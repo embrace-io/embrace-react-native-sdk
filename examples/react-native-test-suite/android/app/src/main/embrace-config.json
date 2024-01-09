@@ -1,0 +1,9 @@
+{
+  "app_id": "EQSm6",
+  "api_token": "13f327e891ad45858949004eb755b9f1",
+  "sdk_config": {
+    "view_config": {
+      "enable_automatic_activity_capture": false
+    }
+  }
+}

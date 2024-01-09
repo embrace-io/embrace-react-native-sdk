@@ -1,0 +1,73 @@
+{
+  "name": "@embrace-react-native/core",
+  "version": "3.1.0",
+  "description": "A React Native wrapper for Embrace SDK",
+  "author": {
+    "name": "Embrace.io",
+    "email": "truenorth@embrace.io"
+  },
+  "homepage": "https://embrace.io/",
+  "license": "ISC",
+  "keywords": [
+    "react-native",
+    "react-component",
+    "tracking",
+    "embrace",
+    "bug tracker"
+  ],
+  "main": "lib/src/index.js",
+  "typings": "lib/src/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "dependencies": {
+    "glob": "^7.1.4",
+    "gzip-js": "^0.3.2",
+    "inquirer": "^6.5.1",
+    "promise": "^8.0.3",
+    "semver": "^7.1.3",
+    "xcode": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@types/gzip-js": "^0.3.3",
+    "@types/jest": "^28.1.7",
+    "@types/node": "^12.7.2",
+    "@types/react-native": "^0.60.2",
+    "@types/semver": "^7.1.0",
+    "babel-jest": "^25.3.0",
+    "husky": "^4.2.5",
+    "jest": "^25.3.0",
+    "lerna": "^6.0.3",
+    "lint-staged": "^10.1.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native": "^0.56.0",
+    "react-test-renderer": "^18.2.0",
+    "ts-jest": "^25.3.1",
+    "tslint": "^5.18.0",
+    "typedoc": "^0.17.8",
+    "typescript": "^4.7.4"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "test": "node ./__tests__/state-tracker.test.ts",
+    "build": "yarn pack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:embrace-io/embrace-react-native.git"
+  },
+  "bugs": {
+    "url": "https://github.com/embrace-io/embrace-react-native/issues"
+  },
+  "gitHead": "742bee72aa0710844c3538f52f099f3dacd5b2b1"
+}

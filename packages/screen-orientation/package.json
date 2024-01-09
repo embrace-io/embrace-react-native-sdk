@@ -1,0 +1,44 @@
+{
+  "name": "@embrace-react-native/orientation-change-tracker",
+  "version": "0.1.0",
+  "description": "Allows to track the App orientation",
+  "author": {
+    "name": "Embrace.io",
+    "email": "truenorth@embrace.io"
+  },
+  "homepage": "https://embrace.io/",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.56.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.7",
+    "react": "^18.2.0",
+    "react-native": "^0.56.0"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "test": "node ./__tests__/screen-orientation-tracker.test.ts",
+    "build": "yarn pack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:embrace-io/embrace-react-native.git"
+  },
+  "bugs": {
+    "url": "https://github.com/embrace-io/embrace-react-native/issues"
+  },
+  "gitHead": "742bee72aa0710844c3538f52f099f3dacd5b2b1"
+}

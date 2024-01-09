@@ -1,0 +1,20 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "trailing-comma": [false],
+    "max-line-length": [true, 300],
+    "object-literal-sort-keys": false,
+    "no-var-requires": false,
+    "no-empty": false,
+    "interface-name": false,
+    "no-shadowed-variable": false,
+    "no-console": false,
+    "quotemark": [true, "single"]
+  },
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": ["**/*.js"]
+  }
+}
