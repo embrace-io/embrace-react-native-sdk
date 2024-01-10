@@ -32,7 +32,7 @@ YARN
 
 The JavaScript Embrace SDK ships with a setup script to modify the files in your
 project to add the native dependencies. The setup scripts can be found in your
-`node_modules` folder at `node_modules/@embrace-react-native/core/dist/scripts/setup`
+`node_modules` folder at `node_modules/@embrace-react-native/core/dist/scripts/setup`.
 
 **Run the setup script**
 
