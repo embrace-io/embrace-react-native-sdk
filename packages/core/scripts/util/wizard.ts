@@ -1,4 +1,4 @@
-import EmbraceLogger from "../../src/logger";
+import EmbraceLogger from '../../src/logger';
 const logger = new EmbraceLogger(console);
 export interface Field {
   name: string;
@@ -68,10 +68,10 @@ class Wizard {
   public runSteps(): Promise<void> {
     return this.processSteps()
       .then(() => {
-        logger.log("done");
+        logger.log('done');
       })
       .catch((err) => {
-        logger.error("error in setting up Embrace: " + err);
+        logger.error('error in setting up Embrace: ' + err);
         const uncompletedSteps = this.getUncompletedSteps();
         uncompletedSteps.forEach((uncompletedStep) => {
           logger.error(
@@ -79,7 +79,7 @@ class Wizard {
               uncompletedStep.name
             }, Please refer to the docs at ${
               uncompletedStep.docURL ||
-              "https://embrace.io/docs/react-native/integration/"
+              'https://embrace.io/docs/react-native/integration/'
             }`
           );
         });

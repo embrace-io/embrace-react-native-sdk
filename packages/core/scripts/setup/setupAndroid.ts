@@ -1,16 +1,16 @@
-import EmbraceLogger from "../../src/logger";
-import Wizard from "../util/wizard";
+import EmbraceLogger from '../../src/logger';
+import Wizard from '../util/wizard';
 import {
   createEmbraceJSON,
   patchAppBuildGradle,
   patchBuildGradle,
   patchMainApplication,
-} from "./android";
-import { apiToken, packageJSON } from "./common";
+} from './android';
+import { apiToken, packageJSON } from './common';
 
 const logger = new EmbraceLogger(console);
 
-logger.log("initializing setup wizard for android");
+logger.log('initializing setup wizard for android');
 
 const androidSteps = [
   patchBuildGradle,

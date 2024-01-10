@@ -1,8 +1,8 @@
-const semverGte = require("semver/functions/gte");
-const fs = require("fs");
-const path = require("path");
+const semverGte = require('semver/functions/gte');
+const fs = require('fs');
+const path = require('path');
 
-import EmbraceLogger from "../../src/logger";
+import EmbraceLogger from '../../src/logger';
 import {
   appDelegatePatchable,
   bundlePhaseExtraArgs,
@@ -14,22 +14,22 @@ import {
   formatEmbraceInitializer,
   podfilePatchable,
   xcodePatchable,
-} from "../util/ios";
-import Wizard from "../util/wizard";
-import { apiToken, iosAppID, packageJSON } from "./common";
+} from '../util/ios';
+import Wizard from '../util/wizard';
+import { apiToken, iosAppID, packageJSON } from './common';
 
 const logger = new EmbraceLogger(console);
 
 export const iosImportEmbrace = {
-  name: "iOS import Embrace",
+  name: 'iOS import Embrace',
   run: (wizard: Wizard): Promise<any> =>
     wizard
       .fieldValue(packageJSON)
       .then((json) => appDelegatePatchable(json))
       .then((appDelegate) => {
-        logger.log("patching AppDelegate with Embrace import");
+        logger.log('patching AppDelegate with Embrace import');
         if (appDelegate.hasLine(embraceImport)) {
-          logger.warn("already imported Embrace");
+          logger.warn('already imported Embrace');
           return false;
         }
         appDelegate.addAfter('#import "AppDelegate.h"', embraceImport);
@@ -37,19 +37,19 @@ export const iosImportEmbrace = {
         return true;
       }),
   docURL:
-    "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
+    'https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually',
 };
 
 export const iosInitializeEmbrace = {
-  name: "iOS initialize Embrace",
+  name: 'iOS initialize Embrace',
   run: (wizard: Wizard): Promise<any> =>
     wizard
       .fieldValue(packageJSON)
       .then((json) => appDelegatePatchable(json))
       .then((appDelegate) => {
-        logger.log("patching AppDelegate with Embrace initialize");
-        if (appDelegate.hasLine("[[Embrace sharedInstance] start")) {
-          logger.warn("already initializing Embrace");
+        logger.log('patching AppDelegate with Embrace initialize');
+        if (appDelegate.hasLine('[[Embrace sharedInstance] start')) {
+          logger.warn('already initializing Embrace');
           return false;
         }
         const embraceInitializer = formatEmbraceInitializer();
@@ -61,29 +61,29 @@ export const iosInitializeEmbrace = {
         return true;
       }),
   docURL:
-    "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
+    'https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually',
 };
 
 export const iosPodfile = {
-  name: "Podfile patch (ONLY React Native Version < 0.6)",
+  name: 'Podfile patch (ONLY React Native Version < 0.6)',
   run: (wizard: Wizard): Promise<any> =>
     wizard.fieldValue(packageJSON).then((json) => {
-      const rnVersion = (json.dependencies || {})["react-native"];
+      const rnVersion = (json.dependencies || {})['react-native'];
       if (!rnVersion) {
-        throw Error("react-native dependency was not found");
+        throw Error('react-native dependency was not found');
       }
-      const rnVersionSanitized = rnVersion.replace("^", "");
+      const rnVersionSanitized = rnVersion.replace('^', '');
 
       // If 6.0.0, autolink should have linked the Pod.
-      if (semverGte("6.0.0", rnVersionSanitized)) {
+      if (semverGte('6.0.0', rnVersionSanitized)) {
         logger.log(
-          "skipping patching Podfile since react-native is on an autolink supported version"
+          'skipping patching Podfile since react-native is on an autolink supported version'
         );
         return;
       }
       return podfilePatchable().then((podfile) => {
         if (podfile.hasLine(embraceNativePod)) {
-          logger.warn("Already has EmbraceIO pod");
+          logger.warn('Already has EmbraceIO pod');
           return;
         }
         podfile.addAfter(embraceRNPod, embraceNativePod);
@@ -91,11 +91,11 @@ export const iosPodfile = {
       });
     }),
   docURL:
-    "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#native-modules",
+    'https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#native-modules',
 };
 
 export const patchXcodeBundlePhase = {
-  name: "Update bundle phase",
+  name: 'Update bundle phase',
   run: (wizard: Wizard): Promise<any> =>
     wizard
       .fieldValue(packageJSON)
@@ -103,15 +103,15 @@ export const patchXcodeBundlePhase = {
       .then((project) => {
         const bundlePhaseKey = project.findPhase(bundlePhaseRE);
         if (!bundlePhaseKey) {
-          logger.error("Could not find Xcode React Native bundle phase");
+          logger.error('Could not find Xcode React Native bundle phase');
           return;
         }
 
         if (project.hasLine(bundlePhaseKey, bundlePhaseExtraArgs)) {
-          logger.warn("already patched Xcode React Native bundle phase");
+          logger.warn('already patched Xcode React Native bundle phase');
           return;
         }
-        logger.log("Patching Xcode React Native bundle phase");
+        logger.log('Patching Xcode React Native bundle phase');
         project.modifyPhase(
           bundlePhaseKey,
           /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m,
@@ -121,17 +121,17 @@ export const patchXcodeBundlePhase = {
         return project.patch();
       }),
   docURL:
-    "https://embrace.io/docs/react-native/integration/upload-symbol-files/#uploading-source-maps",
+    'https://embrace.io/docs/react-native/integration/upload-symbol-files/#uploading-source-maps',
 };
 
 export const addUploadBuildPhase = {
-  name: "Add upload phase",
+  name: 'Add upload phase',
   run: (wizard: Wizard): Promise<any> =>
     wizard.fieldValue(packageJSON).then((json) => {
       return xcodePatchable(json).then((project) => {
         const uploadBuildPhaseKey = project.findPhase(embRunScript);
         if (uploadBuildPhaseKey) {
-          logger.warn("already added upload phase");
+          logger.warn('already added upload phase');
           return;
         }
         return wizard.fieldValueList([iosAppID, apiToken]).then((list) => {
@@ -139,11 +139,11 @@ export const addUploadBuildPhase = {
           const proj = project.project;
           proj.addBuildPhase(
             [],
-            "PBXShellScriptBuildPhase",
-            "Upload Debug Symbols to Embrace",
+            'PBXShellScriptBuildPhase',
+            'Upload Debug Symbols to Embrace',
             null,
             {
-              shellPath: "/bin/sh",
+              shellPath: '/bin/sh',
               shellScript: `EMBRACE_ID=${id} EMBRACE_TOKEN=${token} ${embRunScript}`,
             }
           );
@@ -153,20 +153,20 @@ export const addUploadBuildPhase = {
       });
     }),
   docURL:
-    "https://embrace.io/docs/react-native/integration/upload-symbol-files/#uploading-native-and-javascript-symbol-files",
+    'https://embrace.io/docs/react-native/integration/upload-symbol-files/#uploading-native-and-javascript-symbol-files',
 };
 
 const findNameWithCaseSensitiveFromPath = (path: string, name: string) => {
-  const pathSplitted = path.toLocaleLowerCase().split("/");
+  const pathSplitted = path.toLocaleLowerCase().split('/');
   const nameInLowerCase = name.toLocaleLowerCase();
   const nameFounded = pathSplitted.find(
     (element) => element === `${nameInLowerCase}.xcodeproj`
   );
   if (nameFounded) {
-    return nameFounded.replace(".xcodeproj", "");
+    return nameFounded.replace('.xcodeproj', '');
   }
 
-  logger.warn("the xcodeproj file does not match with your project's name");
+  logger.warn('the xcodeproj file does not match with your project\'s name');
   logger.warn(
     `skipping adding Embrace-Info.plist to ${name}, this should be added to the project manually.
     You can go https://embrace.io/docs/ios/integration/session-reporting/#import-embrace for more information`
@@ -175,16 +175,16 @@ const findNameWithCaseSensitiveFromPath = (path: string, name: string) => {
 };
 
 export const createEmbracePlist = {
-  name: "Create Embrace plist file",
+  name: 'Create Embrace plist file',
   run: (wizard: Wizard): Promise<any> =>
     wizard.fieldValue(packageJSON).then(({ name }) => {
-      const p = path.join("ios", name, "Embrace-Info.plist");
+      const p = path.join('ios', name, 'Embrace-Info.plist');
       if (fs.existsSync(p)) {
-        logger.warn("already has Embrace-Info.json file");
+        logger.warn('already has Embrace-Info.json file');
         return;
       }
 
-      fs.closeSync(fs.openSync(p, "a"));
+      fs.closeSync(fs.openSync(p, 'a'));
 
       return xcodePatchable({ name })
         .then((project) => {
@@ -208,11 +208,11 @@ export const createEmbracePlist = {
         );
     }),
   docURL:
-    "https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually",
+    'https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually',
 };
 
 const embraceRNPod =
-  "pod 'RNEmbrace', :path => '../node_modules/@embrace-react-native_core'";
+  'pod \'RNEmbrace\', :path => \'../node_modules/@embrace-react-native_core\'';
 
 const plistContents = (iosAppIDValue: string) => {
   return `<?xml version="1.0" encoding="UTF-8"?>

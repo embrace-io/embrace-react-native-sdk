@@ -1,10 +1,10 @@
-import EmbraceLogger from "../../src/logger";
-import Wizard from "../util/wizard";
-import { patchBuildGradle } from "./android";
+import EmbraceLogger from '../../src/logger';
+import Wizard from '../util/wizard';
+import { patchBuildGradle } from './android';
 
 const logger = new EmbraceLogger(console);
 
-logger.log("initializing update wizard");
+logger.log('initializing update wizard');
 
 const androidSteps = [patchBuildGradle];
 

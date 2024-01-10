@@ -1,12 +1,12 @@
-import EmbraceLogger from "../../src/logger";
-import Wizard from "../util/wizard";
+import EmbraceLogger from '../../src/logger';
+import Wizard from '../util/wizard';
 import {
   createEmbraceJSON,
   patchAppBuildGradle,
   patchBuildGradle,
   patchMainApplication,
-} from "./android";
-import { apiToken, iosAppID, packageJSON } from "./common";
+} from './android';
+import { apiToken, iosAppID, packageJSON } from './common';
 import {
   addUploadBuildPhase,
   createEmbracePlist,
@@ -14,11 +14,11 @@ import {
   iosInitializeEmbrace,
   iosPodfile,
   patchXcodeBundlePhase,
-} from "./ios";
+} from './ios';
 
 const logger = new EmbraceLogger(console);
 
-logger.log("initializing setup wizard");
+logger.log('initializing setup wizard');
 
 const iosSetps = [
   iosImportEmbrace,
