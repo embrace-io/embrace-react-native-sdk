@@ -7,11 +7,11 @@ import {
   startMoment,
   getLastRunEndState,
   getCurrentSessionId,
-} from '@embrace-react-native/core';
+} from '@embrace-io/core';
 import {getPokemonWithAxios, getPokemonWithFetch} from '../api/apis';
 import ActionButton from '../components/ActionButton';
 import WebViewScreen from './WebViewScreen';
-import {useEmbraceOrientationLogger} from '@embrace-react-native/orientation-change-tracker';
+import {useEmbraceOrientationLogger} from '@embrace-io/orientation-change-tracker';
 
 const HomeScreen = () => {
   useEmbraceOrientationLogger();

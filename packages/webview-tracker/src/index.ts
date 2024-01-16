@@ -11,12 +11,12 @@ const validateDependencies = (message: IWebViewMessageParams) => {
     return false;
   } else if (!NativeModules.EmbraceManager) {
     console.warn(
-      '[Embrace] You must have the Embrace SDK to Web View events, run `yarn add embrace-react-native`.'
+      '[Embrace] You must have the Embrace SDK to Web View events, run `yarn add @embrace-io/core`.'
     );
     return false;
   } else if (!NativeModules.EmbraceManager.trackWebViewPerformance) {
     console.warn(
-      '[Embrace] The Embrace SDK installed needs to be updated, run `yarn add embrace-react-native`.'
+      '[Embrace] The Embrace SDK installed needs to be updated, run `yarn add @embrace-io/core`.'
     );
     return false;
   } else if (!message || !message.nativeEvent) {

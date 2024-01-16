@@ -2,7 +2,7 @@
 
 > ## Core Module Required
 >
-> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-react-native/core).
+> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/core).
 
 # Add React Redux Tracker
 
@@ -19,11 +19,11 @@ Embrace has a separate module for tracking Redux's Actions, to use it you will n
 ### Install the component
 
 ```sh
-yarn add @embrace-react-native/action-tracker
+yarn add @embrace-io/action-tracker
 ```
 
 ```sh
-npm install @embrace-react-native/action-tracker
+npm install @embrace-io/action-tracker
 ```
 
 ### Adding the component to your code
@@ -34,7 +34,7 @@ Add an useRef for the NavigationContainer and pass it to Embrace's hook
 import { applyMiddleware, compose, configureStore } from "@reduxjs/toolkit";
 
 // Import the Embrace's Middleware
-import { buildEmbraceMiddleware } from "@embrace-react-native/action-tracker";
+import { buildEmbraceMiddleware } from "@embrace-io/action-tracker";
 
 // Create the Enhancer that applies the Embrace's Middleware
 const middlewareEnhancer = applyMiddleware(buildEmbraceMiddleware());

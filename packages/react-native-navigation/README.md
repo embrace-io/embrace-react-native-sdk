@@ -2,7 +2,7 @@
 
 > ## Core Module Required
 >
-> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-react-native/core).
+> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/core).
 
 # Add React Native Navigation screen tracker
 
@@ -19,11 +19,11 @@ Embrace has a separate module for tracking Screens, to use it you will need to a
 ### Install the component
 
 ```sh
-yarn add @embrace-react-native/react-native-navigation
+yarn add @embrace-io/react-native-navigation
 ```
 
 ```sh
-npm install @embrace-react-native/react-native-navigation
+npm install @embrace-io/react-native-navigation
 ```
 
 ### Adding the component to your code
@@ -40,7 +40,7 @@ If you have more than one navigation instance, you can pass a second parameter t
 import { Navigation } from "react-native-navigation";
 
 // Start - Add those lines
-import EmbraceNavigationTracker from "@embrace-react-native/react-native-navigation";
+import EmbraceNavigationTracker from "@embrace-io/react-native-navigation";
 EmbraceNavigationTracker.build(Navigation);
 // End - Add those lines
 

@@ -2,7 +2,7 @@
 
 > ## Core Module Required
 >
-> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-react-native/core).
+> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/core).
 
 # Add Orientation Tracker
 
@@ -19,11 +19,11 @@ Embrace has a separate module for tracking Orientation, to use it you will need 
 ### Install the component
 
 ```sh
-yarn add @embrace-react-native/orientation-change-tracker
+yarn add @embrace-io/orientation-change-tracker
 ```
 
 ```sh
-npm install @embrace-react-native/orientation-change-tracker
+npm install @embrace-io/orientation-change-tracker
 ```
 
 ### Adding the method to your code
@@ -32,7 +32,7 @@ Add the useEmbraceOrientationLogger to your component
 
 ```javascript
 // Import the Embrace log method
-import { useEmbraceOrientationLogger } from "@embrace-react-native/orientation-change-tracker";
+import { useEmbraceOrientationLogger } from "@embrace-io/orientation-change-tracker";
 
 const App = () => {
   useEmbraceOrientationLogger()

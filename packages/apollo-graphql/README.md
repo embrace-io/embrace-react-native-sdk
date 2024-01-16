@@ -2,7 +2,7 @@
 
 > ## Core Module Required
 >
-> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-react-native/core).
+> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/core).
 
 # Add React Native Apollo Tracker
 
@@ -19,12 +19,12 @@ Embrace has a separate module for tracking Apollo network, to use it you will ne
 ### Install the component
 
 ```sh
-yarn add @embrace-react-native/apollo-graphql
+yarn add @embrace-io/apollo-graphql
 
 ```
 
 ```sh
-npm install @embrace-react-native/apollo-graphql
+npm install @embrace-io/apollo-graphql
 ```
 
 ### Adding the component to your code
@@ -32,7 +32,7 @@ npm install @embrace-react-native/apollo-graphql
 Apply the Apollo GraphQL tracker to your Apollo provider instance.
 
 ```javascript
-import EmbraceApolloLink from "@embrace-react-native/apollo-graphql";
+import EmbraceApolloLink from "@embrace-io/apollo-graphql";
 import {
   ApolloClient,
   InMemoryCache,

@@ -1,5 +1,5 @@
 {
-  "name": "embrace-react-native",
+  "name": "embrace-io",
   "version": "3.51.0",
   "private": "false",
   "author": {
@@ -82,8 +82,8 @@
   },
   "rnpm": {
     "commands": {
-      "postlink": "node node_modules/embrace-react-native/dist/scripts/postlink",
-      "postunlink": "node node_modules/embrace-react-native/dist/scripts/postunlink"
+      "postlink": "node node_modules/embrace-io/dist/scripts/postlink",
+      "postunlink": "node node_modules/embrace-io/dist/scripts/postunlink"
     }
   },
   "workspaces": [
@@ -91,6 +91,6 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:embrace-io/embrace-react-native.git"
+    "url": "git@github.com:embrace-io/embrace-io.git"
   }
 }

@@ -212,7 +212,7 @@ export const createEmbracePlist = {
 };
 
 const embraceRNPod =
-  'pod \'RNEmbrace\', :path => \'../node_modules/@embrace-react-native_core\'';
+  'pod \'RNEmbrace\', :path => \'../node_modules/@embrace-io_core\'';
 
 const plistContents = (iosAppIDValue: string) => {
   return `<?xml version="1.0" encoding="UTF-8"?>

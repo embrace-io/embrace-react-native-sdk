@@ -1,5 +1,5 @@
 {
-  "name": "@embrace-react-native/react-native-navigation",
+  "name": "@embrace-io/react-native-navigation",
   "version": "4.0.0",
   "description": "This is used to track React Native screens (using React Native Navigation) with the Embrace SDK",
   "author": {
@@ -32,10 +32,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:embrace-io/embrace-react-native.git"
+    "url": "git@github.com:embrace-io/embrace-io.git"
   },
   "bugs": {
-    "url": "https://github.com/embrace-io/embrace-react-native/issues"
+    "url": "https://github.com/embrace-io/embrace-io/issues"
   },
   "gitHead": "0e15bb316225a075d6dc2437b9784b441d6c0533"
 }

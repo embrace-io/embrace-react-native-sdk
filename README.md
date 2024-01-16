@@ -19,29 +19,29 @@ _If you need an App ID and API Token, contact us at support@embrace.io or on Sla
 NPM
 
 ```sh
-    npm install @embrace-react-native/core
+    npm install @embrace-io/core
 ```
 
 YARN
 
 ```sh
-    yarn add @embrace-react-native/core
+    yarn add @embrace-io/core
 ```
 
 ##### Setup Script
 
 The JavaScript Embrace SDK ships with a setup script to modify the files in your
 project to add the native dependencies. The setup scripts can be found in your
-`node_modules` folder at `node_modules/@embrace-react-native/core/dist/scripts/setup`
+`node_modules` folder at `node_modules/@embrace-io/core/dist/scripts/setup`
 
 **Run the setup script**
 
 ```shell-session
-node node_modules/@embrace-react-native/core/dist/scripts/setup/installAndroid.js
+node node_modules/@embrace-io/core/dist/scripts/setup/installAndroid.js
 ```
 
 ```shell-session
-node node_modules/@embrace-react-native/core/dist/scripts/setup/installIos.js
+node node_modules/@embrace-io/core/dist/scripts/setup/installIos.js
 ```
 
 You can use git to see the changes that the script made.
@@ -55,7 +55,7 @@ git diff
 Initialize method applies the necessary listener to your application. This allow Embrace to track javascript errors, check js bundle changes (if you use OTA), track js patch and react native versions.
 
 ```javascript
-import { initialize } from "@embrace-react-native/core";
+import { initialize } from "@embrace-io/core";
 
 type Props = {};
 export default class App extends Component<Props> {

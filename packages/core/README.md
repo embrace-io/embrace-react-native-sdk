@@ -122,7 +122,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "io.embrace:embrace-swazzler:${findProject(':embrace-react-native').properties['emb_android_sdk']}"
+        classpath "io.embrace:embrace-swazzler:${findProject(':embrace-io').properties['emb_android_sdk']}"
         ...
     }
 }
@@ -208,24 +208,24 @@ public class MainActivity extends ReactActivity {
 
 This is a simplified process for React Native projects. If you want further information on the Android SDK integration, you can check the steps on the Native [Android Quick Integration Guide](https://docs.embrace.io/docs/android-integration-guide).
 
-### Step 3: Add the embrace-react-native npm package to your React Native Project
+### Step 3: Add the embrace-io npm package to your React Native Project
 
 In order to access the native functionalities that the Embrace SDKs provide, we built a wrapper using an npm package, fully compatible with react-native linking logic.
 Open your terminal and on the root of your React Native project install the npm package by running the following:
 
 ```console
-$ npm i -S embrace-react-native
+$ npm i -S embrace-io
 ```
 
-### Step 4: Link embrace-react-native
+### Step 4: Link embrace-io
 
 React Native offers a pretty handy command that automatically links native modules with you React Native application.
 For more info, you can get it on the [Original Documentation Site](https://facebook.github.io/react-native/docs/linking-libraries-ios).
 
-To link embrace-react-native, open your terminal and on your React Native project root run:
+To link embrace-io, open your terminal and on your React Native project root run:
 
 ```console
-$ react-native link embrace-react-native
+$ react-native link embrace-io
 ```
 
 ### Troubleshoot Step - Deprecated instruction on you app's build gradle file.
@@ -234,7 +234,7 @@ During the linking process, React native will add a line to your android `app/bu
 
 ```gradle
 ...
-compile project(':embrace-react-native')
+compile project(':embrace-io')
 ```
 
 Be aware that the compile instruction has been deprecated but React Native still uses it on the Linking process.
@@ -242,7 +242,7 @@ If that line is causing issues, you can replace it with:
 
 ```gradle
 ...
-implementation project(':embrace-react-native')
+implementation project(':embrace-io')
 ```
 
 `implementation` is the right instruction for the compiler to add dependency to the project.
@@ -264,7 +264,7 @@ This should download `RNEmbrace` pod to your iOS Project.
 A good place to start is after your startup moment ends. This moment starts automatically with the code added to AppDelegate.m on iOS or MainActivity.java on Android, and you should end on Component mount similar to the below code.
 
 ```javascript
-import { endAppStartup } from "embrace-react-native";
+import { endAppStartup } from "embrace-io";
 
 type Props = {};
 export default class App extends Component<Props> {

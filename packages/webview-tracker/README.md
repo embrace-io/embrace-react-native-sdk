@@ -2,7 +2,7 @@
 
 > ## Core Module Required
 >
-> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-react-native/core).
+> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/core).
 
 # Add WebView Tracker
 
@@ -19,11 +19,11 @@ Embrace has a separate module for tracking WebView, to use it you will need to a
 ### Install the component
 
 ```sh
-yarn add @embrace-react-native/webview-tracker
+yarn add @embrace-io/webview-tracker
 ```
 
 ```sh
-npm install @embrace-react-native/webview-tracker
+npm install @embrace-io/webview-tracker
 ```
 
 ### Adding the method to your code
@@ -32,7 +32,7 @@ Add the logEmbraceWebView to your WebView component
 
 ```javascript
 // Import the Embrace log method
-import { logEmbraceWebView } from "@embrace-react-native/webview-tracker";
+import { logEmbraceWebView } from "@embrace-io/webview-tracker";
 import { WebView } from "react-native-webview";
 
 const App = () => {

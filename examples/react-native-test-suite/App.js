@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import {SafeAreaView, Text, TouchableOpacity} from 'react-native';
 
-import {initialize, endAppStartup} from '@embrace-react-native/core';
+import {initialize, endAppStartup} from '@embrace-io/core';
 
 import MainNavigation from './src/navigation/MainNavigation';
-import EmbraceApolloLink from '@embrace-react-native/apollo-graphql/lib/index';
+import EmbraceApolloLink from '@embrace-io/apollo-graphql/lib/index';
 import {
   ApolloClient,
   InMemoryCache,

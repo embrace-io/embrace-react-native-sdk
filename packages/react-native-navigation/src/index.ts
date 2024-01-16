@@ -16,7 +16,7 @@ export default class EmbraceNavigationTracker {
   ): number => {
     if (!NativeModules.EmbraceManager) {
       console.warn(
-        '[Embrace] You must have the Embrace SDK to track screens, run `yarn add embrace-react-native`.'
+        '[Embrace] You must have the Embrace SDK to track screens, run `yarn add @embrace-io/core`.'
       );
       return 0;
     }

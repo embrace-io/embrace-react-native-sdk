@@ -61,7 +61,7 @@ export const useEmbraceOrientationLogger = () => {
   const init = () => {
     if (!NativeModules.EmbraceManager) {
       console.warn(
-        '[Embrace] You must have the Embrace SDK to Web View events, run `yarn add embrace-react-native`.'
+        '[Embrace] You must have the Embrace SDK to Web View events, run `yarn add @embrace-io/core`.'
       );
     } else {
       lastOrientation.current = getOrientation();

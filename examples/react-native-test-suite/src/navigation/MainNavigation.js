@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useEmbraceNavigationTracker} from '@embrace-react-native/react-navigation';
+import {useEmbraceNavigationTracker} from '@embrace-io/react-navigation';
 import HomeScreen from '../screens/HomeScreen';
 
 import NativeCrashes from '../screens/NativeCrashesScreen';
