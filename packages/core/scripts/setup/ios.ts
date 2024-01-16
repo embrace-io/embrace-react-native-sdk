@@ -157,10 +157,10 @@ export const addUploadBuildPhase = {
 };
 
 const findNameWithCaseSensitiveFromPath = (path: string, name: string) => {
-  const pathSplitted = path.toLocaleLowerCase().split('/');
+  const pathSplitted = path.split('/');
   const nameInLowerCase = name.toLocaleLowerCase();
   const nameFounded = pathSplitted.find(
-    (element) => element === `${nameInLowerCase}.xcodeproj`
+    (element) => element.toLocaleLowerCase() === `${nameInLowerCase}.xcodeproj`
   );
   if (nameFounded) {
     return nameFounded.replace('.xcodeproj', '');
