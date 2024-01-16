@@ -1,5 +1,5 @@
 {
-  "name": "@embrace-io/webview-tracker",
+  "name": "@embrace-io/react-native-webview-tracker",
   "version": "3.17.0",
   "description": "Allows to track events on WebViews components",
   "author": {

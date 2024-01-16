@@ -1,5 +1,5 @@
 {
-  "name": "@embrace-io/orientation-change-tracker",
+  "name": "@embrace-io/react-native-orientation-change-tracker",
   "version": "3.17.0",
   "description": "Allows to track the App orientation",
   "author": {
