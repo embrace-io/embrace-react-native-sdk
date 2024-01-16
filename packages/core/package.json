@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/core",
-  "version": "3.17.2",
+  "version": "3.17.3",
   "description": "A React Native wrapper for Embrace SDK",
   "author": {
     "name": "Embrace.io",
