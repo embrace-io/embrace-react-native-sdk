@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/action-tracker",
-  "version": "4.0.0",
+  "version": "3.16.0",
   "description": "Allows to track the dispatched actions of your state managment",
   "author": {
     "name": "Embrace.io",
