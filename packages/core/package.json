@@ -54,7 +54,8 @@
   "files": [
     "lib",
     "android",
-    "ios"
+    "ios",
+    "RNEmbrace.podspec"
   ],
   "publishConfig": {
     "access": "public"
