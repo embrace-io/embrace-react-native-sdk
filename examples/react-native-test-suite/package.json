@@ -12,7 +12,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.10",
     "@embrace-io/apollo-graphql": "/Users/mutsi/job/embrace/react-native-sdk/packages/apollo-graphql",
-    "@embrace-io/core": "/Users/mutsi/job/embrace/react-native-sdk/packages/core",
+    "@embrace-io/react-native": "/Users/mutsi/job/embrace/react-native-sdk/packages/core",
     "@embrace-io/orientation-change-tracker": "/Users/mutsi/job/embrace/react-native-sdk/packages/screen-orientation",
     "@embrace-io/react-navigation": "/Users/mutsi/job/embrace/react-native-sdk/packages/react-navigation",
     "@embrace-io/webview-tracker": "/Users/mutsi/job/embrace/react-native-sdk/packages/webview-tracker",

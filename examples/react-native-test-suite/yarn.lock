@@ -847,7 +847,7 @@
 "@embrace-io/apollo-graphql@file:../../packages/apollo-graphql":
   version "0.1.0"
 
-"@embrace-io/core@file:../../packages/core":
+"@embrace-io/react-native@file:../../packages/core":
   version "0.1.0"
   dependencies:
     glob "^7.1.4"

@@ -122,7 +122,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "io.embrace:embrace-swazzler:${findProject(':embrace-io').properties['emb_android_sdk']}"
+        classpath "io.embrace:embrace-swazzler:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}"
         ...
     }
 }

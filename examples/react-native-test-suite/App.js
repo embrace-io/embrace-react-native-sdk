@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {SafeAreaView, Text, TouchableOpacity} from 'react-native';
 
-import {initialize, endAppStartup} from '@embrace-io/core';
+import {initialize, endAppStartup} from '@embrace-io/react-native';
 
 import MainNavigation from './src/navigation/MainNavigation';
 import EmbraceApolloLink from '@embrace-io/apollo-graphql/lib/index';

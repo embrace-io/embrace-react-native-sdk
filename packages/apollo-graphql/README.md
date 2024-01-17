@@ -2,7 +2,7 @@
 
 > ## Core Module Required
 >
-> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/core).
+> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native).
 
 # Add React Native Apollo Tracker
 

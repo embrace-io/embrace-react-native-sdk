@@ -23,7 +23,7 @@ const androidEmbraceSwazzler =
   /classpath(\(|\s)('|")io\.embrace:embrace-swazzler:.*('|")\)?/;
 
 const androidGenericVersion =
-  'classpath "io.embrace:embrace-swazzler:${findProject(\':embrace-io_core\').properties[\'emb_android_sdk\']}"';
+  'classpath "io.embrace:embrace-swazzler:${findProject(\':embrace-io_react-native\').properties[\'emb_android_sdk\']}"';
 
 export const patchBuildGradle = {
   name: 'patch build.gradle',

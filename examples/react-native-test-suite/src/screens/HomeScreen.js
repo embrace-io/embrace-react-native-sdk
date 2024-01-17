@@ -7,7 +7,7 @@ import {
   startMoment,
   getLastRunEndState,
   getCurrentSessionId,
-} from '@embrace-io/core';
+} from '@embrace-io/react-native';
 import {getPokemonWithAxios, getPokemonWithFetch} from '../api/apis';
 import ActionButton from '../components/ActionButton';
 import WebViewScreen from './WebViewScreen';
