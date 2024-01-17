@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native-apollo-graphql",
-  "version": "3.17.4",
+  "version": "3.17.5",
   "description": "This is used to track networks calls using GraphQL with the Embrace SDK",
   "author": {
     "name": "Embrace.io",
