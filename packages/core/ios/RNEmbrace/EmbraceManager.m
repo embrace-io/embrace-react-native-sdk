@@ -128,33 +128,6 @@ RCT_EXPORT_METHOD(startMomentWithNameAndIdentifierAndProperties:(NSString*)name 
   }
 }
 
-RCT_EXPORT_METHOD(startMomentWithNameAllowingScreenshot:(NSString*)name allowScreenshot:(BOOL)allowScreenshot resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  @try {
-    [[Embrace sharedInstance] startMomentWithName:name identifier:nil allowScreenshot:allowScreenshot];
-    resolve(@YES);
-  } @catch (NSException *exception) {
-    resolve(@NO);
-  }
-}
-
-RCT_EXPORT_METHOD(startMomentWithNameAndIdentifierAllowingScreenshot:(NSString*)name identifier:(NSString*)identifier allowScreenshot:(BOOL)allowScreenshot resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  @try {
-    [[Embrace sharedInstance] startMomentWithName:name identifier:identifier allowScreenshot:allowScreenshot];
-    resolve(@YES);
-  } @catch (NSException *exception) {
-    resolve(@NO);
-  }
-}
-
-RCT_EXPORT_METHOD(startMomentWithNameAndIdentifierAndPropertiesAllowingScreenshot:(NSString*)name identifier:(NSString*)identifier properties:(NSDictionary*)properties allowingScreenshot:(BOOL)allowingScreenshot resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-  @try {
-    [[Embrace sharedInstance] startMomentWithName:name identifier:identifier allowScreenshot:allowingScreenshot properties:properties];    resolve(@YES);
-    resolve(@YES);
-  } @catch (NSException *exception) {
-    resolve(@NO);
-  }
-}
-
 RCT_EXPORT_METHOD(endMomentWithName:(NSString*)name properties:(NSDictionary*)properties resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   @try {
     [[Embrace sharedInstance] endMomentWithName:name properties:properties];
@@ -219,7 +192,6 @@ RCT_EXPORT_METHOD(logMessageWithSeverity:(NSString*)message severity:(NSString*)
 }
 
 
-// TODO: Update this to take in screenshot flag and stack trace.
 RCT_EXPORT_METHOD(
   logMessageWithSeverityAndProperties:(NSString*)message
                              severity:(NSString*)severity
