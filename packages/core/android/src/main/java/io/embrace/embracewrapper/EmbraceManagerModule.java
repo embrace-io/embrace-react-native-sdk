@@ -343,10 +343,9 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setReactNativeSDKVersion(String number, Promise promise) {
         try {
-            Embrace.getInstance().getReactNativeInternalInterface().setReactNativeSDKVersion(number);
+            Embrace.getInstance().getReactNativeInternalInterface().setReactNativeSdkVersion(number);
             promise.resolve(true);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
-            Log.e("Embrace", "In order to track React Native View you have to update to at least v5.10.0 the Embrace's Swazzler version under android/build.gradle", e);
+        } catch (Exception e) {
             promise.resolve(false);
         }
     }
