@@ -23,7 +23,7 @@ yarn add @embrace-io/webview-tracker
 ```
 
 ```sh
-npm install @embrace-io/webview-tracker
+npm i @embrace-io/webview-tracker
 ```
 
 ### Adding the method to your code
