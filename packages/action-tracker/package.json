@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native-action-tracker",
-  "version": "3.17.7",
+  "version": "4.0.1",
   "description": "Allows to track the dispatched actions of your state managment",
   "author": {
     "name": "Embrace.io",

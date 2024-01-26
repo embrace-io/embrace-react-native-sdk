@@ -8,7 +8,7 @@ For additional info please refer to the [React Native Guide](https://embrace.io/
 
 Only an Embrace App ID and an Embrace API Token.
 
-_If you need an App ID and API Token, contact us at support@embrace.io or on Slack._
+_If you need an App ID and API Token, [Go to our dashboard](https://dash.embrace.io/signup/) to create an account._
 
 # Integration
 
@@ -32,16 +32,16 @@ YARN
 
 The JavaScript Embrace SDK ships with a setup script to modify the files in your
 project to add the native dependencies. The setup scripts can be found in your
-`node_modules` folder at `node_modules/@embrace-io/react-native/dist/scripts/setup`
+`node_modules` folder at `node_modules/@embrace-io/react-native/lib/scripts/setup`
 
 **Run the setup script**
 
 ```shell-session
-node node_modules/@embrace-io/react-native/dist/scripts/setup/installAndroid.js
+node node_modules/@embrace-io/react-native/lib/scripts/setup/installAndroid.js
 ```
 
 ```shell-session
-node node_modules/@embrace-io/react-native/dist/scripts/setup/installIos.js
+node node_modules/@embrace-io/react-native/lib/scripts/setup/installIos.js
 ```
 
 You can use git to see the changes that the script made.
