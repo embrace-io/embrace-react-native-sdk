@@ -18,7 +18,7 @@
     "react-native.config.js"
   ],
   "scripts": {
-    "publish-modules": "npx lerna run tsc && npx lerna publish --tag-version-prefix='rn-modules-'",
+    "publish-modules": "npx lerna run tsc && npx lerna publish --tag-version-prefix='rn-os-modules-'",
     "build:watch": "tsc -w --preserveWatchOutput",
     "lint": "tslint --fix -c tslint.json -p tsconfig.json",
     "prebuild": "npm run lint && rm -rf dist",

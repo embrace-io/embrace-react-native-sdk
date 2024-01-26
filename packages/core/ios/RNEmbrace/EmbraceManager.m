@@ -417,8 +417,7 @@ RCT_EXPORT_METHOD(getCurrentSessionId:(RCTPromiseResolveBlock)resolve rejecter:(
 RCT_EXPORT_METHOD(startNativeEmbraceSDK:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   @try {
     dispatch_async(dispatch_get_main_queue(), ^{
-      NSDictionary *emptyDictionary = [NSDictionary dictionary];
-      [[Embrace sharedInstance] startWithLaunchOptions:emptyDictionary framework:EMBAppFrameworkReactNative];
+      [[Embrace sharedInstance] startWithLaunchOptions:nil framework:EMBAppFrameworkReactNative];
     });
     resolve(@YES);
   } @catch (NSException *exception) {
