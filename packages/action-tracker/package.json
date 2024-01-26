@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native-action-tracker",
-  "version": "4.0.0",
+  "version": "3.17.7",
   "description": "Allows to track the dispatched actions of your state managment",
   "author": {
     "name": "Embrace.io",
@@ -37,5 +37,5 @@
   "bugs": {
     "url": "https://github.com/embrace-io/embrace-io/issues"
   },
-  "gitHead": "0e15bb316225a075d6dc2437b9784b441d6c0533"
+  "gitHead": "efdb7cc032ded0970102aae7006865372558e105"
 }
