@@ -887,7 +887,7 @@ describe('Test testing purpose functions', () => {
 });
 
 describe('Test initialize', () => {
-  test('initialize', async () => {
+  test('initialize', () => {
     const mockSetReactNativeVersion = jest.fn();
     const mockSetJavaScriptPatchNumber = jest.fn();
     const mockSetReactNativeSDKVersion = jest.fn();
@@ -904,14 +904,15 @@ describe('Test initialize', () => {
 
     const { initialize } = require('../index');
 
-    const result = await initialize({ patch: testValue });
-    expect(result).toBe(true);
+    const result = initialize({ patch: testValue });
+    jest.runAllTicks();
+    expect(result).resolves.toBe(true);
     expect(mockSetReactNativeVersion).toBeCalled();
     expect(mockSetJavaScriptPatchNumber).toBeCalled();
     expect(mockSetReactNativeSDKVersion).toBeCalled();
   });
 
-  test('applying previousHandler', async () => {
+  test('applying previousHandler', () => {
     const previousHandler = jest.fn();
     const mockSetReactNativeVersion = jest.fn();
     const mockSetJavaScriptPatchNumber = jest.fn();
@@ -928,7 +929,8 @@ describe('Test initialize', () => {
     }));
     ErrorUtils.getGlobalHandler = previousHandler;
     const { initialize } = require('../index');
-    const result = await initialize({ patch: testValue });
+    const result = initialize({ patch: testValue });
+    jest.runAllTicks();
     const handleError = () => {};
     const generatedGlobalErrorFunc = handleGlobalError(
       previousHandler,
@@ -937,14 +939,14 @@ describe('Test initialize', () => {
     generatedGlobalErrorFunc(Error('Test'));
     jest.advanceTimersByTime(250);
 
-    expect(result).toBe(true);
+    expect(result).resolves.toBe(true);
     expect(previousHandler).toBeCalled();
     expect(mockSetReactNativeVersion).toBeCalled();
     expect(mockSetJavaScriptPatchNumber).toBeCalled();
     expect(mockSetReactNativeSDKVersion).toBeCalled();
   });
 
-  test('store embrace sdk version', async () => {
+  test('store embrace sdk version', () => {
     const mocksetReactNativeSDKVersion = jest.fn();
 
     jest.mock('react-native', () => ({
@@ -958,12 +960,13 @@ describe('Test initialize', () => {
     }));
     const { initialize } = require('../index');
 
-    const result = await initialize();
-    expect(result).toBe(true);
+    const result = initialize();
+    jest.runAllTicks();
+    expect(result).resolves.toBe(true);
     expect(mocksetReactNativeSDKVersion).toBeCalled();
   });
 
-  test('applying Tracking', async () => {
+  test('applying Tracking', () => {
     interface ITracking {
       onUnhandled: (_: any, error: Error) => {};
     }
@@ -993,7 +996,8 @@ describe('Test initialize', () => {
 
     const { initialize } = require('../index');
 
-    await initialize({ patch: testValue });
+    initialize({ patch: testValue });
+    jest.runAllTicks();
 
     expect(mockLogMessageWithSeverityAndProperties).toBeCalled();
   });
