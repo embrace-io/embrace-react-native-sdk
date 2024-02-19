@@ -4,7 +4,7 @@ beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
 describe('Log network call With Axios', () => {
-  test('Verify the instance has an Axios structure', async () => {
+  test('Verify the instance has an Axios structure', () => {
     const axiosMockedOK = {
       interceptors: {
         request: {
@@ -34,15 +34,15 @@ describe('Log network call With Axios', () => {
     };
 
     const { applyNetworkInterceptors } = require('../index');
-    expect(await applyNetworkInterceptors(axiosMockedOK)).toEqual(true);
-    expect(await applyNetworkInterceptors()).toEqual(false);
-    expect(await applyNetworkInterceptors(axiosMockedNOK)).toEqual(false);
+    expect(applyNetworkInterceptors(axiosMockedOK)).resolves.toEqual(true);
+    expect(applyNetworkInterceptors()).resolves.toEqual(false);
+    expect(applyNetworkInterceptors(axiosMockedNOK)).resolves.toEqual(false);
     expect(
-      await applyNetworkInterceptors(axiosMockedNOKJustInterceptor)
-    ).toEqual(false);
+      applyNetworkInterceptors(axiosMockedNOKJustInterceptor)
+    ).resolves.toEqual(false);
     expect(
-      await applyNetworkInterceptors(axiosMockedNOKInterceptorWithRequest)
-    ).toEqual(false);
+      applyNetworkInterceptors(axiosMockedNOKInterceptorWithRequest)
+    ).resolves.toEqual(false);
   });
 
   test('Axios \'use\' methods should be called', () => {
