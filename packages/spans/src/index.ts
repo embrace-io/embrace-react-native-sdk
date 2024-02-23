@@ -118,7 +118,13 @@ export const recordSpanWithName = async (
 
   if (attributes && Object.values(attributes).length > 0) {
     for (const [key, value] of Object.entries(attributes)) {
-      NativeModules.EmbraceManager.addSpanAttributesToSpanId(id, key, value);
+      if (validateAndLogRequiredProperties({ key, value })) {
+        NativeModules.EmbraceManager.addSpanAttributesToSpanId(
+          id,
+          key.toString(),
+          value.toString()
+        );
+      }
     }
   }
 
