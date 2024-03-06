@@ -367,7 +367,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             long et = endTime.longValue();
 
             final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<String, Object>();
-            Embrace.getInstance().logRnAction(name, st, et, props, payloadSize, output);
+            Embrace.getInstance().getReactNativeInternalInterface().logRnAction(name, st, et, props, payloadSize, output);
             promise.resolve(true);
         }catch(Exception e){
             promise.resolve(false);
