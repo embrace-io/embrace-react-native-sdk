@@ -922,6 +922,7 @@ describe('Test initialize', () => {
     const { initialize } = require('../index');
 
     const result = initialize({ patch: testValue });
+
     expect(result).resolves.toBe(true);
 
     result.then(() => {
@@ -981,8 +982,13 @@ describe('Test initialize', () => {
     const { initialize } = require('../index');
 
     const result = initialize();
+
     expect(result).resolves.toBe(true);
-    result.then(() => expect(mocksetReactNativeSDKVersion).toBeCalled());
+
+    result.then(() => {
+      expect(mocksetReactNativeSDKVersion).toBeCalled();
+    });
+    
   });
 
   test('applying Tracking', () => {
@@ -1016,10 +1022,11 @@ describe('Test initialize', () => {
     const { initialize } = require('../index');
 
     const result = initialize({ patch: testValue });
+
     expect(result).resolves.toBe(true);
 
-    result.then(() =>
-      expect(mockLogMessageWithSeverityAndProperties).toBeCalled()
-    );
+    result.then(() => {
+      expect(mockLogMessageWithSeverityAndProperties).toBeCalled();
+    });
   });
 });
