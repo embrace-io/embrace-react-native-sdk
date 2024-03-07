@@ -1,7 +1,7 @@
 {
   "name": "@embrace-io/react-native",
-  "version": "4.0.1",
-  "description": "A React Native wrapper for Embrace SDK",
+  "version": "4.0.4",
+  "description": "A React Native wrapper for Embrace SDK.",
   "author": {
     "name": "Embrace.io",
     "email": "truenorth@embrace.io"
