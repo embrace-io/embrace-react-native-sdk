@@ -1,11 +1,15 @@
 import { NativeModules } from 'react-native';
 import { Attributes, Events, SPAN_ERROR_CODES } from '../interfaces/ISpans';
-import { createFalsePromise, validateAndLogRequiredProperties } from './Utils';
+import {
+  convertMSToNano,
+  createFalsePromise,
+  validateAndLogRequiredProperties,
+} from './Utils';
 
 export const startSpanWithName = (
   name: string,
   parentSpanId?: string
-): Promise<boolean> => {
+): Promise<boolean | string> => {
   if (!validateAndLogRequiredProperties({ name })) {
     return createFalsePromise();
   }
@@ -51,7 +55,7 @@ export const addSpanEventToSpanId = (
     return NativeModules.EmbraceManager.addSpanEventToSpanId(
       spanId,
       name,
-      timeStamp,
+      convertMSToNano(timeStamp),
       attributes
     );
   } catch (e) {
@@ -133,7 +137,7 @@ export const recordSpanWithName = async (
       NativeModules.EmbraceManager.addSpanEventToSpanId(
         id,
         event.name,
-        event.timestampNanos,
+        convertMSToNano(event.timestampNanos),
         event.attributes
       );
     });
@@ -166,15 +170,24 @@ export const recordCompletedSpanWithName = (
   ) {
     return createFalsePromise();
   }
+  let tmpEvent = [] as Events[];
+  if (events && events.length > 0) {
+    tmpEvent = events.map((event) => {
+      return {
+        ...event,
+        timestampNanos: convertMSToNano(event.timestampNanos),
+      };
+    });
+  }
   try {
     return NativeModules.EmbraceManager.recordCompletedSpanWithName(
       name,
-      startTimeNanos,
-      endTimeNanos,
+      convertMSToNano(startTimeNanos),
+      convertMSToNano(endTimeNanos),
       errorCode,
       parentSpanId,
       attributes,
-      events
+      tmpEvent
     );
   } catch (e) {
     console.warn(

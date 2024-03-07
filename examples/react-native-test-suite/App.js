@@ -2,49 +2,9 @@ import React, {useEffect} from 'react';
 import {SafeAreaView, Text, TouchableOpacity} from 'react-native';
 
 import {initialize, endAppStartup} from '@embrace-io/react-native';
+// import codePush from 'react-native-code-push';
 
 import MainNavigation from './src/navigation/MainNavigation';
-import EmbraceApolloLink from '@embrace-io/apollo-graphql/lib/index';
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  ApolloLink,
-  useMutation,
-} from '@apollo/client';
-import {gql} from '@apollo/client';
-import {useQuery} from '@apollo/client';
-import {BatchHttpLink} from 'apollo-link-batch-http';
-
-export const USERS_MUTATION = gql`
-  mutation idk {
-    updateTodo(
-      input: {id: "8db57b8f-be09-4e07-a1f6-4fb77d9b16e7", done: true}
-    ) {
-      id
-      done
-    }
-  }
-`;
-
-export const USERS_QUERY = gql`
-  query getItems {
-    users {
-      id
-      email
-      name
-    }
-  }
-`;
-
-export const POKE_QUERY = gql`
-  query getItems {
-    pokemon_v2_item {
-      name
-      cost
-    }
-  }
-`;
 
 const App = () => {
   useEffect(() => {
@@ -79,22 +39,7 @@ const App = () => {
   );
 };
 
-const ApolloWrappedComponent = ({children}) => {
-  useQuery(USERS_QUERY);
-  const [responsee] = useMutation(USERS_MUTATION);
-  responsee().then(rr => {
-    console.log('responsee', rr);
-  });
+// let codePushOptions = {checkFrequency: codePush.CheckFrequency.ON_APP_RESUME};
 
-  const httpLink = new BatchHttpLink({
-    uri: 'https://api.mocki.io/v2/c4d7a195/graphql',
-  });
-  const embraceMiddleware = new EmbraceApolloLink.build(ApolloLink, httpLink);
-  const client = new ApolloClient({
-    link: embraceMiddleware(),
-
-    cache: new InMemoryCache(),
-  });
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
-};
+// App = codePush(codePushOptions)(App);
 export default App;

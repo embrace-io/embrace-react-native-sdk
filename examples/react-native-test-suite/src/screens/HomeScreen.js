@@ -11,7 +11,7 @@ import {
 import {getPokemonWithAxios, getPokemonWithFetch} from '../api/apis';
 import ActionButton from '../components/ActionButton';
 import WebViewScreen from './WebViewScreen';
-import {useEmbraceOrientationLogger} from '@embrace-io/orientation-change-tracker';
+import {useEmbraceOrientationLogger} from '@embrace-io/react-native-orientation-change-tracker';
 
 const HomeScreen = () => {
   useEmbraceOrientationLogger();

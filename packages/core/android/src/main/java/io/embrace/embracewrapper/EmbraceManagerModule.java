@@ -585,7 +585,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         }
     }
 
-    private Map<String, String> convertirReadableMap(ReadableMap readableMap) {
+    private Map<String, String> convertToReadableMap(ReadableMap readableMap) {
         if (readableMap == null) {
             return null;
         }
@@ -618,12 +618,22 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     private List<Map<String, Object>> transformListReadableMapToListMap(ReadableArray items) {
         List<Map<String, Object>> objectMapList = new ArrayList<>();
 
-        for (int i = 0; i < items.size(); i++) {
-            ReadableMap readableMap = items.getMap(i);
+        try{
+            for (int i = 0; i < items.size(); i++) {
+                ReadableMap readableMap = items.getMap(i);
 
-            if (readableMap != null) {
-                objectMapList.add(readableMap.toHashMap());
+                if (readableMap != null) {
+                    Map<String, Object> map = readableMap.toHashMap();
+                    // TODO Change when Android/iOS replace time in nano for ms
+                    if (map.containsKey("timestampNanos") && map.get("timestampNanos") instanceof Double) {
+                        double timestampNanos = (Double) map.get("timestampNanos");
+                        map.put("timestampNanos", (long) timestampNanos);
+                    }
+                    objectMapList.add(map);
+                }
             }
+        }catch(Exception e){
+            Log.e("Embrace", "There was an error in parsing the span event data", e);
         }
 
         return objectMapList;
@@ -653,7 +663,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     public void addSpanEventToSpanId(String spanId, String name, Double time, ReadableMap attributes, Promise promise) {
         try{
 
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().addSpanEvent(spanId, name, time.longValue(), this.convertirReadableMap(attributes)));
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().addSpanEvent(spanId, name, time.longValue(), this.convertToReadableMap(attributes)));
         }catch(Exception e){
             promise.resolve(false);
         }
@@ -664,7 +674,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         try{
             ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
 
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().recordCompletedSpan(name, startTimeNanos.longValue(), endTimeNanos.longValue(), errorCodeInstance, parentSpanId, this.convertirReadableMap(attributes), this.transformListReadableMapToListMap(events)));
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().recordCompletedSpan(name, startTimeNanos.longValue(), endTimeNanos.longValue(), errorCodeInstance, parentSpanId, this.convertToReadableMap(attributes), this.transformListReadableMapToListMap(events)));
         }catch(Exception e){
             promise.resolve(false);
         }

@@ -571,31 +571,11 @@ RCT_EXPORT_METHOD(addSpanAttributesToSpanId:(nonnull NSString*)spanId
   }
 }
 
-RCT_EXPORT_METHOD(recordSpanWithName:(nonnull NSString*)name
-    parentSpanId:(nullable NSString *)parentSpanId
-    attributes:(nullable NSDictionary *)attributes
-    events:(nullable NSArray *)events
-    callback:(RCTResponseSenderBlock)callback) {
-  @try {
-    id (^operationBlock)(void) = ^{
-      callback(@[@"SpanTrackerApplied"]);
-      return @YES;
-    };
-    id result = [[RNEmbrace sharedInstance] recordSpanWithName:name
-            parentSpanId:parentSpanId
-            attributes:attributes
-            events:events
-            operation:operationBlock];
-  } @catch (NSException *exception) {
-      callback(@[@"SpanTrackerFailed"]);
-  }
-}
-
 RCT_EXPORT_METHOD(recordCompletedSpanWithName:(nonnull NSString*)name
     startTimeNanos:(NSInteger)startTimeNanos
     endTimeNanos:(NSInteger)endTimeNanos
     errorCode:(NSString *)errorCode
-    parentSpanId:(nonnull NSString *)parentSpanId
+    parentSpanId:(nullable NSString *)parentSpanId
     attributes:(nullable NSDictionary *)attributes
     events:(nullable NSArray *)events
     resolver:(RCTPromiseResolveBlock)resolve
