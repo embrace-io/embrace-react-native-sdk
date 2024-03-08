@@ -1,6 +1,6 @@
 import React from 'react';
 import {WebView} from 'react-native-webview';
-import {logEmbraceWebView} from '@embrace-io/webview-tracker';
+import {logEmbraceWebView} from '@embrace-io/react-native-webview-tracker';
 import {Modal, View, Text, TouchableOpacity} from 'react-native';
 
 const WebViewScreen = ({visible, closePopup}) => {

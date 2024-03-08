@@ -6,6 +6,8 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableArray;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.bridge.WritableMap;
@@ -14,6 +16,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
+
+import io.embrace.android.embracesdk.spans.ErrorCode;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
@@ -560,6 +566,110 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             promise.resolve(false);
         }
 
+    }
+
+    @ReactMethod()
+    public void startSpan(String name, String parentSpanId, Promise promise) {
+        try{
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().startSpan(name, parentSpanId, null));
+        }catch(Exception e){
+            promise.resolve(null);
+        }
+    }
+
+    private Map<String, String> convertToReadableMap(ReadableMap readableMap) {
+        if (readableMap == null) {
+            return null;
+        }
+
+        Map<String, String> stringMap = new HashMap<>();
+
+        for (String key : readableMap.toHashMap().keySet()) {
+            stringMap.put(key, readableMap.getString(key));
+        }
+
+        return stringMap;
+    }
+
+    private ErrorCode getSpanErrorCodebyString(String errorCode){
+        switch (errorCode) {
+            case "Failure":
+                return ErrorCode.FAILURE;
+
+            case "UserAbandon":
+                return ErrorCode.USER_ABANDON;
+
+            case "Unknown":
+                return ErrorCode.UNKNOWN;
+
+            default:
+                return null;
+        }
+    }
+
+    private List<Map<String, Object>> transformListReadableMapToListMap(ReadableArray items) {
+        List<Map<String, Object>> objectMapList = new ArrayList<>();
+
+        try{
+            for (int i = 0; i < items.size(); i++) {
+                ReadableMap readableMap = items.getMap(i);
+
+                if (readableMap != null) {
+                    Map<String, Object> map = readableMap.toHashMap();
+                    // TODO Change when Android/iOS replace time in nano for ms
+                    if (map.containsKey("timestampNanos") && map.get("timestampNanos") instanceof Double) {
+                        double timestampNanos = (Double) map.get("timestampNanos");
+                        map.put("timestampNanos", (long) timestampNanos);
+                    }
+                    objectMapList.add(map);
+                }
+            }
+        }catch(Exception e){
+            Log.e("Embrace", "There was an error in parsing the span event data", e);
+        }
+
+        return objectMapList;
+    }
+
+    @ReactMethod()
+    public void stopSpan(String spanId, String errorCodeString, Promise promise) {
+        try{
+            
+            ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().stopSpan(spanId, errorCodeInstance, null));
+        }catch(Exception e){
+            promise.resolve(false);
+        }
+    }
+
+    @ReactMethod()
+    public void addSpanAttributeToSpan(String spanId, String key, String value, Promise promise) {
+        try{
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().addSpanAttribute(spanId, key, value));
+        }catch(Exception e){
+            promise.resolve(false);
+        }
+    }
+
+    @ReactMethod()
+    public void addSpanEventToSpan(String spanId, String name, Double time, ReadableMap attributes, Promise promise) {
+        try{
+
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().addSpanEvent(spanId, name, time.longValue(), this.convertToReadableMap(attributes)));
+        }catch(Exception e){
+            promise.resolve(false);
+        }
+    }
+
+    @ReactMethod()
+    public void recordCompletedSpan(String name, Double startTimeNanos, Double endTimeNanos, String errorCodeString, String parentSpanId, ReadableMap attributes, ReadableArray events, Promise promise) {
+        try{
+            ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
+
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().recordCompletedSpan(name, startTimeNanos.longValue(), endTimeNanos.longValue(), errorCodeInstance, parentSpanId, this.convertToReadableMap(attributes), this.transformListReadableMapToListMap(events)));
+        }catch(Exception e){
+            promise.resolve(false);
+        }
     }
 
     private boolean validateHTTPMethod(String httpMethod) {
