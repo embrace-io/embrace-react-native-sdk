@@ -1,0 +1,5 @@
+# Global owners
+* @embrace-io/team-react-native
+
+# API surface owners
+src/embrace.ts @fractalwrench @fnewberg

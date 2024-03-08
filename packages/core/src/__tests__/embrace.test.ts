@@ -922,6 +922,7 @@ describe('Test initialize', () => {
     const { initialize } = require('../index');
 
     const result = initialize({ patch: testValue });
+
     expect(result).resolves.toBe(true);
 
     result.then(() => {
@@ -929,6 +930,7 @@ describe('Test initialize', () => {
       expect(mockSetJavaScriptPatchNumber).toBeCalled();
       expect(mockSetReactNativeSDKVersion).toBeCalled();
     });
+
   });
 
   test('applying previousHandler', () => {
@@ -949,6 +951,7 @@ describe('Test initialize', () => {
     ErrorUtils.getGlobalHandler = previousHandler;
     const { initialize } = require('../index');
     const result = initialize({ patch: testValue });
+
     const handleError = () => {};
     const generatedGlobalErrorFunc = handleGlobalError(
       previousHandler,
