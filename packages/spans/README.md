@@ -29,7 +29,7 @@ npm install @embrace-io/react-native-spans
 
 ```javascript
 
-import { buildEmbraceMiddleware } from "@embrace-io/react-native-spans";
+import { startSpanWithName, stopSpanWithId } from "@embrace-io/react-native-spans";
 const App = () => {
   const spanId = useRef<string>();
   const getDataFromServer = () => {
