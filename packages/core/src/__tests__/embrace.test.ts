@@ -930,7 +930,42 @@ describe('Test initialize', () => {
       expect(mockSetJavaScriptPatchNumber).toBeCalled();
       expect(mockSetReactNativeSDKVersion).toBeCalled();
     });
+  });
 
+  test('initialize - native not initialized', () => {
+    jest.mock('react-native', () => ({
+      NativeModules: {
+        EmbraceManager: {
+          isStarted: () => false,
+          startNativeEmbraceSDK: () => false,
+        },
+      },
+    }));
+
+    const { initialize } = require('../index');
+
+    const result = initialize({ patch: testValue });
+    jest.runAllTicks();
+
+    expect(result).resolves.toBe(true);
+  });
+
+  test('initialize - native initialized', () => {
+    jest.mock('react-native', () => ({
+      NativeModules: {
+        EmbraceManager: {
+          isStarted: () => false,
+          startNativeEmbraceSDK: () => true,
+        },
+      },
+    }));
+
+    const { initialize } = require('../index');
+
+    const result = initialize({ patch: testValue });
+    jest.runAllTicks();
+
+    expect(result).resolves.toBe(true);
   });
 
   test('applying previousHandler', () => {
