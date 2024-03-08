@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {SafeAreaView, Text, TouchableOpacity} from 'react-native';
 
 import {initialize, endAppStartup} from '@embrace-io/react-native';
+// To test with Codepush
 // import codePush from 'react-native-code-push';
 
 import MainNavigation from './src/navigation/MainNavigation';
@@ -39,6 +40,7 @@ const App = () => {
   );
 };
 
+// To test with Codepush
 // let codePushOptions = {checkFrequency: codePush.CheckFrequency.ON_APP_RESUME};
 
 // App = codePush(codePushOptions)(App);
