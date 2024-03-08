@@ -19,7 +19,7 @@ beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
 
-test('endAppStartup', () => {
+test('endAppStartup', async () => {
   const mock = jest.fn();
   jest.mock('react-native', () => ({
     NativeModules: {
@@ -29,11 +29,11 @@ test('endAppStartup', () => {
     },
   }));
   const { endAppStartup } = require('../index');
-  endAppStartup();
+  await endAppStartup();
   expect(mock).toBeCalled();
 });
 
-test('endAppStartupWithProperties', () => {
+test('endAppStartupWithProperties', async () => {
   const mock = jest.fn();
   jest.mock(
     'react-native',
@@ -47,12 +47,12 @@ test('endAppStartupWithProperties', () => {
     { virtual: true }
   );
   const { endAppStartup } = require('../index');
-  endAppStartup(testProps);
+  await endAppStartup(testProps);
   expect(mock).toBeCalledWith(testProps);
 });
 
 describe('User Identifier Tests', () => {
-  test('setUserIdentifier', () => {
+  test('setUserIdentifier', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -66,11 +66,11 @@ describe('User Identifier Tests', () => {
       { virtual: true }
     );
     const { setUserIdentifier } = require('../index');
-    setUserIdentifier(testUserId);
+    await setUserIdentifier(testUserId);
     expect(mock).toBeCalledWith(testUserId);
   });
 
-  test('clearUserIdentifier', () => {
+  test('clearUserIdentifier', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -85,13 +85,13 @@ describe('User Identifier Tests', () => {
     );
 
     const { clearUserIdentifier } = require('../index');
-    clearUserIdentifier();
+    await clearUserIdentifier();
     expect(mock).toBeCalled();
   });
 });
 
 describe('User Data Tests', () => {
-  test('setUsername', () => {
+  test('setUsername', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -105,11 +105,11 @@ describe('User Data Tests', () => {
       { virtual: true }
     );
     const { setUsername } = require('../index');
-    setUsername(testUserId);
+    await setUsername(testUserId);
     expect(mock).toBeCalledWith(testUserId);
   });
 
-  test('clearUsername', () => {
+  test('clearUsername', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -123,11 +123,11 @@ describe('User Data Tests', () => {
       { virtual: true }
     );
     const { clearUsername } = require('../index');
-    clearUsername();
+    await clearUsername();
     expect(mock).toBeCalled();
   });
 
-  test('setUserEmail', () => {
+  test('setUserEmail', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -141,11 +141,11 @@ describe('User Data Tests', () => {
       { virtual: true }
     );
     const { setUserEmail } = require('../index');
-    setUserEmail(testEmail);
+    await setUserEmail(testEmail);
     expect(mock).toBeCalledWith(testEmail);
   });
 
-  test('clearUserEmail', () => {
+  test('clearUserEmail', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -159,13 +159,13 @@ describe('User Data Tests', () => {
       { virtual: true }
     );
     const { clearUserEmail } = require('../index');
-    clearUserEmail();
+    await clearUserEmail();
     expect(mock).toBeCalled();
   });
 });
 
 describe('Logs Test', () => {
-  test('addBreadcrumb', () => {
+  test('addBreadcrumb', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -179,11 +179,11 @@ describe('Logs Test', () => {
       { virtual: true }
     );
     const { addBreadcrumb } = require('../index');
-    addBreadcrumb(testView);
+    await addBreadcrumb(testView);
     expect(mock).toBeCalledWith(testView);
   });
 
-  test('logScreen', () => {
+  test('logScreen', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -197,7 +197,7 @@ describe('Logs Test', () => {
       { virtual: true }
     );
     const { logScreen } = require('../index');
-    logScreen(testView);
+    await logScreen(testView);
     expect(mock).toBeCalledWith(`Opening screen [${testView}]`);
   });
 
@@ -213,7 +213,13 @@ describe('Logs Test', () => {
       ${testMessage} | ${ERROR}   | ${testProps} | ${true}         | ${mockSt}
     `(
       'should run $severity log',
-      ({ message, severity, properties, allowScreenshot, stackTrace }) => {
+      async ({
+        message,
+        severity,
+        properties,
+        allowScreenshot,
+        stackTrace,
+      }) => {
         const mock = jest.fn();
         jest.mock(
           'react-native',
@@ -228,13 +234,13 @@ describe('Logs Test', () => {
         );
         const embrace = require('../index');
         embrace.generateStackTrace = () => (severity === INFO ? '' : mockSt);
-        embrace.logMessage(message, severity, properties);
+        await embrace.logMessage(message, severity, properties);
         expect(mock).toBeCalledWith(message, severity, properties, stackTrace);
       }
     );
   });
 
-  test('logInfo', () => {
+  test('logInfo', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -248,11 +254,11 @@ describe('Logs Test', () => {
       { virtual: true }
     );
     const { logInfo } = require('../index');
-    logInfo('test message');
+    await logInfo('test message');
     expect(mock).toBeCalledWith(`test message`, INFO, undefined, '');
   });
 
-  test('logWarning', () => {
+  test('logWarning', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -266,7 +272,7 @@ describe('Logs Test', () => {
       { virtual: true }
     );
     const { logWarning } = require('../index');
-    logWarning('test message');
+    await logWarning('test message');
     expect(mock).toBeCalledWith(
       `test message`,
       WARNING,
@@ -275,7 +281,7 @@ describe('Logs Test', () => {
     );
   });
 
-  test('logError', () => {
+  test('logError', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -289,7 +295,7 @@ describe('Logs Test', () => {
       { virtual: true }
     );
     const { logError } = require('../index');
-    logError('test message');
+    await logError('test message');
     expect(mock).toBeCalledWith(
       `test message`,
       ERROR,
@@ -320,6 +326,8 @@ describe('Log handled Error Tests', () => {
     );
     const { logHandledError } = require('../index');
     logHandledError(message, properties);
+
+    jest.advanceTimersByTime(250);
     if (message instanceof Error) {
       expect(mock).toBeCalledWith(out.message, out.stack, out.properties);
     } else {
@@ -329,7 +337,7 @@ describe('Log handled Error Tests', () => {
 });
 
 describe('Personas Tests', () => {
-  test('addUserPersona', () => {
+  test('addUserPersona', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -343,11 +351,11 @@ describe('Personas Tests', () => {
       { virtual: true }
     );
     const { addUserPersona } = require('../index');
-    addUserPersona(testPersona);
+    await addUserPersona(testPersona);
     expect(mock).toBeCalledWith(testPersona);
   });
 
-  test('clearUserPersona', () => {
+  test('clearUserPersona', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -361,11 +369,11 @@ describe('Personas Tests', () => {
       { virtual: true }
     );
     const { clearUserPersona } = require('../index');
-    clearUserPersona(testPersona);
+    await clearUserPersona(testPersona);
     expect(mock).toBeCalledWith(testPersona);
   });
 
-  test('clearAllUserPersonas', () => {
+  test('clearAllUserPersonas', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -379,13 +387,13 @@ describe('Personas Tests', () => {
       { virtual: true }
     );
     const { clearAllUserPersonas } = require('../index');
-    clearAllUserPersonas();
+    await clearAllUserPersonas();
     expect(mock).toBeCalled();
   });
 });
 
 describe('Custom Views Tests', () => {
-  test('startView', () => {
+  test('startView', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -399,11 +407,11 @@ describe('Custom Views Tests', () => {
       { virtual: true }
     );
     const { startView } = require('../index');
-    startView(testView);
+    await startView(testView);
     expect(mock).toBeCalledWith(testView);
   });
 
-  test('endView', () => {
+  test('endView', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -417,13 +425,13 @@ describe('Custom Views Tests', () => {
       { virtual: true }
     );
     const { endView } = require('../index');
-    endView(testView);
+    await endView(testView);
     expect(mock).toBeCalledWith(testView);
   });
 });
 
 describe('Session Properties Tests', () => {
-  test('getSessionProperties', () => {
+  test('getSessionProperties', async () => {
     const mock = jest.fn(() => Promise.resolve({ key: 'value' }));
     jest.mock(
       'react-native',
@@ -443,7 +451,7 @@ describe('Session Properties Tests', () => {
     );
   });
 
-  test('should call addSessionProperty with values ', () => {
+  test('should call addSessionProperty with values ', async () => {
     const mock = jest.fn(() => Promise.resolve(true));
     jest.mock(
       'react-native',
@@ -458,11 +466,11 @@ describe('Session Properties Tests', () => {
     );
 
     const { addSessionProperty } = require('../index');
-    addSessionProperty(testKey, testValue, testPermanent);
+    await addSessionProperty(testKey, testValue, testPermanent);
     expect(mock).toBeCalledWith(testKey, testValue, testPermanent);
   });
 
-  test('addSessionProperty should return success', () => {
+  test('addSessionProperty should return success', async () => {
     const mock = jest.fn(() => Promise.resolve(true));
     jest.mock(
       'react-native',
@@ -477,12 +485,12 @@ describe('Session Properties Tests', () => {
     );
 
     const { addSessionProperty } = require('../index');
-    addSessionProperty(testKey, testValue, testPermanent).then(
+    await addSessionProperty(testKey, testValue, testPermanent).then(
       (success: boolean) => expect(success).toBeTruthy()
     );
   });
 
-  test('removeSessionProperty', () => {
+  test('removeSessionProperty', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -497,13 +505,13 @@ describe('Session Properties Tests', () => {
     );
 
     const { removeSessionProperty } = require('../index');
-    removeSessionProperty(testKey);
+    await removeSessionProperty(testKey);
     expect(mock).toBeCalledWith(testKey);
   });
 });
 
 describe('endSession', () => {
-  test('endSession default', () => {
+  test('endSession default', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -517,11 +525,11 @@ describe('endSession', () => {
       { virtual: true }
     );
     const { endSession } = require('../index');
-    endSession();
+    await endSession();
     expect(mock).toBeCalledWith(false);
   });
 
-  test('endSession with clearUserInfo', () => {
+  test('endSession with clearUserInfo', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -535,14 +543,14 @@ describe('endSession', () => {
       { virtual: true }
     );
     const { endSession } = require('../index');
-    endSession(clearUserInfo);
+    await endSession(clearUserInfo);
     expect(mock).toBeCalledWith(clearUserInfo);
   });
 });
 
 describe('Start Moment', () => {
   describe('Test Start Moment', () => {
-    test('start moment', () => {
+    test('start moment', async () => {
       const mockWithIdentifierAndProperties = jest.fn();
       const mockWithIdentifierWithoutProperties = jest.fn();
       const mockWithoutIdentifierAndProperties = jest.fn();
@@ -559,10 +567,10 @@ describe('Start Moment', () => {
       }));
       const { startMoment } = require('../index');
 
-      startMoment(testValue, 'identifier', {});
-      startMoment(testValue, 'identifier');
-      startMoment(testValue, undefined, {});
-      startMoment(testValue);
+      await startMoment(testValue, 'identifier', {});
+      await startMoment(testValue, 'identifier');
+      await startMoment(testValue, undefined, {});
+      await startMoment(testValue);
       expect(mockWithIdentifierAndProperties).toBeCalledTimes(2);
       expect(mockWithIdentifierWithoutProperties).toBeCalled();
       expect(mockWithoutIdentifierAndProperties).toBeCalled();
@@ -590,6 +598,7 @@ describe('Start Moment', () => {
       startMoment(undefined, undefined, {});
       startMoment(undefined);
 
+      jest.advanceTimersByTime(250);
       expect(mockWithIdentifierAndProperties).toBeCalledTimes(0);
       expect(mockWithIdentifierWithoutProperties).toBeCalledTimes(0);
       expect(mockWithoutIdentifierAndProperties).toBeCalledTimes(0);
@@ -604,7 +613,7 @@ describe('endMoment', () => {
     ${testValue} | ${testUserId} | ${null}
     ${testValue} | ${null}       | ${testProps}
     ${testValue} | ${testUserId} | ${testProps}
-  `('endMomentWithName', ({ name, identifier, properties }) => {
+  `('endMomentWithName', async ({ name, identifier, properties }) => {
     const mock = jest.fn();
 
     jest.mock(
@@ -620,7 +629,7 @@ describe('endMoment', () => {
       { virtual: true }
     );
     const { endMoment } = require('../index');
-    endMoment(name, identifier, properties);
+    await endMoment(name, identifier, properties);
     if (identifier) {
       expect(mock).toBeCalledWith(name, identifier, properties);
     } else {
@@ -630,7 +639,7 @@ describe('endMoment', () => {
 });
 
 describe('Payers Test', () => {
-  test('setUserAsPayer', () => {
+  test('setUserAsPayer', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -644,10 +653,10 @@ describe('Payers Test', () => {
       { virtual: true }
     );
     const { setUserAsPayer } = require('../index');
-    setUserAsPayer();
+    await setUserAsPayer();
     expect(mock).toBeCalled();
   });
-  test('clearUserAsPayer', () => {
+  test('clearUserAsPayer', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -661,13 +670,13 @@ describe('Payers Test', () => {
       { virtual: true }
     );
     const { clearUserAsPayer } = require('../index');
-    clearUserAsPayer();
+    await clearUserAsPayer();
     expect(mock).toBeCalled();
   });
 });
 
 describe('JavaScript bundle', () => {
-  test('setJavaScriptBundlePath', () => {
+  test('setJavaScriptBundlePath', async () => {
     const mock = jest.fn();
     jest.mock('react-native', () => ({
       NativeModules: {
@@ -679,13 +688,13 @@ describe('JavaScript bundle', () => {
     const { setJavaScriptBundlePath } = require('../index');
     const path = 'path/to/bundle.bundle';
 
-    setJavaScriptBundlePath(path);
+    await setJavaScriptBundlePath(path);
     expect(mock).toBeCalledWith(path);
   });
 });
 
 describe('Log network call', () => {
-  test('recordNetworkRequest', () => {
+  test('recordNetworkRequest', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -710,7 +719,7 @@ describe('Log network call', () => {
     const networkStatus = Number(200);
     const error = null;
 
-    recordNetworkRequest(
+    await recordNetworkRequest(
       url,
       method,
       st,
@@ -745,7 +754,7 @@ describe('Record network call', () => {
   const networkStatus = Number(200);
   const error = 'error';
 
-  test('record completed network request', () => {
+  test('record completed network request', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -760,7 +769,15 @@ describe('Record network call', () => {
     );
 
     const { recordNetworkRequest } = require('../index');
-    recordNetworkRequest(url, method, st, et, bytesIn, bytesOut, networkStatus);
+    await recordNetworkRequest(
+      url,
+      method,
+      st,
+      et,
+      bytesIn,
+      bytesOut,
+      networkStatus
+    );
 
     expect(mock).toBeCalledWith(
       url,
@@ -774,7 +791,7 @@ describe('Record network call', () => {
     );
   });
 
-  test('record incomplete network request', () => {
+  test('record incomplete network request', async () => {
     const mock = jest.fn();
     jest.mock(
       'react-native',
@@ -789,14 +806,14 @@ describe('Record network call', () => {
     );
 
     const { recordNetworkRequest } = require('../index');
-    recordNetworkRequest(url, method, st, et, error);
+    await recordNetworkRequest(url, method, st, et, error);
 
     expect(mock).toBeCalledWith(url, method, st, et, error, -1, -1, undefined);
   });
 });
 
 describe('Test Device Stuffs', () => {
-  test('test device Id', () => {
+  test('test device Id', async () => {
     const mock = jest.fn();
     jest.mock('react-native', () => ({
       NativeModules: {
@@ -806,10 +823,10 @@ describe('Test Device Stuffs', () => {
       },
     }));
     const { getDeviceId } = require('../index');
-    getDeviceId();
+    await getDeviceId();
     expect(mock).toBeCalled();
   });
-  test('test session Id', () => {
+  test('test session Id', async () => {
     const mock = jest.fn();
     jest.mock('react-native', () => ({
       NativeModules: {
@@ -819,7 +836,7 @@ describe('Test Device Stuffs', () => {
       },
     }));
     const { getCurrentSessionId } = require('../index');
-    getCurrentSessionId();
+    await getCurrentSessionId();
     expect(mock).toBeCalled();
   });
 });
@@ -864,7 +881,7 @@ describe('Last Session Info', () => {
 });
 
 describe('Test OTA Stuffs', () => {
-  test('test set javascript patch number', () => {
+  test('test set javascript patch number', async () => {
     const mock = jest.fn();
     jest.mock('react-native', () => ({
       NativeModules: {
@@ -874,7 +891,7 @@ describe('Test OTA Stuffs', () => {
       },
     }));
     const { setJavaScriptPatch } = require('../index');
-    setJavaScriptPatch();
+    await setJavaScriptPatch();
     expect(mock).toBeCalled();
   });
 });
@@ -905,11 +922,15 @@ describe('Test initialize', () => {
     const { initialize } = require('../index');
 
     const result = initialize({ patch: testValue });
-    jest.runAllTicks();
+
     expect(result).resolves.toBe(true);
-    expect(mockSetReactNativeVersion).toBeCalled();
-    expect(mockSetJavaScriptPatchNumber).toBeCalled();
-    expect(mockSetReactNativeSDKVersion).toBeCalled();
+
+    result.then(() => {
+      expect(mockSetReactNativeVersion).toBeCalled();
+      expect(mockSetJavaScriptPatchNumber).toBeCalled();
+      expect(mockSetReactNativeSDKVersion).toBeCalled();
+    });
+
   });
 
   test('applying previousHandler', () => {
@@ -930,20 +951,22 @@ describe('Test initialize', () => {
     ErrorUtils.getGlobalHandler = previousHandler;
     const { initialize } = require('../index');
     const result = initialize({ patch: testValue });
-    jest.runAllTicks();
+
     const handleError = () => {};
     const generatedGlobalErrorFunc = handleGlobalError(
       previousHandler,
       handleError
     );
     generatedGlobalErrorFunc(Error('Test'));
-    jest.advanceTimersByTime(250);
 
     expect(result).resolves.toBe(true);
-    expect(previousHandler).toBeCalled();
-    expect(mockSetReactNativeVersion).toBeCalled();
-    expect(mockSetJavaScriptPatchNumber).toBeCalled();
-    expect(mockSetReactNativeSDKVersion).toBeCalled();
+
+    result.then(() => {
+      expect(previousHandler).toBeCalled();
+      expect(mockSetReactNativeVersion).toBeCalled();
+      expect(mockSetJavaScriptPatchNumber).toBeCalled();
+      expect(mockSetReactNativeSDKVersion).toBeCalled();
+    });
   });
 
   test('store embrace sdk version', () => {
@@ -961,9 +984,12 @@ describe('Test initialize', () => {
     const { initialize } = require('../index');
 
     const result = initialize();
-    jest.runAllTicks();
+
     expect(result).resolves.toBe(true);
-    expect(mocksetReactNativeSDKVersion).toBeCalled();
+
+    result.then(() => {
+      expect(mocksetReactNativeSDKVersion).toBeCalled();
+    });
   });
 
   test('applying Tracking', () => {
@@ -996,9 +1022,12 @@ describe('Test initialize', () => {
 
     const { initialize } = require('../index');
 
-    initialize({ patch: testValue });
-    jest.runAllTicks();
+    const result = initialize({ patch: testValue });
 
-    expect(mockLogMessageWithSeverityAndProperties).toBeCalled();
+    expect(result).resolves.toBe(true);
+
+    result.then(() => {
+      expect(mockLogMessageWithSeverityAndProperties).toBeCalled();
+    });
   });
 });

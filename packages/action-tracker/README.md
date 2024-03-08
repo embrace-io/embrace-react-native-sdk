@@ -28,8 +28,6 @@ npm install @embrace-io/action-tracker
 
 ### Adding the component to your code
 
-Add an useRef for the NavigationContainer and pass it to Embrace's hook
-
 ```javascript
 import { applyMiddleware, compose, configureStore } from "@reduxjs/toolkit";
 

@@ -4,7 +4,7 @@ beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
 describe('Log network call With Axios', () => {
-  test('Verify the instance has an Axios structure', async () => {
+  test('Verify the instance has an Axios structure', () => {
     const axiosMockedOK = {
       interceptors: {
         request: {
