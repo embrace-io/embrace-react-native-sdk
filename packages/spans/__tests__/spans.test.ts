@@ -144,26 +144,26 @@ describe('Test Spans - Add Event', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanEventToSpanId: mockNativePromise,
+          addSpanEventToSpan: mockNativePromise,
         },
       },
     }));
 
-    const { addSpanEventToSpanId } = require('../src/index');
-    addSpanEventToSpanId('Hey', 'name');
+    const { addSpanEventToSpan } = require('../src/index');
+    addSpanEventToSpan('Hey', 'name');
     expect(mockNativePromiseResolved).toBeCalledTimes(1);
   });
   test('Add Event To Span - Undefined', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanEventToSpanId: undefined,
+          addSpanEventToSpan: undefined,
         },
       },
     }));
 
-    const { addSpanEventToSpanId } = require('../src/index');
-    const result = addSpanEventToSpanId('Hey', 'name');
+    const { addSpanEventToSpan } = require('../src/index');
+    const result = addSpanEventToSpan('Hey', 'name');
     expect(result).resolves.toBe(false);
   });
   test('Add Event To Span - With spanId - With Name - With time', () => {
@@ -177,13 +177,13 @@ describe('Test Spans - Add Event', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanEventToSpanId: mockNativePromise,
+          addSpanEventToSpan: mockNativePromise,
         },
       },
     }));
 
-    const { addSpanEventToSpanId } = require('../src/index');
-    addSpanEventToSpanId('Hey', 'name', 123);
+    const { addSpanEventToSpan } = require('../src/index');
+    addSpanEventToSpan('Hey', 'name', 123);
     expect(mockNativePromiseResolved).toBeCalledTimes(1);
   });
   test('Add Event To Span - With spanId - With Name - With time - With Attribute', () => {
@@ -197,13 +197,13 @@ describe('Test Spans - Add Event', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanEventToSpanId: mockNativePromise,
+          addSpanEventToSpan: mockNativePromise,
         },
       },
     }));
 
-    const { addSpanEventToSpanId } = require('../src/index');
-    addSpanEventToSpanId('Hey', 'name', 123, { at1: '123' });
+    const { addSpanEventToSpan } = require('../src/index');
+    addSpanEventToSpan('Hey', 'name', 123, { at1: '123' });
     expect(mockNativePromiseResolved).toBeCalledTimes(1);
   });
   test('Add Event To Span - Without spanId', () => {
@@ -212,13 +212,13 @@ describe('Test Spans - Add Event', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanEventToSpanId: mockNativePromise,
+          addSpanEventToSpan: mockNativePromise,
         },
       },
     }));
-    const { addSpanEventToSpanId } = require('../src/index');
-    const result = addSpanEventToSpanId('', 'name');
-    const result2 = addSpanEventToSpanId(undefined, 'name');
+    const { addSpanEventToSpan } = require('../src/index');
+    const result = addSpanEventToSpan('', 'name');
+    const result2 = addSpanEventToSpan(undefined, 'name');
 
     expect(result).resolves.toBe(false);
     expect(result2).resolves.toBe(false);
@@ -232,12 +232,12 @@ describe('Test Spans - Add Event', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanEventToSpanId: mockNativePromise,
+          addSpanEventToSpan: mockNativePromise,
         },
       },
     }));
-    const { addSpanEventToSpanId } = require('../src/index');
-    const result = addSpanEventToSpanId('SpanId', '');
+    const { addSpanEventToSpan } = require('../src/index');
+    const result = addSpanEventToSpan('SpanId', '');
 
     expect(result).resolves.toBe(false);
     expect(mockNativePromise).toBeCalledTimes(0);
@@ -256,13 +256,13 @@ describe('Test Spans - Add Attribute', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanAttributesToSpanId: mockNativePromise,
+          addSpanAttributeToSpan: mockNativePromise,
         },
       },
     }));
 
-    const { addSpanAttributesToSpanId } = require('../src/index');
-    addSpanAttributesToSpanId('Hey', 'key', 'value');
+    const { addSpanAttributeToSpan } = require('../src/index');
+    addSpanAttributeToSpan('Hey', 'key', 'value');
     expect(mockNativePromiseResolved).toBeCalledTimes(1);
   });
 
@@ -270,12 +270,12 @@ describe('Test Spans - Add Attribute', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanAttributesToSpanId: undefined,
+          addSpanAttributeToSpan: undefined,
         },
       },
     }));
-    const { addSpanAttributesToSpanId } = require('../src/index');
-    const result = addSpanAttributesToSpanId('Hey', 'key', 'value');
+    const { addSpanAttributeToSpan } = require('../src/index');
+    const result = addSpanAttributeToSpan('Hey', 'key', 'value');
 
     expect(result).resolves.toBe(false);
   });
@@ -286,13 +286,13 @@ describe('Test Spans - Add Attribute', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanAttributesToSpanId: mockNativePromise,
+          addSpanAttributeToSpan: mockNativePromise,
         },
       },
     }));
-    const { addSpanAttributesToSpanId } = require('../src/index');
-    const result = addSpanAttributesToSpanId('', 'key', 'value');
-    const result2 = addSpanAttributesToSpanId(undefined, 'key', 'value');
+    const { addSpanAttributeToSpan } = require('../src/index');
+    const result = addSpanAttributeToSpan('', 'key', 'value');
+    const result2 = addSpanAttributeToSpan(undefined, 'key', 'value');
 
     expect(result).resolves.toBe(false);
 
@@ -307,13 +307,13 @@ describe('Test Spans - Add Attribute', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanAttributesToSpanId: mockNativePromise,
+          addSpanAttributeToSpan: mockNativePromise,
         },
       },
     }));
-    const { addSpanAttributesToSpanId } = require('../src/index');
-    const result = addSpanAttributesToSpanId('SpanId', '', 'value');
-    const result2 = addSpanAttributesToSpanId('SpanId', undefined, 'value');
+    const { addSpanAttributeToSpan } = require('../src/index');
+    const result = addSpanAttributeToSpan('SpanId', '', 'value');
+    const result2 = addSpanAttributeToSpan('SpanId', undefined, 'value');
 
     expect(result).resolves.toBe(false);
     expect(result2).resolves.toBe(false);
@@ -327,13 +327,13 @@ describe('Test Spans - Add Attribute', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
         EmbraceManager: {
-          addSpanAttributesToSpanId: mockNativePromise,
+          addSpanAttributeToSpan: mockNativePromise,
         },
       },
     }));
-    const { addSpanAttributesToSpanId } = require('../src/index');
-    const result = addSpanAttributesToSpanId('SpanId', 'key', '');
-    const result2 = addSpanAttributesToSpanId('SpanId', 'key', undefined);
+    const { addSpanAttributeToSpan } = require('../src/index');
+    const result = addSpanAttributeToSpan('SpanId', 'key', '');
+    const result2 = addSpanAttributeToSpan('SpanId', 'key', undefined);
 
     expect(result).resolves.toBe(false);
     expect(result2).resolves.toBe(false);
@@ -344,8 +344,8 @@ describe('Test Spans - Add Attribute', () => {
 
 describe('Test Spans - Record Span With Function', () => {
   test('Record Span With Function - Without Name / does not exist', () => {
-    const mockAddSpanAttributesToSpanId = jest.fn();
-    const mockAddSpanEventToSpanId = jest.fn();
+    const mockaddSpanAttributeToSpan = jest.fn();
+    const mockaddSpanEventToSpan = jest.fn();
     const mockStopSpanWithId = jest.fn();
     const mockedFunction = jest.fn();
 
@@ -358,8 +358,8 @@ describe('Test Spans - Record Span With Function', () => {
       NativeModules: {
         EmbraceManager: {
           startSpanWithName: mockStartSpanWithName,
-          addSpanAttributesToSpanId: mockAddSpanAttributesToSpanId,
-          addSpanEventToSpanId: mockAddSpanEventToSpanId,
+          addSpanAttributeToSpan: mockaddSpanAttributeToSpan,
+          addSpanEventToSpan: mockaddSpanEventToSpan,
           stopSpanWithId: mockStopSpanWithId,
         },
       },
@@ -373,13 +373,13 @@ describe('Test Spans - Record Span With Function', () => {
     expect(mockedFunction).toBeCalledTimes(2);
     expect(mockStopSpanWithId).toBeCalledTimes(0);
 
-    expect(mockAddSpanAttributesToSpanId).toBeCalledTimes(0);
-    expect(mockAddSpanEventToSpanId).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
   });
 
   test('Record Span With Function - With Name', () => {
-    const mockAddSpanAttributesToSpanId = jest.fn();
-    const mockAddSpanEventToSpanId = jest.fn();
+    const mockaddSpanAttributeToSpan = jest.fn();
+    const mockaddSpanEventToSpan = jest.fn();
     const mockStopSpanWithId = jest.fn();
     const mockedFunction = jest.fn();
 
@@ -396,8 +396,8 @@ describe('Test Spans - Record Span With Function', () => {
       NativeModules: {
         EmbraceManager: {
           startSpanWithName: mockStartSpanWithName,
-          addSpanAttributesToSpanId: mockAddSpanAttributesToSpanId,
-          addSpanEventToSpanId: mockAddSpanEventToSpanId,
+          addSpanAttributeToSpan: mockaddSpanAttributeToSpan,
+          addSpanEventToSpan: mockaddSpanEventToSpan,
           stopSpanWithId: mockStopSpanWithId,
         },
       },
@@ -410,12 +410,12 @@ describe('Test Spans - Record Span With Function', () => {
     expect(mockedFunction).toBeCalledTimes(1);
     expect(mockStopSpanWithId).toBeCalledTimes(1);
 
-    expect(mockAddSpanAttributesToSpanId).toBeCalledTimes(0);
-    expect(mockAddSpanEventToSpanId).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
   });
   test('Record Span With Function - With Name', () => {
-    const mockAddSpanAttributesToSpanId = jest.fn();
-    const mockAddSpanEventToSpanId = jest.fn();
+    const mockaddSpanAttributeToSpan = jest.fn();
+    const mockaddSpanEventToSpan = jest.fn();
     const mockStopSpanWithId = jest.fn();
     const mockedFunction = jest.fn();
 
@@ -428,8 +428,8 @@ describe('Test Spans - Record Span With Function', () => {
       NativeModules: {
         EmbraceManager: {
           startSpanWithName: mockStartSpanWithName,
-          addSpanAttributesToSpanId: mockAddSpanAttributesToSpanId,
-          addSpanEventToSpanId: mockAddSpanEventToSpanId,
+          addSpanAttributeToSpan: mockaddSpanAttributeToSpan,
+          addSpanEventToSpan: mockaddSpanEventToSpan,
           stopSpanWithId: mockStopSpanWithId,
         },
       },
@@ -442,13 +442,13 @@ describe('Test Spans - Record Span With Function', () => {
     expect(mockedFunction).toBeCalledTimes(1);
     expect(mockStopSpanWithId).toBeCalledTimes(1);
 
-    expect(mockAddSpanAttributesToSpanId).toBeCalledTimes(0);
-    expect(mockAddSpanEventToSpanId).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
   });
 
   test('Record Span With Function - With Name', () => {
-    const mockAddSpanAttributesToSpanId = jest.fn();
-    const mockAddSpanEventToSpanId = jest.fn();
+    const mockaddSpanAttributeToSpan = jest.fn();
+    const mockaddSpanEventToSpan = jest.fn();
     const mockStopSpanWithId = jest.fn();
     const mockedFunction = jest.fn();
     const mockCallback = () => {
@@ -465,8 +465,8 @@ describe('Test Spans - Record Span With Function', () => {
       NativeModules: {
         EmbraceManager: {
           startSpanWithName: mockStartSpanWithName,
-          addSpanAttributesToSpanId: mockAddSpanAttributesToSpanId,
-          addSpanEventToSpanId: mockAddSpanEventToSpanId,
+          addSpanAttributeToSpan: mockaddSpanAttributeToSpan,
+          addSpanEventToSpan: mockaddSpanEventToSpan,
           stopSpanWithId: mockStopSpanWithId,
         },
       },
@@ -481,13 +481,13 @@ describe('Test Spans - Record Span With Function', () => {
     expect(mockedFunction).toBeCalledTimes(1);
     expect(mockStopSpanWithId).toBeCalledTimes(1);
 
-    expect(mockAddSpanAttributesToSpanId).toBeCalledTimes(0);
-    expect(mockAddSpanEventToSpanId).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
   });
 
   test('Record Span With Function - With Name - Attributes', () => {
-    const mockAddSpanAttributesToSpanId = jest.fn();
-    const mockAddSpanEventToSpanId = jest.fn();
+    const mockaddSpanAttributeToSpan = jest.fn();
+    const mockaddSpanEventToSpan = jest.fn();
     const mockStopSpanWithId = jest.fn();
     const mockedFunction = jest.fn();
 
@@ -500,8 +500,8 @@ describe('Test Spans - Record Span With Function', () => {
       NativeModules: {
         EmbraceManager: {
           startSpanWithName: mockStartSpanWithName,
-          addSpanAttributesToSpanId: mockAddSpanAttributesToSpanId,
-          addSpanEventToSpanId: mockAddSpanEventToSpanId,
+          addSpanAttributeToSpan: mockaddSpanAttributeToSpan,
+          addSpanEventToSpan: mockaddSpanEventToSpan,
           stopSpanWithId: mockStopSpanWithId,
         },
       },
@@ -516,8 +516,8 @@ describe('Test Spans - Record Span With Function', () => {
     expect(mockedFunction).toBeCalledTimes(1);
     expect(mockStopSpanWithId).toBeCalledTimes(1);
 
-    expect(mockAddSpanAttributesToSpanId).toBeCalledTimes(1);
-    expect(mockAddSpanEventToSpanId).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(1);
+    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
   });
   test('Record Span With Function - undefined', () => {
     const mockedFunction = jest.fn();
@@ -536,8 +536,8 @@ describe('Test Spans - Record Span With Function', () => {
     expect(result).resolves.toBe(false);
   });
   test('Record Span With Function - With Name - Attribute Event', () => {
-    const mockAddSpanAttributesToSpanId = jest.fn();
-    const mockAddSpanEventToSpanId = jest.fn();
+    const mockaddSpanAttributeToSpan = jest.fn();
+    const mockaddSpanEventToSpan = jest.fn();
     const mockStopSpanWithId = jest.fn();
     const mockedFunction = jest.fn();
 
@@ -550,8 +550,8 @@ describe('Test Spans - Record Span With Function', () => {
       NativeModules: {
         EmbraceManager: {
           startSpanWithName: mockStartSpanWithName,
-          addSpanAttributesToSpanId: mockAddSpanAttributesToSpanId,
-          addSpanEventToSpanId: mockAddSpanEventToSpanId,
+          addSpanAttributeToSpan: mockaddSpanAttributeToSpan,
+          addSpanEventToSpan: mockaddSpanEventToSpan,
           stopSpanWithId: mockStopSpanWithId,
         },
       },
@@ -571,13 +571,13 @@ describe('Test Spans - Record Span With Function', () => {
     expect(mockedFunction).toBeCalledTimes(1);
     expect(mockStopSpanWithId).toBeCalledTimes(1);
 
-    expect(mockAddSpanAttributesToSpanId).toBeCalledTimes(1);
-    expect(mockAddSpanEventToSpanId).toBeCalledTimes(1);
+    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(1);
+    expect(mockaddSpanEventToSpan).toBeCalledTimes(1);
   });
 
   test('Record Span With Function - With Name - Attributes x 2', () => {
-    const mockAddSpanAttributesToSpanId = jest.fn();
-    const mockAddSpanEventToSpanId = jest.fn();
+    const mockaddSpanAttributeToSpan = jest.fn();
+    const mockaddSpanEventToSpan = jest.fn();
     const mockStopSpanWithId = jest.fn();
     const mockedFunction = jest.fn();
 
@@ -590,8 +590,8 @@ describe('Test Spans - Record Span With Function', () => {
       NativeModules: {
         EmbraceManager: {
           startSpanWithName: mockStartSpanWithName,
-          addSpanAttributesToSpanId: mockAddSpanAttributesToSpanId,
-          addSpanEventToSpanId: mockAddSpanEventToSpanId,
+          addSpanAttributeToSpan: mockaddSpanAttributeToSpan,
+          addSpanEventToSpan: mockaddSpanEventToSpan,
           stopSpanWithId: mockStopSpanWithId,
         },
       },
@@ -607,13 +607,13 @@ describe('Test Spans - Record Span With Function', () => {
     expect(mockedFunction).toBeCalledTimes(1);
     expect(mockStopSpanWithId).toBeCalledTimes(1);
 
-    expect(mockAddSpanAttributesToSpanId).toBeCalledTimes(2);
-    expect(mockAddSpanEventToSpanId).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(2);
+    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
   });
 
   test('Record Span With Function - With Name - Attributes Events x 2', () => {
-    const mockAddSpanAttributesToSpanId = jest.fn();
-    const mockAddSpanEventToSpanId = jest.fn();
+    const mockaddSpanAttributeToSpan = jest.fn();
+    const mockaddSpanEventToSpan = jest.fn();
     const mockStopSpanWithId = jest.fn();
     const mockedFunction = jest.fn();
 
@@ -626,8 +626,8 @@ describe('Test Spans - Record Span With Function', () => {
       NativeModules: {
         EmbraceManager: {
           startSpanWithName: mockStartSpanWithName,
-          addSpanAttributesToSpanId: mockAddSpanAttributesToSpanId,
-          addSpanEventToSpanId: mockAddSpanEventToSpanId,
+          addSpanAttributeToSpan: mockaddSpanAttributeToSpan,
+          addSpanEventToSpan: mockaddSpanEventToSpan,
           stopSpanWithId: mockStopSpanWithId,
         },
       },
@@ -659,13 +659,13 @@ describe('Test Spans - Record Span With Function', () => {
     expect(mockedFunction).toBeCalledTimes(1);
     expect(mockStopSpanWithId).toBeCalledTimes(1);
 
-    expect(mockAddSpanAttributesToSpanId).toBeCalledTimes(2);
-    expect(mockAddSpanEventToSpanId).toBeCalledTimes(2);
+    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(2);
+    expect(mockaddSpanEventToSpan).toBeCalledTimes(2);
   });
 
   test('Record Span With Function - With Name - Event', () => {
-    const mockAddSpanAttributesToSpanId = jest.fn();
-    const mockAddSpanEventToSpanId = jest.fn();
+    const mockaddSpanAttributeToSpan = jest.fn();
+    const mockaddSpanEventToSpan = jest.fn();
     const mockStopSpanWithId = jest.fn();
     const mockedFunction = jest.fn();
 
@@ -678,8 +678,8 @@ describe('Test Spans - Record Span With Function', () => {
       NativeModules: {
         EmbraceManager: {
           startSpanWithName: mockStartSpanWithName,
-          addSpanAttributesToSpanId: mockAddSpanAttributesToSpanId,
-          addSpanEventToSpanId: mockAddSpanEventToSpanId,
+          addSpanAttributeToSpan: mockaddSpanAttributeToSpan,
+          addSpanEventToSpan: mockaddSpanEventToSpan,
           stopSpanWithId: mockStopSpanWithId,
         },
       },
@@ -694,8 +694,8 @@ describe('Test Spans - Record Span With Function', () => {
     expect(mockedFunction).toBeCalledTimes(1);
     expect(mockStopSpanWithId).toBeCalledTimes(1);
 
-    expect(mockAddSpanAttributesToSpanId).toBeCalledTimes(0);
-    expect(mockAddSpanEventToSpanId).toBeCalledTimes(1);
+    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanEventToSpan).toBeCalledTimes(1);
   });
 });
 

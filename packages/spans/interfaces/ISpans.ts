@@ -3,7 +3,7 @@ export interface Attributes {
 }
 export interface Events {
   name: string;
-  timestampNanos?: number;
+  timeStampMs?: number;
   attributes?: Attributes;
 }
 

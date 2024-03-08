@@ -643,7 +643,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod()
-    public void addSpanAttributesToSpanId(String spanId, String key, String value, Promise promise) {
+    public void addSpanAttributeToSpan(String spanId, String key, String value, Promise promise) {
         try{
             promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().addSpanAttribute(spanId, key, value));
         }catch(Exception e){

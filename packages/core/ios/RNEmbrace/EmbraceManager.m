@@ -544,7 +544,7 @@ RCT_EXPORT_METHOD(stopSpanWithId:(nonnull NSString*)spanId
   }
 }
 
-RCT_EXPORT_METHOD(addSpanEventToSpanId:(nonnull NSString*)spanId
+RCT_EXPORT_METHOD(addSpanEventToSpan:(nonnull NSString*)spanId
     name:(nonnull NSString *)name
     time:(NSUInteger)time
     attributes:(nullable NSDictionary *)attributes
@@ -558,7 +558,7 @@ RCT_EXPORT_METHOD(addSpanEventToSpanId:(nonnull NSString*)spanId
   }
 }
 
-RCT_EXPORT_METHOD(addSpanAttributesToSpanId:(nonnull NSString*)spanId
+RCT_EXPORT_METHOD(addSpanAttributeToSpan:(nonnull NSString*)spanId
     key:(nonnull NSString *)key
     value:(nonnull NSString *)value
     resolver:(RCTPromiseResolveBlock)resolve
