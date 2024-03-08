@@ -569,9 +569,9 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod()
-    public void startSpanWithName(String name, String parentSpanId, Promise promise) {
+    public void startSpan(String name, String parentSpanId, Promise promise) {
         try{
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().startSpan(name, parentSpanId));
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().startSpan(name, parentSpanId, null));
         }catch(Exception e){
             promise.resolve(null);
         }
@@ -632,11 +632,11 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod()
-    public void stopSpanWithId(String spanId, String errorCodeString, Promise promise) {
+    public void stopSpan(String spanId, String errorCodeString, Promise promise) {
         try{
             
             ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().stopSpan(spanId, errorCodeInstance));
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().stopSpan(spanId, errorCodeInstance, null));
         }catch(Exception e){
             promise.resolve(false);
         }
@@ -652,7 +652,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod()
-    public void addSpanEventToSpanId(String spanId, String name, Double time, ReadableMap attributes, Promise promise) {
+    public void addSpanEventToSpan(String spanId, String name, Double time, ReadableMap attributes, Promise promise) {
         try{
 
             promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().addSpanEvent(spanId, name, time.longValue(), this.convertToReadableMap(attributes)));
@@ -662,7 +662,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod()
-    public void recordCompletedSpanWithName(String name, Double startTimeNanos, Double endTimeNanos, String errorCodeString, String parentSpanId, ReadableMap attributes, ReadableArray events, Promise promise) {
+    public void recordCompletedSpan(String name, Double startTimeNanos, Double endTimeNanos, String errorCodeString, String parentSpanId, ReadableMap attributes, ReadableArray events, Promise promise) {
         try{
             ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
 

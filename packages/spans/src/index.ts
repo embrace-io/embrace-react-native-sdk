@@ -6,7 +6,7 @@ import {
   validateAndLogRequiredProperties,
 } from './Utils';
 
-export const startSpanWithName = (
+export const startSpan = (
   name: string,
   parentSpanId?: string
 ): Promise<boolean | string> => {
@@ -14,17 +14,17 @@ export const startSpanWithName = (
     return createFalsePromise();
   }
   try {
-    return NativeModules.EmbraceManager.startSpanWithName(name, parentSpanId);
+    return NativeModules.EmbraceManager.startSpan(name, parentSpanId);
   } catch (e) {
     console.warn(
-      `[Embrace] The method startSpanWithName was not found, please update the SDK.`,
+      `[Embrace] The method startSpan was not found, please update the SDK.`,
       e
     );
     return createFalsePromise();
   }
 };
 
-export const stopSpanWithId = (
+export const stopSpan = (
   spanId: string,
   errorCode: SPAN_ERROR_CODES = 'None'
 ): Promise<boolean> => {
@@ -32,10 +32,10 @@ export const stopSpanWithId = (
     return createFalsePromise();
   }
   try {
-    return NativeModules.EmbraceManager.stopSpanWithId(spanId, errorCode);
+    return NativeModules.EmbraceManager.stopSpan(spanId, errorCode);
   } catch (e) {
     console.warn(
-      `[Embrace] The method stopSpanWithId was not found, please update the SDK.`,
+      `[Embrace] The method stopSpan was not found, please update the SDK.`,
       e
     );
     return createFalsePromise();
@@ -90,7 +90,7 @@ export const addSpanAttributeToSpan = (
   }
 };
 
-export const recordSpanWithName = async (
+export const recordSpan = async (
   name: string,
   callback: () => void | Promise<void>,
   attributes?: Attributes,
@@ -103,13 +103,10 @@ export const recordSpanWithName = async (
   }
   let id = '';
   try {
-    id = await NativeModules.EmbraceManager.startSpanWithName(
-      name,
-      parentSpanId
-    );
+    id = await NativeModules.EmbraceManager.startSpan(name, parentSpanId);
   } catch (e) {
     console.warn(
-      `[Embrace] The method startSpanWithName was not found, please update the SDK.`,
+      `[Embrace] The method startSpan was not found, please update the SDK.`,
       e
     );
     return createFalsePromise();
@@ -150,13 +147,13 @@ export const recordSpanWithName = async (
       await callback();
     }
   } catch (e) {
-    await NativeModules.EmbraceManager.stopSpanWithId(id, 'Failure');
+    await NativeModules.EmbraceManager.stopSpan(id, 'Failure');
     throw e;
   }
-  return NativeModules.EmbraceManager.stopSpanWithId(id, 'None');
+  return NativeModules.EmbraceManager.stopSpan(id, 'None');
 };
 
-export const recordCompletedSpanWithName = (
+export const recordCompletedSpan = (
   name: string,
   startTimeMS: number,
   endTimeMS: number,
@@ -178,7 +175,7 @@ export const recordCompletedSpanWithName = (
     });
   }
   try {
-    return NativeModules.EmbraceManager.recordCompletedSpanWithName(
+    return NativeModules.EmbraceManager.recordCompletedSpan(
       name,
       convertMSToNano(startTimeMS),
       convertMSToNano(endTimeMS),
@@ -189,7 +186,7 @@ export const recordCompletedSpanWithName = (
     );
   } catch (e) {
     console.warn(
-      `[Embrace] The method recordCompletedSpanWithName was not found, please update the SDK.`,
+      `[Embrace] The method recordCompletedSpan was not found, please update the SDK.`,
       e
     );
     return createFalsePromise();

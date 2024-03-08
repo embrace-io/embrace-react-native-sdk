@@ -521,7 +521,7 @@ RCT_EXPORT_METHOD(
    
 }
 
-RCT_EXPORT_METHOD(startSpanWithName:(nonnull NSString*)name parentSpanId:(nullable NSString *)parentSpanId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(startSpan:(nonnull NSString*)name parentSpanId:(nullable NSString *)parentSpanId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   @try {
     NSString *spanId = [[RNEmbrace sharedInstance] startSpanWithName:name parentSpanId:parentSpanId];
     resolve(spanId);
@@ -530,7 +530,7 @@ RCT_EXPORT_METHOD(startSpanWithName:(nonnull NSString*)name parentSpanId:(nullab
   }
 }
 
-RCT_EXPORT_METHOD(stopSpanWithId:(nonnull NSString*)spanId
+RCT_EXPORT_METHOD(stopSpan:(nonnull NSString*)spanId
     errorCode:(NSString *)errorCode
     resolver:(RCTPromiseResolveBlock)resolve 
     rejecter:(RCTPromiseRejectBlock)reject) {
@@ -571,7 +571,7 @@ RCT_EXPORT_METHOD(addSpanAttributeToSpan:(nonnull NSString*)spanId
   }
 }
 
-RCT_EXPORT_METHOD(recordCompletedSpanWithName:(nonnull NSString*)name
+RCT_EXPORT_METHOD(recordCompletedSpan:(nonnull NSString*)name
     startTimeNanos:(NSInteger)startTimeNanos
     endTimeNanos:(NSInteger)endTimeNanos
     errorCode:(NSString *)errorCode

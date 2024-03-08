@@ -29,19 +29,19 @@ npm install @embrace-io/react-native-spans
 
 ```javascript
 
-import { startSpanWithName, stopSpanWithId } from "@embrace-io/react-native-spans";
+import { startSpan, stopSpan } from "@embrace-io/react-native-spans";
 const App = () => {
   const spanId = useRef<string>();
   const getDataFromServer = () => {
     // Create a span, store the spanId to add Events, Attributes and stop the span
-    startSpanWithName(`tracingName`).then((id) => {
+    startSpan(`tracingName`).then((id) => {
       spanId.current = id;
     });
     getData().then(stopTracing);
   };
   const stopTracing = () => {
     // You must stop the tracing
-    stopSpanWithId(spanId.current);
+    stopSpan(spanId.current);
   };
   useEffect(() => {
     getDataFromServer();
