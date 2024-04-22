@@ -396,7 +396,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "EMBRACE_ID=SgNw5 EMBRACE_TOKEN=13f327e891ad45858949004eb755b9f1 \"${PODS_ROOT}/EmbraceIO/run.sh\"\n";
+			shellScript = "EMBRACE_ID=A82U7 EMBRACE_TOKEN=13f327e891ad45858949004eb755b9f1 \"${PODS_ROOT}/EmbraceIO/run.sh\"\n";
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -647,7 +647,21 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -720,7 +734,21 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;

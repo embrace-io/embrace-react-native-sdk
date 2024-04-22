@@ -17,8 +17,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
-  
-  [[Embrace sharedInstance] startWithLaunchOptions:launchOptions framework:EMBAppFrameworkReactNative];
+  //  [[Embrace sharedInstance] startWithLaunchOptions:launchOptions framework:EMBAppFrameworkReactNative];
 
   self.moduleName = @"EmbraceTestSuite";
   // You can add your custom initial props in the dictionary below.

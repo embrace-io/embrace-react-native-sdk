@@ -1,8 +1,26 @@
 PODS:
+  - appcenter-analytics (5.0.1):
+    - AppCenter/Analytics (~> 5.0)
+    - AppCenterReactNativeShared (~> 5.0)
+    - React-Core
+  - appcenter-core (5.0.1):
+    - AppCenterReactNativeShared (~> 5.0)
+    - React-Core
+  - appcenter-crashes (5.0.1):
+    - AppCenter/Crashes (~> 5.0)
+    - AppCenterReactNativeShared (~> 5.0)
+    - React-Core
+  - AppCenter/Analytics (5.0.4):
+    - AppCenter/Core
+  - AppCenter/Core (5.0.4)
+  - AppCenter/Crashes (5.0.4):
+    - AppCenter/Core
+  - AppCenterReactNativeShared (5.0.1):
+    - AppCenter/Core (= 5.0.4)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
-  - EmbraceIO (5.19.4)
+  - EmbraceIO (5.25.1)
   - FBLazyVector (0.72.5)
   - FBReactNativeSpec (0.72.5):
     - RCT-Folly (= 2021.07.22.00)
@@ -344,12 +362,8 @@ PODS:
   - React-jsinspector (0.72.5)
   - React-logger (0.72.5):
     - glog
-  - react-native-safe-area-context (4.5.3):
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
+  - react-native-safe-area-context (4.8.2):
     - React-Core
-    - ReactCommon/turbomodule/core
   - react-native-webview (12.1.0):
     - React-Core
   - React-NativeModulesApple (0.72.5):
@@ -458,19 +472,22 @@ PODS:
     - React-logger (= 0.72.5)
     - React-perflogger (= 0.72.5)
   - RNEmbrace (1.1.1):
-    - EmbraceIO (= 5.19.4)
+    - EmbraceIO (= 5.25.1)
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNScreens (3.20.0):
+  - RNScreens (3.29.0):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
-    - React-RCTImage
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
+  - appcenter-analytics (from `../node_modules/appcenter-analytics`)
+  - appcenter-core (from `../node_modules/appcenter`)
+  - appcenter-crashes (from `../node_modules/appcenter-crashes`)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -533,13 +550,15 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - RNEmbrace (from `../node_modules/react-native-embrace`)
+  - "RNEmbrace (from `../node_modules/@embrace-io/react-native`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
+    - AppCenter
+    - AppCenterReactNativeShared
     - CocoaAsyncSocket
     - EmbraceIO
     - Flipper
@@ -557,6 +576,12 @@ SPEC REPOS:
     - YogaKit
 
 EXTERNAL SOURCES:
+  appcenter-analytics:
+    :path: "../node_modules/appcenter-analytics"
+  appcenter-core:
+    :path: "../node_modules/appcenter"
+  appcenter-crashes:
+    :path: "../node_modules/appcenter-crashes"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
@@ -636,7 +661,7 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   RNEmbrace:
-    :path: "../node_modules/react-native-embrace"
+    :path: "../node_modules/@embrace-io/react-native"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNScreens:
@@ -645,10 +670,15 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AppCenter: 85c92db0759d2792a65eb61d6842d2e86611a49a
+  appcenter-analytics: b3a60e025b8db7013a71053c1ced96bcf7acba75
+  appcenter-core: 53cc7b5d9a2cdd6a484cae8e50977bab91e0780e
+  appcenter-crashes: 9cb825ee8f89715a1b0a7164a71fc8c582b0e796
+  AppCenterReactNativeShared: 22aea9046e80c449137f4e574ae1f229616e2358
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
-  EmbraceIO: 9e0c0542fbe6c1625432b971fd2da13f7bb71b6c
+  EmbraceIO: 058bcb4dde5cacce0a185ebd125a80fe86164147
   FBLazyVector: 71803c074f6325f10b5ec891c443b6bbabef0ca7
   FBReactNativeSpec: 448e08a759d29a96e15725ae532445bf4343567c
   Flipper: 6edb735e6c3e332975d1b17956bcc584eccf5818
@@ -678,7 +708,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: f32f98d8ddbdfd97dea286af90381a731d68c505
   React-jsinspector: aef73cbd43b70675f572214d10fa438c89bf11ba
   React-logger: 2e4aee3e11b3ec4fa6cfd8004610bbb3b8d6cca4
-  react-native-safe-area-context: b8979f5eda6ed5903d4dbc885be3846ea3daa753
+  react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   react-native-webview: 13db17f7c7fe8f91c826e9afcc369cbc74507ea0
   React-NativeModulesApple: c6529c637f2e886aab44c48d66cabef2d4fd1138
   React-perflogger: cd8886513f68e1c135a1e79d20575c6489641597
@@ -697,9 +727,9 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 05bede38cb51ae152f31707022e881ee9ae970ab
   React-utils: 7a9918a1ffdd39aba67835d42386f592ea3f8e76
   ReactCommon: a77b3916d0d39113b5f0de714a0acd47c9d17c3a
-  RNEmbrace: 979ccc76c258359aab30dc63b4f3f634c7e6c03d
+  RNEmbrace: d1cd049d9f38b27e5bb1a0bfcfa9ed329da75499
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
+  RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 86fed2e4d425ee4c6eab3813ba1791101ee153c6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
