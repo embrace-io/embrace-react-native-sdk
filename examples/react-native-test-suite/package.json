@@ -10,8 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@embrace-io/error-handler": "/Users/mutsi/job/embrace/react-native-sdk/packages/error-handler",
-    "@embrace-io/react-native": "/Users/mutsi/job/embrace/react-native-sdk/packages/core",
+    "@embrace-io/react-native": "^4.1.1",
     "@embrace-io/react-native-spans": "^4.1.0",
     "@embrace-io/react-native-webview-tracker": "^4.0.1",
     "@embrace-io/react-navigation": "^4.0.1",
