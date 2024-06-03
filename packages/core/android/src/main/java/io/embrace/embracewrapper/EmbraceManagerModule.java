@@ -569,9 +569,13 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod()
-    public void startSpan(String name, String parentSpanId, Promise promise) {
+    public void startSpan(String name, String parentSpanId, Double startTimeMS, Promise promise) {
         try{
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().startSpan(name, parentSpanId, null));
+            Long startTime = null;
+            if(startTimeMS != null){
+                startTime = startTimeMS.longValue();
+            }
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().startSpan(name, parentSpanId, startTime));
         }catch(Exception e){
             promise.resolve(null);
         }
@@ -632,11 +636,14 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod()
-    public void stopSpan(String spanId, String errorCodeString, Promise promise) {
+    public void stopSpan(String spanId, String errorCodeString, Double endTimeMS, Promise promise) {
         try{
-            
+            Long endTime = null;
+            if(endTimeMS != null){
+                endTime = endTimeMS.longValue();
+            }
             ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().stopSpan(spanId, errorCodeInstance, null));
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().stopSpan(spanId, errorCodeInstance, endTime));
         }catch(Exception e){
             promise.resolve(false);
         }
