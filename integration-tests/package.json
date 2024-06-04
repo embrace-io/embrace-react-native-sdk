@@ -1,0 +1,29 @@
+{
+  "name": "integration-tests",
+  "version": "1.0.0",
+  "description": "Integration test harness",
+  "main": "index.js",
+  "scripts": {
+    "test": "wdio run ./wdio.conf.ts",
+    "update-local-embrace": "./update-local-embrace.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@testing-library/webdriverio": "^3.2.1",
+    "@wdio/appium-service": "^8.38.2",
+    "@wdio/cli": "^8.38.1",
+    "@wdio/json-reporter": "^8.38.0",
+    "@wdio/local-runner": "^8.38.0",
+    "@wdio/mocha-framework": "^8.38.0",
+    "appium": "^2.6.0",
+    "appium-uiautomator2-driver": "^3.5.2",
+    "appium-xcuitest-driver": "^7.17.2",
+    "mockserver-client": "^5.15.0",
+    "mockserver-node": "^5.15.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.11.2",
+    "typescript": "^5.4.5",
+    "webdriverio": "^8.38.0"
+  }
+}
