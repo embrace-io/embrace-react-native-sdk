@@ -14,5 +14,5 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "ios", "android", "./dist"]
+  "exclude": ["node_modules", "ios", "android", "./dist", "./integration-tests"]
 }
