@@ -4,15 +4,12 @@ const fs = require('fs');
 import { FileUpdatable, getFileContents, Patchable } from './file';
 
 import EmbraceLogger from '../../src/logger';
+import { IOS_LANGUAGE, MAIN_CLASS_BY_LANGUAGE } from '../setup/patches/common';
 
 const embLogger = new EmbraceLogger(console);
 
 export const embraceNativePod = `
   pod 'EmbraceIO'
-`;
-
-export const embraceImport = `
-#import <Embrace/Embrace.h>
 `;
 
 export const bundlePhaseRE = /react-native-xcode\.sh/;
@@ -22,37 +19,33 @@ export const bundlePhaseExtraArgs =
 
 export const embRunScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';
 
-export const appDelegatePatchable = ({
-  name,
-}: {
-  name: string;
-}): Promise<FileUpdatable> => {
-  return new Promise((resolve, reject) => {
-    const appDelegatePathFounded: string[] = glob.sync(
-      '**/AppDelegate.*(m|mm)',
-      { ignore: ['node_modules/**', 'ios/Pods/**'] }
-    );
-
-    let appDelegatePath: string | undefined;
-    if (appDelegatePathFounded.length === 1) {
-      appDelegatePath = appDelegatePathFounded[0];
-    } else if (appDelegatePathFounded.length > 1) {
-      appDelegatePath = appDelegatePathFounded.find((path: string) => {
-        return path.toLocaleLowerCase().indexOf(name.toLocaleLowerCase()) > -1;
-      });
+export const getAppDelegateByIOSLanguage = (
+  projectName: string,
+  language: IOS_LANGUAGE
+): FileUpdatable | undefined => {
+  const appDelegatePathFounded: string[] = glob.sync(
+    `**/${MAIN_CLASS_BY_LANGUAGE[language]}`,
+    {
+      ignore: ['node_modules/**', 'ios/Pods/**'],
     }
+  );
 
-    if (!appDelegatePath) {
-      return reject(
-        embLogger.format(
-          'Couldn\'t find AppDelegate. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=ios&platform=ios to update manually.'
-        )
+  let appDelegatePath: string | undefined;
+  if (appDelegatePathFounded.length === 1) {
+    appDelegatePath = appDelegatePathFounded[0];
+  } else if (appDelegatePathFounded.length > 1) {
+    appDelegatePath = appDelegatePathFounded.find((path: string) => {
+      return (
+        path.toLocaleLowerCase().indexOf(projectName.toLocaleLowerCase()) > -1
       );
-    }
+    });
+  }
 
-    const appDelegate = getFileContents(appDelegatePath);
-    return resolve(appDelegate);
-  });
+  if (!appDelegatePath) {
+    return undefined;
+  }
+
+  return getFileContents(appDelegatePath);
 };
 
 export const podfilePatchable = (): Promise<FileUpdatable> => {

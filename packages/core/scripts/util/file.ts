@@ -7,7 +7,7 @@ export interface Patchable {
 
 export interface FileUpdatable extends Patchable {
   contents: string;
-  addBefore: (line: string, add: string) => void;
+  addBefore: (line: string | RegExp, add: string) => void;
   addAfter: (line: string | RegExp, add: string) => void;
   hasLine: (line: string | RegExp) => boolean;
   deleteLine: (line: string | RegExp) => void;
@@ -76,7 +76,9 @@ class FileContents implements FileUpdatable {
         if (line.toString().match(/^\/\(\\s\+\)/)) {
           space = matches[1];
         }
-        if (matches[0]) { replaceWith = matches[0]; }
+        if (matches[0]) {
+          replaceWith = matches[0];
+        }
       }
       this.contents = this.contents.replace(
         line,

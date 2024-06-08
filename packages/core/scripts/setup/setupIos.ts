@@ -4,7 +4,6 @@ import { apiToken, iosAppID, packageJSON } from './common';
 import {
   addUploadBuildPhase,
   createEmbracePlist,
-  iosImportEmbrace,
   iosInitializeEmbrace,
   iosPodfile,
   patchXcodeBundlePhase,
@@ -15,7 +14,6 @@ const logger = new EmbraceLogger(console);
 logger.log('initializing setup wizard for ios');
 
 const iosSetps = [
-  iosImportEmbrace,
   iosInitializeEmbrace,
   iosPodfile,
   patchXcodeBundlePhase,

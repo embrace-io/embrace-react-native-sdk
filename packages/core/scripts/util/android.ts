@@ -1,5 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+import {
+  ANROID_LANGUAGE,
+  MAIN_CLASS_BY_LANGUAGE,
+} from '../setup/patches/common';
 import { FileUpdatable, getFileContents } from './file';
 
 interface IDirectory {
@@ -37,12 +41,12 @@ export const embraceJSON = (): Promise<FileUpdatable> => {
   });
 };
 
-export const mainApplicationPatchable = ({
-  name = '',
-}): Promise<FileUpdatable> => {
+export const mainApplicationPatchable = (
+  platform: ANROID_LANGUAGE
+): Promise<FileUpdatable> => {
   return new Promise<FileUpdatable>((resolve, reject) => {
     const p = path.join('android', 'app', 'src', 'main', 'java', 'com');
-    const mainApp = 'MainApplication.java';
+    const mainApp = MAIN_CLASS_BY_LANGUAGE[platform];
 
     const foldersInJava: IDirectory[] = fs
       .readdirSync(p, { withFileTypes: true })
@@ -95,7 +99,7 @@ export const mainApplicationPatchable = ({
 
     if (!mainApplicationPath) {
       return reject(
-        `cannot find MainApplication.java file in any folder at ${p}. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`
+        `cannot find ${MAIN_CLASS_BY_LANGUAGE[platform]} file in any folder at ${p}. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`
       );
     }
     return resolve(getFileContents(mainApplicationPath));

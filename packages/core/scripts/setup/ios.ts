@@ -4,62 +4,46 @@ const path = require('path');
 
 import EmbraceLogger from '../../src/logger';
 import {
-  appDelegatePatchable,
   bundlePhaseExtraArgs,
   bundlePhaseRE,
-  embraceImport,
   embraceNativePod,
   embracePlistPatchable,
   embRunScript,
-  formatEmbraceInitializer,
+  getAppDelegateByIOSLanguage,
   podfilePatchable,
   xcodePatchable,
 } from '../util/ios';
 import Wizard from '../util/wizard';
 import { apiToken, iosAppID, packageJSON } from './common';
+import patchAppDelegateObjectiveC from './patches/ios/ios.objectivec';
+import patchAppDelegateSwift from './patches/ios/ios.swift';
 
 const logger = new EmbraceLogger(console);
 
-export const iosImportEmbrace = {
-  name: 'iOS import Embrace',
-  run: (wizard: Wizard): Promise<any> =>
-    wizard
-      .fieldValue(packageJSON)
-      .then((json) => appDelegatePatchable(json))
-      .then((appDelegate) => {
-        logger.log('patching AppDelegate with Embrace import');
-        if (appDelegate.hasLine(embraceImport)) {
-          logger.warn('already imported Embrace');
-          return false;
-        }
-        appDelegate.addAfter('#import "AppDelegate.h"', embraceImport);
-        appDelegate.patch();
-        return true;
-      }),
-  docURL:
-    'https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually',
+const tryToPatchAppDelegate = async ({
+  name,
+}: {
+  name: string;
+}): Promise<boolean> => {
+  const appDelegate = getAppDelegateByIOSLanguage(name, 'objectivec');
+  console.log('ENTRO ACA', appDelegate);
+  if (!appDelegate) {
+    const appDelegateSwift = getAppDelegateByIOSLanguage(name, 'swift');
+    if (!appDelegateSwift) {
+      logger.format(
+        'Couldn\'t find AppDelegate. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=ios&platform=ios to update manually.'
+      );
+      return false;
+    }
+    return await patchAppDelegateSwift(appDelegateSwift);
+  }
+  return (await patchAppDelegateObjectiveC(appDelegate)) || false;
 };
 
 export const iosInitializeEmbrace = {
   name: 'iOS initialize Embrace',
   run: (wizard: Wizard): Promise<any> =>
-    wizard
-      .fieldValue(packageJSON)
-      .then((json) => appDelegatePatchable(json))
-      .then((appDelegate) => {
-        logger.log('patching AppDelegate with Embrace initialize');
-        if (appDelegate.hasLine('[[Embrace sharedInstance] start')) {
-          logger.warn('already initializing Embrace');
-          return false;
-        }
-        const embraceInitializer = formatEmbraceInitializer();
-        const DID_LAUNCH_REGEX =
-          /(-\s*\(BOOL\)\s*application:\s*\(UIApplication\s\*\)\s*(app|application)\s+didFinishLaunchingWithOptions:\s*\(NSDictionary\s*\*\)launchOptions\s*\{\s*)/;
-
-        appDelegate.addAfter(DID_LAUNCH_REGEX, embraceInitializer);
-        appDelegate.patch();
-        return true;
-      }),
+    wizard.fieldValue(packageJSON).then(tryToPatchAppDelegate),
   docURL:
     'https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually',
 };
