@@ -1,31 +1,42 @@
+const fs = require('fs');
 import EmbraceLogger from '../../src/logger';
+
+import { unlinkObjectiveC } from '../setup/patches/ios/unlink.objectivec';
+import { unlinkSwift } from '../setup/patches/ios/unlink.swift';
 import { NoopFile, patchFiles } from '../util/file';
 import {
-  appDelegatePatchable,
   bundlePhaseExtraArgs,
   bundlePhaseRE,
-  embraceImport,
   embraceNativePod,
+  embracePlistPatchable,
   podfilePatchable,
   xcodePatchable,
 } from '../util/ios';
 
-const packageJson = require('../../../../../package.json');
+const packageJson = require('../../../../../../package.json');
 
 const embLogger = new EmbraceLogger(console);
 
-const embraceRNRE =
-  /\[\[Embrace sharedInstance] startWithKey:@"[a-zA-Z0-9]*" launchOptions:launchOptions framework:EMBAppFrameworkReactNative];/;
+const removeEmbraceInfoPlist = (): Promise<boolean> =>
+  new Promise((resolve, reject) =>
+    embracePlistPatchable(packageJson.name)
+      .then((file) => {
+        fs.unlinkSync(file.path);
+        resolve(true);
+      })
+      .catch(() => {
+        reject(false);
+      })
+  );
 
 export default () => {
-  embLogger.log('Running iOS postunlink script');
+  embLogger.log('Running iOS unlink script');
   return patchFiles(
-    () =>
-      appDelegatePatchable(packageJson).then((appDelegate) => {
-        appDelegate.deleteLine(embraceImport);
-        appDelegate.deleteLine(embraceRNRE);
-        return appDelegate;
-      }),
+    () => {
+      return unlinkObjectiveC(packageJson.name).catch(() =>
+        unlinkSwift(packageJson.name)
+      );
+    },
     () =>
       podfilePatchable().then((podfile) => {
         podfile.deleteLine(embraceNativePod);
@@ -44,5 +55,5 @@ export default () => {
         project.sync();
         return project;
       })
-  );
+  ).then(removeEmbraceInfoPlist);
 };
