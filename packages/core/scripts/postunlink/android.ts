@@ -16,25 +16,29 @@ import { FileUpdatable, patchFiles } from '../util/file';
 
 const embLogger = new EmbraceLogger(console);
 
-const unlinkSwazzlerImport = (): Promise<FileUpdatable> => {
-  return new Promise((resolve) =>
-    buildGradlePatchable().then((file) => {
-      file.deleteLine(androidEmbraceSwazzler);
-      resolve(file);
-    })
+export const unlinkSwazzlerImport = (): Promise<FileUpdatable> => {
+  return new Promise((resolve, reject) =>
+    buildGradlePatchable()
+      .then((file) => {
+        file.deleteLine(androidEmbraceSwazzler);
+        resolve(file);
+      })
+      .catch(reject)
   );
 };
 
-const unlinkSwazzlerApply = (): Promise<FileUpdatable> => {
-  return new Promise((resolve) =>
-    buildAppGradlePatchable().then((file) => {
-      file.deleteLine(androidEmbraceSwazzlerPluginRE);
-      resolve(file);
-    })
+export const unlinkSwazzlerApply = (): Promise<FileUpdatable> => {
+  return new Promise((resolve, reject) =>
+    buildAppGradlePatchable()
+      .then((file) => {
+        file.deleteLine(androidEmbraceSwazzlerPluginRE);
+        resolve(file);
+      })
+      .catch(reject)
   );
 };
 
-const removeEmbraceConfigFile = (): Promise<boolean> =>
+export const removeEmbraceConfigFile = (): Promise<boolean> =>
   new Promise((resolve, reject) =>
     embraceJSON()
       .then((file) => {
@@ -48,7 +52,7 @@ export default () => {
   embLogger.log('Running android unlink script');
   return patchFiles(
     () => unlinkKotlin().catch(unlinkJava),
-    () => unlinkSwazzlerImport(),
-    () => unlinkSwazzlerApply()
+    unlinkSwazzlerImport,
+    unlinkSwazzlerApply
   ).then(removeEmbraceConfigFile);
 };

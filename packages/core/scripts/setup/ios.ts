@@ -14,19 +14,18 @@ import {
   xcodePatchable,
 } from '../util/ios';
 import Wizard from '../util/wizard';
-import { apiToken, iosAppID, packageJSON } from './common';
+import { apiToken, iosAppID, IPackageJson, packageJSON } from './common';
 import patchAppDelegateObjectiveC from './patches/ios/ios.objectivec';
 import patchAppDelegateSwift from './patches/ios/ios.swift';
 
 const logger = new EmbraceLogger(console);
 
-const tryToPatchAppDelegate = async ({
+export const tryToPatchAppDelegate = async ({
   name,
 }: {
   name: string;
 }): Promise<boolean> => {
   const appDelegate = getAppDelegateByIOSLanguage(name, 'objectivec');
-  console.log('ENTRO ACA', appDelegate);
   if (!appDelegate) {
     const appDelegateSwift = getAppDelegateByIOSLanguage(name, 'swift');
     if (!appDelegateSwift) {
@@ -48,32 +47,35 @@ export const iosInitializeEmbrace = {
     'https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually',
 };
 
+export const patchPodfile = (json: IPackageJson) => {
+  const rnVersion = (json.dependencies || {})['react-native'];
+  if (!rnVersion) {
+    throw Error('react-native dependency was not found');
+  }
+  const rnVersionSanitized = rnVersion.replace('^', '');
+
+  // If 6.0.0, autolink should have linked the Pod.
+  if (semverGte('6.0.0', rnVersionSanitized)) {
+    logger.log(
+      'skipping patching Podfile since react-native is on an autolink supported version'
+    );
+    return;
+  }
+  return podfilePatchable().then((podfile) => {
+    if (podfile.hasLine(embraceNativePod)) {
+      logger.warn('Already has EmbraceIO pod');
+      return;
+    }
+    podfile.addBefore('use_react_native', `${embraceNativePod}\n`);
+
+    return podfile.patch();
+  });
+};
+
 export const iosPodfile = {
   name: 'Podfile patch (ONLY React Native Version < 0.6)',
   run: (wizard: Wizard): Promise<any> =>
-    wizard.fieldValue(packageJSON).then((json) => {
-      const rnVersion = (json.dependencies || {})['react-native'];
-      if (!rnVersion) {
-        throw Error('react-native dependency was not found');
-      }
-      const rnVersionSanitized = rnVersion.replace('^', '');
-
-      // If 6.0.0, autolink should have linked the Pod.
-      if (semverGte('6.0.0', rnVersionSanitized)) {
-        logger.log(
-          'skipping patching Podfile since react-native is on an autolink supported version'
-        );
-        return;
-      }
-      return podfilePatchable().then((podfile) => {
-        if (podfile.hasLine(embraceNativePod)) {
-          logger.warn('Already has EmbraceIO pod');
-          return;
-        }
-        podfile.addAfter(embraceRNPod, embraceNativePod);
-        return podfile.patch();
-      });
-    }),
+    wizard.fieldValue(packageJSON).then(patchPodfile),
   docURL:
     'https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#native-modules',
 };
@@ -140,9 +142,15 @@ export const addUploadBuildPhase = {
     'https://embrace.io/docs/react-native/integration/upload-symbol-files/#uploading-native-and-javascript-symbol-files',
 };
 
-const findNameWithCaseSensitiveFromPath = (path: string, name: string) => {
+export const findNameWithCaseSensitiveFromPath = (
+  path: string,
+  name: string
+) => {
   const pathSplitted = path.split('/');
   const nameInLowerCase = name.toLocaleLowerCase();
+  console.log('AASD', pathSplitted);
+  console.log('AASD nameInLowerCase', nameInLowerCase);
+
   const nameFounded = pathSplitted.find(
     (element) => element.toLocaleLowerCase() === `${nameInLowerCase}.xcodeproj`
   );
@@ -194,9 +202,6 @@ export const createEmbracePlist = {
   docURL:
     'https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually',
 };
-
-const embraceRNPod =
-  'pod \'RNEmbrace\', :path => \'../node_modules/@embrace-io_react-native\'';
 
 const plistContents = (iosAppIDValue: string) => {
   return `<?xml version="1.0" encoding="UTF-8"?>

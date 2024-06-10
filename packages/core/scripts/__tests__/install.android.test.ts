@@ -13,7 +13,7 @@ describe('Modify Build Gradle', () => {
   test('Add Android Swazzler Version If Build Does Not Have Swazzler Version', async () => {
     jest.mock('path', () => ({
       join: () =>
-        './packages/core/scripts/__tests__/__mocks__/buildWithoutSwazzler.gradle',
+        './packages/core/scripts/__tests__/__mocks__/android/buildWithoutSwazzler.gradle',
     }));
     const androidUtil = require('../util/android');
     const { patchBuildGradle } = require('../setup/android');
@@ -42,7 +42,7 @@ describe('Modify Build Gradle', () => {
   test('Update Android Swazzler Version', async () => {
     jest.mock('path', () => ({
       join: () =>
-        './packages/core/scripts/__tests__/__mocks__/buildWithoutSwazzler.gradle',
+        './packages/core/scripts/__tests__/__mocks__/android/buildWithoutSwazzler.gradle',
     }));
     const wiz = new Wizard();
     const { patchBuildGradle } = require('../setup/android');
@@ -61,7 +61,7 @@ describe('Modify Build Gradle', () => {
   test('Couldnt Update Android Swazzler Version', async () => {
     jest.mock('path', () => ({
       join: () =>
-        './packages/core/scripts/__tests__/__mocks__/noExistbuild.gradle',
+        './packages/core/scripts/__tests__/__mocks__/android/noExistbuild.gradle',
     }));
     const wiz = new Wizard();
     const { patchBuildGradle } = require('../setup/android');

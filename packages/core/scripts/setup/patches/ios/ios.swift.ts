@@ -7,7 +7,7 @@ import {
 
 export const SWIFT_APP_DELEGATE = 'AppDelegate.swift';
 
-export const EMBRACE_IMPORT_SWIFT = 'import Embrace\n';
+export const EMBRACE_IMPORT_SWIFT = 'import Embrace';
 
 export const EMBRACE_INIT_SWIFT =
   'Embrace.sharedInstance().start(launchOptions: launchOptions, framework:.reactNative)';
@@ -17,7 +17,7 @@ const addImportToAppDelegate = (appDelegate: FileUpdatable) => {
 
   addLineBeforeToTextInFile(
     appDelegate,
-    EMBRACE_IMPORT_SWIFT,
+    `${EMBRACE_IMPORT_SWIFT}\n`,
     searchText,
     MAIN_CLASS_BY_LANGUAGE.swift
   );
@@ -29,7 +29,7 @@ const addStartToAppDelegate = (appDelegate: FileUpdatable) => {
 
   addLineAfterToTextInFile(
     appDelegate,
-    `\n		${EMBRACE_IMPORT_SWIFT}`,
+    `\n${EMBRACE_INIT_SWIFT}`,
     DID_LAUNCH_REGEX,
     MAIN_CLASS_BY_LANGUAGE.swift
   );

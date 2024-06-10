@@ -8,9 +8,7 @@ import { IOS_LANGUAGE, MAIN_CLASS_BY_LANGUAGE } from '../setup/patches/common';
 
 const embLogger = new EmbraceLogger(console);
 
-export const embraceNativePod = `
-  pod 'EmbraceIO'
-`;
+export const embraceNativePod = `pod 'EmbraceIO'`;
 
 export const bundlePhaseRE = /react-native-xcode\.sh/;
 
@@ -103,7 +101,7 @@ export const xcodePatchable = ({
       );
     }
 
-    return getXcodeProject(projectPath).then(resolve);
+    return getXcodeProject(projectPath).then(resolve).catch(reject);
   });
 };
 
@@ -124,7 +122,7 @@ const getXcodeProject = (path: string): Promise<XcodeProject> => {
   });
 };
 
-class XcodeProject implements Patchable {
+export class XcodeProject implements Patchable {
   public project: any;
   public path: string;
 
