@@ -2,6 +2,8 @@
   "name": "navigation",
   "version": "1.0.0",
   "description": "Instrumentation library that captures telemetry data during navigation changes.",
+  "author": "Embrace.io",
+  "license": "UNLICENSED",
   "main": "index.ts",
   "scripts": {
     "test": "jest"
@@ -35,9 +37,8 @@
     "telemetry",
     "instrumentation"
   ],
-  "author": "Embrace.io",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/embrace-io/embrace-io/issues"
-  }
+  },
+  "private": true
 }
