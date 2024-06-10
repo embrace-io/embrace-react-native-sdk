@@ -1,16 +1,16 @@
 {
   "name": "navigation",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Instrumentation library that captures telemetry data during navigation changes.",
   "author": "Embrace.io",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "main": "index.ts",
   "scripts": {
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com/embrace-io/embrace-io.git"
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk.git"
   },
   "directories": {
     "test": "__tests__"
@@ -32,13 +32,14 @@
   },
   "keywords": [
     "otel",
+    "opentelemetry",
     "react-native",
     "navigation",
     "telemetry",
     "instrumentation"
   ],
   "bugs": {
-    "url": "https://github.com/embrace-io/embrace-io/issues"
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk/issues"
   },
   "private": true
 }
