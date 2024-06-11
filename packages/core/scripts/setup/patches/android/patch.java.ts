@@ -2,9 +2,7 @@
 
 import { mainApplicationPatchable } from '../../../util/android';
 import { FileUpdatable } from '../../../util/file';
-import { addLineAfterToTextInFile } from '../common';
-
-export const JAVA_MAIN_ACTIVITY = 'MainApplication.java';
+import { addLineAfterToTextInFile, JAVA_MAIN_ACTIVITY } from '../common';
 
 export const EMBRACE_IMPORT_JAVA =
   'import io.embrace.android.embracesdk.Embrace;';
@@ -32,11 +30,11 @@ const patchJavaImport = (file: FileUpdatable) => {
  *  @return boolean
  */
 const patchJavaStartEmbrace = (file: FileUpdatable) => {
-  const searchRegex = /(\s+)super\.onCreate\(\);/;
+  const searchText = 'super.onCreate();';
   return addLineAfterToTextInFile(
     file,
-    EMBRACE_INIT_JAVA,
-    searchRegex,
+    `\n${EMBRACE_INIT_JAVA}`,
+    searchText,
     JAVA_MAIN_ACTIVITY
   );
 };
@@ -44,7 +42,6 @@ const patchJavaStartEmbrace = (file: FileUpdatable) => {
 const patchJavaMainApplication = async () => {
   try {
     const file = await mainApplicationPatchable('java');
-
     const hasImportAdded = patchJavaImport(file);
     const hasStartAdded = patchJavaStartEmbrace(file);
     if (hasStartAdded || hasImportAdded) {

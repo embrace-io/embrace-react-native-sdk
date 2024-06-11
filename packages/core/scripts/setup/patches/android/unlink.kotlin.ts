@@ -14,8 +14,8 @@ const unlinkKotlin = (): Promise<FileUpdatable> => {
       return;
     }
 
-    mainApplication.deleteLine(EMBRACE_IMPORT_KOTLIN);
-    mainApplication.deleteLine(EMBRACE_INIT_KOTLIN);
+    mainApplication.deleteLine(`${EMBRACE_IMPORT_KOTLIN}\n`);
+    mainApplication.deleteLine(`${EMBRACE_INIT_KOTLIN}\n`);
     resolve(mainApplication);
   });
 };

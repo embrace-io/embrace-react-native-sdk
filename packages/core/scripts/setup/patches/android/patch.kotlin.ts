@@ -2,9 +2,8 @@
 
 import { mainApplicationPatchable } from '../../../util/android';
 import { FileUpdatable } from '../../../util/file';
-import { addLineAfterToTextInFile } from '../common';
+import { addLineAfterToTextInFile, KOTLIN_MAIN_ACTIVITY } from '../common';
 
-export const KOTLIN_MAIN_ACTIVITY = 'MainApplication.kt';
 export const EMBRACE_IMPORT_KOTLIN =
   'import io.embrace.android.embracesdk.Embrace';
 
@@ -31,12 +30,12 @@ const patchKotlinImport = (file: FileUpdatable) => {
  *  @return boolean
  */
 const patchKotlinStartEmbrace = (file: FileUpdatable) => {
-  const searchRegex = /(\s+)super\.onCreate\(\)/;
+  const searchText = 'super.onCreate()';
 
   return addLineAfterToTextInFile(
     file,
-    EMBRACE_INIT_KOTLIN,
-    searchRegex,
+    `\n${EMBRACE_INIT_KOTLIN}`,
+    searchText,
     KOTLIN_MAIN_ACTIVITY
   );
 };
@@ -52,6 +51,7 @@ const patchKotlinMainApplication = async () => {
     }
     return true;
   } catch (e) {
+    console.log('EERR', e);
     return false;
   }
 };

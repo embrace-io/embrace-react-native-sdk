@@ -94,7 +94,8 @@ describe('Uninstall Script Android', () => {
   });
   test('Unlink Embrace From MainApplication.java - TEST FAILS', async () => {
     jest.mock('path', () => ({
-      join: () => './packages/core/scripts/__tests__/__mocks__/android',
+      join: () =>
+        './packages/core/scripts/__tests__/__mocks__/android/main-without-embrace',
     }));
     const { unlinkJava } = require('../setup/patches/android/unlink.java');
 
@@ -104,7 +105,8 @@ describe('Uninstall Script Android', () => {
   });
   test('Unlink Embrace From MainApplication.kt - TEST FAILS', async () => {
     jest.mock('path', () => ({
-      join: () => './packages/core/scripts/__tests__/__mocks__/android',
+      join: () =>
+        './packages/core/scripts/__tests__/__mocks__/android/main-without-embrace',
     }));
     const { unlinkKotlin } = require('../setup/patches/android/unlink.kotlin');
     const failed = jest.fn();

@@ -47,7 +47,6 @@ export const mainApplicationPatchable = (
   return new Promise<FileUpdatable>((resolve, reject) => {
     const p = path.join('android', 'app', 'src', 'main', 'java', 'com');
     const mainApp = MAIN_CLASS_BY_LANGUAGE[platform];
-
     const foldersInJava: IDirectory[] = fs
       .readdirSync(p, { withFileTypes: true })
       .filter((dirent: IDirectory) => dirent.isDirectory());

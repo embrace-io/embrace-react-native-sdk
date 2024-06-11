@@ -12,8 +12,8 @@ const unlinkJava = (): Promise<FileUpdatable> => {
       reject(undefined);
       return;
     }
-    mainApplication.deleteLine(EMBRACE_IMPORT_JAVA);
-    mainApplication.deleteLine(EMBRACE_INIT_JAVA);
+    mainApplication.deleteLine(`${EMBRACE_IMPORT_JAVA}\n`);
+    mainApplication.deleteLine(`${EMBRACE_INIT_JAVA}\n`);
     resolve(mainApplication);
   });
 };
