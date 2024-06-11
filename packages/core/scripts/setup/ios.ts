@@ -130,7 +130,7 @@ export const addUploadBuildPhase = {
             null,
             {
               shellPath: '/bin/sh',
-              shellScript: `EMBRACE_ID=${id} EMBRACE_TOKEN=${token} ${embRunScript}`,
+              shellScript: `REACT_NATIVE_MAP_PATH="$CONFIGURATION_BUILD_DIR/main.jsbundle.map" EMBRACE_ID=${id} EMBRACE_TOKEN=${token} ${embRunScript}`,
             }
           );
           project.sync();
