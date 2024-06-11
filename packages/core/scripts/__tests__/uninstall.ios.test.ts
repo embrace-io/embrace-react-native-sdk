@@ -54,7 +54,7 @@ describe('Uninstall Script iOS', () => {
 
     const xcode = await xcodePatchable(packageJsonMock);
 
-    expect(!!xcode.findPhase('eEmbraceIO')).toBe(true);
+    expect(!!xcode.findPhase('EmbraceIO')).toBe(true);
     expect(!!xcode.findPhase('SOURCEMAP_FILE')).toBe(true);
 
     const result = await iosUninstaller.unpatchXcode();
