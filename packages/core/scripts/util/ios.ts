@@ -18,7 +18,7 @@ export const embraceImport = `
 export const bundlePhaseRE = /react-native-xcode\.sh/;
 
 export const bundlePhaseExtraArgs =
-  'export EXTRA_PACKAGER_ARGS="--sourcemap-output $CONFIGURATION_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/main.jsbundle.map"';
+  'export SOURCEMAP_FILE="$CONFIGURATION_BUILD_DIR/main.jsbundle.map";';
 
 export const embRunScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';
 
