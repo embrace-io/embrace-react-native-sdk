@@ -4,11 +4,11 @@ const path = require('path');
 
 import EmbraceLogger from '../../src/logger';
 import {
-  bundlePhaseExtraArgs,
   bundlePhaseRE,
   embraceNativePod,
   embracePlistPatchable,
   embRunScript,
+  exportSourcemapRNVariable,
   getAppDelegateByIOSLanguage,
   podfilePatchable,
   xcodePatchable,
@@ -93,7 +93,7 @@ export const patchXcodeBundlePhase = {
           return;
         }
 
-        if (project.hasLine(bundlePhaseKey, bundlePhaseExtraArgs)) {
+        if (project.hasLine(bundlePhaseKey, exportSourcemapRNVariable)) {
           logger.warn('already patched Xcode React Native bundle phase');
           return;
         }
@@ -101,7 +101,7 @@ export const patchXcodeBundlePhase = {
         project.modifyPhase(
           bundlePhaseKey,
           /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m,
-          `${bundlePhaseExtraArgs}\n`
+          `${exportSourcemapRNVariable}\n`
         );
         project.sync();
         return project.patch();

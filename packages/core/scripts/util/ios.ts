@@ -12,7 +12,7 @@ export const embraceNativePod = `pod 'EmbraceIO'`;
 
 export const bundlePhaseRE = /react-native-xcode\.sh/;
 
-export const bundlePhaseExtraArgs =
+export const exportSourcemapRNVariable =
   'export SOURCEMAP_FILE="$CONFIGURATION_BUILD_DIR/main.jsbundle.map";';
 
 export const embRunScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';

@@ -42,12 +42,24 @@ describe('Uninstall Script iOS', () => {
       () => ({
         name: 'testMock',
       }),
-      { virtual: true }
+      {
+        virtual: true,
+      }
     );
     const iosUninstaller = require('../postunlink/ios');
+    const { xcodePatchable } = require('../util/ios');
+    const packageJsonMock = {
+      name: 'testMock',
+    };
+
+    const xcode = await xcodePatchable(packageJsonMock);
+
+    expect(!!xcode.findPhase('eEmbraceIO')).toBe(true);
+    expect(!!xcode.findPhase('SOURCEMAP_FILE')).toBe(true);
+
     const result = await iosUninstaller.unpatchXcode();
     expect(result.project.includes('EmbraceIO')).toBe(false);
-    expect(result.project.includes('EXTRA_PACKAGER_ARGS')).toBe(false);
+    expect(result.project.includes('SOURCEMAP_FILE')).toBe(false);
   });
   test('Unlink Embrace From AppDelegate.mm - TEST FAILS', async () => {
     jest.mock('glob', () => ({

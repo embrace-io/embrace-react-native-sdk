@@ -5,10 +5,10 @@ import { unlinkObjectiveC } from '../setup/patches/ios/unlink.objectivec';
 import { unlinkSwift } from '../setup/patches/ios/unlink.swift';
 import { FileUpdatable, patchFiles } from '../util/file';
 import {
-  bundlePhaseExtraArgs,
   bundlePhaseRE,
   embraceNativePod,
   embracePlistPatchable,
+  exportSourcemapRNVariable,
   podfilePatchable,
   xcodePatchable,
   XcodeProject,
@@ -48,7 +48,7 @@ export const unpatchXcode = (): Promise<XcodeProject> =>
           embLogger.error('Could not find bundle phase.');
           reject();
         }
-        project.modifyPhase(bundlePhaseKey, bundlePhaseExtraArgs, '');
+        project.modifyPhase(bundlePhaseKey, exportSourcemapRNVariable, '');
         project.findAndRemovePhase('/EmbraceIO/run.sh');
         project.sync();
         resolve(project);

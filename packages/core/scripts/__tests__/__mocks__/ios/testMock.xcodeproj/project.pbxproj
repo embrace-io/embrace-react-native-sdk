@@ -7,14 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* testMockTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* testMockTests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-testMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-testMock.a */; };
+		00E356F31AD99517003FC87E /* EmbraceTestSuiteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* EmbraceTestSuiteTests.m */; };
+		0C80B921A6F3F58F76C31292 /* libPods-EmbraceTestSuite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-EmbraceTestSuite.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		7699B88040F8A987B510C191 /* libPods-testMock-testMockTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-testMock-testMockTests.a */; };
+		3881A8C026224CB98C6F4144 /* Embrace-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63995EC3AFFB4222A1C40EC2 /* Embrace-Info.plist */; };
+		4B9ECF0F28BD530E00983159 /* CRLCrashCXXException.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B9ECF0E28BD530E00983159 /* CRLCrashCXXException.mm */; };
+		4B9ECF1228BD593D00983159 /* CRLCrash.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9ECF1128BD593D00983159 /* CRLCrash.m */; };
+		4B9ECF1428BD850600983159 /* CRLCrashCXXException.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B9ECF0E28BD530E00983159 /* CRLCrashCXXException.mm */; };
+		4B9ECF1528BD851000983159 /* CRLCrash.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9ECF1128BD593D00983159 /* CRLCrash.m */; };
+		4BDBE69A28ADA24000467C32 /* RCTNativeTestModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BDBE69928ADA24000467C32 /* RCTNativeTestModule.mm */; };
+		4BDBE69B28ADA24000467C32 /* RCTNativeTestModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BDBE69928ADA24000467C32 /* RCTNativeTestModule.mm */; };
+		7699B88040F8A987B510C191 /* libPods-EmbraceTestSuite-EmbraceTestSuiteTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-EmbraceTestSuite-EmbraceTestSuiteTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		9A9CDDFC986A4DE798D0D2C0 /* Embrace-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C08464EF2674D35BE1B7DDA /* Embrace-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,28 +29,34 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = testMock;
+			remoteInfo = EmbraceTestSuite;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* testMockTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = testMockTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* EmbraceTestSuiteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EmbraceTestSuiteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* testMockTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = testMockTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* testMock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testMock.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = testMock/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = testMock/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = testMock/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = testMock/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = testMock/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-testMock-testMockTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-testMock-testMockTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4392A12AC88292D35C810B /* Pods-testMock.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testMock.debug.xcconfig"; path = "Target Support Files/Pods-testMock/Pods-testMock.debug.xcconfig"; sourceTree = "<group>"; };
-		4C08464EF2674D35BE1B7DDA /* Embrace-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "Embrace-Info.plist"; path = "testMock/Embrace-Info.plist"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-testMock.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testMock.release.xcconfig"; path = "Target Support Files/Pods-testMock/Pods-testMock.release.xcconfig"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-testMock-testMockTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testMock-testMockTests.debug.xcconfig"; path = "Target Support Files/Pods-testMock-testMockTests/Pods-testMock-testMockTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-testMock.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-testMock.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = testMock/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-testMock-testMockTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testMock-testMockTests.release.xcconfig"; path = "Target Support Files/Pods-testMock-testMockTests/Pods-testMock-testMockTests.release.xcconfig"; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* EmbraceTestSuiteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmbraceTestSuiteTests.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* EmbraceTestSuite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmbraceTestSuite.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = EmbraceTestSuite/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = EmbraceTestSuite/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = EmbraceTestSuite/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = EmbraceTestSuite/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = EmbraceTestSuite/main.m; sourceTree = "<group>"; };
+		19F6CBCC0A4E27FBF8BF4A61 /* libPods-EmbraceTestSuite-EmbraceTestSuiteTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EmbraceTestSuite-EmbraceTestSuiteTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B4392A12AC88292D35C810B /* Pods-EmbraceTestSuite.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EmbraceTestSuite.debug.xcconfig"; path = "Target Support Files/Pods-EmbraceTestSuite/Pods-EmbraceTestSuite.debug.xcconfig"; sourceTree = "<group>"; };
+		4B9ECF0E28BD530E00983159 /* CRLCrashCXXException.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CRLCrashCXXException.mm; sourceTree = "<group>"; };
+		4B9ECF1028BD533700983159 /* CRLCrashCXXException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRLCrashCXXException.h; sourceTree = "<group>"; };
+		4B9ECF1128BD593D00983159 /* CRLCrash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRLCrash.m; sourceTree = "<group>"; };
+		4B9ECF1328BD594900983159 /* CRLCrash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRLCrash.h; sourceTree = "<group>"; };
+		4BDBE69828ADA1ED00467C32 /* RCTNativeTestModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTNativeTestModule.h; sourceTree = "<group>"; };
+		4BDBE69928ADA24000467C32 /* RCTNativeTestModule.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNativeTestModule.mm; sourceTree = "<group>"; };
+		5709B34CF0A7D63546082F79 /* Pods-EmbraceTestSuite.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EmbraceTestSuite.release.xcconfig"; path = "Target Support Files/Pods-EmbraceTestSuite/Pods-EmbraceTestSuite.release.xcconfig"; sourceTree = "<group>"; };
+		5B7EB9410499542E8C5724F5 /* Pods-EmbraceTestSuite-EmbraceTestSuiteTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EmbraceTestSuite-EmbraceTestSuiteTests.debug.xcconfig"; path = "Target Support Files/Pods-EmbraceTestSuite-EmbraceTestSuiteTests/Pods-EmbraceTestSuite-EmbraceTestSuiteTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5DCACB8F33CDC322A6C60F78 /* libPods-EmbraceTestSuite.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EmbraceTestSuite.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		63995EC3AFFB4222A1C40EC2 /* Embrace-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "Embrace-Info.plist"; path = "EmbraceTestSuite/Embrace-Info.plist"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = EmbraceTestSuite/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		89C6BE57DB24E9ADA2F236DE /* Pods-EmbraceTestSuite-EmbraceTestSuiteTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EmbraceTestSuite-EmbraceTestSuiteTests.release.xcconfig"; path = "Target Support Files/Pods-EmbraceTestSuite-EmbraceTestSuiteTests/Pods-EmbraceTestSuite-EmbraceTestSuiteTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -53,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-testMock-testMockTests.a in Frameworks */,
+				7699B88040F8A987B510C191 /* libPods-EmbraceTestSuite-EmbraceTestSuiteTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,20 +73,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-testMock.a in Frameworks */,
+				0C80B921A6F3F58F76C31292 /* libPods-EmbraceTestSuite.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* testMockTests */ = {
+		00E356EF1AD99517003FC87E /* EmbraceTestSuiteTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* testMockTests.m */,
+				00E356F21AD99517003FC87E /* EmbraceTestSuiteTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = testMockTests;
+			path = EmbraceTestSuiteTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -85,7 +97,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* testMock */ = {
+		13B07FAE1A68108700A75B9A /* EmbraceTestSuite */ = {
 			isa = PBXGroup;
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -94,17 +106,17 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				4C08464EF2674D35BE1B7DDA /* Embrace-Info.plist */,
+				63995EC3AFFB4222A1C40EC2 /* Embrace-Info.plist */,
 			);
-			name = testMock;
+			name = EmbraceTestSuite;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-testMock.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-testMock-testMockTests.a */,
+				5DCACB8F33CDC322A6C60F78 /* libPods-EmbraceTestSuite.a */,
+				19F6CBCC0A4E27FBF8BF4A61 /* libPods-EmbraceTestSuite-EmbraceTestSuiteTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -119,9 +131,15 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* testMock */,
+				4B9ECF1328BD594900983159 /* CRLCrash.h */,
+				4B9ECF1128BD593D00983159 /* CRLCrash.m */,
+				4B9ECF1028BD533700983159 /* CRLCrashCXXException.h */,
+				4B9ECF0E28BD530E00983159 /* CRLCrashCXXException.mm */,
+				4BDBE69928ADA24000467C32 /* RCTNativeTestModule.mm */,
+				4BDBE69828ADA1ED00467C32 /* RCTNativeTestModule.h */,
+				13B07FAE1A68108700A75B9A /* EmbraceTestSuite */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* testMockTests */,
+				00E356EF1AD99517003FC87E /* EmbraceTestSuiteTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -134,8 +152,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* testMock.app */,
-				00E356EE1AD99517003FC87E /* testMockTests.xctest */,
+				13B07F961A680F5B00A75B9A /* EmbraceTestSuite.app */,
+				00E356EE1AD99517003FC87E /* EmbraceTestSuiteTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -143,10 +161,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-testMock.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-testMock.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-testMock-testMockTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-testMock-testMockTests.release.xcconfig */,
+				3B4392A12AC88292D35C810B /* Pods-EmbraceTestSuite.debug.xcconfig */,
+				5709B34CF0A7D63546082F79 /* Pods-EmbraceTestSuite.release.xcconfig */,
+				5B7EB9410499542E8C5724F5 /* Pods-EmbraceTestSuite-EmbraceTestSuiteTests.debug.xcconfig */,
+				89C6BE57DB24E9ADA2F236DE /* Pods-EmbraceTestSuite-EmbraceTestSuiteTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -154,9 +172,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* testMockTests */ = {
+		00E356ED1AD99517003FC87E /* EmbraceTestSuiteTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "testMockTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "EmbraceTestSuiteTests" */;
 			buildPhases = (
 				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -170,14 +188,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = testMockTests;
-			productName = testMockTests;
-			productReference = 00E356EE1AD99517003FC87E /* testMockTests.xctest */;
+			name = EmbraceTestSuiteTests;
+			productName = EmbraceTestSuiteTests;
+			productReference = 00E356EE1AD99517003FC87E /* EmbraceTestSuiteTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* testMock */ = {
+		13B07F861A680F5B00A75B9A /* EmbraceTestSuite */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "testMock" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "EmbraceTestSuite" */;
 			buildPhases = (
 				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -187,16 +205,15 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
-				1E355CAA9B1C42848E0069F7 /* Upload Debug Symbols to Embrace */,
-				2590F853E7E44DCB85296747 /* Upload Debug Symbols to Embrace */,
+				97C34991B317492A8B2EBA12 /* Upload Debug Symbols to Embrace */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = testMock;
-			productName = testMock;
-			productReference = 13B07F961A680F5B00A75B9A /* testMock.app */;
+			name = EmbraceTestSuite;
+			productName = EmbraceTestSuite;
+			productReference = 13B07F961A680F5B00A75B9A /* EmbraceTestSuite.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -216,7 +233,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "testMock" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "EmbraceTestSuite" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -229,8 +246,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* testMock */,
-				00E356ED1AD99517003FC87E /* testMockTests */,
+				13B07F861A680F5B00A75B9A /* EmbraceTestSuite */,
+				00E356ED1AD99517003FC87E /* EmbraceTestSuiteTests */,
 			);
 		};
 /* End PBXProject section */
@@ -249,7 +266,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				9A9CDDFC986A4DE798D0D2C0 /* Embrace-Info.plist in Resources */,
+				3881A8C026224CB98C6F4144 /* Embrace-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,7 +287,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\n\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $CONFIGURATION_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/main.jsbundle.map\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\n\nexport SOURCEMAP_FILE=\"$CONFIGURATION_BUILD_DIR/main.jsbundle.map\";\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
 		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -278,16 +295,30 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testMock/Pods-testMock-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite/Pods-EmbraceTestSuite-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testMock/Pods-testMock-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite/Pods-EmbraceTestSuite-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-testMock/Pods-testMock-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite/Pods-EmbraceTestSuite-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		97C34991B317492A8B2EBA12 /* Upload Debug Symbols to Embrace */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Upload Debug Symbols to Embrace";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/main.jsbundle.map\" EMBRACE_ID=Jso7A EMBRACE_TOKEN=4922d55c060c47828cac53abc09f9458 \"${PODS_ROOT}/EmbraceIO/run.sh\"\n";
 		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -304,7 +335,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-testMock-testMockTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-EmbraceTestSuite-EmbraceTestSuiteTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -326,7 +357,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-testMock-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-EmbraceTestSuite-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -339,15 +370,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testMock-testMockTests/Pods-testMock-testMockTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite-EmbraceTestSuiteTests/Pods-EmbraceTestSuite-EmbraceTestSuiteTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testMock-testMockTests/Pods-testMock-testMockTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite-EmbraceTestSuiteTests/Pods-EmbraceTestSuite-EmbraceTestSuiteTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-testMock-testMockTests/Pods-testMock-testMockTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite-EmbraceTestSuiteTests/Pods-EmbraceTestSuite-EmbraceTestSuiteTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
@@ -356,15 +387,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testMock/Pods-testMock-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite/Pods-EmbraceTestSuite-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testMock/Pods-testMock-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite/Pods-EmbraceTestSuite-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-testMock/Pods-testMock-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite/Pods-EmbraceTestSuite-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
@@ -373,15 +404,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testMock-testMockTests/Pods-testMock-testMockTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite-EmbraceTestSuiteTests/Pods-EmbraceTestSuite-EmbraceTestSuiteTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testMock-testMockTests/Pods-testMock-testMockTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite-EmbraceTestSuiteTests/Pods-EmbraceTestSuite-EmbraceTestSuiteTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-testMock-testMockTests/Pods-testMock-testMockTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite-EmbraceTestSuiteTests/Pods-EmbraceTestSuite-EmbraceTestSuiteTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -403,20 +434,6 @@
 			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		2590F853E7E44DCB85296747 /* Upload Debug Symbols to Embrace */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			name = "Upload Debug Symbols to Embrace";
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			shellPath = /bin/sh;
-			shellScript = "EMBRACE_ID=qwe EMBRACE_TOKEN=ewq \"${PODS_ROOT}/EmbraceIO/run.sh\"";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -424,7 +441,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* testMockTests.m in Sources */,
+				4B9ECF1428BD850600983159 /* CRLCrashCXXException.mm in Sources */,
+				4BDBE69B28ADA24000467C32 /* RCTNativeTestModule.mm in Sources */,
+				00E356F31AD99517003FC87E /* EmbraceTestSuiteTests.m in Sources */,
+				4B9ECF1528BD851000983159 /* CRLCrash.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,7 +452,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B9ECF1228BD593D00983159 /* CRLCrash.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				4B9ECF0F28BD530E00983159 /* CRLCrashCXXException.mm in Sources */,
+				4BDBE69A28ADA24000467C32 /* RCTNativeTestModule.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,7 +465,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* testMock */;
+			target = 13B07F861A680F5B00A75B9A /* EmbraceTestSuite */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -450,14 +473,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-testMock-testMockTests.debug.xcconfig */;
+			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-EmbraceTestSuite-EmbraceTestSuiteTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = testMockTests/Info.plist;
+				INFOPLIST_FILE = EmbraceTestSuiteTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -471,17 +494,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/testMock.app/testMock";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EmbraceTestSuite.app/EmbraceTestSuite";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-testMock-testMockTests.release.xcconfig */;
+			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-EmbraceTestSuite-EmbraceTestSuiteTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = testMockTests/Info.plist;
+				INFOPLIST_FILE = EmbraceTestSuiteTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -495,19 +518,20 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/testMock.app/testMock";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EmbraceTestSuite.app/EmbraceTestSuite";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-testMock.debug.xcconfig */;
+			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-EmbraceTestSuite.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L5RVT7J8CV;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = testMock/Info.plist;
+				INFOPLIST_FILE = EmbraceTestSuite/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -519,7 +543,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = testMock;
+				PRODUCT_NAME = EmbraceTestSuite;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -528,12 +552,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-testMock.release.xcconfig */;
+			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-EmbraceTestSuite.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = testMock/Info.plist;
+				DEVELOPMENT_TEAM = L5RVT7J8CV;
+				INFOPLIST_FILE = EmbraceTestSuite/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -545,7 +570,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = testMock;
+				PRODUCT_NAME = EmbraceTestSuite;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -584,7 +609,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -592,6 +617,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -618,6 +644,29 @@
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -657,9 +706,13 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -684,6 +737,29 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -693,7 +769,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "testMockTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "EmbraceTestSuiteTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -702,7 +778,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "testMock" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "EmbraceTestSuite" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -711,7 +787,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "testMock" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "EmbraceTestSuite" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
