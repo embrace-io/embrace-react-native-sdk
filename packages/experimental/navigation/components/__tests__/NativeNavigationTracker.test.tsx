@@ -5,8 +5,8 @@ import {render} from '@testing-library/react-native';
 import useNativeNavigationTracker, {
   NativeNavRef,
 } from '../../hooks/useNativeNavigationTracker';
+import NativeNavigationTracker from '../NativeNavigationTracker';
 
-import {NativeNavigationTracker} from '@/packages/navigation';
 
 const mockGetTracer = jest.fn();
 const mockStartSpan = jest.fn();

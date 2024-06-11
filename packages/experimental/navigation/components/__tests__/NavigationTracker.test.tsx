@@ -3,8 +3,8 @@ import {ForwardedRef} from 'react';
 import {render} from '@testing-library/react-native';
 
 import useNavigationTracker, {NavRef} from '../../hooks/useNavigationTracker';
+import NavigationTracker from '../NavigationTracker';
 
-import {NavigationTracker} from '@/packages/navigation';
 
 jest.mock('../../hooks/useNavigationTracker', () => jest.fn());
 
