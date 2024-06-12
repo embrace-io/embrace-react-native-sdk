@@ -148,8 +148,6 @@ export const findNameWithCaseSensitiveFromPath = (
 ) => {
   const pathSplitted = path.split('/');
   const nameInLowerCase = name.toLocaleLowerCase();
-  console.log('AASD', pathSplitted);
-  console.log('AASD nameInLowerCase', nameInLowerCase);
 
   const nameFounded = pathSplitted.find(
     (element) => element.toLocaleLowerCase() === `${nameInLowerCase}.xcodeproj`

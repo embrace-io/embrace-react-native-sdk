@@ -164,8 +164,7 @@ describe('Test React Native Apollo Tracker', () => {
     jest.mock(
       'gzip-js',
       () => ({
-        zip: (r: any) => {
-          console.log('RRR', r);
+        zip: () => {
           return { length: 0 };
         },
       }),

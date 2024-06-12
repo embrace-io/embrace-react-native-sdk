@@ -51,7 +51,6 @@ const patchKotlinMainApplication = async () => {
     }
     return true;
   } catch (e) {
-    console.log('EERR', e);
     return false;
   }
 };
