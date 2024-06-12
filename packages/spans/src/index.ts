@@ -8,13 +8,18 @@ import {
 
 export const startSpan = (
   name: string,
-  parentSpanId?: string
+  parentSpanId?: string,
+  startTimeMS?: number
 ): Promise<boolean | string> => {
   if (!validateAndLogRequiredProperties({ name })) {
     return createFalsePromise();
   }
   try {
-    return NativeModules.EmbraceManager.startSpan(name, parentSpanId);
+    return NativeModules.EmbraceManager.startSpan(
+      name,
+      parentSpanId,
+      convertMSToNano(startTimeMS)
+    );
   } catch (e) {
     console.warn(
       `[Embrace] The method startSpan was not found, please update the SDK.`,
@@ -26,13 +31,18 @@ export const startSpan = (
 
 export const stopSpan = (
   spanId: string,
-  errorCode: SPAN_ERROR_CODES = 'None'
+  errorCode: SPAN_ERROR_CODES = 'None',
+  endTimeMS?: number
 ): Promise<boolean> => {
   if (!validateAndLogRequiredProperties({ spanId })) {
     return createFalsePromise();
   }
   try {
-    return NativeModules.EmbraceManager.stopSpan(spanId, errorCode);
+    return NativeModules.EmbraceManager.stopSpan(
+      spanId,
+      errorCode,
+      convertMSToNano(endTimeMS)
+    );
   } catch (e) {
     console.warn(
       `[Embrace] The method stopSpan was not found, please update the SDK.`,
