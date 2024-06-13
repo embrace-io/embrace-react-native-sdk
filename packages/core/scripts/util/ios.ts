@@ -237,7 +237,3 @@ export class XcodeProject implements Patchable {
     });
   }
 }
-
-export const formatEmbraceInitializer = (): string => `
-  [[Embrace sharedInstance] startWithLaunchOptions:launchOptions framework:EMBAppFrameworkReactNative];
-`;
