@@ -1,5 +1,5 @@
-import {ForwardedRef} from 'react';
 import {renderHook} from '@testing-library/react-native';
+import {ForwardedRef} from 'react';
 
 import useNativeNavigationTracker, {
   NativeNavRef,
@@ -30,6 +30,8 @@ const mockStartSpan = jest.fn(() => ({
   updateName: jest.fn(),
   isRecording: jest.fn(),
   recordException: jest.fn(),
+  addLink: jest.fn(),
+  addLinks: jest.fn(),
 }));
 const mockStartActiveSpan = jest.fn();
 

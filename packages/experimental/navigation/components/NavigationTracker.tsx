@@ -1,29 +1,22 @@
-import React, {ReactNode, forwardRef} from 'react';
 import {TracerProvider} from '@opentelemetry/api';
+import React, {forwardRef, ReactNode} from 'react';
 
-import useTrace from '../otel/hooks/useTrace';
 import useNavigationTracker, {type NavRef} from '../hooks/useNavigationTracker';
+import useTrace from '../otel/hooks/useTrace';
 
 type NavigationTrackerRef = NavRef;
-type NavigationTrackerProps = {
+interface NavigationTrackerProps {
   children: ReactNode;
   // selected provider, should be configured by the app consumer
   provider: TracerProvider;
-};
+}
 
 const NavigationTracker = forwardRef<
   NavigationTrackerRef,
   NavigationTrackerProps
 >(({children, provider}, ref) => {
   // Initializing a Trace instance
-  const tracer = useTrace({name: 'navigation', version: '1.0.0'}, provider);
-
-  /**
-   * NOTE
-   * - should we check if the reference is the one we need even when typescript would complain if it is different?
-   * (People can force the type deactivating the typescript checks)
-   * - should introduce a log to warn the user if the ref is not the one we are expecting and return?
-   */
+  const tracer = useTrace({name: 'navigation', version: '0.1.0'}, provider);
 
   useNavigationTracker(ref, tracer);
 
