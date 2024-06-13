@@ -3,7 +3,7 @@
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
-    "jsx": "react",
+    "jsx": "react-native",
     "outDir": "./dist",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

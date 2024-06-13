@@ -1,12 +1,11 @@
-import {Text} from 'react-native';
-import {ForwardedRef} from 'react';
 import {render} from '@testing-library/react-native';
+import {ForwardedRef} from 'react';
 
+import { Text } from 'react-native';
 import useNativeNavigationTracker, {
   NativeNavRef,
 } from '../../hooks/useNativeNavigationTracker';
 import NativeNavigationTracker from '../NativeNavigationTracker';
-
 
 const mockGetTracer = jest.fn();
 const mockStartSpan = jest.fn();
@@ -16,7 +15,10 @@ const mockProvider = {
   startSpan: mockStartSpan,
 };
 
-jest.mock('../../hooks/useNativeNavigationTracker', () => jest.fn());
+jest.mock('../../hooks/useNativeNavigationTracker', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
 
 const mockRegisterComponentDidAppearListener = jest.fn();
 const mockRegisterComponentDidDisappearListener = jest.fn();
@@ -37,6 +39,7 @@ describe('NativeNavigationTracker.tsx', () => {
       <NativeNavigationTracker
         ref={mockNativeNavigationRef}
         provider={mockProvider}>
+        {/* @ts-ignore */}
         <Text>my app goes here</Text>
       </NativeNavigationTracker>,
     );
@@ -48,8 +51,8 @@ describe('NativeNavigationTracker.tsx', () => {
           _provider: expect.objectContaining({
             _delegate: expect.objectContaining(mockProvider),
           }),
-          name: 'navigation',
-          version: '1.0.0',
+          name: 'native-navigation',
+          version: '0.1.0',
           options: undefined,
         }),
       }),

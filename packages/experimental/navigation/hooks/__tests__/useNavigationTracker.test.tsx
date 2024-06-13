@@ -1,11 +1,7 @@
-import {ForwardedRef} from 'react';
 import {renderHook} from '@testing-library/react-native';
+import {ForwardedRef} from 'react';
 
 import useNavigationTracker, {type NavRef} from '../useNavigationTracker';
-
-jest.mock('../../otel/hooks/useSpan', () => () => ({
-  current: null,
-}));
 
 const mockSpanSetAttribute = jest.fn();
 const mockSpanEnd = jest.fn();
@@ -21,6 +17,8 @@ const mockStartSpan = jest.fn(() => ({
   updateName: jest.fn(),
   isRecording: jest.fn(),
   recordException: jest.fn(),
+  addLink: jest.fn(),
+  addLinks: jest.fn(),
 }));
 const mockStartActiveSpan = jest.fn();
 const mockGetCurrentRoute = jest.fn();

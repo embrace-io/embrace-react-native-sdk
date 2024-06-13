@@ -1,12 +1,14 @@
-import {Text} from 'react-native';
-import {ForwardedRef} from 'react';
 import {render} from '@testing-library/react-native';
+import {Ref} from 'react';
 
+import { Text } from 'react-native';
 import useNavigationTracker, {NavRef} from '../../hooks/useNavigationTracker';
 import NavigationTracker from '../NavigationTracker';
 
-
-jest.mock('../../hooks/useNavigationTracker', () => jest.fn());
+jest.mock('../../hooks/useNavigationTracker', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
 
 const mockGetTracer = jest.fn();
 const mockStartSpan = jest.fn();
@@ -22,12 +24,13 @@ const mockNavigationRef = {
     addListener: jest.fn(),
     getCurrentRoute: jest.fn(),
   },
-} as unknown as ForwardedRef<NavRef>;
+} as unknown as Ref<NavRef>;
 
 describe('NavigationTracker.tsx', () => {
   it('should render component and call the hook', () => {
     const screen = render(
       <NavigationTracker ref={mockNavigationRef} provider={mockProvider}>
+        {/* @ts-ignore */}
         <Text>my app goes here</Text>
       </NavigationTracker>,
     );
@@ -40,7 +43,7 @@ describe('NavigationTracker.tsx', () => {
             _delegate: expect.objectContaining(mockProvider),
           }),
           name: 'navigation',
-          version: '1.0.0',
+          version: '0.1.0',
           options: undefined,
         }),
       }),
