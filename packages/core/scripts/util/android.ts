@@ -1,6 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-import { FileUpdatable, getFileContents } from './file';
+import {FileUpdatable, getFileContents} from "./file";
+
+const path = require("path");
+const fs = require("fs");
 
 interface IDirectory {
   isDirectory: () => boolean;
@@ -9,7 +10,7 @@ interface IDirectory {
 
 export const buildGradlePatchable = (): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
-    const gradlePath = path.join('android', 'build.gradle');
+    const gradlePath = path.join("android", "build.gradle");
     if (!fs.existsSync(gradlePath)) {
       return reject(`cannot find build.gradle file at ${gradlePath}`);
     }
@@ -19,7 +20,7 @@ export const buildGradlePatchable = (): Promise<FileUpdatable> => {
 
 export const buildAppGradlePatchable = (): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
-    const appGradlePath = path.join('android', 'app', 'build.gradle');
+    const appGradlePath = path.join("android", "app", "build.gradle");
     if (!fs.existsSync(appGradlePath)) {
       return reject(`cannot find build.gradle file at ${appGradlePath}`);
     }
@@ -29,7 +30,7 @@ export const buildAppGradlePatchable = (): Promise<FileUpdatable> => {
 
 export const embraceJSON = (): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
-    const p = path.join('android', 'app', 'src', 'main', 'embrace-config.json');
+    const p = path.join("android", "app", "src", "main", "embrace-config.json");
     if (!fs.existsSync(p)) {
       return reject(`cannot find embrace-config.json file at ${p}`);
     }
@@ -38,19 +39,19 @@ export const embraceJSON = (): Promise<FileUpdatable> => {
 };
 
 export const mainApplicationPatchable = ({
-  name = '',
+  name = "",
 }): Promise<FileUpdatable> => {
   return new Promise<FileUpdatable>((resolve, reject) => {
-    const p = path.join('android', 'app', 'src', 'main', 'java', 'com');
-    const mainApp = 'MainApplication.java';
+    const p = path.join("android", "app", "src", "main", "java", "com");
+    const mainApp = "MainApplication.java";
 
     const foldersInJava: IDirectory[] = fs
-      .readdirSync(p, { withFileTypes: true })
+      .readdirSync(p, {withFileTypes: true})
       .filter((dirent: IDirectory) => dirent.isDirectory());
 
     if (foldersInJava.length === 0) {
       return reject(
-        `cannot find any folder at ${p}, ${mainApp} patch was skipped. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`
+        `cannot find any folder at ${p}, ${mainApp} patch was skipped. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`,
       );
     }
 
@@ -59,7 +60,7 @@ export const mainApplicationPatchable = ({
     let foldersToLook = foldersInJava;
     while (!mainApplicationPath && hasFoldersToLook) {
       const foldersToLookTmp: IDirectory[] = [];
-      foldersToLook.forEach((dir) => {
+      foldersToLook.forEach(dir => {
         if (fs.existsSync(`${p}/${dir.name}/${mainApp}`)) {
           mainApplicationPath = `${p}/${dir.name}/${mainApp}`;
           hasFoldersToLook = false;
@@ -72,14 +73,14 @@ export const mainApplicationPatchable = ({
 
         const foldersInside =
           fs
-            .readdirSync(`${p}/${dir.name}`, { withFileTypes: true })
+            .readdirSync(`${p}/${dir.name}`, {withFileTypes: true})
             .filter((dirent: IDirectory) => dirent.isDirectory()) || [];
 
         if (foldersInside.length > 0) {
           foldersToLookTmp.push(
             ...foldersInside.map((d: IDirectory) => {
-              return { ...d, name: `${dir.name}/${d.name}` };
-            })
+              return {...d, name: `${dir.name}/${d.name}`};
+            }),
           );
         }
       });
@@ -95,7 +96,7 @@ export const mainApplicationPatchable = ({
 
     if (!mainApplicationPath) {
       return reject(
-        `cannot find MainApplication.java file in any folder at ${p}. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`
+        `cannot find MainApplication.java file in any folder at ${p}. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`,
       );
     }
     return resolve(getFileContents(mainApplicationPath));

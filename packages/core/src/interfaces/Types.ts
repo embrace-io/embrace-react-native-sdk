@@ -1,1 +1,1 @@
-export type SessionStatus = 'INVALID' | 'CRASH' | 'CLEAN_EXIT';
+export type SessionStatus = "INVALID" | "CRASH" | "CLEAN_EXIT";

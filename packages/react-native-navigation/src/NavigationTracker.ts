@@ -1,9 +1,9 @@
-import { NativeModules } from 'react-native';
+import {NativeModules} from "react-native";
 
 import {
   ICurrentScreenInstance,
   INavigation,
-} from '../navigation/interfaces/NavigationInterfaces';
+} from "../navigation/interfaces/NavigationInterfaces";
 
 export default class NavigationTracker {
   public currentScreen?: ICurrentScreenInstance = undefined;
@@ -22,27 +22,27 @@ export default class NavigationTracker {
       NativeModules.EmbraceManager.startView(cS.name);
     } else {
       console.warn(
-        '[Embrace] The method startView was not found, please update the native SDK'
+        "[Embrace] The method startView was not found, please update the native SDK",
       );
     }
-  }
+  };
 
   public updateLastScreen = (name: string) => {
     if (this.currentScreen && this.currentScreen.name !== name) {
-      const cSEnd = { ...this.currentScreen };
+      const cSEnd = {...this.currentScreen};
       cSEnd.endTime = new Date().getTime();
       if (NativeModules.EmbraceManager.endView) {
         NativeModules.EmbraceManager.endView(cSEnd.name);
         this.setLastScreenStart(name);
       } else {
         console.warn(
-          '[Embrace] The method endView was not found, please update the native SDK'
+          "[Embrace] The method endView was not found, please update the native SDK",
         );
       }
     }
-  }
+  };
   public initNavigator = (navigation: INavigation) => {
-    navigation.events().registerComponentDidAppearListener((event) => {
+    navigation.events().registerComponentDidAppearListener(event => {
       if (!this.currentScreen || !this.currentScreen.name) {
         this.setLastScreenStart(event.componentName);
       }
@@ -53,5 +53,5 @@ export default class NavigationTracker {
         this.updateLastScreen(event.componentName);
       }
     });
-  }
+  };
 }

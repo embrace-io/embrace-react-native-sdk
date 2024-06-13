@@ -3,5 +3,5 @@
  * but only what we are going to use
  */
 export interface IWebViewMessageParams {
-  nativeEvent: { data: string };
+  nativeEvent: {data: string};
 }

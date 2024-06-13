@@ -1,9 +1,11 @@
-const glob = require('glob');
-const xcode = require('xcode');
-const fs = require('fs');
-import { FileUpdatable, getFileContents, Patchable } from './file';
+import EmbraceLogger from "../../src/logger";
 
-import EmbraceLogger from '../../src/logger';
+import {FileUpdatable, getFileContents, Patchable} from "./file";
+
+const fs = require("fs");
+
+const xcode = require("xcode");
+const glob = require("glob");
 
 const embLogger = new EmbraceLogger(console);
 
@@ -29,8 +31,8 @@ export const appDelegatePatchable = ({
 }): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
     const appDelegatePathFounded: string[] = glob.sync(
-      '**/AppDelegate.*(m|mm)',
-      { ignore: ['node_modules/**', 'ios/Pods/**'] }
+      "**/AppDelegate.*(m|mm)",
+      {ignore: ["node_modules/**", "ios/Pods/**"]},
     );
 
     let appDelegatePath: string | undefined;
@@ -45,8 +47,8 @@ export const appDelegatePatchable = ({
     if (!appDelegatePath) {
       return reject(
         embLogger.format(
-          'Couldn\'t find AppDelegate. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=ios&platform=ios to update manually.'
-        )
+          "Couldn't find AppDelegate. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=ios&platform=ios to update manually.",
+        ),
       );
     }
 
@@ -57,12 +59,12 @@ export const appDelegatePatchable = ({
 
 export const podfilePatchable = (): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
-    const podfilePath = glob.sync('ios/Podfile')[0];
+    const podfilePath = glob.sync("ios/Podfile")[0];
     if (!podfilePath) {
       return reject(
         embLogger.format(
-          'Could not find Podfile. Please refer to the docs at https://docs.embrace.io to update manually.'
-        )
+          "Could not find Podfile. Please refer to the docs at https://docs.embrace.io to update manually.",
+        ),
       );
     }
     const podfile = getFileContents(podfilePath);
@@ -76,9 +78,9 @@ export const embracePlistPatchable = ({
   name: string;
 }): Promise<FileUpdatable> => {
   return new Promise<FileUpdatable>((resolve, reject) => {
-    const plistPath = glob.sync('ios/**/Embrace-Info.plist')[0];
+    const plistPath = glob.sync("ios/**/Embrace-Info.plist")[0];
     if (!plistPath) {
-      return reject(embLogger.format('Could not find Embrace-Info.plist'));
+      return reject(embLogger.format("Could not find Embrace-Info.plist"));
     }
     return resolve(getFileContents(plistPath));
   });
@@ -91,8 +93,8 @@ export const xcodePatchable = ({
 }): Promise<XcodeProject> => {
   return new Promise((resolve, reject) => {
     const projectPathFounded: string[] = glob.sync(
-      '**/*.xcodeproj/project.pbxproj',
-      { ignore: ['node_modules/**', 'ios/Pods/**'] }
+      "**/*.xcodeproj/project.pbxproj",
+      {ignore: ["node_modules/**", "ios/Pods/**"]},
     );
 
     let projectPath: string | undefined;
@@ -106,7 +108,7 @@ export const xcodePatchable = ({
 
     if (!projectPath) {
       return reject(
-        embLogger.format(`Could not find xcode project file. ${docsMessage}`)
+        embLogger.format(`Could not find xcode project file. ${docsMessage}`),
       );
     }
 
@@ -115,7 +117,7 @@ export const xcodePatchable = ({
 };
 
 const docsMessage =
-  'Please refer to the docs at https://docs.embrace.io to update manually.';
+  "Please refer to the docs at https://docs.embrace.io to update manually.";
 
 const getXcodeProject = (path: string): Promise<XcodeProject> => {
   const project = xcode.project(path);
@@ -135,12 +137,12 @@ class XcodeProject implements Patchable {
   public project: any;
   public path: string;
 
-  constructor(path: string = '', project: any) {
+  constructor(path: string = "", project: any) {
     this.path = path;
     this.project = project;
   }
 
-  public buildPhaseObj(): { [key: string]: any } {
+  public buildPhaseObj(): {[key: string]: any} {
     return this.project.hash.project.objects.PBXShellScriptBuildPhase || {};
   }
 
@@ -179,7 +181,7 @@ class XcodeProject implements Patchable {
     let code = JSON.parse(phase.shellScript);
     code = code.replace(
       line,
-      (match: string) => `${add}${add === '' ? '' : match}`
+      (match: string) => `${add}${add === "" ? "" : match}`,
     );
 
     phase.shellScript = JSON.stringify(code);
@@ -188,16 +190,16 @@ class XcodeProject implements Patchable {
   public findPhase(line: string | RegExp): string {
     const buildPhaseObj = this.buildPhaseObj();
     return (
-      Object.keys(buildPhaseObj).find((key) => {
+      Object.keys(buildPhaseObj).find(key => {
         return this.hasLine(key, line);
-      }) || ''
+      }) || ""
     );
   }
 
   public findAndRemovePhase(line: string | RegExp) {
     const buildPhaseObj = this.buildPhaseObj();
     this.project.hash.project.objects.PBXShellScriptBuildPhase = Object.keys(
-      buildPhaseObj
+      buildPhaseObj,
     ).reduce((a, key) => {
       const phase = buildPhaseObj[key];
       if (!phase) {
@@ -210,7 +212,7 @@ class XcodeProject implements Patchable {
         }
       }
 
-      return { ...a, [key]: buildPhaseObj[key] };
+      return {...a, [key]: buildPhaseObj[key]};
     }, {});
   }
 
@@ -225,14 +227,14 @@ class XcodeProject implements Patchable {
   public addFile(groupName: string, path: string) {
     const target = this.findHash(
       this.project.hash.project.objects.PBXNativeTarget,
-      groupName
+      groupName,
     );
     const group = this.findHash(
       this.project.hash.project.objects.PBXGroup,
-      groupName
+      groupName,
     );
     if (target && group) {
-      const file = this.project.addFile(path, group[0], { target: target[0] });
+      const file = this.project.addFile(path, group[0], {target: target[0]});
       file.target = target[0];
       file.uuid = this.project.generateUuid();
       this.project.addToPbxBuildFileSection(file);

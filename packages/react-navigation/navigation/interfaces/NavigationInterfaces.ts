@@ -1,4 +1,4 @@
-type NavigationType = 'stack' | 'tab';
+type NavigationType = "stack" | "tab";
 
 /**
  * This interface is to define Navigation Ref instance
@@ -43,7 +43,7 @@ interface INavigationInstance {
   getCurrentRoute: () => INavigationState;
   addListener: (
     s: string,
-    f: (e: INavigationListenerCurrentObject) => void
+    f: (e: INavigationListenerCurrentObject) => void,
   ) => () => void;
 }
 

@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require("fs");
 
 export interface Patchable {
   patch: () => void;
@@ -17,7 +17,7 @@ export const patchFiles = (
   ...files: Array<() => Promise<Patchable>>
 ): Promise<void> => {
   return chainPromises(...files).then((patchables: Patchable[]) => {
-    patchables.map((p) => p.patch());
+    patchables.map(p => p.patch());
   });
 };
 
@@ -26,13 +26,13 @@ const chainPromises = (
 ): Promise<any[]> =>
   promises.reduce(
     (prev: Promise<any>, cur: () => Promise<any>) =>
-      prev.then((prevRes) => cur().then((curRes) => [...prevRes, curRes])),
-    Promise.resolve([])
+      prev.then(prevRes => cur().then(curRes => [...prevRes, curRes])),
+    Promise.resolve([]),
   );
 
 export const NoopFile = {
-  path: '',
-  contents: '',
+  path: "",
+  contents: "",
   patch: (): void => {},
   hasLine: (_: string) => false,
   addBefore: (line: string, add: string) => {},
@@ -44,9 +44,9 @@ class FileContents implements FileUpdatable {
   public contents: string;
   public path: string;
 
-  constructor(path: string = '') {
+  constructor(path: string = "") {
     this.path = path;
-    this.contents = fs.readFileSync(path, 'utf8');
+    this.contents = fs.readFileSync(path, "utf8");
   }
 
   public hasLine(line: string | RegExp): boolean {
@@ -66,7 +66,7 @@ class FileContents implements FileUpdatable {
   public addAfter(line: string | RegExp, add: string) {
     if (this.hasLine(line)) {
       let replaceWith = line;
-      let space = '' as string | RegExp;
+      let space = "" as string | RegExp;
       if (line instanceof RegExp) {
         const matches = this.contents.match(line) || [];
         if (matches.length === 0) {
@@ -76,18 +76,20 @@ class FileContents implements FileUpdatable {
         if (line.toString().match(/^\/\(\\s\+\)/)) {
           space = matches[1];
         }
-        if (matches[0]) { replaceWith = matches[0]; }
+        if (matches[0]) {
+          replaceWith = matches[0];
+        }
       }
       this.contents = this.contents.replace(
         line,
-        `${replaceWith}${space}${add}`
+        `${replaceWith}${space}${add}`,
       );
     }
   }
 
   public deleteLine(line: string | RegExp) {
     if (this.hasLine(line)) {
-      this.contents = this.contents.replace(line, '');
+      this.contents = this.contents.replace(line, "");
     }
   }
 

@@ -1,3 +1,3 @@
-import run from './setupIos';
+import run from "./setupIos";
 
 run();

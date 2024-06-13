@@ -1,3 +1,3 @@
-import run from './setupAndroid';
+import run from "./setupAndroid";
 
 run();

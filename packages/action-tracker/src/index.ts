@@ -1,10 +1,11 @@
-import { zip } from 'gzip-js';
-import { NativeModules } from 'react-native';
+import {NativeModules} from "react-native";
+import {zip} from "gzip-js";
+
 import {
   IAnyAction,
   IDispatch,
   IMiddleware,
-} from '../interfaces/MiddlewareInterfaces';
+} from "../interfaces/MiddlewareInterfaces";
 
 /**
  * This method generates a Middleware that has to be attached to the
@@ -15,9 +16,9 @@ export const buildEmbraceMiddleware = () => {
   return (store: IMiddleware<IDispatch, any>) =>
     (next: IDispatch<IAnyAction>) =>
     (action: IAnyAction) => {
-      if (!next || typeof next !== 'function') {
+      if (!next || typeof next !== "function") {
         console.warn(
-          '[Embrace] The state managment middleware was not applied succesfully'
+          "[Embrace] The state managment middleware was not applied succesfully",
         );
         return 0;
       }
@@ -27,7 +28,7 @@ export const buildEmbraceMiddleware = () => {
         const result = next(action);
         if (!action || !action.type) {
           console.warn(
-            '[Embrace] An action without name was dispatched, track was skipped'
+            "[Embrace] An action without name was dispatched, track was skipped",
           );
         } else {
           const endTime = new Date().getTime();
@@ -37,14 +38,14 @@ export const buildEmbraceMiddleware = () => {
             endTime,
             {},
             zip(action.payload || 0).length,
-            'SUCCESS'
+            "SUCCESS",
           );
         }
         return result;
       } catch (e) {
         if (!action || !action.type) {
           console.warn(
-            '[Embrace] An action without name was dispatched, track was skipped'
+            "[Embrace] An action without name was dispatched, track was skipped",
           );
         } else {
           const endTime = new Date().getTime();
@@ -54,7 +55,7 @@ export const buildEmbraceMiddleware = () => {
             endTime,
             {},
             zip(action.payload || 0).length,
-            'FAIL'
+            "FAIL",
           );
           throw e;
         }
