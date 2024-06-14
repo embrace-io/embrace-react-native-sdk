@@ -1,9 +1,9 @@
-import {trace, Tracer, TracerProvider} from '@opentelemetry/api';
-import {MutableRefObject, useEffect, useRef} from 'react';
+import {MutableRefObject, useEffect, useRef} from "react";
+import {trace, Tracer, TracerProvider} from "@opentelemetry/api";
 
 const TRACER_DEFAULT = {
-  name: 'default',
-  version: '1.0',
+  name: "default",
+  version: "1.0",
 };
 
 interface ConfigArgs {

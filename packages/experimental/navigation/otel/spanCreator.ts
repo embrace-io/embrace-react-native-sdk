@@ -1,10 +1,10 @@
-import {MutableRefObject} from 'react';
+import {MutableRefObject} from "react";
 
-import {SpanRef} from './hooks/useSpan';
-import {TracerRef} from './hooks/useTrace';
+import {TracerRef} from "./hooks/useTrace";
+import {SpanRef} from "./hooks/useSpan";
 
 const ATTRIBUTES = {
-  initialView: 'initial_view',
+  initialView: "initial_view",
 };
 
 const spanCreator = (

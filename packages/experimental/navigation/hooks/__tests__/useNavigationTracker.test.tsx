@@ -1,7 +1,7 @@
-import {renderHook} from '@testing-library/react-native';
-import {ForwardedRef} from 'react';
+import {ForwardedRef} from "react";
+import {renderHook} from "@testing-library/react-native";
 
-import useNavigationTracker, {type NavRef} from '../useNavigationTracker';
+import useNavigationTracker, {type NavRef} from "../useNavigationTracker";
 
 const mockSpanSetAttribute = jest.fn();
 const mockSpanEnd = jest.fn();
@@ -38,24 +38,24 @@ const mockNavigationRef = {
   },
 } as unknown as ForwardedRef<NavRef>;
 
-describe('useNavigationTracker.ts', () => {
+describe("useNavigationTracker.ts", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should work as expected when the application implements expo-router', () => {
+  it("should work as expected when the application implements expo-router", () => {
     renderHook(() => useNavigationTracker(mockNavigationRef, mockTracerRef));
-    expect(mockAddListener).toHaveBeenCalledWith('state', expect.any(Function));
+    expect(mockAddListener).toHaveBeenCalledWith("state", expect.any(Function));
 
     const mockStateListenerCall = mockAddListener.mock.calls[0][1];
 
-    mockGetCurrentRoute.mockReturnValue({name: 'first-view-test'});
+    mockGetCurrentRoute.mockReturnValue({name: "first-view-test"});
     mockStateListenerCall();
     expect(mockSpanEnd).not.toHaveBeenCalled();
     // starts the initial span
     expect(mockStartSpan).toHaveBeenCalledTimes(1);
 
-    mockGetCurrentRoute.mockReturnValue({name: 'second-view-test'});
+    mockGetCurrentRoute.mockReturnValue({name: "second-view-test"});
     mockStateListenerCall();
     // finish the initial span
     expect(mockSpanEnd).toHaveBeenCalledTimes(1);
