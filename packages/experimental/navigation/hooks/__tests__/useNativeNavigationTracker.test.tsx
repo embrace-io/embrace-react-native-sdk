@@ -1,9 +1,9 @@
-import {renderHook} from '@testing-library/react-native';
-import {ForwardedRef} from 'react';
+import {ForwardedRef} from "react";
+import {renderHook} from "@testing-library/react-native";
 
 import useNativeNavigationTracker, {
   NativeNavRef,
-} from '../useNativeNavigationTracker';
+} from "../useNativeNavigationTracker";
 
 const mockRegisterComponentDidAppearListener = jest.fn();
 const mockRegisterComponentDidDisappearListener = jest.fn();
@@ -42,12 +42,12 @@ const mockTracerRef = {
   },
 };
 
-describe('useNativeNavigationTracker.ts', () => {
+describe("useNativeNavigationTracker.ts", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should work as expected when the application implements react-native-navigation', () => {
+  it("should work as expected when the application implements react-native-navigation", () => {
     renderHook(() =>
       useNativeNavigationTracker(mockNativeNavigationRef, mockTracerRef),
     );
@@ -59,9 +59,9 @@ describe('useNativeNavigationTracker.ts', () => {
     const mockDidAppearListenerCall =
       mockRegisterComponentDidAppearListener.mock.calls[0][0];
 
-    mockDidAppearListenerCall({componentName: 'initial-test-view'});
+    mockDidAppearListenerCall({componentName: "initial-test-view"});
     expect(mockSpanEnd).not.toHaveBeenCalled();
-    expect(mockStartSpan).toHaveBeenNthCalledWith(1, 'initial-test-view');
+    expect(mockStartSpan).toHaveBeenNthCalledWith(1, "initial-test-view");
 
     expect(mockRegisterComponentDidDisappearListener).toHaveBeenCalledWith(
       expect.any(Function),
@@ -70,8 +70,8 @@ describe('useNativeNavigationTracker.ts', () => {
     const mockDidDisappearListenerCall =
       mockRegisterComponentDidDisappearListener.mock.calls[0][0];
 
-    mockDidDisappearListenerCall({componentName: 'second-test-view'});
+    mockDidDisappearListenerCall({componentName: "second-test-view"});
     expect(mockSpanEnd).toHaveBeenCalled();
-    expect(mockStartSpan).toHaveBeenNthCalledWith(2, 'second-test-view');
+    expect(mockStartSpan).toHaveBeenNthCalledWith(2, "second-test-view");
   });
 });

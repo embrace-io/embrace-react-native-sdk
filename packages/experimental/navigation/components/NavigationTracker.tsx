@@ -1,8 +1,8 @@
-import {TracerProvider} from '@opentelemetry/api';
-import React, {forwardRef, ReactNode} from 'react';
+import React, {forwardRef, ReactNode} from "react";
+import {TracerProvider} from "@opentelemetry/api";
 
-import useNavigationTracker, {type NavRef} from '../hooks/useNavigationTracker';
-import useTrace from '../otel/hooks/useTrace';
+import useTrace from "../otel/hooks/useTrace";
+import useNavigationTracker, {type NavRef} from "../hooks/useNavigationTracker";
 
 type NavigationTrackerRef = NavRef;
 interface NavigationTrackerProps {
@@ -16,14 +16,14 @@ const NavigationTracker = forwardRef<
   NavigationTrackerProps
 >(({children, provider}, ref) => {
   // Initializing a Trace instance
-  const tracer = useTrace({name: 'navigation', version: '0.1.0'}, provider);
+  const tracer = useTrace({name: "navigation", version: "0.1.0"}, provider);
 
   useNavigationTracker(ref, tracer);
 
   return <>{children}</>;
 });
 
-NavigationTracker.displayName = 'NavigationTracker';
+NavigationTracker.displayName = "NavigationTracker";
 
 export default NavigationTracker;
 export type {NavigationTrackerRef};

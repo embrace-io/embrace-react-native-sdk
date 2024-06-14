@@ -1,5 +1,5 @@
-import {Span} from '@opentelemetry/api';
-import {MutableRefObject, useRef} from 'react';
+import {MutableRefObject, useRef} from "react";
+import {Span} from "@opentelemetry/api";
 
 type SpanRef = MutableRefObject<Span | null>;
 

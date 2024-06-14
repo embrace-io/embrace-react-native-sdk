@@ -3,12 +3,12 @@
  * react-native-navigation
  */
 
-import {ForwardedRef, useEffect, useMemo, useRef} from 'react';
+import {ForwardedRef, useEffect, useMemo, useRef} from "react";
 
-import useSpan from '../otel/hooks/useSpan';
-import {TracerRef} from '../otel/hooks/useTrace';
-import spanCreator from '../otel/spanCreator';
-import { TNativeNavigationContainer } from '../types/navigation';
+import {TNativeNavigationContainer} from "../types/navigation";
+import spanCreator from "../otel/spanCreator";
+import {TracerRef} from "../otel/hooks/useTrace";
+import useSpan from "../otel/hooks/useSpan";
 
 type NativeNavRef = TNativeNavigationContainer;
 
@@ -17,7 +17,7 @@ const useNativeNavigationTracker = (
   tracer: TracerRef,
 ) => {
   const navigationElRef = useMemo(() => {
-    const isMutableRef = ref !== null && typeof ref !== 'function';
+    const isMutableRef = ref !== null && typeof ref !== "function";
     return isMutableRef ? ref.current : undefined;
   }, [ref]);
 
@@ -53,7 +53,7 @@ const useNativeNavigationTracker = (
 
     navigationElRef.registerCommandListener(() => {
       // NOTE: To implement
-      console.log('registerCommandListener');
+      console.log("registerCommandListener");
     });
   }, [navigationElRef, tracer]);
 };
