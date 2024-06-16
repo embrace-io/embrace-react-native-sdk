@@ -1,7 +1,6 @@
 import { mainApplicationPatchable } from '../../../util/android';
 import { FileUpdatable } from '../../../util/file';
-
-import { EMBRACE_IMPORT_KOTLIN, EMBRACE_INIT_KOTLIN } from './patch.kotlin';
+import { EMBRACE_IMPORT_KOTLIN, EMBRACE_INIT_KOTLIN } from '../patch';
 
 const unlinkKotlin = (): Promise<FileUpdatable> => {
   return new Promise(async (resolve, reject) => {

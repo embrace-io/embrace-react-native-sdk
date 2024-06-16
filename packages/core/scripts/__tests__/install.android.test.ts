@@ -1,7 +1,4 @@
-import {
-  EMBRACE_IMPORT_JAVA,
-  EMBRACE_INIT_JAVA,
-} from '../setup/patches/android/patch.java';
+import { EMBRACE_IMPORT_JAVA, EMBRACE_INIT_JAVA } from '../setup/patches/patch';
 import Wizard from '../util/wizard';
 
 jest.useFakeTimers();

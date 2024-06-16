@@ -6,12 +6,10 @@ import {
 } from '../setup/android';
 import {
   EMBRACE_IMPORT_JAVA,
-  EMBRACE_INIT_JAVA,
-} from '../setup/patches/android/patch.java';
-import {
   EMBRACE_IMPORT_KOTLIN,
+  EMBRACE_INIT_JAVA,
   EMBRACE_INIT_KOTLIN,
-} from '../setup/patches/android/patch.kotlin';
+} from '../setup/patches/patch';
 
 jest.useFakeTimers();
 

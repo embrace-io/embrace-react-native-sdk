@@ -64,9 +64,9 @@ const addLineBeforeToTextInFile = (
   }
 };
 
-type ANROID_LANGUAGE = 'kotlin' | 'java';
+type ANDROID_LANGUAGE = 'kotlin' | 'java';
 type IOS_LANGUAGE = 'swift' | 'objectivec';
-type SUPPORTED_LANGUAGES = IOS_LANGUAGE | ANROID_LANGUAGE;
+type SUPPORTED_LANGUAGES = IOS_LANGUAGE | ANDROID_LANGUAGE;
 
 const MAIN_CLASS_BY_LANGUAGE: Record<SUPPORTED_LANGUAGES, string> = {
   kotlin: KOTLIN_MAIN_ACTIVITY,
@@ -80,6 +80,6 @@ export {
   addLineBeforeToTextInFile,
   MAIN_CLASS_BY_LANGUAGE,
   SUPPORTED_LANGUAGES,
-  ANROID_LANGUAGE,
+  ANDROID_LANGUAGE,
   IOS_LANGUAGE,
 };

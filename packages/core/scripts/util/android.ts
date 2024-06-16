@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 import {
-  ANROID_LANGUAGE,
+  ANDROID_LANGUAGE,
   MAIN_CLASS_BY_LANGUAGE,
 } from '../setup/patches/common';
 import { FileUpdatable, getFileContents } from './file';
@@ -41,67 +41,74 @@ export const embraceJSON = (): Promise<FileUpdatable> => {
   });
 };
 
-export const mainApplicationPatchable = (
-  platform: ANROID_LANGUAGE
-): Promise<FileUpdatable> => {
-  return new Promise<FileUpdatable>((resolve, reject) => {
-    const p = path.join('android', 'app', 'src', 'main', 'java', 'com');
-    const mainApp = MAIN_CLASS_BY_LANGUAGE[platform];
-    const foldersInJava: IDirectory[] = fs
-      .readdirSync(p, { withFileTypes: true })
-      .filter((dirent: IDirectory) => dirent.isDirectory());
+export const getMainApplicationPatchable = (platform: ANDROID_LANGUAGE) => {
+  const p = path.join('android', 'app', 'src', 'main', 'java', 'com');
+  const mainApp = MAIN_CLASS_BY_LANGUAGE[platform];
+  const foldersInJava: IDirectory[] = fs
+    .readdirSync(p, { withFileTypes: true })
+    .filter((dirent: IDirectory) => dirent.isDirectory());
 
-    if (foldersInJava.length === 0) {
-      return reject(
-        `cannot find any folder at ${p}, ${mainApp} patch was skipped. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`
-      );
-    }
+  if (foldersInJava.length === 0) {
+    return undefined;
+  }
 
-    let mainApplicationPath: string | undefined;
-    let hasFoldersToLook = true;
-    let foldersToLook = foldersInJava;
-    while (!mainApplicationPath && hasFoldersToLook) {
-      const foldersToLookTmp: IDirectory[] = [];
-      foldersToLook.forEach((dir) => {
-        if (fs.existsSync(`${p}/${dir.name}/${mainApp}`)) {
-          mainApplicationPath = `${p}/${dir.name}/${mainApp}`;
-          hasFoldersToLook = false;
-          return;
-        }
-
-        if (mainApplicationPath) {
-          return;
-        }
-
-        const foldersInside =
-          fs
-            .readdirSync(`${p}/${dir.name}`, { withFileTypes: true })
-            .filter((dirent: IDirectory) => dirent.isDirectory()) || [];
-
-        if (foldersInside.length > 0) {
-          foldersToLookTmp.push(
-            ...foldersInside.map((d: IDirectory) => {
-              return { ...d, name: `${dir.name}/${d.name}` };
-            })
-          );
-        }
-      });
-
-      if (!mainApplicationPath) {
-        if (foldersToLookTmp.length === 0) {
-          hasFoldersToLook = false;
-        } else {
-          foldersToLook = [...foldersToLookTmp];
-        }
+  let mainApplicationPath: string | undefined;
+  let hasFoldersToLook = true;
+  let foldersToLook = foldersInJava;
+  while (!mainApplicationPath && hasFoldersToLook) {
+    const foldersToLookTmp: IDirectory[] = [];
+    foldersToLook.forEach((dir) => {
+      if (fs.existsSync(`${p}/${dir.name}/${mainApp}`)) {
+        mainApplicationPath = `${p}/${dir.name}/${mainApp}`;
+        hasFoldersToLook = false;
+        return;
       }
-    }
+
+      if (mainApplicationPath) {
+        return;
+      }
+
+      const foldersInside =
+        fs
+          .readdirSync(`${p}/${dir.name}`, { withFileTypes: true })
+          .filter((dirent: IDirectory) => dirent.isDirectory()) || [];
+
+      if (foldersInside.length > 0) {
+        foldersToLookTmp.push(
+          ...foldersInside.map((d: IDirectory) => {
+            return { ...d, name: `${dir.name}/${d.name}` };
+          })
+        );
+      }
+    });
 
     if (!mainApplicationPath) {
+      if (foldersToLookTmp.length === 0) {
+        hasFoldersToLook = false;
+      } else {
+        foldersToLook = [...foldersToLookTmp];
+      }
+    }
+  }
+
+  if (!mainApplicationPath) {
+    return undefined;
+  }
+
+  return getFileContents(mainApplicationPath);
+};
+
+export const mainApplicationPatchable = (
+  platform: ANDROID_LANGUAGE
+): Promise<FileUpdatable> => {
+  return new Promise<FileUpdatable>((resolve, reject) => {
+    const file = getMainApplicationPatchable(platform);
+    if (!file) {
       return reject(
-        `cannot find ${MAIN_CLASS_BY_LANGUAGE[platform]} file in any folder at ${p}. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`
+        `cannot find ${MAIN_CLASS_BY_LANGUAGE[platform]} file in any folder at "android/.../com/*". Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`
       );
     }
-    return resolve(getFileContents(mainApplicationPath));
+    return resolve(file);
   });
 };
 

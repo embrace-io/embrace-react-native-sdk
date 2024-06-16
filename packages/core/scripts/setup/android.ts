@@ -12,8 +12,7 @@ import { NoopFile } from '../util/file';
 import { FileUpdatable } from '../util/file';
 import Wizard from '../util/wizard';
 import { androidAppID, apiToken, packageJSON } from './common';
-import patchJavaMainApplication from './patches/android/patch.java';
-import patchKotlinMainApplication from './patches/android/patch.kotlin';
+import patch from './patches/patch';
 
 const logger = new EmbraceLogger(console);
 
@@ -113,12 +112,13 @@ export const createEmbraceJSON = {
     'https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=android#manually',
 };
 
-const tryToPatchMainApplication = async () => {
+const tryToPatchMainApplication = () => {
   // In the future there will be more apps with kotlin than java so I start looking up by kotlin
-  const response = await patchKotlinMainApplication();
+  const response = patch('kotlin');
   if (!response) {
-    return patchJavaMainApplication();
+    return patch('java');
   }
+  return response;
 };
 
 export const patchMainApplication = {
