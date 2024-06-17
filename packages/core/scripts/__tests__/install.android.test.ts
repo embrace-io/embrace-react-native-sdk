@@ -84,9 +84,8 @@ describe('Patch Android', () => {
       join: () => './packages/core/scripts/__tests__/__mocks__/android',
     }));
 
-    const patchJavaMainApplication =
-      require('../setup/patches/android/patch.java').default;
-    const result = await patchJavaMainApplication();
+    const patchMainApplication = require('../setup/patches/patch').default;
+    const result = await patchMainApplication('java');
 
     expect(result).toBe(true);
 
@@ -102,9 +101,8 @@ describe('Patch Android', () => {
       join: () => './packages/core/scripts/__tests__/__mocks__/android',
     }));
 
-    const patchKotlinMainApplication =
-      require('../setup/patches/android/patch.kotlin').default;
-    const result = await patchKotlinMainApplication();
+    const patchMainApplication = require('../setup/patches/patch').default;
+    const result = await patchMainApplication('kotlin');
 
     expect(result).toBe(true);
 

@@ -11,7 +11,7 @@ const unlinkSwift = (projectName: string): Promise<FileUpdatable> => {
       return;
     }
     appDelegate.deleteLine(`${EMBRACE_IMPORT_SWIFT}\n`);
-    appDelegate.deleteLine(`\n${EMBRACE_INIT_SWIFT}`);
+    appDelegate.deleteLine(`${EMBRACE_INIT_SWIFT}\n`);
     resolve(appDelegate);
   });
 };

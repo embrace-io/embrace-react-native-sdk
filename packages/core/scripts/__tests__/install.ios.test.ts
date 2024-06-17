@@ -1,12 +1,12 @@
 import {
-  EMBRACE_IMPORT_OBJECTIVEC,
-  EMBRACE_INIT_OBJECTIVEC,
-} from '../setup/patches/ios/ios.objectivec';
-import {
   EMBRACE_IMPORT_SWIFT,
   EMBRACE_INIT_SWIFT,
-} from '../setup/patches/ios/ios.swift';
-import { embraceNativePod } from '../util/ios';
+} from '../setup/patches/patch';
+import {
+  EMBRACE_IMPORT_OBJECTIVEC,
+  EMBRACE_INIT_OBJECTIVEC,
+  embraceNativePod,
+} from '../util/ios';
 
 jest.useFakeTimers();
 
@@ -28,8 +28,8 @@ describe('Uninstall Script iOS', () => {
       }),
       { virtual: true }
     );
-    const { tryToPatchAppDelegate } = require('../setup/ios');
-    const result = await tryToPatchAppDelegate({ name: 'test' });
+    const patchAppDelegate = require('../setup/patches/patch').default;
+    const result = await patchAppDelegate('objectivec', { name: 'test' });
 
     expect(result).toBe(true);
 
@@ -66,8 +66,8 @@ describe('Uninstall Script iOS', () => {
       }),
       { virtual: true }
     );
-    const { tryToPatchAppDelegate } = require('../setup/ios');
-    const result = await tryToPatchAppDelegate({ name: 'test' });
+    const patchAppDelegate = require('../setup/patches/patch').default;
+    const result = await patchAppDelegate('swift', { name: 'test' });
 
     expect(result).toBe(true);
 

@@ -103,12 +103,12 @@ const PATCH_ANDROID_KOTLIN_MAIN_ACTIVITTY: PatchDefinition = {
   textsToAdd: [
     {
       searchText: 'import android.app.Application',
-      textToAdd: EMBRACE_IMPORT_KOTLIN,
+      textToAdd: `\n${EMBRACE_IMPORT_KOTLIN}`,
       order: 'after',
     },
     {
       searchText: 'super.onCreate()',
-      textToAdd: EMBRACE_INIT_KOTLIN,
+      textToAdd: `\n${EMBRACE_INIT_KOTLIN}`,
       order: 'after',
     },
   ],
@@ -120,12 +120,12 @@ const PATCH_ANDROID_JAVA_MAIN_ACTIVITTY: PatchDefinition = {
   textsToAdd: [
     {
       searchText: 'import android.app.Application;',
-      textToAdd: EMBRACE_IMPORT_JAVA,
+      textToAdd: `\n${EMBRACE_IMPORT_JAVA}`,
       order: 'after',
     },
     {
       searchText: 'super.onCreate();',
-      textToAdd: EMBRACE_INIT_JAVA,
+      textToAdd: `\n${EMBRACE_INIT_JAVA}`,
       order: 'after',
     },
   ],

@@ -1,11 +1,11 @@
 import {
-  EMBRACE_IMPORT_OBJECTIVEC,
-  EMBRACE_INIT_OBJECTIVEC,
-} from '../setup/patches/ios/ios.objectivec';
-import {
   EMBRACE_IMPORT_SWIFT,
   EMBRACE_INIT_SWIFT,
-} from '../setup/patches/ios/ios.swift';
+} from '../setup/patches/patch';
+import {
+  EMBRACE_IMPORT_OBJECTIVEC,
+  EMBRACE_INIT_OBJECTIVEC,
+} from '../util/ios';
 
 jest.useFakeTimers();
 
