@@ -1,7 +1,11 @@
 import EmbraceLogger from '../../../src/logger';
 import { getMainApplicationPatchable } from '../../util/android';
 import { FileUpdatable } from '../../util/file';
-import { getAppDelegateByIOSLanguage } from '../../util/ios';
+import {
+  EMBRACE_IMPORT_OBJECTIVEC,
+  EMBRACE_INIT_OBJECTIVEC,
+  getAppDelegateByIOSLanguage,
+} from '../../util/ios';
 
 import {
   addLineAfterToTextInFile,
@@ -11,11 +15,11 @@ import {
   MAIN_CLASS_BY_LANGUAGE,
   SUPPORTED_LANGUAGES,
 } from './common';
-import {
-  EMBRACE_IMPORT_OBJECTIVEC,
-  EMBRACE_INIT_OBJECTIVEC,
-} from './ios/ios.objectivec';
-import { EMBRACE_IMPORT_SWIFT, EMBRACE_INIT_SWIFT } from './ios/ios.swift';
+
+export const EMBRACE_IMPORT_SWIFT = 'import Embrace';
+
+export const EMBRACE_INIT_SWIFT =
+  'Embrace.sharedInstance().start(launchOptions: launchOptions, framework:.reactNative)';
 
 export const EMBRACE_IMPORT_JAVA =
   'import io.embrace.android.embracesdk.Embrace;';
@@ -52,14 +56,13 @@ const PATCH_IOS_SWIFT_APPDELEGATE: PatchDefinition = {
   fileName: MAIN_CLASS_BY_LANGUAGE.swift,
   textsToAdd: [
     {
-      searchText: '#import "AppDelegate.h"',
-      textToAdd: EMBRACE_IMPORT_SWIFT,
-      order: 'after',
+      searchText: '@UIApplicationMain',
+      textToAdd: `${EMBRACE_IMPORT_SWIFT}\n`,
+      order: 'before',
     },
     {
-      searchText:
-        /(-\s*\(BOOL\)\s*application:\s*\(UIApplication\s\*\)\s*(app|application)\s+didFinishLaunchingWithOptions:\s*\(NSDictionary\s*\*\)launchOptions\s*\{\s*)/,
-      textToAdd: EMBRACE_INIT_SWIFT,
+      searchText: /func\s+application\(\s*_\s*[^}]*\{/,
+      textToAdd: `\n${EMBRACE_INIT_SWIFT}`,
       order: 'after',
     },
   ],

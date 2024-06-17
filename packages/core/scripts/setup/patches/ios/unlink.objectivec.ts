@@ -1,9 +1,9 @@
 import { FileUpdatable } from '../../../util/file';
-import { getAppDelegateByIOSLanguage } from '../../../util/ios';
 import {
   EMBRACE_IMPORT_OBJECTIVEC,
   EMBRACE_INIT_OBJECTIVEC,
-} from './ios.objectivec';
+  getAppDelegateByIOSLanguage,
+} from '../../../util/ios';
 
 const unlinkObjectiveC = (projectName: string): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {

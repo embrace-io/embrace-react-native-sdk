@@ -1,12 +1,12 @@
 import EmbraceLogger from '../../../src/logger';
 import { FileUpdatable } from '../../util/file';
-import { OBJECTIVEC_APP_DELEGATE } from './ios/ios.objectivec';
-import { SWIFT_APP_DELEGATE } from './ios/ios.swift';
 
 // TODO refactor this
 const logger = new EmbraceLogger(console);
 export const JAVA_MAIN_ACTIVITY = 'MainApplication.java';
 export const KOTLIN_MAIN_ACTIVITY = 'MainApplication.kt';
+export const SWIFT_APP_DELEGATE = 'AppDelegate.swift';
+export const OBJECTIVEC_APP_DELEGATE = 'AppDelegate.*(m|mm)';
 
 /**
  * Adds a line to the specified file after the specified search text.

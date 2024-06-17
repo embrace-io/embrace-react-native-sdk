@@ -9,14 +9,12 @@ import {
   embracePlistPatchable,
   embRunScript,
   exportSourcemapRNVariable,
-  getAppDelegateByIOSLanguage,
   podfilePatchable,
   xcodePatchable,
 } from '../util/ios';
 import Wizard from '../util/wizard';
 import { apiToken, iosAppID, IPackageJson, packageJSON } from './common';
-import patchAppDelegateObjectiveC from './patches/ios/ios.objectivec';
-import patchAppDelegateSwift from './patches/ios/ios.swift';
+import patch from './patches/patch';
 
 const logger = new EmbraceLogger(console);
 
@@ -25,18 +23,11 @@ export const tryToPatchAppDelegate = async ({
 }: {
   name: string;
 }): Promise<boolean> => {
-  const appDelegate = getAppDelegateByIOSLanguage(name, 'objectivec');
-  if (!appDelegate) {
-    const appDelegateSwift = getAppDelegateByIOSLanguage(name, 'swift');
-    if (!appDelegateSwift) {
-      logger.format(
-        'Couldn\'t find AppDelegate. Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=ios&platform=ios to update manually.'
-      );
-      return false;
-    }
-    return await patchAppDelegateSwift(appDelegateSwift);
+  const response = patch('objectivec', name);
+  if (!response) {
+    return patch('swift', name) || false;
   }
-  return (await patchAppDelegateObjectiveC(appDelegate)) || false;
+  return response;
 };
 
 export const iosInitializeEmbrace = {
