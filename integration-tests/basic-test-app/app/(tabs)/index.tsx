@@ -1,16 +1,24 @@
 import { Image, StyleSheet, Button } from "react-native";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { endSession, logError } from "@embrace-io/react-native";
+import { endSession } from "@embrace-io/react-native";
+import {
+  generateNestedSpans,
+  generateTestSpans,
+} from "@/helpers/generateSpans";
+import { Tracer } from "@opentelemetry/api";
+import { EmbraceNativeTracerProvider } from "@embrace.io/react-native-tracer-provider";
 
 const HomeScreen = () => {
   const handleEndSession = useCallback(() => {
-    console.log("end session was clicked");
     endSession();
+  }, []);
+  const tracer = useMemo<Tracer>(() => {
+    return new EmbraceNativeTracerProvider().getTracer("span-test", "1.0");
   }, []);
 
   return (
@@ -24,8 +32,19 @@ const HomeScreen = () => {
       }
     >
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">End Session</ThemedText>
+        <ThemedText type="subtitle">Session</ThemedText>
         <Button onPress={handleEndSession} title="END SESSION" />
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Span</ThemedText>
+        <Button
+          onPress={() => generateTestSpans(tracer)}
+          title={"GENERATE TEST SPANS"}
+        />
+        <Button
+          onPress={() => generateNestedSpans(tracer)}
+          title={"GENERATE NESTED SPANS"}
+        />
       </ThemedView>
     </ParallaxScrollView>
   );

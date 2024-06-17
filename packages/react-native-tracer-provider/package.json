@@ -1,0 +1,78 @@
+{
+  "name": "@embrace.io/react-native-tracer-provider",
+  "version": "0.1.0",
+  "description": "A React Native wrapper over the Embrace SDK that conforms to the OpenTelemetry TracerProvider interface",
+  "author": "Embrace <truenorth@embrace.io> (https://embrace.io)",
+  "homepage": "https://github.com/embrace-io/embrace-react-native-sdk#readme",
+  "license": "Apache-2.0",
+  "keywords": [
+    "react-native",
+    "ios",
+    "android",
+    "embrace"
+  ],
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/src/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "ios",
+    "cpp",
+    "*.podspec",
+    "!ios/build",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
+    "!**/.*"
+  ],
+  "scripts": {
+    "tsc": "tsc",
+    "test": "jest",
+    "build": "yarn pack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/embrace-io/embrace-react-native-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-trace-web": "^1.25.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@types/gzip-js": "^0.3.3",
+    "@types/jest": "^28.1.7",
+    "@types/node": "^12.7.2",
+    "@types/react-native": "^0.60.2",
+    "@types/semver": "^7.1.0",
+    "babel-jest": "^25.3.0",
+    "husky": "^4.2.5",
+    "jest": "^25.3.0",
+    "lerna": "^6.0.3",
+    "lint-staged": "^10.1.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native": "^0.56.0",
+    "react-test-renderer": "^18.2.0",
+    "ts-jest": "^25.3.1",
+    "tslint": "^5.18.0",
+    "typedoc": "^0.17.8",
+    "typescript": "^4.7.4"
+  }
+}
