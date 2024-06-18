@@ -14,4 +14,4 @@ interface EmbraceRequestBody {
   json: EmbracePayload;
 }
 
-export type { EmbraceRequestBody, SessionPayload };
+export type {EmbraceRequestBody, SessionPayload};

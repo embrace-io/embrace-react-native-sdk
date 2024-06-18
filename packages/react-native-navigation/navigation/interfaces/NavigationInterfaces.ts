@@ -18,7 +18,7 @@ export interface IEvent {
  */
 export interface IEvents {
   registerComponentDidAppearListener: (
-    callback: (event: IEvent) => void
+    callback: (event: IEvent) => void,
   ) => void;
 }
 

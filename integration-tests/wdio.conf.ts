@@ -1,9 +1,9 @@
-import type { Options } from '@wdio/types';
+import type {Options} from "@wdio/types";
 import {
   clearServer,
   startServer,
   stopServer,
-} from './helpers/embrace_server.ts';
+} from "./helpers/embrace_server.ts";
 
 export const config: Options.Testrunner = {
   //
@@ -11,11 +11,11 @@ export const config: Options.Testrunner = {
   // Runner Configuration
   // ====================
   // WebdriverIO supports running e2e tests as well as unit and component tests.
-  runner: 'local',
+  runner: "local",
   autoCompileOpts: {
     autoCompile: true,
     tsNodeOpts: {
-      project: './tsconfig.json',
+      project: "./tsconfig.json",
       transpileOnly: true,
     },
   },
@@ -36,7 +36,7 @@ export const config: Options.Testrunner = {
   // The path of the spec files will be resolved relative from the directory of
   // of the config file unless it's absolute.
   //
-  specs: ['./specs/**/*.ts'],
+  specs: ["./specs/**/*.ts"],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -66,13 +66,13 @@ export const config: Options.Testrunner = {
   capabilities: [
     {
       // capabilities for local Appium web tests on an Android Emulator
-      'platformName': 'Android',
-      'appium:deviceName': 'Android GoogleAPI Emulator',
-      'appium:platformVersion': '14.0',
-      'appium:automationName': 'UiAutomator2',
-      'appium:appPackage': 'io.embrace.basictestapp',
-      'appium:appActivity': '.MainActivity',
-      'appium:noReset': true,
+      platformName: "Android",
+      "appium:deviceName": "Android GoogleAPI Emulator",
+      "appium:platformVersion": "14.0",
+      "appium:automationName": "UiAutomator2",
+      "appium:appPackage": "io.embrace.basictestapp",
+      "appium:appActivity": ".MainActivity",
+      "appium:noReset": true,
 
       //  TODO: for CI/CD we probably want to point to the prebuilt release
       //  APK rather than having to have the app running in an emulator beforehand, e.g.
@@ -80,11 +80,11 @@ export const config: Options.Testrunner = {
     },
     {
       // capabilities for local Appium web tests on an iOS Emulator
-      'platformName': 'iOS',
-      'appium:automationName': 'XCUITest',
-      'appium:deviceName': 'iPhone 15',
-      'appium:appPackage': 'io.embrace.basictestapp',
-      'appium:noReset': true,
+      platformName: "iOS",
+      "appium:automationName": "XCUITest",
+      "appium:deviceName": "iPhone 15",
+      "appium:appPackage": "io.embrace.basictestapp",
+      "appium:noReset": true,
     },
   ],
 
@@ -95,7 +95,7 @@ export const config: Options.Testrunner = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: 'info',
+  logLevel: "info",
   //
   // Set specific log levels per logger
   // loggers:
@@ -135,7 +135,7 @@ export const config: Options.Testrunner = {
   // Services take over a specific job you don't want to take care of. They enhance
   // your test setup with almost no effort. Unlike plugins, they don't add new
   // commands. Instead, they hook themselves up into the test process.
-  services: ['appium'],
+  services: ["appium"],
 
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
@@ -143,7 +143,7 @@ export const config: Options.Testrunner = {
   //
   // Make sure you have the wdio adapter package for the specific framework installed
   // before running any tests.
-  framework: 'mocha',
+  framework: "mocha",
 
   //
   // The number of times to retry the entire specfile when it fails as a whole
@@ -158,12 +158,12 @@ export const config: Options.Testrunner = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  reporters: ['json'],
+  reporters: ["json"],
 
   // Options to be passed to Mocha.
   // See the full list at http://mochajs.org/
   mochaOpts: {
-    ui: 'bdd',
+    ui: "bdd",
     timeout: 60000,
   },
 
