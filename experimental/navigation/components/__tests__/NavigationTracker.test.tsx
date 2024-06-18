@@ -5,7 +5,7 @@ import {useNavigationContainerRef} from "@react-navigation/native";
 
 import NavigationTracker from "../NavigationTracker";
 import {NavRef} from "../../hooks/useNavigationTracker";
-import useProvider from "../../../utils/hooks/useProvider";
+import useProvider from "../../../testUtils/hooks/useProvider";
 
 const mockAddListener = jest.fn();
 const mockGetCurrentRoute = jest.fn();

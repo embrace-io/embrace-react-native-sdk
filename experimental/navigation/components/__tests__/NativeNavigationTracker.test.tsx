@@ -4,7 +4,7 @@ import {useRef} from "react";
 import {render} from "@testing-library/react-native";
 
 import NativeNavigationTracker from "../NativeNavigationTracker";
-import useProvider from "../../../utils/hooks/useProvider";
+import useProvider from "../../../testUtils/hooks/useProvider";
 
 const mockDidAppearListener = jest.fn();
 const mockDidDisappearListener = jest.fn();
