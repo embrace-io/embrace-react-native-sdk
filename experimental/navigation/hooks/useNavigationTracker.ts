@@ -37,7 +37,7 @@ const useNavigationTracker = (ref: ForwardedRef<NavRef>, tracer: TracerRef) => {
         spanCreator(tracer, span, navView, routeName);
       });
     }
-  }, [navigationElRef, tracer]);
+  }, [navigationElRef, span, tracer]);
 };
 
 export default useNavigationTracker;
