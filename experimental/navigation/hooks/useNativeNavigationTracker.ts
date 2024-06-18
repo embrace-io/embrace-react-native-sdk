@@ -50,12 +50,7 @@ const useNativeNavigationTracker = (
 
       spanCreator(tracer, span, navView, componentName);
     });
-
-    navigationElRef.registerCommandListener(() => {
-      // NOTE: To implement
-      console.log("registerCommandListener");
-    });
-  }, [navigationElRef, tracer]);
+  }, [navigationElRef, span, tracer]);
 };
 
 export default useNativeNavigationTracker;

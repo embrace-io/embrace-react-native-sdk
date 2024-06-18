@@ -1,4 +1,4 @@
-import {Text} from "react-native";
+import React, {Text} from "react-native";
 import {Ref} from "react";
 import {render} from "@testing-library/react-native";
 
@@ -30,7 +30,7 @@ describe("NavigationTracker.tsx", () => {
   it("should render component and call the hook", () => {
     const screen = render(
       <NavigationTracker ref={mockNavigationRef} provider={mockProvider}>
-        {/* @ts-expect-error @typescript-eslint/ban-ts-comment */}{" "}
+        {/* @ts-expect-error @typescript-eslint/ban-ts-comment */}
         <Text>my app goes here</Text>
       </NavigationTracker>,
     );
