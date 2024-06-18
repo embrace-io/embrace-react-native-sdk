@@ -1,61 +1,79 @@
+import {EventsRegistry, Navigation} from "react-native-navigation";
 import React, {Text} from "react-native";
-import {ForwardedRef} from "react";
+import {useRef} from "react";
 import {render} from "@testing-library/react-native";
 
 import NativeNavigationTracker from "../NativeNavigationTracker";
-import useNativeNavigationTracker, {
-  NativeNavRef,
-} from "../../hooks/useNativeNavigationTracker";
+import useProvider from "../../../utils/hooks/useProvider";
 
-const mockGetTracer = jest.fn();
-const mockStartSpan = jest.fn();
+const mockDidAppearListener = jest.fn();
+const mockDidDisappearListener = jest.fn();
 
-const mockProvider = {
-  getTracer: mockGetTracer,
-  startSpan: mockStartSpan,
+const App = () => {
+  const provider = useProvider();
+  const ref = useRef(Navigation.events());
+
+  return (
+    <NativeNavigationTracker ref={ref} provider={provider}>
+      {/* @ts-expect-error @typescript-eslint/ban-ts-comment */}
+      <Text>my app goes here</Text>
+    </NativeNavigationTracker>
+  );
 };
 
-jest.mock("../../hooks/useNativeNavigationTracker", () => ({
-  __esModule: true,
-  default: jest.fn(),
-}));
-
-const mockRegisterComponentDidAppearListener = jest.fn();
-const mockRegisterComponentDidDisappearListener = jest.fn();
-const mockRegisterCommandListener = jest.fn();
-const mockNativeNavigationRef = {
-  current: {
-    // keep mocking functions when needed
-    registerComponentDidAppearListener: mockRegisterComponentDidAppearListener,
-    registerComponentDidDisappearListener:
-      mockRegisterComponentDidDisappearListener,
-    registerCommandListener: mockRegisterCommandListener,
-  },
-} as unknown as ForwardedRef<NativeNavRef>;
-
 describe("NativeNavigationTracker.tsx", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  const mockConsoleDir = jest.spyOn(console, "dir");
+  jest.spyOn(Navigation, "events").mockImplementation(
+    () =>
+      ({
+        registerAppLaunchedListener: jest.fn(),
+        registerComponentDidAppearListener: mockDidAppearListener,
+        registerComponentDidDisappearListener: mockDidDisappearListener,
+      }) as unknown as EventsRegistry,
+  );
+
   it("should render component and call the hook", () => {
-    const screen = render(
-      <NativeNavigationTracker
-        ref={mockNativeNavigationRef}
-        provider={mockProvider}>
-        {/* @ts-expect-error @typescript-eslint/ban-ts-comment */}
-        <Text>my app goes here</Text>
-      </NativeNavigationTracker>,
+    const screen = render(<App />);
+
+    expect(mockDidAppearListener).toHaveBeenCalledWith(expect.any(Function));
+
+    const mockDidAppearListenerCall = mockDidAppearListener.mock.calls[0][0];
+
+    mockDidAppearListenerCall({componentName: "initial-test-view"});
+    expect(mockDidDisappearListener).toHaveBeenCalledWith(expect.any(Function));
+
+    const mockDidDisappearListenerCall =
+      mockDidDisappearListener.mock.calls[0][0];
+
+    mockDidDisappearListenerCall({componentName: "initial-test-view"});
+
+    expect(mockConsoleDir).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "initial-test-view",
+        traceId: expect.any(String),
+        attributes: {initial_view: true},
+        timestamp: expect.any(Number),
+        duration: expect.any(Number),
+      }),
+      expect.objectContaining({depth: expect.any(Number)}),
     );
 
-    expect(useNativeNavigationTracker).toHaveBeenCalledWith(
-      mockNativeNavigationRef,
+    mockDidAppearListenerCall({componentName: "second-test-view"});
+    mockDidDisappearListenerCall({componentName: "second-test-view"});
+
+    expect(mockConsoleDir).toHaveBeenCalledWith(
       expect.objectContaining({
-        current: expect.objectContaining({
-          _provider: expect.objectContaining({
-            _delegate: expect.objectContaining(mockProvider),
-          }),
-          name: "native-navigation",
-          version: "0.1.0",
-          options: undefined,
-        }),
+        name: "second-test-view",
+        traceId: expect.any(String),
+        attributes: {},
+        timestamp: expect.any(Number),
+        duration: expect.any(Number),
       }),
+      expect.objectContaining({depth: expect.any(Number)}),
     );
 
     expect(screen.getByText("my app goes here")).toBeDefined();

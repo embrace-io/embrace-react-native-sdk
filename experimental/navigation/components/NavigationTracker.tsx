@@ -16,13 +16,15 @@ const NavigationTracker = forwardRef<
   NavigationTrackerProps
 >(({children, provider}, ref) => {
   // Initializing a Trace instance
-  const tracer = useTrace({name: "navigation", version: "0.1.0"}, provider);
+  const tracer = useTrace(
+    {name: "native-navigation", version: "0.1.0"},
+    provider,
+  );
 
   useNavigationTracker(ref, tracer);
 
   return <>{children}</>;
 });
-
 NavigationTracker.displayName = "NavigationTracker";
 
 export default NavigationTracker;

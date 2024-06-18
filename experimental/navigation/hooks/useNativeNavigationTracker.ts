@@ -6,7 +6,7 @@
 import {ForwardedRef, useEffect, useMemo, useRef} from "react";
 
 import {TNativeNavigationContainer} from "../types/navigation";
-import spanCreator from "../otel/spanCreator";
+import spanCreator, {spanEnd} from "../otel/spanCreator";
 import {TracerRef} from "../otel/hooks/useTrace";
 import useSpan from "../otel/hooks/useSpan";
 
@@ -21,7 +21,6 @@ const useNativeNavigationTracker = (
     return isMutableRef ? ref.current : undefined;
   }, [ref]);
 
-  // tracking specific (no otel related)
   const navView = useRef<string | null>(null);
 
   // Initializing a Span
@@ -48,7 +47,7 @@ const useNativeNavigationTracker = (
         return;
       }
 
-      spanCreator(tracer, span, navView, componentName);
+      spanEnd(span);
     });
   }, [navigationElRef, span, tracer]);
 };
