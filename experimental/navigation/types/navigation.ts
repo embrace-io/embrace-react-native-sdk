@@ -13,7 +13,6 @@ interface TNativeNavigationContainer {
   registerComponentDidDisappearListener: (
     cb: (args: {componentName: string}) => void,
   ) => void;
-  registerCommandListener: (cb: () => void) => void;
 }
 
 export {type TNavigationContainer, type TNativeNavigationContainer};

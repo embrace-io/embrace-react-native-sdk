@@ -10,7 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "declaration": true,
-    "noUnusedLocals": true,
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
