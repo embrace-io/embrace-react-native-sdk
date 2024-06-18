@@ -28,8 +28,8 @@ import {Stack, useNavigationContainerRef} from 'expo-router';
 import {NavigationTracker} from '@embrace/react-native/experimental/navigation';
 
 const App: FC = () => {
-  const navigationRef = useNavigationContainerRef(); // if you not use `expo-router` the same hook is also available in `@react-navigation/native` since `expo-router` is built on top of it
-  const provider = useProvider(); // the provider is something you need to configurate and pass down as prop into the `NavigationTracker` component
+  const navigationRef = useNavigationContainerRef(); // if you do not use `expo-router` the same hook is also available in `@react-navigation/native` since `expo-router` is built on top of it
+  const provider = useProvider(); // the provider is something you need to configure and pass down as prop into the `NavigationTracker` component
 
   return (
     <NavigationTracker ref={navigationRef} provider={provider}>

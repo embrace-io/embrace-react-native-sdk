@@ -15,8 +15,6 @@ const useTrace = (config: ConfigArgs, provider: TracerProvider): TracerRef => {
   // using the layout effect to make sure the tracer is initialized before the component is rendered
   useLayoutEffect(() => {
     if (tracerRef.current === null && provider) {
-      trace.setGlobalTracerProvider(provider);
-
       tracerRef.current = trace.getTracer(name, version);
     }
   }, [name, provider, version]);
