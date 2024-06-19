@@ -5,12 +5,12 @@
 
 import {ForwardedRef, useEffect, useMemo, useRef} from "react";
 
-import {TNavigationContainer} from "../types/navigation";
+import {INavigationContainer} from "../types/navigation";
 import spanCreator from "../otel/spanCreator";
 import {TracerRef} from "../otel/hooks/useTrace";
 import useSpan from "../otel/hooks/useSpan";
 
-type NavRef = TNavigationContainer;
+type NavRef = INavigationContainer;
 
 const useNavigationTracker = (ref: ForwardedRef<NavRef>, tracer: TracerRef) => {
   const navigationElRef = useMemo(() => {

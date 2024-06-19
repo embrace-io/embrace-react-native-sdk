@@ -1,4 +1,4 @@
-interface TNavigationContainer {
+interface INavigationContainer {
   addListener: (
     event: "state",
     callback: (args: {name: string}) => void,
@@ -6,7 +6,7 @@ interface TNavigationContainer {
   getCurrentRoute: () => {name: string};
 }
 
-interface TNativeNavigationContainer {
+interface INativeNavigationContainer {
   registerComponentDidAppearListener: (
     cb: (args: {componentName: string}) => void,
   ) => void;
@@ -15,4 +15,4 @@ interface TNativeNavigationContainer {
   ) => void;
 }
 
-export {type TNavigationContainer, type TNativeNavigationContainer};
+export {type INavigationContainer, type INativeNavigationContainer};
