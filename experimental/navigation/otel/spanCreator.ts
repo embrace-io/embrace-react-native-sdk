@@ -10,8 +10,8 @@ const ATTRIBUTES = {
 const spanStart = (
   tracer: TracerRef,
   span: SpanRef,
-  currentRouteName: string,
-  isFirstView: boolean,
+  name: string,
+  isFirstView?: boolean,
 ) => {
   if (!tracer.current) {
     // do nothing in case for some reason the tracer is not initialized
@@ -19,7 +19,7 @@ const spanStart = (
   }
 
   // Starting the span
-  span.current = tracer.current.startSpan(currentRouteName);
+  span.current = tracer.current.startSpan(name);
 
   if (isFirstView) {
     // it should create the first span knowing there is not a previous view
