@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useCallback, useEffect, useRef} from "react";
 import {
   BasicTracerProvider,
   ConsoleSpanExporter,
@@ -34,25 +34,37 @@ import {
         "links": []
     }
  */
-const exporter = new ConsoleSpanExporter();
-const processor = new SimpleSpanProcessor(exporter);
-const provider = new BasicTracerProvider();
-
-const configure = () => {
-  provider.addSpanProcessor(processor);
-  provider.register();
-};
-
 const useProvider = () => {
+  const provider = useRef(new BasicTracerProvider());
+
+  const configure = useCallback(() => {
+    const exporter = new ConsoleSpanExporter();
+    const processor = new SimpleSpanProcessor(exporter);
+
+    provider.current.addSpanProcessor(processor);
+    provider.current.register();
+  }, []);
+
   useEffect(() => {
+    const providerRef = provider.current;
+
     try {
       configure();
     } catch (e) {
-      console.log(e);
+      console.warn("Provider was not initialized", e);
     }
-  }, []);
 
-  return provider;
+    return () => {
+      const shutdown = async () => {
+        // this is important if we are creating more than one instance of a Provider
+        await providerRef.shutdown();
+      };
+
+      shutdown();
+    };
+  }, [configure]);
+
+  return provider.current;
 };
 
 export default useProvider;

@@ -1,6 +1,6 @@
 import React, {Text} from "react-native";
 import {ForwardedRef} from "react";
-import {render} from "@testing-library/react-native";
+import {cleanup, render} from "@testing-library/react-native";
 import {useNavigationContainerRef} from "@react-navigation/native";
 
 import NavigationTracker from "../NavigationTracker";
@@ -15,15 +15,14 @@ jest.mock("@react-navigation/native", () => ({
   useNavigationContainerRef: jest.fn(),
 }));
 
-const App = () => {
-  const provider = useProvider();
-
+const AppWithProvider = ({shouldPassProvider = true}) => {
   const ref = useNavigationContainerRef();
+  const provider = useProvider();
 
   return (
     <NavigationTracker
       ref={ref as unknown as ForwardedRef<NavRef>}
-      provider={provider}>
+      provider={shouldPassProvider ? provider : undefined}>
       {/* @ts-expect-error @typescript-eslint/ban-ts-comment */}
       <Text>my app goes here</Text>
     </NavigationTracker>
@@ -31,7 +30,8 @@ const App = () => {
 };
 
 describe("NavigationTracker.tsx", () => {
-  beforeEach(() => {
+  afterEach(() => {
+    cleanup();
     jest.clearAllMocks();
   });
 
@@ -54,11 +54,55 @@ describe("NavigationTracker.tsx", () => {
     },
   }));
 
-  it("should render component and call the hook", () => {
-    const screen = render(<App />);
+  it("should render a component that implements <NavigationTracker /> without passing a provider", () => {
+    const screen = render(<AppWithProvider shouldPassProvider={false} />);
 
     expect(mockAddListener).toHaveBeenCalledWith("state", expect.any(Function));
+    const mockStateListenerCall = mockAddListener.mock.calls[0][1];
 
+    mockGetCurrentRoute.mockReturnValue({name: "first-view-test"});
+    mockStateListenerCall();
+
+    mockGetCurrentRoute.mockReturnValue({name: "second-view-test"});
+    mockStateListenerCall();
+
+    // after render a view and then navigate to a different one the spanEnd should be called and it should register a complete span
+    expect(mockConsoleDir).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "first-view-test",
+        traceId: expect.any(String),
+        attributes: {initial_view: true},
+        timestamp: expect.any(Number),
+        duration: expect.any(Number),
+      }),
+      expect.objectContaining({depth: expect.any(Number)}),
+    );
+
+    mockGetCurrentRoute.mockReturnValue({name: "second-view-test"});
+    mockStateListenerCall();
+
+    mockGetCurrentRoute.mockReturnValue({name: "third-view-test"});
+    mockStateListenerCall();
+
+    // again after render a view and then navigate to a different one (the third) the spanEnd should be called and it should register a complete span
+    expect(mockConsoleDir).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "second-view-test",
+        traceId: expect.any(String),
+        attributes: {},
+        timestamp: expect.any(Number),
+        duration: expect.any(Number),
+      }),
+      expect.objectContaining({depth: expect.any(Number)}),
+    );
+
+    expect(screen.getByText("my app goes here")).toBeDefined();
+  });
+
+  it("should render a component that implements <NavigationTracker /> passing a custom provider", () => {
+    const screen = render(<AppWithProvider shouldPassProvider={true} />);
+
+    expect(mockAddListener).toHaveBeenCalledWith("state", expect.any(Function));
     const mockStateListenerCall = mockAddListener.mock.calls[0][1];
 
     mockGetCurrentRoute.mockReturnValue({name: "first-view-test"});

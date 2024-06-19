@@ -10,7 +10,7 @@ type NativeNavigationTrackerRef = NativeNavRef;
 interface NativeNavigationTrackerProps {
   children: ReactNode;
   // selected provider, should be configured by the app consumer
-  provider: TracerProvider;
+  provider?: TracerProvider;
 }
 
 const NativeNavigationTracker = forwardRef<

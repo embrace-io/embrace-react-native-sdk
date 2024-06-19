@@ -5,12 +5,12 @@
 
 import {ForwardedRef, useEffect, useMemo, useRef} from "react";
 
-import {TNativeNavigationContainer} from "../types/navigation";
+import {INativeNavigationContainer} from "../types/navigation";
 import spanCreator, {spanEnd} from "../otel/spanCreator";
 import {TracerRef} from "../otel/hooks/useTrace";
 import useSpan from "../otel/hooks/useSpan";
 
-type NativeNavRef = TNativeNavigationContainer;
+type NativeNavRef = INativeNavigationContainer;
 
 const useNativeNavigationTracker = (
   ref: ForwardedRef<NativeNavRef>,

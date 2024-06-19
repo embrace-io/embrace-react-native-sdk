@@ -7,8 +7,8 @@ import useNavigationTracker, {type NavRef} from "../hooks/useNavigationTracker";
 type NavigationTrackerRef = NavRef;
 interface NavigationTrackerProps {
   children: ReactNode;
-  // selected provider, should be configured by the app consumer
-  provider: TracerProvider;
+  // selected provider, configured by the app consumer if global tracer is not enough
+  provider?: TracerProvider;
 }
 
 const NavigationTracker = forwardRef<
