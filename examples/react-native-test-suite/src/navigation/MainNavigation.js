@@ -9,6 +9,8 @@ import HomeScreen from '../screens/HomeScreen';
 
 import NativeCrashes from '../screens/NativeCrashesScreen';
 import JSCrashes from '../screens/JSCrashesScreen';
+import Breadcrumbs from '../screens/tests/Breadcrumbs';
+import SendScreen from '../screens/tests/SendScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,11 +22,19 @@ const CrashStack = () => (
     <Stack.Screen name="JsCrashes" component={JSCrashes} />
   </Stack.Navigator>
 );
+const ActionStack = createNativeStackNavigator();
 
+const ActionStacks = () => (
+  <ActionStack.Navigator screenOptions={{headerShown: false}}>
+    <ActionStack.Screen name="HomeScreen" component={HomeScreen} />
+    <ActionStack.Screen name="Breadcrumbs" component={Breadcrumbs} />
+    <ActionStack.Screen name="SendScreen" component={SendScreen} />
+  </ActionStack.Navigator>
+);
 const BottomTab = () => {
   return (
     <Tab.Navigator screenOptions={{headerShown: false}}>
-      <Tab.Screen name="Actions" component={HomeScreen} />
+      <Tab.Screen name="Actions" component={ActionStacks} />
       <Tab.Screen name="Crashes" component={CrashStack} />
     </Tab.Navigator>
   );
@@ -34,9 +44,32 @@ const MainNavigation = () => {
   const navigationRef = useRef();
   useEmbraceNavigationTracker(navigationRef);
 
+  console.log('ASD', navigationRef.current);
+  const deepLinksConf = {
+    screens: {
+      Actions: {
+        screens: {
+          Breadcrumbs: {
+            path: 'breadcrumbs',
+          },
+          SendScreen: {
+            path: 'sendData',
+          },
+        },
+      },
+    },
+  };
+
+  const linking = {
+    prefixes: ['tests://'],
+    config: deepLinksConf,
+  };
   return (
     <NavigationContainer ref={navigationRef}>
-      <BottomTab />
+      <Tab.Navigator screenOptions={{headerShown: false}}>
+        <Tab.Screen name="Actions" component={ActionStacks} />
+        <Tab.Screen name="Crashes" component={CrashStack} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 };

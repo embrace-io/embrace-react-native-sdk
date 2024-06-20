@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "63428710068",
+    "project_id": "rn-test-2092a",
+    "storage_bucket": "rn-test-2092a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63428710068:android:04191666176f7bcb9a11e1",
+        "android_client_info": {
+          "package_name": "com.embracetestsuite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63428710068-181omi2e30l4gpbdrg5hgded7sra8aig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrDWI1ZJ_fd_mckWrIEpKAvd36sn0cOqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63428710068-181omi2e30l4gpbdrg5hgded7sra8aig.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "63428710068-rjoed2lic11fh1j19k87l7ir7giac8nq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.embrace.rn.test"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63428710068:android:a8d3fffe9c3012729a11e1",
+        "android_client_info": {
+          "package_name": "com.embracetestsuite.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63428710068-181omi2e30l4gpbdrg5hgded7sra8aig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrDWI1ZJ_fd_mckWrIEpKAvd36sn0cOqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63428710068-181omi2e30l4gpbdrg5hgded7sra8aig.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "63428710068-rjoed2lic11fh1j19k87l7ir7giac8nq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.embrace.rn.test"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

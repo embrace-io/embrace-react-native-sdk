@@ -1,5 +1,10 @@
 import axios from 'axios';
 import {BASE_URL, API_VERSION} from './config';
+import {applyNetworkInterceptors} from '@embrace-io/react-native';
+
+applyNetworkInterceptors(axios).then(r => {
+  console.log('FUNC', r);
+});
 
 export const getPokemonWithFetch = async () =>
   await fetch(`${BASE_URL}${API_VERSION}pokemon/ditto`, {

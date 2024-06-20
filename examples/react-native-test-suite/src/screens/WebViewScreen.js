@@ -4,6 +4,7 @@ import {logEmbraceWebView} from '@embrace-io/react-native-webview-tracker';
 import {Modal, View, Text, TouchableOpacity} from 'react-native';
 
 const WebViewScreen = ({visible, closePopup}) => {
+  if (!visible) return null;
   return (
     <Modal transparent visible={visible}>
       <View
