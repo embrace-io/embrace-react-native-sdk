@@ -31,7 +31,8 @@ target 'test722' do
   # Flags change depending on the env values.
   flags = get_default_flags()
 
-  use_react_native!(
+  pod 'EmbraceIO'
+use_react_native!(
     :path => config[:reactNativePath],
     # Hermes is now enabled by default. Disable by setting this flag to false.
     :hermes_enabled => flags[:hermes_enabled],
@@ -44,8 +45,7 @@ target 'test722' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-  pod 'EmbraceIO'
-
+  
   target 'test722Tests' do
     inherit! :complete
     # Pods for testing

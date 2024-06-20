@@ -1,15 +1,14 @@
 const fs = require('fs');
 const path = require('path');
-import {
-  androidEmbraceSwazzler,
-  androidEmbraceSwazzlerPluginRE,
-} from '../setup/android';
+
 import {
   EMBRACE_IMPORT_JAVA,
   EMBRACE_IMPORT_KOTLIN,
   EMBRACE_INIT_JAVA,
   EMBRACE_INIT_KOTLIN,
 } from '../setup/patches/patch';
+
+import Wizard from '../util/wizard';
 
 jest.useFakeTimers();
 
@@ -23,22 +22,52 @@ describe('Uninstall Script Android', () => {
       join: () =>
         './packages/core/scripts/__tests__/__mocks__/android/buildWithSwazzler.gradle',
     }));
-    const androidUninstaller = require('../postunlink/android');
-    const result = await androidUninstaller.unlinkSwazzlerImport();
+    const {
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
 
-    expect(androidEmbraceSwazzler.test(result.contents)).toBe(false);
+    const result = removeEmbraceImportAndStartFromFile('swazzlerImport');
+    expect(result).toBe(true);
+
+    const wiz = new Wizard();
+    const { patchBuildGradle } = require('../setup/android');
+
+    const androidSteps = [patchBuildGradle];
+    [...androidSteps].map((step) => wiz.registerStep(step));
+    let failed = 0;
+    try {
+      await wiz.processSteps();
+    } catch (e) {
+      failed = 1;
+    }
+    expect(failed).toBe(0);
   });
   test('Remove Android Swazzler Apply', async () => {
     jest.mock('path', () => ({
       join: () =>
         './packages/core/scripts/__tests__/__mocks__/android/appBuildWithSwazzler.gradle',
     }));
-    const androidUninstaller = require('../postunlink/android');
-    const result = await androidUninstaller.unlinkSwazzlerApply();
+    const {
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
 
-    expect(androidEmbraceSwazzlerPluginRE.test(result.contents)).toBe(false);
+    const result = removeEmbraceImportAndStartFromFile('swazzlerApply');
+    expect(result).toBe(true);
+
+    const wiz = new Wizard();
+    const { patchAppBuildGradle } = require('../setup/android');
+
+    const androidSteps = [patchAppBuildGradle];
+    [...androidSteps].map((step) => wiz.registerStep(step));
+    let failed = 0;
+    try {
+      await wiz.processSteps();
+    } catch (e) {
+      failed = 1;
+    }
+    expect(failed).toBe(0);
   });
-  test('Remove Android Swazzler Apply', async () => {
+  test('Remove Embrace Config File', async () => {
     jest.mock('path', () => ({
       join: () =>
         './packages/core/scripts/__tests__/__mocks__/android/embrace-config.json',
@@ -52,8 +81,8 @@ describe('Uninstall Script Android', () => {
 
     expect(fs.existsSync(p)).toBe(true);
 
-    const androidUninstaller = require('../postunlink/android');
-    await androidUninstaller.removeEmbraceConfigFile();
+    const { removeEmbraceConfigFiles } = require('../setup/uninstall');
+    await removeEmbraceConfigFiles();
 
     expect(fs.existsSync(p)).toBe(false);
   });
@@ -68,11 +97,25 @@ describe('Uninstall Script Android', () => {
     expect(mainApplication.contents.includes(EMBRACE_IMPORT_JAVA)).toBe(true);
     expect(mainApplication.contents.includes(EMBRACE_INIT_JAVA)).toBe(true);
 
-    const { unlinkJava } = require('../setup/patches/android/unlink.java');
+    const {
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
 
-    const result = await unlinkJava('test');
-    expect(result.contents.includes(EMBRACE_IMPORT_JAVA)).toBe(false);
-    expect(result.contents.includes(EMBRACE_INIT_JAVA)).toBe(false);
+    removeEmbraceImportAndStartFromFile('javaImportStart');
+
+    const mainApplicationAfterRemove = await mainApplicationPatchable('java');
+
+    expect(
+      mainApplicationAfterRemove.contents.includes(EMBRACE_IMPORT_JAVA)
+    ).toBe(false);
+    expect(
+      mainApplicationAfterRemove.contents.includes(EMBRACE_INIT_JAVA)
+    ).toBe(false);
+
+    const patchMainApplication = require('../setup/patches/patch').default;
+    const result = await patchMainApplication('java');
+
+    expect(result).toBe(true);
   });
   test('Unlink Embrace From MainApplication.kt', async () => {
     jest.mock('path', () => ({
@@ -84,31 +127,53 @@ describe('Uninstall Script Android', () => {
 
     expect(mainApplication.contents.includes(EMBRACE_IMPORT_KOTLIN)).toBe(true);
     expect(mainApplication.contents.includes(EMBRACE_INIT_KOTLIN)).toBe(true);
+    const {
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
 
-    const { unlinkKotlin } = require('../setup/patches/android/unlink.kotlin');
-    const result = await unlinkKotlin('test');
-    expect(result.contents.includes(EMBRACE_IMPORT_KOTLIN)).toBe(false);
-    expect(result.contents.includes(EMBRACE_INIT_KOTLIN)).toBe(false);
+    const result = removeEmbraceImportAndStartFromFile('kotlinImportStart');
+    expect(result).toBe(true);
+
+    const mainApplicationAfterRemove = await mainApplicationPatchable('kotlin');
+
+    expect(
+      mainApplicationAfterRemove.contents.includes(EMBRACE_IMPORT_KOTLIN)
+    ).toBe(false);
+    expect(
+      mainApplicationAfterRemove.contents.includes(EMBRACE_INIT_KOTLIN)
+    ).toBe(false);
+
+    const patchMainApplication = require('../setup/patches/patch').default;
+    const patchResult = await patchMainApplication('kotlin');
+
+    expect(patchResult).toBe(true);
   });
   test('Unlink Embrace From MainApplication.java - TEST FAILS', async () => {
     jest.mock('path', () => ({
       join: () =>
         './packages/core/scripts/__tests__/__mocks__/android/main-without-embrace',
     }));
-    const { unlinkJava } = require('../setup/patches/android/unlink.java');
 
-    const failed = jest.fn();
-    await unlinkJava('test').catch(failed);
-    expect(failed).toBeCalled();
+    const {
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
+
+    const result = await removeEmbraceImportAndStartFromFile('java');
+
+    expect(result).toBe(false);
   });
   test('Unlink Embrace From MainApplication.kt - TEST FAILS', async () => {
     jest.mock('path', () => ({
       join: () =>
         './packages/core/scripts/__tests__/__mocks__/android/main-without-embrace',
     }));
-    const { unlinkKotlin } = require('../setup/patches/android/unlink.kotlin');
-    const failed = jest.fn();
-    await unlinkKotlin('test').catch(failed);
-    expect(failed).toBeCalled();
+
+    const {
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
+
+    const result = await removeEmbraceImportAndStartFromFile('kotlin');
+
+    expect(result).toBe(false);
   });
 });

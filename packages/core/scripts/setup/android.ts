@@ -22,7 +22,7 @@ const androidToolsBuildGradleRE =
 export const androidEmbraceSwazzler =
   /classpath(\(|\s)('|")io\.embrace:embrace-swazzler:.*('|")\)?/;
 
-const androidGenericVersion =
+export const androidGenericVersion =
   'classpath "io.embrace:embrace-swazzler:${findProject(\':embrace-io_react-native\').properties[\'emb_android_sdk\']}"';
 
 export const patchBuildGradle = {

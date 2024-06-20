@@ -1,4 +1,3 @@
-import { EMBRACE_IMPORT_JAVA, EMBRACE_INIT_JAVA } from '../setup/patches/patch';
 import Wizard from '../util/wizard';
 
 jest.useFakeTimers();
@@ -26,7 +25,8 @@ describe('Modify Build Gradle', () => {
     let failed = 0;
     try {
       await wiz.processSteps();
-    } catch {
+    } catch (e) {
+      console.log('ERRR', e);
       failed = 1;
     }
     expect(failed).toBe(0);
@@ -89,12 +89,15 @@ describe('Patch Android', () => {
 
     expect(result).toBe(true);
 
-    const { unlinkJava } = require('../setup/patches/android/unlink.java');
+    const {
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
 
-    const revert = await unlinkJava('test');
-    expect(revert.contents.includes(EMBRACE_IMPORT_JAVA)).toBe(false);
-    expect(revert.contents.includes(EMBRACE_INIT_JAVA)).toBe(false);
-    revert.patch();
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
+      'javaImportStart'
+    );
+
+    expect(resultUnpatch).toBe(true);
   });
   test('Add Android Kotlin import', async () => {
     jest.mock('path', () => ({
@@ -106,11 +109,14 @@ describe('Patch Android', () => {
 
     expect(result).toBe(true);
 
-    const { unlinkKotlin } = require('../setup/patches/android/unlink.kotlin');
+    const {
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
 
-    const revert = await unlinkKotlin('test');
-    expect(revert.contents.includes(EMBRACE_IMPORT_JAVA)).toBe(false);
-    expect(revert.contents.includes(EMBRACE_INIT_JAVA)).toBe(false);
-    revert.patch();
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
+      'kotlinImportStart'
+    );
+
+    expect(resultUnpatch).toBe(true);
   });
 });

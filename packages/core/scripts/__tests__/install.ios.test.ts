@@ -1,13 +1,3 @@
-import {
-  EMBRACE_IMPORT_SWIFT,
-  EMBRACE_INIT_SWIFT,
-} from '../setup/patches/patch';
-import {
-  EMBRACE_IMPORT_OBJECTIVEC,
-  EMBRACE_INIT_OBJECTIVEC,
-  embraceNativePod,
-} from '../util/ios';
-
 jest.useFakeTimers();
 
 beforeEach(() => {
@@ -34,19 +24,14 @@ describe('Uninstall Script iOS', () => {
     expect(result).toBe(true);
 
     const {
-      unlinkObjectiveC,
-    } = require('../setup/patches/ios/unlink.objectivec');
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
 
-    const resultUnpatch = await unlinkObjectiveC('test');
-
-    expect(resultUnpatch.contents.includes(EMBRACE_IMPORT_OBJECTIVEC)).toBe(
-      false
-    );
-    expect(resultUnpatch.contents.includes(EMBRACE_INIT_OBJECTIVEC)).toBe(
-      false
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
+      'objectivecImportStart'
     );
 
-    resultUnpatch.patch();
+    expect(resultUnpatch).toBe(true);
   });
   test('Patch AppDelegate.swift', async () => {
     jest.mock('glob', () => ({
@@ -71,14 +56,15 @@ describe('Uninstall Script iOS', () => {
 
     expect(result).toBe(true);
 
-    const { unlinkSwift } = require('../setup/patches/ios/unlink.swift');
+    const {
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
 
-    const resultUnpatch = await unlinkSwift('test');
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
+      'swiftImportStart'
+    );
 
-    expect(resultUnpatch.contents.includes(EMBRACE_IMPORT_SWIFT)).toBe(false);
-    expect(resultUnpatch.contents.includes(EMBRACE_INIT_SWIFT)).toBe(false);
-
-    resultUnpatch.patch();
+    expect(resultUnpatch).toBe(true);
   });
   test('Patch Podfile', async () => {
     jest.mock('glob', () => ({
@@ -97,11 +83,14 @@ describe('Uninstall Script iOS', () => {
     };
     await patchPodfile(mockPackageJson);
 
-    const iosUninstaller = require('../postunlink/ios');
+    const {
+      removeEmbraceImportAndStartFromFile,
+    } = require('../setup/uninstall');
 
-    const result = await iosUninstaller.unpatchPodfile();
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
+      'podFileImport'
+    );
 
-    expect(result.contents.includes(embraceNativePod)).toBe(false);
-    result.patch();
+    expect(resultUnpatch).toBe(true);
   });
 });

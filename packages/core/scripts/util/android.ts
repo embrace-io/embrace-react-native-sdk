@@ -11,23 +11,41 @@ interface IDirectory {
   name: string;
 }
 
+export const getBuildGradlePatchable = (
+  paths: string[] = []
+): FileUpdatable => {
+  const gradlePath = path.join(...paths);
+  if (!fs.existsSync(gradlePath)) {
+    throw new Error(`cannot find build.gradle file at ${gradlePath}`);
+  }
+  return getFileContents(gradlePath);
+};
+
 export const buildGradlePatchable = (): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
-    const gradlePath = path.join('android', 'build.gradle');
-    if (!fs.existsSync(gradlePath)) {
-      return reject(`cannot find build.gradle file at ${gradlePath}`);
+    try {
+      return resolve(getBuildGradlePatchable(['android', 'build.gradle']));
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        return reject(e.message);
+      }
+      return reject(e);
     }
-    return resolve(getFileContents(gradlePath));
   });
 };
 
 export const buildAppGradlePatchable = (): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
-    const appGradlePath = path.join('android', 'app', 'build.gradle');
-    if (!fs.existsSync(appGradlePath)) {
-      return reject(`cannot find build.gradle file at ${appGradlePath}`);
+    try {
+      return resolve(
+        getBuildGradlePatchable(['android', 'app', 'build.gradle'])
+      );
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        return reject(e.message);
+      }
+      return reject(e);
     }
-    return resolve(getFileContents(appGradlePath));
   });
 };
 

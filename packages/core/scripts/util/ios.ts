@@ -51,19 +51,25 @@ export const getAppDelegateByIOSLanguage = (
 
   return getFileContents(appDelegatePath);
 };
-
+export const getPodFile = () => {
+  const podfilePath = glob.sync('ios/Podfile')[0];
+  if (!podfilePath) {
+    throw new Error(
+      'Could not find Podfile. Please refer to the docs at https://docs.embrace.io to update manually.'
+    );
+  }
+  return getFileContents(podfilePath);
+};
 export const podfilePatchable = (): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
-    const podfilePath = glob.sync('ios/Podfile')[0];
-    if (!podfilePath) {
-      return reject(
-        embLogger.format(
-          'Could not find Podfile. Please refer to the docs at https://docs.embrace.io to update manually.'
-        )
-      );
+    try {
+      return resolve(getPodFile());
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        return reject(e.message);
+      }
+      return reject(e);
     }
-    const podfile = getFileContents(podfilePath);
-    return resolve(podfile);
   });
 };
 
