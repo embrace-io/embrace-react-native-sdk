@@ -1,5 +1,4 @@
 # OpenTelemetry Navigation Instrumentation for React Native
-This is an experimental package under active development. New releases may include breaking changes.
 
 This module provides instrumentation for [react-native/nagivation](https://reactnavigation.org/docs/getting-started), [expo-router](https://docs.expo.dev/router/introduction/) and [wix/react-native-navigation](https://wix.github.io/react-native-navigation/docs/before-you-start/)
 
@@ -83,6 +82,36 @@ const HomeScreen: FC = () => {
 export default App;
 ```
 
+## Goal
+The purpose of this package is to intercept changes in the navigation of a React Native application and create telemetry data following the OpenTelemetry standards. Every new view displayed will start a new Span, which will end only when the next view becomes available to the user.
+
+For instance, when the application starts and the user navigates to a new section, the first Span will be considered finished at that moment. Let’s take a look at the output of this Span:
+
+```
+{
+  resource: {
+    attributes: {
+      'service.name': 'unknown_service:/Users/testuser/.nvm/versions/node/v18.18.0/bin/node',
+      'telemetry.sdk.language': 'nodejs',
+      'telemetry.sdk.name': 'opentelemetry',
+      'telemetry.sdk.version': '1.25.0'
+    }
+  },
+  traceId: 'a3280f7e6afab1e5b7f4ecfc12ec059f',
+  parentId: undefined,
+  traceState: undefined,
+  name: 'initial-test-view',
+  id: '270509763b408343',
+  kind: 0,
+  timestamp: 1718975153696000,
+  duration: 252.375,
+  attributes: { initial_view: true },
+  status: { code: 0 },
+  events: [],
+  links: []
+}
+```
+
 ### NOTE
 `useProvider` hook in this example returns an instance of a configured provided.
-It doesn't matter what provider you pick, you just need to pass down one with all of your configurations. In order to create that provider you would probably need to take a look at the official [Open Telemetry JS docs](https://github.com/open-telemetry/opentelemetry-js). You can take a look at our suggestion (`experimental/testUtils/hooks/useProvider.ts`) but have in consideration this is the smallest and simplest provider that adds just few configurations.
+It doesn't matter what provider you pick, you just need to pass down one with all of your configurations. In order to create that provider you would probably need to take a look at the official [OpenTelemetry JS docs](https://github.com/open-telemetry/opentelemetry-js). You can take a look at our suggestion (`experimental/testUtils/hooks/useProvider.ts`) but have in consideration this is the smallest and simplest provider that adds just few configurations.
