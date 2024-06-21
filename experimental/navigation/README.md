@@ -114,4 +114,4 @@ For instance, when the application starts and the user navigates to a new sectio
 
 ### NOTE
 `useProvider` hook in this example returns an instance of a configured provided.
-It doesn't matter what provider you pick, you just need to pass down one with all of your configurations. In order to create that provider you would probably need to take a look at the official [OpenTelemetry JS docs](https://github.com/open-telemetry/opentelemetry-js). You can take a look at our suggestion (`experimental/testUtils/hooks/useProvider.ts`) but have in consideration this is the smallest and simplest provider that adds just few configurations.
+It doesn't matter which provider you choose; you just need to pass down one (if needed) with all your configurations. To create that provider, you may want to refer to the official [OpenTelemetry JS documentation](https://github.com/open-telemetry/opentelemetry-js). You can also review our suggested implementation (`experimental/testUtils/hooks/useProvider.ts`), but keep in mind that this is the simplest provider with minimal configurations.
