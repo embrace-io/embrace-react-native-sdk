@@ -26,6 +26,31 @@ describe('Test Spans - Start', () => {
     expect(mockNativePromiseResolved).toBeCalledTimes(1);
   });
 
+  test('Create Span - With Name && Span time', () => {
+    const mockNativePromiseResolved = jest.fn();
+    const mockNativePromise = (name: string, _: undefined, time: number) =>
+      new Promise((res, reject) => {
+        if (!name || !time) {
+          return reject();
+        }
+        mockNativePromiseResolved();
+
+        res(true);
+      });
+
+    jest.mock('react-native', () => ({
+      NativeModules: {
+        EmbraceManager: {
+          startSpan: mockNativePromise,
+        },
+      },
+    }));
+
+    const { startSpan } = require('../src/index');
+    startSpan('Hey', undefined, new Date().getTime());
+    expect(mockNativePromiseResolved).toBeCalledTimes(1);
+  });
+
   test('Create Span - Undefined', () => {
     jest.mock('react-native', () => ({
       NativeModules: {
@@ -76,6 +101,30 @@ describe('Test Spans - Start', () => {
 
     expect(mockNativePromise).toBeCalledTimes(0);
   });
+  test('Create Span - With Name && Span time && ParentId', () => {
+    const mockNativePromiseResolved = jest.fn();
+    const mockNativePromise = (name: string, parentId: string, time: number) =>
+      new Promise((res, reject) => {
+        if (parentId !== '123' || !name || !time) {
+          return reject();
+        }
+        mockNativePromiseResolved();
+
+        res(true);
+      });
+
+    jest.mock('react-native', () => ({
+      NativeModules: {
+        EmbraceManager: {
+          startSpan: mockNativePromise,
+        },
+      },
+    }));
+
+    const { startSpan } = require('../src/index');
+    startSpan('Hey', '123', new Date().getTime());
+    expect(mockNativePromiseResolved).toBeCalledTimes(1);
+  });
 });
 
 describe('Test Spans - Stop', () => {
@@ -99,6 +148,35 @@ describe('Test Spans - Stop', () => {
     stopSpan('Hey');
     expect(mockNativePromiseResolved).toBeCalledTimes(1);
   });
+
+  test('Stop Span - With spanId && Time', () => {
+    const mockNativePromiseResolved = jest.fn();
+    const mockNativePromise = (
+      spanId: string,
+      error: undefined,
+      time: number
+    ) =>
+      new Promise((res, reject) => {
+        if (!spanId || !time) {
+          return reject();
+        }
+        mockNativePromiseResolved();
+        res(true);
+      });
+
+    jest.mock('react-native', () => ({
+      NativeModules: {
+        EmbraceManager: {
+          stopSpan: mockNativePromise,
+        },
+      },
+    }));
+
+    const { stopSpan } = require('../src/index');
+    stopSpan('Hey', undefined, new Date().getTime());
+    expect(mockNativePromiseResolved).toBeCalledTimes(1);
+  });
+
   test('Stop Span - Without spanId', () => {
     const mockNativePromise = jest.fn();
 
@@ -129,6 +207,30 @@ describe('Test Spans - Stop', () => {
     const { stopSpan } = require('../src/index');
     const result = stopSpan('id');
     expect(result).resolves.toBe(false);
+  });
+
+  test('Stop Span - With spanId && Time && Error', () => {
+    const mockNativePromiseResolved = jest.fn();
+    const mockNativePromise = (spanId: string, error: string, time: number) =>
+      new Promise((res, reject) => {
+        if (error !== 'Failure' || !spanId || !time) {
+          return reject();
+        }
+        mockNativePromiseResolved();
+        res(true);
+      });
+
+    jest.mock('react-native', () => ({
+      NativeModules: {
+        EmbraceManager: {
+          stopSpan: mockNativePromise,
+        },
+      },
+    }));
+
+    const { stopSpan } = require('../src/index');
+    stopSpan('Hey', 'Failure', new Date().getTime());
+    expect(mockNativePromiseResolved).toBeCalledTimes(1);
   });
 });
 
