@@ -19,13 +19,11 @@ import {
   xcodePatchable,
 } from '../util/ios';
 import Wizard, { Step } from '../util/wizard';
-import {
-  androidEmbraceSwazzlerPluginRE,
-  androidGenericVersion,
-} from './android';
+import { androidEmbraceSwazzlerPlugin, androidGenericVersion } from './android';
+import { findNameWithCaseSensitiveFromPath } from './ios';
 import { MAIN_CLASS_BY_LANGUAGE } from './patches/common';
 
-const packageJson = require('../../../../package.json');
+const packageJson = require('../../../../../../package.json');
 
 export const EMBRACE_IMPORT_SWIFT = 'import Embrace';
 
@@ -122,7 +120,7 @@ const UNINSTALL_ANDROID_JAVA_MAIN_ACTIVITTY: IUnlinkEmbraceCode = {
 
 const UNINSTALL_ANDROID_SWAZZLER_IMPORT: IUnlinkEmbraceCode = {
   stepName: 'Removing Embrace code in build.gradle',
-  fileName: MAIN_CLASS_BY_LANGUAGE.java,
+  fileName: 'android/build.gradle',
   textsToDelete: [
     {
       ITextToDelete: `${androidGenericVersion}`,
@@ -134,10 +132,10 @@ const UNINSTALL_ANDROID_SWAZZLER_IMPORT: IUnlinkEmbraceCode = {
 
 const UNINSTALL_ANDROID_SWAZZLER_APPLY: IUnlinkEmbraceCode = {
   stepName: 'Removing Embrace code in app/build.gradle',
-  fileName: MAIN_CLASS_BY_LANGUAGE.java,
+  fileName: 'app/build.gradle',
   textsToDelete: [
     {
-      ITextToDelete: `${androidEmbraceSwazzlerPluginRE}\n`,
+      ITextToDelete: `${androidEmbraceSwazzlerPlugin}\n`,
     },
   ],
   findFileFunction: () =>
@@ -147,7 +145,7 @@ const UNINSTALL_ANDROID_SWAZZLER_APPLY: IUnlinkEmbraceCode = {
 
 const UNINSTALL_IOS_PODFILE: IUnlinkEmbraceCode = {
   stepName: 'Removing Embrace code in Podfile',
-  fileName: MAIN_CLASS_BY_LANGUAGE.java,
+  fileName: 'Podfile',
   textsToDelete: [
     {
       ITextToDelete: `${embraceNativePod}\n`,
@@ -210,33 +208,62 @@ export const removeEmbraceImportAndStartFromFile = (
   return hasToPatch;
 };
 
-export const removeEmbraceConfigFiles = async (projectName?: string) => {
-  const androidConfigFile = await embraceJSON();
-  fs.unlinkSync(androidConfigFile.path);
+export const removeEmbraceConfigFileAndroid = async () => {
+  try {
+    const androidConfigFile = await embraceJSON();
+    fs.unlinkSync(androidConfigFile.path);
+  } catch (_) {
+    logger.error(
+      'Could not find embrace-config.json, Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually '
+    );
+  }
+};
 
-  if (projectName) {
+export const removeEmbraceConfigFileIos = async (projectName: string) => {
+  try {
     const iosConifgFile = await embracePlistPatchable({ name: projectName });
     fs.unlinkSync(iosConifgFile.path);
+  } catch (_) {
+    logger.error(
+      'Could not find Embrace-Info.plist, Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually '
+    );
   }
 };
 
 export const removeEmbraceFromXcode = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     xcodePatchable(packageJson)
       .then((project) => {
         const bundlePhaseKey = project.findPhase(bundlePhaseRE);
         if (!bundlePhaseKey) {
-          logger.error('Could not find bundle phase.');
-          reject();
+          logger.error(
+            'Could not find bundle phase, Please refer to the docs at https://embrace.io/docs/react-native/integration/upload-symbol-files/'
+          );
         }
-        project.modifyPhase(bundlePhaseKey, exportSourcemapRNVariable, '');
+        const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
+          project.path,
+          packageJson.name
+        );
+
+        project.removeResourceFile(
+          nameWithCaseSensitive,
+          `${nameWithCaseSensitive}/Embrace-Info.plist`
+        );
+        project.findAndRemovePhase('Upload Debug Symbols to Embrace');
+        project.modifyPhase(
+          bundlePhaseKey,
+          `${exportSourcemapRNVariable}\n`,
+          ''
+        );
         project.findAndRemovePhase('/EmbraceIO/run.sh');
         project.sync();
         project.patch();
         resolve(project);
       })
       .catch((r) => {
-        reject(r);
+        logger.error(
+          'Could not find bundle phase, Please refer to the docs at https://embrace.io/docs/react-native/integration/upload-symbol-files/'
+        );
       });
   });
 };
@@ -248,18 +275,26 @@ const getRemoveEmbraceFromXcodeStep = () => {
     docURL: '',
   };
 };
-const getRemoveEmbraceConfigFilesStep = () => {
+const getRemoveEmbraceConfigFileAndroidStep = () => {
   return {
-    name: 'Removing Embrace Config Files',
+    name: 'Removing Andoird Embrace Config File',
     run: (wizard: Wizard) =>
-      new Promise((resolve, reject) => {
-        try {
-          resolve(removeEmbraceConfigFiles());
-        } catch (e) {
-          reject(e);
-        }
+      new Promise((resolve) => {
+        resolve(removeEmbraceConfigFileAndroid());
       }),
-    docURL: '',
+    docURL:
+      'https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually',
+  };
+};
+const getRemoveEmbraceConfigFileIosStep = () => {
+  return {
+    name: 'Removing iOS Embrace Config File',
+    run: (wizard: Wizard) =>
+      new Promise((resolve) => {
+        resolve(removeEmbraceConfigFileIos(packageJson));
+      }),
+    docURL:
+      'https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually',
   };
 };
 
@@ -285,7 +320,8 @@ const getUnlinkFilesStep = () => {
 
 const transformUninstalFunctionsToSteps = (): Step[] => {
   const steps = getUnlinkFilesStep();
-  steps.push(getRemoveEmbraceConfigFilesStep());
+  steps.push(getRemoveEmbraceConfigFileAndroidStep());
+  steps.push(getRemoveEmbraceConfigFileIosStep());
   steps.push(getRemoveEmbraceFromXcodeStep());
   return steps;
 };
@@ -298,4 +334,4 @@ const run = () => {
   wiz.runSteps();
 };
 
-export default run;
+run();

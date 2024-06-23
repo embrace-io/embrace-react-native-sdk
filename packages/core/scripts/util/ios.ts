@@ -108,6 +108,7 @@ export const xcodePatchable = ({
     }
 
     if (!projectPath) {
+      console.log('SALIOOO');
       return reject(
         embLogger.format(`Could not find xcode project file. ${docsMessage}`)
       );
@@ -199,6 +200,7 @@ export class XcodeProject implements Patchable {
 
   public findAndRemovePhase(line: string | RegExp) {
     const buildPhaseObj = this.buildPhaseObj();
+
     this.project.hash.project.objects.PBXShellScriptBuildPhase = Object.keys(
       buildPhaseObj
     ).reduce((a, key) => {
@@ -214,6 +216,22 @@ export class XcodeProject implements Patchable {
       }
 
       return { ...a, [key]: buildPhaseObj[key] };
+    }, {});
+    const nativeTargets = this.project.hash.project.objects.PBXNativeTarget;
+    this.project.hash.project.objects.PBXNativeTarget = Object.keys(
+      nativeTargets
+    ).reduce((a, key) => {
+      const phase = nativeTargets[key];
+      if (!phase) {
+        return a;
+      }
+      if (phase.buildPhases) {
+        phase.buildPhases = phase.buildPhases.filter(
+          ({ comment }: { comment: string }) =>
+            !comment.includes('Upload Debug Symbols to Embrace')
+        );
+      }
+      return { ...a, [key]: phase };
     }, {});
   }
 
@@ -240,6 +258,25 @@ export class XcodeProject implements Patchable {
       file.uuid = this.project.generateUuid();
       this.project.addToPbxBuildFileSection(file);
       this.project.addToPbxResourcesBuildPhase(file);
+    }
+  }
+
+  public removeResourceFile(groupName: string, path: string) {
+    const target = this.findHash(
+      this.project.hash.project.objects.PBXNativeTarget,
+      groupName
+    );
+    const group = this.findHash(
+      this.project.hash.project.objects.PBXGroup,
+      groupName
+    );
+    if (target && group) {
+      const file = this.project.removeSourceFile(
+        path,
+        { target: target[0] },
+        group[0]
+      );
+      this.project.removeFromPbxResourcesBuildPhase(file);
     }
   }
 

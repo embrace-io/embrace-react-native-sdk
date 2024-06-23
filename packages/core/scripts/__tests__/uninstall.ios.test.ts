@@ -12,7 +12,7 @@ jest.useFakeTimers();
 beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
-
+const flushPromises = () => new Promise((resolve) => process.nextTick(resolve));
 describe('Uninstall Script iOS', () => {
   test('Remove Embrace From Podfile', async () => {
     jest.mock('glob', () => ({
@@ -92,7 +92,13 @@ describe('Uninstall Script iOS', () => {
         './packages/core/scripts/__tests__/__mocks__/ios/NoAppDelegate.mm',
       ],
     }));
-
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const {
       removeEmbraceImportAndStartFromFile,
     } = require('../setup/uninstall');
@@ -112,7 +118,13 @@ describe('Uninstall Script iOS', () => {
         './packages/core/scripts/__tests__/__mocks__/ios/NoAppDelegate.swift',
       ],
     }));
-
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const {
       removeEmbraceImportAndStartFromFile,
     } = require('../setup/uninstall');
@@ -133,7 +145,13 @@ describe('Uninstall Script iOS', () => {
         './packages/core/scripts/__tests__/__mocks__/ios/AppDelegate.mm',
       ],
     }));
-
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const { getAppDelegateByIOSLanguage } = require('../util/ios');
     const appDelegate = await getAppDelegateByIOSLanguage('test', 'objectivec');
 
@@ -162,7 +180,13 @@ describe('Uninstall Script iOS', () => {
         './packages/core/scripts/__tests__/__mocks__/ios/AppDelegate.swift',
       ],
     }));
-
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const { getAppDelegateByIOSLanguage } = require('../util/ios');
     const appDelegate = await getAppDelegateByIOSLanguage('test', 'swift');
 
@@ -179,6 +203,7 @@ describe('Uninstall Script iOS', () => {
 
     expect(resultUnpatch).toBe(true);
 
+    await flushPromises();
     const patchAppDelegate = require('../setup/patches/patch').default;
     const result = await patchAppDelegate('swift', { name: 'test' });
 

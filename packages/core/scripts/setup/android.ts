@@ -50,7 +50,7 @@ export const patchBuildGradle = {
 const androidPlugin = /apply plugin: ("|')com.android.application("|')/;
 export const androidEmbraceSwazzlerPluginRE =
   /apply plugin: ('|")embrace-swazzler('|")/;
-const androidEmbraceSwazzlerPlugin = 'apply plugin: \'embrace-swazzler\'';
+export const androidEmbraceSwazzlerPlugin = 'apply plugin: \'embrace-swazzler\'';
 
 export const patchAppBuildGradle = {
   name: 'patch app/build.gradle',

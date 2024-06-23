@@ -22,6 +22,13 @@ describe('Uninstall Script Android', () => {
       join: () =>
         './packages/core/scripts/__tests__/__mocks__/android/buildWithSwazzler.gradle',
     }));
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const {
       removeEmbraceImportAndStartFromFile,
     } = require('../setup/uninstall');
@@ -47,6 +54,13 @@ describe('Uninstall Script Android', () => {
       join: () =>
         './packages/core/scripts/__tests__/__mocks__/android/appBuildWithSwazzler.gradle',
     }));
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const {
       removeEmbraceImportAndStartFromFile,
     } = require('../setup/uninstall');
@@ -72,6 +86,13 @@ describe('Uninstall Script Android', () => {
       join: () =>
         './packages/core/scripts/__tests__/__mocks__/android/embrace-config.json',
     }));
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const p = path.join(
       'packages/core/scripts/__tests__/__mocks__/android/embrace-config.json'
     );
@@ -81,8 +102,8 @@ describe('Uninstall Script Android', () => {
 
     expect(fs.existsSync(p)).toBe(true);
 
-    const { removeEmbraceConfigFiles } = require('../setup/uninstall');
-    await removeEmbraceConfigFiles();
+    const { removeEmbraceConfigFileAndroid } = require('../setup/uninstall');
+    await removeEmbraceConfigFileAndroid();
 
     expect(fs.existsSync(p)).toBe(false);
   });
@@ -90,7 +111,13 @@ describe('Uninstall Script Android', () => {
     jest.mock('path', () => ({
       join: () => './packages/core/scripts/__tests__/__mocks__/',
     }));
-
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const { mainApplicationPatchable } = require('../util/android');
     const mainApplication = await mainApplicationPatchable('java');
 
@@ -121,7 +148,13 @@ describe('Uninstall Script Android', () => {
     jest.mock('path', () => ({
       join: () => './packages/core/scripts/__tests__/__mocks__/',
     }));
-
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const { mainApplicationPatchable } = require('../util/android');
     const mainApplication = await mainApplicationPatchable('kotlin');
 
@@ -153,7 +186,13 @@ describe('Uninstall Script Android', () => {
       join: () =>
         './packages/core/scripts/__tests__/__mocks__/android/main-without-embrace',
     }));
-
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const {
       removeEmbraceImportAndStartFromFile,
     } = require('../setup/uninstall');
@@ -167,7 +206,13 @@ describe('Uninstall Script Android', () => {
       join: () =>
         './packages/core/scripts/__tests__/__mocks__/android/main-without-embrace',
     }));
-
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const {
       removeEmbraceImportAndStartFromFile,
     } = require('../setup/uninstall');

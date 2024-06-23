@@ -83,7 +83,13 @@ describe('Patch Android', () => {
     jest.mock('path', () => ({
       join: () => './packages/core/scripts/__tests__/__mocks__/android',
     }));
-
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const patchMainApplication = require('../setup/patches/patch').default;
     const result = await patchMainApplication('java');
 
@@ -103,7 +109,13 @@ describe('Patch Android', () => {
     jest.mock('path', () => ({
       join: () => './packages/core/scripts/__tests__/__mocks__/android',
     }));
-
+    jest.mock(
+      '../../../../../../package.json',
+      () => ({
+        name: 'test',
+      }),
+      { virtual: true }
+    );
     const patchMainApplication = require('../setup/patches/patch').default;
     const result = await patchMainApplication('kotlin');
 
