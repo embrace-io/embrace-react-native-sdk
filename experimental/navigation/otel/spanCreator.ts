@@ -1,35 +1,40 @@
+import {AppStateStatus} from "react-native";
 import {MutableRefObject} from "react";
 
 import {TracerRef} from "./hooks/useTrace";
 import {SpanRef} from "./hooks/useSpan";
 
 const ATTRIBUTES = {
-  initialView: "initial_view",
+  initialView: "launch",
+  appState: "status.end",
 };
 
 const spanStart = (
   tracer: TracerRef,
   span: SpanRef,
   currentRouteName: string,
-  isFirstView: boolean,
+  isLaunch?: boolean,
 ) => {
-  if (!tracer.current) {
-    // do nothing in case for some reason the tracer is not initialized
+  if (!tracer.current || span.current !== null) {
+    // do nothing in case for some reason the tracer is not initialized or there is already an active span
     return;
   }
 
   // Starting the span
   span.current = tracer.current.startSpan(currentRouteName);
 
-  if (isFirstView) {
-    // it should create the first span knowing there is not a previous view
-    span.current.setAttribute(ATTRIBUTES.initialView, true);
-  }
+  // it should create the first span knowing there is not a previous view
+  span.current.setAttribute(ATTRIBUTES.initialView, !!isLaunch);
 };
 
-const spanEnd = (span: SpanRef) => {
+const spanEnd = (span: SpanRef, appState?: AppStateStatus) => {
   if (span.current) {
+    span.current.setAttribute(ATTRIBUTES.appState, appState ?? "active");
+
     span.current.end();
+
+    // make sure we destroy any existent span
+    span.current = null;
   }
 };
 
@@ -61,4 +66,4 @@ const spanCreator = (
 };
 
 export default spanCreator;
-export {spanStart, spanEnd};
+export {spanStart, spanEnd, ATTRIBUTES};
