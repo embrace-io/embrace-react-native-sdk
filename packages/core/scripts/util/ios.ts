@@ -108,7 +108,6 @@ export const xcodePatchable = ({
     }
 
     if (!projectPath) {
-      console.log('SALIOOO');
       return reject(
         embLogger.format(`Could not find xcode project file. ${docsMessage}`)
       );

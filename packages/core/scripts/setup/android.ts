@@ -122,7 +122,7 @@ const tryToPatchMainApplication = () => {
 };
 
 export const patchMainApplication = {
-  name: 'patch MainApplication.kt file',
+  name: 'patch MainApplication file',
   run: (wizard: Wizard): Promise<any> => {
     return wizard.fieldValue(packageJSON).then(() => {
       return tryToPatchMainApplication();
