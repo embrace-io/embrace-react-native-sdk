@@ -22,25 +22,16 @@ import Wizard, { Step } from '../util/wizard';
 import { androidEmbraceSwazzlerPlugin, androidGenericVersion } from './android';
 import { findNameWithCaseSensitiveFromPath } from './ios';
 import { MAIN_CLASS_BY_LANGUAGE } from './patches/common';
+import {
+  EMBRACE_IMPORT_JAVA,
+  EMBRACE_IMPORT_KOTLIN,
+  EMBRACE_IMPORT_SWIFT,
+  EMBRACE_INIT_JAVA,
+  EMBRACE_INIT_KOTLIN,
+  EMBRACE_INIT_SWIFT,
+} from './patches/patch';
 
 const packageJson = require('../../../../../../package.json');
-
-export const EMBRACE_IMPORT_SWIFT = 'import Embrace';
-
-export const EMBRACE_INIT_SWIFT =
-  'Embrace.sharedInstance().start(launchOptions: launchOptions, framework:.reactNative)';
-
-export const EMBRACE_IMPORT_JAVA =
-  'import io.embrace.android.embracesdk.Embrace;';
-
-export const EMBRACE_INIT_JAVA =
-  'Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE);';
-
-export const EMBRACE_IMPORT_KOTLIN =
-  'import io.embrace.android.embracesdk.Embrace';
-
-export const EMBRACE_INIT_KOTLIN =
-  'Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE)';
 
 const logger = new EmbraceLogger(console);
 
