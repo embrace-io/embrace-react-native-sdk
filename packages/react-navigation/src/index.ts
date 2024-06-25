@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { NativeModules } from 'react-native';
 import {
   ICurrentScreenInstance,
@@ -9,9 +9,11 @@ import {
 import { findNavigationHistory } from '../navigation/Utils';
 
 export const useEmbraceNavigationTracker = (
-  navigationRef: INavigationRef,
+  navigationRefParam: RefObject<unknown>,
   forceRefresh?: boolean
 ) => {
+  const navigationRef = navigationRefParam as INavigationRef;
+
   const [isFirstScreen, setIsFirstScreen] = useState<boolean>(true);
   const currentScreen = useRef<ICurrentScreenInstance>();
 
@@ -70,6 +72,7 @@ export const useEmbraceNavigationTracker = (
       );
       return;
     }
+
     if (!navigationRef.current) {
       console.warn(
         '[Embrace] Navigation reference current object is null. Navigation tracker was not applied.'
@@ -81,6 +84,7 @@ export const useEmbraceNavigationTracker = (
 
     if (isFirstScreen) {
       const currentRute = navigationRefC.getCurrentRoute();
+
       findAndSetLastScreen(currentRute);
       setIsFirstScreen(false);
     }
