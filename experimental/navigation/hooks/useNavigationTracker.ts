@@ -6,10 +6,13 @@
 import {AppStateStatus} from "react-native";
 import {ForwardedRef, useCallback, useEffect, useMemo, useRef} from "react";
 
+import spanCreator, {
+  spanCreatorAppState,
+  spanEnd,
+} from "../utils/otel/spanCreator";
+import {TracerRef} from "../utils/otel/hooks/useTrace";
+import useSpan from "../utils/otel/hooks/useSpan";
 import {INavigationContainer} from "../types/navigation";
-import spanCreator, {spanCreatorAppState, spanEnd} from "../otel/spanCreator";
-import {TracerRef} from "../otel/hooks/useTrace";
-import useSpan from "../otel/hooks/useSpan";
 
 import useAppStateListener from "./useAppStateListener";
 

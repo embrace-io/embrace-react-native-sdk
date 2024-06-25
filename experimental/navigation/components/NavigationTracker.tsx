@@ -1,7 +1,7 @@
 import React, {forwardRef, ReactNode} from "react";
 import {TracerProvider} from "@opentelemetry/api";
 
-import useTrace from "../otel/hooks/useTrace";
+import useTrace from "../utils/otel/hooks/useTrace";
 import useNavigationTracker, {type NavRef} from "../hooks/useNavigationTracker";
 
 type NavigationTrackerRef = NavRef;

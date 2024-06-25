@@ -4,8 +4,8 @@ import {useRef} from "react";
 import {cleanup, render} from "@testing-library/react-native";
 
 import NativeNavigationTracker from "../NativeNavigationTracker";
-import {ATTRIBUTES} from "../../otel/spanCreator";
-import useProvider from "../../../testUtils/hooks/useProvider";
+import useProvider from "../../utils/test/hooks/useProvider";
+import {ATTRIBUTES} from "../../utils/otel/spanCreator";
 
 const mockDidAppearListener = jest.fn();
 const mockDidDisappearListener = jest.fn();

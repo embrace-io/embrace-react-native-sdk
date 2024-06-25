@@ -4,9 +4,9 @@ import {cleanup, render} from "@testing-library/react-native";
 import {useNavigationContainerRef} from "@react-navigation/native";
 
 import NavigationTracker from "../NavigationTracker";
-import {ATTRIBUTES} from "../../otel/spanCreator";
+import useProvider from "../../utils/test/hooks/useProvider";
+import {ATTRIBUTES} from "../../utils/otel/spanCreator";
 import {NavRef} from "../../hooks/useNavigationTracker";
-import useProvider from "../../../testUtils/hooks/useProvider";
 
 const mockAddListener = jest.fn();
 const mockGetCurrentRoute = jest.fn();
