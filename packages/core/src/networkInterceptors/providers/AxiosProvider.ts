@@ -1,5 +1,6 @@
-import { zip } from 'gzip-js';
-import { NativeModules, Platform } from 'react-native';
+import {NativeModules, Platform} from "react-native";
+import {zip} from "gzip-js";
+
 import {
   AxiosInterceptorManager,
   IAxios,
@@ -7,10 +8,10 @@ import {
   IAxiosRequestConfig,
   IAxiosResponse,
   IEmbraceAxiosTrackerMetadata,
-} from '../../interfaces/IAxios';
+} from "../../interfaces/IAxios";
 
 const UNKNONW_ERROR_MESSAGE =
-  '[Embrace] Embrace was unable to capture the errored request due to limitations in the Axios API. Please raise a bug on the Axios repo if this affects you.';
+  "[Embrace] Embrace was unable to capture the errored request due to limitations in the Axios API. Please raise a bug on the Axios repo if this affects you.";
 
 const logErrorWithoutResponse = (error: IAxiosErrorResponse) => {
   console.warn(UNKNONW_ERROR_MESSAGE, error.message, error.stack);
@@ -24,13 +25,13 @@ const logErrorWithResponse = (
   dataReceived: any,
   status: number,
   errorMessage: string,
-  errorName?: string
+  errorName?: string,
 ) => {
   const endInMillis = new Date().getTime();
   const gzippedRequestData = dataRequest ? zip(dataRequest).length : 0;
   const gzippedResponseData = dataReceived ? zip(dataReceived).length : 0;
 
-  const { startInMillis } = embraceMetadata;
+  const {startInMillis} = embraceMetadata;
 
   const logIOS = () =>
     NativeModules.EmbraceManager.logNetworkRequest(
@@ -41,7 +42,7 @@ const logErrorWithResponse = (
       gzippedRequestData,
       gzippedResponseData,
       status,
-      errorMessage
+      errorMessage,
     );
 
   const logAndroid = () =>
@@ -51,18 +52,18 @@ const logErrorWithResponse = (
       startInMillis,
       endInMillis,
       errorName,
-      errorMessage
+      errorMessage,
     );
 
-  return Platform.OS === 'ios' ? logIOS() : logAndroid();
+  return Platform.OS === "ios" ? logIOS() : logAndroid();
 };
 
 const applyRequestInterceptors = (
-  request: AxiosInterceptorManager<IAxiosRequestConfig>
+  request: AxiosInterceptorManager<IAxiosRequestConfig>,
 ) => {
   const requestConfig = (config: IAxiosRequestConfig) => {
     if (config) {
-      config.embraceMetadata = { startInMillis: new Date().getTime() };
+      config.embraceMetadata = {startInMillis: new Date().getTime()};
     }
     return config;
   };
@@ -75,11 +76,11 @@ const applyRequestInterceptors = (
 };
 
 const applyResponseInterceptors = (
-  response: AxiosInterceptorManager<IAxiosResponse>
+  response: AxiosInterceptorManager<IAxiosResponse>,
 ) => {
   const responseConfig = (response: IAxiosResponse) => {
     const {
-      config: { method, url, embraceMetadata, data: dataRequest },
+      config: {method, url, embraceMetadata, data: dataRequest},
       status,
       data: dataReceived,
     } = response;
@@ -93,7 +94,7 @@ const applyResponseInterceptors = (
       return response;
     }
 
-    const { startInMillis } = embraceMetadata;
+    const {startInMillis} = embraceMetadata;
 
     try {
       NativeModules.EmbraceManager.logNetworkRequest(
@@ -104,12 +105,12 @@ const applyResponseInterceptors = (
         gzippedRequestData,
         gzippedResponseData,
         status,
-        null
+        null,
       );
     } catch (e) {
       console.warn(
         `[Embrace] Could not send the network request to Embrace's server.`,
-        e
+        e,
       );
     }
 
@@ -123,7 +124,7 @@ const applyResponseInterceptors = (
     }
 
     const {
-      config: { method, url, embraceMetadata, data: dataRequest },
+      config: {method, url, embraceMetadata, data: dataRequest},
       status,
       data: dataReceived,
     } = error.response;
@@ -138,12 +139,12 @@ const applyResponseInterceptors = (
           dataReceived,
           status,
           error.message,
-          error.name
+          error.name,
         );
       } catch (e) {
         console.warn(
           `[Embrace] Could not send the network error to Embrace's server.`,
-          e
+          e,
         );
       }
     } else {
@@ -163,7 +164,7 @@ const applyResponseInterceptors = (
  */
 export const applyAxiosNetworkInterceptor = (networkSDKInstance: IAxios) => {
   const {
-    interceptors: { request, response },
+    interceptors: {request, response},
   } = networkSDKInstance;
 
   applyRequestInterceptors(request);

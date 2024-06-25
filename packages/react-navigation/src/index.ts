@@ -1,12 +1,13 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { NativeModules } from 'react-native';
+
 import {
   ICurrentScreenInstance,
   IHistory,
   INavigationRef,
   INavigationState,
-} from '../navigation/interfaces/NavigationInterfaces';
-import { findNavigationHistory } from '../navigation/Utils';
+} from "../navigation/interfaces/NavigationInterfaces";
+import {findNavigationHistory} from "../navigation/Utils";
 
 export const useEmbraceNavigationTracker = (
   navigationRefParam: RefObject<unknown>,
@@ -31,22 +32,22 @@ export const useEmbraceNavigationTracker = (
       NativeModules.EmbraceManager.startView(cS.name);
     } else {
       console.warn(
-        '[Embrace] The method startView was not found, please update the native SDK'
+        "[Embrace] The method startView was not found, please update the native SDK",
       );
     }
   };
-  const updateLastScreen = ({ name }: IHistory) => {
+  const updateLastScreen = ({name}: IHistory) => {
     if (!currentScreen.current?.name) {
       setLastScreenStart(name);
     } else if (currentScreen.current.name !== name) {
-      const cSEnd = { ...currentScreen.current };
+      const cSEnd = {...currentScreen.current};
       cSEnd.endTime = new Date().getTime();
       if (NativeModules.EmbraceManager.endView) {
         NativeModules.EmbraceManager.endView(cSEnd.name);
         setLastScreenStart(name);
       } else {
         console.warn(
-          '[Embrace] The method endView was not found, please update the native SDK'
+          "[Embrace] The method endView was not found, please update the native SDK",
         );
       }
     }
@@ -62,20 +63,20 @@ export const useEmbraceNavigationTracker = (
   useEffect(() => {
     if (!NativeModules.EmbraceManager) {
       console.warn(
-        '[Embrace] You must have the Embrace SDK to track screens, run `yarn add @embrace-io/react-native`.'
+        "[Embrace] You must have the Embrace SDK to track screens, run `yarn add @embrace-io/react-native`.",
       );
       return;
     }
     if (!navigationRef) {
       console.warn(
-        '[Embrace] Navigation reference was not provided. Navigation tracker was not applied.'
+        "[Embrace] Navigation reference was not provided. Navigation tracker was not applied.",
       );
       return;
     }
 
     if (!navigationRef.current) {
       console.warn(
-        '[Embrace] Navigation reference current object is null. Navigation tracker was not applied.'
+        "[Embrace] Navigation reference current object is null. Navigation tracker was not applied.",
       );
       return;
     }
@@ -89,8 +90,8 @@ export const useEmbraceNavigationTracker = (
       setIsFirstScreen(false);
     }
 
-    console.log('[Embrace] Navigation tracker was applied.');
-    const unsubscribe = navigationRefC.addListener('state', (e) => {
+    console.log("[Embrace] Navigation tracker was applied.");
+    const unsubscribe = navigationRefC.addListener("state", e => {
       findAndSetLastScreen(e.data.state);
     });
     return unsubscribe;

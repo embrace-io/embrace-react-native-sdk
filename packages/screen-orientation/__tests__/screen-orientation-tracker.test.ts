@@ -4,18 +4,18 @@ beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
 
-describe('Test Orientation Tracker', () => {
-  test('Project without React Native Embrace', () => {
+describe("Test Orientation Tracker", () => {
+  test("Project without React Native Embrace", () => {
     const mockDimensionGet = jest.fn();
-    jest.mock('react', () => ({
+    jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useRef: () => {
-        return { current: undefined };
+        return {current: undefined};
       },
     }));
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: undefined,
       },
@@ -24,27 +24,27 @@ describe('Test Orientation Tracker', () => {
       },
     }));
 
-    const { useEmbraceOrientationLogger } = require('../src/index');
+    const {useEmbraceOrientationLogger} = require("../src/index");
 
     useEmbraceOrientationLogger();
-    expect(mockDimensionGet).toBeCalledTimes(0);
+    expect(mockDimensionGet).toHaveBeenCalledTimes(0);
   });
-  test('Init successfully - Landscape', () => {
+  test("Init successfully - Landscape", () => {
     const mockBreadcrumb = jest.fn();
 
-    jest.mock('react', () => ({
+    jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useRef: () => {
-        return { current: undefined };
+        return {current: undefined};
       },
     }));
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           logBreadcrumb: (message: string) => {
-            if (message.includes('landscape')) {
+            if (message.includes("landscape")) {
               mockBreadcrumb();
             }
           },
@@ -61,27 +61,27 @@ describe('Test Orientation Tracker', () => {
       },
     }));
 
-    const { useEmbraceOrientationLogger } = require('../src/index');
+    const {useEmbraceOrientationLogger} = require("../src/index");
 
     useEmbraceOrientationLogger();
-    expect(mockBreadcrumb).toBeCalledTimes(1);
+    expect(mockBreadcrumb).toHaveBeenCalledTimes(1);
   });
-  test('Init successfully - Portrait', () => {
+  test("Init successfully - Portrait", () => {
     const mockBreadcrumb = jest.fn();
 
-    jest.mock('react', () => ({
+    jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useRef: () => {
-        return { current: undefined };
+        return {current: undefined};
       },
     }));
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           logBreadcrumb: (message: string) => {
-            if (message.includes('portrait')) {
+            if (message.includes("portrait")) {
               mockBreadcrumb();
             }
           },
@@ -98,27 +98,27 @@ describe('Test Orientation Tracker', () => {
       },
     }));
 
-    const { useEmbraceOrientationLogger } = require('../src/index');
+    const {useEmbraceOrientationLogger} = require("../src/index");
 
     useEmbraceOrientationLogger();
-    expect(mockBreadcrumb).toBeCalledTimes(1);
+    expect(mockBreadcrumb).toHaveBeenCalledTimes(1);
   });
-  test('Init successfully - Portrait', () => {
+  test("Init successfully - Portrait", () => {
     const mockBreadcrumb = jest.fn();
 
-    jest.mock('react', () => ({
+    jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useRef: () => {
-        return { current: undefined };
+        return {current: undefined};
       },
     }));
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           logBreadcrumb: (message: string) => {
-            if (message.includes('portrait')) {
+            if (message.includes("portrait")) {
               mockBreadcrumb();
             }
           },
@@ -135,28 +135,28 @@ describe('Test Orientation Tracker', () => {
       },
     }));
 
-    const { useEmbraceOrientationLogger } = require('../src/index');
+    const {useEmbraceOrientationLogger} = require("../src/index");
 
     useEmbraceOrientationLogger();
-    expect(mockBreadcrumb).toBeCalledTimes(1);
+    expect(mockBreadcrumb).toHaveBeenCalledTimes(1);
   });
 
-  test('Init successfully - Portrait', () => {
+  test("Init successfully - Portrait", () => {
     const mockBreadcrumb = jest.fn();
 
-    jest.mock('react', () => ({
+    jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useRef: () => {
-        return { current: undefined };
+        return {current: undefined};
       },
     }));
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           logBreadcrumb: (message: string) => {
-            if (message.includes('portrait')) {
+            if (message.includes("portrait")) {
               mockBreadcrumb();
             }
           },
@@ -173,27 +173,27 @@ describe('Test Orientation Tracker', () => {
       },
     }));
 
-    const { useEmbraceOrientationLogger } = require('../src/index');
+    const {useEmbraceOrientationLogger} = require("../src/index");
 
     useEmbraceOrientationLogger();
-    expect(mockBreadcrumb).toBeCalledTimes(1);
+    expect(mockBreadcrumb).toHaveBeenCalledTimes(1);
   });
-  test('Init successfully - Portrait - With Change', () => {
+  test("Init successfully - Portrait - With Change", () => {
     const mockBreadcrumb = jest.fn();
 
-    jest.mock('react', () => ({
+    jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useRef: () => {
-        return { current: undefined };
+        return {current: undefined};
       },
     }));
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           logBreadcrumb: (message: string) => {
-            if (message.includes('portrait')) {
+            if (message.includes("portrait")) {
               mockBreadcrumb();
             }
           },
@@ -201,7 +201,9 @@ describe('Test Orientation Tracker', () => {
       },
       Dimensions: {
         addEventListener: (q: string, w: () => {}) => {
-          if (q) { w(); }
+          if (q) {
+            w();
+          }
         },
         get: jest
           .fn()
@@ -216,27 +218,27 @@ describe('Test Orientation Tracker', () => {
       },
     }));
 
-    const { useEmbraceOrientationLogger } = require('../src/index');
+    const {useEmbraceOrientationLogger} = require("../src/index");
 
     useEmbraceOrientationLogger();
-    expect(mockBreadcrumb).toBeCalledTimes(2);
+    expect(mockBreadcrumb).toHaveBeenCalledTimes(2);
   });
-  test('Init successfully - Portrait - With Change, but same orientation', () => {
+  test("Init successfully - Portrait - With Change, but same orientation", () => {
     const mockBreadcrumb = jest.fn();
 
-    jest.mock('react', () => ({
+    jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useRef: () => {
-        return { current: undefined };
+        return {current: undefined};
       },
     }));
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           logBreadcrumb: (message: string) => {
-            if (message.includes('portrait')) {
+            if (message.includes("portrait")) {
               mockBreadcrumb();
             }
           },
@@ -244,7 +246,9 @@ describe('Test Orientation Tracker', () => {
       },
       Dimensions: {
         addEventListener: (q: string, w: () => {}) => {
-          if (q) { w(); }
+          if (q) {
+            w();
+          }
         },
         get: jest
           .fn()
@@ -259,9 +263,9 @@ describe('Test Orientation Tracker', () => {
       },
     }));
 
-    const { useEmbraceOrientationLogger } = require('../src/index');
+    const {useEmbraceOrientationLogger} = require("../src/index");
 
     useEmbraceOrientationLogger();
-    expect(mockBreadcrumb).toBeCalledTimes(1);
+    expect(mockBreadcrumb).toHaveBeenCalledTimes(1);
   });
 });
