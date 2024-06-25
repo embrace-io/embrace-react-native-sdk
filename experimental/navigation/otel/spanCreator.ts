@@ -6,6 +6,7 @@ import {SpanRef} from "./hooks/useSpan";
 
 const ATTRIBUTES = {
   initialView: "launch",
+  finalView: "unmount",
   appState: "status.end",
 };
 
@@ -38,6 +39,20 @@ const spanEnd = (span: SpanRef, appState?: AppStateStatus) => {
   }
 };
 
+const spanCreatorAppState =
+  (tracer: TracerRef, span: SpanRef) =>
+  (currentRouteName: string, currentState: AppStateStatus) => {
+    if (currentState === null || currentState === undefined) {
+      return;
+    }
+
+    if (currentState === "active") {
+      spanStart(tracer, span, currentRouteName);
+    } else {
+      spanEnd(span, currentState);
+    }
+  };
+
 const spanCreator = (
   tracer: TracerRef,
   span: SpanRef,
@@ -66,4 +81,4 @@ const spanCreator = (
 };
 
 export default spanCreator;
-export {spanStart, spanEnd, ATTRIBUTES};
+export {spanStart, spanEnd, spanCreatorAppState, ATTRIBUTES};

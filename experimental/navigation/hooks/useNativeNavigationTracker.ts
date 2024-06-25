@@ -7,7 +7,7 @@ import {AppStateStatus} from "react-native";
 import {ForwardedRef, useCallback, useEffect, useMemo, useRef} from "react";
 
 import {INativeNavigationContainer} from "../types/navigation";
-import spanCreator, {spanEnd, spanStart} from "../otel/spanCreator";
+import spanCreator, {spanCreatorAppState, spanEnd} from "../otel/spanCreator";
 import {TracerRef} from "../otel/hooks/useTrace";
 import useSpan from "../otel/hooks/useSpan";
 
@@ -64,19 +64,13 @@ const useNativeNavigationTracker = (
 
   const handleAppStateListener = useCallback(
     (currentState: AppStateStatus) => {
-      if (
-        navView.current === null ||
-        currentState === null ||
-        currentState === undefined
-      ) {
+      const appStateHandler = spanCreatorAppState(tracer, span);
+
+      if (navView?.current === null) {
         return;
       }
 
-      if (currentState === "active") {
-        spanStart(tracer, span, navView?.current);
-      } else {
-        spanEnd(span, currentState);
-      }
+      appStateHandler(navView?.current, currentState);
     },
     [span, tracer],
   );
