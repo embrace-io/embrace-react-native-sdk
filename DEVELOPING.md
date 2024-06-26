@@ -1,97 +1,130 @@
-# Developing React Native
+# Developing
+
+## Setup
+
+```bash
+corepack enable
+yarn install
+```
+
+## Adding a new package
+
+Any new package under ./packages/ will get automatically picked up as a new Yarn workspace. The directory should include:
+- `package.json` with a name and description (other fields will be filled by yarn constraints, version is supplied by Lerna)
+- `tsconfig.json` that extends from the one at the root
+- `README.md`
+- `src/` and `__tests__` folders to contain the code for the package
+
+## Adding dependencies
+
+Since we are using Yarn workspaces `dependencies` should not be added to the root `package.json` (see [more details](https://stackoverflow.com/a/53558779)).
+If multiple packages include the same dependency Yarn constraints will enforce that the version used matches.
+`devDependencies` are fine to add at the root `package.json` (see [more details](https://github.com/lerna/lerna/issues/1079#issuecomment-337660289))
+if they are shared among multiple packages, otherwise add them to just the individual package that requires it.
+
+## Testing changes during development
+
+From the root of the project you can lint and test all packages with:
+
+```bash
+yarn lint
+yarn test
+```
+
+## Manual integration testing
 
 The [example app](examples/react-native-test-suite/) allows you to test out the React Native Embrace SDK in a representative app.
 
 Code changes will **NOT** automatically be picked up by the example app. You **MUST** follow the instructions to test out local changes.
 
-To get started, install node_modules with `yarn`.
+To get started generate a new artifact from whichever packages you modified:
 
-React Native behaves substantially different between debug/release mode - we should always test release candidates against a release build.
+```bash
+cd packages/<package-modified>/
+yarn build
+yarn pack
+```
 
-## Run on Android
+Then update the example app with that local artifact:
 
-To run on Android, follow the instructions below for debug/release mode.
+```bash
+cd examples/react-native-test-suite
+yarn add ../<path-to-local-artifact>/
+yarn
+```
 
-### Debug mode
+If you alter the node_modules in any way (either by deleting them or running `yarn install`) or make further changes
+then you will need to follow the above instructions again.
 
-`yarn android`
+Then run the app on either Android or iOS, note that React Native behaves substantially different between debug/release
+mode, so we should always test release candidates against a release build.
 
-### Release mode
+Android:
 
+```bash
 `yarn android --variant=release`
+```
 
-## Run on iOS
+iOS:
 
-To run on iOS, follow the instructions below for debug/release mode.
+```bash
+pushd ios; pod install; popd;
+yarn ios --configuration=Release
+```
 
-`pushd ios; pod install; popd;`
+## Testing against new Embrace Android SDK versions
 
-### Debug mode
-
-`yarn ios`
-
-### Release mode
-
-`yarn ios --configuration=Release`
-
-# Testing SDK changes locally
-
-These instructions are temporary & subject to change while we figure out a better way of testing changes.
-
-If you alter the node_modules in any way (either by deleting them or running `yarn install`) then you might need to follow the instructions again.
-
-## Testing JavaScript changes
-
-You can test React Native changes adding this library using `yarn` or `npm`. To do this you have to run `yarn pack` to generate the dist folder and then, in your test project run `yarn add localPath/embrace-io`. (If for some reason your local sdk has node-modules inside, that might bring some errors, delete that folder since it shouldn't have one)
-
-## Testing Android changes
-
-You can test Android changes in our React Native SDK by altering the dependency in the React Native package's `build.gradle`. You can either publish a local artefact with `./gradlew clean assembleRelease publishToMavenLocal`, or if you need CI to pass - publish a beta as documented in the [Android repo](https://github.com/embrace-io/embrace-android-sdk3#qa-releases).
+You can test Embrace Android SDK changes by altering the dependency in the core package's [build.gradle](./packages/core/android/build.gradle).
+And then either publish a local artifact or if you need CI to pass - publish a beta:
 
 ### Local artefact
 
-1. Publish locally with `./gradlew clean assembleRelease publishToMavenLocal -Pversion=<your-version-here>`
+1. Publish locally with `cd packages/core/android && ./gradlew clean assembleRelease publishToMavenLocal -Pversion=<your-version-here>`
 2. Add `mavenLocal()` to the `repositories` closure in `examples/react-native-test-suite/node_modules/embrace-io/android/build.gradle`
-3. Set the correct `embrace-android-sdk` version in both `examples/react-native-test-suite/node_modules/embrace-io/android/build.gradle`
+3. Set the correct `embrace-android-sdk` version in `examples/react-native-test-suite/node_modules/embrace-io/android/build.gradle`
 4. Run the app in the normal way
 
-### Beta artefact
+### Beta artifact
 
 1. Follow the [Android repo](https://github.com/embrace-io/embrace-android-sdk3#qa-releases) instructions for creating a beta
 2. Find `rootProject.allprojects.repositories` in `embrace_android/android/build.gradle` and add `maven {url "https://repo.embrace.io/repository/beta"}`
 3. Add `mavenLocal()` to the `repositories` closure in `examples/react-native-test-suite/node_modules/embrace-io/android/build.gradle`
-4. Set the correct `embrace-android-sdk` version in both `examples/react-native-test-suite/node_modules/embrace-io/android/build.gradle`
+4. Set the correct `embrace-android-sdk` version in `examples/react-native-test-suite/node_modules/embrace-io/android/build.gradle`
 5. Run the app in the normal way
 
-## Testing iOS changes locally
+## Testing against new Embrace iOS SDK versions
 
-### Local artefact
+### Local artifact
 
-You can test changes local changes to the iOS SDK by updating the React Native Embrace project's `podspec` and `Podfile` to point to the local copy.
+You can test changes local changes to the iOS SDK by updating the example app's `podspec` and `Podfile` to point to the local copy.
 
 1. In `examples/react-native-test-suite/node_modules/embrace-io/RNEmbrace.podspec`, change the dependency on the iOS SDK to `s.dependency 'EmbraceIO-LOCAL'`
 2. In `examples/react-native-test-suite/ios/Podfile`, add the following line `pod 'EmbraceIO-LOCAL', :path => 'path/to/ios_sdk'`
 3. In `examples/react-native-test-suite/ios`, run the `pod update` command
 
-### Beta artefact
+### Beta artifact
 
 1. Ask the iOS team to publish a beta of the iOS SDK to the `EmbraceIO-DEV` pod
 2. In `examples/react-native-test-suite/node_modules/embrace-io/RNEmbrace.podspec`, change the dependency on the iOS SDK to `s.dependency 'EmbraceIO-DEV'`
 3. In `examples/react-native-test-suite/ios/Podfile`, add the following line `pod 'EmbraceIO-DEV'`
 4. In `examples/react-native-test-suite/ios`, run the `pod update` command
 
-# Releasing the SDK
+## Automated integration testing
 
-0. Bump the Android (SDK + Swazzler)/iOS dependencies to the latest available stable versions
-   0.1. Update the iOS SDK version in `./RNEmbrace.podspec`
-   0.2. Update the Android SDK version in `./android/gradle.properties`
-1. Bump the SDK version according to semver
-2. Run the example app on Android + iOS (in release mode) and confirm that a session is captured & appears in the dashboard with useful info
-3. Create a PR with all these changes and merge to `master`
-4. Release to npm with `yarn publish --tag <your-version-here>`
+Automated integration testing is being actively developed to replace some of the manual testing outlined above, see [here](./integration-tests/README.md) for more details.
 
-# Releasing a beta SDK version
+## Branching strategy
 
-To release a beta version of the SDK you should add a suffix to the version string. For example, `1.3.0-beta01` would be an appropriate name.
+Generally all proposed changes should target the `master` branch and new releases are cut from there after QA. One exception
+is urgent patch fixes, in those cases a branch should be made from the latest released tag to isolate the fix from any
+unreleased changes on `master` and a patch release will be cut from that new branch.
 
-Otherwise, the release process will be exactly the same as for a regular release.
+## Releasing
+
+1. Bump the Android (SDK + Swazzler)/iOS dependencies to the latest available stable versions
+   1. Update the iOS SDK version in `./packages/core/ios/RNEmbrace.podspec`
+   2. Update the Android SDK version in `./packages/core/android/gradle.properties`
+2. Bump the SDK version according to semver 
+3. Run the example app on Android + iOS (in release mode) and confirm that a session is captured & appears in the dashboard with useful info
+4. Create a PR with all these changes and merge to `master`
+5. Release to npm with `yarn publish --tag <your-version-here>`

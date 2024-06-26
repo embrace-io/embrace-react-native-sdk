@@ -1,26 +1,20 @@
 # React Native Embrace - React Native Navigation
 
-> ## Core Module Required
+> [!IMPORTANT]
 >
 > This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native).
-
-# Add React Native Navigation screen tracker
-
-## Adding Context to Sessions
 
 Embrace can collect basic session data and crashes as you've already seen in the [Crash Reporting](https://embrace.io/docs/react-native/integration/crash-reporting) and [Session Reporting](https://embrace.io/docs/react-native/integration/session-reporting) sections.
 Embrace can also collect the screens that your app opened and include it as context within your sessions.
 Here's how you add the screen tracker to the session.
-
-## Adding the component
-
-Embrace has a separate module for tracking Screens, to use it you will need to add the React Native Navigation Tracker
 
 ### Install the component
 
 ```sh
 yarn add @embrace-io/react-native-navigation
 ```
+
+Or
 
 ```sh
 npm install @embrace-io/react-native-navigation
@@ -30,11 +24,9 @@ npm install @embrace-io/react-native-navigation
 
 Apply the EmbraceNavigationTracker to your Navigation instance. You should do this in your entry point, usually index.js
 
-{{< hint info >}}
-
-If you have more than one navigation instance, you can pass a second parameter to the build method with an identifier
-
-{{< /hint >}}
+> [!TIP]
+> 
+> If you have more than one navigation instance, you can pass a second parameter to the build method with an identifier
 
 ```javascript
 import { Navigation } from "react-native-navigation";
@@ -70,12 +62,12 @@ Embrace automatically collects the native screens, if you do not want to see the
 
 Go to your embrace-config.json inside android/app/src/main and add the sdk_config, your file should be like this
 
-```javascript
+```json
 {
   "app_id": "APP_ID",
   "api_token": "API_TOKEN",
   ...
-  // Add this lines
+  // Add these lines
   "sdk_config": {
     "view_config": {
       "enable_automatic_activity_capture": false
@@ -102,5 +94,4 @@ Go to your Embrace-info.plist inside ios/YOURAPPNAME and add ENABLE_AUTOMATIC_VI
 	<false/>
 </dict>
 </plist>
-
 ```
