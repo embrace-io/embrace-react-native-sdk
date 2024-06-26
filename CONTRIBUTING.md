@@ -1,7 +1,21 @@
 # Contributing
 
-We are not seeking new committers now, but you are welcome to create a github issue explaining your requirements.
+## Contributing License Agreement
 
-If you've found a bug, please contribute a failing [test](https://github.com/embrace-io/embrace-io-sdk/tree/master/examples/react-native-test-suite) case so we can study and fix it.
+Before code can be accepted all contributors must complete our [Individual Contributor License Agreement (CLA)](https://forms.gle/SjXadmUcVwh6NrU68).
 
-If you have a new feature idea, please get in touch with us [support@embrace.io](mailto:support@embrace.io) or create a github issue
+## Pull Requests
+
+If you would like to contribute code you can do so through GitHub by
+forking the repository and sending a pull request.
+
+When submitting code, please make every effort to follow existing conventions
+and style in order to keep the code as readable as possible.
+
+For more details on how to setup your environment and implement changes please see our [development guide](./DEVELOPING.md).
+
+## Reporting issues
+
+If you have any trouble to start contributing, please [contact us directly](mailto:support@embrace.io) or reach out in our [Community Slack](https://embraceio-community.slack.com/)
+Finally, feel free to open a [new issue](https://github.com/embrace-io/embrace-react-native-sdk/issues/new).
+

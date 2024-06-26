@@ -25,6 +25,10 @@ Individual packages are published from this monorepo, reasoning can be found in 
 | [`@embrace-io/react-native-spans`](./packages/spans)                                   | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-spans.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-spans)                                           |
 | [`@embrace-io/react-native-webview-tracker`](./packages/webview-tracker)               | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-webview-tracker.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-webview-tracker)                       |
 
+## Contributing
+
+Please refer to our [contribution guide](./CONTRIBUTING.md) to get started.
+
 ## Support
 
 - Open an [issue](https://github.com/embrace-io/embrace-react-native-sdk/issues/new) for the Embrace team to triage.
