@@ -28,7 +28,7 @@ describe('Uninstall Script iOS', () => {
     } = require('../setup/uninstall');
 
     const resultUnpatch = await removeEmbraceImportAndStartFromFile(
-      'objectivecImportStart'
+      'objectivec'
     );
 
     expect(resultUnpatch).toBe(true);
@@ -60,9 +60,7 @@ describe('Uninstall Script iOS', () => {
       removeEmbraceImportAndStartFromFile,
     } = require('../setup/uninstall');
 
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
-      'swiftImportStart'
-    );
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile('swift');
 
     expect(resultUnpatch).toBe(true);
   });
@@ -83,13 +81,9 @@ describe('Uninstall Script iOS', () => {
     };
     await patchPodfile(mockPackageJson);
 
-    const {
-      removeEmbraceImportAndStartFromFile,
-    } = require('../setup/uninstall');
+    const { removeEmbraceLinkFromFile } = require('../setup/uninstall');
 
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
-      'podFileImport'
-    );
+    const resultUnpatch = await removeEmbraceLinkFromFile('podFileImport');
 
     expect(resultUnpatch).toBe(true);
   });

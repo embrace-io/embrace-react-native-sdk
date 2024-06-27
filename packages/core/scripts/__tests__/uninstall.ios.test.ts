@@ -27,13 +27,9 @@ describe('Uninstall Script iOS', () => {
       }),
       { virtual: true }
     );
-    const {
-      removeEmbraceImportAndStartFromFile,
-    } = require('../setup/uninstall');
+    const { removeEmbraceLinkFromFile } = require('../setup/uninstall');
 
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
-      'podFileImport'
-    );
+    const resultUnpatch = await removeEmbraceLinkFromFile('podFileImport');
 
     expect(resultUnpatch).toBe(true);
 
@@ -105,7 +101,7 @@ describe('Uninstall Script iOS', () => {
 
     const crash = jest.fn();
     try {
-      await removeEmbraceImportAndStartFromFile('objectivecImportStart');
+      await removeEmbraceImportAndStartFromFile('objectivec');
     } catch (e) {
       crash();
     }
@@ -131,7 +127,7 @@ describe('Uninstall Script iOS', () => {
 
     const crash = jest.fn();
     try {
-      await removeEmbraceImportAndStartFromFile('swiftImportStart');
+      await removeEmbraceImportAndStartFromFile('swift');
     } catch (e) {
       crash();
     }
@@ -163,7 +159,7 @@ describe('Uninstall Script iOS', () => {
     } = require('../setup/uninstall');
 
     const resultUnpatch = await removeEmbraceImportAndStartFromFile(
-      'objectivecImportStart'
+      'objectivec'
     );
 
     expect(resultUnpatch).toBe(true);
@@ -197,9 +193,7 @@ describe('Uninstall Script iOS', () => {
       removeEmbraceImportAndStartFromFile,
     } = require('../setup/uninstall');
 
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
-      'swiftImportStart'
-    );
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile('swift');
 
     expect(resultUnpatch).toBe(true);
 

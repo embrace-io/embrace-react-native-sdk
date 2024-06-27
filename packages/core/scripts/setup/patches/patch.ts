@@ -46,13 +46,13 @@ type FindFileFunction = (
   projectName?: string
 ) => FileUpdatable | undefined;
 
-interface PatchDefinition {
+export interface IPatchDefinition {
   fileName: string;
   textsToAdd: TextToAdd[];
   findFileFunction: FindFileFunction;
 }
 
-const PATCH_IOS_SWIFT_APPDELEGATE: PatchDefinition = {
+const PATCH_IOS_SWIFT_APPDELEGATE: IPatchDefinition = {
   fileName: MAIN_CLASS_BY_LANGUAGE.swift,
   textsToAdd: [
     {
@@ -74,7 +74,7 @@ const PATCH_IOS_SWIFT_APPDELEGATE: PatchDefinition = {
     return getAppDelegateByIOSLanguage(projectName, language as IOS_LANGUAGE);
   },
 };
-const PATCH_IOS_OBJECTIVEC_APPDELEGATE: PatchDefinition = {
+const PATCH_IOS_OBJECTIVEC_APPDELEGATE: IPatchDefinition = {
   fileName: MAIN_CLASS_BY_LANGUAGE.objectivec,
   textsToAdd: [
     {
@@ -98,7 +98,7 @@ const PATCH_IOS_OBJECTIVEC_APPDELEGATE: PatchDefinition = {
   },
 };
 
-const PATCH_ANDROID_KOTLIN_MAIN_ACTIVITTY: PatchDefinition = {
+const PATCH_ANDROID_KOTLIN_MAIN_ACTIVITTY: IPatchDefinition = {
   fileName: MAIN_CLASS_BY_LANGUAGE.kotlin,
   textsToAdd: [
     {
@@ -115,7 +115,7 @@ const PATCH_ANDROID_KOTLIN_MAIN_ACTIVITTY: PatchDefinition = {
   findFileFunction: (language: SUPPORTED_LANGUAGES) =>
     getMainApplicationPatchable(language as ANDROID_LANGUAGE),
 };
-const PATCH_ANDROID_JAVA_MAIN_ACTIVITTY: PatchDefinition = {
+const PATCH_ANDROID_JAVA_MAIN_ACTIVITTY: IPatchDefinition = {
   fileName: MAIN_CLASS_BY_LANGUAGE.java,
   textsToAdd: [
     {
@@ -134,10 +134,10 @@ const PATCH_ANDROID_JAVA_MAIN_ACTIVITTY: PatchDefinition = {
 };
 
 type SupportedPatches = {
-  [key in SUPPORTED_LANGUAGES]: PatchDefinition;
+  [key in SUPPORTED_LANGUAGES]: IPatchDefinition;
 };
 
-const SUPPORTED_PATCHES: SupportedPatches = {
+export const SUPPORTED_PATCHES: SupportedPatches = {
   objectivec: PATCH_IOS_OBJECTIVEC_APPDELEGATE,
   swift: PATCH_IOS_SWIFT_APPDELEGATE,
   java: PATCH_ANDROID_JAVA_MAIN_ACTIVITTY,

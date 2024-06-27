@@ -1,35 +1,21 @@
 import EmbraceLogger from '../../src/logger';
 const fs = require('fs');
 
-import {
-  embraceJSON,
-  getBuildGradlePatchable,
-  getMainApplicationPatchable,
-} from '../util/android';
+import { embraceJSON, getBuildGradlePatchable } from '../util/android';
 import { FileUpdatable } from '../util/file';
 import {
   bundlePhaseRE,
-  EMBRACE_IMPORT_OBJECTIVEC,
-  EMBRACE_INIT_OBJECTIVEC,
   embraceNativePod,
   embracePlistPatchable,
   exportSourcemapRNVariable,
-  getAppDelegateByIOSLanguage,
   getPodFile,
   xcodePatchable,
 } from '../util/ios';
 import Wizard, { Step } from '../util/wizard';
 import { androidEmbraceSwazzlerPlugin, androidGenericVersion } from './android';
 import { findNameWithCaseSensitiveFromPath } from './ios';
-import { MAIN_CLASS_BY_LANGUAGE } from './patches/common';
-import {
-  EMBRACE_IMPORT_JAVA,
-  EMBRACE_IMPORT_KOTLIN,
-  EMBRACE_IMPORT_SWIFT,
-  EMBRACE_INIT_JAVA,
-  EMBRACE_INIT_KOTLIN,
-  EMBRACE_INIT_SWIFT,
-} from './patches/patch';
+import { SUPPORTED_LANGUAGES } from './patches/common';
+import { SUPPORTED_PATCHES } from './patches/patch';
 
 const packageJson = require('../../../../../../package.json');
 
@@ -48,66 +34,6 @@ interface IUnlinkEmbraceCode {
   findFileFunction: FindFileFunction;
   docUrl: string;
 }
-
-const UNINSTALL_IOS_SWIFT_APPDELEGATE: IUnlinkEmbraceCode = {
-  stepName: 'Removing Embrace code in AppDelegate',
-  fileName: MAIN_CLASS_BY_LANGUAGE.swift,
-  textsToDelete: [
-    {
-      ITextToDelete: `${EMBRACE_IMPORT_SWIFT}\n`,
-    },
-    {
-      ITextToDelete: `${EMBRACE_INIT_SWIFT}\n`,
-    },
-  ],
-  findFileFunction: () =>
-    getAppDelegateByIOSLanguage(packageJson.name, 'swift'),
-  docUrl: '',
-};
-const UNINSTALL_IOS_OBJECTIVEC_APPDELEGATE: IUnlinkEmbraceCode = {
-  stepName: 'Removing Embrace code in AppDelegate',
-  fileName: MAIN_CLASS_BY_LANGUAGE.objectivec,
-  textsToDelete: [
-    {
-      ITextToDelete: EMBRACE_IMPORT_OBJECTIVEC,
-    },
-    {
-      ITextToDelete: EMBRACE_INIT_OBJECTIVEC,
-    },
-  ],
-  findFileFunction: () =>
-    getAppDelegateByIOSLanguage(packageJson.name, 'objectivec'),
-  docUrl: '',
-};
-
-const UNINSTALL_ANDROID_KOTLIN_MAIN_ACTIVITTY: IUnlinkEmbraceCode = {
-  stepName: 'Removing Embrace code in Main Activity',
-  fileName: MAIN_CLASS_BY_LANGUAGE.kotlin,
-  textsToDelete: [
-    {
-      ITextToDelete: `\n${EMBRACE_IMPORT_KOTLIN}`,
-    },
-    {
-      ITextToDelete: `${EMBRACE_INIT_KOTLIN}\n`,
-    },
-  ],
-  findFileFunction: () => getMainApplicationPatchable('kotlin'),
-  docUrl: '',
-};
-const UNINSTALL_ANDROID_JAVA_MAIN_ACTIVITTY: IUnlinkEmbraceCode = {
-  stepName: 'Removing Embrace code in Main Activity',
-  fileName: MAIN_CLASS_BY_LANGUAGE.java,
-  textsToDelete: [
-    {
-      ITextToDelete: `\n${EMBRACE_IMPORT_JAVA}`,
-    },
-    {
-      ITextToDelete: `${EMBRACE_INIT_JAVA}\n`,
-    },
-  ],
-  findFileFunction: () => getMainApplicationPatchable('java'),
-  docUrl: '',
-};
 
 const UNINSTALL_ANDROID_SWAZZLER_IMPORT: IUnlinkEmbraceCode = {
   stepName: 'Removing Embrace code in build.gradle',
@@ -146,29 +72,18 @@ const UNINSTALL_IOS_PODFILE: IUnlinkEmbraceCode = {
   docUrl: '',
 };
 
-type UNLINK_EMBRACE_CODE =
-  | 'objectivecImportStart'
-  | 'swiftImportStart'
-  | 'javaImportStart'
-  | 'kotlinImportStart'
-  | 'swazzlerImport'
-  | 'swazzlerApply'
-  | 'podFileImport';
+type UNLINK_EMBRACE_CODE = 'swazzlerImport' | 'swazzlerApply' | 'podFileImport';
 type SupportedPatches = {
   [key in UNLINK_EMBRACE_CODE]: IUnlinkEmbraceCode;
 };
 
 const UNLINK_EMBRACE_CODE: SupportedPatches = {
-  objectivecImportStart: UNINSTALL_IOS_OBJECTIVEC_APPDELEGATE,
-  swiftImportStart: UNINSTALL_IOS_SWIFT_APPDELEGATE,
-  javaImportStart: UNINSTALL_ANDROID_JAVA_MAIN_ACTIVITTY,
-  kotlinImportStart: UNINSTALL_ANDROID_KOTLIN_MAIN_ACTIVITTY,
   swazzlerImport: UNINSTALL_ANDROID_SWAZZLER_IMPORT,
   swazzlerApply: UNINSTALL_ANDROID_SWAZZLER_APPLY,
   podFileImport: UNINSTALL_IOS_PODFILE,
 };
 
-export const removeEmbraceImportAndStartFromFile = (
+export const removeEmbraceLinkFromFile = (
   patch: UNLINK_EMBRACE_CODE
 ): boolean => {
   if (UNLINK_EMBRACE_CODE[patch] === undefined) {
@@ -191,6 +106,36 @@ export const removeEmbraceImportAndStartFromFile = (
     logger.log(`Deleting ${ITextToDelete} from ${fileName}`);
     file.deleteLine(ITextToDelete);
     return ITextToDelete;
+  });
+  const hasToPatch = result.some((item) => item);
+  if (hasToPatch) {
+    file.patch();
+  }
+  return hasToPatch;
+};
+
+export const removeEmbraceImportAndStartFromFile = (
+  patch: SUPPORTED_LANGUAGES
+): boolean => {
+  if (SUPPORTED_PATCHES[patch] === undefined) {
+    logger.warn('This language is not supported');
+    return false;
+  }
+
+  const { fileName, textsToAdd, findFileFunction } = SUPPORTED_PATCHES[patch];
+
+  const file = findFileFunction(patch, packageJson.name);
+
+  if (!file) {
+    logger.warn('The file to be patched not found');
+    return false;
+  }
+
+  const result = textsToAdd.map((item) => {
+    const { textToAdd } = item;
+    logger.log(`Deleting ${textToAdd} from ${fileName}`);
+    file.deleteLine(textToAdd);
+    return textToAdd;
   });
   const hasToPatch = result.some((item) => item);
   if (hasToPatch) {
@@ -294,9 +239,7 @@ const getUnlinkFilesStep = () => {
     const run = (wizard: Wizard) =>
       new Promise((resolve, reject) => {
         try {
-          resolve(
-            removeEmbraceImportAndStartFromFile(key as UNLINK_EMBRACE_CODE)
-          );
+          resolve(removeEmbraceLinkFromFile(key as UNLINK_EMBRACE_CODE));
         } catch (e) {
           reject(e);
         }
@@ -309,8 +252,30 @@ const getUnlinkFilesStep = () => {
   });
 };
 
+const getUnlinkImportStartFilesStep = () => {
+  return Object.entries(SUPPORTED_PATCHES).map(([key, value]) => {
+    const run = (wizard: Wizard) =>
+      new Promise((resolve, reject) => {
+        try {
+          resolve(
+            removeEmbraceImportAndStartFromFile(key as SUPPORTED_LANGUAGES)
+          );
+        } catch (e) {
+          reject(e);
+        }
+      });
+    return {
+      name: `Removing Embrace code in ${value.fileName}`,
+      run,
+      docURL:
+        'https://embrace.io/docs/react-native/integration/session-reporting/#starting-embrace-sdk-from-android--ios',
+    } as Step;
+  });
+};
+
 const transformUninstalFunctionsToSteps = (): Step[] => {
   const steps = getUnlinkFilesStep();
+  steps.push(...getUnlinkImportStartFilesStep());
   steps.push(getRemoveEmbraceConfigFileAndroidStep());
   steps.push(getRemoveEmbraceConfigFileIosStep());
   steps.push(getRemoveEmbraceFromXcodeStep());

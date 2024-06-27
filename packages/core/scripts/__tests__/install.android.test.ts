@@ -99,9 +99,7 @@ describe('Patch Android', () => {
       removeEmbraceImportAndStartFromFile,
     } = require('../setup/uninstall');
 
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
-      'javaImportStart'
-    );
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile('java');
 
     expect(resultUnpatch).toBe(true);
   });
@@ -125,9 +123,7 @@ describe('Patch Android', () => {
       removeEmbraceImportAndStartFromFile,
     } = require('../setup/uninstall');
 
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
-      'kotlinImportStart'
-    );
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile('kotlin');
 
     expect(resultUnpatch).toBe(true);
   });
