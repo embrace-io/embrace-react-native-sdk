@@ -7,7 +7,7 @@ const LINKING_ERROR =
   '- You are not using Expo Go\n';
 
 export const TracerProviderModule = NativeModules.TracerProviderModule
-  ? NativeModules.TracerProvider
+  ? NativeModules.TracerProviderModule
   : new Proxy(
       {},
       {

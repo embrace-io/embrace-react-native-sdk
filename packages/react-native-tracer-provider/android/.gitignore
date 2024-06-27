@@ -14,3 +14,7 @@ local.properties
 
 # Bundle artifacts
 *.jsbundle
+
+# See ../DEVELOPING.md
+src/main/java/
+dependencies.gradle

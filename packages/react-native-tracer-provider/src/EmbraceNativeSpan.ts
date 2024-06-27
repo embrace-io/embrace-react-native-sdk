@@ -21,8 +21,8 @@ import {
 /**
  * EmbraceNativeSpan implements a Span over the native Embrace Android and iOS SDKs.
  *
- * A handful of simple attributes are maintained on the JS side for each span include a unique ID based on the
- * tracer's name and version, this is used in calls over the bridge to the native modules to perform the actual operations
+ * A handful of simple attributes are maintained on the JS side for each span including a unique ID based on the
+ * tracer's name and version which is used in calls over the bridge to the native modules to perform the actual operations
  * on the span
  *
  * The JS side of this implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)

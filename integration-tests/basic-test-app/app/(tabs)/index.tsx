@@ -11,7 +11,7 @@ import {
   generateTestSpans,
 } from "@/helpers/generateSpans";
 import { Tracer } from "@opentelemetry/api";
-import { EmbraceNativeTracerProvider } from "@embrace.io/react-native-tracer-provider";
+import { EmbraceNativeTracerProvider } from "@embrace-io/react-native-tracer-provider";
 
 const HomeScreen = () => {
   const handleEndSession = useCallback(() => {

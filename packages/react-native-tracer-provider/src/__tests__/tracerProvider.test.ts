@@ -3,7 +3,6 @@ import {
   context,
   SpanContext,
   SpanKind,
-  SpanStatus,
   SpanStatusCode,
   trace,
   Tracer,
@@ -60,7 +59,7 @@ jest.mock('../TracerProviderModule', () => ({
       time: number
     ) => mockAddEvent(id, name, attributes, time),
     addLinks: (id: string, links: Link[]) => mockAddLinks(id, links),
-    setStatus: (id: string, status: SpanStatus) => mockSetStatus(id, status),
+    setStatus: (id: string, status: {code: string, message?: string}) => mockSetStatus(id, status),
     updateName: (id: string, name: string) => mockUpdateName(id, name),
     endSpan: (id: string, time: number) => mockEndSpan(id, time),
   }
