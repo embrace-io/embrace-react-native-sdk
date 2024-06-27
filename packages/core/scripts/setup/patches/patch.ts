@@ -35,10 +35,13 @@ export const EMBRACE_INIT_KOTLIN =
 
 const logger = new EmbraceLogger(console);
 
+type ORDER = 'after' | 'before';
+type BREAKINGLINE_ORDER = ORDER | 'none' | 'both';
 interface TextToAdd {
   searchText: string | RegExp;
   textToAdd: string;
-  order: 'before' | 'after';
+  order: ORDER;
+  breakingLine: BREAKINGLINE_ORDER;
 }
 
 type FindFileFunction = (
@@ -57,13 +60,15 @@ const PATCH_IOS_SWIFT_APPDELEGATE: IPatchDefinition = {
   textsToAdd: [
     {
       searchText: '@UIApplicationMain',
-      textToAdd: `${EMBRACE_IMPORT_SWIFT}\n`,
+      textToAdd: EMBRACE_IMPORT_SWIFT,
       order: 'before',
+      breakingLine: 'after',
     },
     {
       searchText: /func\s+application\(\s*_\s*[^}]*\{/,
-      textToAdd: `\n${EMBRACE_INIT_SWIFT}`,
+      textToAdd: EMBRACE_INIT_SWIFT,
       order: 'after',
+      breakingLine: 'before',
     },
   ],
   findFileFunction: (language: SUPPORTED_LANGUAGES, projectName?: string) => {
@@ -81,12 +86,14 @@ const PATCH_IOS_OBJECTIVEC_APPDELEGATE: IPatchDefinition = {
       searchText: '#import "AppDelegate.h"',
       textToAdd: EMBRACE_IMPORT_OBJECTIVEC,
       order: 'after',
+      breakingLine: 'both',
     },
     {
       searchText:
         /(-\s*\(BOOL\)\s*application:\s*\(UIApplication\s\*\)\s*(app|application)\s+didFinishLaunchingWithOptions:\s*\(NSDictionary\s*\*\)launchOptions\s*\{\s*)/,
       textToAdd: EMBRACE_INIT_OBJECTIVEC,
       order: 'after',
+      breakingLine: 'after',
     },
   ],
   findFileFunction: (language: SUPPORTED_LANGUAGES, projectName?: string) => {
@@ -103,13 +110,15 @@ const PATCH_ANDROID_KOTLIN_MAIN_ACTIVITTY: IPatchDefinition = {
   textsToAdd: [
     {
       searchText: 'import android.app.Application',
-      textToAdd: `\n${EMBRACE_IMPORT_KOTLIN}`,
+      textToAdd: `${EMBRACE_IMPORT_KOTLIN}`,
       order: 'after',
+      breakingLine: 'before',
     },
     {
       searchText: 'super.onCreate()',
-      textToAdd: `\n${EMBRACE_INIT_KOTLIN}`,
+      textToAdd: `${EMBRACE_INIT_KOTLIN}`,
       order: 'after',
+      breakingLine: 'before',
     },
   ],
   findFileFunction: (language: SUPPORTED_LANGUAGES) =>
@@ -120,13 +129,15 @@ const PATCH_ANDROID_JAVA_MAIN_ACTIVITTY: IPatchDefinition = {
   textsToAdd: [
     {
       searchText: 'import android.app.Application;',
-      textToAdd: `\n${EMBRACE_IMPORT_JAVA}`,
+      textToAdd: EMBRACE_IMPORT_JAVA,
       order: 'after',
+      breakingLine: 'before',
     },
     {
       searchText: 'super.onCreate();',
-      textToAdd: `\n${EMBRACE_INIT_JAVA}`,
+      textToAdd: EMBRACE_INIT_JAVA,
       order: 'after',
+      breakingLine: 'before',
     },
   ],
   findFileFunction: (language: SUPPORTED_LANGUAGES) =>
@@ -144,6 +155,17 @@ export const SUPPORTED_PATCHES: SupportedPatches = {
   kotlin: PATCH_ANDROID_KOTLIN_MAIN_ACTIVITTY,
 };
 
+export const getTextToAddWithBreakingLine = (
+  textToAdd: string,
+  breakingLine: BREAKINGLINE_ORDER,
+  padding: string = ''
+) => {
+  if (breakingLine === 'both') { return `\n${padding}${textToAdd}\n${padding}`; }
+  if (breakingLine === 'before') { return `\n${padding}${textToAdd}`; }
+  if (breakingLine === 'after') { return `${textToAdd}\n${padding}`; }
+  return textToAdd;
+};
+
 const patch = (languague: SUPPORTED_LANGUAGES, projectName?: string) => {
   if (SUPPORTED_PATCHES[languague] === undefined) {
     return logger.warn('This language is not supported');
@@ -159,12 +181,38 @@ const patch = (languague: SUPPORTED_LANGUAGES, projectName?: string) => {
   }
 
   const result = textsToAdd.map((item) => {
-    const { order, textToAdd, searchText } = item;
+    const { order, textToAdd, searchText, breakingLine } = item;
+
+    let padding = '';
+    if (searchText instanceof RegExp) {
+      padding = file
+        .getPaddingAfterStringToTheNextString(searchText)
+        ?.replace(searchText, '');
+    } else {
+      padding = file.getPaddingFromString(searchText)?.replace(searchText, '');
+    }
+
+    const finalTextToAdd = getTextToAddWithBreakingLine(
+      textToAdd,
+      breakingLine,
+      padding
+    );
+
     if (order === 'after') {
-      return addLineAfterToTextInFile(file, textToAdd, searchText, fileName);
+      return addLineAfterToTextInFile(
+        file,
+        finalTextToAdd,
+        searchText,
+        fileName
+      );
     }
     if (order === 'before') {
-      return addLineBeforeToTextInFile(file, textToAdd, searchText, fileName);
+      return addLineBeforeToTextInFile(
+        file,
+        finalTextToAdd,
+        searchText,
+        fileName
+      );
     }
   });
   const hasToPatch = result.some((item) => item);

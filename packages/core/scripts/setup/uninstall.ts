@@ -15,7 +15,10 @@ import Wizard, { Step } from '../util/wizard';
 import { androidEmbraceSwazzlerPlugin, androidGenericVersion } from './android';
 import { findNameWithCaseSensitiveFromPath } from './ios';
 import { SUPPORTED_LANGUAGES } from './patches/common';
-import { SUPPORTED_PATCHES } from './patches/patch';
+import {
+  getTextToAddWithBreakingLine,
+  SUPPORTED_PATCHES,
+} from './patches/patch';
 
 const packageJson = require('../../../../../../package.json');
 
@@ -132,9 +135,25 @@ export const removeEmbraceImportAndStartFromFile = (
   }
 
   const result = textsToAdd.map((item) => {
-    const { textToAdd } = item;
+    const { textToAdd, breakingLine } = item;
+
     logger.log(`Deleting ${textToAdd} from ${fileName}`);
-    file.deleteLine(textToAdd);
+    // let padding = "";
+    // if (searchText.toString().includes("{")) {
+    //   padding = file
+    //     .getPaddingAfterStringToTheNextString(textToAdd)
+    //     ?.replace(textToAdd, "");
+    // } else {
+    //   padding = file.getPaddingFromString(textToAdd)?.replace(textToAdd, "");
+    // }
+    const padding = file.getPaddingFromString(textToAdd)?.replace(textToAdd, '');
+    const finalTextToDelet = getTextToAddWithBreakingLine(
+      `${padding}${textToAdd}`,
+      breakingLine
+    );
+    console.log('WEEE', `${padding?.length}`);
+    console.log('WEEE', `${finalTextToDelet}`);
+    file.deleteLine(finalTextToDelet);
     return textToAdd;
   });
   const hasToPatch = result.some((item) => item);
