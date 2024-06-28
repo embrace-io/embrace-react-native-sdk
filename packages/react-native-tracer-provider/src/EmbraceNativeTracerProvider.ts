@@ -4,8 +4,8 @@ import {
   Tracer,
   TracerProvider,
 } from '@opentelemetry/api';
-import { StackContextManager } from './StackContextManager';
 import { EmbraceNativeTracer } from './EmbraceNativeTracer';
+import { StackContextManager } from './StackContextManager';
 import { TracerProviderModule } from './TracerProviderModule';
 import {
   EmbraceNativeTracerProviderConfig,
@@ -43,8 +43,8 @@ export class EmbraceNativeTracerProvider implements TracerProvider {
     version?: string,
     options?: { schemaUrl?: string }
   ): Tracer {
-    const schemaUrl = options?.schemaUrl || "";
-    const tracerVersion = version || ""
+    const schemaUrl = options?.schemaUrl || '';
+    const tracerVersion = version || '';
     TracerProviderModule.getTracer(name, tracerVersion, schemaUrl);
     return new EmbraceNativeTracer(
       this.contextManager,

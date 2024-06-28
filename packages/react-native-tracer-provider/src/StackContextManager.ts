@@ -4,6 +4,7 @@
  * Since only this file was needed a dependency wasn't added on the entire @opentelemetry/sdk-trace-web package. If this
  * component is separated out into its own package this file can be removed.
  */
+/* tslint:disable */
 
 /*
  * Copyright The OpenTelemetry Authors
