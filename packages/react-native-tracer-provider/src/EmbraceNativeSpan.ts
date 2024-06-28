@@ -30,6 +30,7 @@ import {
 export class EmbraceNativeSpan implements Span {
   private readonly tracerName: string;
   private readonly tracerVersion: string;
+  private readonly tracerSchemaUrl: string;
   private readonly createdIndex: number;
   private readonly spanContextSyncBehaviour: SpanContextSyncBehaviour;
   private recording: boolean = true;
@@ -39,17 +40,19 @@ export class EmbraceNativeSpan implements Span {
   constructor(
     tracerName: string,
     tracerVersion: string,
+    tracerSchemaUrl: string,
     createdIndex: number,
     spanContextSyncBehaviour: SpanContextSyncBehaviour
   ) {
     this.tracerName = tracerName;
     this.tracerVersion = tracerVersion;
+    this.tracerSchemaUrl = tracerSchemaUrl;
     this.createdIndex = createdIndex;
     this.spanContextSyncBehaviour = spanContextSyncBehaviour;
   }
 
   public nativeID(): string {
-    return `${this.tracerName}_${this.tracerVersion}_${this.createdIndex}`;
+    return `${this.tracerName}_${this.tracerVersion}_${this.tracerSchemaUrl}_${this.createdIndex}`;
   }
 
   public creatingNativeSide(creating: Promise<SpanContext>) {

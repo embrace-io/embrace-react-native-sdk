@@ -4,8 +4,7 @@ import {
   Tracer,
   TracerProvider,
 } from '@opentelemetry/api';
-// TODO, worth having a dependency on sdk-trace-web just for this?
-import { StackContextManager } from '@opentelemetry/sdk-trace-web';
+import { StackContextManager } from './StackContextManager';
 import { EmbraceNativeTracer } from './EmbraceNativeTracer';
 import { TracerProviderModule } from './TracerProviderModule';
 import {
@@ -44,14 +43,15 @@ export class EmbraceNativeTracerProvider implements TracerProvider {
     version?: string,
     options?: { schemaUrl?: string }
   ): Tracer {
-    // TODO, pass schemaUrl through?
-
-    TracerProviderModule.getTracer(name, version);
+    const schemaUrl = options?.schemaUrl || "";
+    const tracerVersion = version || ""
+    TracerProviderModule.getTracer(name, tracerVersion, schemaUrl);
     return new EmbraceNativeTracer(
       this.contextManager,
       this.spanContextSyncBehaviour,
       name,
-      version
+      tracerVersion,
+      schemaUrl,
     );
   }
 }

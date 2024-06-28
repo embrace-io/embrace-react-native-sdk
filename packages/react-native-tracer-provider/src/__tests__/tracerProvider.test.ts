@@ -25,14 +25,15 @@ const mockEndSpan = jest.fn();
 
 jest.mock('../TracerProviderModule', () => ({
   TracerProviderModule: {
-    getTracer: (name: string, version: string) =>
-      mockGetTracer(name, version),
+    getTracer: (name: string, version?: string, schemaUrl?: string) =>
+      mockGetTracer(name, version, schemaUrl),
     startSpan: (
       tracerName: string,
       tracerVersion: string,
+      tracerSchemaUrl: string,
       id: string,
       name: string,
-      kind: SpanKind | undefined,
+      kind: string,
       time: number,
       attributes: Attributes,
       links: Link[],
@@ -41,6 +42,7 @@ jest.mock('../TracerProviderModule', () => ({
       mockStartSpan(
         tracerName,
         tracerVersion,
+        tracerSchemaUrl,
         id,
         name,
         kind,
@@ -65,7 +67,7 @@ jest.mock('../TracerProviderModule', () => ({
   }
 }));
 
-describe('Embrace Tracer Provider', () => {
+describe('Embrace Native Tracer Provider', () => {
   let testTracer: Tracer;
 
   beforeEach(() => {
@@ -87,7 +89,7 @@ describe('Embrace Tracer Provider', () => {
     const provider = new EmbraceNativeTracerProvider();
     provider.getTracer('test', 'v1');
 
-    expect(mockGetTracer).toBeCalledWith('test', 'v1');
+    expect(mockGetTracer).toBeCalledWith('test', 'v1', '');
   });
 
   it('should allow starting a span', () => {
@@ -96,7 +98,8 @@ describe('Embrace Tracer Provider', () => {
     expect(mockStartSpan).toHaveBeenCalledWith(
       'test',
       'v1',
-      'test_v1_1',
+      '',
+      'test_v1__1',
       'my-span',
       '',
       0,
@@ -134,7 +137,8 @@ describe('Embrace Tracer Provider', () => {
     expect(mockStartSpan).toHaveBeenCalledWith(
       'test',
       'v1',
-      'test_v1_1',
+      '',
+      'test_v1__1',
       'my-span',
       'CONSUMER',
       1718409600000,
@@ -171,13 +175,14 @@ describe('Embrace Tracer Provider', () => {
     expect(mockStartSpan).toHaveBeenCalledWith(
       'test',
       'v1',
-      'test_v1_2',
+      '',
+      'test_v1__2',
       'my-child-span',
       '',
       0,
       {},
       [],
-      'test_v1_1'
+      'test_v1__1'
     );
   });
 
@@ -191,7 +196,8 @@ describe('Embrace Tracer Provider', () => {
     expect(mockStartSpan).toHaveBeenCalledWith(
       'test',
       'v1',
-      'test_v1_2',
+      '',
+      'test_v1__2',
       'my-child-span',
       '',
       0,
@@ -206,7 +212,8 @@ describe('Embrace Tracer Provider', () => {
       expect(mockStartSpan).toHaveBeenCalledWith(
         'test',
         'v1',
-        'test_v1_1',
+        '',
+        'test_v1__1',
         'my-active-span',
         '',
         0,
@@ -221,13 +228,14 @@ describe('Embrace Tracer Provider', () => {
     expect(mockStartSpan).toHaveBeenCalledWith(
       'test',
       'v1',
-      'test_v1_2',
+      '',
+      'test_v1__2',
       'my-child-span',
       '',
       0,
       {},
       [],
-      'test_v1_1'
+      'test_v1__1'
     );
   });
 
@@ -239,7 +247,8 @@ describe('Embrace Tracer Provider', () => {
         expect(mockStartSpan).toHaveBeenCalledWith(
           'test',
           'v1',
-          'test_v1_1',
+          '',
+          'test_v1__1',
           'my-active-span',
           'CLIENT',
           0,
@@ -255,13 +264,14 @@ describe('Embrace Tracer Provider', () => {
     expect(mockStartSpan).toHaveBeenCalledWith(
       'test',
       'v1',
-      'test_v1_2',
+      '',
+      'test_v1__2',
       'my-child-span',
       '',
       0,
       {},
       [],
-      'test_v1_1'
+      'test_v1__1'
     );
   });
 
@@ -277,7 +287,8 @@ describe('Embrace Tracer Provider', () => {
         expect(mockStartSpan).toHaveBeenCalledWith(
           'test',
           'v1',
-          'test_v1_2',
+          '',
+          'test_v1__2',
           'my-active-span',
           'CLIENT',
           0,
@@ -293,13 +304,14 @@ describe('Embrace Tracer Provider', () => {
     expect(mockStartSpan).toHaveBeenCalledWith(
       'test',
       'v1',
-      'test_v1_3',
+      '',
+      'test_v1__3',
       'my-child-span',
       '',
       0,
       {},
       [],
-      'test_v1_1'
+      'test_v1__1'
     );
   });
 
@@ -313,7 +325,8 @@ describe('Embrace Tracer Provider', () => {
       expect(mockStartSpan).toHaveBeenCalledWith(
         'test',
         'v1',
-        'test_v1_1',
+        '',
+        'test_v1__1',
         'my-active-span',
         'CLIENT',
         0,
@@ -331,13 +344,14 @@ describe('Embrace Tracer Provider', () => {
     expect(mockStartSpan).toHaveBeenCalledWith(
       'test',
       'v1',
-      'test_v1_2',
+      '',
+      'test_v1__2',
       'my-child-span',
       '',
       0,
       {},
       [],
-      'test_v1_1'
+      'test_v1__1'
     );
   });
 
@@ -369,7 +383,7 @@ describe('Embrace Tracer Provider', () => {
     const span = tracer.startSpan('my-span');
     span.spanContext();
 
-    expect(mockSpanContext).toHaveBeenCalledWith('test_v1_1');
+    expect(mockSpanContext).toHaveBeenCalledWith('test_v1__1');
   });
 
   it('should optionally throw an error when attempting to get a pending span context', () => {
@@ -408,7 +422,7 @@ describe('Embrace Tracer Provider', () => {
     const span = testTracer.startSpan('my-span');
     span.setAttribute('my-attr', 'val1');
 
-    expect(mockSetAttributes).toHaveBeenCalledWith('test_v1_1', {
+    expect(mockSetAttributes).toHaveBeenCalledWith('test_v1__1', {
       'my-attr': 'val1',
     });
 
@@ -418,7 +432,7 @@ describe('Embrace Tracer Provider', () => {
       'my-other-attr': 'val2',
     });
 
-    expect(mockSetAttributes).toHaveBeenCalledWith('test_v1_1', {
+    expect(mockSetAttributes).toHaveBeenCalledWith('test_v1__1', {
       'my-attr': 'val1',
       'my-other-attr': 'val2',
     });
@@ -428,7 +442,7 @@ describe('Embrace Tracer Provider', () => {
     const span = testTracer.startSpan('my-span');
     span.addEvent('my-event');
 
-    expect(mockAddEvent).toHaveBeenCalledWith('test_v1_1', 'my-event', {}, 0);
+    expect(mockAddEvent).toHaveBeenCalledWith('test_v1__1', 'my-event', {}, 0);
   });
 
   it('should allow adding an event to a span with attributes', () => {
@@ -436,7 +450,7 @@ describe('Embrace Tracer Provider', () => {
     span.addEvent('my-event', { 'my-attr': 'val1' });
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      'test_v1_1',
+      'test_v1__1',
       'my-event',
       { 'my-attr': 'val1' },
       0
@@ -448,7 +462,7 @@ describe('Embrace Tracer Provider', () => {
     span.addEvent('my-event', new Date(Date.UTC(2019, 5, 15, 0, 0, 0, 0)));
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      'test_v1_1',
+      'test_v1__1',
       'my-event',
       {},
       1560556800000
@@ -460,7 +474,7 @@ describe('Embrace Tracer Provider', () => {
     span.addEvent('my-event', { 'my-attr': 'val1' }, 1590556800000);
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      'test_v1_1',
+      'test_v1__1',
       'my-event',
       { 'my-attr': 'val1' },
       1590556800000
@@ -483,7 +497,7 @@ describe('Embrace Tracer Provider', () => {
 
     span.addLink(link1);
 
-    expect(mockAddLinks).toHaveBeenCalledWith('test_v1_1', [link1]);
+    expect(mockAddLinks).toHaveBeenCalledWith('test_v1__1', [link1]);
 
     mockAddLinks.mockClear();
     const link2 = {
@@ -499,13 +513,13 @@ describe('Embrace Tracer Provider', () => {
     };
     span.addLinks([link2]);
 
-    expect(mockAddLinks).toHaveBeenCalledWith('test_v1_1', [link2]);
+    expect(mockAddLinks).toHaveBeenCalledWith('test_v1__1', [link2]);
   });
 
   it('should allow setting a span\'s status', () => {
     const span = testTracer.startSpan('my-span');
     span.setStatus({ code: SpanStatusCode.ERROR });
-    expect(mockSetStatus).toHaveBeenCalledWith('test_v1_1', {
+    expect(mockSetStatus).toHaveBeenCalledWith('test_v1__1', {
       code: 'ERROR',
     });
   });
@@ -513,7 +527,7 @@ describe('Embrace Tracer Provider', () => {
   it('should allow updating a span\'s name', () => {
     const span = testTracer.startSpan('my-span');
     span.updateName('new-name');
-    expect(mockUpdateName).toHaveBeenCalledWith('test_v1_1', 'new-name');
+    expect(mockUpdateName).toHaveBeenCalledWith('test_v1__1', 'new-name');
   });
 
   it('should allow recording an exception on the span', () => {
@@ -521,7 +535,7 @@ describe('Embrace Tracer Provider', () => {
     span.recordException({ message: 'error', name: 'error-name' });
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      'test_v1_1',
+      'test_v1__1',
       'exception',
       { 'exception.message': 'error', 'exception.type': 'error-name' },
       0
@@ -538,7 +552,7 @@ describe('Embrace Tracer Provider', () => {
     });
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      'test_v1_1',
+      'test_v1__1',
       'exception',
       {
         'exception.message': 'error',
@@ -554,7 +568,7 @@ describe('Embrace Tracer Provider', () => {
     span.recordException('error', new Date(Date.UTC(2024, 5, 15, 0, 0, 0)));
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      'test_v1_1',
+      'test_v1__1',
       'exception',
       { 'exception.message': 'error' },
       1718409600000
@@ -568,7 +582,7 @@ describe('Embrace Tracer Provider', () => {
 
     span.end();
 
-    expect(mockEndSpan).toHaveBeenCalledWith('test_v1_1', 0);
+    expect(mockEndSpan).toHaveBeenCalledWith('test_v1__1', 0);
     expect(span.isRecording()).toBe(false);
 
     // No update operations should go through after the span is ended
@@ -608,6 +622,29 @@ describe('Embrace Tracer Provider', () => {
     const span = testTracer.startSpan('my-span');
     span.end([1600556800, 200000000]);
 
-    expect(mockEndSpan).toHaveBeenCalledWith('test_v1_1', 1600556800200);
+    expect(mockEndSpan).toHaveBeenCalledWith('test_v1__1', 1600556800200);
+  });
+
+  it('should allow getting a tracer with a schemaUrl', () => {
+    const provider = new EmbraceNativeTracerProvider();
+    const tracerWithSchema = provider.getTracer('test', 'v1', {schemaUrl: 's1'});
+
+    expect(mockGetTracer).toBeCalledWith('test', 'v1', 's1');
+
+    tracerWithSchema.startSpan('my-span');
+
+    // Schema URL should be included to uniquely identify tracer and spans
+    expect(mockStartSpan).toHaveBeenCalledWith(
+      'test',
+      'v1',
+      's1',
+      'test_v1_s1_1',
+      'my-span',
+      '',
+      0,
+      {},
+      [],
+      ''
+    );
   });
 });

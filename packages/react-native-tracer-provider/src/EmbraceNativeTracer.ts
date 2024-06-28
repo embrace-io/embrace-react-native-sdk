@@ -26,6 +26,7 @@ import { normalizeAttributes, normalizeLinks, normalizeTime } from './util';
 export class EmbraceNativeTracer implements Tracer {
   private readonly name: string;
   private readonly version: string;
+  private readonly schemaUrl: string;
   private spansCreated: number;
   private readonly contextManager: ContextManager;
   private readonly spanContextSyncBehaviour: SpanContextSyncBehaviour;
@@ -33,10 +34,12 @@ export class EmbraceNativeTracer implements Tracer {
     contextManager: ContextManager,
     spanContextSyncBehaviour: SpanContextSyncBehaviour,
     name: string,
-    version?: string
+    version: string,
+    schemaUrl: string,
   ) {
     this.name = name;
-    this.version = version || '';
+    this.version = version;
+    this.schemaUrl = schemaUrl;
     this.spansCreated = 0;
     this.contextManager = contextManager;
     this.spanContextSyncBehaviour = spanContextSyncBehaviour;
@@ -53,6 +56,7 @@ export class EmbraceNativeTracer implements Tracer {
     const nativeSpan = new EmbraceNativeSpan(
       this.name,
       this.version,
+      this.schemaUrl,
       this.spansCreated,
       this.spanContextSyncBehaviour
     );
@@ -61,6 +65,7 @@ export class EmbraceNativeTracer implements Tracer {
       TracerProviderModule.startSpan(
         this.name,
         this.version,
+        this.schemaUrl,
         nativeSpan.nativeID(),
         name,
         kind ? SpanKind[kind] : '',
@@ -74,6 +79,7 @@ export class EmbraceNativeTracer implements Tracer {
     return nativeSpan;
   }
 
+  // Taken from https://github.com/open-telemetry/opentelemetry-js/blob/01a2c35a694e57df45f063d61506ef9e9938eb7d/packages/opentelemetry-sdk-trace-base/src/Tracer.ts#L199-L242
   public startActiveSpan<F extends (span: Span) => ReturnType<F>>(
     name: string,
     fn: F
@@ -111,8 +117,6 @@ export class EmbraceNativeTracer implements Tracer {
       ctx = arg3 as Context | undefined;
       fn = arg4 as F;
     }
-    // Taken from https://github.com/open-telemetry/opentelemetry-js/blob/main/packages/opentelemetry-sdk-trace-base/src/Tracer.ts#L226C1-L242C4
-
     const parentContext = ctx ?? this.contextManager.active();
     const span = this.startSpan(name, opts, parentContext);
     const contextWithSpanSet = trace.setSpan(parentContext, span);

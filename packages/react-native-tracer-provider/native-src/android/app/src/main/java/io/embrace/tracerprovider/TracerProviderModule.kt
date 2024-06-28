@@ -23,10 +23,10 @@ import io.opentelemetry.context.Context
 import io.opentelemetry.exporter.logging.LoggingSpanExporter
 import io.opentelemetry.sdk.trace.SdkTracerProvider
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
+import java.util.concurrent.ConcurrentHashMap
 
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
-import kotlin.collections.HashMap
 
 /**
  * Needed so WritableNativeMap can be swapped out for JavaOnlyMap during testing as the former
@@ -51,8 +51,8 @@ private const val SPAN_STATUS_MESSAGE_KEY = "message"
 
 class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     private val log = Logger.getLogger(this.javaClass.name)
-    private val tracers = HashMap<String, Tracer>()
-    private val spans = HashMap<String, Span>()
+    private val tracers = ConcurrentHashMap<String, Tracer>()
+    private val spans = ConcurrentHashMap<String, Span>()
     private var tracerProvider: TracerProvider
     private var writableMapBuilder: WritableMapBuilder
 
@@ -162,25 +162,39 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
         this.writableMapBuilder = writableMapBuilder
     }
 
+    private fun getTracerKey(name: String, version: String, schemaUrl: String): String {
+        return "$name $version $schemaUrl"
+    }
+
     /**
      * Methods to allow the JS side to conform to @opentelemetry-js/api
      */
 
-    @ReactMethod fun getTracer(name: String, version: String) {
-        val id = "$name $version"
+    @ReactMethod fun getTracer(name: String, version: String, schemaUrl: String) {
+        val id = getTracerKey(name, version, schemaUrl)
 
         if (tracers.containsKey(id)) {
             return
         }
 
-        tracers[id] = tracerProvider.get(name, version)
+        val builder = tracerProvider.tracerBuilder(name)
+
+        if (version != "") {
+            builder.setInstrumentationVersion(version)
+        }
+
+        if (schemaUrl != "") {
+            builder.setSchemaUrl(schemaUrl)
+        }
+
+        tracers[id] = builder.build()
     }
 
-    @ReactMethod fun startSpan(tracerName: String, tracerVersion: String, spanBridgeID: String,
-                               name: String, kind: String, time: Double,
+    @ReactMethod fun startSpan(tracerName: String, tracerVersion: String, tracerSchemaUrl: String,
+                               spanBridgeID: String, name: String, kind: String, time: Double,
                                attributes: ReadableMap, links: ReadableArray, parentID: String,
                                promise: Promise) {
-        val tracer = tracers["$tracerName $tracerVersion"] ?: return
+        val tracer = tracers[getTracerKey(tracerName, tracerVersion, tracerSchemaUrl)] ?: return
         val spanBuilder = tracer.spanBuilder(name)
 
         // Set kind

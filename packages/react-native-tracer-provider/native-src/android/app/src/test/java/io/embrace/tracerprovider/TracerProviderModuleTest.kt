@@ -51,7 +51,7 @@ class TracerProviderModuleTest {
 
             val context: ReactApplicationContext = mock()
             tracerProviderModule = TracerProviderModule(context, provider, JavaOnlyMapMapBuilder())
-            tracerProviderModule.getTracer("test", "v1")
+            tracerProviderModule.getTracer("test", "v1", "")
 
             promise = mock()
         }
@@ -65,7 +65,7 @@ class TracerProviderModuleTest {
 
     @Test
     fun startSpanSimple() {
-        tracerProviderModule.startSpan("test", "v1", "span_0",
+        tracerProviderModule.startSpan("test", "v1", "", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise)
         tracerProviderModule.endSpan("span_0", 0.0)
@@ -122,7 +122,7 @@ class TracerProviderModuleTest {
             )
         )
 
-        tracerProviderModule.startSpan("test", "v1", "span_0",
+        tracerProviderModule.startSpan("test", "v1", "", "span_0",
             "my-span", "CLIENT", 1718386928001.0, attributes, links,
             "", promise)
         tracerProviderModule.endSpan("span_0" , 1728386928001.0)
@@ -163,10 +163,10 @@ class TracerProviderModuleTest {
 
     @Test
     fun startSpanWithParent() {
-        tracerProviderModule.startSpan("test", "v1", "span_0",
+        tracerProviderModule.startSpan("test", "v1", "", "span_0",
             "parent-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise)
-        tracerProviderModule.startSpan("test", "v1", "span_1",
+        tracerProviderModule.startSpan("test", "v1", "", "span_1",
             "child-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "span_0", promise)
         tracerProviderModule.endSpan("span_0", 0.0)
@@ -186,7 +186,7 @@ class TracerProviderModuleTest {
 
     @Test
     fun setAttributes() {
-        tracerProviderModule.startSpan("test", "v1", "span_0",
+        tracerProviderModule.startSpan("test", "v1", "", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise)
         tracerProviderModule.setAttributes("span_0", JavaOnlyMap.of(
@@ -219,7 +219,7 @@ class TracerProviderModuleTest {
 
     @Test
     fun addEvent() {
-        tracerProviderModule.startSpan("test", "v1", "span_0",
+        tracerProviderModule.startSpan("test", "v1", "", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise)
         tracerProviderModule.addEvent("span_0", "my-1st-event",
@@ -250,7 +250,7 @@ class TracerProviderModuleTest {
 
     @Test
     fun addLinks() {
-        tracerProviderModule.startSpan("test", "v1", "span_0",
+        tracerProviderModule.startSpan("test", "v1", "", "span_0",
             "my-span", "", 1718386928001.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise)
         tracerProviderModule.addLinks("span_0", JavaOnlyArray.of(
@@ -292,13 +292,13 @@ class TracerProviderModuleTest {
 
     @Test
     fun setStatus() {
-        tracerProviderModule.startSpan("test", "v1", "span_0",
+        tracerProviderModule.startSpan("test", "v1", "", "span_0",
             "my-span-1", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise)
         tracerProviderModule.setStatus("span_0", JavaOnlyMap.of("code", "ERROR"))
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        tracerProviderModule.startSpan("test", "v1", "span_1",
+        tracerProviderModule.startSpan("test", "v1", "", "span_1",
             "my-span-2", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise)
         tracerProviderModule.setStatus("span_1", JavaOnlyMap.of("code", "OK", "message", "some message"))
@@ -320,7 +320,7 @@ class TracerProviderModuleTest {
 
     @Test
     fun updateName() {
-        tracerProviderModule.startSpan("test", "v1", "span_0",
+        tracerProviderModule.startSpan("test", "v1", "", "span_0",
             "my-span-1", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise)
         tracerProviderModule.updateName("span_0", "my-updated-span-name")
@@ -338,7 +338,7 @@ class TracerProviderModuleTest {
     @Test
     fun startSpanInvalidKind() {
         tracerProviderModule.startSpan(
-            "test", "v1", "span_0",
+            "test", "v1", "", "span_0",
             "my-span", "foo", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise
         )
@@ -359,7 +359,7 @@ class TracerProviderModuleTest {
     @Test
     fun setStatusInvalid() {
         tracerProviderModule.startSpan(
-            "test", "v1", "span_0",
+            "test", "v1", "", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise
         )
@@ -375,6 +375,41 @@ class TracerProviderModuleTest {
 
             assertEquals("my-span", span1.name)
             assertEquals(StatusCode.UNSET, span1.status.statusCode)
+        }
+    }
+
+
+    @Test
+    fun startSpanWithSchemaURL() {
+        // schemaUrl should form part of the unique key so should not find the tracer we setup
+        // in beforeEach if we set a different value
+        tracerProviderModule.startSpan("test", "v1", "schema", "span_0",
+            "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+            "", promise)
+        tracerProviderModule.endSpan("span_0", 0.0)
+
+        argumentCaptor<Collection<SpanData>>().apply {
+            verify(exporter, times(0)).export(capture())
+            assertEquals(0, allValues.size)
+        }
+
+        // Create a tracer with that schemaUrl, should work now
+        tracerProviderModule.getTracer("test", "v1", "schema")
+        tracerProviderModule.startSpan("test", "v1", "schema", "span_0",
+            "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+            "", promise)
+        tracerProviderModule.endSpan("span_0", 0.0)
+
+        argumentCaptor<Collection<SpanData>>().apply {
+            verify(exporter, times(1)).export(capture())
+            assertEquals(1, allValues.size)
+
+            val spans = allValues[0].asSequence().withIndex()
+            val span1 = spans.elementAt(0).value
+
+            assertEquals(1, spans.count())
+            assertEquals("my-span", span1.name)
+            assertTrue(span1.hasEnded())
         }
     }
 }
