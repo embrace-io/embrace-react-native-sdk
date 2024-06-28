@@ -1,32 +1,18 @@
 {
-  "name": "embrace-io",
-  "version": "3.51.0",
-  "private": "false",
-  "author": {
-    "name": "Embrace.io",
-    "email": "truenorth@embrace.io"
-  },
-  "homepage": "https://embrace.io/",
-  "description": "A React Native wrapper for Embrace SDK",
-  "main": "dist/src/embrace.js",
-  "types": "dist/src/embrace.d.ts",
-  "files": [
-    "/dist",
-    "/android",
-    "/ios",
-    "RNEmbrace.podspec",
-    "react-native.config.js"
+  "name": "embrace-react-native-monorepo",
+  "private": true,
+  "description": "Monorepo for packages that power Embrace's React Native SDK.",
+  "workspaces": [
+    "packages/*"
   ],
+  "packageManager": "yarn@4.3.1",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
-    "publish-modules": "npx lerna run tsc && npx lerna publish --tag-version-prefix='rn-os-modules-'",
-    "build:watch": "tsc -w --preserveWatchOutput",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
-    "prebuild": "npm run lint && rm -rf dist",
+    "publish": "npx lerna run build && npx lerna publish",
     "build": "tsc",
-    "preversion": "npm run lint && npm run build",
-    "version": "git add -A",
-    "postversion": "git push && git push --tags",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
     "test": "jest",
     "docs": "typedoc --options typedoc.json --inputFiles ./src/embrace.ts && touch ./docs/.nojekyll && git add docs"
   },
@@ -37,28 +23,8 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "yarn prettier",
       "yarn lint"
     ]
-  },
-  "license": "ISC",
-  "keywords": [
-    "react-native",
-    "react-component",
-    "tracking",
-    "embrace",
-    "bug tracker"
-  ],
-  "peerDependencies": {
-    "react-native": ">=0.56.0"
-  },
-  "dependencies": {
-    "glob": "^7.1.4",
-    "gzip-js": "^0.3.2",
-    "inquirer": "^6.5.1",
-    "promise": "^8.0.3",
-    "semver": "^7.1.3",
-    "xcode": "^2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -73,6 +39,7 @@
     "@types/semver": "^7.1.0",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
+    "@yarnpkg/types": "^4.0.0",
     "babel-jest": "^25.3.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -94,18 +61,5 @@
     "ts-jest": "^25.3.1",
     "typedoc": "^0.17.8",
     "typescript": "^4.7.4"
-  },
-  "rnpm": {
-    "commands": {
-      "postlink": "node node_modules/embrace-io/dist/scripts/postlink",
-      "postunlink": "node node_modules/embrace-io/dist/scripts/postunlink"
-    }
-  },
-  "workspaces": [
-    "packages/*"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:embrace-io/embrace-io.git"
   }
 }

@@ -1,44 +1,44 @@
 {
   "name": "@embrace-io/react-native-webview-tracker",
   "version": "4.1.2",
-  "description": "Allows to track events on WebViews components",
-  "author": {
-    "name": "Embrace.io",
-    "email": "truenorth@embrace.io"
+  "description": "Allows to track events on WebView components using the Embrace SDK",
+  "peerDependencies": {
+    "react-native": ">=0.56.0"
   },
-  "homepage": "https://embrace.io/",
-  "license": "ISC",
-  "main": "lib/src/index.js",
-  "typings": "lib/src/index.d.ts",
+  "author": "Embrace <support@embrace.io> (https://embrace.io/)",
+  "bugs": {
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk/issues",
+    "email": "support@embrace.io"
+  },
+  "homepage": "https://github.com/embrace-io/embrace-react-native-sdk",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk",
+    "directory": "packages/webview-tracker"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
   },
-  "peerDependencies": {
-    "react-native": ">=0.56.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^28.1.7",
-    "react": "^18.2.0",
-    "react-native": "^0.56.0"
-  },
+  "keywords": [
+    "embrace",
+    "react-native",
+    "tracking",
+    "observability",
+    "instrumentation",
+    "telemetry",
+    "bug tracker"
+  ],
   "files": [
     "lib"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
-    "tsc": "tsc",
-    "test": "node ./__tests__/webview-tracker.test.ts",
-    "build": "yarn pack"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:embrace-io/embrace-io.git"
-  },
-  "bugs": {
-    "url": "https://github.com/embrace-io/embrace-io/issues"
-  },
-  "gitHead": "0e15bb316225a075d6dc2437b9784b441d6c0533"
+    "build": "tsc"
+  }
 }

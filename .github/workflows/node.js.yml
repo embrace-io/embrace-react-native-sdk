@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+      - run: corepack enable
       - run: yarn
       - run: yarn lint
       - run: yarn test --watchAll=false --coverage
