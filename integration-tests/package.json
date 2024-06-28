@@ -1,6 +1,6 @@
 {
   "name": "integration-tests",
-  "version": "1.0.0",
+  "private": true,
   "description": "Integration test harness",
   "main": "index.js",
   "scripts": {

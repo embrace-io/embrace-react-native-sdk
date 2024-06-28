@@ -27,6 +27,7 @@
     "version": "git add -A",
     "postversion": "git push && git push --tags",
     "test": "jest",
+    "native-test": "npx lerna run native-test --scope=@embrace-io/react-native-tracer-provider",
     "docs": "typedoc --options typedoc.json --inputFiles ./src/embrace.ts && touch ./docs/.nojekyll && git add docs"
   },
   "husky": {

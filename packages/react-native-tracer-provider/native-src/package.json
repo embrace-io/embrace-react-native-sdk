@@ -1,0 +1,10 @@
+{
+  "name": "react-native-tracer-provider-native-source",
+  "private": true,
+  "dependencies": {
+    "react-native": "0.74.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

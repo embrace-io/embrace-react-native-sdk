@@ -1,7 +1,6 @@
 {
   "name": "basic-test-app",
   "main": "expo-router/entry",
-  "version": "1.0.0",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -16,6 +15,7 @@
   },
   "dependencies": {
     "@embrace-io/react-native": "file:../artifacts/embrace-io-react-native-local.tgz",
+    "@embrace-io/react-native-tracer-provider": "file:../artifacts/embrace-io-react-native-tracer-provider-local.tgz",
     "@expo/vector-icons": "^14.0.0",
     "@react-navigation/native": "^6.0.2",
     "expo": "~51.0.9",
