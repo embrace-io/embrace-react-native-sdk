@@ -160,9 +160,15 @@ export const getTextToAddWithBreakingLine = (
   breakingLine: BREAKINGLINE_ORDER,
   padding: string = ''
 ) => {
-  if (breakingLine === 'both') { return `\n${padding}${textToAdd}\n${padding}`; }
-  if (breakingLine === 'before') { return `\n${padding}${textToAdd}`; }
-  if (breakingLine === 'after') { return `${textToAdd}\n${padding}`; }
+  if (breakingLine === 'both') {
+    return `\n${padding}${textToAdd}\n${padding}`;
+  }
+  if (breakingLine === 'before') {
+    return `\n${padding}${textToAdd}`;
+  }
+  if (breakingLine === 'after') {
+    return `${textToAdd}\n${padding}`;
+  }
   return textToAdd;
 };
 
@@ -184,6 +190,7 @@ const patch = (languague: SUPPORTED_LANGUAGES, projectName?: string) => {
     const { order, textToAdd, searchText, breakingLine } = item;
 
     let padding = '';
+    // If its a regex we take the spaces from the next breaking line to the next line
     if (searchText instanceof RegExp) {
       padding = file
         .getPaddingAfterStringToTheNextString(searchText)
