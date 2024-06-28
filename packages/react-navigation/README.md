@@ -1,28 +1,24 @@
 # React Native Embrace - React Navigation
 
-> ## Core Module Required
+> [!IMPORTANT]
 >
 > This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native).
-
-# Add React Navigation screen tracker
-
-## Adding Context to Sessions
 
 Embrace can collect basic session data and crashes as you've already seen in the [Crash Reporting](https://embrace.io/docs/react-native/integration/crash-reporting) and [Session Reporting](https://embrace.io/docs/react-native/integration/session-reporting) sections.
 Embrace can also collect the screens that your app opened and include it as context within your sessions.
 Here's how you add the screen tracker to the session.
 
-Currently we are only supporting the React Navigation SDK, if you are using another library please contact us at <support@embrace.io> or on Slack if you would like to request support.
-
-## Adding the component
-
-Embrace has a separate module for tracking Screens, to use it you will need to add the React Navigation Tracker
+Currently we are only supporting the React Navigation SDK, if you are using another library please contact us at <support@embrace.io>,
+on [Slack](https://embraceio-community.slack.com/), or open a [new issue](https://github.com/embrace-io/embrace-react-native-sdk/issues/new)
+if you would like to request support.
 
 ### Install the component
 
 ```sh
 yarn add @embrace-io/react-navigation
 ```
+
+Or
 
 ```sh
 npm install @embrace-io/react-navigation
@@ -59,7 +55,7 @@ Embrace automatically collects the native screens, if you do not want to see the
 
 Go to your embrace-config.json inside android/app/src/main and add the sdk_config, your file should be like this
 
-```javascript
+```json
 {
   "app_id": "APP_ID",
   "api_token": "API_TOKEN",
@@ -91,5 +87,4 @@ Go to your Embrace-info.plist inside ios/YOURAPPNAME and add ENABLE_AUTOMATIC_VI
 	<false/>
 </dict>
 </plist>
-
 ```

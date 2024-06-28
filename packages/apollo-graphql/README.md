@@ -1,27 +1,20 @@
 # React Native Embrace - Apollo GraphQL
 
-> ## Core Module Required
+> [!IMPORTANT]
 >
 > This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native).
 
-# Add React Native Apollo Tracker
-
-## Adding Context to Sessions
-
 Embrace can collect basic session data and crashes as you've already seen in the [Crash Reporting](https://embrace.io/docs/react-native/integration/crash-reporting) and [Session Reporting](https://embrace.io/docs/react-native/integration/session-reporting) sections.
-Embrace can also collect the screens that your app opened and include it as context within your sessions.
-Here's how you add the screen tracker to the session.
-
-## Adding the component
-
-Embrace has a separate module for tracking Apollo network, to use it you will need to add the Apollo Tracker
+Embrace can also collect the network requests your app makes when using Apollo GraphQL.
+Here's how you add the Apollo GraphQL tracker to the session.
 
 ### Install the component
 
 ```sh
 yarn add @embrace-io/apollo-graphql
-
 ```
+
+Or
 
 ```sh
 npm install @embrace-io/apollo-graphql
@@ -71,8 +64,6 @@ const ApolloWrapper = () => {
 };
 ```
 
-{{< hint info >}}
-
-The build method has a third parameter that is platform, you can pass ios or android, if you only want to track in one of them
-
-{{< /hint >}}
+> [!TIP]
+> 
+> The build method has a third parameter that is platform, you can pass ios or android, if you only want to track in one of them
