@@ -1,5 +1,6 @@
 package io.embrace.tracerprovider
 
+import io.embrace.android.embracesdk.Embrace;
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -17,14 +18,13 @@ import io.opentelemetry.api.trace.SpanKind
 import io.opentelemetry.api.trace.StatusCode
 import io.opentelemetry.api.trace.TraceFlags
 import io.opentelemetry.api.trace.TraceState
-import io.opentelemetry.api.trace.TracerProvider
 import io.opentelemetry.api.trace.Tracer
+import io.opentelemetry.api.trace.TracerProvider
 import io.opentelemetry.context.Context
 import io.opentelemetry.exporter.logging.LoggingSpanExporter
 import io.opentelemetry.sdk.trace.SdkTracerProvider
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 import java.util.concurrent.ConcurrentHashMap
-
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
 
@@ -50,7 +50,7 @@ private const val SPAN_STATUS_CODE_KEY = "code"
 private const val SPAN_STATUS_MESSAGE_KEY = "message"
 
 class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-    private val log = Logger.getLogger(this.javaClass.name)
+    private val log = Logger.getLogger("[Embrace]")
     private val tracers = ConcurrentHashMap<String, Tracer>()
     private val spans = ConcurrentHashMap<String, Span>()
     private var tracerProvider: TracerProvider
@@ -143,7 +143,9 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
     }
 
     init {
-        // TODO replace with Embrace OTEL provider
+        log.warning(Embrace.AppFramework.UNITY.toString())
+        // TODO replace with Embrace OTEL provider from 6.8.3
+        // tracerProvider = Embrace.getInstance().getOpenTelemetry().getTracerProvider()
         tracerProvider = SdkTracerProvider.builder()
             .addSpanProcessor(SimpleSpanProcessor.create(LoggingSpanExporter.create()))
             .build()
