@@ -1,3 +1,13 @@
+/**
+ * These helpers setup scenarios for testing the associated payloads that get generated from them in
+ * integration-tests/specs/*.test.ts.
+ *
+ * Ideally this test app would just expose simple buttons and inputs for starting spans, setting attributes, etc.
+ * and then the test spec would include both the setup and the assertions. However, in practice the UI that would be
+ * needed to recreate these scenarios ends up being quite complex, so we compromise a bit of readability here and split
+ * the test setup and assertions between these two spots
+ */
+
 /* 'use strict'; */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -15,6 +25,8 @@ export function generateTestSpans(tracer: Tracer) {
   const span3 = tracer.startSpan("test-3");
   // Not ended so shouldn't be part of the output
   tracer.startSpan("test-4");
+  // TODO, invalid end time before start time, does it end up getting dropped?
+  tracer.startSpan("test-5").end(new Date("2000-01-01T00:00:00Z"));
 
   // Set some attributes
   span1.setAttributes({

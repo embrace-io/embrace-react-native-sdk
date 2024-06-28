@@ -1,6 +1,5 @@
 package io.embrace.tracerprovider
 
-
 import com.facebook.react.bridge.JavaOnlyArray
 import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
@@ -28,10 +27,9 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 
-
 class JavaOnlyMapMapBuilder : WritableMapBuilder {
     override fun build() : WritableMap {
-        return JavaOnlyMap();
+        return JavaOnlyMap()
     }
 }
 
@@ -43,8 +41,8 @@ class TracerProviderModuleTest {
 
         @JvmStatic
         @BeforeAll
-        fun beforeAll(): Unit {
-            exporter = mock() {
+        fun beforeAll() {
+            exporter = mock {
                 on { export(any()) } doReturn CompletableResultCode.ofSuccess()
             }
             val provider = SdkTracerProvider.builder()
@@ -60,7 +58,7 @@ class TracerProviderModuleTest {
     }
 
     @BeforeEach
-    fun beforeEach(): Unit {
+    fun beforeEach() {
         clearInvocations(exporter)
         clearInvocations(promise)
     }
@@ -98,7 +96,7 @@ class TracerProviderModuleTest {
 
     @Test
     fun startSpanWithOptions() {
-        var attributes = JavaOnlyMap.of(
+        val attributes = JavaOnlyMap.of(
             "my-attr1", "some-string",
             "my-attr2", true,
             "my-attr3", 344,
@@ -106,7 +104,7 @@ class TracerProviderModuleTest {
             "my-attr5", JavaOnlyArray.of(true, false),
             "my-attr6", JavaOnlyArray.of(22, 44),
         )
-        var links = JavaOnlyArray.of(
+        val links = JavaOnlyArray.of(
             JavaOnlyMap.of(
                 "context", JavaOnlyMap.of(
                     "spanId", "1111000011110000",

@@ -30,6 +30,13 @@ describe("Tracer Provider", () => {
       expectValidIDs(spans[1]);
       expectValidIDs(spans[2]);
 
+      // TODO update when testing against the actual Embrace SDK
+      const expectedSpanDurations = [
+         2591701,
+         2352861857268000,
+         5927541
+      ];
+
       expect(sessionPayloads[0].spans).toEqual([
         {
           trace_id: spans[0].trace_id,
@@ -37,7 +44,7 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-1-updated",
           start_time_unix_nano: 1718045981827000 * 1000000,
-          end_time_unix_nano: 1718045981827000 * 1000000 + 2591701,
+          end_time_unix_nano: 1718045981827000 * 1000000 + expectedSpanDurations[0],
           status: "OK",
           events: [],
           attributes: {},
@@ -48,7 +55,7 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-2",
           start_time_unix_nano: 1718045981828000 * 1000000,
-          end_time_unix_nano: 1718045981828000 * 1000000 + 2352861857268000,
+          end_time_unix_nano: 1718045981828000 * 1000000 + expectedSpanDurations[1],
           status: "UNSET",
           events: [
             {
@@ -77,7 +84,7 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-3",
           start_time_unix_nano: 1718045981828000 * 1000000,
-          end_time_unix_nano: 1718045981828000 * 1000000 + 5927541,
+          end_time_unix_nano: 1718045981828000 * 1000000 + expectedSpanDurations[2],
           status: "UNSET",
           events: [
             {
@@ -115,6 +122,15 @@ describe("Tracer Provider", () => {
       expectValidIDs(spans[3]);
       expectValidIDs(spans[4]);
 
+      // TODO update when testing against the actual Embrace SDK
+      const expectedSpanDurations = [
+         46207,
+         2606099,
+         693721,
+         756168,
+         841156,
+      ];
+
       expect(sessionPayloads[0].spans).toEqual([
         {
           trace_id: spans[0].trace_id,
@@ -122,7 +138,7 @@ describe("Tracer Provider", () => {
           parent_span_id: spans[1].span_id,
           name: "test-5",
           start_time_unix_nano: 1718047385968000 * 1000000,
-          end_time_unix_nano: 1718047385968000 * 1000000 + 46207,
+          end_time_unix_nano: 1718047385968000 * 1000000 + expectedSpanDurations[0],
           status: "UNSET",
           events: [],
           attributes: {},
@@ -133,7 +149,7 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-4",
           start_time_unix_nano: 1718047385966000 * 1000000,
-          end_time_unix_nano: 1718047385966000 * 1000000 + 2606099,
+          end_time_unix_nano: 1718047385966000 * 1000000 + expectedSpanDurations[1],
           status: "UNSET",
           events: [],
           attributes: {},
@@ -144,7 +160,7 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-1",
           start_time_unix_nano: 1718047075563000 * 1000000,
-          end_time_unix_nano: 1718047075563000 * 1000000 + 693721,
+          end_time_unix_nano: 1718047075563000 * 1000000 + expectedSpanDurations[2],
           status: "UNSET",
           events: [],
           attributes: {},
@@ -155,7 +171,7 @@ describe("Tracer Provider", () => {
           parent_span_id: spans[2].span_id,
           name: "test-2",
           start_time_unix_nano: 1718047075563000 * 1000000,
-          end_time_unix_nano: 1718047075563000 * 1000000 + 756168,
+          end_time_unix_nano: 1718047075563000 * 1000000 + expectedSpanDurations[3],
           status: "UNSET",
           events: [],
           attributes: {
@@ -168,7 +184,7 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-3",
           start_time_unix_nano: 1718047075564000 * 1000000,
-          end_time_unix_nano: 1718047075564000 * 1000000 + 841156,
+          end_time_unix_nano: 1718047075564000 * 1000000 + expectedSpanDurations[4],
           status: "UNSET",
           events: [],
           attributes: {

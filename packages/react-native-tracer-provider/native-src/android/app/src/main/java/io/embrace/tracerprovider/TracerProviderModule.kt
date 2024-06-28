@@ -1,9 +1,9 @@
-package io.embrace.tracerprovider;
+package io.embrace.tracerprovider
 
 import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
@@ -11,20 +11,21 @@ import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
-import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Span
 import io.opentelemetry.api.trace.SpanContext
 import io.opentelemetry.api.trace.SpanKind
 import io.opentelemetry.api.trace.StatusCode
 import io.opentelemetry.api.trace.TraceFlags
 import io.opentelemetry.api.trace.TraceState
-import io.opentelemetry.api.trace.TracerProvider;
-import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.api.trace.TracerProvider
+import io.opentelemetry.api.trace.Tracer
 import io.opentelemetry.context.Context
-import io.opentelemetry.exporter.logging.LoggingSpanExporter;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import io.opentelemetry.exporter.logging.LoggingSpanExporter
+import io.opentelemetry.sdk.trace.SdkTracerProvider
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit
+import java.util.logging.Logger
 import kotlin.collections.HashMap
 
 /**
@@ -37,15 +38,23 @@ interface WritableMapBuilder {
 
 class WritableNativeMapBuilder : WritableMapBuilder {
     override fun build() : WritableMap {
-        return WritableNativeMap();
+        return WritableNativeMap()
     }
 }
 
+private const val LINK_ATTRIBUTES_KEY = "attributes"
+private const val LINK_SPAN_CONTEXT_KEY = "context"
+private const val SPAN_CONTEXT_TRACE_ID_KEY = "traceId"
+private const val SPAN_CONTEXT_SPAN_ID_KEY = "spanId"
+private const val SPAN_STATUS_CODE_KEY = "code"
+private const val SPAN_STATUS_MESSAGE_KEY = "message"
+
 class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-    private val tracers = HashMap<String, Tracer>();
-    private val spans = HashMap<String, Span>();
-    private var tracerProvider: TracerProvider;
-    private var writableMapBuilder: WritableMapBuilder;
+    private val log = Logger.getLogger(this.javaClass.name)
+    private val tracers = HashMap<String, Tracer>()
+    private val spans = HashMap<String, Span>()
+    private var tracerProvider: TracerProvider
+    private var writableMapBuilder: WritableMapBuilder
 
     override fun getName() = "TracerProviderModule"
 
@@ -54,15 +63,8 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
      * actual OTEL API objects
      */
 
-    private val LINK_ATTRIBUTES_KEY = "attributes";
-    private val LINK_SPAN_CONTEXT_KEY = "context";
-    private val SPAN_CONTEXT_TRACE_ID_KEY = "traceId";
-    private val SPAN_CONTEXT_SPAN_ID_KEY = "spanId";
-    private val SPAN_STATUS_CODE_KEY = "code";
-    private val SPAN_STATUS_MESSAGE_KEY = "message";
-
     private fun stringListFromReadableArray(array: ReadableArray) :List<String> {
-        val list: MutableList<String> = mutableListOf();
+        val list: MutableList<String> = mutableListOf()
 
         for(i in 0..<array.size()) {
             list.add(array.getString(i))
@@ -71,7 +73,7 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
     }
 
     private fun doubleListFromReadableArray(array: ReadableArray) :List<Double> {
-        val list: MutableList<Double> = mutableListOf();
+        val list: MutableList<Double> = mutableListOf()
 
         for(i in 0..<array.size()) {
             list.add(array.getDouble(i))
@@ -80,7 +82,7 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
     }
 
     private fun booleanListFromReadableArray(array: ReadableArray) :List<Boolean> {
-        val list: MutableList<Boolean> = mutableListOf();
+        val list: MutableList<Boolean> = mutableListOf()
 
         for(i in 0..<array.size()) {
             list.add(array.getBoolean(i))
@@ -94,7 +96,7 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
 
         while(it.hasNextKey()) {
             val key = it.nextKey()
-            val type = map.getType(key);
+            val type = map.getType(key)
 
             when (type) {
                 ReadableType.Boolean -> builder.put(key, map.getBoolean(key))
@@ -102,7 +104,7 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
                 ReadableType.String -> builder.put(key, map.getString(key) ?: "")
                 ReadableType.Array -> {
                     val array = map.getArray(key)
-                    val arrayType = array?.getType(0);
+                    val arrayType = array?.getType(0)
                     when (arrayType) {
                         ReadableType.Boolean -> builder.put(AttributeKey.booleanArrayKey(key), booleanListFromReadableArray(array))
                         ReadableType.Number -> builder.put(AttributeKey.doubleArrayKey(key), doubleListFromReadableArray(array))
@@ -115,7 +117,7 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
         }
 
 
-        return builder.build();
+        return builder.build()
     }
 
     private fun spanContextFromReadableMap(map: ReadableMap) : SpanContext {
@@ -178,14 +180,16 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
                                name: String, kind: String, time: Double,
                                attributes: ReadableMap, links: ReadableArray, parentID: String,
                                promise: Promise) {
-        val tracer = tracers["$tracerName $tracerVersion"] ?: return;
-        val spanBuilder = tracer.spanBuilder(name);
+        val tracer = tracers["$tracerName $tracerVersion"] ?: return
+        val spanBuilder = tracer.spanBuilder(name)
 
         // Set kind
         if (kind.isNotEmpty()) {
             try {
                 spanBuilder.setSpanKind(SpanKind.valueOf(kind))
-            } catch(e: IllegalArgumentException) { }
+            } catch(e: IllegalArgumentException) {
+                log.warning("invalid kind for startSpan: $kind")
+            }
         }
 
         // Set time
@@ -211,15 +215,15 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
         }
 
         // Set parent
-        val parent = spans[parentID];
+        val parent = spans[parentID]
         if (parentID.isEmpty() || parent == null) {
             spanBuilder.setNoParent()
         } else {
             spanBuilder.setParent(parent.storeInContext(Context.root()))
         }
 
-        val span = spanBuilder.startSpan();
-        spans[spanBridgeID] = span;
+        val span = spanBuilder.startSpan()
+        spans[spanBridgeID] = span
         promise.resolve(spanContextToWritableMap(span.spanContext))
     }
 
@@ -228,12 +232,12 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
     }
 
     @ReactMethod fun setAttributes(spanBridgeID: String, attributes: ReadableMap) {
-        val span = spans[spanBridgeID] ?: return;
-        span.setAllAttributes(attributesFromReadableMap(attributes));
+        val span = spans[spanBridgeID] ?: return
+        span.setAllAttributes(attributesFromReadableMap(attributes))
     }
 
     @ReactMethod fun addEvent(spanBridgeID: String, eventName: String, attributes: ReadableMap, time: Double) {
-        val span = spans[spanBridgeID] ?: return;
+        val span = spans[spanBridgeID] ?: return
 
         if (time != 0.0) {
             span.addEvent(eventName, attributesFromReadableMap(attributes), time.toLong(), TimeUnit.MILLISECONDS)
@@ -243,7 +247,7 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
     }
 
     @ReactMethod fun addLinks(spanBridgeID: String, links: ReadableArray) {
-        val span = spans[spanBridgeID] ?: return;
+        val span = spans[spanBridgeID] ?: return
         for(i in 0..<links.size()) {
             val link = links.getMap(i)
             val linkSpanContext = link.getMap(LINK_SPAN_CONTEXT_KEY) ?: continue
@@ -258,7 +262,7 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
     }
 
     @ReactMethod fun setStatus(spanBridgeID: String, status: ReadableMap) {
-        val span = spans[spanBridgeID] ?: return;
+        val span = spans[spanBridgeID] ?: return
         val statusCode = status.getString(SPAN_STATUS_CODE_KEY) ?: return
         val message = status.getString(SPAN_STATUS_MESSAGE_KEY) ?: ""
 
@@ -268,21 +272,23 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
             } else {
                 span.setStatus(StatusCode.valueOf(statusCode), message)
             }
-        } catch(e: IllegalArgumentException) {}
+        } catch(e: IllegalArgumentException) {
+            log.warning("invalid statusCode for setStatus: $statusCode")
+        }
     }
 
     @ReactMethod fun updateName(spanBridgeID: String, name: String) {
-        val span = spans[spanBridgeID] ?: return;
-        span.updateName(name);
+        val span = spans[spanBridgeID] ?: return
+        span.updateName(name)
     }
 
     @ReactMethod fun endSpan(spanBridgeID: String, endTime: Double) {
-        val span = spans[spanBridgeID] ?: return;
+        val span = spans[spanBridgeID] ?: return
 
         if (endTime == 0.0) {
-            span.end();
+            span.end()
         } else {
-            span.end(endTime.toLong(), TimeUnit.MILLISECONDS);
+            span.end(endTime.toLong(), TimeUnit.MILLISECONDS)
         }
     }
 }
