@@ -4,86 +4,81 @@ beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
 
-describe('Uninstall Script iOS', () => {
-  test('Patch AppDelegate.mm', async () => {
-    jest.mock('glob', () => ({
+describe("Uninstall Script iOS", () => {
+  test("Patch AppDelegate.mm", async () => {
+    jest.mock("glob", () => ({
       sync: () => [
-        './packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace.mm',
+        "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace.mm",
       ],
     }));
     jest.mock(
-      '../../../../../../package.json',
+      "../../../../../../package.json",
       () => ({
-        name: 'test',
+        name: "test",
       }),
-      { virtual: true }
+      {virtual: true},
     );
-    const patchAppDelegate = require('../setup/patches/patch').default;
-    const result = await patchAppDelegate('objectivec', { name: 'test' });
+    const patchAppDelegate = require("../setup/patches/patch").default;
+    const result = await patchAppDelegate("objectivec", {name: "test"});
 
     expect(result).toBe(true);
 
-    const {
-      removeEmbraceImportAndStartFromFile,
-    } = require('../setup/uninstall');
+    const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
 
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile(
-      'objectivec'
-    );
+    const resultUnpatch =
+      await removeEmbraceImportAndStartFromFile("objectivec");
 
     expect(resultUnpatch).toBe(true);
   });
-  test('Patch AppDelegate.swift', async () => {
-    jest.mock('glob', () => ({
+  test("Patch AppDelegate.swift", async () => {
+    jest.mock("glob", () => ({
       sync: (pattern: string) => {
-        if (pattern.includes('swift')) {
+        if (pattern.includes("swift")) {
           return [
-            './packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace.swift',
+            "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace.swift",
           ];
         }
         return [];
       },
     }));
     jest.mock(
-      '../../../../../../package.json',
+      "../../../../../../package.json",
       () => ({
-        name: 'test',
+        name: "test",
       }),
-      { virtual: true }
+      {virtual: true},
     );
-    const patchAppDelegate = require('../setup/patches/patch').default;
-    const result = await patchAppDelegate('swift', { name: 'test' });
+    const patchAppDelegate = require("../setup/patches/patch").default;
+    const result = await patchAppDelegate("swift", {name: "test"});
 
     expect(result).toBe(true);
 
-    const {
-      removeEmbraceImportAndStartFromFile,
-    } = require('../setup/uninstall');
+    const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
 
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile('swift');
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile("swift");
 
     expect(resultUnpatch).toBe(true);
   });
-  test('Patch Podfile', async () => {
-    jest.mock('glob', () => ({
+  test("Patch Podfile", async () => {
+    jest.mock("glob", () => ({
       sync: () => [
-        './packages/core/scripts/__tests__/__mocks__/ios/PodfileWithoutEmbrace',
+        "./packages/core/scripts/__tests__/__mocks__/ios/PodfileWithoutEmbrace",
       ],
     }));
-    jest.mock('semver/functions/gte', () => () => false);
+    jest.mock("semver/functions/gte", () => () => false);
 
-    const { patchPodfile } = require('../setup/ios');
+    const {patchPodfile} = require("../setup/ios");
     const mockPackageJson = {
-      name: 'Test',
+      name: "Test",
       dependencies: {
-        'react-native': '0.0.0',
+        "react-native": "0.0.0",
       },
     };
     await patchPodfile(mockPackageJson);
 
-    const { removeEmbraceLinkFromFile } = require('../setup/uninstall');
+    const {removeEmbraceLinkFromFile} = require("../setup/uninstall");
 
-    const resultUnpatch = await removeEmbraceLinkFromFile('podFileImport');
+    const resultUnpatch = await removeEmbraceLinkFromFile("podFileImport");
 
     expect(resultUnpatch).toBe(true);
   });

@@ -7,4 +7,4 @@ export interface Events {
   attributes?: Attributes;
 }
 
-export type SPAN_ERROR_CODES = 'None' | 'Failure' | 'UserAbandon' | 'Unknown';
+export type SPAN_ERROR_CODES = "None" | "Failure" | "UserAbandon" | "Unknown";

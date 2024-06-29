@@ -1,9 +1,9 @@
 type ErrorHandler = (error: Error, callback: () => void) => void;
 
 type GlobalErrorHandler = (
-    previousHandler: (error: Error, isFatal?: boolean) => void,
-    handleError: ErrorHandler
-  ) => (error: Error, isFatal?: boolean) => void;
+  previousHandler: (error: Error, isFatal?: boolean) => void,
+  handleError: ErrorHandler,
+) => (error: Error, isFatal?: boolean) => void;
 
 const handleGlobalError: GlobalErrorHandler =
   (previousHandler, handleError) => (error, isFatal) => {
@@ -15,4 +15,4 @@ const handleGlobalError: GlobalErrorHandler =
     handleError(error, callback);
   };
 
-export { handleGlobalError };
+export {handleGlobalError};

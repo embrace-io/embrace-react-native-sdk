@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require("fs");
 
 export interface Patchable {
   patch: () => void;
@@ -19,7 +19,7 @@ export const patchFiles = (
   ...files: Array<() => Promise<Patchable>>
 ): Promise<void> => {
   return chainPromises(...files).then((patchables: Patchable[]) => {
-    patchables.map((p) => p.patch());
+    patchables.map(p => p.patch());
   });
 };
 
@@ -28,17 +28,17 @@ const chainPromises = (
 ): Promise<any[]> =>
   promises.reduce(
     (prev: Promise<any>, cur: () => Promise<any>) =>
-      prev.then((prevRes) => cur().then((curRes) => [...prevRes, curRes])),
-    Promise.resolve([])
+      prev.then(prevRes => cur().then(curRes => [...prevRes, curRes])),
+    Promise.resolve([]),
   );
 
 export const NoopFile = {
-  path: '',
-  contents: '',
+  path: "",
+  contents: "",
   patch: (): void => {},
   hasLine: (_: string) => false,
-  getPaddingFromString: (searchString: string) => '',
-  getPaddingAfterStringToTheNextString: (searchString: RegExp) => '',
+  getPaddingFromString: (searchString: string) => "",
+  getPaddingAfterStringToTheNextString: (searchString: RegExp) => "",
   addBefore: (line: string, add: string) => {},
   addAfter: (line: string, add: string) => {},
   deleteLine: (line: string) => {},
@@ -48,15 +48,15 @@ class FileContents implements FileUpdatable {
   public contents: string;
   public path: string;
 
-  constructor(path: string = '') {
+  constructor(path: string = "") {
     this.path = path;
-    this.contents = fs.readFileSync(path, 'utf8');
+    this.contents = fs.readFileSync(path, "utf8");
   }
 
   public getPaddingFromString(searchString: string): string {
     const index = this.contents.indexOf(searchString);
 
-    const lastLineBreakIndex = this.contents.lastIndexOf('\n', index);
+    const lastLineBreakIndex = this.contents.lastIndexOf("\n", index);
 
     const start = lastLineBreakIndex === -1 ? 0 : lastLineBreakIndex + 1;
     const leadingWhitespace = this.contents
@@ -65,21 +65,21 @@ class FileContents implements FileUpdatable {
     if (leadingWhitespace) {
       return leadingWhitespace[0];
     }
-    return '';
+    return "";
   }
 
   public getPaddingAfterStringToTheNextString(searchString: RegExp): string {
     const match = this.contents.match(searchString);
 
     if (!match) {
-      return '';
+      return "";
     }
     const index = match.index;
 
-    const nextLineBreakIndex = this.contents.indexOf('\n', index);
+    const nextLineBreakIndex = this.contents.indexOf("\n", index);
 
     if (nextLineBreakIndex === -1) {
-      return '';
+      return "";
     }
 
     let afterLineBreakIndex = nextLineBreakIndex + 2;
@@ -97,7 +97,7 @@ class FileContents implements FileUpdatable {
     if (spacesBetween) {
       return spacesBetween[0];
     }
-    return '';
+    return "";
   }
 
   public hasLine(line: string | RegExp): boolean {
@@ -117,7 +117,7 @@ class FileContents implements FileUpdatable {
   public addAfter(line: string | RegExp, add: string) {
     if (this.hasLine(line)) {
       let replaceWith = line;
-      let space = '' as string | RegExp;
+      let space = "" as string | RegExp;
       if (line instanceof RegExp) {
         const matches = this.contents.match(line) || [];
         if (matches.length === 0) {
@@ -133,14 +133,14 @@ class FileContents implements FileUpdatable {
       }
       this.contents = this.contents.replace(
         line,
-        `${replaceWith}${space}${add}`
+        `${replaceWith}${space}${add}`,
       );
     }
   }
 
   public deleteLine(line: string | RegExp) {
     if (this.hasLine(line)) {
-      this.contents = this.contents.replace(line, '');
+      this.contents = this.contents.replace(line, "");
     }
   }
 

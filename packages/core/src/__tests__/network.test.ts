@@ -3,8 +3,8 @@ jest.useFakeTimers();
 beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
-describe('Log network call With Axios', () => {
-  test('Verify the instance has an Axios structure', () => {
+describe("Log network call With Axios", () => {
+  test("Verify the instance has an Axios structure", () => {
     const axiosMockedOK = {
       interceptors: {
         request: {
@@ -33,19 +33,19 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
     expect(applyNetworkInterceptors(axiosMockedOK)).resolves.toEqual(true);
     expect(applyNetworkInterceptors()).resolves.toEqual(false);
     expect(applyNetworkInterceptors(axiosMockedNOK)).resolves.toEqual(false);
     expect(
-      applyNetworkInterceptors(axiosMockedNOKJustInterceptor)
+      applyNetworkInterceptors(axiosMockedNOKJustInterceptor),
     ).resolves.toEqual(false);
     expect(
-      applyNetworkInterceptors(axiosMockedNOKInterceptorWithRequest)
+      applyNetworkInterceptors(axiosMockedNOKInterceptorWithRequest),
     ).resolves.toEqual(false);
   });
 
-  test('Axios \'use\' methods should be called', () => {
+  test("Axios 'use' methods should be called", () => {
     const axiosMocked = {
       interceptors: {
         request: {
@@ -57,15 +57,15 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
-    expect(axiosMocked.interceptors.request.use).toBeCalled();
-    expect(axiosMocked.interceptors.response.use).toBeCalled();
+    expect(axiosMocked.interceptors.request.use).toHaveBeenCalled();
+    expect(axiosMocked.interceptors.response.use).toHaveBeenCalled();
   });
 
-  test('Axios \'use\' methods should be called with Func', () => {
+  test("Axios 'use' methods should be called with Func", () => {
     Promise.reject = jest.fn();
     const mockLogNetworkRequest = jest.fn();
 
@@ -84,7 +84,7 @@ describe('Log network call With Axios', () => {
           handlers: [] as Record<string, any>,
           use(
             responseConfig: (t: any) => {},
-            responseOnReject: (t: any) => {}
+            responseOnReject: (t: any) => {},
           ) {
             this.handlers.push({
               fulfilled: responseConfig,
@@ -95,7 +95,7 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           logNetworkRequest: mockLogNetworkRequest,
@@ -103,41 +103,41 @@ describe('Log network call With Axios', () => {
       },
     }));
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
     expect(axiosMocked.interceptors.request.handlers.length).toEqual(1);
     expect(axiosMocked.interceptors.response.handlers.length).toEqual(1);
 
-    axiosMocked.interceptors.request.handlers[0].rejected('');
-    axiosMocked.interceptors.response.handlers[0].rejected('');
+    axiosMocked.interceptors.request.handlers[0].rejected("");
+    axiosMocked.interceptors.response.handlers[0].rejected("");
 
-    const requestMock = { embraceMetadata: { startInMillis: 1655838253076 } };
+    const requestMock = {embraceMetadata: {startInMillis: 1655838253076}};
 
     expect(
-      Object.keys(axiosMocked.interceptors.request.handlers[0].fulfilled({}))
+      Object.keys(axiosMocked.interceptors.request.handlers[0].fulfilled({})),
     ).toEqual(Object.keys(requestMock));
 
     const responsePropMock = {
       config: {
-        method: 'get',
-        url: 'google.com',
-        embraceMetadata: { startInMillis: 1655838253076 },
-        data: { getBytes: () => 123 },
+        method: "get",
+        url: "google.com",
+        embraceMetadata: {startInMillis: 1655838253076},
+        data: {getBytes: () => 123},
       },
       status: 200,
-      data: { getBytes: () => 12 },
+      data: {getBytes: () => 12},
     };
 
     axiosMocked.interceptors.response.handlers[0].fulfilled(responsePropMock);
 
-    expect(mockLogNetworkRequest).toBeCalledTimes(1);
+    expect(mockLogNetworkRequest).toHaveBeenCalledTimes(1);
 
-    expect(Promise.reject).toBeCalledTimes(2);
+    expect(Promise.reject).toHaveBeenCalledTimes(2);
   });
 
-  test('Axios Request Config param not set', () => {
+  test("Axios Request Config param not set", () => {
     const axiosMocked = {
       interceptors: {
         request: {
@@ -153,7 +153,7 @@ describe('Log network call With Axios', () => {
           handlers: [] as Record<string, any>,
           use(
             responseConfig: (t: any) => {},
-            responseOnReject: (t: any) => {}
+            responseOnReject: (t: any) => {},
           ) {
             this.handlers.push({
               fulfilled: responseConfig,
@@ -164,20 +164,20 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
     expect(axiosMocked.interceptors.request.handlers[0].fulfilled()).toEqual(
-      undefined
+      undefined,
     );
   });
 
-  test('Shouldn\'t track network data', () => {
+  test("Shouldn't track network data", () => {
     Promise.reject = jest.fn();
     const mockLogNetworkRequest = jest.fn();
     jest.mock(
-      'react-native',
+      "react-native",
       () => ({
         NativeModules: {
           EmbraceManager: {
@@ -185,7 +185,7 @@ describe('Log network call With Axios', () => {
           },
         },
       }),
-      { virtual: true }
+      {virtual: true},
     );
     const axiosMocked = {
       interceptors: {
@@ -202,7 +202,7 @@ describe('Log network call With Axios', () => {
           handlers: [] as Record<string, any>,
           use(
             responseConfig: (t: any) => {},
-            responseOnReject: (t: any) => {}
+            responseOnReject: (t: any) => {},
           ) {
             this.handlers.push({
               fulfilled: responseConfig,
@@ -213,42 +213,42 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
     const responsePropMockWithoutMethod = {
       config: {
-        url: 'google.com',
-        embraceMetadata: { startInMillis: 1655838253076 },
-        data: { getBytes: () => 123 },
+        url: "google.com",
+        embraceMetadata: {startInMillis: 1655838253076},
+        data: {getBytes: () => 123},
       },
       status: 200,
-      data: { getBytes: () => 12 },
+      data: {getBytes: () => 12},
     };
 
     axiosMocked.interceptors.response.handlers[0].fulfilled(
-      responsePropMockWithoutMethod
+      responsePropMockWithoutMethod,
     );
 
     const responsePropMockWithoutURL = {
       config: {
-        method: 'get',
-        embraceMetadata: { startInMillis: 1655838253076 },
-        data: { getBytes: () => 123 },
+        method: "get",
+        embraceMetadata: {startInMillis: 1655838253076},
+        data: {getBytes: () => 123},
       },
       status: 200,
-      data: { getBytes: () => 12 },
+      data: {getBytes: () => 12},
     };
 
     axiosMocked.interceptors.response.handlers[0].fulfilled(
-      responsePropMockWithoutURL
+      responsePropMockWithoutURL,
     );
 
     const responsePropMockWithoutMetadata = {
       config: {
-        method: 'get',
-        url: 'google.com',
+        method: "get",
+        url: "google.com",
         data: undefined,
       },
       status: 200,
@@ -256,13 +256,13 @@ describe('Log network call With Axios', () => {
     };
 
     axiosMocked.interceptors.response.handlers[0].fulfilled(
-      responsePropMockWithoutMetadata
+      responsePropMockWithoutMetadata,
     );
 
-    expect(mockLogNetworkRequest).toBeCalledTimes(0);
+    expect(mockLogNetworkRequest).toHaveBeenCalledTimes(0);
   });
 
-  test('Not tracking bytes', () => {
+  test("Not tracking bytes", () => {
     const axiosMocked = {
       interceptors: {
         request: {
@@ -278,7 +278,7 @@ describe('Log network call With Axios', () => {
           handlers: [] as Record<string, any>,
           use(
             responseConfig: (t: any) => {},
-            responseOnReject: (t: any) => {}
+            responseOnReject: (t: any) => {},
           ) {
             this.handlers.push({
               fulfilled: responseConfig,
@@ -289,15 +289,15 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
     const responsePropMock = {
       config: {
-        method: 'get',
-        url: 'google.com',
-        embraceMetadata: { startInMillis: 1655838253076 },
+        method: "get",
+        url: "google.com",
+        embraceMetadata: {startInMillis: 1655838253076},
         data: {},
       },
       status: 200,
@@ -307,11 +307,11 @@ describe('Log network call With Axios', () => {
     axiosMocked.interceptors.response.handlers[0].fulfilled(responsePropMock);
   });
 
-  test('Track rejected error', () => {
+  test("Track rejected error", () => {
     const mockLogNetworkRequest = jest.fn();
 
     jest.mock(
-      'react-native',
+      "react-native",
       () => ({
         NativeModules: {
           EmbraceManager: {
@@ -319,7 +319,7 @@ describe('Log network call With Axios', () => {
           },
         },
       }),
-      { virtual: true }
+      {virtual: true},
     );
     const axiosMocked = {
       interceptors: {
@@ -336,7 +336,7 @@ describe('Log network call With Axios', () => {
           handlers: [] as Record<string, any>,
           use(
             responseConfig: (t: any) => {},
-            responseOnReject: (t: any) => {}
+            responseOnReject: (t: any) => {},
           ) {
             this.handlers.push({
               fulfilled: responseConfig,
@@ -347,30 +347,30 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
     const responseErrorPropMock = {
-      message: 'undefined is not an object',
-      stack: 'evaluating \'d[0].a\'',
+      message: "undefined is not an object",
+      stack: "evaluating 'd[0].a'",
     };
 
     axiosMocked.interceptors.response.handlers[0].rejected(
-      responseErrorPropMock
+      responseErrorPropMock,
     );
 
-    expect(mockLogNetworkRequest).toBeCalledTimes(0);
+    expect(mockLogNetworkRequest).toHaveBeenCalledTimes(0);
   });
 
-  test('Track http code != 2xx iOS', () => {
+  test("Track http code != 2xx iOS", () => {
     const mockLogNetworkRequest = jest.fn();
 
     jest.mock(
-      'react-native',
+      "react-native",
       () => ({
         Platform: {
-          OS: 'ios',
+          OS: "ios",
         },
         NativeModules: {
           EmbraceManager: {
@@ -378,7 +378,7 @@ describe('Log network call With Axios', () => {
           },
         },
       }),
-      { virtual: true }
+      {virtual: true},
     );
     const axiosMocked = {
       interceptors: {
@@ -395,7 +395,7 @@ describe('Log network call With Axios', () => {
           handlers: [] as Record<string, any>,
           use(
             responseConfig: (t: any) => {},
-            responseOnReject: (t: any) => {}
+            responseOnReject: (t: any) => {},
           ) {
             this.handlers.push({
               fulfilled: responseConfig,
@@ -406,39 +406,39 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
     const responseErrorPropMock = {
-      message: 'Request failed with status code 404',
+      message: "Request failed with status code 404",
       response: {
         config: {
-          method: 'get',
-          url: 'google.com',
-          embraceMetadata: { startInMillis: 1655838253076 },
-          data: { getBytes: () => 123 },
+          method: "get",
+          url: "google.com",
+          embraceMetadata: {startInMillis: 1655838253076},
+          data: {getBytes: () => 123},
         },
         status: 404,
-        data: { getBytes: () => 12 },
+        data: {getBytes: () => 12},
       },
     };
 
     axiosMocked.interceptors.response.handlers[0].rejected(
-      responseErrorPropMock
+      responseErrorPropMock,
     );
 
-    expect(mockLogNetworkRequest).toBeCalledTimes(1);
+    expect(mockLogNetworkRequest).toHaveBeenCalledTimes(1);
   });
 
-  test('Track http code != 2xx', () => {
+  test("Track http code != 2xx", () => {
     const mockLogNetworkClientError = jest.fn();
 
     jest.mock(
-      'react-native',
+      "react-native",
       () => ({
         Platform: {
-          OS: 'android',
+          OS: "android",
         },
         NativeModules: {
           EmbraceManager: {
@@ -446,7 +446,7 @@ describe('Log network call With Axios', () => {
           },
         },
       }),
-      { virtual: true }
+      {virtual: true},
     );
     const axiosMocked = {
       interceptors: {
@@ -463,7 +463,7 @@ describe('Log network call With Axios', () => {
           handlers: [] as Record<string, any>,
           use(
             responseConfig: (t: any) => {},
-            responseOnReject: (t: any) => {}
+            responseOnReject: (t: any) => {},
           ) {
             this.handlers.push({
               fulfilled: responseConfig,
@@ -474,41 +474,41 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
     const responseErrorPropMock = {
-      message: 'Request failed with status code 404',
+      message: "Request failed with status code 404",
       response: {
         config: {
-          method: 'get',
-          url: 'google.com',
-          embraceMetadata: { startInMillis: 1655838253076 },
-          data: { getBytes: () => 123 },
+          method: "get",
+          url: "google.com",
+          embraceMetadata: {startInMillis: 1655838253076},
+          data: {getBytes: () => 123},
         },
         status: 404,
-        data: { getBytes: () => 12 },
+        data: {getBytes: () => 12},
       },
     };
 
     axiosMocked.interceptors.response.handlers[0].rejected(
-      responseErrorPropMock
+      responseErrorPropMock,
     );
 
-    expect(mockLogNetworkClientError).toBeCalledTimes(1);
+    expect(mockLogNetworkClientError).toHaveBeenCalledTimes(1);
   });
 
-  test('Error on logNetworkRequest', () => {
+  test("Error on logNetworkRequest", () => {
     const mockLogNetworkClientError = () => {
       throw Error;
     };
 
     jest.mock(
-      'react-native',
+      "react-native",
       () => ({
         Platform: {
-          OS: 'ios',
+          OS: "ios",
         },
         NativeModules: {
           EmbraceManager: {
@@ -516,7 +516,7 @@ describe('Log network call With Axios', () => {
           },
         },
       }),
-      { virtual: true }
+      {virtual: true},
     );
     const axiosMocked = {
       interceptors: {
@@ -533,7 +533,7 @@ describe('Log network call With Axios', () => {
           handlers: [] as Record<string, any>,
           use(
             responseConfig: (t: any) => {},
-            responseOnReject: (t: any) => {}
+            responseOnReject: (t: any) => {},
           ) {
             this.handlers.push({
               fulfilled: responseConfig,
@@ -544,17 +544,17 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
     const responseErrorPropMock = {
-      message: 'Request failed with status code 404',
+      message: "Request failed with status code 404",
       response: {
         config: {
-          method: 'get',
-          url: 'google.com',
-          embraceMetadata: { startInMillis: 1655838253076 },
+          method: "get",
+          url: "google.com",
+          embraceMetadata: {startInMillis: 1655838253076},
           data: undefined,
         },
         status: 404,
@@ -563,15 +563,15 @@ describe('Log network call With Axios', () => {
     };
 
     axiosMocked.interceptors.response.handlers[0].rejected(
-      responseErrorPropMock
+      responseErrorPropMock,
     );
   });
 
-  test('No Track network because the information was incomplete', () => {
+  test("No Track network because the information was incomplete", () => {
     const mockLogNetworkRequest = jest.fn();
 
     jest.mock(
-      'react-native',
+      "react-native",
       () => ({
         NativeModules: {
           EmbraceManager: {
@@ -579,7 +579,7 @@ describe('Log network call With Axios', () => {
           },
         },
       }),
-      { virtual: true }
+      {virtual: true},
     );
     const axiosMocked = {
       interceptors: {
@@ -596,7 +596,7 @@ describe('Log network call With Axios', () => {
           handlers: [] as Record<string, any>,
           use(
             responseConfig: (t: any) => {},
-            responseOnReject: (t: any) => {}
+            responseOnReject: (t: any) => {},
           ) {
             this.handlers.push({
               fulfilled: responseConfig,
@@ -607,31 +607,31 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
     const responseErrorPropMock = {
-      message: 'Request failed with status code 404',
+      message: "Request failed with status code 404",
       response: {
         config: {
-          method: 'get',
-          embraceMetadata: { startInMillis: 1655838253076 },
+          method: "get",
+          embraceMetadata: {startInMillis: 1655838253076},
         },
         status: 404,
       },
     };
 
     axiosMocked.interceptors.response.handlers[0].rejected(
-      responseErrorPropMock
+      responseErrorPropMock,
     );
 
-    expect(mockLogNetworkRequest).toBeCalledTimes(0);
+    expect(mockLogNetworkRequest).toHaveBeenCalledTimes(0);
   });
 
-  test('logNetworkRequest failed', () => {
+  test("logNetworkRequest failed", () => {
     jest.mock(
-      'react-native',
+      "react-native",
       () => ({
         NativeModules: {
           EmbraceManager: {
@@ -639,7 +639,7 @@ describe('Log network call With Axios', () => {
           },
         },
       }),
-      { virtual: true }
+      {virtual: true},
     );
     const axiosMocked = {
       interceptors: {
@@ -656,7 +656,7 @@ describe('Log network call With Axios', () => {
           handlers: [] as Record<string, any>,
           use(
             responseConfig: (t: any) => {},
-            responseOnReject: (t: any) => {}
+            responseOnReject: (t: any) => {},
           ) {
             this.handlers.push({
               fulfilled: responseConfig,
@@ -667,25 +667,25 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors(axiosMocked);
 
     const responsePropMock = {
       config: {
-        method: 'get',
-        url: 'google.com',
-        embraceMetadata: { startInMillis: 1655838253076 },
-        data: { getBytes: () => 123 },
+        method: "get",
+        url: "google.com",
+        embraceMetadata: {startInMillis: 1655838253076},
+        data: {getBytes: () => 123},
       },
       status: 200,
-      data: { getBytes: () => 12 },
+      data: {getBytes: () => 12},
     };
 
     axiosMocked.interceptors.response.handlers[0].fulfilled(responsePropMock);
   });
 
-  test('Axios Use methods should not be called', () => {
+  test("Axios Use methods should not be called", () => {
     const axiosMocked = {
       interceptors: {
         request: {
@@ -697,11 +697,11 @@ describe('Log network call With Axios', () => {
       },
     };
 
-    const { applyNetworkInterceptors } = require('../index');
+    const {applyNetworkInterceptors} = require("../index");
 
     applyNetworkInterceptors();
 
-    expect(axiosMocked.interceptors.request.use).toBeCalledTimes(0);
-    expect(axiosMocked.interceptors.response.use).toBeCalledTimes(0);
+    expect(axiosMocked.interceptors.request.use).toHaveBeenCalledTimes(0);
+    expect(axiosMocked.interceptors.response.use).toHaveBeenCalledTimes(0);
   });
 });

@@ -1,12 +1,12 @@
-import Asker, { Answer } from '../util/asker';
+import Asker, {Answer} from "../util/asker";
 
 export interface IPackageJson {
   name: string;
   dependencies: Record<string, string>;
 }
 enum Platform {
-  Android = 'Android',
-  IOS = 'iOS',
+  Android = "Android",
+  IOS = "iOS",
 }
 
 const appIDQuestion = (platform: Platform) => ({
@@ -14,13 +14,13 @@ const appIDQuestion = (platform: Platform) => ({
   message: `What is your ${platform} Embrace App ID? (5-character value)`,
 });
 const apiTokenQuestion = () => ({
-  name: 'embAPIToken',
-  message: 'What is your Embrace API token? (32-digit hex number)',
+  name: "embAPIToken",
+  message: "What is your Embrace API token? (32-digit hex number)",
 });
 const asker = new Asker();
 
 export const iosAppID = {
-  name: 'iOS App ID',
+  name: "iOS App ID",
   fetch: () => {
     const question = appIDQuestion(Platform.IOS);
     return asker
@@ -30,7 +30,7 @@ export const iosAppID = {
 };
 
 export const androidAppID = {
-  name: 'Android App ID',
+  name: "Android App ID",
   fetch: () => {
     const question = appIDQuestion(Platform.Android);
     return asker
@@ -40,7 +40,7 @@ export const androidAppID = {
 };
 
 export const apiToken = {
-  name: 'API Token',
+  name: "API Token",
   fetch: () => {
     const question = apiTokenQuestion();
     return asker
@@ -50,13 +50,13 @@ export const apiToken = {
 };
 
 export const packageJSON = {
-  name: 'app name',
+  name: "app name",
   fetch: () => {
     try {
-      const packageJson = require('../../../../../../package.json');
+      const packageJson = require("../../../../../../package.json");
       return Promise.resolve(packageJson);
     } catch {
-      return Promise.reject('could not find package.json file');
+      return Promise.reject("could not find package.json file");
     }
   },
 };

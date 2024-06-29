@@ -1,12 +1,12 @@
-import EmbraceLogger from '../../../src/logger';
-import { FileUpdatable } from '../../util/file';
+import {FileUpdatable} from "../../util/file";
+import EmbraceLogger from "../../../src/logger";
 
 // TODO refactor this
 const logger = new EmbraceLogger(console);
-export const JAVA_MAIN_ACTIVITY = 'MainApplication.java';
-export const KOTLIN_MAIN_ACTIVITY = 'MainApplication.kt';
-export const SWIFT_APP_DELEGATE = 'AppDelegate.swift';
-export const OBJECTIVEC_APP_DELEGATE = 'AppDelegate.*(m|mm)';
+export const JAVA_MAIN_ACTIVITY = "MainApplication.java";
+export const KOTLIN_MAIN_ACTIVITY = "MainApplication.kt";
+export const SWIFT_APP_DELEGATE = "AppDelegate.swift";
+export const OBJECTIVEC_APP_DELEGATE = "AppDelegate.*(m|mm)";
 
 /**
  * Adds a line to the specified file after the specified search text.
@@ -24,7 +24,7 @@ const addLineAfterToTextInFile = (
   file: FileUpdatable,
   lineToAdd: string,
   searchText: string | RegExp,
-  fileName?: string
+  fileName?: string,
 ): boolean => {
   if (file.hasLine(lineToAdd)) {
     logger.warn(`${fileName} already contains the line: ${lineToAdd}`);
@@ -52,7 +52,7 @@ const addLineBeforeToTextInFile = (
   file: FileUpdatable,
   lineToAdd: string,
   searchText: string | RegExp,
-  fileName?: string
+  fileName?: string,
 ): boolean => {
   if (file.hasLine(lineToAdd)) {
     logger.warn(`${fileName} already contains the line: ${lineToAdd}`);
@@ -64,8 +64,8 @@ const addLineBeforeToTextInFile = (
   }
 };
 
-type ANDROID_LANGUAGE = 'kotlin' | 'java';
-type IOS_LANGUAGE = 'swift' | 'objectivec';
+type ANDROID_LANGUAGE = "kotlin" | "java";
+type IOS_LANGUAGE = "swift" | "objectivec";
 type SUPPORTED_LANGUAGES = IOS_LANGUAGE | ANDROID_LANGUAGE;
 
 const MAIN_CLASS_BY_LANGUAGE: Record<SUPPORTED_LANGUAGES, string> = {

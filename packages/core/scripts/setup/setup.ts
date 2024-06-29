@@ -1,23 +1,24 @@
-import EmbraceLogger from '../../src/logger';
-import Wizard from '../util/wizard';
-import {
-  createEmbraceJSON,
-  patchAppBuildGradle,
-  patchBuildGradle,
-  patchMainApplication,
-} from './android';
-import { apiToken, iosAppID, packageJSON } from './common';
+import Wizard from "../util/wizard";
+import EmbraceLogger from "../../src/logger";
+
 import {
   addUploadBuildPhase,
   createEmbracePlist,
   iosInitializeEmbrace,
   iosPodfile,
   patchXcodeBundlePhase,
-} from './ios';
+} from "./ios";
+import {apiToken, iosAppID, packageJSON} from "./common";
+import {
+  createEmbraceJSON,
+  patchAppBuildGradle,
+  patchBuildGradle,
+  patchMainApplication,
+} from "./android";
 
 const logger = new EmbraceLogger(console);
 
-logger.log('initializing setup wizard');
+logger.log("initializing setup wizard");
 
 const iosSetps = [
   iosInitializeEmbrace,
@@ -36,8 +37,8 @@ const androidSteps = [
 
 const run = () => {
   const wiz = new Wizard();
-  [iosAppID, apiToken, packageJSON].map((field) => wiz.registerField(field));
-  [...iosSetps, ...androidSteps].map((step) => wiz.registerStep(step));
+  [iosAppID, apiToken, packageJSON].map(field => wiz.registerField(field));
+  [...iosSetps, ...androidSteps].map(step => wiz.registerStep(step));
   wiz.runSteps();
 };
 

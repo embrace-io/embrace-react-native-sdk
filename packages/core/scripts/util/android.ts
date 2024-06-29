@@ -1,10 +1,12 @@
-const fs = require('fs');
-const path = require('path');
 import {
   ANDROID_LANGUAGE,
   MAIN_CLASS_BY_LANGUAGE,
-} from '../setup/patches/common';
-import { FileUpdatable, getFileContents } from './file';
+} from "../setup/patches/common";
+
+import {FileUpdatable, getFileContents} from "./file";
+
+const path = require("path");
+const fs = require("fs");
 
 interface IDirectory {
   isDirectory: () => boolean;
@@ -12,7 +14,7 @@ interface IDirectory {
 }
 
 export const getBuildGradlePatchable = (
-  paths: string[] = []
+  paths: string[] = [],
 ): FileUpdatable => {
   const gradlePath = path.join(...paths);
   if (!fs.existsSync(gradlePath)) {
@@ -24,7 +26,7 @@ export const getBuildGradlePatchable = (
 export const buildGradlePatchable = (): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
     try {
-      return resolve(getBuildGradlePatchable(['android', 'build.gradle']));
+      return resolve(getBuildGradlePatchable(["android", "build.gradle"]));
     } catch (e: unknown) {
       if (e instanceof Error) {
         return reject(e.message);
@@ -38,7 +40,7 @@ export const buildAppGradlePatchable = (): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
     try {
       return resolve(
-        getBuildGradlePatchable(['android', 'app', 'build.gradle'])
+        getBuildGradlePatchable(["android", "app", "build.gradle"]),
       );
     } catch (e: unknown) {
       if (e instanceof Error) {
@@ -51,7 +53,7 @@ export const buildAppGradlePatchable = (): Promise<FileUpdatable> => {
 
 export const embraceJSON = (): Promise<FileUpdatable> => {
   return new Promise((resolve, reject) => {
-    const p = path.join('android', 'app', 'src', 'main', 'embrace-config.json');
+    const p = path.join("android", "app", "src", "main", "embrace-config.json");
     if (!fs.existsSync(p)) {
       return reject(`cannot find embrace-config.json file at ${p}`);
     }
@@ -60,10 +62,10 @@ export const embraceJSON = (): Promise<FileUpdatable> => {
 };
 
 export const getMainApplicationPatchable = (platform: ANDROID_LANGUAGE) => {
-  const p = path.join('android', 'app', 'src', 'main', 'java', 'com');
+  const p = path.join("android", "app", "src", "main", "java", "com");
   const mainApp = MAIN_CLASS_BY_LANGUAGE[platform];
   const foldersInJava: IDirectory[] = fs
-    .readdirSync(p, { withFileTypes: true })
+    .readdirSync(p, {withFileTypes: true})
     .filter((dirent: IDirectory) => dirent.isDirectory());
 
   if (foldersInJava.length === 0) {
@@ -75,7 +77,7 @@ export const getMainApplicationPatchable = (platform: ANDROID_LANGUAGE) => {
   let foldersToLook = foldersInJava;
   while (!mainApplicationPath && hasFoldersToLook) {
     const foldersToLookTmp: IDirectory[] = [];
-    foldersToLook.forEach((dir) => {
+    foldersToLook.forEach(dir => {
       if (fs.existsSync(`${p}/${dir.name}/${mainApp}`)) {
         mainApplicationPath = `${p}/${dir.name}/${mainApp}`;
         hasFoldersToLook = false;
@@ -88,14 +90,14 @@ export const getMainApplicationPatchable = (platform: ANDROID_LANGUAGE) => {
 
       const foldersInside =
         fs
-          .readdirSync(`${p}/${dir.name}`, { withFileTypes: true })
+          .readdirSync(`${p}/${dir.name}`, {withFileTypes: true})
           .filter((dirent: IDirectory) => dirent.isDirectory()) || [];
 
       if (foldersInside.length > 0) {
         foldersToLookTmp.push(
           ...foldersInside.map((d: IDirectory) => {
-            return { ...d, name: `${dir.name}/${d.name}` };
-          })
+            return {...d, name: `${dir.name}/${d.name}`};
+          }),
         );
       }
     });
@@ -117,13 +119,13 @@ export const getMainApplicationPatchable = (platform: ANDROID_LANGUAGE) => {
 };
 
 export const mainApplicationPatchable = (
-  platform: ANDROID_LANGUAGE
+  platform: ANDROID_LANGUAGE,
 ): Promise<FileUpdatable> => {
   return new Promise<FileUpdatable>((resolve, reject) => {
     const file = getMainApplicationPatchable(platform);
     if (!file) {
       return reject(
-        `cannot find ${MAIN_CLASS_BY_LANGUAGE[platform]} file in any folder at "android/.../com/*". Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`
+        `cannot find ${MAIN_CLASS_BY_LANGUAGE[platform]} file in any folder at "android/.../com/*". Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/?rn-platform=android to update it manually.`,
       );
     }
     return resolve(file);

@@ -1,4 +1,4 @@
-import Wizard from '../util/wizard';
+import Wizard from "../util/wizard";
 
 jest.useFakeTimers();
 
@@ -9,19 +9,19 @@ beforeEach(() => {
 const androidEmbraceSwazzler =
   /classpath(\(|\s)('|")io\.embrace:embrace-swazzler:.*('|")\)?/;
 
-describe('Modify Build Gradle', () => {
-  test('Add Android Swazzler Version If Build Does Not Have Swazzler Version', async () => {
-    jest.mock('path', () => ({
+describe("Modify Build Gradle", () => {
+  test("Add Android Swazzler Version If Build Does Not Have Swazzler Version", async () => {
+    jest.mock("path", () => ({
       join: () =>
-        './packages/core/scripts/__tests__/__mocks__/android/buildWithoutSwazzler.gradle',
+        "./packages/core/scripts/__tests__/__mocks__/android/buildWithoutSwazzler.gradle",
     }));
-    const androidUtil = require('../util/android');
-    const { patchBuildGradle } = require('../setup/android');
+    const androidUtil = require("../util/android");
+    const {patchBuildGradle} = require("../setup/android");
 
     const wiz = new Wizard();
     const androidSteps = [patchBuildGradle];
 
-    [...androidSteps].map((step) => wiz.registerStep(step));
+    [...androidSteps].map(step => wiz.registerStep(step));
     let failed = 0;
     try {
       await wiz.processSteps();
@@ -39,16 +39,16 @@ describe('Modify Build Gradle', () => {
     file.patch();
     expect(file.hasLine(androidEmbraceSwazzler)).toBe(false);
   });
-  test('Update Android Swazzler Version', async () => {
-    jest.mock('path', () => ({
+  test("Update Android Swazzler Version", async () => {
+    jest.mock("path", () => ({
       join: () =>
-        './packages/core/scripts/__tests__/__mocks__/android/buildWithoutSwazzler.gradle',
+        "./packages/core/scripts/__tests__/__mocks__/android/buildWithoutSwazzler.gradle",
     }));
     const wiz = new Wizard();
-    const { patchBuildGradle } = require('../setup/android');
+    const {patchBuildGradle} = require("../setup/android");
 
     const androidSteps = [patchBuildGradle];
-    [...androidSteps].map((step) => wiz.registerStep(step));
+    [...androidSteps].map(step => wiz.registerStep(step));
     let failed = 0;
     try {
       await wiz.processSteps();
@@ -57,16 +57,16 @@ describe('Modify Build Gradle', () => {
     }
     expect(failed).toBe(0);
   });
-  test('Couldnt Update Android Swazzler Version', async () => {
-    jest.mock('path', () => ({
+  test("Couldnt Update Android Swazzler Version", async () => {
+    jest.mock("path", () => ({
       join: () =>
-        './packages/core/scripts/__tests__/__mocks__/android/noExistbuild.gradle',
+        "./packages/core/scripts/__tests__/__mocks__/android/noExistbuild.gradle",
     }));
     const wiz = new Wizard();
-    const { patchBuildGradle } = require('../setup/android');
+    const {patchBuildGradle} = require("../setup/android");
 
     const androidSteps = [patchBuildGradle];
-    [...androidSteps].map((step) => wiz.registerStep(step));
+    [...androidSteps].map(step => wiz.registerStep(step));
     let failed = 0;
     try {
       await wiz.processSteps();
@@ -77,52 +77,48 @@ describe('Modify Build Gradle', () => {
   });
 });
 
-describe('Patch Android', () => {
-  test('Add Android java import', async () => {
-    jest.mock('path', () => ({
-      join: () => './packages/core/scripts/__tests__/__mocks__/android',
+describe("Patch Android", () => {
+  test("Add Android java import", async () => {
+    jest.mock("path", () => ({
+      join: () => "./packages/core/scripts/__tests__/__mocks__/android",
     }));
     jest.mock(
-      '../../../../../../package.json',
+      "../../../../../../package.json",
       () => ({
-        name: 'test',
+        name: "test",
       }),
-      { virtual: true }
+      {virtual: true},
     );
-    const patchMainApplication = require('../setup/patches/patch').default;
-    const result = await patchMainApplication('java');
+    const patchMainApplication = require("../setup/patches/patch").default;
+    const result = await patchMainApplication("java");
 
     expect(result).toBe(true);
 
-    const {
-      removeEmbraceImportAndStartFromFile,
-    } = require('../setup/uninstall');
+    const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
 
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile('java');
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile("java");
 
     expect(resultUnpatch).toBe(true);
   });
-  test('Add Android Kotlin import', async () => {
-    jest.mock('path', () => ({
-      join: () => './packages/core/scripts/__tests__/__mocks__/android',
+  test("Add Android Kotlin import", async () => {
+    jest.mock("path", () => ({
+      join: () => "./packages/core/scripts/__tests__/__mocks__/android",
     }));
     jest.mock(
-      '../../../../../../package.json',
+      "../../../../../../package.json",
       () => ({
-        name: 'test',
+        name: "test",
       }),
-      { virtual: true }
+      {virtual: true},
     );
-    const patchMainApplication = require('../setup/patches/patch').default;
-    const result = await patchMainApplication('kotlin');
+    const patchMainApplication = require("../setup/patches/patch").default;
+    const result = await patchMainApplication("kotlin");
 
     expect(result).toBe(true);
 
-    const {
-      removeEmbraceImportAndStartFromFile,
-    } = require('../setup/uninstall');
+    const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
 
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile('kotlin');
+    const resultUnpatch = await removeEmbraceImportAndStartFromFile("kotlin");
 
     expect(resultUnpatch).toBe(true);
   });
