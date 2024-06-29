@@ -26,7 +26,6 @@ describe('Modify Build Gradle', () => {
     try {
       await wiz.processSteps();
     } catch (e) {
-      console.log('ERRR', e);
       failed = 1;
     }
     expect(failed).toBe(0);
