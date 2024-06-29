@@ -7,22 +7,22 @@ import {
   buildGradlePatchable,
   embraceJSON,
   embraceJSONContents,
-  mainApplicationPatchable,
 } from '../util/android';
 import { NoopFile } from '../util/file';
 import { FileUpdatable } from '../util/file';
 import Wizard from '../util/wizard';
 import { androidAppID, apiToken, packageJSON } from './common';
+import patch from './patches/patch';
 
 const logger = new EmbraceLogger(console);
 
 const androidToolsBuildGradleRE =
   /(\s+)classpath(\(|\s)("|')com\.android\.tools\.build:gradle(?::\d+(?:\.\d+)*)?("|')\)/;
 
-const androidEmbraceSwazzler =
+export const androidEmbraceSwazzler =
   /classpath(\(|\s)('|")io\.embrace:embrace-swazzler:.*('|")\)?/;
 
-const androidGenericVersion =
+export const androidGenericVersion =
   'classpath "io.embrace:embrace-swazzler:${findProject(\':embrace-io_react-native\').properties[\'emb_android_sdk\']}"';
 
 export const patchBuildGradle = {
@@ -48,9 +48,9 @@ export const patchBuildGradle = {
 };
 
 const androidPlugin = /apply plugin: ("|')com.android.application("|')/;
-const androidEmbraceSwazzlerPluginRE =
+export const androidEmbraceSwazzlerPluginRE =
   /apply plugin: ('|")embrace-swazzler('|")/;
-const androidEmbraceSwazzlerPlugin = 'apply plugin: \'embrace-swazzler\'';
+export const androidEmbraceSwazzlerPlugin = 'apply plugin: \'embrace-swazzler\'';
 
 export const patchAppBuildGradle = {
   name: 'patch app/build.gradle',
@@ -112,31 +112,20 @@ export const createEmbraceJSON = {
     'https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=android#manually',
 };
 
-const embraceInit =
-  'Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE);';
-const embraceImport = 'import io.embrace.android.embracesdk.Embrace;';
+const tryToPatchMainApplication = () => {
+  // In the future there will be more apps with kotlin than java so I start looking up by kotlin
+  const response = patch('kotlin');
+  if (!response) {
+    return patch('java');
+  }
+  return response;
+};
+
 export const patchMainApplication = {
-  name: 'patch MainApplication.java file',
+  name: 'patch MainApplication file',
   run: (wizard: Wizard): Promise<any> => {
-    return wizard.fieldValue(packageJSON).then((json) => {
-      return mainApplicationPatchable(json).then((file) => {
-        if (file.hasLine(embraceImport)) {
-          logger.warn('already has import in MainApplication.java');
-        } else {
-          logger.warn('adding import line to MainApplication.java');
-          file.addBefore(
-            'import android.app.Application;',
-            embraceImport + '\n'
-          );
-        }
-        if (file.hasLine(embraceInit)) {
-          logger.warn('already has init function in MainApplication.java');
-        } else {
-          logger.warn('adding init function in MainApplication.java');
-          file.addAfter(/(\s+)super\.onCreate\(\);/, embraceInit);
-        }
-        return file.patch();
-      });
+    return wizard.fieldValue(packageJSON).then(() => {
+      return tryToPatchMainApplication();
     });
   },
   docURL:

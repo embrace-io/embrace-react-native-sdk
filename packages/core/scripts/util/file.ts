@@ -7,9 +7,11 @@ export interface Patchable {
 
 export interface FileUpdatable extends Patchable {
   contents: string;
-  addBefore: (line: string, add: string) => void;
+  addBefore: (line: string | RegExp, add: string) => void;
   addAfter: (line: string | RegExp, add: string) => void;
   hasLine: (line: string | RegExp) => boolean;
+  getPaddingFromString: (searchString: string) => string;
+  getPaddingAfterStringToTheNextString: (searchString: RegExp) => string;
   deleteLine: (line: string | RegExp) => void;
 }
 
@@ -35,6 +37,8 @@ export const NoopFile = {
   contents: '',
   patch: (): void => {},
   hasLine: (_: string) => false,
+  getPaddingFromString: (searchString: string) => '',
+  getPaddingAfterStringToTheNextString: (searchString: RegExp) => '',
   addBefore: (line: string, add: string) => {},
   addAfter: (line: string, add: string) => {},
   deleteLine: (line: string) => {},
@@ -47,6 +51,53 @@ class FileContents implements FileUpdatable {
   constructor(path: string = '') {
     this.path = path;
     this.contents = fs.readFileSync(path, 'utf8');
+  }
+
+  public getPaddingFromString(searchString: string): string {
+    const index = this.contents.indexOf(searchString);
+
+    const lastLineBreakIndex = this.contents.lastIndexOf('\n', index);
+
+    const start = lastLineBreakIndex === -1 ? 0 : lastLineBreakIndex + 1;
+    const leadingWhitespace = this.contents
+      .substring(start, index)
+      .match(/[ \t]*$/);
+    if (leadingWhitespace) {
+      return leadingWhitespace[0];
+    }
+    return '';
+  }
+
+  public getPaddingAfterStringToTheNextString(searchString: RegExp): string {
+    const match = this.contents.match(searchString);
+
+    if (!match) {
+      return '';
+    }
+    const index = match.index;
+
+    const nextLineBreakIndex = this.contents.indexOf('\n', index);
+
+    if (nextLineBreakIndex === -1) {
+      return '';
+    }
+
+    let afterLineBreakIndex = nextLineBreakIndex + 2;
+    while (afterLineBreakIndex < this.contents.length) {
+      if (!/[\s\n]/.test(this.contents.charAt(afterLineBreakIndex))) {
+        break;
+      }
+      afterLineBreakIndex++;
+    }
+
+    const spacesBetween = this.contents
+      .substring(nextLineBreakIndex + 1, afterLineBreakIndex)
+      .match(/[ \t]*$/);
+
+    if (spacesBetween) {
+      return spacesBetween[0];
+    }
+    return '';
   }
 
   public hasLine(line: string | RegExp): boolean {
@@ -76,7 +127,9 @@ class FileContents implements FileUpdatable {
         if (line.toString().match(/^\/\(\\s\+\)/)) {
           space = matches[1];
         }
-        if (matches[0]) { replaceWith = matches[0]; }
+        if (matches[0]) {
+          replaceWith = matches[0];
+        }
       }
       this.contents = this.contents.replace(
         line,

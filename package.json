@@ -82,8 +82,7 @@
   },
   "rnpm": {
     "commands": {
-      "postlink": "node node_modules/embrace-io/dist/scripts/postlink",
-      "postunlink": "node node_modules/embrace-io/dist/scripts/postunlink"
+      "postlink": "node node_modules/embrace-io/dist/scripts/postlink"
     }
   },
   "workspaces": [
