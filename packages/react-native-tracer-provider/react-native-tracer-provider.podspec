@@ -38,4 +38,8 @@ Pod::Spec.new do |s|
       s.dependency "ReactCommon/turbomodule/core"
     end
   end
+
+  load 'ios/dependencies.rb'
+  load_dependencies(s)
+
 end
