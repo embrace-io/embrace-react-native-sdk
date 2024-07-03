@@ -20,7 +20,9 @@ Any new package under ./packages/ will get automatically picked up as a new Yarn
 Since we are using Yarn workspaces `dependencies` should not be added to the root `package.json` (see [more details](https://stackoverflow.com/a/53558779)).
 If multiple packages include the same dependency Yarn constraints will enforce that the version used matches.
 `devDependencies` are fine to add at the root `package.json` (see [more details](https://github.com/lerna/lerna/issues/1079#issuecomment-337660289))
-if they are shared among multiple packages, otherwise add them to just the individual package that requires it.
+if they are shared among multiple packages, otherwise add them to just the individual package that requires it. This is
+also where we define common peerDependencies and enforce a common version. These are packages such as React Native that
+our packages require but that we leave to the customer to have defined as explicit dependencies.
 
 ## Testing changes during development
 
@@ -50,7 +52,6 @@ Then update the example app with that local artifact:
 ```bash
 cd examples/react-native-test-suite
 yarn add ../<path-to-local-artifact>/
-yarn
 ```
 
 If you alter the node_modules in any way (either by deleting them or running `yarn install`) or make further changes
@@ -62,14 +63,14 @@ mode, so we should always test release candidates against a release build.
 Android:
 
 ```bash
-`yarn android --variant=release`
+`yarn android --mode=release`
 ```
 
 iOS:
 
 ```bash
 pushd ios; pod install; popd;
-yarn ios --configuration=Release
+yarn ios --mode=Release
 ```
 
 ## Testing against new Embrace Android SDK versions
@@ -127,4 +128,5 @@ unreleased changes on `master` and a patch release will be cut from that new bra
 2. Bump the SDK version according to semver 
 3. Run the example app on Android + iOS (in release mode) and confirm that a session is captured & appears in the dashboard with useful info
 4. Create a PR with all these changes and merge to `master`
-5. Release to npm with `yarn publish --tag <your-version-here>`
+5. Release to npm with `yarn publish`
+6. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/master/docs/react-native/changelog.md) for the release
