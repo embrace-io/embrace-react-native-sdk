@@ -13,6 +13,7 @@ jobs:
       matrix:
         node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        jdk-version: ["17"]
 
     steps:
       - uses: actions/checkout@v4
@@ -21,6 +22,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+      - name: Install JDK ${{ matrix.jdk-version }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: ${{ matrix.jdk-version }}
       - run: yarn
       - run: yarn lint
       - run: yarn test --watchAll=false --coverage
