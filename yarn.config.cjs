@@ -95,6 +95,20 @@ function enforceFileStructure({ Yarn }) {
 }
 
 /**
+ *  Enforces each package having a peerDependency on React Native
+ */
+function enforceReactNativePeerDependency({ Yarn }) {
+  for (const workspace of Yarn.workspaces()) {
+    if (workspace.manifest.private) continue;
+
+    workspace.set("peerDependencies", {
+      ...(workspace.peerDependencies || {}),
+      "react-native": ">=0.56.0",
+    });
+  }
+}
+
+/**
  *  Enforces that a workspace MUST depend on the same version of a dependency as the one used by the other workspaces
  *  Taken from: https://yarnpkg.com/features/constraints
  */
@@ -116,6 +130,7 @@ module.exports = defineConfig({
     enforcePackageInfo(ctx);
     enforceNoDualTypeDependencies(ctx);
     enforceFileStructure(ctx);
+    enforceReactNativePeerDependency(ctx);
     enforceConsistentDependenciesAcrossTheProject(ctx);
   },
 });

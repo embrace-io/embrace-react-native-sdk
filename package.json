@@ -11,15 +11,8 @@
   },
   "scripts": {
     "publish": "npx lerna run build && npx lerna publish",
-    "build": "tsc",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
-    "test": "jest",
-    "docs": "typedoc --options typedoc.json --inputFiles ./src/embrace.ts && touch ./docs/.nojekyll && git add docs"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn docs && lint-staged"
-    }
+    "test": "jest"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
@@ -48,7 +41,6 @@
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-native": "^4.1.0",
-    "husky": "^4.2.5",
     "jest": "^25.3.0",
     "lerna": "^6.0.3",
     "lint-staged": "^10.1.7",
@@ -59,7 +51,6 @@
     "react-native": "^0.56.0",
     "react-test-renderer": "^18.2.0",
     "ts-jest": "^25.3.1",
-    "typedoc": "^0.17.8",
     "typescript": "^4.7.4"
   }
 }
