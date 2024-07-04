@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.source = {:path => "ios/RNEmbrace/"}
 
   s.dependency 'React-Core'
-  s.dependency 'EmbraceIO', '5.25.1'
+  s.dependency 'EmbraceIO', '5.25.2'
 
   s.homepage     = "https://embrace.io/"
 

@@ -1,6 +1,3 @@
-import path from "path";
-import fs from "fs";
-
 import Wizard from "../util/wizard";
 import {NoopFile} from "../util/file";
 import {FileUpdatable} from "../util/file";
@@ -14,6 +11,9 @@ import EmbraceLogger from "../../src/logger";
 
 import patch from "./patches/patch";
 import {androidAppID, apiToken, packageJSON} from "./common";
+
+const path = require("path");
+const fs = require("fs");
 
 const logger = new EmbraceLogger(console);
 

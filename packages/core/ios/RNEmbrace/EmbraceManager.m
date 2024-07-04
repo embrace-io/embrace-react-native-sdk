@@ -523,7 +523,7 @@ RCT_EXPORT_METHOD(
 
 RCT_EXPORT_METHOD(startSpan:(nonnull NSString*)name parentSpanId:(nullable NSString *)parentSpanId startTimeNanos:(NSInteger)startTimeNanos resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   @try {
-    NSString *spanId = [[RNEmbrace sharedInstance] startSpanWithName:name startTimeNanos:startTimeNanos parentSpanId:parentSpanId];
+    NSString *spanId = [[RNEmbrace sharedInstance] startSpanWithName:name parentSpanId:parentSpanId startTimeNanos:startTimeNanos];
     resolve(spanId);
   } @catch (NSException *exception) {
     resolve(nil);

@@ -57,10 +57,10 @@ export const stopSpan = (
 export const addSpanEventToSpan = (
   spanId: string,
   name: string,
-  timeStampMs?: number,
+  timeStampMs: number,
   attributes?: Attributes,
 ): Promise<boolean> => {
-  if (!validateAndLogRequiredProperties({name, spanId})) {
+  if (!validateAndLogRequiredProperties({name, spanId, timeStampMs})) {
     return createFalsePromise();
   }
   try {
