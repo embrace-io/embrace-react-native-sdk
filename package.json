@@ -20,7 +20,7 @@
   "scripts": {
     "publish-modules": "npx lerna run tsc && npx lerna publish --tag-version-prefix='rn-os-modules-'",
     "build:watch": "tsc -w --preserveWatchOutput",
-    "lint": "lint-staged",
+    "lint": "yarn lint",
     "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
     "prebuild": "npm run lint && rm -rf dist",
     "build": "tsc",
