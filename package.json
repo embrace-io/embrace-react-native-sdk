@@ -1,7 +1,7 @@
 {
   "name": "embrace-io",
   "version": "4.2.0",
-  "private": "true",
+  "private": "false",
   "author": {
     "name": "Embrace.io",
     "email": "truenorth@embrace.io"
