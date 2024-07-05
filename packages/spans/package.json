@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native-spans",
-  "version": "4.1.2",
+  "version": "4.2.0",
   "description": "Embrace’s Performance Tracing solution gives you complete visibility into any customized operation you’d like to track, enabling you to identify, prioritize, and resolve any performance issue",
   "author": {
     "name": "Embrace.io",

@@ -1,19 +1,17 @@
 import Wizard from "../util/wizard";
 import {
-  appDelegatePatchable,
-  bundlePhaseExtraArgs,
   bundlePhaseRE,
-  embraceImport,
   embraceNativePod,
   embracePlistPatchable,
   embRunScript,
-  formatEmbraceInitializer,
+  exportSourcemapRNVariable,
   podfilePatchable,
   xcodePatchable,
 } from "../util/ios";
 import EmbraceLogger from "../../src/logger";
 
-import {apiToken, iosAppID, packageJSON} from "./common";
+import patch from "./patches/patch";
+import {apiToken, iosAppID, IPackageJson, packageJSON} from "./common";
 
 const path = require("path");
 const fs = require("fs");
@@ -22,76 +20,55 @@ const semverGte = require("semver/functions/gte");
 
 const logger = new EmbraceLogger(console);
 
-export const iosImportEmbrace = {
-  name: "iOS import Embrace",
-  run: (wizard: Wizard): Promise<any> =>
-    wizard
-      .fieldValue(packageJSON)
-      .then(json => appDelegatePatchable(json))
-      .then(appDelegate => {
-        logger.log("patching AppDelegate with Embrace import");
-        if (appDelegate.hasLine(embraceImport)) {
-          logger.warn("already imported Embrace");
-          return false;
-        }
-        appDelegate.addAfter('#import "AppDelegate.h"', embraceImport);
-        appDelegate.patch();
-        return true;
-      }),
-  docURL:
-    "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
+export const tryToPatchAppDelegate = async ({
+  name,
+}: {
+  name: string;
+}): Promise<boolean> => {
+  const response = patch("objectivec", name);
+  if (!response) {
+    return patch("swift", name) || false;
+  }
+  return response;
 };
 
 export const iosInitializeEmbrace = {
   name: "iOS initialize Embrace",
   run: (wizard: Wizard): Promise<any> =>
-    wizard
-      .fieldValue(packageJSON)
-      .then(json => appDelegatePatchable(json))
-      .then(appDelegate => {
-        logger.log("patching AppDelegate with Embrace initialize");
-        if (appDelegate.hasLine("[[Embrace sharedInstance] start")) {
-          logger.warn("already initializing Embrace");
-          return false;
-        }
-        const embraceInitializer = formatEmbraceInitializer();
-        const DID_LAUNCH_REGEX =
-          /(-\s*\(BOOL\)\s*application:\s*\(UIApplication\s\*\)\s*(app|application)\s+didFinishLaunchingWithOptions:\s*\(NSDictionary\s*\*\)launchOptions\s*\{\s*)/;
-
-        appDelegate.addAfter(DID_LAUNCH_REGEX, embraceInitializer);
-        appDelegate.patch();
-        return true;
-      }),
+    wizard.fieldValue(packageJSON).then(tryToPatchAppDelegate),
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
+};
+
+export const patchPodfile = (json: IPackageJson) => {
+  const rnVersion = (json.dependencies || {})["react-native"];
+  if (!rnVersion) {
+    throw Error("react-native dependency was not found");
+  }
+  const rnVersionSanitized = rnVersion.replace("^", "");
+
+  // If 6.0.0, autolink should have linked the Pod.
+  if (semverGte("6.0.0", rnVersionSanitized)) {
+    logger.log(
+      "skipping patching Podfile since react-native is on an autolink supported version",
+    );
+    return;
+  }
+  return podfilePatchable().then(podfile => {
+    if (podfile.hasLine(embraceNativePod)) {
+      logger.warn("Already has EmbraceIO pod");
+      return;
+    }
+    podfile.addBefore("use_react_native", `${embraceNativePod}\n`);
+
+    return podfile.patch();
+  });
 };
 
 export const iosPodfile = {
   name: "Podfile patch (ONLY React Native Version < 0.6)",
   run: (wizard: Wizard): Promise<any> =>
-    wizard.fieldValue(packageJSON).then(json => {
-      const rnVersion = (json.dependencies || {})["react-native"];
-      if (!rnVersion) {
-        throw Error("react-native dependency was not found");
-      }
-      const rnVersionSanitized = rnVersion.replace("^", "");
-
-      // If 6.0.0, autolink should have linked the Pod.
-      if (semverGte("6.0.0", rnVersionSanitized)) {
-        logger.log(
-          "skipping patching Podfile since react-native is on an autolink supported version",
-        );
-        return;
-      }
-      return podfilePatchable().then(podfile => {
-        if (podfile.hasLine(embraceNativePod)) {
-          logger.warn("Already has EmbraceIO pod");
-          return;
-        }
-        podfile.addAfter(embraceRNPod, embraceNativePod);
-        return podfile.patch();
-      });
-    }),
+    wizard.fieldValue(packageJSON).then(patchPodfile),
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#native-modules",
 };
@@ -109,7 +86,7 @@ export const patchXcodeBundlePhase = {
           return;
         }
 
-        if (project.hasLine(bundlePhaseKey, bundlePhaseExtraArgs)) {
+        if (project.hasLine(bundlePhaseKey, exportSourcemapRNVariable)) {
           logger.warn("already patched Xcode React Native bundle phase");
           return;
         }
@@ -117,7 +94,7 @@ export const patchXcodeBundlePhase = {
         project.modifyPhase(
           bundlePhaseKey,
           /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m,
-          `${bundlePhaseExtraArgs}\n`,
+          `${exportSourcemapRNVariable}\n`,
         );
         project.sync();
         return project.patch();
@@ -158,9 +135,13 @@ export const addUploadBuildPhase = {
     "https://embrace.io/docs/react-native/integration/upload-symbol-files/#uploading-native-and-javascript-symbol-files",
 };
 
-const findNameWithCaseSensitiveFromPath = (path: string, name: string) => {
+export const findNameWithCaseSensitiveFromPath = (
+  path: string,
+  name: string,
+) => {
   const pathSplitted = path.split("/");
   const nameInLowerCase = name.toLocaleLowerCase();
+
   const nameFounded = pathSplitted.find(
     element => element.toLocaleLowerCase() === `${nameInLowerCase}.xcodeproj`,
   );
@@ -212,9 +193,6 @@ export const createEmbracePlist = {
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually",
 };
-
-const embraceRNPod =
-  "pod 'RNEmbrace', :path => '../node_modules/@embrace-io_react-native'";
 
 const plistContents = (iosAppIDValue: string) => {
   return `<?xml version="1.0" encoding="UTF-8"?>

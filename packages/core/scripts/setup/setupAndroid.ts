@@ -1,7 +1,7 @@
 import Wizard from "../util/wizard";
 import EmbraceLogger from "../../src/logger";
 
-import {apiToken, packageJSON} from "./common";
+import {androidAppID, apiToken, packageJSON} from "./common";
 import {
   createEmbraceJSON,
   patchAppBuildGradle,
@@ -22,7 +22,7 @@ const androidSteps = [
 
 const run = () => {
   const wiz = new Wizard();
-  [apiToken, packageJSON].map(field => wiz.registerField(field));
+  [androidAppID, apiToken, packageJSON].map(field => wiz.registerField(field));
   [...androidSteps].map(step => wiz.registerStep(step));
   wiz.runSteps();
 };

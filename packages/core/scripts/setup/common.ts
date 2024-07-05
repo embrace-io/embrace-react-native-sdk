@@ -1,5 +1,9 @@
 import Asker, {Answer} from "../util/asker";
 
+export interface IPackageJson {
+  name: string;
+  dependencies: Record<string, string>;
+}
 enum Platform {
   Android = "Android",
   IOS = "iOS",

@@ -59,6 +59,7 @@ class Wizard {
       (chain: Promise<any[]>, step: Step): Promise<any[]> =>
         chain.then(results => {
           return step.run(this).then(res => {
+            logger.log(`${step.name} was completed`);
             step.isCompleted = true;
             return [...results, res];
           });
