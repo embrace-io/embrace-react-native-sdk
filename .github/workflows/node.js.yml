@@ -31,7 +31,7 @@ jobs:
       - run: yarn
       - run: yarn lint
       - run: yarn test --watchAll=false --coverage
-      - run: yarn native-test
+      - run: yarn android-test
       - run: yarn build
       - uses: codecov/codecov-action@v4
         with:

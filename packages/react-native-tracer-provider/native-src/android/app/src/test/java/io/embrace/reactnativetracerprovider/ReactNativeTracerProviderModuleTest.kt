@@ -1,4 +1,4 @@
-package io.embrace.tracerprovider
+package io.embrace.reactnativetracerprovider
 
 import com.facebook.react.bridge.JavaOnlyArray
 import com.facebook.react.bridge.JavaOnlyMap
@@ -33,9 +33,9 @@ class JavaOnlyMapMapBuilder : WritableMapBuilder {
     }
 }
 
-class TracerProviderModuleTest {
+class ReactNativeTracerProviderModuleTest {
     companion object {
-        private lateinit var tracerProviderModule: TracerProviderModule
+        private lateinit var tracerProviderModule: ReactNativeTracerProviderModule
         private lateinit var exporter: SpanExporter
         private lateinit var promise: Promise
 
@@ -50,7 +50,7 @@ class TracerProviderModuleTest {
                 .build()
 
             val context: ReactApplicationContext = mock()
-            tracerProviderModule = TracerProviderModule(context, provider, JavaOnlyMapMapBuilder())
+            tracerProviderModule = ReactNativeTracerProviderModule(context, provider, JavaOnlyMapMapBuilder())
             tracerProviderModule.getTracer("test", "v1", "")
 
             promise = mock()

@@ -12,7 +12,7 @@ directories are git ignored and only generated as needed during build.
 
 ### Testing Android
 
-Tests can be run from Android Studio by adding native-src/android as a Project or from the CLI with `yarn native-test`
+Tests can be run from Android Studio by adding native-src/android as a Project or from the CLI with `yarn android-test`
 
 ### Testing iOS
 

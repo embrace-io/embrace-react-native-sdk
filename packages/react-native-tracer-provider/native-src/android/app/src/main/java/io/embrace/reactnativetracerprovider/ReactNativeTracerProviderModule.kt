@@ -1,4 +1,4 @@
-package io.embrace.tracerprovider
+package io.embrace.reactnativetracerprovider
 
 import io.embrace.android.embracesdk.Embrace;
 import com.facebook.react.bridge.Promise
@@ -49,17 +49,17 @@ private const val SPAN_CONTEXT_SPAN_ID_KEY = "spanId"
 private const val SPAN_STATUS_CODE_KEY = "code"
 private const val SPAN_STATUS_MESSAGE_KEY = "message"
 
-class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     private val log = Logger.getLogger("[Embrace]")
     private val tracers = ConcurrentHashMap<String, Tracer>()
     private val spans = ConcurrentHashMap<String, Span>()
     private var tracerProvider: TracerProvider
     private var writableMapBuilder: WritableMapBuilder
 
-    override fun getName() = "TracerProviderModule"
+    override fun getName() = "ReactNativeTracerProviderModule"
 
     /**
-     * Various serializer helpers to go to and from the bridge Readable/Writable Array/Maps to
+     * Various deserializer helpers to go to and from the bridge Readable/Writable Array/Maps to
      * actual OTEL API objects
      */
 
@@ -109,10 +109,16 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
                         ReadableType.Boolean -> builder.put(AttributeKey.booleanArrayKey(key), booleanListFromReadableArray(array))
                         ReadableType.Number -> builder.put(AttributeKey.doubleArrayKey(key), doubleListFromReadableArray(array))
                         ReadableType.String -> builder.put(AttributeKey.stringArrayKey(key), stringListFromReadableArray(array))
-                        else -> continue
+                        else -> {
+                            log.warning("invalid attribute key: $key")
+                            continue
+                        }
                     }
                 }
-                else -> continue
+                else -> {
+                    log.warning("invalid attribute value for key: $key")
+                    continue
+                }
             }
         }
 
@@ -121,12 +127,12 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
     }
 
     private fun spanContextFromReadableMap(map: ReadableMap) : SpanContext {
-        val traceID = map.getString(SPAN_CONTEXT_TRACE_ID_KEY) ?: ""
-        val spanID = map.getString(SPAN_CONTEXT_SPAN_ID_KEY) ?: ""
+        val traceId = map.getString(SPAN_CONTEXT_TRACE_ID_KEY) ?: ""
+        val spanId = map.getString(SPAN_CONTEXT_SPAN_ID_KEY) ?: ""
 
         val spanContext = SpanContext.create(
-            traceID,
-            spanID,
+            traceId,
+            spanId,
             TraceFlags.getDefault(),
             TraceState.getDefault())
 
@@ -168,6 +174,14 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
         return "$name $version $schemaUrl"
     }
 
+    private fun getSpan(id: String): Span? {
+        val span = spans[id]
+        if (span == null) {
+            log.warning("could not retrieve span with id: $id")
+        }
+        return span
+    }
+
     /**
      * Methods to allow the JS side to conform to @opentelemetry-js/api
      */
@@ -193,8 +207,8 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
     }
 
     @ReactMethod fun startSpan(tracerName: String, tracerVersion: String, tracerSchemaUrl: String,
-                               spanBridgeID: String, name: String, kind: String, time: Double,
-                               attributes: ReadableMap, links: ReadableArray, parentID: String,
+                               spanBridgeId: String, name: String, kind: String, time: Double,
+                               attributes: ReadableMap, links: ReadableArray, parentId: String,
                                promise: Promise) {
         val tracer = tracers[getTracerKey(tracerName, tracerVersion, tracerSchemaUrl)] ?: return
         val spanBuilder = tracer.spanBuilder(name)
@@ -231,29 +245,31 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
         }
 
         // Set parent
-        val parent = spans[parentID]
-        if (parentID.isEmpty() || parent == null) {
+        if (parentId.isEmpty()) {
             spanBuilder.setNoParent()
         } else {
-            spanBuilder.setParent(parent.storeInContext(Context.root()))
+            var parent = getSpan(parentId);
+            if (parent != null) {
+                spanBuilder.setParent(parent.storeInContext(Context.root()))
+            }
         }
 
         val span = spanBuilder.startSpan()
-        spans[spanBridgeID] = span
+        spans[spanBridgeId] = span
         promise.resolve(spanContextToWritableMap(span.spanContext))
     }
 
-    @ReactMethod(isBlockingSynchronousMethod = true) fun spanContext(spanBridgeID: String) : WritableMap {
-        return spanContextToWritableMap(spans[spanBridgeID]?.spanContext)
+    @ReactMethod(isBlockingSynchronousMethod = true) fun spanContext(spanBridgeId: String) : WritableMap {
+        return spanContextToWritableMap(getSpan(spanBridgeId)?.spanContext)
     }
 
-    @ReactMethod fun setAttributes(spanBridgeID: String, attributes: ReadableMap) {
-        val span = spans[spanBridgeID] ?: return
+    @ReactMethod fun setAttributes(spanBridgeId: String, attributes: ReadableMap) {
+        val span = getSpan(spanBridgeId) ?: return
         span.setAllAttributes(attributesFromReadableMap(attributes))
     }
 
-    @ReactMethod fun addEvent(spanBridgeID: String, eventName: String, attributes: ReadableMap, time: Double) {
-        val span = spans[spanBridgeID] ?: return
+    @ReactMethod fun addEvent(spanBridgeId: String, eventName: String, attributes: ReadableMap, time: Double) {
+        val span = getSpan(spanBridgeId) ?: return
 
         if (time != 0.0) {
             span.addEvent(eventName, attributesFromReadableMap(attributes), time.toLong(), TimeUnit.MILLISECONDS)
@@ -262,8 +278,8 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
         }
     }
 
-    @ReactMethod fun addLinks(spanBridgeID: String, links: ReadableArray) {
-        val span = spans[spanBridgeID] ?: return
+    @ReactMethod fun addLinks(spanBridgeId: String, links: ReadableArray) {
+        val span = getSpan(spanBridgeId) ?: return
         for(i in 0..<links.size()) {
             val link = links.getMap(i)
             val linkSpanContext = link.getMap(LINK_SPAN_CONTEXT_KEY) ?: continue
@@ -277,8 +293,8 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
         }
     }
 
-    @ReactMethod fun setStatus(spanBridgeID: String, status: ReadableMap) {
-        val span = spans[spanBridgeID] ?: return
+    @ReactMethod fun setStatus(spanBridgeId: String, status: ReadableMap) {
+        val span = getSpan(spanBridgeId) ?: return
         val statusCode = status.getString(SPAN_STATUS_CODE_KEY) ?: return
         val message = status.getString(SPAN_STATUS_MESSAGE_KEY) ?: ""
 
@@ -293,13 +309,13 @@ class TracerProviderModule(reactContext: ReactApplicationContext) : ReactContext
         }
     }
 
-    @ReactMethod fun updateName(spanBridgeID: String, name: String) {
-        val span = spans[spanBridgeID] ?: return
+    @ReactMethod fun updateName(spanBridgeId: String, name: String) {
+        val span = getSpan(spanBridgeId) ?: return
         span.updateName(name)
     }
 
-    @ReactMethod fun endSpan(spanBridgeID: String, endTime: Double) {
-        val span = spans[spanBridgeID] ?: return
+    @ReactMethod fun endSpan(spanBridgeId: String, endTime: Double) {
+        val span = getSpan(spanBridgeId) ?: return
 
         if (endTime == 0.0) {
             span.end()

@@ -45,6 +45,6 @@
   ],
   "scripts": {
     "build": "./copy-native-src.sh && tsc",
-    "native-test": "cd native-src && yarn install && cd android && ./gradlew :app:testDebugUnitTest && cd ../../"
+    "android-test": "cd native-src && yarn install && cd android && ./gradlew :app:testDebugUnitTest && cd ../../"
   }
 }
