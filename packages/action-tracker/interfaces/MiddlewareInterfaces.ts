@@ -12,7 +12,7 @@ export interface IAnyAction extends IAction {
  * This interface defines the dispatch instance structure
  */
 export type IDispatch<A extends IAction = IAnyAction> = <T extends A>(
-  action: T
+  action: T,
 ) => T;
 
 /**

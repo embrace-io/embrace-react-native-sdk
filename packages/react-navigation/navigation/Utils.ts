@@ -1,4 +1,4 @@
-import { IHistory, INavigationState } from './interfaces/NavigationInterfaces';
+import {IHistory, INavigationState} from "./interfaces/NavigationInterfaces";
 
 /**
  * This method loops into the Navigation history state and returns the whole history sorted
@@ -8,22 +8,22 @@ import { IHistory, INavigationState } from './interfaces/NavigationInterfaces';
  */
 export const findNavigationHistory = (
   navigationState: INavigationState,
-  historyName: IHistory[] = []
+  historyName: IHistory[] = [],
 ) => {
   if (!navigationState) {
     return historyName;
   }
-  const { state, name } = navigationState;
+  const {state, name} = navigationState;
   if (name) {
-    historyName.push({ name });
+    historyName.push({name});
   }
   if (state) {
     findNavigationHistory(state, historyName);
   } else {
-    const { index, routes, type } = navigationState;
+    const {index, routes, type} = navigationState;
     if (routes && routes.length > 0) {
-      if (type === 'stack') {
-        routes.forEach((route) => {
+      if (type === "stack") {
+        routes.forEach(route => {
           findNavigationHistory(route, historyName);
         });
       } else {

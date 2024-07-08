@@ -1,24 +1,31 @@
-import { NativeModules } from 'react-native';
-import { Attributes, Events, SPAN_ERROR_CODES } from '../interfaces/ISpans';
+import {NativeModules} from "react-native";
+
+import {Attributes, Events, SPAN_ERROR_CODES} from "../interfaces/ISpans";
+
 import {
   convertMSToNano,
   createFalsePromise,
   validateAndLogRequiredProperties,
-} from './Utils';
+} from "./Utils";
 
 export const startSpan = (
   name: string,
-  parentSpanId?: string
+  parentSpanId?: string,
+  startTimeMS?: number,
 ): Promise<boolean | string> => {
-  if (!validateAndLogRequiredProperties({ name })) {
+  if (!validateAndLogRequiredProperties({name})) {
     return createFalsePromise();
   }
   try {
-    return NativeModules.EmbraceManager.startSpan(name, parentSpanId);
+    return NativeModules.EmbraceManager.startSpan(
+      name,
+      parentSpanId,
+      convertMSToNano(startTimeMS),
+    );
   } catch (e) {
     console.warn(
       `[Embrace] The method startSpan was not found, please update the SDK.`,
-      e
+      e,
     );
     return createFalsePromise();
   }
@@ -26,17 +33,22 @@ export const startSpan = (
 
 export const stopSpan = (
   spanId: string,
-  errorCode: SPAN_ERROR_CODES = 'None'
+  errorCode: SPAN_ERROR_CODES = "None",
+  endTimeMS?: number,
 ): Promise<boolean> => {
-  if (!validateAndLogRequiredProperties({ spanId })) {
+  if (!validateAndLogRequiredProperties({spanId})) {
     return createFalsePromise();
   }
   try {
-    return NativeModules.EmbraceManager.stopSpan(spanId, errorCode);
+    return NativeModules.EmbraceManager.stopSpan(
+      spanId,
+      errorCode,
+      convertMSToNano(endTimeMS),
+    );
   } catch (e) {
     console.warn(
       `[Embrace] The method stopSpan was not found, please update the SDK.`,
-      e
+      e,
     );
     return createFalsePromise();
   }
@@ -45,10 +57,10 @@ export const stopSpan = (
 export const addSpanEventToSpan = (
   spanId: string,
   name: string,
-  timeStampMs?: number,
-  attributes?: Attributes
+  timeStampMs: number,
+  attributes?: Attributes,
 ): Promise<boolean> => {
-  if (!validateAndLogRequiredProperties({ name, spanId })) {
+  if (!validateAndLogRequiredProperties({name, spanId, timeStampMs})) {
     return createFalsePromise();
   }
   try {
@@ -56,12 +68,12 @@ export const addSpanEventToSpan = (
       spanId,
       name,
       convertMSToNano(timeStampMs),
-      attributes
+      attributes,
     );
   } catch (e) {
     console.warn(
       `[Embrace] The method addSpanEventToSpan was not found, please update the SDK.`,
-      e
+      e,
     );
     return createFalsePromise();
   }
@@ -70,21 +82,21 @@ export const addSpanEventToSpan = (
 export const addSpanAttributeToSpan = (
   spanId: string,
   key: string,
-  value: string
+  value: string,
 ): Promise<boolean> => {
-  if (!validateAndLogRequiredProperties({ spanId, key, value })) {
+  if (!validateAndLogRequiredProperties({spanId, key, value})) {
     return createFalsePromise();
   }
   try {
     return NativeModules.EmbraceManager.addSpanAttributeToSpan(
       spanId,
       key,
-      value
+      value,
     );
   } catch (e) {
     console.warn(
       `[Embrace] The method addSpanAttributeToSpan was not found, please update the SDK.`,
-      e
+      e,
     );
     return createFalsePromise();
   }
@@ -95,47 +107,47 @@ export const recordSpan = async (
   callback: () => void | Promise<void>,
   attributes?: Attributes,
   events?: Events[],
-  parentSpanId?: string
+  parentSpanId?: string,
 ): Promise<boolean> => {
-  if (!validateAndLogRequiredProperties({ name }) || !callback) {
+  if (!validateAndLogRequiredProperties({name}) || !callback) {
     callback();
     return createFalsePromise();
   }
-  let id = '';
+  let id = "";
   try {
     id = await NativeModules.EmbraceManager.startSpan(name, parentSpanId);
   } catch (e) {
     console.warn(
       `[Embrace] The method startSpan was not found, please update the SDK.`,
-      e
+      e,
     );
     return createFalsePromise();
   }
 
-  if (!id || id === '') {
+  if (!id || id === "") {
     callback();
     return createFalsePromise();
   }
 
   if (attributes && Object.values(attributes).length > 0) {
     for (const [key, value] of Object.entries(attributes)) {
-      if (validateAndLogRequiredProperties({ key, value })) {
+      if (validateAndLogRequiredProperties({key, value})) {
         NativeModules.EmbraceManager.addSpanAttributeToSpan(
           id,
           key.toString(),
-          value.toString()
+          value.toString(),
         );
       }
     }
   }
 
   if (events && events.length > 0) {
-    events.forEach((event) => {
+    events.forEach(event => {
       NativeModules.EmbraceManager.addSpanEventToSpan(
         id,
         event.name,
         convertMSToNano(event.timeStampMs),
-        event.attributes
+        event.attributes,
       );
     });
   }
@@ -147,27 +159,27 @@ export const recordSpan = async (
       await callback();
     }
   } catch (e) {
-    await NativeModules.EmbraceManager.stopSpan(id, 'Failure');
+    await NativeModules.EmbraceManager.stopSpan(id, "Failure");
     throw e;
   }
-  return NativeModules.EmbraceManager.stopSpan(id, 'None');
+  return NativeModules.EmbraceManager.stopSpan(id, "None");
 };
 
 export const recordCompletedSpan = (
   name: string,
   startTimeMS: number,
   endTimeMS: number,
-  errorCode: SPAN_ERROR_CODES = 'None',
+  errorCode: SPAN_ERROR_CODES = "None",
   parentSpanId?: string,
   attributes?: Attributes,
-  events?: Events[]
+  events?: Events[],
 ): Promise<boolean> => {
-  if (!validateAndLogRequiredProperties({ name, startTimeMS, endTimeMS })) {
+  if (!validateAndLogRequiredProperties({name, startTimeMS, endTimeMS})) {
     return createFalsePromise();
   }
   let tmpEvent = [] as Events[];
   if (events && events.length > 0) {
-    tmpEvent = events.map((event) => {
+    tmpEvent = events.map(event => {
       return {
         ...event,
         timestampNanos: convertMSToNano(event.timeStampMs),
@@ -182,12 +194,12 @@ export const recordCompletedSpan = (
       errorCode,
       parentSpanId,
       attributes,
-      tmpEvent
+      tmpEvent,
     );
   } catch (e) {
     console.warn(
       `[Embrace] The method recordCompletedSpan was not found, please update the SDK.`,
-      e
+      e,
     );
     return createFalsePromise();
   }

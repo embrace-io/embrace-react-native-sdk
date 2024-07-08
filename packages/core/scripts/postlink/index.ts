@@ -1,3 +1,3 @@
-import run from '../setup/setup';
+import run from "../setup/setup";
 
 run();

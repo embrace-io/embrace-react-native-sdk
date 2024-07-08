@@ -1,4 +1,5 @@
-import EmbraceLogger from '../../src/logger';
+import EmbraceLogger from "../../src/logger";
+
 const logger = new EmbraceLogger(console);
 export interface Field {
   name: string;
@@ -13,9 +14,9 @@ export interface Step {
 }
 
 class Wizard {
-  private fields: { [name: string]: Field };
+  private fields: {[name: string]: Field};
   private steps: Step[];
-  private fieldValues: { [name: string]: any };
+  private fieldValues: {[name: string]: any};
 
   constructor() {
     this.fields = {};
@@ -45,42 +46,43 @@ class Wizard {
   public fieldValueList(list: Field[]): Promise<any[]> {
     return list.reduce(
       (chain: Promise<any[]>, field: Field): Promise<any[]> =>
-        chain.then((results) => field.fetch().then((res) => [...results, res])),
-      Promise.resolve([])
+        chain.then(results => field.fetch().then(res => [...results, res])),
+      Promise.resolve([]),
     );
   }
 
   public getUncompletedSteps(): Step[] {
-    return this.steps.filter((step) => !step.isCompleted);
+    return this.steps.filter(step => !step.isCompleted);
   }
   public processSteps(): Promise<any[]> {
     return this.steps.reduce(
       (chain: Promise<any[]>, step: Step): Promise<any[]> =>
-        chain.then((results) => {
-          return step.run(this).then((res) => {
+        chain.then(results => {
+          return step.run(this).then(res => {
+            logger.log(`${step.name} was completed`);
             step.isCompleted = true;
             return [...results, res];
           });
         }),
-      Promise.resolve([])
+      Promise.resolve([]),
     );
   }
   public runSteps(): Promise<void> {
     return this.processSteps()
       .then(() => {
-        logger.log('done');
+        logger.log("done");
       })
-      .catch((err) => {
-        logger.error('error in setting up Embrace: ' + err);
+      .catch(err => {
+        logger.error("error in setting up Embrace: " + err);
         const uncompletedSteps = this.getUncompletedSteps();
-        uncompletedSteps.forEach((uncompletedStep) => {
+        uncompletedSteps.forEach(uncompletedStep => {
           logger.error(
             `We could not complete: ${
               uncompletedStep.name
             }, Please refer to the docs at ${
               uncompletedStep.docURL ||
-              'https://embrace.io/docs/react-native/integration/'
-            }`
+              "https://embrace.io/docs/react-native/integration/"
+            }`,
           );
         });
       });
