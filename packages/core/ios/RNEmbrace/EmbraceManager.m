@@ -521,9 +521,9 @@ RCT_EXPORT_METHOD(
    
 }
 
-RCT_EXPORT_METHOD(startSpan:(nonnull NSString*)name parentSpanId:(nullable NSString *)parentSpanId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(startSpan:(nonnull NSString*)name parentSpanId:(nullable NSString *)parentSpanId startTimeNanos:(NSInteger)startTimeNanos resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   @try {
-    NSString *spanId = [[RNEmbrace sharedInstance] startSpanWithName:name parentSpanId:parentSpanId];
+    NSString *spanId = [[RNEmbrace sharedInstance] startSpanWithName:name parentSpanId:parentSpanId startTimeNanos:startTimeNanos];
     resolve(spanId);
   } @catch (NSException *exception) {
     resolve(nil);
@@ -532,12 +532,13 @@ RCT_EXPORT_METHOD(startSpan:(nonnull NSString*)name parentSpanId:(nullable NSStr
 
 RCT_EXPORT_METHOD(stopSpan:(nonnull NSString*)spanId
     errorCode:(NSString *)errorCode
+    endTimeNanos:(NSInteger)endTimeNanos
     resolver:(RCTPromiseResolveBlock)resolve 
     rejecter:(RCTPromiseRejectBlock)reject) {
   @try {
     EmbraceOTelSpanHelper *spanHelper = [[EmbraceOTelSpanHelper alloc] init];
     EmbraceOTelSpanErrorCode formatedErrorCode = [spanHelper getEmbraceOTelSpanErrorCodeByString:errorCode];
-    BOOL result = [[RNEmbrace sharedInstance] stopSpanWithId:spanId errorCode:formatedErrorCode];
+    BOOL result = [[RNEmbrace sharedInstance] stopSpanWithId:spanId endTimeNanos:endTimeNanos errorCode:formatedErrorCode];
     resolve(result ? @YES : @NO);
   } @catch (NSException *exception) {
     resolve(@NO);

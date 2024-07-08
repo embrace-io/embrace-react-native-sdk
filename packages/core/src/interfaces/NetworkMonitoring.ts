@@ -1,6 +1,6 @@
-import { IAxios, validateAxiosInterface } from './IAxios';
+import {IAxios, validateAxiosInterface} from "./IAxios";
 
-export type NETWORK_SDK_INTERCEPTORS = 'axios';
+export type NETWORK_SDK_INTERCEPTORS = "axios";
 
 export type NETWORK_INTERCEPTOR_TYPES = IAxios;
 
@@ -11,10 +11,10 @@ export type NETWORK_INTERCEPTOR_TYPES = IAxios;
  * @returns Provider interceptor type
  */
 export const getNetworkSDKInterceptorProvider = (
-  providerInstance: NETWORK_INTERCEPTOR_TYPES
+  providerInstance: NETWORK_INTERCEPTOR_TYPES,
 ) => {
   if (validateAxiosInterface(providerInstance)) {
-    return 'axios';
+    return "axios";
   }
 
   return undefined;

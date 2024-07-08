@@ -1,5 +1,5 @@
-import { LiteralMap } from './Common';
-import { MethodType } from './HTTP';
+import {MethodType} from "./HTTP";
+import {LiteralMap} from "./Common";
 
 /**
  * This interface defines the internal Axios's interceptor structure
@@ -7,7 +7,7 @@ import { MethodType } from './HTTP';
 export interface AxiosInterceptorManager<V> {
   use<T = V>(
     onFulfilled?: (value: V) => T | Promise<T>,
-    onRejected?: (error: any) => any
+    onRejected?: (error: any) => any,
   ): void;
 }
 
@@ -79,15 +79,15 @@ export interface IAxios {
  */
 
 export const validateAxiosInterface = (instance: any): instance is IAxios => {
-  if (!('interceptors' in instance)) {
+  if (!("interceptors" in instance)) {
     return false;
   }
-  const { interceptors } = instance;
-  if (!('request' in interceptors && 'response' in interceptors)) {
+  const {interceptors} = instance;
+  if (!("request" in interceptors && "response" in interceptors)) {
     return false;
   }
-  const { request, response } = interceptors;
-  if (!('use' in request && 'use' in response)) {
+  const {request, response} = interceptors;
+  if (!("use" in request && "use" in response)) {
     return false;
   }
   return true;

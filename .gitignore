@@ -53,6 +53,7 @@ node_modules
 .nvm
 /bots/node_modules/
 package-lock.json
+.yarn/*
 
 # OS X
 .DS_Store
