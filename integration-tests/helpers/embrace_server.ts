@@ -1,7 +1,7 @@
-import { start_mockserver, stop_mockserver } from "mockserver-node";
-import { EmbraceRequestBody, SessionMessage } from "../typings/embrace";
+import {start_mockserver, stop_mockserver} from "mockserver-node";
+import {EmbraceRequestBody, SessionMessage} from "../typings/embrace";
 
-import { mockServerClient } from "mockserver-client";
+import {mockServerClient} from "mockserver-client";
 
 const PORT = 8877;
 
@@ -24,21 +24,21 @@ const clearServer = async () => {
 
 const getSessionMessages = async (delay = 2000): Promise<SessionMessage[]> => {
   if (delay) {
-    await new Promise((r) => setTimeout(r, delay));
+    await new Promise(r => setTimeout(r, delay));
   }
 
   const requests = await mockServerClient(
     "localhost",
-    PORT
+    PORT,
   ).retrieveRecordedRequests({
     path: "/v1/log/sessions",
     method: "POST",
   });
 
-  return requests.map((r) => {
+  return requests.map(r => {
     const body = r.body as EmbraceRequestBody;
     return body.json;
   });
 };
 
-export { startServer, stopServer, clearServer, getSessionMessages };
+export {startServer, stopServer, clearServer, getSessionMessages};
