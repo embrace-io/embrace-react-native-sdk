@@ -1,4 +1,4 @@
-declare module "mockserver-node" {
+declare module 'mockserver-node' {
   export function start_mockserver({
     serverPort,
     trace,
@@ -7,5 +7,5 @@ declare module "mockserver-node" {
     trace: boolean;
   }): void;
 
-  export function stop_mockserver({serverPort}: {serverPort: number}): void;
+  export function stop_mockserver({ serverPort }: { serverPort: number }): void;
 }
