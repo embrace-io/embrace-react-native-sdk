@@ -24,7 +24,7 @@ const mockUpdateName = jest.fn();
 const mockEndSpan = jest.fn();
 
 jest.mock('../TracerProviderModule', () => ({
-  TracerProviderModule: {
+  ReactNativeTracerProviderModule: {
     getTracer: (name: string, version?: string, schemaUrl?: string) =>
       mockGetTracer(name, version, schemaUrl),
     startSpan: (
