@@ -2,7 +2,7 @@
 
 Embrace gathers the information needed to identify issues and measure performance automatically upon integration. The following React Native guide provides simple instruction on how to call the relevant functions so teams can be provided much needed additional context (logs and user info) and measure the timing of key areas of their app explicitly (moments).
 
-For additional info please refer to the [React Native Guide](https://docs.embrace.io/docs/quick-quide).
+For additional info please refer to the [React Native Guide](https://embrace.io/docs/react-native/).
 
 # Requirements
 
@@ -76,7 +76,7 @@ To initialize the Embrace SDK as early as possible, we strongly recommend that y
 
 ##### Optional:
 
-This is a simplified process for React Native projects. If you want further information on the iOS SDK integration, you can check the steps on the Native [iOS Quick Integration Guide](https://docs.embrace.io/docs/ios-integration-guide).
+This is a simplified process for React Native projects. If you want further information on the iOS SDK integration, you can check the steps on the Native [iOS Quick Integration Guide](https://embrace.io/docs/ios/).
 
 ### Step 2: Add Native Embrace Android SDK
 
@@ -206,7 +206,7 @@ public class MainActivity extends ReactActivity {
 
 ##### Optional:
 
-This is a simplified process for React Native projects. If you want further information on the Android SDK integration, you can check the steps on the Native [Android Quick Integration Guide](https://docs.embrace.io/docs/android-integration-guide).
+This is a simplified process for React Native projects. If you want further information on the Android SDK integration, you can check the steps on the Native [Android Quick Integration Guide](https://embrace.io/docs/android/).
 
 ### Step 3: Add the embrace-io npm package to your React Native Project
 
