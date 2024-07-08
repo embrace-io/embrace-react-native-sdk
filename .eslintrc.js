@@ -99,5 +99,6 @@ module.exports = {
     "/node_modules/",
     "/examples/",
     "/integration-tests/",
+    "/lib/",
   ],
 };

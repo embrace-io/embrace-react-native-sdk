@@ -1,5 +1,5 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
-import { NativeModules } from 'react-native';
+import {NativeModules} from "react-native";
+import {RefObject, useEffect, useRef, useState} from "react";
 
 import {
   ICurrentScreenInstance,
@@ -11,7 +11,7 @@ import {findNavigationHistory} from "../navigation/Utils";
 
 export const useEmbraceNavigationTracker = (
   navigationRefParam: RefObject<unknown>,
-  forceRefresh?: boolean
+  forceRefresh?: boolean,
 ) => {
   const navigationRef = navigationRefParam as INavigationRef;
 
