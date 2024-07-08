@@ -95,7 +95,11 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+  // OTEL dependencies
+  implementation(platform("io.opentelemetry:opentelemetry-bom:1.38.0"));
+  implementation("io.opentelemetry:opentelemetry-api");
+  implementation("io.opentelemetry:opentelemetry-sdk");
+  implementation("io.opentelemetry:opentelemetry-exporter-logging");
 }
 
-// Copied from ../native-src/android/app/ as part of `yarn build`
-apply from: 'dependencies.gradle'
