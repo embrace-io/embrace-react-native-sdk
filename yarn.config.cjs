@@ -41,7 +41,7 @@ function enforcePackageInfo({ Yarn }) {
       workspace.unset("keywords")
     } else {
       workspace.set("keywords", [...new Set([
-        ...(workspace.keywords || []),
+        ...(workspace.manifest.keywords || []),
         "embrace",
         "react-native",
         "tracking",
@@ -81,17 +81,18 @@ function enforceFileStructure({ Yarn }) {
     workspace.set("typings", "lib/index.d.ts");
     workspace.set("directories", {
       lib: "lib",
-      test: "__tests__"
+      test: "__tests__",
     });
     workspace.set("files", [...new Set([
-      ...(workspace.files || []),
-      "lib"
+      ...(workspace.manifest.files || []),
+      "lib",
     ])]);
     workspace.set("scripts", {
-      ...(workspace.scripts || {}),
+      ...(workspace.manifest.scripts || {}),
       build: "tsc",
     });
   }
+
 }
 
 /**
