@@ -88,8 +88,8 @@ function enforceFileStructure({ Yarn }) {
       "lib",
     ])]);
     workspace.set("scripts", {
-      ...(workspace.manifest.scripts || {}),
       build: "tsc",
+      ...(workspace.manifest.scripts || {}),
     });
   }
 
