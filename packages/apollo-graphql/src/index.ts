@@ -1,5 +1,6 @@
-import { zip } from 'gzip-js';
-import { NativeModules, Platform } from 'react-native';
+import {NativeModules, Platform} from "react-native";
+import {zip} from "gzip-js";
+
 export interface IHttpOption {
   uri: string;
   url?: string;
@@ -47,7 +48,7 @@ interface IError {
   stack?: string;
 }
 interface IFowardResponse {
-  map: (data: IMap) => { subscribe: ISubscribe };
+  map: (data: IMap) => {subscribe: ISubscribe};
 }
 interface IObserver {
   error: (r: IError) => void;
@@ -65,7 +66,7 @@ const logErrorWithResponse = (
   dataReceived: any,
   status: number,
   errorMessage: string,
-  errorName?: string
+  errorName?: string,
 ) => {
   const endInMillis = new Date().getTime();
   const gzippedRequestData = dataRequest ? zip(dataRequest).length : 0;
@@ -80,7 +81,7 @@ const logErrorWithResponse = (
       gzippedRequestData,
       gzippedResponseData,
       status,
-      errorMessage
+      errorMessage,
     );
 
   const logAndroid = () =>
@@ -90,10 +91,10 @@ const logErrorWithResponse = (
       startInMillis,
       endInMillis,
       errorName,
-      errorMessage
+      errorMessage,
     );
 
-  return Platform.OS === 'ios' ? logIOS() : logAndroid();
+  return Platform.OS === "ios" ? logIOS() : logAndroid();
 };
 
 const createEmbraceHttpLink = (ApolloLink: any, httpLink: any) => {
@@ -103,16 +104,16 @@ const createEmbraceHttpLink = (ApolloLink: any, httpLink: any) => {
 
       const sufix = `${
         operation.operationName !== undefined &&
-        operation.operationName !== 'undefined'
+        operation.operationName !== "undefined"
           ? operation.operationName
-          : ''
+          : ""
       }(${operation.query.definitions[0].operation})`;
 
-      operation.setContext({ start: startTime });
+      operation.setContext({start: startTime});
       operation.setContext(() => {
         return {
           headers: {
-            'x-emb-path': `/graphql/${sufix}`,
+            "x-emb-path": `/graphql/${sufix}`,
           },
         };
       });
@@ -124,7 +125,7 @@ const createEmbraceHttpLink = (ApolloLink: any, httpLink: any) => {
         dataSent: any,
         dataReceived: any,
         status: number,
-        error?: IError
+        error?: IError,
       ) => {
         const gzippedDataSentData = dataSent ? zip(dataSent).length : 0;
         const gzippedResponseData = dataReceived ? zip(dataReceived).length : 0;
@@ -132,32 +133,32 @@ const createEmbraceHttpLink = (ApolloLink: any, httpLink: any) => {
         if (!error) {
           NativeModules.EmbraceManager.logNetworkRequest(
             path,
-            'POST',
+            "POST",
             st,
             et,
             gzippedDataSentData,
             gzippedResponseData,
             status,
-            undefined
+            undefined,
           );
         } else {
           logErrorWithResponse(
-            'POST',
+            "POST",
             path,
             st,
             gzippedDataSentData,
             gzippedResponseData,
             status,
             error.message,
-            error.name
+            error.name,
           );
         }
       };
 
-      const observable = forward(operation).map((data) => {
+      const observable = forward(operation).map(data => {
         const {
           start: startTime,
-          response: { status, url },
+          response: {status, url},
         } = operation.getContext();
         const endTime = new Date().getTime();
         sendDataToEmbrace(
@@ -166,15 +167,15 @@ const createEmbraceHttpLink = (ApolloLink: any, httpLink: any) => {
           endTime,
           operation.query.loc.source.body,
           data.data,
-          status
+          status,
         );
         return data;
       });
 
       observable.subscribe({
-        error: (error) => {
-          const { start: startTime, response } = operation.getContext();
-          const { url } = response;
+        error: error => {
+          const {start: startTime, response} = operation.getContext();
+          const {url} = response;
           let responseSize = 0;
           if (response._bodyBlob && response._bodyBlob._data) {
             responseSize = response._bodyBlob._data.size;
@@ -187,13 +188,13 @@ const createEmbraceHttpLink = (ApolloLink: any, httpLink: any) => {
             operation.query.loc.source.body,
             responseSize,
             error.statusCode,
-            error
+            error,
           );
         },
       });
 
       return observable;
-    }
+    },
   );
 
   return authMiddleware.concat(httpLink);
@@ -203,29 +204,29 @@ export default class EmbraceApolloLink {
   public static build = (
     ApolloLink: any,
     link: any,
-    platformToApply?: 'ios' | 'android'
+    platformToApply?: "ios" | "android",
   ): any => {
     if (!link) {
       console.warn(
-        '[Embrace] Apollo Link was not provided. GraphQL tracker was not applied.'
+        "[Embrace] Apollo Link was not provided. GraphQL tracker was not applied.",
       );
       return () => {};
     }
     if (platformToApply && platformToApply !== Platform.OS) {
       console.warn(
-        '[Embrace] This platform was marked to not track. GraphQL tracker was not applied.'
+        "[Embrace] This platform was marked to not track. GraphQL tracker was not applied.",
       );
       return link;
     }
     if (!ApolloLink) {
       console.warn(
-        '[Embrace] Apollo reference was not provided. GraphQL tracker was not applied.'
+        "[Embrace] Apollo reference was not provided. GraphQL tracker was not applied.",
       );
       return link;
     }
     if (!NativeModules.EmbraceManager) {
       console.warn(
-        '[Embrace] You must have the Embrace SDK to track screens, run `yarn add @embrace-io/react-native`.'
+        "[Embrace] You must have the Embrace SDK to track screens, run `yarn add @embrace-io/react-native`.",
       );
       return link;
     }
@@ -235,5 +236,5 @@ export default class EmbraceApolloLink {
     };
 
     return embraceMiddleware;
-  }
+  };
 }

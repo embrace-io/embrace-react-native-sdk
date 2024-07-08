@@ -1,16 +1,17 @@
-import EmbraceLogger from '../../src/logger';
-import Wizard from '../util/wizard';
+import Wizard from "../util/wizard";
+import EmbraceLogger from "../../src/logger";
+
+import {androidAppID, apiToken, packageJSON} from "./common";
 import {
   createEmbraceJSON,
   patchAppBuildGradle,
   patchBuildGradle,
   patchMainApplication,
-} from './android';
-import { apiToken, packageJSON } from './common';
+} from "./android";
 
 const logger = new EmbraceLogger(console);
 
-logger.log('initializing setup wizard for android');
+logger.log("initializing setup wizard for android");
 
 const androidSteps = [
   patchBuildGradle,
@@ -21,8 +22,8 @@ const androidSteps = [
 
 const run = () => {
   const wiz = new Wizard();
-  [apiToken, packageJSON].map((field) => wiz.registerField(field));
-  [...androidSteps].map((step) => wiz.registerStep(step));
+  [androidAppID, apiToken, packageJSON].map(field => wiz.registerField(field));
+  [...androidSteps].map(step => wiz.registerStep(step));
   wiz.runSteps();
 };
 

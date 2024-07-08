@@ -1,8 +1,0 @@
-{
-  "disableSources": true,
-  "excludeNotExported": true,
-  "inputFiles": ["./src/embrace.ts"],
-  "out": "docs",
-  "readme": "none",
-  "theme": "minimal"
-}

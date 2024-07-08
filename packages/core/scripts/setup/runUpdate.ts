@@ -1,3 +1,3 @@
-import run from './updateAndroid';
+import run from "./updateAndroid";
 
 run();

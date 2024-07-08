@@ -4,16 +4,16 @@ beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
 
-describe('Test Spans - Start', () => {
-  test('Create Span - With Name', () => {
+describe("Test Spans - Start", () => {
+  test("Create Span - With Name", () => {
     const mockNativePromiseResolved = jest.fn();
     const mockNativePromise = () =>
-      new Promise((res) => {
+      new Promise(res => {
         mockNativePromiseResolved();
         res(true);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockNativePromise,
@@ -21,13 +21,13 @@ describe('Test Spans - Start', () => {
       },
     }));
 
-    const { startSpan } = require('../src/index');
-    startSpan('Hey');
-    expect(mockNativePromiseResolved).toBeCalledTimes(1);
+    const {startSpan} = require("../src/index");
+    startSpan("Hey");
+    expect(mockNativePromiseResolved).toHaveBeenCalledTimes(1);
   });
 
-  test('Create Span - Undefined', () => {
-    jest.mock('react-native', () => ({
+  test("Create Span - Undefined", () => {
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: undefined,
@@ -35,59 +35,59 @@ describe('Test Spans - Start', () => {
       },
     }));
 
-    const { startSpan } = require('../src/index');
-    const result = startSpan('Hey');
+    const {startSpan} = require("../src/index");
+    const result = startSpan("Hey");
     expect(result).resolves.toBe(false);
   });
-  test('Create Span - Without Name', () => {
+  test("Create Span - Without Name", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockNativePromise,
         },
       },
     }));
-    const { startSpan } = require('../src/index');
-    const result = startSpan('');
+    const {startSpan} = require("../src/index");
+    const result = startSpan("");
     const result2 = startSpan(undefined);
 
     expect(result).resolves.toBe(false);
 
     expect(result2).resolves.toBe(false);
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
 
-  test('Create Span - Without Name', () => {
+  test("Create Span - Without Name", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockNativePromise,
         },
       },
     }));
-    const { startSpan } = require('../src/index');
+    const {startSpan} = require("../src/index");
     startSpan(undefined);
     jest.runAllTimers();
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
 });
 
-describe('Test Spans - Stop', () => {
-  test('Stop Span - With spanId', () => {
+describe("Test Spans - Stop", () => {
+  test("Stop Span - With spanId", () => {
     const mockNativePromiseResolved = jest.fn();
     const mockNativePromise = () =>
-      new Promise((res) => {
+      new Promise(res => {
         mockNativePromiseResolved();
         res(true);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           stopSpan: mockNativePromise,
@@ -95,53 +95,53 @@ describe('Test Spans - Stop', () => {
       },
     }));
 
-    const { stopSpan } = require('../src/index');
-    stopSpan('Hey');
-    expect(mockNativePromiseResolved).toBeCalledTimes(1);
+    const {stopSpan} = require("../src/index");
+    stopSpan("Hey");
+    expect(mockNativePromiseResolved).toHaveBeenCalledTimes(1);
   });
-  test('Stop Span - Without spanId', () => {
+  test("Stop Span - Without spanId", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           stopSpan: mockNativePromise,
         },
       },
     }));
-    const { stopSpan } = require('../src/index');
-    const result = stopSpan('');
+    const {stopSpan} = require("../src/index");
+    const result = stopSpan("");
     const result2 = stopSpan(undefined);
 
     expect(result).resolves.toBe(false);
     expect(result2).resolves.toBe(false);
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
-  test('Stop Span - Undefined', () => {
-    jest.mock('react-native', () => ({
+  test("Stop Span - Undefined", () => {
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           stopSpan: undefined,
         },
       },
     }));
-    const { stopSpan } = require('../src/index');
-    const result = stopSpan('id');
+    const {stopSpan} = require("../src/index");
+    const result = stopSpan("id");
     expect(result).resolves.toBe(false);
   });
 });
 
-describe('Test Spans - Add Event', () => {
-  test('Add Event To Span - With spanId - With Name', () => {
+describe("Test Spans - Add Event", () => {
+  test("Add Event To Span - With spanId - With Name - Time", () => {
     const mockNativePromiseResolved = jest.fn();
     const mockNativePromise = () =>
-      new Promise((res) => {
+      new Promise(res => {
         mockNativePromiseResolved();
         res(true);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanEventToSpan: mockNativePromise,
@@ -149,12 +149,12 @@ describe('Test Spans - Add Event', () => {
       },
     }));
 
-    const { addSpanEventToSpan } = require('../src/index');
-    addSpanEventToSpan('Hey', 'name');
-    expect(mockNativePromiseResolved).toBeCalledTimes(1);
+    const {addSpanEventToSpan} = require("../src/index");
+    addSpanEventToSpan("Hey", "name", new Date().getTime());
+    expect(mockNativePromiseResolved).toHaveBeenCalledTimes(1);
   });
-  test('Add Event To Span - Undefined', () => {
-    jest.mock('react-native', () => ({
+  test("Add Event To Span - Undefined", () => {
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanEventToSpan: undefined,
@@ -162,19 +162,19 @@ describe('Test Spans - Add Event', () => {
       },
     }));
 
-    const { addSpanEventToSpan } = require('../src/index');
-    const result = addSpanEventToSpan('Hey', 'name');
+    const {addSpanEventToSpan} = require("../src/index");
+    const result = addSpanEventToSpan("Hey", "name");
     expect(result).resolves.toBe(false);
   });
-  test('Add Event To Span - With spanId - With Name - With time', () => {
+  test("Add Event To Span - With spanId - With Name - With time", () => {
     const mockNativePromiseResolved = jest.fn();
     const mockNativePromise = () =>
-      new Promise((res) => {
+      new Promise(res => {
         mockNativePromiseResolved();
         res(true);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanEventToSpan: mockNativePromise,
@@ -182,19 +182,19 @@ describe('Test Spans - Add Event', () => {
       },
     }));
 
-    const { addSpanEventToSpan } = require('../src/index');
-    addSpanEventToSpan('Hey', 'name', 123);
-    expect(mockNativePromiseResolved).toBeCalledTimes(1);
+    const {addSpanEventToSpan} = require("../src/index");
+    addSpanEventToSpan("Hey", "name", 123);
+    expect(mockNativePromiseResolved).toHaveBeenCalledTimes(1);
   });
-  test('Add Event To Span - With spanId - With Name - With time - With Attribute', () => {
+  test("Add Event To Span - With spanId - With Name - With time - With Attribute", () => {
     const mockNativePromiseResolved = jest.fn();
     const mockNativePromise = () =>
-      new Promise((res) => {
+      new Promise(res => {
         mockNativePromiseResolved();
         res(true);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanEventToSpan: mockNativePromise,
@@ -202,58 +202,58 @@ describe('Test Spans - Add Event', () => {
       },
     }));
 
-    const { addSpanEventToSpan } = require('../src/index');
-    addSpanEventToSpan('Hey', 'name', 123, { at1: '123' });
-    expect(mockNativePromiseResolved).toBeCalledTimes(1);
+    const {addSpanEventToSpan} = require("../src/index");
+    addSpanEventToSpan("Hey", "name", 123, {at1: "123"});
+    expect(mockNativePromiseResolved).toHaveBeenCalledTimes(1);
   });
-  test('Add Event To Span - Without spanId', () => {
+  test("Add Event To Span - Without spanId", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanEventToSpan: mockNativePromise,
         },
       },
     }));
-    const { addSpanEventToSpan } = require('../src/index');
-    const result = addSpanEventToSpan('', 'name');
-    const result2 = addSpanEventToSpan(undefined, 'name');
+    const {addSpanEventToSpan} = require("../src/index");
+    const result = addSpanEventToSpan("", "name");
+    const result2 = addSpanEventToSpan(undefined, "name");
 
     expect(result).resolves.toBe(false);
     expect(result2).resolves.toBe(false);
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
 
-  test('Add Event To Span - Without Name', () => {
+  test("Add Event To Span - Without Name", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanEventToSpan: mockNativePromise,
         },
       },
     }));
-    const { addSpanEventToSpan } = require('../src/index');
-    const result = addSpanEventToSpan('SpanId', '');
+    const {addSpanEventToSpan} = require("../src/index");
+    const result = addSpanEventToSpan("SpanId", "");
 
     expect(result).resolves.toBe(false);
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
 });
 
-describe('Test Spans - Add Attribute', () => {
-  test('Add Attribute To Span - With spanId - With Key - With Value', () => {
+describe("Test Spans - Add Attribute", () => {
+  test("Add Attribute To Span - With spanId - With Key - With Value", () => {
     const mockNativePromiseResolved = jest.fn();
     const mockNativePromise = () =>
-      new Promise((res) => {
+      new Promise(res => {
         mockNativePromiseResolved();
         res(true);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanAttributeToSpan: mockNativePromise,
@@ -261,100 +261,100 @@ describe('Test Spans - Add Attribute', () => {
       },
     }));
 
-    const { addSpanAttributeToSpan } = require('../src/index');
-    addSpanAttributeToSpan('Hey', 'key', 'value');
-    expect(mockNativePromiseResolved).toBeCalledTimes(1);
+    const {addSpanAttributeToSpan} = require("../src/index");
+    addSpanAttributeToSpan("Hey", "key", "value");
+    expect(mockNativePromiseResolved).toHaveBeenCalledTimes(1);
   });
 
-  test('Add Attribute To Span - Without native SDK', () => {
-    jest.mock('react-native', () => ({
+  test("Add Attribute To Span - Without native SDK", () => {
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanAttributeToSpan: undefined,
         },
       },
     }));
-    const { addSpanAttributeToSpan } = require('../src/index');
-    const result = addSpanAttributeToSpan('Hey', 'key', 'value');
+    const {addSpanAttributeToSpan} = require("../src/index");
+    const result = addSpanAttributeToSpan("Hey", "key", "value");
 
     expect(result).resolves.toBe(false);
   });
 
-  test('Add Attribute To Span - Without spanId', () => {
+  test("Add Attribute To Span - Without spanId", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanAttributeToSpan: mockNativePromise,
         },
       },
     }));
-    const { addSpanAttributeToSpan } = require('../src/index');
-    const result = addSpanAttributeToSpan('', 'key', 'value');
-    const result2 = addSpanAttributeToSpan(undefined, 'key', 'value');
+    const {addSpanAttributeToSpan} = require("../src/index");
+    const result = addSpanAttributeToSpan("", "key", "value");
+    const result2 = addSpanAttributeToSpan(undefined, "key", "value");
 
     expect(result).resolves.toBe(false);
 
     expect(result2).resolves.toBe(false);
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
 
-  test('Add Attribute To Span - Without Key', () => {
+  test("Add Attribute To Span - Without Key", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanAttributeToSpan: mockNativePromise,
         },
       },
     }));
-    const { addSpanAttributeToSpan } = require('../src/index');
-    const result = addSpanAttributeToSpan('SpanId', '', 'value');
-    const result2 = addSpanAttributeToSpan('SpanId', undefined, 'value');
+    const {addSpanAttributeToSpan} = require("../src/index");
+    const result = addSpanAttributeToSpan("SpanId", "", "value");
+    const result2 = addSpanAttributeToSpan("SpanId", undefined, "value");
 
     expect(result).resolves.toBe(false);
     expect(result2).resolves.toBe(false);
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
 
-  test('Add Attribute To Span - Without Value', () => {
+  test("Add Attribute To Span - Without Value", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           addSpanAttributeToSpan: mockNativePromise,
         },
       },
     }));
-    const { addSpanAttributeToSpan } = require('../src/index');
-    const result = addSpanAttributeToSpan('SpanId', 'key', '');
-    const result2 = addSpanAttributeToSpan('SpanId', 'key', undefined);
+    const {addSpanAttributeToSpan} = require("../src/index");
+    const result = addSpanAttributeToSpan("SpanId", "key", "");
+    const result2 = addSpanAttributeToSpan("SpanId", "key", undefined);
 
     expect(result).resolves.toBe(false);
     expect(result2).resolves.toBe(false);
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
 });
 
-describe('Test Spans - Record Span With Function', () => {
-  test('Record Span With Function - Without Name / does not exist', () => {
+describe("Test Spans - Record Span With Function", () => {
+  test("Record Span With Function - Without Name / does not exist", () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
     const mockedFunction = jest.fn();
 
     const mockstartSpan = () =>
-      new Promise((res) => {
+      new Promise(res => {
         res(undefined);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockstartSpan,
@@ -365,34 +365,34 @@ describe('Test Spans - Record Span With Function', () => {
       },
     }));
 
-    const { recordSpan } = require('../src/index');
-    recordSpan('Hey', mockedFunction);
+    const {recordSpan} = require("../src/index");
+    recordSpan("Hey", mockedFunction);
     recordSpan(undefined, mockedFunction);
     jest.runAllTicks();
 
-    expect(mockedFunction).toBeCalledTimes(2);
-    expect(mockstopSpan).toBeCalledTimes(0);
+    expect(mockedFunction).toHaveBeenCalledTimes(2);
+    expect(mockstopSpan).toHaveBeenCalledTimes(0);
 
-    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(0);
-    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toHaveBeenCalledTimes(0);
+    expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
 
-  test('Record Span With Function - With Name', () => {
+  test("Record Span With Function - With Name", () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
     const mockedFunction = jest.fn();
 
-    const mockCallback = new Promise((res) => {
+    const mockCallback = new Promise(res => {
       mockedFunction();
       res(true);
     });
     const mockstartSpan = () =>
-      new Promise((res) => {
+      new Promise(res => {
         res(123);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockstartSpan,
@@ -403,28 +403,28 @@ describe('Test Spans - Record Span With Function', () => {
       },
     }));
 
-    const { recordSpan } = require('../src/index');
-    recordSpan('Hey', mockCallback);
+    const {recordSpan} = require("../src/index");
+    recordSpan("Hey", mockCallback);
     jest.runAllTicks();
 
-    expect(mockedFunction).toBeCalledTimes(1);
-    expect(mockstopSpan).toBeCalledTimes(1);
+    expect(mockedFunction).toHaveBeenCalledTimes(1);
+    expect(mockstopSpan).toHaveBeenCalledTimes(1);
 
-    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(0);
-    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toHaveBeenCalledTimes(0);
+    expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
-  test('Record Span With Function - With Name', () => {
+  test("Record Span With Function - With Name", () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
     const mockedFunction = jest.fn();
 
     const mockstartSpan = () =>
-      new Promise((res) => {
+      new Promise(res => {
         res(123);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockstartSpan,
@@ -435,33 +435,33 @@ describe('Test Spans - Record Span With Function', () => {
       },
     }));
 
-    const { recordSpan } = require('../src/index');
-    recordSpan('Hey', mockedFunction);
+    const {recordSpan} = require("../src/index");
+    recordSpan("Hey", mockedFunction);
     jest.runAllTicks();
 
-    expect(mockedFunction).toBeCalledTimes(1);
-    expect(mockstopSpan).toBeCalledTimes(1);
+    expect(mockedFunction).toHaveBeenCalledTimes(1);
+    expect(mockstopSpan).toHaveBeenCalledTimes(1);
 
-    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(0);
-    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toHaveBeenCalledTimes(0);
+    expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
 
-  test('Record Span With Function - With Name', () => {
+  test("Record Span With Function - With Name", () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
     const mockedFunction = jest.fn();
     const mockCallback = () => {
       mockedFunction();
-      throw Error('Should fail');
+      throw Error("Should fail");
     };
 
     const mockstartSpan = () =>
-      new Promise((res) => {
+      new Promise(res => {
         res(123);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockstartSpan,
@@ -472,31 +472,31 @@ describe('Test Spans - Record Span With Function', () => {
       },
     }));
 
-    const { recordSpan } = require('../src/index');
+    const {recordSpan} = require("../src/index");
     try {
-      recordSpan('Hey', mockCallback);
+      recordSpan("Hey", mockCallback);
       jest.runAllTicks();
     } catch (e) {}
 
-    expect(mockedFunction).toBeCalledTimes(1);
-    expect(mockstopSpan).toBeCalledTimes(1);
+    expect(mockedFunction).toHaveBeenCalledTimes(1);
+    expect(mockstopSpan).toHaveBeenCalledTimes(1);
 
-    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(0);
-    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toHaveBeenCalledTimes(0);
+    expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
 
-  test('Record Span With Function - With Name - Attributes', () => {
+  test("Record Span With Function - With Name - Attributes", () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
     const mockedFunction = jest.fn();
 
     const mockstartSpan = () =>
-      new Promise((res) => {
+      new Promise(res => {
         res(123);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockstartSpan,
@@ -507,22 +507,22 @@ describe('Test Spans - Record Span With Function', () => {
       },
     }));
 
-    const { recordSpan } = require('../src/index');
-    recordSpan('Hey', mockedFunction, {
-      val1: 'value',
+    const {recordSpan} = require("../src/index");
+    recordSpan("Hey", mockedFunction, {
+      val1: "value",
     });
     jest.runAllTicks();
 
-    expect(mockedFunction).toBeCalledTimes(1);
-    expect(mockstopSpan).toBeCalledTimes(1);
+    expect(mockedFunction).toHaveBeenCalledTimes(1);
+    expect(mockstopSpan).toHaveBeenCalledTimes(1);
 
-    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(1);
-    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toHaveBeenCalledTimes(1);
+    expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
-  test('Record Span With Function - undefined', () => {
+  test("Record Span With Function - undefined", () => {
     const mockedFunction = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: undefined,
@@ -530,23 +530,23 @@ describe('Test Spans - Record Span With Function', () => {
       },
     }));
 
-    const { recordSpan } = require('../src/index');
-    const result = recordSpan('Hey', mockedFunction);
+    const {recordSpan} = require("../src/index");
+    const result = recordSpan("Hey", mockedFunction);
 
     expect(result).resolves.toBe(false);
   });
-  test('Record Span With Function - With Name - Attribute Event', () => {
+  test("Record Span With Function - With Name - Attribute Event", () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
     const mockedFunction = jest.fn();
 
     const mockstartSpan = () =>
-      new Promise((res) => {
+      new Promise(res => {
         res(123);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockstartSpan,
@@ -557,36 +557,36 @@ describe('Test Spans - Record Span With Function', () => {
       },
     }));
 
-    const { recordSpan } = require('../src/index');
+    const {recordSpan} = require("../src/index");
     recordSpan(
-      'Hey',
+      "Hey",
       mockedFunction,
       {
-        val1: 'value',
+        val1: "value",
       },
-      [{ name: 'name', timestampNanos: 123, attributes: { val1: 'val1' } }]
+      [{name: "name", timestampNanos: 123, attributes: {val1: "val1"}}],
     );
     jest.runAllTicks();
 
-    expect(mockedFunction).toBeCalledTimes(1);
-    expect(mockstopSpan).toBeCalledTimes(1);
+    expect(mockedFunction).toHaveBeenCalledTimes(1);
+    expect(mockstopSpan).toHaveBeenCalledTimes(1);
 
-    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(1);
-    expect(mockaddSpanEventToSpan).toBeCalledTimes(1);
+    expect(mockaddSpanAttributeToSpan).toHaveBeenCalledTimes(1);
+    expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(1);
   });
 
-  test('Record Span With Function - With Name - Attributes x 2', () => {
+  test("Record Span With Function - With Name - Attributes x 2", () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
     const mockedFunction = jest.fn();
 
     const mockstartSpan = () =>
-      new Promise((res) => {
+      new Promise(res => {
         res(123);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockstartSpan,
@@ -597,32 +597,32 @@ describe('Test Spans - Record Span With Function', () => {
       },
     }));
 
-    const { recordSpan } = require('../src/index');
-    recordSpan('Hey', mockedFunction, {
-      val1: 'value',
-      val2: 'value',
+    const {recordSpan} = require("../src/index");
+    recordSpan("Hey", mockedFunction, {
+      val1: "value",
+      val2: "value",
     });
     jest.runAllTicks();
 
-    expect(mockedFunction).toBeCalledTimes(1);
-    expect(mockstopSpan).toBeCalledTimes(1);
+    expect(mockedFunction).toHaveBeenCalledTimes(1);
+    expect(mockstopSpan).toHaveBeenCalledTimes(1);
 
-    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(2);
-    expect(mockaddSpanEventToSpan).toBeCalledTimes(0);
+    expect(mockaddSpanAttributeToSpan).toHaveBeenCalledTimes(2);
+    expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
 
-  test('Record Span With Function - With Name - Attributes Events x 2', () => {
+  test("Record Span With Function - With Name - Attributes Events x 2", () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
     const mockedFunction = jest.fn();
 
     const mockstartSpan = () =>
-      new Promise((res) => {
+      new Promise(res => {
         res(123);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockstartSpan,
@@ -633,48 +633,48 @@ describe('Test Spans - Record Span With Function', () => {
       },
     }));
 
-    const { recordSpan } = require('../src/index');
+    const {recordSpan} = require("../src/index");
     recordSpan(
-      'Hey',
+      "Hey",
       mockedFunction,
       {
-        val1: 'value',
-        val2: 'value',
+        val1: "value",
+        val2: "value",
       },
       [
         {
-          name: 'name',
+          name: "name",
           timestampNanos: 123,
-          attributes: { val1: 'val1', val2: 'val2' },
+          attributes: {val1: "val1", val2: "val2"},
         },
         {
-          name: 'name2',
+          name: "name2",
           timestampNanos: 1234,
-          attributes: { val1: 'val1', val2: 'val2' },
+          attributes: {val1: "val1", val2: "val2"},
         },
-      ]
+      ],
     );
     jest.runAllTicks();
 
-    expect(mockedFunction).toBeCalledTimes(1);
-    expect(mockstopSpan).toBeCalledTimes(1);
+    expect(mockedFunction).toHaveBeenCalledTimes(1);
+    expect(mockstopSpan).toHaveBeenCalledTimes(1);
 
-    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(2);
-    expect(mockaddSpanEventToSpan).toBeCalledTimes(2);
+    expect(mockaddSpanAttributeToSpan).toHaveBeenCalledTimes(2);
+    expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(2);
   });
 
-  test('Record Span With Function - With Name - Event', () => {
+  test("Record Span With Function - With Name - Event", () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
     const mockedFunction = jest.fn();
 
     const mockstartSpan = () =>
-      new Promise((res) => {
+      new Promise(res => {
         res(123);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           startSpan: mockstartSpan,
@@ -685,30 +685,30 @@ describe('Test Spans - Record Span With Function', () => {
       },
     }));
 
-    const { recordSpan } = require('../src/index');
-    recordSpan('Hey', mockedFunction, undefined, [
-      { name: 'name', timestampNanos: 123, attributes: { val1: 'val1' } },
+    const {recordSpan} = require("../src/index");
+    recordSpan("Hey", mockedFunction, undefined, [
+      {name: "name", timestampNanos: 123, attributes: {val1: "val1"}},
     ]);
     jest.runAllTicks();
 
-    expect(mockedFunction).toBeCalledTimes(1);
-    expect(mockstopSpan).toBeCalledTimes(1);
+    expect(mockedFunction).toHaveBeenCalledTimes(1);
+    expect(mockstopSpan).toHaveBeenCalledTimes(1);
 
-    expect(mockaddSpanAttributeToSpan).toBeCalledTimes(0);
-    expect(mockaddSpanEventToSpan).toBeCalledTimes(1);
+    expect(mockaddSpanAttributeToSpan).toHaveBeenCalledTimes(0);
+    expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(1);
   });
 });
 
-describe('Test Spans - Record Completed', () => {
-  test('Record Completed Span - With Name', () => {
+describe("Test Spans - Record Completed", () => {
+  test("Record Completed Span - With Name", () => {
     const mockNativePromiseResolved = jest.fn();
     const mockNativePromise = () =>
-      new Promise((res) => {
+      new Promise(res => {
         mockNativePromiseResolved();
         res(true);
       });
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           recordCompletedSpan: mockNativePromise,
@@ -716,12 +716,12 @@ describe('Test Spans - Record Completed', () => {
       },
     }));
 
-    const { recordCompletedSpan } = require('../src/index');
-    recordCompletedSpan('Hey');
-    expect(mockNativePromiseResolved).toBeCalledTimes(0);
+    const {recordCompletedSpan} = require("../src/index");
+    recordCompletedSpan("Hey");
+    expect(mockNativePromiseResolved).toHaveBeenCalledTimes(0);
   });
-  test('Record Completed Span - undefined', () => {
-    jest.mock('react-native', () => ({
+  test("Record Completed Span - undefined", () => {
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           recordCompletedSpan: undefined,
@@ -729,132 +729,132 @@ describe('Test Spans - Record Completed', () => {
       },
     }));
 
-    const { recordCompletedSpan } = require('../src/index');
-    const result = recordCompletedSpan('Hey', 123, 123);
+    const {recordCompletedSpan} = require("../src/index");
+    const result = recordCompletedSpan("Hey", 123, 123);
     expect(result).resolves.toBe(false);
   });
-  test('Record Completed Span - Without Name', () => {
+  test("Record Completed Span - Without Name", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           recordCompletedSpan: mockNativePromise,
         },
       },
     }));
-    const { recordCompletedSpan } = require('../src/index');
-    const result = recordCompletedSpan('');
+    const {recordCompletedSpan} = require("../src/index");
+    const result = recordCompletedSpan("");
     const result2 = recordCompletedSpan(undefined);
 
     expect(result).resolves.toBe(false);
 
     expect(result2).resolves.toBe(false);
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
-  test('Record Completed Span - With Name - Without startTimeNanos', () => {
+  test("Record Completed Span - With Name - Without startTimeNanos", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           recordCompletedSpan: mockNativePromise,
         },
       },
     }));
-    const { recordCompletedSpan } = require('../src/index');
-    const result = recordCompletedSpan('name', '');
-    const result2 = recordCompletedSpan('name', undefined);
+    const {recordCompletedSpan} = require("../src/index");
+    const result = recordCompletedSpan("name", "");
+    const result2 = recordCompletedSpan("name", undefined);
 
     expect(result).resolves.toBe(false);
 
     expect(result2).resolves.toBe(false);
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
-  test('Record Completed Span - With Name - With startTimeNanos - Without endTimeNanos', () => {
+  test("Record Completed Span - With Name - With startTimeNanos - Without endTimeNanos", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           recordCompletedSpan: mockNativePromise,
         },
       },
     }));
-    const { recordCompletedSpan } = require('../src/index');
-    const result = recordCompletedSpan('name', 123, '');
-    const result2 = recordCompletedSpan('name', 123, undefined);
+    const {recordCompletedSpan} = require("../src/index");
+    const result = recordCompletedSpan("name", 123, "");
+    const result2 = recordCompletedSpan("name", 123, undefined);
 
     expect(result).resolves.toBe(false);
 
     expect(result2).resolves.toBe(false);
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
-  test('Record Completed Span - Without Name - With startTimeNanos - Without endTimeNanos', () => {
+  test("Record Completed Span - Without Name - With startTimeNanos - Without endTimeNanos", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           recordCompletedSpan: mockNativePromise,
         },
       },
     }));
-    const { recordCompletedSpan } = require('../src/index');
-    const result = recordCompletedSpan('', 123, '');
-    const result2 = recordCompletedSpan('name', 123, undefined);
+    const {recordCompletedSpan} = require("../src/index");
+    const result = recordCompletedSpan("", 123, "");
+    const result2 = recordCompletedSpan("name", 123, undefined);
 
     expect(result).resolves.toBe(false);
 
     expect(result2).resolves.toBe(false);
 
-    expect(mockNativePromise).toBeCalledTimes(0);
+    expect(mockNativePromise).toHaveBeenCalledTimes(0);
   });
 
-  test('Record Completed Span - With Name - With startTimeNanos - With endTimeNanos', () => {
+  test("Record Completed Span - With Name - With startTimeNanos - With endTimeNanos", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           recordCompletedSpan: mockNativePromise,
         },
       },
     }));
-    const { recordCompletedSpan } = require('../src/index');
-    recordCompletedSpan('name', 123, 123);
+    const {recordCompletedSpan} = require("../src/index");
+    recordCompletedSpan("name", 123, 123);
 
-    expect(mockNativePromise).toBeCalledTimes(1);
+    expect(mockNativePromise).toHaveBeenCalledTimes(1);
   });
 
-  test('Record Completed Span - With Name - With startTimeNanos - With endTimeNanos', () => {
+  test("Record Completed Span - With Name - With startTimeNanos - With endTimeNanos", () => {
     const mockNativePromise = jest.fn();
 
-    jest.mock('react-native', () => ({
+    jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
           recordCompletedSpan: mockNativePromise,
         },
       },
     }));
-    const { recordCompletedSpan } = require('../src/index');
+    const {recordCompletedSpan} = require("../src/index");
 
-    recordCompletedSpan('name', 123, 123, 'None', undefined, undefined, [
+    recordCompletedSpan("name", 123, 123, "None", undefined, undefined, [
       {
-        name: 'name',
+        name: "name",
         timestampNanos: 123,
-        attributes: { val1: 'val1', val2: 'val2' },
+        attributes: {val1: "val1", val2: "val2"},
       },
       {
-        name: 'name2',
+        name: "name2",
         timestampNanos: 1234,
-        attributes: { val1: 'val1', val2: 'val2' },
+        attributes: {val1: "val1", val2: "val2"},
       },
     ]);
 
-    expect(mockNativePromise).toBeCalledTimes(1);
+    expect(mockNativePromise).toHaveBeenCalledTimes(1);
   });
 });
