@@ -1,4 +1,4 @@
-import type { Options } from "@wdio/types";
+import type {Options} from "@wdio/types";
 import {
   clearServer,
   startServer,
@@ -80,11 +80,11 @@ export const config: Options.Testrunner = {
     },
     {
       // capabilities for local Appium web tests on an iOS Emulator
-      'platformName': 'iOS',
-      'appium:automationName': 'XCUITest',
-      'appium:deviceName': 'iPhone 15',
-      'appium:appPackage': 'io.embrace.basictestapp',
-      'appium:noReset': true,
+      platformName: "iOS",
+      "appium:automationName": "XCUITest",
+      "appium:deviceName": "iPhone 15",
+      "appium:appPackage": "io.embrace.basictestapp",
+      "appium:noReset": true,
     },
   ],
 

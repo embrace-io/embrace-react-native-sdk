@@ -1,7 +1,7 @@
-import { driver } from "@wdio/globals";
+import {driver} from "@wdio/globals";
 
-import { getSessionMessages } from "../helpers/embrace_server";
-import { EmbraceSpanData } from "../typings/embrace";
+import {getSessionMessages} from "../helpers/embrace_server";
+import {EmbraceSpanData} from "../typings/embrace";
 
 describe("Tracer Provider", () => {
   const expectValidIDs = (span: EmbraceSpanData) => {
@@ -31,11 +31,7 @@ describe("Tracer Provider", () => {
       expectValidIDs(spans[2]);
 
       // TODO update when testing against the actual Embrace SDK
-      const expectedSpanDurations = [
-         2591701,
-         2352861857268000,
-         5927541
-      ];
+      const expectedSpanDurations = [2591701, 2352861857268000, 5927541];
 
       expect(sessionPayloads[0].spans).toEqual([
         {
@@ -44,7 +40,8 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-1-updated",
           start_time_unix_nano: 1718045981827000 * 1000000,
-          end_time_unix_nano: 1718045981827000 * 1000000 + expectedSpanDurations[0],
+          end_time_unix_nano:
+            1718045981827000 * 1000000 + expectedSpanDurations[0],
           status: "OK",
           events: [],
           attributes: {},
@@ -55,7 +52,8 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-2",
           start_time_unix_nano: 1718045981828000 * 1000000,
-          end_time_unix_nano: 1718045981828000 * 1000000 + expectedSpanDurations[1],
+          end_time_unix_nano:
+            1718045981828000 * 1000000 + expectedSpanDurations[1],
           status: "UNSET",
           events: [
             {
@@ -84,7 +82,8 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-3",
           start_time_unix_nano: 1718045981828000 * 1000000,
-          end_time_unix_nano: 1718045981828000 * 1000000 + expectedSpanDurations[2],
+          end_time_unix_nano:
+            1718045981828000 * 1000000 + expectedSpanDurations[2],
           status: "UNSET",
           events: [
             {
@@ -123,13 +122,7 @@ describe("Tracer Provider", () => {
       expectValidIDs(spans[4]);
 
       // TODO update when testing against the actual Embrace SDK
-      const expectedSpanDurations = [
-         46207,
-         2606099,
-         693721,
-         756168,
-         841156,
-      ];
+      const expectedSpanDurations = [46207, 2606099, 693721, 756168, 841156];
 
       expect(sessionPayloads[0].spans).toEqual([
         {
@@ -138,7 +131,8 @@ describe("Tracer Provider", () => {
           parent_span_id: spans[1].span_id,
           name: "test-5",
           start_time_unix_nano: 1718047385968000 * 1000000,
-          end_time_unix_nano: 1718047385968000 * 1000000 + expectedSpanDurations[0],
+          end_time_unix_nano:
+            1718047385968000 * 1000000 + expectedSpanDurations[0],
           status: "UNSET",
           events: [],
           attributes: {},
@@ -149,7 +143,8 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-4",
           start_time_unix_nano: 1718047385966000 * 1000000,
-          end_time_unix_nano: 1718047385966000 * 1000000 + expectedSpanDurations[1],
+          end_time_unix_nano:
+            1718047385966000 * 1000000 + expectedSpanDurations[1],
           status: "UNSET",
           events: [],
           attributes: {},
@@ -160,7 +155,8 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-1",
           start_time_unix_nano: 1718047075563000 * 1000000,
-          end_time_unix_nano: 1718047075563000 * 1000000 + expectedSpanDurations[2],
+          end_time_unix_nano:
+            1718047075563000 * 1000000 + expectedSpanDurations[2],
           status: "UNSET",
           events: [],
           attributes: {},
@@ -171,7 +167,8 @@ describe("Tracer Provider", () => {
           parent_span_id: spans[2].span_id,
           name: "test-2",
           start_time_unix_nano: 1718047075563000 * 1000000,
-          end_time_unix_nano: 1718047075563000 * 1000000 + expectedSpanDurations[3],
+          end_time_unix_nano:
+            1718047075563000 * 1000000 + expectedSpanDurations[3],
           status: "UNSET",
           events: [],
           attributes: {
@@ -184,7 +181,8 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-3",
           start_time_unix_nano: 1718047075564000 * 1000000,
-          end_time_unix_nano: 1718047075564000 * 1000000 + expectedSpanDurations[4],
+          end_time_unix_nano:
+            1718047075564000 * 1000000 + expectedSpanDurations[4],
           status: "UNSET",
           events: [],
           attributes: {

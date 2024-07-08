@@ -1,6 +1,6 @@
-import { driver } from "@wdio/globals";
+import {driver} from "@wdio/globals";
 
-import { getSessionMessages } from "../helpers/embrace_server";
+import {getSessionMessages} from "../helpers/embrace_server";
 
 describe("Sessions", () => {
   it("should be recorded as foreground", async () => {
