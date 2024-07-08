@@ -6,11 +6,12 @@ import {
   SpanOptions,
   trace,
   Tracer,
-} from '@opentelemetry/api';
-import { EmbraceNativeSpan } from './EmbraceNativeSpan';
-import { TracerProviderModule } from './TracerProviderModule';
-import { SpanContextSyncBehaviour } from './types';
-import { normalizeAttributes, normalizeLinks, normalizeTime } from './util';
+} from "@opentelemetry/api";
+
+import {normalizeAttributes, normalizeLinks, normalizeTime} from "./util";
+import {SpanContextSyncBehaviour} from "./types";
+import {TracerProviderModule} from "./TracerProviderModule";
+import {EmbraceNativeSpan} from "./EmbraceNativeSpan";
 
 /**
  * EmbraceNativeTracer implements a Tracer over the native Embrace Android and iOS SDKs.
@@ -45,12 +46,16 @@ export class EmbraceNativeTracer implements Tracer {
     this.spanContextSyncBehaviour = spanContextSyncBehaviour;
   }
 
-  public startSpan(name: string, options: SpanOptions = {}, context?: Context): Span {
-    const { kind, attributes, links, startTime, root } = options;
+  public startSpan(
+    name: string,
+    options: SpanOptions = {},
+    context?: Context,
+  ): Span {
+    const {kind, attributes, links, startTime, root} = options;
     const parentSpan = trace.getSpan(
-      context || this.contextManager.active()
+      context || this.contextManager.active(),
     ) as EmbraceNativeSpan;
-    const parentNativeID = (!root && parentSpan && parentSpan.nativeID()) || '';
+    const parentNativeID = (!root && parentSpan && parentSpan.nativeID()) || "";
 
     this.spansCreated += 1;
     const nativeSpan = new EmbraceNativeSpan(
@@ -58,7 +63,7 @@ export class EmbraceNativeTracer implements Tracer {
       this.version,
       this.schemaUrl,
       this.spansCreated,
-      this.spanContextSyncBehaviour
+      this.spanContextSyncBehaviour,
     );
 
     nativeSpan.creatingNativeSide(
@@ -68,12 +73,12 @@ export class EmbraceNativeTracer implements Tracer {
         this.schemaUrl,
         nativeSpan.nativeID(),
         name,
-        kind ? SpanKind[kind] : '',
+        kind ? SpanKind[kind] : "",
         normalizeTime(startTime),
         normalizeAttributes(attributes),
         normalizeLinks(links),
-        parentNativeID
-      )
+        parentNativeID,
+      ),
     );
 
     return nativeSpan;
@@ -82,24 +87,27 @@ export class EmbraceNativeTracer implements Tracer {
   // Taken from https://github.com/open-telemetry/opentelemetry-js/blob/01a2c35a694e57df45f063d61506ef9e9938eb7d/packages/opentelemetry-sdk-trace-base/src/Tracer.ts#L199-L242
   public startActiveSpan<F extends (span: Span) => ReturnType<F>>(
     name: string,
-    fn: F
+    fn: F,
   ): ReturnType<F>;
+  // eslint-disable-next-line no-dupe-class-members
   public startActiveSpan<F extends (span: Span) => ReturnType<F>>(
     name: string,
     opts: SpanOptions,
-    fn: F
+    fn: F,
   ): ReturnType<F>;
+  // eslint-disable-next-line no-dupe-class-members
   public startActiveSpan<F extends (span: Span) => ReturnType<F>>(
     name: string,
     opts: SpanOptions,
     ctx: Context,
-    fn: F
+    fn: F,
   ): ReturnType<F>;
+  // eslint-disable-next-line no-dupe-class-members
   public startActiveSpan<F extends (span: Span) => ReturnType<F>>(
     name: string,
     arg2?: F | SpanOptions,
     arg3?: F | Context,
-    arg4?: F
+    arg4?: F,
   ): ReturnType<F> | undefined {
     let opts: SpanOptions | undefined;
     let ctx: Context | undefined;

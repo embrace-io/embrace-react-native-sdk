@@ -1,5 +1,5 @@
-import { Attributes, TimeInput } from '@opentelemetry/api';
-import { Link } from '@opentelemetry/api/build/src/trace/link';
+import {Link} from "@opentelemetry/api/build/src/trace/link";
+import {Attributes, TimeInput} from "@opentelemetry/api";
 
 /**
  * Several different primitive types are valid as TimeInput, normalize to a number representing epoch milliseconds
@@ -12,7 +12,7 @@ export const normalizeTime = (time?: TimeInput): number => {
     return 0;
   }
 
-  if (typeof time === 'number') {
+  if (typeof time === "number") {
     return time;
   }
 
@@ -45,10 +45,10 @@ export const normalizeLinks = (links?: Link[]) => {
 };
 
 export const isAttributes = (
-  attributesOrTimeInput: Attributes | TimeInput | undefined
+  attributesOrTimeInput: Attributes | TimeInput | undefined,
 ): attributesOrTimeInput is Attributes => {
   return (
-    typeof attributesOrTimeInput === 'object' &&
+    typeof attributesOrTimeInput === "object" &&
     !(attributesOrTimeInput instanceof Date) &&
     !Array.isArray(attributesOrTimeInput)
   );

@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-import { Context, ContextManager, ROOT_CONTEXT } from '@opentelemetry/api';
+import {Context, ContextManager, ROOT_CONTEXT} from "@opentelemetry/api";
 
 /**
  * Stack Context Manager for managing the state in web
@@ -47,13 +47,14 @@ export class StackContextManager implements ContextManager {
   // eslint-disable-next-line @typescript-eslint/ban-types
   private _bindFunction<T extends Function>(
     context = ROOT_CONTEXT,
-    target: T
+    target: T,
   ): T {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const manager = this;
     const contextWrapper = function (this: unknown, ...args: unknown[]) {
       return manager.with(context, () => target.apply(this, args));
     };
-    Object.defineProperty(contextWrapper, 'length', {
+    Object.defineProperty(contextWrapper, "length", {
       enumerable: false,
       configurable: true,
       writable: false,
@@ -80,7 +81,7 @@ export class StackContextManager implements ContextManager {
     if (context === undefined) {
       context = this.active();
     }
-    if (typeof target === 'function') {
+    if (typeof target === "function") {
       return this._bindFunction(context, target);
     }
     return target;
