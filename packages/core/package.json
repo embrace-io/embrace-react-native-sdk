@@ -37,12 +37,6 @@
     "lib": "lib",
     "test": "__tests__"
   },
-  "rnpm": {
-    "commands": {
-      "postlink": "node node_modules/embrace-io/dist/scripts/postlink",
-      "postunlink": "node node_modules/embrace-io/dist/scripts/postunlink"
-    }
-  },
   "keywords": [
     "embrace",
     "react-native",
