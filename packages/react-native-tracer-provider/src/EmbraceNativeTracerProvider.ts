@@ -3,14 +3,15 @@ import {
   ContextManager,
   Tracer,
   TracerProvider,
-} from '@opentelemetry/api';
-import { EmbraceNativeTracer } from './EmbraceNativeTracer';
-import { StackContextManager } from './StackContextManager';
-import { TracerProviderModule } from './TracerProviderModule';
+} from "@opentelemetry/api";
+
 import {
   EmbraceNativeTracerProviderConfig,
   SpanContextSyncBehaviour,
-} from './types';
+} from "./types";
+import {TracerProviderModule} from "./TracerProviderModule";
+import {StackContextManager} from "./StackContextManager";
+import {EmbraceNativeTracer} from "./EmbraceNativeTracer";
 
 /**
  * EmbraceNativeTracerProvider implements a TracerProvider over the native Embrace Android and iOS SDKs.
@@ -26,7 +27,7 @@ export class EmbraceNativeTracerProvider implements TracerProvider {
   constructor(
     config: EmbraceNativeTracerProviderConfig = {
       setGlobalContextManager: true,
-    }
+    },
   ) {
     this.contextManager = new StackContextManager();
     this.contextManager.enable();
@@ -35,16 +36,16 @@ export class EmbraceNativeTracerProvider implements TracerProvider {
       context.setGlobalContextManager(this.contextManager);
     }
 
-    this.spanContextSyncBehaviour = config.spanContextSyncBehaviour || 'block';
+    this.spanContextSyncBehaviour = config.spanContextSyncBehaviour || "block";
   }
 
   public getTracer(
     name: string,
     version?: string,
-    options?: { schemaUrl?: string }
+    options?: {schemaUrl?: string},
   ): Tracer {
-    const schemaUrl = options?.schemaUrl || '';
-    const tracerVersion = version || '';
+    const schemaUrl = options?.schemaUrl || "";
+    const tracerVersion = version || "";
     TracerProviderModule.getTracer(name, tracerVersion, schemaUrl);
     return new EmbraceNativeTracer(
       this.contextManager,

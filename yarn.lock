@@ -2507,6 +2507,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@embrace-io/react-native-tracer-provider@workspace:packages/react-native-tracer-provider":
+  version: 0.0.0-use.local
+  resolution: "@embrace-io/react-native-tracer-provider@workspace:packages/react-native-tracer-provider"
+  dependencies:
+    "@opentelemetry/api": "npm:^1.9.0"
+  peerDependencies:
+    react-native: ">=0.56.0"
+  languageName: unknown
+  linkType: soft
+
 "@embrace-io/react-native-webview-tracker@workspace:packages/webview-tracker":
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-webview-tracker@workspace:packages/webview-tracker"
@@ -3505,6 +3515,13 @@ __metadata:
   dependencies:
     "@octokit/openapi-types": "npm:^18.0.0"
   checksum: 10c0/2925479aa378a4491762b4fcf381bdc7daca39b4e0b2dd7062bce5d74a32ed7d79d20d3c65ceaca6d105cf4b1f7417fea634219bf90f79a57d03e2dac629ec45
+  languageName: node
+  linkType: hard
+
+"@opentelemetry/api@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "@opentelemetry/api@npm:1.9.0"
+  checksum: 10c0/9aae2fe6e8a3a3eeb6c1fdef78e1939cf05a0f37f8a4fae4d6bf2e09eb1e06f966ece85805626e01ba5fab48072b94f19b835449e58b6d26720ee19a58298add
   languageName: node
   linkType: hard
 

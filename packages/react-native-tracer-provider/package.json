@@ -21,7 +21,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/embrace-io/embrace-react-native-sdk",
-    "directory": "packages/core"
+    "directory": "packages/react-native-tracer-provider"
   },
   "publishConfig": {
     "access": "public"
@@ -46,5 +46,8 @@
   "scripts": {
     "build": "./copy-native-src.sh && tsc",
     "android-test": "cd native-src && yarn install && cd android && ./gradlew :app:testDebugUnitTest && cd ../../"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.56.0"
   }
 }

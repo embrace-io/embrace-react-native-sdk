@@ -11,4 +11,4 @@ export interface EmbraceNativeTracerProviderConfig {
  *  - return_empty: return a span context with blank strings for the span and trace IDs
  *  - throw: throw an error
  */
-export type SpanContextSyncBehaviour = 'block' | 'return_empty' | 'throw';
+export type SpanContextSyncBehaviour = "block" | "return_empty" | "throw";

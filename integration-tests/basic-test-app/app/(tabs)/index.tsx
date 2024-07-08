@@ -1,17 +1,14 @@
-import { Image, StyleSheet, Button } from "react-native";
-import { useCallback, useMemo } from "react";
+import {Image, StyleSheet, Button} from "react-native";
+import {useCallback, useMemo} from "react";
 
-import { ThemedView } from "@/components/ThemedView";
-import { ThemedText } from "@/components/ThemedText";
+import {ThemedView} from "@/components/ThemedView";
+import {ThemedText} from "@/components/ThemedText";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { endSession } from "@embrace-io/react-native";
-import {
-  generateNestedSpans,
-  generateTestSpans,
-} from "@/helpers/generateSpans";
-import { Tracer } from "@opentelemetry/api";
-import { EmbraceNativeTracerProvider } from "@embrace-io/react-native-tracer-provider";
+import {endSession} from "@embrace-io/react-native";
+import {generateNestedSpans, generateTestSpans} from "@/helpers/generateSpans";
+import {Tracer} from "@opentelemetry/api";
+import {EmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 
 const HomeScreen = () => {
   const handleEndSession = useCallback(() => {
@@ -23,14 +20,13 @@ const HomeScreen = () => {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
+      headerBackgroundColor={{light: "#A1CEDC", dark: "#1D3D47"}}
       headerImage={
         <Image
           source={require("@/assets/images/partial-react-logo.png")}
           style={styles.reactLogo}
         />
-      }
-    >
+      }>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Session</ThemedText>
         <Button onPress={handleEndSession} title="END SESSION" />

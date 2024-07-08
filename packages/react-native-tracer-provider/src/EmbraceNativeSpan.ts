@@ -1,3 +1,4 @@
+import {Link} from "@opentelemetry/api/build/src/trace/link";
 import {
   Attributes,
   AttributeValue,
@@ -7,16 +8,16 @@ import {
   SpanStatus,
   SpanStatusCode,
   TimeInput,
-} from '@opentelemetry/api';
-import { Link } from '@opentelemetry/api/build/src/trace/link';
-import { TracerProviderModule } from './TracerProviderModule';
-import { SpanContextSyncBehaviour } from './types';
+} from "@opentelemetry/api";
+
 import {
   isAttributes,
   normalizeAttributes,
   normalizeLinks,
   normalizeTime,
-} from './util';
+} from "./util";
+import {SpanContextSyncBehaviour} from "./types";
+import {TracerProviderModule} from "./TracerProviderModule";
 
 /**
  * EmbraceNativeSpan implements a Span over the native Embrace Android and iOS SDKs.
@@ -42,7 +43,7 @@ export class EmbraceNativeSpan implements Span {
     tracerVersion: string,
     tracerSchemaUrl: string,
     createdIndex: number,
-    spanContextSyncBehaviour: SpanContextSyncBehaviour
+    spanContextSyncBehaviour: SpanContextSyncBehaviour,
   ) {
     this.tracerName = tracerName;
     this.tracerVersion = tracerVersion;
@@ -82,14 +83,14 @@ export class EmbraceNativeSpan implements Span {
     }
 
     switch (this.spanContextSyncBehaviour) {
-      case 'block':
+      case "block":
         return TracerProviderModule.spanContext(this.nativeID());
-      case 'throw':
-        throw new Error('span context is not yet available on the native side');
-      case 'return_empty':
+      case "throw":
+        throw new Error("span context is not yet available on the native side");
+      case "return_empty":
         return {
-          traceId: '',
-          spanId: '',
+          traceId: "",
+          spanId: "",
           traceFlags: 0,
         };
     }
@@ -99,25 +100,28 @@ export class EmbraceNativeSpan implements Span {
    * spanContextAsync provides an async alternative to spanContext by wrapping the response in a promise
    */
   public spanContextAsync(): Promise<SpanContext> {
-    return this.creating || Promise.reject('failed to retrieve span context');
+    return this.creating || Promise.reject("failed to retrieve span context");
   }
 
   public setAttribute(key: string, value: AttributeValue): this {
-    return this.setAttributes({ [key]: value });
+    return this.setAttributes({[key]: value});
   }
 
   public setAttributes(attributes: Attributes): this {
     if (this.isReadonly()) {
       return this;
     }
-    TracerProviderModule.setAttributes(this.nativeID(), normalizeAttributes(attributes));
+    TracerProviderModule.setAttributes(
+      this.nativeID(),
+      normalizeAttributes(attributes),
+    );
     return this;
   }
 
   public addEvent(
     name: string,
     attributesOrStartTime?: Attributes | TimeInput,
-    timeStamp?: TimeInput
+    timeStamp?: TimeInput,
   ): this {
     if (this.isReadonly()) {
       return this;
@@ -128,14 +132,14 @@ export class EmbraceNativeSpan implements Span {
         this.nativeID(),
         name,
         normalizeAttributes(attributesOrStartTime),
-        normalizeTime(timeStamp)
+        normalizeTime(timeStamp),
       );
     } else {
       TracerProviderModule.addEvent(
         this.nativeID(),
         name,
         normalizeAttributes({}),
-        normalizeTime(attributesOrStartTime)
+        normalizeTime(attributesOrStartTime),
       );
     }
 
@@ -201,27 +205,27 @@ export class EmbraceNativeSpan implements Span {
     // https://opentelemetry.io/docs/specs/semconv/exceptions/exceptions-spans/
     // https://github.com/open-telemetry/opentelemetry-js/blob/4fa7c1358e84287079a5cba95313d42b50cfcb91/packages/opentelemetry-sdk-trace-base/src/Span.ts#L303
     const attributes: Attributes = {};
-    if (typeof exception === 'string') {
-      attributes['exception.message'] = exception;
+    if (typeof exception === "string") {
+      attributes["exception.message"] = exception;
     } else if (exception) {
       if (exception.code) {
-        attributes['exception.type'] = exception.code.toString();
+        attributes["exception.type"] = exception.code.toString();
       } else if (exception.name) {
-        attributes['exception.type'] = exception.name;
+        attributes["exception.type"] = exception.name;
       }
       if (exception.message) {
-        attributes['exception.message'] = exception.message;
+        attributes["exception.message"] = exception.message;
       }
       if (exception.stack) {
-        attributes['exception.stacktrace'] = exception.stack;
+        attributes["exception.stacktrace"] = exception.stack;
       }
     }
 
     TracerProviderModule.addEvent(
       this.nativeID(),
-      'exception',
+      "exception",
       normalizeAttributes(attributes),
-      normalizeTime(time)
+      normalizeTime(time),
     );
   }
 }
