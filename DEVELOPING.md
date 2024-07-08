@@ -13,7 +13,7 @@ Any new package under ./packages/ will get automatically picked up as a new Yarn
 - `package.json` with a name and description (other fields will be filled by yarn constraints, version is supplied by Lerna)
 - `tsconfig.json` that extends from the one at the root
 - `README.md`
-- `src/` and `__tests__` folders to contain the code for the package
+- `src/` and `__tests__/` folders to contain the code for the package
 
 ## Adding dependencies
 
@@ -78,7 +78,7 @@ yarn ios --mode=Release
 You can test Embrace Android SDK changes by altering the dependency in the core package's [build.gradle](./packages/core/android/build.gradle).
 And then either publish a local artifact or if you need CI to pass - publish a beta:
 
-### Local artefact
+### Local artifact
 
 1. Publish locally with `cd packages/core/android && ./gradlew clean assembleRelease publishToMavenLocal -Pversion=<your-version-here>`
 2. Add `mavenLocal()` to the `repositories` closure in `examples/react-native-test-suite/node_modules/embrace-io/android/build.gradle`
@@ -125,8 +125,8 @@ unreleased changes on `master` and a patch release will be cut from that new bra
 1. Bump the Android (SDK + Swazzler)/iOS dependencies to the latest available stable versions
    1. Update the iOS SDK version in `./packages/core/ios/RNEmbrace.podspec`
    2. Update the Android SDK version in `./packages/core/android/gradle.properties`
-2. Bump the SDK version according to semver 
+2. Bump the RN SDK version according to semver in `./lerna.json`
 3. Run the example app on Android + iOS (in release mode) and confirm that a session is captured & appears in the dashboard with useful info
-4. Create a PR with all these changes and merge to `master`
-5. Release to npm with `yarn publish`
+4. Release to npm with `yarn publish-modules`
+5. Create a PR with all these changes and merge to `master`
 6. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/master/docs/react-native/changelog.md) for the release
