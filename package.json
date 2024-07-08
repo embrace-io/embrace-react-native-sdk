@@ -11,6 +11,7 @@
   },
   "scripts": {
     "publish-modules": "npx lerna run build && npx lerna publish",
+    "build": "npx lerna run build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
     "test": "jest"
   },
