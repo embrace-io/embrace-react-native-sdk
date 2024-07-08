@@ -14,7 +14,10 @@
     "react-native": ">=0.56.0"
   },
   "files": [
-    "lib"
+    "lib",
+    "android",
+    "ios",
+    "RNEmbrace.podspec"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
