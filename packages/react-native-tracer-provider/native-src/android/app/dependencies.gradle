@@ -1,6 +1,6 @@
 dependencies {
   // TODO keep this in sync with the version from the core/ package
-  api "io.embrace:embrace-android-sdk:6.8.2"
+  api "io.embrace:embrace-android-sdk:6.9.0"
 
   // TODO remove once using the Embrace provider
   implementation(platform("io.opentelemetry:opentelemetry-bom:1.38.0"))

@@ -121,9 +121,18 @@ dependencies {
         implementation jscFlavor
     }
 
-  testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
-  testImplementation 'junit:junit:4.12'
-  testImplementation "org.mockito.kotlin:mockito-kotlin:5.3.1"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito.kotlin:mockito-kotlin:5.3.1"
+    testImplementation("io.mockk:mockk:1.13.11")
+}
+
+android {
+    useLibrary 'android.test.mock'
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
