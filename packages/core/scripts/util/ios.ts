@@ -55,7 +55,7 @@ export const getPodFile = () => {
   const podfilePath = glob.sync("ios/Podfile")[0];
   if (!podfilePath) {
     throw new Error(
-      "Could not find Podfile. Please refer to the docs at https://.embrace.io/docs/ to update manually.",
+      "Could not find Podfile. Please refer to the docs at https://embrace.io/docs/ to update manually.",
     );
   }
   return getFileContents(podfilePath);
