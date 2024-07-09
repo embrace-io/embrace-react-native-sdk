@@ -110,6 +110,20 @@ function enforceReactNativePeerDependency({ Yarn }) {
 }
 
 /**
+ *  Enforces each package having a common set of devDependencies
+ */
+function enforceCommonDevDependencies({ Yarn }) {
+  for (const workspace of Yarn.workspaces()) {
+    if (workspace.manifest.private) continue;
+
+    workspace.set("devDependencies", {
+      "typescript": "^4.7.4",
+      ...(workspace.manifest.devDependencies || {}),
+    });
+  }
+}
+
+/**
  *  Enforces that a workspace MUST depend on the same version of a dependency as the one used by the other workspaces
  *  Taken from: https://yarnpkg.com/features/constraints
  */
@@ -132,6 +146,7 @@ module.exports = defineConfig({
     enforceNoDualTypeDependencies(ctx);
     enforceFileStructure(ctx);
     enforceReactNativePeerDependency(ctx);
+    enforceCommonDevDependencies(ctx);
     enforceConsistentDependenciesAcrossTheProject(ctx);
   },
 });
