@@ -10,7 +10,7 @@ yarn install
 ## Adding a new package
 
 Any new package under ./packages/ will get automatically picked up as a new Yarn workspace. The directory should include:
-- `package.json` with a name and description (other fields will be filled by yarn constraints, version is supplied by Lerna)
+- `package.json` with name, description, main, typings (other fields will be filled by yarn constraints, version is supplied by Lerna)
 - `tsconfig.json` that extends from the one at the root
 - `README.md`
 - `src/` and `__tests__/` folders to contain the code for the package
