@@ -63,7 +63,7 @@ export const podfilePatchable = (): Promise<FileUpdatable> => {
     if (!podfilePath) {
       return reject(
         embLogger.format(
-          "Could not find Podfile. Please refer to the docs at https://docs.embrace.io to update manually.",
+          "Could not find Podfile. Please refer to the docs at https://embrace.io/docs to update manually.",
         ),
       );
     }
@@ -117,7 +117,7 @@ export const xcodePatchable = ({
 };
 
 const docsMessage =
-  "Please refer to the docs at https://docs.embrace.io to update manually.";
+  "Please refer to the docs at https://embrace.io/docs to update manually.";
 
 const getXcodeProject = (path: string): Promise<XcodeProject> => {
   const project = xcode.project(path);

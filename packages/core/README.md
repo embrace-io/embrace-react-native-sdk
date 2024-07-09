@@ -4,7 +4,7 @@ Embrace gathers the information needed to identify issues and measure performanc
 The following React Native guide provides simple instruction on how to call the relevant functions so teams can be provided
 much needed additional context (logs and user info) and measure the timing of key areas of their app explicitly (spans).
 
-For additional info please refer to the [React Native Guide](https://docs.embrace.io/docs/react-native).
+For additional info please refer to the [React Native Guide](https://embrace.io/docs/react-native).
 
 # Requirements
 
@@ -40,7 +40,7 @@ node node_modules/@embrace-io/react-native/lib/scripts/setup/installAndroid.js
 node node_modules/@embrace-io/react-native/lib/scripts/setup/installIos.js
 ```
 
-To run these steps manually refer to [this section of our guide](https://docs.embrace.io/docs/react-native/integration/add-embrace-sdk/#manually)
+To run these steps manually refer to [this section of our guide](https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually)
 
 ## Initialize the Embrace SDK
 
@@ -69,9 +69,9 @@ export default App
 
 ## Uploading sourcemaps
 
-Refer to our guide on [uploading symbol files](https://docs.embrace.io/docs/react-native/integration/upload-symbol-files/).
+Refer to our guide on [uploading symbol files](https://embrace.io/docs/react-native/integration/upload-symbol-files/).
 
 ## Troubleshooting
 
-Please refer to our [complete integration guide](https://docs.embrace.io/docs/react-native/integration/). If you continue
+Please refer to our [complete integration guide](https://embrace.io/docs/react-native/integration/). If you continue
 to run into issues please [contact us directly](mailto:support@embrace.io) or reach out in our [Community Slack](https://embraceio-community.slack.com/).
