@@ -71,31 +71,6 @@ function enforceNoDualTypeDependencies({Yarn} ) {
 }
 
 /**
- * Enforces consistent file structure across workspaces
- */
-function enforceFileStructure({ Yarn }) {
-  for (const workspace of Yarn.workspaces()) {
-    if (workspace.manifest.private) continue;
-
-    workspace.set("main", "lib/index.js");
-    workspace.set("typings", "lib/index.d.ts");
-    workspace.set("directories", {
-      lib: "lib",
-      test: "__tests__",
-    });
-    workspace.set("files", [...new Set([
-      ...(workspace.manifest.files || []),
-      "lib",
-    ])]);
-    workspace.set("scripts", {
-      build: "tsc",
-      ...(workspace.manifest.scripts || {}),
-    });
-  }
-
-}
-
-/**
  *  Enforces each package having a peerDependency on React Native
  */
 function enforceReactNativePeerDependency({ Yarn }) {
@@ -144,7 +119,6 @@ module.exports = defineConfig({
   constraints: async ctx => {
     enforcePackageInfo(ctx);
     enforceNoDualTypeDependencies(ctx);
-    enforceFileStructure(ctx);
     enforceReactNativePeerDependency(ctx);
     enforceCommonDevDependencies(ctx);
     enforceConsistentDependenciesAcrossTheProject(ctx);
