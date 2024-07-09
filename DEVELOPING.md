@@ -20,9 +20,10 @@ Any new package under ./packages/ will get automatically picked up as a new Yarn
 Since we are using Yarn workspaces `dependencies` should not be added to the root `package.json` (see [more details](https://stackoverflow.com/a/53558779)).
 If multiple packages include the same dependency Yarn constraints will enforce that the version used matches.
 `devDependencies` are fine to add at the root `package.json` (see [more details](https://github.com/lerna/lerna/issues/1079#issuecomment-337660289))
-if they are shared among multiple packages, otherwise add them to just the individual package that requires it. This is
-also where we define common peerDependencies and enforce a common version. These are packages such as React Native that
-our packages require but that we leave to the customer to have defined as explicit dependencies.
+if they are only needed at the top-level, otherwise add them to just the individual package that requires it. If they
+are shared between multiple packages then they should be added to the Yarn constraints file to enforce a common version.
+This is also where we define common peerDependencies and enforce a common version. These are packages such as React Native
+that our packages require but that we leave to the customer to have defined as explicit dependencies.
 
 ## Testing changes during development
 
