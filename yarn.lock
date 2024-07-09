@@ -2522,6 +2522,7 @@ __metadata:
   resolution: "@embrace-io/react-native-tracer-provider@workspace:packages/react-native-tracer-provider"
   dependencies:
     "@opentelemetry/api": "npm:^1.9.0"
+    typescript: "npm:^4.7.4"
   peerDependencies:
     react-native: ">=0.56.0"
   languageName: unknown
