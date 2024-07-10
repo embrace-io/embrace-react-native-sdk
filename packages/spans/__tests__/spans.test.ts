@@ -133,7 +133,7 @@ describe("Test Spans - Stop", () => {
 });
 
 describe("Test Spans - Add Event", () => {
-  test("Add Event To Span - With spanId - With Name", () => {
+  test("Add Event To Span - With spanId - With Name - Time", () => {
     const mockNativePromiseResolved = jest.fn();
     const mockNativePromise = () =>
       new Promise(res => {
@@ -150,7 +150,7 @@ describe("Test Spans - Add Event", () => {
     }));
 
     const {addSpanEventToSpan} = require("../src/index");
-    addSpanEventToSpan("Hey", "name");
+    addSpanEventToSpan("Hey", "name", new Date().getTime());
     expect(mockNativePromiseResolved).toHaveBeenCalledTimes(1);
   });
   test("Add Event To Span - Undefined", () => {
