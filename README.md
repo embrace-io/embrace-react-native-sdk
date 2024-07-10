@@ -28,7 +28,7 @@ Individual packages are published from this monorepo, reasoning can be found in 
 ## Support
 
 - Open an [issue](https://github.com/embrace-io/embrace-react-native-sdk/issues/new) for the Embrace team to triage.
-- Join our [Community Slack](https://embraceio-community.slack.com/)
+- Join our [Community Slack](https://community.embrace.io)
 
 ## License
 

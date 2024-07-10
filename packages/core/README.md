@@ -53,7 +53,9 @@ import {initialize} from '@embrace-io/react-native';
 const App = ()=> {
 
   useEffect(()=>{
-    // Note: Initialize is a promise, so if you want to perform an action and it must be tracked, it is recommended to use await to wait for the method to finish
+    // `initialize` is a Promise
+    // If you want to perform an action that must be tracked
+    // it is recommended to use await to wait for the method to finish
 
     initialize().then(hasStarted=>{
       if(hasStarted){
@@ -67,11 +69,12 @@ const App = ()=> {
 export default App
 ```
 
-## Uploading sourcemaps
+## Uploading source maps
 
+The Embrace SDK allows you to view both native and JavaScript stack traces for crashes and error logs.
 Refer to our guide on [uploading symbol files](https://embrace.io/docs/react-native/integration/upload-symbol-files/).
 
 ## Troubleshooting
 
 Please refer to our [complete integration guide](https://embrace.io/docs/react-native/integration/). If you continue
-to run into issues please [contact us directly](mailto:support@embrace.io) or reach out in our [Community Slack](https://embraceio-community.slack.com/).
+to run into issues please [contact us directly](mailto:support@embrace.io) or reach out in our [Community Slack](https://community.embrace.io)
