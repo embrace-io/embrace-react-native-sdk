@@ -8,7 +8,8 @@ More documentation and examples can be found in our [React Native Documentation]
 
 ## Getting Started
 
-Please head to our website to [sign up](https://dash.embrace.io/signup/) and then follow our [integration guide](./packages/core/README.md).
+Install the core package with `npm install @embrace-io/react-native` or `yarn add @embrace-io/react-native` and then
+please head to our website to [sign up](https://dash.embrace.io/signup/) and follow our [integration guide](./packages/core/README.md).
 
 ## Packages
 
