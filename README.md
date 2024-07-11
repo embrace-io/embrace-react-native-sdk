@@ -1,66 +1,38 @@
-# NPM - React Native Embrace
+# Embrace React Native SDK
 
-Embrace gathers the information needed to identify issues and measure performance automatically upon integration. The following React Native guide provides simple instruction on how to call the relevant functions so teams can be provided much needed additional context (logs and user info) and measure the timing of key areas of their app explicitly (moments).
+The Embrace React Native SDK gathers the information needed to identify issues and measure performance automatically
+upon integration providing teams with much needed additional context (logs and user info) and timing measurements of
+key areas of their app (spans).
 
-For additional info please refer to the [React Native Guide](https://embrace.io/docs/react-native/).
+More documentation and examples can be found in our [React Native Documentation](https://embrace.io/docs/react-native/).
 
-# Requirements
+## Getting Started
 
-Only an Embrace App ID and an Embrace API Token.
+Install the core package with `npm install @embrace-io/react-native` or `yarn add @embrace-io/react-native` and then
+please head to our website to [sign up](https://dash.embrace.io/signup/) and follow our [integration guide](./packages/core/README.md).
 
-_If you need an App ID and API Token, [Go to our dashboard](https://dash.embrace.io/signup/) to create an account._
+## Packages
 
-# Integration
+Individual packages are published from this monorepo, reasoning can be found in [Babel's design doc](https://github.com/babel/babel/blob/main/doc/design/monorepo.md).
 
-### Step 1: Add Embrace React Native SDK
+| Package                                                                                | Version                                                                                                                                                                                       |
+|----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`@embrace-io/react-native`](./packages/core)                                          | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native)                                                       |
+| [`@embrace-io/react-native-action-tracker`](./packages/action-tracker)                 | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-action-tracker.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-action-tracker)                         |
+| [`@embrace-io/react-native-apollo-graphql`](./packages/apollo-graphql)                 | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-apollo-graphql.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-apollo-graphql)                         |
+| [`@embrace-io/react-native-navigation`](./packages/react-native-navigation)            | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-navigation.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-navigation)                                 |
+| [`@embrace-io/react-navigation`](./packages/react-navigation)                          | [![npm](https://img.shields.io/npm/v/@embrace-io/react-navigation.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-navigation)                                               |
+| [`@embrace-io/react-native-orientation-change-tracker`](./packages/screen-orientation) | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-orientation-change-tracker.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-orientation-change-tracker) |
+| [`@embrace-io/react-native-spans`](./packages/spans)                                   | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-spans.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-spans)                                           |
+| [`@embrace-io/react-native-webview-tracker`](./packages/webview-tracker)               | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-webview-tracker.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-webview-tracker)                       |
 
-##### 1.1: Add EmbraceIO's Pod to your Podfile
+## Support
 
-NPM
+- Open an [issue](https://github.com/embrace-io/embrace-react-native-sdk/issues/new) for the Embrace team to triage.
+- Join our [Community Slack](https://community.embrace.io)
 
-```sh
-    npm install @embrace-io/react-native
-```
+## License
 
-YARN
+[![Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-orange)](./LICENSE.txt)
 
-```sh
-    yarn add @embrace-io/react-native
-```
-
-##### Setup Script
-
-The JavaScript Embrace SDK ships with a setup script to modify the files in your
-project to add the native dependencies. The setup scripts can be found in your
-`node_modules` folder at `node_modules/@embrace-io/react-native/lib/scripts/setup`
-
-**Run the setup script**
-
-```shell-session
-node node_modules/@embrace-io/react-native/lib/scripts/setup/installAndroid.js
-```
-
-```shell-session
-node node_modules/@embrace-io/react-native/lib/scripts/setup/installIos.js
-```
-
-You can use git to see the changes that the script made.
-
-```shell-session
-git diff
-```
-
-### Step 6: Initialize Embrace SDK
-
-Initialize method applies the necessary listener to your application. This allow Embrace to track javascript errors, check js bundle changes (if you use OTA), track js patch and react native versions.
-
-```javascript
-import { initialize } from "@embrace-io/react-native";
-
-type Props = {};
-export default class App extends Component<Props> {
-  componentDidMount() {
-    initialize();
-  }
-}
-```
+The Embrace React Native SDK is published under the Apache-2.0 license.
