@@ -49,7 +49,7 @@ def supportsNamespace() {
 
 android {
   if (supportsNamespace()) {
-    namespace "io.embrace.tracerprovider"
+    namespace "io.embrace.reactnativetracerprovider"
 
     sourceSets {
       main {

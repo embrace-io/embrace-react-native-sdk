@@ -2,7 +2,7 @@ import {DarkTheme, DefaultTheme, ThemeProvider} from "@react-navigation/native";
 import {useFonts} from "expo-font";
 import {Stack} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import {useEffect} from "react";
+import {useEffect, useMemo, useState} from "react";
 import "react-native-reanimated";
 import {
   initialize as initEmbrace,
@@ -15,12 +15,14 @@ import {useColorScheme} from "@/hooks/useColorScheme";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(false)
   useEffect(() => {
     const init = async () => {
       const hasStarted = await initEmbrace();
 
       if (hasStarted) {
         endEmbraceAppStartup();
+        setEmbraceSDKLoaded(true);
       }
     };
 
@@ -28,9 +30,13 @@ export default function RootLayout() {
   }, []);
 
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
+
+  const loaded = useMemo<boolean>(() => {
+    return embraceSDKLoaded && fontsLoaded;
+  }, [embraceSDKLoaded, fontsLoaded]);
 
   useEffect(() => {
     if (loaded) {

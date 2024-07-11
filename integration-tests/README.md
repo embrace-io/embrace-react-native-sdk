@@ -24,12 +24,13 @@ Make sure the test apps have the latest local @embrace-io/react-native changes:
     npm run update-local-embrace
     ```
 
-Make sure the test apps are installed on the device/emulator before running tests:
+Make sure the test apps are installed on the device/emulator before running tests. Note that building the debug variant
+of the app may interfere with the tests as the debug menu gets in the way of UI elements:
 
     ```bash
     cd basic-test-app
-    npx expo run:android --variant debug # or release
-    npx expo run:ios --variant debug # or release
+    npx expo run:android --variant release
+    npx expo run:ios --variant release
     ```
 
 Run the test suite:

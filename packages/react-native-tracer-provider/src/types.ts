@@ -1,3 +1,12 @@
+import {TracerProvider} from "@opentelemetry/api";
+
+export interface UseEmbraceNativeTracerProviderResult {
+  isLoading: boolean;
+  isError: boolean;
+  error: string;
+  tracerProvider: TracerProvider | null;
+}
+
 export interface EmbraceNativeTracerProviderConfig {
   /** Determines the behaviour when a span's context is not currently available when grabbed synchronously */
   spanContextSyncBehaviour?: SpanContextSyncBehaviour;
@@ -7,8 +16,7 @@ export interface EmbraceNativeTracerProviderConfig {
 
 /**
  * Possible behaviours when a span context is not currently available from the native side:
- *  - block: make a blocking synchronous call over the native bridge
  *  - return_empty: return a span context with blank strings for the span and trace IDs
  *  - throw: throw an error
  */
-export type SpanContextSyncBehaviour = "block" | "return_empty" | "throw";
+export type SpanContextSyncBehaviour = "return_empty" | "throw";

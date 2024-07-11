@@ -1,6 +1,6 @@
 import {HrTime, TimeInput} from "@opentelemetry/api";
 
-import {isAttributes, normalizeTime} from "../index";
+import {isAttributes, normalizeTime} from "../util";
 
 describe("normalizeTime", () => {
   it.each([

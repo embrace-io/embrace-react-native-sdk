@@ -53,3 +53,7 @@ export const isAttributes = (
     !Array.isArray(attributesOrTimeInput)
   );
 };
+
+export const logWarning = (msg: string) => {
+  console.warn(`[Embrace] ${msg}`);
+};

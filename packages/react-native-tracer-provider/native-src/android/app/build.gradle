@@ -74,9 +74,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "io.embrace.tracerproviderexample"
+    namespace "io.embrace.reactnativetracerprovider"
     defaultConfig {
-        applicationId "io.embrace.tracerproviderexample"
+        applicationId "io.embrace.reactnativetracerprovider"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -125,6 +125,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito.kotlin:mockito-kotlin:5.3.1"
     testImplementation("io.mockk:mockk:1.13.11")
+
+    // Sometimes useful to test against the OTEL Tracer Provider to compare differences
+    testImplementation(platform("io.opentelemetry:opentelemetry-bom:1.38.0"))
+    testImplementation("io.opentelemetry:opentelemetry-sdk")
+    testImplementation("io.opentelemetry:opentelemetry-exporter-logging")
 }
 
 android {

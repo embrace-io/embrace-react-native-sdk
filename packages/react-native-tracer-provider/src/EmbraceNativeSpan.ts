@@ -12,6 +12,7 @@ import {
 
 import {
   isAttributes,
+  logWarning,
   normalizeAttributes,
   normalizeLinks,
   normalizeTime,
@@ -71,9 +72,8 @@ export class EmbraceNativeSpan implements Span {
    * The fact that native module calls are asynchronous and the @opentelemetry/api is synchronous doesn't matter for
    * most methods as they are generally fire and forget. Getting spanContext is an exception since this could be asked
    * for immediately after having started a span and if the value is not yet ready on the native side we will either:
-   *  - do a blocking synchronous call to retrieve it
-   *  - throw an error
    *  - return a blank span context
+   *  - throw an error
    *
    * Behaviour can be figured on the EmbraceNativeTracerProvider by supplying spanContextSyncBehaviour
    */
@@ -82,17 +82,20 @@ export class EmbraceNativeSpan implements Span {
       return this.savedSpanContext;
     }
 
+    const msg =
+      "Span context is not yet available on the native side." +
+      " You can wait on it with: `await (span as EmbraceNativeSpan).spanContextAsync()`.";
+
     switch (this.spanContextSyncBehaviour) {
-      case "block":
-        return TracerProviderModule.spanContext(this.nativeID());
-      case "throw":
-        throw new Error("span context is not yet available on the native side");
       case "return_empty":
+        logWarning(msg + " Returning a blank SpanContext");
         return {
           traceId: "",
           spanId: "",
           traceFlags: 0,
         };
+      case "throw":
+        throw new Error(msg);
     }
   }
 
@@ -155,6 +158,9 @@ export class EmbraceNativeSpan implements Span {
       return this;
     }
 
+    logWarning(
+      "Adding span links is not currently supported by the Embrace SDK",
+    );
     TracerProviderModule.addLinks(this.nativeID(), normalizeLinks(links));
 
     return this;
