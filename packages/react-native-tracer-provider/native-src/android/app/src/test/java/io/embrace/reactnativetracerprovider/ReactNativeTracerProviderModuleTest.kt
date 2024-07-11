@@ -14,6 +14,7 @@ import com.facebook.react.bridge.JavaOnlyArray
 import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import io.embrace.android.embracesdk.Embrace
 import io.mockk.every
@@ -31,7 +32,6 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider
 import io.opentelemetry.sdk.trace.data.SpanData
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 import io.opentelemetry.sdk.trace.export.SpanExporter
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Assertions.*
@@ -181,13 +181,9 @@ class ReactNativeTracerProviderModuleTest {
             assertTrue(span1.hasEnded())
         }
 
-        val spanContext = tracerProviderModule.spanContext("span_0")
-
         argumentCaptor<WritableMap>().apply {
             verify(promise, times(1)).resolve(capture())
             assertEquals(1, allValues.size)
-            assertEquals(spanContext.getString("spanId"), allValues[0].getString("spanId"))
-            assertEquals(spanContext.getString("traceId"), allValues[0].getString("traceId"))
             assertNotEquals(allValues[0].getString("spanId"), SpanId.getInvalid())
             assertNotEquals(allValues[0].getString("traceId"), TraceId.getInvalid())
         }
@@ -285,6 +281,16 @@ class ReactNativeTracerProviderModuleTest {
         tracerProviderModule.endSpan("span_0", 0.0)
         tracerProviderModule.endSpan("span_1", 0.0)
 
+        var parentSpanContext: ReadableMap? = null
+        var childSpanContext: ReadableMap? = null
+
+        argumentCaptor<WritableMap>().apply {
+            verify(promise, times(2)).resolve(capture())
+            assertEquals(2, allValues.size)
+            parentSpanContext = allValues[0]
+            childSpanContext = allValues[1]
+        }
+
         argumentCaptor<Collection<SpanData>>().apply {
             verify(exporter, times(2)).export(capture())
             assertEquals(2, allValues.size)
@@ -293,7 +299,8 @@ class ReactNativeTracerProviderModuleTest {
             val childSpan = allValues[1].asSequence().withIndex().elementAt(0).value
 
             assertEquals(SpanId.getInvalid(), parentSpan.parentSpanId)
-            assertEquals(tracerProviderModule.spanContext("span_0").getString("spanId"), childSpan.parentSpanId)
+            assertEquals(parentSpanContext?.getString("spanId"), childSpan.parentSpanId)
+            assertEquals(parentSpanContext?.getString("traceId"), childSpanContext?.getString("traceId"))
         }
     }
 

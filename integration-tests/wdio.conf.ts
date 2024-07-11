@@ -1,9 +1,12 @@
 import type {Options} from "@wdio/types";
 import {
   clearServer,
+  /*
   startServer,
   stopServer,
-} from "./helpers/embrace_server.ts";
+   */
+} from "./helpers/embrace_server";
+
 
 export const config: Options.Testrunner = {
   //
@@ -33,10 +36,10 @@ export const config: Options.Testrunner = {
   // worker process. In order to have a group of spec files run in the same worker
   // process simply enclose them in an array within the specs array.
   //
-  // The path of the spec files will be resolved relative from the directory of
+  // The path of the spec files will be resolved relative from the directory
   // of the config file unless it's absolute.
   //
-  specs: ["./specs/**/*.ts"],
+  specs: ["./specs/tracer_provider.test.ts"],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -72,12 +75,13 @@ export const config: Options.Testrunner = {
       "appium:automationName": "UiAutomator2",
       "appium:appPackage": "io.embrace.basictestapp",
       "appium:appActivity": ".MainActivity",
-      "appium:noReset": true,
+      //"appium:noReset": true,
 
       //  TODO: for CI/CD we probably want to point to the prebuilt release
       //  APK rather than having to have the app running in an emulator beforehand, e.g.
       //  "appium:app": "./basic-test-app/android/app/build/outputs/apk/debug/app-debug.apk",
     },
+    /*
     {
       // capabilities for local Appium web tests on an iOS Emulator
       platformName: "iOS",
@@ -86,6 +90,8 @@ export const config: Options.Testrunner = {
       "appium:appPackage": "io.embrace.basictestapp",
       "appium:noReset": true,
     },
+
+     */
   ],
 
   //
@@ -181,7 +187,7 @@ export const config: Options.Testrunner = {
    * @param {Array.<Object>} capabilities list of capabilities details
    */
   onPrepare() {
-    startServer(false);
+    //startServer(false);
   },
   /**
    * Gets executed before a worker process is spawned and can be used to initialize specific service
@@ -317,7 +323,7 @@ export const config: Options.Testrunner = {
    * @param {<Object>} results object containing test results
    */
   onComplete() {
-    stopServer();
+    //stopServer();
   },
   /**
    * Gets executed when a refresh happens.

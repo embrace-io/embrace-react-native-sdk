@@ -8,7 +8,12 @@ import {
   Tracer,
 } from "@opentelemetry/api";
 
-import {normalizeAttributes, normalizeLinks, normalizeTime} from "./util";
+import {
+  logWarning,
+  normalizeAttributes,
+  normalizeLinks,
+  normalizeTime,
+} from "./util";
 import {SpanContextSyncBehaviour} from "./types";
 import {TracerProviderModule} from "./TracerProviderModule";
 import {EmbraceNativeSpan} from "./EmbraceNativeSpan";
@@ -65,6 +70,12 @@ export class EmbraceNativeTracer implements Tracer {
       this.spansCreated,
       this.spanContextSyncBehaviour,
     );
+
+    if (links && links.length) {
+      logWarning(
+        "Adding span links is not currently supported by the Embrace SDK",
+      );
+    }
 
     nativeSpan.creatingNativeSide(
       TracerProviderModule.startSpan(

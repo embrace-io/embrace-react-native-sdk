@@ -1,3 +1,4 @@
+import {renderHook, waitFor} from "@testing-library/react-native";
 import {Link} from "@opentelemetry/api/build/src/trace/link";
 import {
   Attributes,
@@ -6,20 +7,32 @@ import {
   SpanKind,
   SpanStatusCode,
   trace,
-  Tracer,
 } from "@opentelemetry/api";
 
-import {EmbraceNativeSpan, EmbraceNativeTracerProvider} from "../index";
+import {
+  EmbraceNativeTracerProviderConfig,
+  EmbraceNativeSpan,
+  useEmbraceNativeTracerProvider,
+} from "../index";
 
 const mockGetTracer = jest.fn();
 const mockStartSpan = jest.fn();
-const mockSpanContext = jest.fn();
 const mockSetAttributes = jest.fn();
 const mockAddEvent = jest.fn();
 const mockAddLinks = jest.fn();
 const mockSetStatus = jest.fn();
 const mockUpdateName = jest.fn();
 const mockEndSpan = jest.fn();
+
+const mockIsStarted = jest.fn();
+
+jest.mock("react-native", () => ({
+  NativeModules: {
+    EmbraceManager: {
+      isStarted: () => mockIsStarted(),
+    },
+  },
+}));
 
 jest.mock("../TracerProviderModule", () => ({
   TracerProviderModule: {
@@ -49,7 +62,6 @@ jest.mock("../TracerProviderModule", () => ({
         links,
         parentID,
       ),
-    spanContext: (id: string) => mockSpanContext(id),
     setAttributes: (id: string, attributes: Attributes) =>
       mockSetAttributes(id, attributes),
     addEvent: (
@@ -67,14 +79,10 @@ jest.mock("../TracerProviderModule", () => ({
 }));
 
 describe("Embrace Native Tracer Provider", () => {
-  let testTracer: Tracer;
-
-  beforeEach(() => {
-    const provider = new EmbraceNativeTracerProvider();
-    testTracer = provider.getTracer("test", "v1");
-
+  beforeEach(async () => {
     jest.resetAllMocks();
 
+    mockIsStarted.mockReturnValue(Promise.resolve(true));
     mockStartSpan.mockReturnValue(
       Promise.resolve({
         traceId: "",
@@ -84,15 +92,67 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow getting a tracer", () => {
-    const provider = new EmbraceNativeTracerProvider();
-    provider.getTracer("test", "v1");
+  const getTestTracer = async ({
+    name = "test",
+    version = "v1",
+    tracerOptions,
+    config,
+  }: {
+    name?: string;
+    version?: string;
+    tracerOptions?: {schemaUrl?: string};
+    config?: EmbraceNativeTracerProviderConfig;
+  }) => {
+    const {result} = renderHook(() => useEmbraceNativeTracerProvider(config));
 
-    expect(mockGetTracer).toHaveBeenCalledWith("test", "v1", "");
+    await waitFor(() => expect(result.current.tracerProvider).toBeTruthy());
+
+    return result.current.tracerProvider!.getTracer(
+      name,
+      version,
+      tracerOptions,
+    );
+  };
+
+  it("should allow getting a tracer", async () => {
+    await getTestTracer({name: "some-tracer", version: "v17"});
+    expect(mockGetTracer).toHaveBeenCalledWith("some-tracer", "v17", "");
   });
 
-  it("should allow starting a span", () => {
-    testTracer.startSpan("my-span");
+  it("should error if getting a tracer provider before the Embrace SDK has started", async () => {
+    mockIsStarted.mockReturnValue(Promise.resolve(false));
+
+    const {result} = renderHook(() => useEmbraceNativeTracerProvider());
+
+    await waitFor(() => {
+      expect(result.current).toEqual({
+        isLoading: false,
+        isError: true,
+        error:
+          "The Embrace SDK must be started to use the TracerProvider, please invoke `initialize` from `@embrace-io/react-native`.",
+        tracerProvider: null,
+      });
+    });
+  });
+
+  it("should error if there was a problem setting up the tracer provider", async () => {
+    mockIsStarted.mockReturnValue(Promise.reject("rejected"));
+
+    const {result} = renderHook(() => useEmbraceNativeTracerProvider());
+
+    await waitFor(() => {
+      expect(result.current).toEqual({
+        isLoading: false,
+        isError: true,
+        error: "Failed to setup EmbraceNativeTracerProvider",
+        tracerProvider: null,
+      });
+    });
+  });
+
+  it("should allow starting a span", async () => {
+    const tracer = await getTestTracer({});
+    tracer.startSpan("my-span");
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
@@ -108,8 +168,9 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow starting a span with options", () => {
-    testTracer.startSpan("my-span", {
+  it("should allow starting a span with options", async () => {
+    const tracer = await getTestTracer({});
+    tracer.startSpan("my-span", {
       kind: SpanKind.CONSUMER,
       startTime: 1718409600000,
       attributes: {
@@ -164,12 +225,13 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow starting a span with a parent", () => {
-    const parent = testTracer.startSpan("my-parent-span");
+  it("should allow starting a span with a parent", async () => {
+    const tracer = await getTestTracer({});
+    const parent = tracer.startSpan("my-parent-span");
     const parentContext = trace.setSpan(context.active(), parent);
     mockStartSpan.mockClear();
 
-    testTracer.startSpan("my-child-span", {}, parentContext);
+    tracer.startSpan("my-child-span", {}, parentContext);
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
@@ -185,12 +247,13 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should not start a span with a parent when root is set", () => {
-    const parent = testTracer.startSpan("my-parent-span");
+  it("should not start a span with a parent when root is set", async () => {
+    const tracer = await getTestTracer({});
+    const parent = tracer.startSpan("my-parent-span");
     const parentContext = trace.setSpan(context.active(), parent);
     mockStartSpan.mockClear();
 
-    testTracer.startSpan("my-child-span", {root: true}, parentContext);
+    tracer.startSpan("my-child-span", {root: true}, parentContext);
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
@@ -206,8 +269,9 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow starting an active span", () => {
-    testTracer.startActiveSpan("my-active-span", () => {
+  it("should allow starting an active span", async () => {
+    const tracer = await getTestTracer({});
+    tracer.startActiveSpan("my-active-span", () => {
       expect(mockStartSpan).toHaveBeenCalledWith(
         "test",
         "v1",
@@ -221,7 +285,7 @@ describe("Embrace Native Tracer Provider", () => {
         "",
       );
       mockStartSpan.mockClear();
-      testTracer.startSpan("my-child-span");
+      tracer.startSpan("my-child-span");
     });
 
     expect(mockStartSpan).toHaveBeenCalledWith(
@@ -238,27 +302,24 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow starting an active span with options", () => {
-    testTracer.startActiveSpan(
-      "my-active-span",
-      {kind: SpanKind.CLIENT},
-      () => {
-        expect(mockStartSpan).toHaveBeenCalledWith(
-          "test",
-          "v1",
-          "",
-          "test_v1__1",
-          "my-active-span",
-          "CLIENT",
-          0,
-          {},
-          [],
-          "",
-        );
-        mockStartSpan.mockClear();
-        testTracer.startSpan("my-child-span");
-      },
-    );
+  it("should allow starting an active span with options", async () => {
+    const tracer = await getTestTracer({});
+    tracer.startActiveSpan("my-active-span", {kind: SpanKind.CLIENT}, () => {
+      expect(mockStartSpan).toHaveBeenCalledWith(
+        "test",
+        "v1",
+        "",
+        "test_v1__1",
+        "my-active-span",
+        "CLIENT",
+        0,
+        {},
+        [],
+        "",
+      );
+      mockStartSpan.mockClear();
+      tracer.startSpan("my-child-span");
+    });
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
@@ -274,31 +335,28 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow starting an active span with children overriding their parent", () => {
-    const parent = testTracer.startSpan("my-parent-span");
+  it("should allow starting an active span with children overriding their parent", async () => {
+    const tracer = await getTestTracer({});
+    const parent = tracer.startSpan("my-parent-span");
     const parentContext = trace.setSpan(context.active(), parent);
     mockStartSpan.mockClear();
 
-    testTracer.startActiveSpan(
-      "my-active-span",
-      {kind: SpanKind.CLIENT},
-      () => {
-        expect(mockStartSpan).toHaveBeenCalledWith(
-          "test",
-          "v1",
-          "",
-          "test_v1__2",
-          "my-active-span",
-          "CLIENT",
-          0,
-          {},
-          [],
-          "",
-        );
-        mockStartSpan.mockClear();
-        testTracer.startSpan("my-child-span", {}, parentContext);
-      },
-    );
+    tracer.startActiveSpan("my-active-span", {kind: SpanKind.CLIENT}, () => {
+      expect(mockStartSpan).toHaveBeenCalledWith(
+        "test",
+        "v1",
+        "",
+        "test_v1__2",
+        "my-active-span",
+        "CLIENT",
+        0,
+        {},
+        [],
+        "",
+      );
+      mockStartSpan.mockClear();
+      tracer.startSpan("my-child-span", {}, parentContext);
+    });
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
@@ -314,12 +372,12 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow starting an active span without setting the global context manager", () => {
-    const provider = new EmbraceNativeTracerProvider({
-      setGlobalContextManager: false,
+  it("should allow starting an active span without setting the global context manager", async () => {
+    const tracer = await getTestTracer({
+      config: {
+        setGlobalContextManager: false,
+      },
     });
-    const tracer = provider.getTracer("test", "v1");
-
     tracer.startActiveSpan("my-active-span", {kind: SpanKind.CLIENT}, () => {
       expect(mockStartSpan).toHaveBeenCalledWith(
         "test",
@@ -355,9 +413,7 @@ describe("Embrace Native Tracer Provider", () => {
   });
 
   it("should return the span context when it's already available", async () => {
-    // Blocking is the default behaviour
-    const provider = new EmbraceNativeTracerProvider();
-    const tracer = provider.getTracer("test", "v1");
+    const tracer = await getTestTracer({});
     const expectedSpanContext = {
       traceId: "t1",
       spanId: "s1",
@@ -373,24 +429,22 @@ describe("Embrace Native Tracer Provider", () => {
     expect(span.spanContext()).toEqual(expectedSpanContext);
   });
 
-  it("should allow getting a pending span context with a blocking call", () => {
-    // Blocking is the default behaviour
-    const provider = new EmbraceNativeTracerProvider();
-    const tracer = provider.getTracer("test", "v1");
+  it("should return an empty span context when it is not yet available", async () => {
+    // Returning empty is the default behaviour
+    const tracer = await getTestTracer({});
     mockStartSpan.mockReturnValue(new Promise<SpanContext>(() => {}));
 
     const span = tracer.startSpan("my-span");
-    span.spanContext();
-
-    expect(mockSpanContext).toHaveBeenCalledWith("test_v1__1");
+    expect(span.spanContext().spanId).toEqual("");
+    expect(span.spanContext().traceId).toEqual("");
   });
 
-  it("should optionally throw an error when attempting to get a pending span context", () => {
-    // Blocking is the default behaviour
-    const provider = new EmbraceNativeTracerProvider({
-      spanContextSyncBehaviour: "throw",
+  it("should optionally throw an error when attempting to get a pending span context", async () => {
+    const tracer = await getTestTracer({
+      config: {
+        spanContextSyncBehaviour: "throw",
+      },
     });
-    const tracer = provider.getTracer("test", "v1");
     mockStartSpan.mockReturnValue(new Promise<SpanContext>(() => {}));
 
     const span = tracer.startSpan("my-span");
@@ -399,8 +453,7 @@ describe("Embrace Native Tracer Provider", () => {
   });
 
   it("should allow getting the span context asynchronously", async () => {
-    const provider = new EmbraceNativeTracerProvider();
-    const tracer = provider.getTracer("test", "v1");
+    const tracer = await getTestTracer({});
     const expectedSpanContext = {
       traceId: "t1",
       spanId: "s1",
@@ -417,8 +470,9 @@ describe("Embrace Native Tracer Provider", () => {
     });
   });
 
-  it("should allow setting attributes on a span", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow setting attributes on a span", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.setAttribute("my-attr", "val1");
 
     expect(mockSetAttributes).toHaveBeenCalledWith("test_v1__1", {
@@ -437,15 +491,17 @@ describe("Embrace Native Tracer Provider", () => {
     });
   });
 
-  it("should allow adding an event to a span", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow adding an event to a span", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.addEvent("my-event");
 
     expect(mockAddEvent).toHaveBeenCalledWith("test_v1__1", "my-event", {}, 0);
   });
 
-  it("should allow adding an event to a span with attributes", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow adding an event to a span with attributes", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.addEvent("my-event", {"my-attr": "val1"});
 
     expect(mockAddEvent).toHaveBeenCalledWith(
@@ -456,8 +512,9 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow adding an event to a span with a timestamp", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow adding an event to a span with a timestamp", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.addEvent("my-event", new Date(Date.UTC(2019, 5, 15, 0, 0, 0, 0)));
 
     expect(mockAddEvent).toHaveBeenCalledWith(
@@ -468,8 +525,9 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow adding an event to a span with attributes and a timestamp", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow adding an event to a span with attributes and a timestamp", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.addEvent("my-event", {"my-attr": "val1"}, 1590556800000);
 
     expect(mockAddEvent).toHaveBeenCalledWith(
@@ -480,8 +538,9 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow setting links on a span", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow setting links on a span", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     const link1 = {
       context: {
         traceId: "t1",
@@ -515,22 +574,25 @@ describe("Embrace Native Tracer Provider", () => {
     expect(mockAddLinks).toHaveBeenCalledWith("test_v1__1", [link2]);
   });
 
-  it("should allow setting a span's status", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow setting a span's status", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.setStatus({code: SpanStatusCode.ERROR});
     expect(mockSetStatus).toHaveBeenCalledWith("test_v1__1", {
       code: "ERROR",
     });
   });
 
-  it("should allow updating a span's name", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow updating a span's name", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.updateName("new-name");
     expect(mockUpdateName).toHaveBeenCalledWith("test_v1__1", "new-name");
   });
 
-  it("should allow recording an exception on the span", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow recording an exception on the span", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.recordException({message: "error", name: "error-name"});
 
     expect(mockAddEvent).toHaveBeenCalledWith(
@@ -541,8 +603,9 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow recording an exception on the span with a code and stack trace", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow recording an exception on the span with a code and stack trace", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.recordException({
       message: "error",
       name: "error-name",
@@ -562,8 +625,9 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow recording an exception on the span with a time", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow recording an exception on the span with a time", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.recordException("error", new Date(Date.UTC(2024, 5, 15, 0, 0, 0)));
 
     expect(mockAddEvent).toHaveBeenCalledWith(
@@ -574,8 +638,9 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should allow ending a span", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow ending a span", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
 
     expect(span.isRecording()).toBe(true);
 
@@ -617,22 +682,25 @@ describe("Embrace Native Tracer Provider", () => {
     expect(mockEndSpan).not.toHaveBeenCalled();
   });
 
-  it("should allow ending a span with a time", () => {
-    const span = testTracer.startSpan("my-span");
+  it("should allow ending a span with a time", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
     span.end([1600556800, 200000000]);
 
     expect(mockEndSpan).toHaveBeenCalledWith("test_v1__1", 1600556800200);
   });
 
-  it("should allow getting a tracer with a schemaUrl", () => {
-    const provider = new EmbraceNativeTracerProvider();
-    const tracerWithSchema = provider.getTracer("test", "v1", {
-      schemaUrl: "s1",
+  it("should allow getting a tracer with a schemaUrl", async () => {
+    const tracer = await getTestTracer({
+      name: "test",
+      version: "v1",
+      tracerOptions: {
+        schemaUrl: "s1",
+      },
     });
-
     expect(mockGetTracer).toHaveBeenCalledWith("test", "v1", "s1");
 
-    tracerWithSchema.startSpan("my-span");
+    tracer.startSpan("my-span");
 
     // Schema URL should be included to uniquely identify tracer and spans
     expect(mockStartSpan).toHaveBeenCalledWith(

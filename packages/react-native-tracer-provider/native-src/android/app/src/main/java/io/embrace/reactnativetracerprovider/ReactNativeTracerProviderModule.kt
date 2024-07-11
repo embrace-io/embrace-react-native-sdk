@@ -1,6 +1,6 @@
 package io.embrace.reactnativetracerprovider
 
-import io.embrace.android.embracesdk.Embrace;
+import io.embrace.android.embracesdk.Embrace
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -21,9 +21,6 @@ import io.opentelemetry.api.trace.TraceState
 import io.opentelemetry.api.trace.Tracer
 import io.opentelemetry.api.trace.TracerProvider
 import io.opentelemetry.context.Context
-import io.opentelemetry.exporter.logging.LoggingSpanExporter
-import io.opentelemetry.sdk.trace.SdkTracerProvider
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
@@ -53,7 +50,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
     private val log = Logger.getLogger("[Embrace]")
     private val tracers = ConcurrentHashMap<String, Tracer>()
     private val spans = ConcurrentHashMap<String, Span>()
-    private var tracerProvider: TracerProvider
+    private var tracerProvider: TracerProvider? = null
     private var writableMapBuilder: WritableMapBuilder
 
     override fun getName() = "ReactNativeTracerProviderModule"
@@ -149,13 +146,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
     }
 
     init {
-        log.warning(Embrace.AppFramework.UNITY.toString())
-        // TODO replace with Embrace OTEL provider from 6.8.3
-        // tracerProvider = Embrace.getInstance().getOpenTelemetry().getTracerProvider()
-        tracerProvider = SdkTracerProvider.builder()
-            .addSpanProcessor(SimpleSpanProcessor.create(LoggingSpanExporter.create()))
-            .build()
-         writableMapBuilder = WritableNativeMapBuilder()
+        writableMapBuilder = WritableNativeMapBuilder()
     }
 
     /**
@@ -187,23 +178,36 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
      */
 
     @ReactMethod fun getTracer(name: String, version: String, schemaUrl: String) {
+        if (tracerProvider == null) {
+            // TODO throw an error on the JS side if this is called before the Embrace SDK is started
+            if (!Embrace.getInstance().isStarted) {
+                return
+            }
+
+            tracerProvider = Embrace.getInstance().getOpenTelemetry().tracerProvider
+        }
+
         val id = getTracerKey(name, version, schemaUrl)
 
         if (tracers.containsKey(id)) {
             return
         }
 
-        val builder = tracerProvider.tracerBuilder(name)
+        val builder = tracerProvider?.tracerBuilder(name)
 
         if (version != "") {
-            builder.setInstrumentationVersion(version)
+            builder?.setInstrumentationVersion(version)
         }
 
         if (schemaUrl != "") {
-            builder.setSchemaUrl(schemaUrl)
+            builder?.setSchemaUrl(schemaUrl)
         }
 
-        tracers[id] = builder.build()
+        val tracer = builder?.build()
+
+        if (tracer != null) {
+            tracers[id] = tracer
+        }
     }
 
     @ReactMethod fun startSpan(tracerName: String, tracerVersion: String, tracerSchemaUrl: String,
@@ -248,7 +252,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         if (parentId.isEmpty()) {
             spanBuilder.setNoParent()
         } else {
-            var parent = getSpan(parentId);
+            val parent = getSpan(parentId)
             if (parent != null) {
                 spanBuilder.setParent(parent.storeInContext(Context.root()))
             }
@@ -257,10 +261,6 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         val span = spanBuilder.startSpan()
         spans[spanBridgeId] = span
         promise.resolve(spanContextToWritableMap(span.spanContext))
-    }
-
-    @ReactMethod(isBlockingSynchronousMethod = true) fun spanContext(spanBridgeId: String) : WritableMap {
-        return spanContextToWritableMap(getSpan(spanBridgeId)?.spanContext)
     }
 
     @ReactMethod fun setAttributes(spanBridgeId: String, attributes: ReadableMap) {
