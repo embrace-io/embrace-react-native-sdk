@@ -1,10 +1,14 @@
+require "json"
+package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+
 Pod::Spec.new do |s|
   s.name         = "RNEmbrace"
-  s.version      = "1.1.1"
-  s.summary      = "A React Native wrapper for Embrace SDK"
+  s.version      = package["version"]
+  s.summary      = package["description"]
+  s.homepage     = package["homepage"]
+  s.license      = package["license"]
+  s.authors      = package["author"]
 
-  s.license      = "ISC"
-  s.authors      = { "Embrace.io" => "truenorth@embrace.io" }
   s.ios.deployment_target = '9.0'
   s.tvos.deployment_target = '10.0'
 
@@ -13,7 +17,4 @@ Pod::Spec.new do |s|
 
   s.dependency 'React-Core'
   s.dependency 'EmbraceIO', '5.25.2'
-
-  s.homepage     = "https://embrace.io/"
-
 end

@@ -97,7 +97,6 @@ module.exports = {
     "/coverage/",
     "/dist/",
     "/node_modules/",
-    "/docs/",
     "/examples/",
     "/integration-tests/",
     "/lib/",
