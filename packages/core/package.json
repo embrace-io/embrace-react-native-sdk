@@ -50,9 +50,13 @@
     "bug tracker"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "node update_android_version.ts && tsc"
   },
   "devDependencies": {
     "typescript": "^4.7.4"
+  },
+  "embrace": {
+    "iosVersion": "6.0.0",
+    "androidVersion": "6.9.1"
   }
 }

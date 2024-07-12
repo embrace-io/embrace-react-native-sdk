@@ -43,5 +43,9 @@
   },
   "devDependencies": {
     "typescript": "^4.7.4"
+  },
+  "embrace": {
+    "iosVersion": "6.0.0",
+    "androidVersion": "6.9.1"
   }
 }
