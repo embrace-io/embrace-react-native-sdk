@@ -297,17 +297,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-basictestapp/Pods-basictestapp-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO/Embrace.framework/Embrace",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenTelemetrySwiftApi/OpenTelemetryApi.framework/OpenTelemetryApi",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-basictestapp-checkManifestLockResult.txt",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Embrace.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenTelemetryApi.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

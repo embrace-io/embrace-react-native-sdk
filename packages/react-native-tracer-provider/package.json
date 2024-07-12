@@ -9,7 +9,7 @@
     "lib",
     "android",
     "ios",
-    "RNEmbrace.podspec"
+    "react-native-tracer-provider.podspec"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
@@ -45,7 +45,8 @@
   ],
   "scripts": {
     "build": "node update_android_version.ts && ./copy-native-src.sh && tsc",
-    "android:test": "node update_android_version.ts && cd native-src && yarn install && cd android && ./gradlew :app:detekt && ./gradlew :app:testDebugUnitTest && cd ../../"
+    "android:test": "node update_android_version.ts && cd native-src && yarn install && cd android && ./gradlew :app:detekt && ./gradlew :app:testDebugUnitTest && cd ../../",
+    "ios:test": "cd native-src/ios && ./run-tests.sh && cd ../../"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"

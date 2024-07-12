@@ -40,6 +40,19 @@ jest.mock("react-native", () => ({
   },
 }));
 
+const mockIsStarted = jest.fn();
+
+jest.mock("react-native", () => ({
+  NativeModules: {
+    EmbraceManager: {
+      isStarted: () => mockIsStarted(),
+    },
+  },
+  Platform: {
+    OS: "ios",
+  },
+}));
+
 jest.mock("../TracerProviderModule", () => ({
   TracerProviderModule: {
     setupTracer: (name: string, version?: string, schemaUrl?: string) =>

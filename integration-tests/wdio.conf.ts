@@ -80,7 +80,6 @@ export const config: Options.Testrunner = {
       "appium:automationName": "XCUITest",
       "appium:deviceName": "iPhone 15",
       "appium:appPackage": "io.embrace.basictestapp",
-      "appium:noReset": true,
     },
   ],
 

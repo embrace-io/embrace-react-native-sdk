@@ -13,7 +13,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   context,
-  SpanContext,
   SpanKind,
   SpanStatusCode,
   trace,

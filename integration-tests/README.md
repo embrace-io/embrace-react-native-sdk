@@ -29,10 +29,10 @@ of the app may interfere with the tests as the debug menu gets in the way of UI 
 
 Android can run in release mode:
 
-```bash
-cd basic-test-app
-npx expo run:android --variant release
-```
+    ```bash
+    cd basic-test-app
+    npx expo run:android --variant release
+    ```
 
 For ios it doesn't apply the `--variant release` mode, so we can do it through xcode:
 
@@ -43,9 +43,9 @@ For ios it doesn't apply the `--variant release` mode, so we can do it through x
 
 or simply run 
 
-```bash
-npx expo run:ios --configuration Release
-```
+    ```bash
+    npx expo run:ios --configuration Release
+    ```
 
 Run the test suite:
 
@@ -92,7 +92,7 @@ can be configured to point to a remote environment. See what capabilities are av
 
 Try:
 
-```shell
-adb uninstall io.appium.uiautomator2.server
-adb uninstall io.appium.uiautomator2.server.test
-```
+    ```bash
+    adb uninstall io.appium.uiautomator2.server
+    adb uninstall io.appium.uiautomator2.server.test
+    ```
