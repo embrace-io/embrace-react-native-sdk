@@ -1,0 +1,5 @@
+dependencies {
+  // TODO keep this in sync with the version from the core/ package
+  api "io.embrace:embrace-android-sdk:6.9.1"
+  implementation("io.opentelemetry:opentelemetry-api")
+}

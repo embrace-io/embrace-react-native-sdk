@@ -44,7 +44,8 @@
     "tracer provider"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "./copy-native-src.sh && tsc",
+    "android-test": "cd native-src && yarn install && cd android && ./gradlew :app:testDebugUnitTest && cd ../../"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"
