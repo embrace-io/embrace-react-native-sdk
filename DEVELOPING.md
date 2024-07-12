@@ -123,11 +123,10 @@ unreleased changes on `master` and a patch release will be cut from that new bra
 
 ## Releasing
 
-1. Bump the Android (SDK + Swazzler)/iOS dependencies to the latest available stable versions
-   1. Update the iOS SDK version in `./packages/core/ios/RNEmbrace.podspec`
-   2. Update the Android SDK version in `./packages/core/android/gradle.properties`
-2. Bump the RN SDK version according to semver in `./lerna.json`
-3. Run the example app on Android + iOS (in release mode) and confirm that a session is captured & appears in the dashboard with useful info
-4. Release to npm with `yarn publish-modules`
-5. Create a PR with all these changes and merge to `master`
-6. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/master/docs/react-native/changelog.md) for the release
+1. Bump the Android (SDK + Swazzler)/iOS dependencies to the latest available stable versions in `./yarn.config.cjs`
+2. Run `yarn constraints --fix` to propagate this change to all package.json files
+3. Bump the RN SDK version according to semver in `./lerna.json`
+4. Run the example app on Android + iOS (in release mode) and confirm that a session is captured & appears in the dashboard with useful info
+5. Release to npm with `yarn publish-modules`
+6. Create a PR with all these changes and merge to `master`
+7. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/master/docs/react-native/changelog.md) for the release
