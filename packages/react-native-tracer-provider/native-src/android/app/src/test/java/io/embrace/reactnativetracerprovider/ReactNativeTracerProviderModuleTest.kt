@@ -18,7 +18,6 @@ import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import io.embrace.android.embracesdk.Embrace
 import io.mockk.every
-import org.mockito.kotlin.any
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.opentelemetry.api.common.AttributeKey
@@ -32,13 +31,17 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider
 import io.opentelemetry.sdk.trace.data.SpanData
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 import io.opentelemetry.sdk.trace.export.SpanExporter
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
@@ -47,7 +50,7 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 
 class JavaOnlyMapMapBuilder : WritableMapBuilder {
-    override fun build() : WritableMap {
+    override fun build(): WritableMap {
         return JavaOnlyMap()
     }
 }
@@ -67,8 +70,8 @@ class ReactNativeTracerProviderModuleTest {
              */
 
             mockkStatic(PreferenceManager::class)
-            every { PreferenceManager.getDefaultSharedPreferences(any())} returns mock<SharedPreferences> {
-                on { getBoolean(any(), any())} doReturn false
+            every { PreferenceManager.getDefaultSharedPreferences(any()) } returns mock<SharedPreferences> {
+                on { getBoolean(any(), any()) } doReturn false
                 on { edit() } doReturn mock<Editor>()
             }
 
@@ -83,7 +86,7 @@ class ReactNativeTracerProviderModuleTest {
              */
 
             val mockResources = mock<Resources> {
-                on { getString(any())} doReturn "my-resource"
+                on { getString(any()) } doReturn "my-resource"
                 on { getIdentifier(any(), any(), any()) } doReturn 0
             }
 
@@ -164,9 +167,11 @@ class ReactNativeTracerProviderModuleTest {
 
     @Test
     fun startSpanSimple() {
-        tracerProviderModule.startSpan("test", "v1", "", "span_0",
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
+            "", promise
+        )
         tracerProviderModule.endSpan("span_0", 0.0)
 
         argumentCaptor<Collection<SpanData>>().apply {
@@ -201,27 +206,36 @@ class ReactNativeTracerProviderModuleTest {
         )
         val links = JavaOnlyArray.of(
             JavaOnlyMap.of(
-                "context", JavaOnlyMap.of(
-                    "spanId", "1111000011110000",
-                    "traceId", "22220000222200002222000022220000",
+                "context",
+                JavaOnlyMap.of(
+                    "spanId",
+                    "1111000011110000",
+                    "traceId",
+                    "22220000222200002222000022220000",
                 ),
-                "attributes", JavaOnlyMap.of(
-                    "link-attr-1", "my-link-attr"
+                "attributes",
+                JavaOnlyMap.of(
+                    "link-attr-1",
+                    "my-link-attr"
                 )
             ),
-             JavaOnlyMap.of(
-                "context", JavaOnlyMap.of(
-                    "spanId", "6666000066660000",
-                    "traceId", "77770000777700007777000077770000",
+            JavaOnlyMap.of(
+                "context",
+                JavaOnlyMap.of(
+                    "spanId",
+                    "6666000066660000",
+                    "traceId",
+                    "77770000777700007777000077770000",
                 )
             )
         )
 
-        tracerProviderModule.startSpan("test", "v1", "", "span_0",
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
             "my-span", "CLIENT", 1718386928001.0, attributes, links,
-            "", promise)
-        tracerProviderModule.endSpan("span_0" , 1728386928001.0)
-
+            "", promise
+        )
+        tracerProviderModule.endSpan("span_0", 1728386928001.0)
 
         argumentCaptor<Collection<SpanData>>().apply {
             verify(exporter, times(1)).export(capture())
@@ -233,7 +247,7 @@ class ReactNativeTracerProviderModuleTest {
             assertEquals(1, spans.count())
             assertEquals("my-span", span1.name)
             assertEquals(SpanKind.CLIENT, span1.kind)
-            assertEquals(  1718386928001000000, span1.startEpochNanos)
+            assertEquals(1718386928001000000, span1.startEpochNanos)
 
             assertEquals(6 + extraAttributes.size, span1.attributes.size())
             assertEquals("some-string", span1.attributes.get(AttributeKey.stringKey("my-attr1")))
@@ -266,18 +280,22 @@ class ReactNativeTracerProviderModuleTest {
             assertEquals(0, span1.links[1].attributes.size())
              */
 
-            assertEquals(   1728386928001000000, span1.endEpochNanos)
+            assertEquals(1728386928001000000, span1.endEpochNanos)
         }
     }
 
     @Test
     fun startSpanWithParent() {
-        tracerProviderModule.startSpan("test", "v1", "", "span_0",
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
             "parent-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
-        tracerProviderModule.startSpan("test", "v1", "", "span_1",
+            "", promise
+        )
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_1",
             "child-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "span_0", promise)
+            "span_0", promise
+        )
         tracerProviderModule.endSpan("span_0", 0.0)
         tracerProviderModule.endSpan("span_1", 0.0)
 
@@ -306,17 +324,22 @@ class ReactNativeTracerProviderModuleTest {
 
     @Test
     fun setAttributes() {
-        tracerProviderModule.startSpan("test", "v1", "", "span_0",
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
-        tracerProviderModule.setAttributes("span_0", JavaOnlyMap.of(
-            "my-attr1", "some-string",
-            "my-attr2", true,
-            "my-attr3", 344,
-            "my-attr4", JavaOnlyArray.of("str1", "str2"),
-            "my-attr5", JavaOnlyArray.of(true, false),
-            "my-attr6", JavaOnlyArray.of(22, 44),
-        ))
+            "", promise
+        )
+        tracerProviderModule.setAttributes(
+            "span_0",
+            JavaOnlyMap.of(
+                "my-attr1", "some-string",
+                "my-attr2", true,
+                "my-attr3", 344,
+                "my-attr4", JavaOnlyArray.of("str1", "str2"),
+                "my-attr5", JavaOnlyArray.of(true, false),
+                "my-attr6", JavaOnlyArray.of(22, 44),
+            )
+        )
         tracerProviderModule.endSpan("span_0", 0.0)
 
         argumentCaptor<Collection<SpanData>>().apply {
@@ -347,16 +370,25 @@ class ReactNativeTracerProviderModuleTest {
         }
     }
 
-
     @Test
     fun addEvent() {
-        tracerProviderModule.startSpan("test", "v1", "", "span_0",
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
-        tracerProviderModule.addEvent("span_0", "my-1st-event",
-            JavaOnlyMap.of("my-attr1", "some-string"), 0.0)
-        tracerProviderModule.addEvent("span_0", "my-2nd-event",
-            JavaOnlyMap.of("my-attr2", "other-string"),  1518386928052.0)
+            "", promise
+        )
+        tracerProviderModule.addEvent(
+            "span_0",
+            "my-1st-event",
+            JavaOnlyMap.of("my-attr1", "some-string"),
+            0.0
+        )
+        tracerProviderModule.addEvent(
+            "span_0",
+            "my-2nd-event",
+            JavaOnlyMap.of("my-attr2", "other-string"),
+            1518386928052.0
+        )
         tracerProviderModule.endSpan("span_0", 0.0)
 
         argumentCaptor<Collection<SpanData>>().apply {
@@ -382,26 +414,39 @@ class ReactNativeTracerProviderModuleTest {
     @Disabled("links are not currently supported by the Embrace Tracer Provider")
     @Test
     fun addLinks() {
-        tracerProviderModule.startSpan("test", "v1", "", "span_0",
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
             "my-span", "", 1718386928001.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
-        tracerProviderModule.addLinks("span_0", JavaOnlyArray.of(
-            JavaOnlyMap.of(
-                "context", JavaOnlyMap.of(
-                    "spanId", "1111000011110000",
-                    "traceId", "22220000222200002222000022220000",
+            "", promise
+        )
+        tracerProviderModule.addLinks(
+            "span_0",
+            JavaOnlyArray.of(
+                JavaOnlyMap.of(
+                    "context",
+                    JavaOnlyMap.of(
+                        "spanId",
+                        "1111000011110000",
+                        "traceId",
+                        "22220000222200002222000022220000",
+                    ),
+                    "attributes",
+                    JavaOnlyMap.of(
+                        "link-attr-1",
+                        "my-link-attr"
+                    )
                 ),
-                "attributes", JavaOnlyMap.of(
-                    "link-attr-1", "my-link-attr"
-                )
-            ),
-             JavaOnlyMap.of(
-                "context", JavaOnlyMap.of(
-                    "spanId", "6666000066660000",
-                    "traceId", "77770000777700007777000077770000",
+                JavaOnlyMap.of(
+                    "context",
+                    JavaOnlyMap.of(
+                        "spanId",
+                        "6666000066660000",
+                        "traceId",
+                        "77770000777700007777000077770000",
+                    )
                 )
             )
-        ))
+        )
         tracerProviderModule.endSpan("span_0", 0.0)
 
         argumentCaptor<Collection<SpanData>>().apply {
@@ -424,15 +469,19 @@ class ReactNativeTracerProviderModuleTest {
 
     @Test
     fun setStatus() {
-        tracerProviderModule.startSpan("test", "v1", "", "span_0",
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
             "my-span-1", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
+            "", promise
+        )
         tracerProviderModule.setStatus("span_0", JavaOnlyMap.of("code", "ERROR"))
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        tracerProviderModule.startSpan("test", "v1", "", "span_1",
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_1",
             "my-span-2", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
+            "", promise
+        )
         tracerProviderModule.setStatus("span_1", JavaOnlyMap.of("code", "OK", "message", "some message"))
         tracerProviderModule.endSpan("span_1", 0.0)
 
@@ -452,9 +501,11 @@ class ReactNativeTracerProviderModuleTest {
 
     @Test
     fun updateName() {
-        tracerProviderModule.startSpan("test", "v1", "", "span_0",
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
             "my-span-1", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
+            "", promise
+        )
         tracerProviderModule.updateName("span_0", "my-updated-span-name")
         tracerProviderModule.endSpan("span_0", 0.0)
 
@@ -510,14 +561,15 @@ class ReactNativeTracerProviderModuleTest {
         }
     }
 
-
     @Test
     fun startSpanWithSchemaURL() {
         // schemaUrl should form part of the unique key so should not find the tracer we setup
         // in beforeEach if we set a different value
-        tracerProviderModule.startSpan("test", "v1", "schema", "span_0",
+        tracerProviderModule.startSpan(
+            "test", "v1", "schema", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
+            "", promise
+        )
         tracerProviderModule.endSpan("span_0", 0.0)
 
         argumentCaptor<Collection<SpanData>>().apply {
@@ -527,9 +579,11 @@ class ReactNativeTracerProviderModuleTest {
 
         // Create a tracer with that schemaUrl, should work now
         tracerProviderModule.getTracer("test", "v1", "schema")
-        tracerProviderModule.startSpan("test", "v1", "schema", "span_0",
+        tracerProviderModule.startSpan(
+            "test", "v1", "schema", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
+            "", promise
+        )
         tracerProviderModule.endSpan("span_0", 0.0)
 
         argumentCaptor<Collection<SpanData>>().apply {
@@ -548,7 +602,7 @@ class ReactNativeTracerProviderModuleTest {
     @Test
     fun embraceSDKNotStarted() {
         mockkStatic(Embrace::class)
-        val embraceMock =  mock<Embrace> {
+        val embraceMock = mock<Embrace> {
             on { isStarted } doReturn false
         }
         every { Embrace.getInstance() } returns embraceMock
@@ -557,9 +611,11 @@ class ReactNativeTracerProviderModuleTest {
 
         // Operations are noops that shouldn't error
         module.getTracer("test", "v1", "")
-        module.startSpan("test", "v1", "schema", "span_0",
+        module.startSpan(
+            "test", "v1", "schema", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise)
+            "", promise
+        )
         verify(embraceMock, times(0)).getOpenTelemetry()
     }
 }

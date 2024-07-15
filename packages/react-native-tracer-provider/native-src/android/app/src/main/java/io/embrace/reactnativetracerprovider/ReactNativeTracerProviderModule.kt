@@ -1,6 +1,5 @@
 package io.embrace.reactnativetracerprovider
 
-import io.embrace.android.embracesdk.Embrace
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -10,6 +9,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+import io.embrace.android.embracesdk.Embrace
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.trace.Span
@@ -34,7 +34,7 @@ interface WritableMapBuilder {
 }
 
 class WritableNativeMapBuilder : WritableMapBuilder {
-    override fun build() : WritableMap {
+    override fun build(): WritableMap {
         return WritableNativeMap()
     }
 }
@@ -60,38 +60,38 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
      * actual OTEL API objects
      */
 
-    private fun stringListFromReadableArray(array: ReadableArray) :List<String> {
+    private fun stringListFromReadableArray(array: ReadableArray): List<String> {
         val list: MutableList<String> = mutableListOf()
 
-        for(i in 0..<array.size()) {
+        for (i in 0..<array.size()) {
             list.add(array.getString(i))
         }
         return list
     }
 
-    private fun doubleListFromReadableArray(array: ReadableArray) :List<Double> {
+    private fun doubleListFromReadableArray(array: ReadableArray): List<Double> {
         val list: MutableList<Double> = mutableListOf()
 
-        for(i in 0..<array.size()) {
+        for (i in 0..<array.size()) {
             list.add(array.getDouble(i))
         }
         return list
     }
 
-    private fun booleanListFromReadableArray(array: ReadableArray) :List<Boolean> {
+    private fun booleanListFromReadableArray(array: ReadableArray): List<Boolean> {
         val list: MutableList<Boolean> = mutableListOf()
 
-        for(i in 0..<array.size()) {
+        for (i in 0..<array.size()) {
             list.add(array.getBoolean(i))
         }
         return list
     }
 
-    private fun attributesFromReadableMap(map: ReadableMap) : Attributes {
+    private fun attributesFromReadableMap(map: ReadableMap): Attributes {
         val it = map.keySetIterator()
         val builder = Attributes.builder()
 
-        while(it.hasNextKey()) {
+        while (it.hasNextKey()) {
             val key = it.nextKey()
             val type = map.getType(key)
 
@@ -108,22 +108,19 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
                         ReadableType.String -> builder.put(AttributeKey.stringArrayKey(key), stringListFromReadableArray(array))
                         else -> {
                             log.warning("invalid attribute key: $key")
-                            continue
                         }
                     }
                 }
                 else -> {
                     log.warning("invalid attribute value for key: $key")
-                    continue
                 }
             }
         }
 
-
         return builder.build()
     }
 
-    private fun spanContextFromReadableMap(map: ReadableMap) : SpanContext {
+    private fun spanContextFromReadableMap(map: ReadableMap): SpanContext {
         val traceId = map.getString(SPAN_CONTEXT_TRACE_ID_KEY) ?: ""
         val spanId = map.getString(SPAN_CONTEXT_SPAN_ID_KEY) ?: ""
 
@@ -131,12 +128,13 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
             traceId,
             spanId,
             TraceFlags.getDefault(),
-            TraceState.getDefault())
+            TraceState.getDefault()
+        )
 
         return spanContext
     }
 
-    private fun spanContextToWritableMap(spanContext: SpanContext?) : WritableMap{
+    private fun spanContextToWritableMap(spanContext: SpanContext?): WritableMap {
         val map = this.writableMapBuilder.build()
 
         map.putString(SPAN_CONTEXT_TRACE_ID_KEY, spanContext?.traceId ?: "")
@@ -210,10 +208,21 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         }
     }
 
-    @ReactMethod fun startSpan(tracerName: String, tracerVersion: String, tracerSchemaUrl: String,
-                               spanBridgeId: String, name: String, kind: String, time: Double,
-                               attributes: ReadableMap, links: ReadableArray, parentId: String,
-                               promise: Promise) {
+    @Suppress("LongParameterList")
+    @ReactMethod
+    fun startSpan(
+        tracerName: String,
+        tracerVersion: String,
+        tracerSchemaUrl: String,
+        spanBridgeId: String,
+        name: String,
+        kind: String,
+        time: Double,
+        attributes: ReadableMap,
+        links: ReadableArray,
+        parentId: String,
+        promise: Promise
+    ) {
         val tracer = tracers[getTracerKey(tracerName, tracerVersion, tracerSchemaUrl)] ?: return
         val spanBuilder = tracer.spanBuilder(name)
 
@@ -221,7 +230,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         if (kind.isNotEmpty()) {
             try {
                 spanBuilder.setSpanKind(SpanKind.valueOf(kind))
-            } catch(e: IllegalArgumentException) {
+            } catch (e: IllegalArgumentException) {
                 log.warning("invalid kind for startSpan: $kind")
             }
         }
@@ -235,7 +244,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         spanBuilder.setAllAttributes(attributesFromReadableMap(attributes))
 
         // Set links
-        for(i in 0..<links.size()) {
+        for (i in 0..<links.size()) {
             val link = links.getMap(i)
             val linkSpanContext = link.getMap(LINK_SPAN_CONTEXT_KEY) ?: continue
             val linkAttributes = link.getMap(LINK_ATTRIBUTES_KEY)
@@ -280,7 +289,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
 
     @ReactMethod fun addLinks(spanBridgeId: String, links: ReadableArray) {
         val span = getSpan(spanBridgeId) ?: return
-        for(i in 0..<links.size()) {
+        for (i in 0..<links.size()) {
             val link = links.getMap(i)
             val linkSpanContext = link.getMap(LINK_SPAN_CONTEXT_KEY) ?: continue
             val linkAttributes = link.getMap(LINK_ATTRIBUTES_KEY)
@@ -304,7 +313,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
             } else {
                 span.setStatus(StatusCode.valueOf(statusCode), message)
             }
-        } catch(e: IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
             log.warning("invalid statusCode for setStatus: $statusCode")
         }
     }

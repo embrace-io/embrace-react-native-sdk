@@ -8,11 +8,11 @@ import com.facebook.react.uimanager.ReactShadowNode
 import com.facebook.react.uimanager.ViewManager
 
 class ReactNativeTracerProviderPackage : ReactPackage {
-	override fun createViewManagers(
-			reactContext: ReactApplicationContext
+    override fun createViewManagers(
+        reactContext: ReactApplicationContext
     ): MutableList<ViewManager<View, ReactShadowNode<*>>> = mutableListOf()
 
-	override fun createNativeModules(
-			reactContext: ReactApplicationContext
+    override fun createNativeModules(
+        reactContext: ReactApplicationContext
     ): MutableList<NativeModule> = listOf(ReactNativeTracerProviderModule(reactContext)).toMutableList()
 }
