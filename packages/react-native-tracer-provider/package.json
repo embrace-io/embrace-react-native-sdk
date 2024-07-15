@@ -44,7 +44,7 @@
     "tracer provider"
   ],
   "scripts": {
-    "build": "./copy-native-src.sh && tsc",
+    "build": "node update_android_version.ts && ./copy-native-src.sh && tsc",
     "android-test": "cd native-src && yarn install && cd android && ./gradlew :app:testDebugUnitTest && cd ../../"
   },
   "peerDependencies": {
@@ -52,5 +52,9 @@
   },
   "devDependencies": {
     "typescript": "^4.7.4"
+  },
+  "embrace": {
+    "iosVersion": "6.0.0",
+    "androidVersion": "6.9.1"
   }
 }

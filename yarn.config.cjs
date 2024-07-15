@@ -115,6 +115,20 @@ function enforceConsistentDependenciesAcrossTheProject({Yarn}) {
   }
 }
 
+/**
+ *  Enforces each package having the same Embrace metadata
+ */
+function enforceEmbraceMetadata({ Yarn }) {
+  for (const workspace of Yarn.workspaces()) {
+    if (workspace.manifest.private) continue;
+
+    workspace.set("embrace", {
+      iosVersion: "6.0.0",
+      androidVersion: "6.9.1",
+    });
+  }
+}
+
 module.exports = defineConfig({
   constraints: async ctx => {
     enforcePackageInfo(ctx);
@@ -122,5 +136,6 @@ module.exports = defineConfig({
     enforceReactNativePeerDependency(ctx);
     enforceCommonDevDependencies(ctx);
     enforceConsistentDependenciesAcrossTheProject(ctx);
+    enforceEmbraceMetadata(ctx);
   },
 });
