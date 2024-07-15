@@ -8,7 +8,12 @@ import {
   Tracer,
 } from "@opentelemetry/api";
 
-import {normalizeAttributes, normalizeLinks, normalizeTime} from "./util";
+import {
+  logWarning,
+  normalizeAttributes,
+  normalizeLinks,
+  normalizeTime,
+} from "./util";
 import {SpanContextSyncBehaviour} from "./types";
 import {TracerProviderModule} from "./TracerProviderModule";
 import {EmbraceNativeSpan} from "./EmbraceNativeSpan";
@@ -55,7 +60,12 @@ export class EmbraceNativeTracer implements Tracer {
     const parentSpan = trace.getSpan(
       context || this.contextManager.active(),
     ) as EmbraceNativeSpan;
-    const parentNativeID = (!root && parentSpan && parentSpan.nativeID()) || "";
+    const parentNativeID =
+      (!root &&
+        parentSpan &&
+        parentSpan.isRecording() &&
+        parentSpan.nativeID()) ||
+      "";
 
     this.spansCreated += 1;
     const nativeSpan = new EmbraceNativeSpan(
@@ -65,6 +75,18 @@ export class EmbraceNativeTracer implements Tracer {
       this.spansCreated,
       this.spanContextSyncBehaviour,
     );
+
+    if (links && links.length) {
+      logWarning(
+        "Adding span links is not currently supported by the Embrace SDK",
+      );
+    }
+
+    if (parentSpan && !parentSpan.isRecording()) {
+      logWarning(
+        "parent span already ended, not setting as parent for this span",
+      );
+    }
 
     nativeSpan.creatingNativeSide(
       TracerProviderModule.startSpan(

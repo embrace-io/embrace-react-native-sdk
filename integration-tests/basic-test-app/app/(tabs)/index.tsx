@@ -6,17 +6,29 @@ import {ThemedText} from "@/components/ThemedText";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import {endSession} from "@embrace-io/react-native";
-import {generateNestedSpans, generateTestSpans} from "@/helpers/generateSpans";
+import {generateBasicSpan, generateNestedSpans, generateTestSpans} from "@/helpers/generateSpans";
 import {Tracer} from "@opentelemetry/api";
-import {EmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 
 const HomeScreen = () => {
   const handleEndSession = useCallback(() => {
     endSession();
   }, []);
-  const tracer = useMemo<Tracer>(() => {
-    return new EmbraceNativeTracerProvider().getTracer("span-test", "1.0");
-  }, []);
+
+  const {isLoading, isError, error, tracerProvider} = useEmbraceNativeTracerProvider()
+  const tracer = useMemo<Tracer|undefined>(() => {
+    if (tracerProvider) {
+      return tracerProvider.getTracer("span-test", "1.0");
+    }
+  }, [isLoading, isError, error, tracerProvider]);
+
+  if (isLoading) {
+    return <ThemedText type="subtitle">Loading Tracer Provider</ThemedText>
+  }
+
+  if (isError) {
+    return <ThemedText type="subtitle">{error}</ThemedText>
+  }
 
   return (
     <ParallaxScrollView
@@ -34,11 +46,15 @@ const HomeScreen = () => {
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Span</ThemedText>
         <Button
-          onPress={() => generateTestSpans(tracer)}
+          onPress={() => generateBasicSpan(tracer!)}
+          title={"GENERATE BASIC SPAN"}
+        />
+        <Button
+          onPress={() => generateTestSpans(tracer!)}
           title={"GENERATE TEST SPANS"}
         />
         <Button
-          onPress={() => generateNestedSpans(tracer)}
+          onPress={() => generateNestedSpans(tracer!)}
           title={"GENERATE NESTED SPANS"}
         />
       </ThemedView>
