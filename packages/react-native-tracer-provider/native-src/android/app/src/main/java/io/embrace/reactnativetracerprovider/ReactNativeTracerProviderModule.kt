@@ -175,7 +175,8 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
      * Methods to allow the JS side to conform to @opentelemetry-js/api
      */
 
-    @ReactMethod fun getTracer(name: String, version: String, schemaUrl: String) {
+    @ReactMethod
+    fun setupTracer(name: String, version: String, schemaUrl: String) {
         if (tracerProvider == null) {
             if (!Embrace.getInstance().isStarted) {
                 log.warning("cannot access tracer provider, Embrace SDK has not been started")
@@ -188,6 +189,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         val id = getTracerKey(name, version, schemaUrl)
 
         if (tracers.containsKey(id)) {
+            // tracer is already setup
             return
         }
 
@@ -272,12 +274,14 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         promise.resolve(spanContextToWritableMap(span.spanContext))
     }
 
-    @ReactMethod fun setAttributes(spanBridgeId: String, attributes: ReadableMap) {
+    @ReactMethod
+    fun setAttributes(spanBridgeId: String, attributes: ReadableMap) {
         val span = getSpan(spanBridgeId) ?: return
         span.setAllAttributes(attributesFromReadableMap(attributes))
     }
 
-    @ReactMethod fun addEvent(spanBridgeId: String, eventName: String, attributes: ReadableMap, time: Double) {
+    @ReactMethod
+    fun addEvent(spanBridgeId: String, eventName: String, attributes: ReadableMap, time: Double) {
         val span = getSpan(spanBridgeId) ?: return
 
         if (time != 0.0) {
@@ -287,7 +291,8 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         }
     }
 
-    @ReactMethod fun addLinks(spanBridgeId: String, links: ReadableArray) {
+    @ReactMethod
+    fun addLinks(spanBridgeId: String, links: ReadableArray) {
         val span = getSpan(spanBridgeId) ?: return
         for (i in 0..<links.size()) {
             val link = links.getMap(i)
@@ -302,7 +307,8 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         }
     }
 
-    @ReactMethod fun setStatus(spanBridgeId: String, status: ReadableMap) {
+    @ReactMethod
+    fun setStatus(spanBridgeId: String, status: ReadableMap) {
         val span = getSpan(spanBridgeId) ?: return
         val statusCode = status.getString(SPAN_STATUS_CODE_KEY) ?: return
         val message = status.getString(SPAN_STATUS_MESSAGE_KEY) ?: ""
@@ -318,12 +324,14 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         }
     }
 
-    @ReactMethod fun updateName(spanBridgeId: String, name: String) {
+    @ReactMethod
+    fun updateName(spanBridgeId: String, name: String) {
         val span = getSpan(spanBridgeId) ?: return
         span.updateName(name)
     }
 
-    @ReactMethod fun endSpan(spanBridgeId: String, endTime: Double) {
+    @ReactMethod
+    fun endSpan(spanBridgeId: String, endTime: Double) {
         val span = getSpan(spanBridgeId) ?: return
 
         if (endTime == 0.0) {

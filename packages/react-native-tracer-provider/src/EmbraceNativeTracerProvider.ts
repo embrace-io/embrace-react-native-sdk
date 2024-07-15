@@ -115,7 +115,7 @@ class EmbraceNativeTracerProvider implements TracerProvider {
   ): Tracer {
     const schemaUrl = options?.schemaUrl || "";
     const tracerVersion = version || "";
-    TracerProviderModule.getTracer(name, tracerVersion, schemaUrl);
+    TracerProviderModule.setupTracer(name, tracerVersion, schemaUrl);
     return new EmbraceNativeTracer(
       this.contextManager,
       this.spanContextSyncBehaviour,

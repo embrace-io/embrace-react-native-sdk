@@ -15,7 +15,7 @@ import {
   useEmbraceNativeTracerProvider,
 } from "../index";
 
-const mockGetTracer = jest.fn();
+const mockSetupTracer = jest.fn();
 const mockStartSpan = jest.fn();
 const mockSetAttributes = jest.fn();
 const mockAddEvent = jest.fn();
@@ -36,8 +36,8 @@ jest.mock("react-native", () => ({
 
 jest.mock("../TracerProviderModule", () => ({
   TracerProviderModule: {
-    getTracer: (name: string, version?: string, schemaUrl?: string) =>
-      mockGetTracer(name, version, schemaUrl),
+    setupTracer: (name: string, version?: string, schemaUrl?: string) =>
+      mockSetupTracer(name, version, schemaUrl),
     startSpan: (
       tracerName: string,
       tracerVersion: string,
@@ -116,7 +116,7 @@ describe("Embrace Native Tracer Provider", () => {
 
   it("should allow getting a tracer", async () => {
     await getTestTracer({name: "some-tracer", version: "v17"});
-    expect(mockGetTracer).toHaveBeenCalledWith("some-tracer", "v17", "");
+    expect(mockSetupTracer).toHaveBeenCalledWith("some-tracer", "v17", "");
   });
 
   it("should error if getting a tracer provider before the Embrace SDK has started", async () => {
@@ -698,7 +698,7 @@ describe("Embrace Native Tracer Provider", () => {
         schemaUrl: "s1",
       },
     });
-    expect(mockGetTracer).toHaveBeenCalledWith("test", "v1", "s1");
+    expect(mockSetupTracer).toHaveBeenCalledWith("test", "v1", "s1");
 
     tracer.startSpan("my-span");
 

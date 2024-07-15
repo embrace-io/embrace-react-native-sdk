@@ -135,7 +135,7 @@ class ReactNativeTracerProviderModuleTest {
             // provider = setupOTELTracerProvider(exporter)
 
             tracerProviderModule = ReactNativeTracerProviderModule(context, provider, JavaOnlyMapMapBuilder())
-            tracerProviderModule.getTracer("test", "v1", "")
+            tracerProviderModule.setupTracer("test", "v1", "")
         }
     }
 
@@ -578,7 +578,7 @@ class ReactNativeTracerProviderModuleTest {
         }
 
         // Create a tracer with that schemaUrl, should work now
-        tracerProviderModule.getTracer("test", "v1", "schema")
+        tracerProviderModule.setupTracer("test", "v1", "schema")
         tracerProviderModule.startSpan(
             "test", "v1", "schema", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
@@ -610,7 +610,7 @@ class ReactNativeTracerProviderModuleTest {
         val module = ReactNativeTracerProviderModule(context)
 
         // Operations are noops that shouldn't error
-        module.getTracer("test", "v1", "")
+        module.setupTracer("test", "v1", "")
         module.startSpan(
             "test", "v1", "schema", "span_0",
             "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
