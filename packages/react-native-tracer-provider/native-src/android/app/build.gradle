@@ -1,3 +1,7 @@
+plugins {
+    id("io.gitlab.arturbosch.detekt") version("1.23.6")
+}
+
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
@@ -130,6 +134,8 @@ dependencies {
     testImplementation(platform("io.opentelemetry:opentelemetry-bom:1.38.0"))
     testImplementation("io.opentelemetry:opentelemetry-sdk")
     testImplementation("io.opentelemetry:opentelemetry-exporter-logging")
+
+    add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
 }
 
 android {
@@ -138,6 +144,12 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    autoCorrect = true
+    config.from(project.files("${project.rootDir}/config/detekt/detekt.yml"))
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
