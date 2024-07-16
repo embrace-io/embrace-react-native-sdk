@@ -1,16 +1,17 @@
 import Foundation
 import EmbraceIO
-import React 
+import React
+import EmbraceCommon
 
 #if canImport(CodePush)
 import CodePush
 #endif
 
 enum EmbraceKeys: String {
-    case reactNativeVersion = "io.embrace.reactnative.version"
-    case embraceReactNativeSdkVersion = "io.embrace.reactnative.sdk.version"
-    case javaScriptPatchNumber = "io.embrace.javascript.patch"
-    case javaScriptBundleURL = "io.embrace.jsbundle.url"
+  case reactNativeVersion = "io.embrace.reactnative.version"
+  case embraceReactNativeSdkVersion = "io.embrace.reactnative.sdk.version"
+  case javaScriptPatchNumber = "io.embrace.javascript.patch"
+  case javaScriptBundleURL = "io.embrace.jsbundle.url"
 }
 
 @objc(EmbraceManager)
@@ -19,277 +20,249 @@ class EmbraceManager: NSObject {
   static func moduleName() -> String {
     return "EmbraceManager"
   }
-
-	@objc
-	func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-			do {
-					try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: path)
-					resolve(true) 
-			} catch {
-					reject(false)
-			}
-	}
-
+  
   @objc
-  func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     do {
-    	let embraceStarted = try Embrace.client?.started ?? false
-			resolve(embraceStarted)
-    } catch {
-      reject(false)
-    }
-  }
-
-	@objc
-  func startNativeEmbraceSDK(_ appId: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    do {
-
-			let embraceOptions = EmbraceOptions(apiKey: appId)
-			
-			Embrace.setup(options: embraceOptions)
-					.start()			
-
-			resolve(true)
-    } catch {
-      reject(false)
-    }
-  }
-
-  @objc
-  func getDeviceId(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    do {
-    	let deviceId = try Embrace.client?.currentDeviceId() ?? nil
-			resolve(deviceId)
-    } catch {
-      reject(nil)
+      try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: path)
+      resolve(true)
+    }  catch let error {
+      reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", error)
     }
   }
   
-	@objc
-	func setUserIdentifier(_ userIdentifier: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-			do {
-					try Embrace.client?.metadata.userIdentifier = userIdentifier
-					resolve(true) 
-			} catch {
-					reject(false)
-			}
-	}
-
-	
-	@objc
+  @objc
+  func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    if let embraceStarted = Embrace.client?.started {
+      resolve(embraceStarted)
+    } else {
+      reject("GET_IS_STARTED", "Error getting isStarted", nil)
+    }
+  }
+  
+  @objc
+  func startNativeEmbraceSDK(_ appId: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    do {
+      
+      let embraceOptions = Embrace.Options(appId: appId)
+      
+      try Embrace.setup(options: embraceOptions)
+        .start()
+      
+      resolve(true)
+    } catch let error {
+      reject("START_EMBRACE_SDK", "Error starting Embrace SDK", error)
+    }
+  }
+  
+  @objc
+  func getDeviceId(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    if let deviceId = Embrace.client?.currentDeviceId() {
+      resolve(deviceId)
+    } else {
+      reject("GET_DEVICE_ID", "Error getting deviceId", nil)
+    }
+  }
+  
+  @objc
+  func setUserIdentifier(_ userIdentifier: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    Embrace.client?.metadata.userIdentifier = userIdentifier
+    resolve(true)
+  }
+  
+  
+  @objc
   func getCurrentSessionId(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    do {
-    	let sessionId = try Embrace.client?.currentSessionId() ?? nil
-			resolve(sessionId)
-    } catch {
-      reject(nil)
+    if let sessionId = Embrace.client?.currentSessionId() {
+      resolve(sessionId)
+    } else {
+      reject("GET_SESSION_ID", "Error getting sessionId", nil)
     }
   }
-
-	@objc
-	func addBreadcrumb(_ event: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-			do {
-					try Embrace.client?.add(event)
-					resolve(true) 
-			} catch {
-					reject(false)
-			}
-	}
-
-	@objc
-	func setReactNativeSDKVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-			do {
-					try Embrace.client?.metadata.addResource(key: EmbraceKeys.embraceReactNativeSdkVersion.rawValue, value: version)
-					resolve(true) 
-			} catch {
-					reject(false)
-			}
-	}
-
-	
-	@objc
-	func setUserName(_ userName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-			do {
-					try Embrace.client?.metadata.userName = userName
-					resolve(true) 
-			} catch {
-					reject(false)
-			}
-	}
-
-	@objc
+  
+  @objc
+  func addBreadcrumb(_ event: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    //TODO Refactor SPAN
+    //      do {
+    //        try Embrace.client?.add(event: event)
+    //          resolve(true)
+    //      } catch {
+    //          reject(false)
+    //      }
+  }
+  
+  @objc
+  func setReactNativeSDKVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    do {
+      try Embrace.client?.metadata.addResource(key: EmbraceKeys.embraceReactNativeSdkVersion.rawValue, value: version)
+      resolve(true)
+    } catch let error {
+      reject("SET_RN_SDK_VERSION", "Error setting ReactNative SDK version", error)
+    }
+  }
+  
+  
+  @objc
+  func setUserName(_ userName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    Embrace.client?.metadata.userName = userName
+    resolve(true)
+  }
+  
+  @objc
   func clearUserEmail(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    Embrace.client?.metadata.userEmail = nil
+    resolve(true)
+  }
+  
+  @objc
+  func setJavaScriptPatchNumber(_ patch: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     do {
-			try Embrace.client?.metadata.userEmail = nil
-			resolve(true)
-    } catch {
-      reject(false)
+      try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptPatchNumber.rawValue, value: patch)
+      resolve(true)
+    } catch let error {
+      reject("SET_JAVASCRIPT_PATCH_NUMBER", "Error setting JavasScript Patch Number", error)
     }
   }
-
-	@objc
-	func setJavaScriptPatchNumber(_ patch: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-			do {
-					try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptPatchNumber.rawValue, value: patch)
-					resolve(true) 
-			} catch {
-					reject(false)
-			}
-	}
-
-	@objc
+  
+  @objc
   func clearUserIdentifier(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    do {
-			try Embrace.client?.metadata.userIdentifier = nil
-			resolve(true)
-    } catch {
-      reject(false)
-    }
+    Embrace.client?.metadata.userIdentifier = nil
+    resolve(true)
   }
-
-	@objc
+  
+  @objc
   func clearUsername(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    do {
-			try Embrace.client?.metadata.userName = nil
-			resolve(true)
-    } catch {
-      reject(false)
-    }
+    Embrace.client?.metadata.userName = nil
+    resolve(true)
   }
-
-
-	@objc
+  
+  
+  @objc
   func endSession(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    Embrace.client?.endCurrentSession()
+    resolve(true)
+  }
+  
+  @objc
+  func checkAndSetCodePushBundleURL(
+    _ resolve: @escaping RCTPromiseResolveBlock,
+    rejecter reject: @escaping RCTPromiseRejectBlock
+  ) {
     do {
-			try Embrace.client?.endSession()
-			resolve(true)
-    } catch {
-      reject(false)
+#if canImport(CodePush)
+      guard let url = try CodePush.bundleURL() else {
+        reject("GET_CODEPUSH_BUNDLE_URL", "Error getting Codepush Bundle URL", nil)
+        return
+      }
+      
+      try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: url.path)
+      resolve(true)
+      
+#else
+      resolve(false)
+#endif
+    } catch let error {
+      reject("CHECK_AND_SET_CODEPUSH_BUNDLE_URL", "Error setting Codepush Bundle URL", error)
     }
   }
-
- 	@objc
-	func checkAndSetCodePushBundleURL(
-			_ resolve: @escaping RCTPromiseResolveBlock,
-			rejecter reject: @escaping RCTPromiseRejectBlock
-	) {
-			do {
-					#if canImport(CodePush)
-					guard let url = try CodePush.bundleURL() else {
-							resolve(false)
-							return
-					}
-					
-					try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: url.path)
-					resolve(true)
-					
-					#else
-					resolve(false)
-					#endif
-			} catch {
-					resolve(false)
-			}
-	}
-
-	@objc
+  
+  @objc
   func clearAllUserPersonas(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    // This is pending to implement from ios
+    //    do {
+    //      try Embrace.client?.metadata.removeAllPersonaTags()
+    //      resolve(true)
+    //    } catch let error {
+    //    reject("CLEAR_ALL_USER_PERSOMAS", "Error clearing all UserPersonas", error)
+    //  }
+  }
+  
+  @objc
+  func setReactNativeVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     do {
-			try Embrace.client?.metadata.removeAllPersonaTags()
-			resolve(true)
-    } catch {
-      reject(false)
+      try Embrace.client?.metadata.addResource(key: EmbraceKeys.reactNativeVersion.rawValue, value: version)
+      resolve(true)
+    } catch let error {
+      reject("SET_RECT_NATIVE_VERSION", "Error setting React Native Number", error)
     }
   }
-
-	@objc
-	func setReactNativeVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-			do {
-					try Embrace.client?.metadata.addResource(key: EmbraceKeys.reactNativeVersion.rawValue, value: version)
-					resolve(true) 
-			} catch {
-					reject(false)
-			}
-	}
-
-	@objc
-	func removeSessionProperty(_ key: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-			do {
-				// TODO REfactor to include lifespan
-					try Embrace.client?.metadata.removeProperty(key: key)
-					resolve(true) 
-			} catch {
-					reject(false)
-			}
-	}
-
-	@objc
-	func setUserEmail(_ userEmail: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-			do {
-				// TODO REfactor to include lifespan
-					try Embrace.client?.metadata.userEmail = userEmail
-					resolve(true) 
-			} catch {
-					reject(false)
-			}
-	}
-	
-	@objc
-	func addSessionProperty(
-			_ key: String,
-			value: String,
-			permanent: Bool,
-			resolver resolve: @escaping RCTPromiseResolveBlock,
-			rejecter reject: @escaping RCTPromiseRejectBlock
-	) {
-			do {
-					let lifespan = permanent ? MetadataRecordLifespan.permanent.rawValue : MetadataRecordLifespan.session.rawValue
-					let success = try Embrace.client?.metadata.addProperty(key:key, value:value, lifespan:lifespan) ?? false
-					resolve(success)
-			} catch {
-					resolve(false)
-			}
-	}
-
-	@objc
+  
+  @objc
+  func removeSessionProperty(_ key: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    do {
+      // TODO REfactor to include lifespan
+      try Embrace.client?.metadata.removeProperty(key: key)
+      resolve(true)
+    } catch let error {
+      reject("REMOVE_SESSION_PROPERTY", "Error removing Session Property", error)
+    }
+  }
+  
+  @objc
+  func setUserEmail(_ userEmail: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    Embrace.client?.metadata.userEmail = userEmail
+    resolve(true)
+  }
+  
+  @objc
+  func addSessionProperty(
+    _ key: String,
+    value: String,
+    permanent: Bool,
+    resolver resolve: @escaping RCTPromiseResolveBlock,
+    rejecter reject: @escaping RCTPromiseRejectBlock
+  ) {
+    do {
+      let lifespan:MetadataLifespan = permanent ? .permanent : .session
+      try Embrace.client?.metadata.addProperty(key:key, value:value, lifespan:lifespan)
+      resolve(true)
+    } catch let error {
+      reject("ADD_SESSION_PROPERTY", "Error adding Session Property", error)
+    }
+  }
+  
+  @objc
   func clearUserPersona(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    do {
-			try Embrace.client?.metadata.removePersonaTag()
-			resolve(true)
-    } catch {
-      reject(false)
-    }
+    // This is pending to implement from ios
+    //    do {
+    //      try Embrace.client?.metadata.removePersonaTag()
+    //      resolve(true)
+    //    } catch {
+    //      reject(false)
+    //    }
   }
-
-	@objc
-	func logMessageWithSeverityAndProperties(
-			_ message: String,
-			severity: String,
-			properties: NSDictionary,
-			resolver resolve: @escaping RCTPromiseResolveBlock,
-			rejecter reject: @escaping RCTPromiseRejectBlock
-	) {
-			do {
-					let severityValue = self.severityFromString(severity)
-
-					try Embrace.client?.logMessage(
-							message,
-							severity: severityValue,
-							attributes: properties as? [AnyHashable : Any]
-					)
-					resolve(true)
-			} catch {
-					reject(false)
-			}
-	}
-
-	private func severity(from inputString: String) -> EMBSeverity {
+  
+  @objc
+  func logMessageWithSeverityAndProperties(
+    _ message: String,
+    severity: String,
+    properties: NSDictionary,
+    resolver resolve: @escaping RCTPromiseResolveBlock,
+    rejecter reject: @escaping RCTPromiseRejectBlock
+  ) {
+    
+    let severityValue = self.severityFromString(from:severity)
+    guard let attributes = properties as? [String: String] else {
+      reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
+      return
+    }
+    Embrace.client?.log(
+      message,
+      severity: severityValue,
+      attributes: attributes
+    )
+    resolve(true)
+    
+  }
+  
+  private func severityFromString(from inputString: String) -> LogSeverity {
     switch inputString {
     case "info":
-        return .info
+      return .info
     case "warning":
-        return .warning
+      return .warn
     default:
-        return .error
+      return .error
     }
-}
+  }
 }
