@@ -1,7 +1,6 @@
 import Foundation
-import EmbraceIO
 import React
-import EmbraceCommon
+import EmbraceIO
 
 #if canImport(CodePush)
 import CodePush
@@ -232,6 +231,7 @@ class EmbraceManager: NSObject {
     //    }
   }
   
+    /*
   @objc
   func logMessageWithSeverityAndProperties(
     _ message: String,
@@ -265,4 +265,6 @@ class EmbraceManager: NSObject {
       return .error
     }
   }
+     */
+     
 }
