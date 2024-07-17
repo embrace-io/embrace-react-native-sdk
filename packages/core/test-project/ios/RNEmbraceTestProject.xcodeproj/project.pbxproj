@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3051055D2C486F0D00CC7C8C /* EmbraceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3051055C2C486F0D00CC7C8C /* EmbraceManager.mm */; };
-		30D215392C48713C00BCBA14 /* EmbraceManager-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 30D215382C48713C00BCBA14 /* EmbraceManager-Bridging-Header.h */; };
 		30DFDA6A2C486677009F2ECC /* RNEmbrace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30DFDA622C486677009F2ECC /* RNEmbrace.framework */; };
 		30DFDA6F2C486677009F2ECC /* RNEmbraceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFDA6E2C486677009F2ECC /* RNEmbraceTests.swift */; };
 		30DFDA7A2C4866AA009F2ECC /* EmbraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFDA782C4866AA009F2ECC /* EmbraceManager.swift */; };
@@ -27,8 +25,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3051055C2C486F0D00CC7C8C /* EmbraceManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmbraceManager.mm; sourceTree = "<group>"; };
-		30D215382C48713C00BCBA14 /* EmbraceManager-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EmbraceManager-Bridging-Header.h"; sourceTree = "<group>"; };
 		30DFDA622C486677009F2ECC /* RNEmbrace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbrace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		30DFDA692C486677009F2ECC /* RNEmbraceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNEmbraceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		30DFDA6E2C486677009F2ECC /* RNEmbraceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNEmbraceTests.swift; sourceTree = "<group>"; };
@@ -96,8 +92,6 @@
 		30DFDA632C486677009F2ECC /* RNEmbrace */ = {
 			isa = PBXGroup;
 			children = (
-				30D215382C48713C00BCBA14 /* EmbraceManager-Bridging-Header.h */,
-				3051055C2C486F0D00CC7C8C /* EmbraceManager.mm */,
 				30DFDA782C4866AA009F2ECC /* EmbraceManager.swift */,
 			);
 			name = RNEmbrace;
@@ -128,7 +122,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30D215392C48713C00BCBA14 /* EmbraceManager-Bridging-Header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,7 +328,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				30DFDA7A2C4866AA009F2ECC /* EmbraceManager.swift in Sources */,
-				3051055D2C486F0D00CC7C8C /* EmbraceManager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,7 +520,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "../../ios/RNEmbrace/EmbraceManager-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -566,7 +558,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "../../ios/RNEmbrace/EmbraceManager-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
