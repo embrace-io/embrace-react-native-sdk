@@ -1,9 +1,8 @@
 import Foundation
 import React
 import EmbraceIO
-import EmbraceCore
 import EmbraceCrash
-import EmbraceCommonInternal
+import EmbraceCommonInternal // TODO should not be needed
 
 #if canImport(CodePush)
 import CodePush
@@ -239,7 +238,6 @@ class EmbraceManager: NSObject {
     //    }
   }
   
-    /*
   @objc
   func logMessageWithSeverityAndProperties(
     _ message: String,
@@ -273,6 +271,4 @@ class EmbraceManager: NSObject {
       return .error
     }
   }
-     */
-     
 }

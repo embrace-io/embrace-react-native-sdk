@@ -24,8 +24,10 @@ final class EmbraceManagerTests: XCTestCase {
       module = EmbraceManager();
   }
 
-  func testStartNativeEmbraceSDK()  {
+  func testStartNativeEmbraceSDK() async throws {
       module.startNativeEmbraceSDK("myApp", resolve: promise.resolve, rejecter: promise.reject)
+      
+      try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
       XCTAssertEqual(promise.resolveCalls.count, 1)
       XCTAssertTrue(promise.resolveCalls[0])
       
