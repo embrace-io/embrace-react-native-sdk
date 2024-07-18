@@ -21,7 +21,9 @@ const tracking = require("promise/setimmediate/rejection-tracking");
 
 const stackLimit = 200;
 
-const unhandledPromiseRejectionPrefix = "Unhandled promise rejection: ";
+// TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+
+// const unhandledPromiseRejectionPrefix = "Unhandled promise rejection: ";
 
 const handleError = async (error: Error, callback: () => void) => {
   if (!(error instanceof Error)) {
@@ -54,7 +56,9 @@ export const initialize = async ({
   }
   const hasNativeSDKStarted = await NativeModules.EmbraceManager.isStarted();
   if (!hasNativeSDKStarted) {
-    const result = await NativeModules.EmbraceManager.startNativeEmbraceSDK();
+    // TODO CHANGE TO CONFIG OR SOMETHING
+    const result =
+      await NativeModules.EmbraceManager.startNativeEmbraceSDK("Jso7A");
     if (!result) {
       console.warn(
         "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
@@ -95,18 +99,19 @@ export const initialize = async ({
   tracking.enable({
     allRejections: true,
     onUnhandled: (_: any, error: Error) => {
-      let message = `Unhandled promise rejection: ${error}`;
-      let st = "";
-      if (error instanceof Error) {
-        message = unhandledPromiseRejectionPrefix + error.message;
-        st = error.stack || "";
-      }
-      return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
-        message,
-        ERROR,
-        {},
-        st,
-      );
+      // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+      // let message = `Unhandled promise rejection: ${error}`;
+      // let st = "";
+      // if (error instanceof Error) {
+      //   message = unhandledPromiseRejectionPrefix + error.message;
+      //   st = error.stack || "";
+      // }
+      // return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
+      //   message,
+      //   ERROR,
+      //   {},
+      //   st,
+      // );
     },
     onHandled: () => {},
   });
@@ -130,10 +135,13 @@ const buildVersionStr = ({
 };
 
 export const endAppStartup = (properties?: Properties): Promise<boolean> => {
-  if (properties && Object.keys(properties).length > 0) {
-    return NativeModules.EmbraceManager.endAppStartupWithProperties(properties);
-  }
-  return NativeModules.EmbraceManager.endAppStartup();
+  // TODO REFACTOR FOR SPAN
+
+  // if (properties && Object.keys(properties).length > 0) {
+  //   return NativeModules.EmbraceManager.endAppStartupWithProperties(properties);
+  // }
+  // return NativeModules.EmbraceManager.endAppStartup();
+  return createFalsePromise();
 };
 
 export const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
@@ -170,55 +178,12 @@ export const logScreen = (screenName: string): Promise<boolean> => {
   );
 };
 
-export const startMoment = (
-  name: string,
-  identifier?: string,
-  properties?: Properties,
-): Promise<boolean> => {
-  if (!name) {
-    console.warn("[Embrace] Name is not defined. The moment was not started.");
-    return createFalsePromise();
-  }
-  if (identifier && properties) {
-    return NativeModules.EmbraceManager.startMomentWithNameAndIdentifierAndProperties(
-      name,
-      identifier,
-      properties,
-    );
-  } else if (identifier) {
-    return NativeModules.EmbraceManager.startMomentWithNameAndIdentifier(
-      name,
-      identifier,
-    );
-  } else if (properties) {
-    return NativeModules.EmbraceManager.startMomentWithNameAndIdentifierAndProperties(
-      name,
-      null,
-      properties,
-    );
-  } else {
-    return NativeModules.EmbraceManager.startMomentWithName(name);
-  }
-};
-
-export const endMoment = (
-  name: string,
-  identifier?: string,
-  properties?: Properties,
-): Promise<boolean> => {
-  if (identifier) {
-    return NativeModules.EmbraceManager.endMomentWithNameAndIdentifier(
-      name,
-      identifier,
-      properties,
-    );
-  } else {
-    return NativeModules.EmbraceManager.endMomentWithName(name, properties);
-  }
-};
-
 export const addUserPersona = (persona: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.addUserPersona(persona);
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+
+  // return NativeModules.EmbraceManager.addUserPersona(persona);
+
+  return createFalsePromise();
 };
 export const clearUserPersona = (persona: string): Promise<boolean> => {
   return NativeModules.EmbraceManager.clearUserPersona(persona);
@@ -260,22 +225,30 @@ export const logHandledError = (
   error: Error,
   properties?: Properties,
 ): Promise<boolean> => {
-  if (error instanceof Error) {
-    return NativeModules.EmbraceManager.logHandledError(
-      error.message,
-      error.stack,
-      properties,
-    );
-  } else {
-    return createFalsePromise();
-  }
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+
+  // if (error instanceof Error) {
+  //   return NativeModules.EmbraceManager.logHandledError(
+  //     error.message,
+  //     error.stack,
+  //     properties,
+  //   );
+  // } else {
+  return createFalsePromise();
+  // }
 };
 export const startView = (view: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.startView(view);
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+
+  //   return NativeModules.EmbraceManager.startView(view);
+  return createFalsePromise();
 };
 
 export const endView = (view: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.endView(view);
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+
+  //   return NativeModules.EmbraceManager.endView(view);
+  return createFalsePromise();
 };
 
 export const generateStackTrace = (): string => {
@@ -304,19 +277,31 @@ export const removeSessionProperty = (key: string) => {
 };
 
 export const getSessionProperties = () => {
-  return NativeModules.EmbraceManager.getSessionProperties();
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+
+  // return NativeModules.EmbraceManager.getSessionProperties();
+
+  return createFalsePromise();
 };
 
 export const endSession = (clearUserInfo: boolean = false) => {
-  return NativeModules.EmbraceManager.endSession(clearUserInfo);
+  return NativeModules.EmbraceManager.endSession();
 };
 
 export const setUserAsPayer = (): Promise<boolean> => {
-  return NativeModules.EmbraceManager.setUserAsPayer();
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+
+  // return NativeModules.EmbraceManager.setUserAsPayer();
+
+  return createFalsePromise();
 };
 
 export const clearUserAsPayer = (): Promise<boolean> => {
-  return NativeModules.EmbraceManager.clearUserAsPayer();
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+
+  // return NativeModules.EmbraceManager.clearUserAsPayer();
+
+  return createFalsePromise();
 };
 export const recordNetworkRequest = (
   url: string,
@@ -328,16 +313,19 @@ export const recordNetworkRequest = (
   statusCode?: number,
   error?: string,
 ): Promise<boolean> => {
-  return NativeModules.EmbraceManager.logNetworkRequest(
-    url,
-    httpMethod,
-    startInMillis,
-    endInMillis,
-    bytesSent || -1,
-    bytesReceived || -1,
-    statusCode || -1,
-    error,
-  );
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+
+  // return NativeModules.EmbraceManager.logNetworkRequest(
+  //   url,
+  //   httpMethod,
+  //   startInMillis,
+  //   endInMillis,
+  //   bytesSent || -1,
+  //   bytesReceived || -1,
+  //   statusCode || -1,
+  //   error,
+  // );
+  return createFalsePromise();
 };
 
 export const logNetworkClientError = (
@@ -348,17 +336,22 @@ export const logNetworkClientError = (
   errorType: string,
   errorMessage: string,
 ): Promise<boolean> => {
-  return NativeModules.EmbraceManager.logNetworkClientError(
-    url,
-    httpMethod,
-    startInMillis,
-    endInMillis,
-    errorType,
-    errorMessage,
-  );
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+
+  // return NativeModules.EmbraceManager.logNetworkClientError(
+  //   url,
+  //   httpMethod,
+  //   startInMillis,
+  //   endInMillis,
+  //   errorType,
+  //   errorMessage,
+  // );
+  return createFalsePromise();
 };
 export const getLastRunEndState = (): Promise<SessionStatus> =>
-  NativeModules.EmbraceManager.getLastRunEndState();
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+  NativeModules.EmbraceManager.getDeviceId();
+// NativeModules.EmbraceManager.getLastRunEndState();
 
 export const getDeviceId = (): Promise<string> =>
   NativeModules.EmbraceManager.getDeviceId();
