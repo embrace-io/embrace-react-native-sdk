@@ -23,7 +23,7 @@ target 'RNEmbrace' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod 'EmbraceIO-DEV', '6.2.0'
+  pod 'EmbraceIO-DEV'
 
   target 'RNEmbraceTests' do
     inherit! :complete
