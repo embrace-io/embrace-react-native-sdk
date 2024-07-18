@@ -1,20 +1,21 @@
-#import "EmbraceOTelSpanHelper.h"
-#import <Embrace/EmbraceOTelSpanErrorCode.h>
+// #import "EmbraceOTelSpanHelper.h"
+// #import <Embrace/EmbraceOTelSpanErrorCode.h>
 
-@implementation EmbraceOTelSpanHelper
+// @implementation EmbraceOTelSpanHelper
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
 
-- (EmbraceOTelSpanErrorCode)getEmbraceOTelSpanErrorCodeByString:(NSString *)errorCode {
-    if ([errorCode isEqualToString:@"None"]) {
-        return None;
-    } else if ([errorCode isEqualToString:@"Failure"]) {
-        return Failure;
-    } else if ([errorCode isEqualToString:@"UserAbandon"]) {
-        return UserAbandon;
-    } else if ([errorCode isEqualToString:@"Unknown"]) {
-        return Unknown;
-    } else {
-        return None;
-    }
-}
+// - (EmbraceOTelSpanErrorCode)getEmbraceOTelSpanErrorCodeByString:(NSString *)errorCode {
+//     if ([errorCode isEqualToString:@"None"]) {
+//         return None;
+//     } else if ([errorCode isEqualToString:@"Failure"]) {
+//         return Failure;
+//     } else if ([errorCode isEqualToString:@"UserAbandon"]) {
+//         return UserAbandon;
+//     } else if ([errorCode isEqualToString:@"Unknown"]) {
+//         return Unknown;
+//     } else {
+//         return None;
+//     }
+// }
 
-@end
+// @end

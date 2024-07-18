@@ -1,6 +1,9 @@
 import Foundation
 import React
 import EmbraceIO
+import EmbraceCore
+import EmbraceCrash
+import EmbraceCommonInternal
 
 #if canImport(CodePush)
 import CodePush
@@ -15,11 +18,6 @@ enum EmbraceKeys: String {
 
 @objc(EmbraceManager)
 class EmbraceManager: NSObject {
-  
-  static func moduleName() -> String {
-    return "EmbraceManager"
-  }
-  
   @objc
   func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     do {
@@ -35,22 +33,32 @@ class EmbraceManager: NSObject {
     if let embraceStarted = Embrace.client?.started {
       resolve(embraceStarted)
     } else {
-      reject("GET_IS_STARTED", "Error getting isStarted", nil)
+      resolve(false)
     }
   }
   
-  @objc
+@objc(startNativeEmbraceSDK:resolver:rejecter:)
   func startNativeEmbraceSDK(_ appId: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    do {
-      
-      let embraceOptions = Embrace.Options(appId: appId)
-      
-      try Embrace.setup(options: embraceOptions)
-        .start()
-      
-      resolve(true)
-    } catch let error {
-      reject("START_EMBRACE_SDK", "Error starting Embrace SDK", error)
+    DispatchQueue.main.async {
+        do {
+          
+          var embraceOptions: Embrace.Options {
+            return .init(
+                appId: appId,
+                appGroupId: nil,
+                platform: .reactNative,
+                captureServices: .automatic,
+                crashReporter: EmbraceCrashReporter()
+            )
+          }
+          
+          try Embrace.setup(options: embraceOptions)
+            .start()
+          
+          resolve(true)
+        } catch let error {
+          reject("START_EMBRACE_SDK", "Error starting Embrace SDK", error)
+        }
     }
   }
   
