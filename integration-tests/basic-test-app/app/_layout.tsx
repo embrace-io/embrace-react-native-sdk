@@ -14,7 +14,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   useEffect(() => {
     const init = async () => {
-      const hasStarted = await initEmbrace();
+      await initEmbrace();
     };
 
     init();

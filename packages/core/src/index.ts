@@ -1,5 +1,5 @@
 "use strict";
-import {NativeModules} from "react-native";
+import {NativeModules, Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
@@ -47,18 +47,20 @@ const isObjectNonEmpty = (obj?: object): boolean =>
 
 export const initialize = async ({
   patch,
-}: {patch?: string} = {}): Promise<boolean> => {
-  if (!ErrorUtils) {
-    console.warn(
-      "[Embrace] ErrorUtils is not defined. Not setting exception handler.",
-    );
-    return createFalsePromise();
-  }
+  iosAppID,
+}: {patch?: string; iosAppID?: string} = {}): Promise<boolean> => {
   const hasNativeSDKStarted = await NativeModules.EmbraceManager.isStarted();
   if (!hasNativeSDKStarted) {
-    // TODO CHANGE TO CONFIG OR SOMETHING
+    if (Platform.OS === "ios" && !iosAppID) {
+      console.warn(
+        "[Embrace] iosAppID required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+      );
+      return createFalsePromise();
+    }
+
     const result =
-      await NativeModules.EmbraceManager.startNativeEmbraceSDK("Jso7A");
+      await NativeModules.EmbraceManager.startNativeEmbraceSDK(iosAppID);
+
     if (!result) {
       console.warn(
         "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
@@ -92,6 +94,13 @@ export const initialize = async ({
   // https://docs.microsoft.com/en-us/appcenter/distribution/codepush/react-native#plugin-configuration-ios
   if (!__DEV__) {
     NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
+  }
+
+  if (!ErrorUtils) {
+    console.warn(
+      "[Embrace] ErrorUtils is not defined. Not setting exception handler.",
+    );
+    return createFalsePromise();
   }
   const previousHandler = ErrorUtils.getGlobalHandler();
   ErrorUtils.setGlobalHandler(handleGlobalError(previousHandler, handleError));
