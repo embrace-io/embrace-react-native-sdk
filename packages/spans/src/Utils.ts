@@ -6,6 +6,7 @@ export const createFalsePromise = (): Promise<boolean> => {
   });
 };
 
+// TODO remove this
 export const convertMSToNano = (ms: number | undefined) => {
   if (!ms) {
     return undefined;

@@ -84,6 +84,41 @@ RCT_EXTERN_METHOD(logMessageWithSeverityAndProperties:(NSString *)message
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(startSpan:(NSString *)name
+                  parentSpanId:(NSString *)parentSpanId
+                  startTimeMS:(double)startTimeMS
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+     
+RCT_EXTERN_METHOD(stopSpan:(NSString *)spanId
+                  errorCodeString:(NSString *)errorCodeString
+                  endTimeMS:(double)endTimeMS
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(addSpanEventToSpan:(NSString *)spanId
+                  name:(NSString *)name
+                  time:(double)time
+                  attributes:(NSDictionary)attributes
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+ 
+RCT_EXTERN_METHOD(addSpanAttributeToSpan:(NSString *)spanId
+                  key:(NSString *)key
+                  value:(NSString *)value
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+      
+RCT_EXTERN_METHOD(recordCompletedSpan:(NSString *)name
+                  startTimeMS:(double)startTimeMS
+                  endTimeMS:(double)endTimeMS
+                  errorCodeString:(NSString *)errorCodeString
+                  parentSpanId:(NSString *)parentSpanId
+                  attributes:(NSDictionary)attributes
+                  events:(NSArray)events
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 + (BOOL)requiresMainQueueSetup
 {
     return NO;

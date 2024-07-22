@@ -1219,7 +1219,7 @@ PODS:
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - EmbraceIO-DEV (= 6.2.0)
+  - EmbraceIO-DEV
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
@@ -1449,6 +1449,6 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 2f71ecf38d934aecb366e686278102a51679c308
 
-PODFILE CHECKSUM: 0ce9b292ccdf1565cbef8b8122a0320d6fa9f374
+PODFILE CHECKSUM: 787db13145fa01b0f3ed78f910b313a13dfabee3
 
 COCOAPODS: 1.11.3
