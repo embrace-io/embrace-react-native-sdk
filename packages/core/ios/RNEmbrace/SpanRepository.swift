@@ -6,6 +6,11 @@ class SpanRepository {
     private let completedSpansQueue = DispatchQueue(label: "io.embrace.RNEmbrace.completedSpans", attributes: .concurrent)
     private var activeSpans = [String: Span]()
     private var completedSpans = [String: Span]()
+    
+    private func getKey(_ span: Span) -> String {
+        // TODO make this a combination of spanId + traceId, spanId not unique on its own
+        return span.context.spanId.hexString
+    }
 
     func get(spanId: String) -> Span? {
         var span: Span?
@@ -24,21 +29,27 @@ class SpanRepository {
     }
     
     func spanStarted(span: Span) {
+        let key = getKey(span)
+        // TODO guard against this growing out of control
         activeSpansQueue.async(flags: .barrier) {
-            self.activeSpans.updateValue(span, forKey: span.context.spanId.hexString)
+            self.activeSpans.updateValue(span, forKey: key)
         }
     }
     
     func spanEnded(span: Span) {
+        let key = getKey(span)
+        
+        // TODO guard against this growing out of control
         activeSpansQueue.async(flags: .barrier) {
-            self.activeSpans.removeValue(forKey: span.context.spanId.hexString)
+            self.activeSpans.removeValue(forKey: key)
         }
         
         completedSpansQueue.async(flags: .barrier) {
-            self.completedSpans.updateValue(span, forKey: span.context.spanId.hexString)
+            self.completedSpans.updateValue(span, forKey: key)
         }
     }
     
+    // TODO hook this up to session end handler
     func sessionEnded() {
         completedSpansQueue.async(flags: .barrier) {
             self.completedSpans.removeAll()

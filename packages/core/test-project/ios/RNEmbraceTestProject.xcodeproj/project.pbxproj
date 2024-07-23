@@ -171,6 +171,8 @@
 				30DFDA6C2C486677009F2ECC /* PBXTargetDependency */,
 			);
 			name = RNEmbraceTests;
+			packageProductDependencies = (
+			);
 			productName = RNEmbraceTests;
 			productReference = 30DFDA692C486677009F2ECC /* RNEmbraceTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -203,6 +205,8 @@
 				Base,
 			);
 			mainGroup = 30DFDA052C485A70009F2ECC;
+			packageReferences = (
+			);
 			productRefGroup = 30DFDA102C485A70009F2ECC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

@@ -367,7 +367,7 @@ class EmbraceManager: NSObject {
     func startSpan(
         _ name: String,
         parentSpanId: String,
-        startTimeMS: Double,
+        startTimeMS: NSNumber,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
@@ -384,8 +384,8 @@ class EmbraceManager: NSObject {
             spanBuilder?.setNoParent()
         }
         
-        if !startTimeMS.isZero {
-            spanBuilder?.setStartTime(time: dateFrom(ms:startTimeMS))
+        if !startTimeMS.doubleValue.isZero {
+            spanBuilder?.setStartTime(time: dateFrom(ms:startTimeMS.doubleValue))
         }
         
         let span = spanBuilder?.startSpan()
@@ -402,7 +402,7 @@ class EmbraceManager: NSObject {
     func stopSpan(
         _ spanId: String,
         errorCodeString: String,
-        endTimeMS: Double,
+        endTimeMS: NSNumber,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
@@ -415,10 +415,10 @@ class EmbraceManager: NSObject {
         
         let errorCode = spanErrorCodeFrom(str: errorCodeString)
         
-        if endTimeMS.isZero {
+        if endTimeMS.doubleValue.isZero {
             span?.end(errorCode: errorCode)
         } else {
-            span?.end(errorCode: errorCode, time: dateFrom(ms: endTimeMS))
+            span?.end(errorCode: errorCode, time: dateFrom(ms: endTimeMS.doubleValue))
         }
         
         spanRepository.spanEnded(span:span!)
