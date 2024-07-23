@@ -313,7 +313,6 @@ class EmbraceManager: NSObject {
         return attributes
     }
     
-    
     private func spanErrorCodeFrom(str: String) -> SpanErrorCode? {
         switch str {
         case "Failure":
@@ -339,7 +338,6 @@ class EmbraceManager: NSObject {
             return nil
         }
     }
-    
     
     private func eventsFrom(array: NSArray) -> [RecordingSpanEvent] {
         var events = [RecordingSpanEvent]()
@@ -373,7 +371,7 @@ class EmbraceManager: NSObject {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
-        var spanBuilder = Embrace.client?.buildSpan(name: name)
+        let spanBuilder = Embrace.client?.buildSpan(name: name)
         
         if spanBuilder == nil {
             reject("START_SPAN_ERROR", "Error starting span, Embrace SDK may not be initialized", nil)
@@ -390,7 +388,7 @@ class EmbraceManager: NSObject {
             spanBuilder?.setStartTime(time: dateFrom(ms:startTimeMS))
         }
         
-        var span = spanBuilder?.startSpan()
+        let span = spanBuilder?.startSpan()
         
         if span != nil {
             spanRepository.spanStarted(span:span!)
