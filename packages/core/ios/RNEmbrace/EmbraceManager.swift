@@ -36,28 +36,28 @@ class EmbraceManager: NSObject {
     }
   }
   
-@objc(startNativeEmbraceSDK:resolver:rejecter:)
+  @objc(startNativeEmbraceSDK:resolver:rejecter:)
   func startNativeEmbraceSDK(_ appId: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
-        do {
-          
-          var embraceOptions: Embrace.Options {
-            return .init(
-                appId: appId,
-                appGroupId: nil,
-                platform: .reactNative,
-                captureServices: .automatic,
-                crashReporter: EmbraceCrashReporter()
-            )
-          }
-          
-          try Embrace.setup(options: embraceOptions)
-            .start()
-          
-          resolve(true)
-        } catch let error {
-          reject("START_EMBRACE_SDK", "Error starting Embrace SDK", error)
+      do {
+        
+        var embraceOptions: Embrace.Options {
+          return .init(
+            appId: appId,
+            appGroupId: nil,
+            platform: .reactNative,
+            captureServices: .automatic,
+            crashReporter: EmbraceCrashReporter()
+          )
         }
+        
+        try Embrace.setup(options: embraceOptions)
+          .start()
+        
+        resolve(true)
+      } catch let error {
+        reject("START_EMBRACE_SDK", "Error starting Embrace SDK", error)
+      }
     }
   }
   
@@ -95,6 +95,15 @@ class EmbraceManager: NSObject {
     //      } catch {
     //          reject(false)
     //      }
+  }
+  
+  @objc
+  func getLastRunEndState(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    if let endState = Embrace.client?.lastRunEndState(){
+      resolve(endState)
+    } else {
+      reject("GET_LAST_RUN_END_STATE", "Error getting Last Run End State", nil)
+    }
   }
   
   @objc
@@ -172,15 +181,34 @@ class EmbraceManager: NSObject {
     }
   }
   
+  @objc(addUserPersona:resolver:rejecter:)
+  func addUserPersona(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    do {
+      try Embrace.client?.metadata.add(persona: PersonaTag(persona), lifespan: .session)
+      resolve(true)
+    } catch let error {
+      reject("ADD_USER_PERSOMAS", "Error adding an User Personas", error)
+    }
+  }
+  
+  @objc(clearUserPersonas:resolver:rejecter:)
+  func clearUserPersonas(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    do {
+      try Embrace.client?.metadata.remove(persona: PersonaTag(persona), lifespan: .session)
+      resolve(true)
+    } catch let error {
+      reject("CLEAR_USER_PERSOMAS", "Error clearing an User Persona", error)
+    }
+  }
+  
   @objc
   func clearAllUserPersonas(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    // This is pending to implement from ios
-    //    do {
-    //      try Embrace.client?.metadata.removeAllPersonaTags()
-    //      resolve(true)
-    //    } catch let error {
-    //    reject("CLEAR_ALL_USER_PERSOMAS", "Error clearing all UserPersonas", error)
-    //  }
+    do {
+      try Embrace.client?.metadata.removeAllPersonas()
+      resolve(true)
+    } catch let error {
+      reject("CLEAR_ALL_USER_PERSOMAS", "Error clearing all User Personas", error)
+    }
   }
   
   @objc
@@ -227,15 +255,14 @@ class EmbraceManager: NSObject {
     }
   }
   
-  @objc
-  func clearUserPersona(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    // This is pending to implement from ios
-    //    do {
-    //      try Embrace.client?.metadata.removePersonaTag()
-    //      resolve(true)
-    //    } catch {
-    //      reject(false)
-    //    }
+  @objc(clearUserPersona:resolver:rejecter:)
+  func clearUserPersona(_ persona:String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    do {
+      try Embrace.client?.metadata.remove(persona: PersonaTag(persona), lifespan: .session)
+      resolve(true)
+    }catch let error {
+      reject("CLEAR_USER_PERSONA", "Error removing User Persona", error)
+    }
   }
   
   @objc
