@@ -73,16 +73,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void endAppStartupWithProperties(ReadableMap properties, Promise promise) {
-        try{
-            Embrace.getInstance().endAppStartup(properties.toHashMap());
-            promise.resolve(true);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
     public void setUserIdentifier(String userIdentifier, Promise promise) {
         try{
             Embrace.getInstance().setUserIdentifier(userIdentifier);
@@ -153,61 +143,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startMomentWithName(String name, Promise promise) {
-        try{
-            Embrace.getInstance().startMoment(name);
-            promise.resolve(true);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void startMomentWithNameAndIdentifier(String name, String identifier, Promise promise) {
-        try{
-            Embrace.getInstance().startMoment(name, identifier);
-            promise.resolve(true);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void startMomentWithNameAndIdentifierAndProperties(String name, String identifier, ReadableMap properties, Promise promise) {
-
-        try {
-            final Map<String, Object> props = properties != null ? properties.toHashMap() : null;
-            Embrace.getInstance().startMoment(name, identifier, props);
-            promise.resolve(true);
-        } catch (Exception e) {
-            Log.e("Embrace", "Error starting moment with name, identifier, and properties", e);
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void endMomentWithName(String name, ReadableMap properties, Promise promise) {
-        try{
-            final Map<String, Object> props = properties != null ? properties.toHashMap() : null;
-            Embrace.getInstance().endMoment(name, props);
-            promise.resolve(true);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void endMomentWithNameAndIdentifier(String name, String identifier,ReadableMap properties, Promise promise) {
-        try{
-            final Map<String, Object> props = properties != null ? properties.toHashMap() : null;
-            Embrace.getInstance().endMoment(name, identifier, props);
-            promise.resolve(true);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
     public void addUserPersona(String persona, Promise promise) {
         try{
             Embrace.getInstance().addUserPersona(persona);
@@ -231,22 +166,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     public void clearAllUserPersonas(Promise promise) {
         try{
             Embrace.getInstance().clearAllUserPersonas();
-            promise.resolve(true);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void logMessageWithSeverity(String message, String severity, Promise promise) {
-        try{
-            if (severity.equals("info")) {
-                Embrace.getInstance().logMessage(message, Severity.INFO);
-            } else if (severity.equals("warning")) {
-                Embrace.getInstance().logMessage(message, Severity.WARNING);
-            } else {
-                Embrace.getInstance().logMessage(message, Severity.ERROR);
-            }
             promise.resolve(true);
         }catch(Exception e){
             promise.resolve(false);
@@ -285,26 +204,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void endView(String screen, Promise promise) {
         //This method is only for compatibility, Android does not need an end event to end the view, but iOS does
-    }
-
-    @ReactMethod
-    public void startFragment(String screen, Promise promise) {
-        try{
-            Embrace.getInstance().startView(screen);
-            promise.resolve(true);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void endFragment(String screen, Promise promise) {
-        try{
-            Embrace.getInstance().endView(screen);
-            promise.resolve(true);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
     }
 
     @ReactMethod
@@ -412,16 +311,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     public void removeSessionProperty(String key, Promise promise) {
         try{
             Embrace.getInstance().removeSessionProperty(key);
-            promise.resolve(true);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void trackWebViewPerformance(String tag, String message, Promise promise) {
-        try{
-            Embrace.getInstance().trackWebViewPerformance(tag, message);
             promise.resolve(true);
         }catch(Exception e){
             promise.resolve(false);
