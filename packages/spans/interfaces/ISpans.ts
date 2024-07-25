@@ -3,7 +3,7 @@ export interface Attributes {
 }
 export interface Events {
   name: string;
-  timeStampMs?: number; // TODO this is required
+  timeStampMs: number;
   attributes?: Attributes;
 }
 

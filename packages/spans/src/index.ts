@@ -2,11 +2,7 @@ import {NativeModules} from "react-native";
 
 import {Attributes, Events, SPAN_ERROR_CODES} from "../interfaces/ISpans";
 
-import {
-  convertMSToNano,
-  createFalsePromise,
-  validateAndLogRequiredProperties,
-} from "./Utils";
+import {createFalsePromise, validateAndLogRequiredProperties} from "./Utils";
 
 export const startSpan = (
   name: string,
@@ -20,7 +16,7 @@ export const startSpan = (
     return NativeModules.EmbraceManager.startSpan(
       name,
       parentSpanId,
-      convertMSToNano(startTimeMS),
+      startTimeMS,
     );
   } catch (e) {
     console.warn(
@@ -40,11 +36,7 @@ export const stopSpan = (
     return createFalsePromise();
   }
   try {
-    return NativeModules.EmbraceManager.stopSpan(
-      spanId,
-      errorCode,
-      convertMSToNano(endTimeMS),
-    );
+    return NativeModules.EmbraceManager.stopSpan(spanId, errorCode, endTimeMS);
   } catch (e) {
     console.warn(
       `[Embrace] The method stopSpan was not found, please update the SDK.`,
@@ -67,7 +59,7 @@ export const addSpanEventToSpan = (
     return NativeModules.EmbraceManager.addSpanEventToSpan(
       spanId,
       name,
-      convertMSToNano(timeStampMs),
+      timeStampMs,
       attributes,
     );
   } catch (e) {
@@ -146,7 +138,7 @@ export const recordSpan = async (
       NativeModules.EmbraceManager.addSpanEventToSpan(
         id,
         event.name,
-        convertMSToNano(event.timeStampMs),
+        event.timeStampMs,
         event.attributes,
       );
     });
@@ -177,24 +169,15 @@ export const recordCompletedSpan = (
   if (!validateAndLogRequiredProperties({name, startTimeMS, endTimeMS})) {
     return createFalsePromise();
   }
-  let tmpEvent = [] as Events[];
-  if (events && events.length > 0) {
-    tmpEvent = events.map(event => {
-      return {
-        ...event,
-        timestampNanos: convertMSToNano(event.timeStampMs),
-      };
-    });
-  }
   try {
     return NativeModules.EmbraceManager.recordCompletedSpan(
       name,
-      convertMSToNano(startTimeMS),
-      convertMSToNano(endTimeMS),
+      startTimeMS,
+      endTimeMS,
       errorCode,
       parentSpanId,
       attributes,
-      tmpEvent,
+      events || [],
     );
   } catch (e) {
     console.warn(
