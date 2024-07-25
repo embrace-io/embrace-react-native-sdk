@@ -1,5 +1,6 @@
 import Foundation
 import React
+import OSLog
 import EmbraceIO
 import EmbraceCrash
 import EmbraceCommonInternal // TODO should not be needed
@@ -24,6 +25,7 @@ private let EVENT_ATTRIBUTES_KEY = "attributes";
 
 @objc(EmbraceManager)
 class EmbraceManager: NSObject {
+  private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
   private var spanRepository = SpanRepository()
 
   @objc
@@ -295,6 +297,8 @@ class EmbraceManager: NSObject {
         for (key, value) in dict {
             if let key = key as? String, let value = value as? String {
                 attributes.updateValue(AttributeValue(value), forKey: key)
+            } else {
+                os_log("unexpected non-string attribute for span", log:log, type: .error)
             }
         }
         
@@ -307,6 +311,8 @@ class EmbraceManager: NSObject {
         for (key, value) in dict {
             if let key = key as? String, let value = value as? String {
                 attributes.updateValue(value, forKey: key)
+            } else {
+                os_log("unexpected non-string attribute for span", log:log, type: .error)
             }
         }
         
@@ -348,10 +354,16 @@ class EmbraceManager: NSObject {
                 let timeStampMs = evt.value(forKey: EVENT_TIMESTAMP_KEY) as? Double
                 let attributes = evt.value(forKey: EVENT_ATTRIBUTES_KEY) as? NSDictionary
                 
-                if name == nil || timeStampMs == nil {
+                if name == nil {
+                    os_log("missing name for event", log:log, type: .error)
                     continue
                 }
                 
+                if timeStampMs == nil {
+                    os_log("missing timestamp for event: %@", log:log, type: .error, name!)
+                    continue
+                }
+
                 if attributes == nil {
                     events.append(RecordingSpanEvent(name: name!, timestamp: dateFrom(ms: timeStampMs!)))
                 } else {
@@ -390,11 +402,15 @@ class EmbraceManager: NSObject {
         
         let span = spanBuilder?.startSpan()
         
+        var id = ""
         if span != nil {
-            spanRepository.spanStarted(span:span!)
-            resolve(span?.context.spanId.hexString)
-        } else {
+            id = spanRepository.spanStarted(span:span!)
+        }
+            
+        if (id.isEmpty) {
             reject("START_SPAN_ERROR", "Error starting span", nil)
+        } else {
+            resolve(id)
         }
     }
     

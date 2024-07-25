@@ -1,15 +1,34 @@
 import Foundation
+import OSLog
 import OpenTelemetryApi
+
+
+// Should not get hit under normal circumstances, add as a guard against misinstrumentation
+private let MAX_STORED_SPANS = 10000
 
 class SpanRepository {
     private let activeSpansQueue = DispatchQueue(label: "io.embrace.RNEmbrace.activeSpans", attributes: .concurrent)
     private let completedSpansQueue = DispatchQueue(label: "io.embrace.RNEmbrace.completedSpans", attributes: .concurrent)
     private var activeSpans = [String: Span]()
     private var completedSpans = [String: Span]()
+    private var log = OSLog(subsystem: "Embrace", category: "SpanRepository")
+    
+    init() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(onSessionEnded),
+            // TODO possible to reference this constant? https://github.com/embrace-io/embrace-apple-sdk/blob/main/Sources/EmbraceCore/Session/SessionController.swift#L13
+            name: Notification.Name("embrace.session.will_end"),
+            object: nil
+        )
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     private func getKey(_ span: Span) -> String {
-        // TODO make this a combination of spanId + traceId, spanId not unique on its own
-        return span.context.spanId.hexString
+        return "\(span.context.spanId.hexString)_\(span.context.traceId.hexString)"
     }
 
     func get(spanId: String) -> Span? {
@@ -28,32 +47,43 @@ class SpanRepository {
         return span
     }
     
-    func spanStarted(span: Span) {
+    func spanStarted(span: Span) -> String {
         let key = getKey(span)
-        // TODO guard against this growing out of control
+        
+        // TODO does concurrent access matter for grabbing count?
+        if activeSpans.count > MAX_STORED_SPANS {
+            os_log("too many active spans being tracked, ignoring", log:log, type: .error)
+            return ""
+        }
+
         activeSpansQueue.async(flags: .barrier) {
             self.activeSpans.updateValue(span, forKey: key)
         }
+        
+        return key
     }
     
     func spanEnded(span: Span) {
         let key = getKey(span)
         
-        // TODO guard against this growing out of control
         activeSpansQueue.async(flags: .barrier) {
             self.activeSpans.removeValue(forKey: key)
         }
         
+        // TODO does concurrent access matter for grabbing count?
+        if completedSpans.count > MAX_STORED_SPANS {
+            os_log("too many completed spans being tracked, ignoring", log:log, type: .error)
+            return
+        }
+
         completedSpansQueue.async(flags: .barrier) {
             self.completedSpans.updateValue(span, forKey: key)
         }
     }
     
-    // TODO hook this up to session end handler
-    func sessionEnded() {
+    @objc func onSessionEnded() {
         completedSpansQueue.async(flags: .barrier) {
             self.completedSpans.removeAll()
         }
-
     }
 }
