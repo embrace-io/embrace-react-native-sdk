@@ -86,13 +86,13 @@ RCT_EXTERN_METHOD(logMessageWithSeverityAndProperties:(NSString *)message
 
 RCT_EXTERN_METHOD(startSpan:(NSString *)name
                   parentSpanId:(NSString *)parentSpanId
-                  startTimeMS:(NSNumber *)startTimeMS
+                  startTimeMS:(nonnull NSNumber *)startTimeMS
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
      
 RCT_EXTERN_METHOD(stopSpan:(NSString *)spanId
                   errorCodeString:(NSString *)errorCodeString
-                  endTimeMS:(NSNumber *)endTimeMS
+                  endTimeMS:(nonnull NSNumber *)endTimeMS
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 

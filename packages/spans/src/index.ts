@@ -7,7 +7,7 @@ import {createFalsePromise, validateAndLogRequiredProperties} from "./Utils";
 export const startSpan = (
   name: string,
   parentSpanId?: string,
-  startTimeMS?: number,
+  startTimeMS: number = 0,
 ): Promise<boolean | string> => {
   if (!validateAndLogRequiredProperties({name})) {
     return createFalsePromise();
@@ -30,7 +30,7 @@ export const startSpan = (
 export const stopSpan = (
   spanId: string,
   errorCode: SPAN_ERROR_CODES = "None",
-  endTimeMS?: number,
+  endTimeMS: number = 0,
 ): Promise<boolean> => {
   if (!validateAndLogRequiredProperties({spanId})) {
     return createFalsePromise();
@@ -107,7 +107,7 @@ export const recordSpan = async (
   }
   let id = "";
   try {
-    id = await NativeModules.EmbraceManager.startSpan(name, parentSpanId);
+    id = await NativeModules.EmbraceManager.startSpan(name, parentSpanId, 0);
   } catch (e) {
     console.warn(
       `[Embrace] The method startSpan was not found, please update the SDK.`,
@@ -151,10 +151,10 @@ export const recordSpan = async (
       await callback();
     }
   } catch (e) {
-    await NativeModules.EmbraceManager.stopSpan(id, "Failure");
+    await NativeModules.EmbraceManager.stopSpan(id, "Failure", 0);
     throw e;
   }
-  return NativeModules.EmbraceManager.stopSpan(id, "None");
+  return NativeModules.EmbraceManager.stopSpan(id, "None", 0);
 };
 
 export const recordCompletedSpan = (

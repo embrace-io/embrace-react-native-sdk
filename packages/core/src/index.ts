@@ -285,7 +285,7 @@ export const getSessionProperties = () => {
 };
 
 export const endSession = (clearUserInfo: boolean = false) => {
-  return NativeModules.EmbraceManager.endSession();
+  return NativeModules.EmbraceManager.endSession(clearUserInfo);
 };
 
 export const setUserAsPayer = (): Promise<boolean> => {
