@@ -390,7 +390,8 @@ class EmbraceManager: NSObject {
         if !parentSpanId.isEmpty, let parent = spanRepository.get(spanId: parentSpanId) {
             spanBuilder?.setParent(parent)
         } else {
-            spanBuilder?.setNoParent()
+            // TODO, do we also need to do this in the case that there's parent?
+            spanBuilder?.markAsKeySpan()
         }
 
         if !startTimeMS.doubleValue.isZero {
@@ -506,9 +507,12 @@ class EmbraceManager: NSObject {
             return
         }
 
+        var attributeStrings = attributeStringsFrom(dict: attributes)
+        // TODO, there a helper or a constant for this?
+        attributeStrings.updateValue("true", forKey: "emb.key")
         Embrace.client?.recordCompletedSpan(name: name, type: SpanType.performance, parent: parent,
                                             startTime: dateFrom(ms: startTimeMS), endTime: dateFrom(ms: endTimeMS),
-                                            attributes: attributeStringsFrom(dict: attributes),
+                                            attributes: attributeStrings,
                                             events: eventsFrom(array: events),
                                             errorCode: errorCodeFrom(str: errorCodeString))
 
