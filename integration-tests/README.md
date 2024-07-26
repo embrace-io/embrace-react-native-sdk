@@ -6,37 +6,38 @@ verifications on the payloads that would have been sent to Embrace.
 The harness uses WebdriverIO's [Testrunner](https://webdriver.io/docs/testrunner/) to spin up a [Appium](http://appium.io/docs/en/latest/intro/) client and server to perform the device automation. [Mockserver](https://www.mock-server.com/#what-is-mockserver) is
 launched for the suite run so that requests sent from the device can be inspected.
 
-```bash
-npm install
-```
+    ```bash
+    npm install
+    ```
 
 For any future updates the [Appium Installer](https://webdriver.io/docs/appium) provides a handy setup wizard:
 
-```bash
-npx appium-installer
-```
+    ```bash
+    npx appium-installer
+    ```
 
 ## Run tests
 
 Make sure the test apps have the latest local @embrace-io/react-native changes:
 
-```bash
-npm run update-local-embrace
-```
+    ```bash
+    npm run update-local-embrace
+    ```
 
-Make sure the test apps are installed on the device/emulator before running tests:
+Make sure the test apps are installed on the device/emulator before running tests. Note that building the debug variant
+of the app may interfere with the tests as the debug menu gets in the way of UI elements:
 
-```bash
-cd basic-test-app
-npx expo run:android --variant debug # or release
-npx expo run:ios --variant debug # or release
-```
+    ```bash
+    cd basic-test-app
+    npx expo run:android --variant release
+    npx expo run:ios --variant release
+    ```
 
 Run the test suite:
 
-```bash
-npm test
-```
+    ```bash
+    npm test
+    ```
 
 ## Debugging tips
 
@@ -45,11 +46,11 @@ npm test
 To help figure out the selectors to use for grabbing UI elements it can be useful to interact with Appium using
 the Appium Inspector. First install the Appium server and drivers globally:
 
-```bash
-npm install -g appium
-appium driver install uiautomator2 # android / ios
-appium driver install xcuitest # ios
-```
+    ```bash
+    npm install -g appium
+    appium driver install uiautomator2 # android / ios
+    appium driver install xcuitest # ios
+    ```
 
 Then install [Appium Inspector](https://github.com/appium/appium-inspector)
 
@@ -58,9 +59,9 @@ Then install [Appium Inspector](https://github.com/appium/appium-inspector)
 You can invoke the Mockserver and watch its output directly to get a look at the payloads it is receiving at different
 endpoints (Note this may include some binary output that doesn't play nice with your terminal):
 
-```bash
-npx tsx helpers/invoke_embrace_server.ts
-```
+    ```bash
+    npx tsx helpers/invoke_embrace_server.ts
+    ```
 
 ## CI
 

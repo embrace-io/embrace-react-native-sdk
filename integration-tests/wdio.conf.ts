@@ -3,7 +3,8 @@ import {
   clearServer,
   startServer,
   stopServer,
-} from "./helpers/embrace_server.ts";
+} from "./helpers/embrace_server";
+
 
 export const config: Options.Testrunner = {
   //
@@ -33,7 +34,7 @@ export const config: Options.Testrunner = {
   // worker process. In order to have a group of spec files run in the same worker
   // process simply enclose them in an array within the specs array.
   //
-  // The path of the spec files will be resolved relative from the directory of
+  // The path of the spec files will be resolved relative from the directory
   // of the config file unless it's absolute.
   //
   specs: ["./specs/**/*.ts"],
@@ -72,7 +73,6 @@ export const config: Options.Testrunner = {
       "appium:automationName": "UiAutomator2",
       "appium:appPackage": "io.embrace.basictestapp",
       "appium:appActivity": ".MainActivity",
-      "appium:noReset": true,
 
       //  TODO: for CI/CD we probably want to point to the prebuilt release
       //  APK rather than having to have the app running in an emulator beforehand, e.g.

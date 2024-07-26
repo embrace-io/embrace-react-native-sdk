@@ -1,7 +1,55 @@
 PODS:
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
-  - EmbraceIO (5.25.1)
+  - EmbraceIO-DEV (6.2.0):
+    - EmbraceIO-DEV/EmbraceIO (= 6.2.0)
+  - EmbraceIO-DEV/EmbraceCaptureService (6.2.0):
+    - EmbraceIO-DEV/EmbraceOTelInternal
+    - EmbraceIO-DEV/OpenTelemetrySdk
+  - EmbraceIO-DEV/EmbraceCommonInternal (6.2.0)
+  - EmbraceIO-DEV/EmbraceConfigInternal (6.2.0):
+    - EmbraceIO-DEV/EmbraceCommonInternal
+  - EmbraceIO-DEV/EmbraceCore (6.2.0):
+    - EmbraceIO-DEV/EmbraceCaptureService
+    - EmbraceIO-DEV/EmbraceCommonInternal
+    - EmbraceIO-DEV/EmbraceConfigInternal
+    - EmbraceIO-DEV/EmbraceObjCUtilsInternal
+    - EmbraceIO-DEV/EmbraceOTelInternal
+    - EmbraceIO-DEV/EmbraceStorageInternal
+    - EmbraceIO-DEV/EmbraceUploadInternal
+  - EmbraceIO-DEV/EmbraceCrash (6.2.0):
+    - EmbraceIO-DEV/EmbraceCommonInternal
+    - EmbraceIO-DEV/KSCrash
+  - EmbraceIO-DEV/EmbraceIO (6.2.0):
+    - EmbraceIO-DEV/EmbraceCaptureService
+    - EmbraceIO-DEV/EmbraceCommonInternal
+    - EmbraceIO-DEV/EmbraceCore
+    - EmbraceIO-DEV/EmbraceCrash
+  - EmbraceIO-DEV/EmbraceObjCUtilsInternal (6.2.0)
+  - EmbraceIO-DEV/EmbraceOTelInternal (6.2.0):
+    - EmbraceIO-DEV/EmbraceCommonInternal
+    - EmbraceIO-DEV/OpenTelemetrySdk
+  - EmbraceIO-DEV/EmbraceStorageInternal (6.2.0):
+    - EmbraceIO-DEV/EmbraceCommonInternal
+    - EmbraceIO-DEV/GRDB
+    - EmbraceIO-DEV/OpenTelemetryApi
+  - EmbraceIO-DEV/EmbraceUploadInternal (6.2.0):
+    - EmbraceIO-DEV/EmbraceCommonInternal
+    - EmbraceIO-DEV/EmbraceOTelInternal
+    - EmbraceIO-DEV/GRDB
+  - EmbraceIO-DEV/GRDB (6.2.0)
+  - EmbraceIO-DEV/KSCrash (6.2.0):
+    - EmbraceIO-DEV/KSCrashCore
+    - EmbraceIO-DEV/KSCrashRecording
+    - EmbraceIO-DEV/KSCrashRecordingCore
+  - EmbraceIO-DEV/KSCrashCore (6.2.0)
+  - EmbraceIO-DEV/KSCrashRecording (6.2.0):
+    - EmbraceIO-DEV/KSCrashRecordingCore
+  - EmbraceIO-DEV/KSCrashRecordingCore (6.2.0):
+    - EmbraceIO-DEV/KSCrashCore
+  - EmbraceIO-DEV/OpenTelemetryApi (6.2.0)
+  - EmbraceIO-DEV/OpenTelemetrySdk (6.2.0):
+    - EmbraceIO-DEV/OpenTelemetryApi
   - EXConstants (16.0.2):
     - ExpoModulesCore
   - EXJSONUtils (0.13.1)
@@ -1442,8 +1490,8 @@ PODS:
     - React-logger (= 0.74.1)
     - React-perflogger (= 0.74.1)
     - React-utils (= 0.74.1)
-  - RNEmbrace (1.1.1):
-    - EmbraceIO (= 5.25.1)
+  - RNEmbrace (4.2.0):
+    - EmbraceIO-DEV
     - React-Core
   - RNGestureHandler (2.16.2):
     - DoubleConversion
@@ -1595,7 +1643,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - EmbraceIO
+    - EmbraceIO-DEV
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1758,7 +1806,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  EmbraceIO: 058bcb4dde5cacce0a185ebd125a80fe86164147
+  EmbraceIO-DEV: e5a181403de0321379e825165aacc54b34006fbe
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
@@ -1829,7 +1877,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: e2152ed146b6a35c07386fc2ac4827b27e6aad12
   React-utils: 3285151c9d1e3a28a9586571fc81d521678c196d
   ReactCommon: f42444e384d82ab89184aed5d6f3142748b54768
-  RNEmbrace: d1cd049d9f38b27e5bb1a0bfcfa9ed329da75499
+  RNEmbrace: 0ba4b2483cd3b9984deae00d7d9ea8ca2296240e
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208

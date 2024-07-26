@@ -273,12 +273,42 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-basictestapp/Pods-basictestapp-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO/Embrace.framework/Embrace",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/EmbraceCaptureService/EmbraceCaptureService.framework/EmbraceCaptureService",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/EmbraceCommonInternal/EmbraceCommonInternal.framework/EmbraceCommonInternal",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/EmbraceConfigInternal/EmbraceConfigInternal.framework/EmbraceConfigInternal",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/EmbraceCore/EmbraceCore.framework/EmbraceCore",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/EmbraceCrash/EmbraceCrash.framework/EmbraceCrash",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/EmbraceIO/EmbraceIO.framework/EmbraceIO",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/EmbraceOTelInternal/EmbraceOTelInternal.framework/EmbraceOTelInternal",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/EmbraceObjCUtilsInternal/EmbraceObjCUtilsInternal.framework/EmbraceObjCUtilsInternal",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/EmbraceStorageInternal/EmbraceStorageInternal.framework/EmbraceStorageInternal",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/EmbraceUploadInternal/EmbraceUploadInternal.framework/EmbraceUploadInternal",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/GRDB/GRDB.framework/GRDB",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/KSCrashCore/KSCrashCore.framework/KSCrashCore",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/KSCrashRecording/KSCrashRecording.framework/KSCrashRecording",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/KSCrashRecordingCore/KSCrashRecordingCore.framework/KSCrashRecordingCore",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/OpenTelemetryApi/OpenTelemetryApi.framework/OpenTelemetryApi",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/EmbraceIO-DEV/OpenTelemetrySdk/OpenTelemetrySdk.framework/OpenTelemetrySdk",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Embrace.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmbraceCaptureService.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmbraceCommonInternal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmbraceConfigInternal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmbraceCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmbraceCrash.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmbraceIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmbraceOTelInternal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmbraceObjCUtilsInternal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmbraceStorageInternal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmbraceUploadInternal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRDB.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KSCrashCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KSCrashRecording.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KSCrashRecordingCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenTelemetryApi.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenTelemetrySdk.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -458,7 +488,10 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -516,7 +549,10 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

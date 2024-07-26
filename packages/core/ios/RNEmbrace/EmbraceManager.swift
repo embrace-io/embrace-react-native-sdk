@@ -50,12 +50,12 @@ class EmbraceManager: NSObject {
     func startNativeEmbraceSDK(_ appId: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
             do {
-                
                 var embraceOptions: Embrace.Options {
                     return .init(
                         appId: appId,
                         appGroupId: nil,
                         platform: .reactNative,
+                        endpoints: Embrace.Endpoints(baseURL: "http://localhost:8877", developmentBaseURL: "http://localhost:8877", configBaseURL: "http://localhost:8877"),
                         captureServices: .automatic,
                         crashReporter: EmbraceCrashReporter()
                     )
