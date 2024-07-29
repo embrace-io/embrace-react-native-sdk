@@ -363,12 +363,10 @@ describe("Personas Tests", () => {
     );
     const {addUserPersona} = require("../index");
     const promiseToResolve = addUserPersona(testPersona);
-    // expect(mock).toHaveBeenCalledWith(testPersona);
     jest.runAllTimers();
-    const result = await promiseToResolve;
-    // TODO uncomment the expect once the method is imeplemented
-    // expect(mock).toHaveBeenCalled();
-    expect(result).toBe(false);
+    await promiseToResolve;
+    expect(mock).toHaveBeenCalled();
+    expect(mock).toHaveBeenCalledWith(testPersona);
   });
 
   test("clearUserPersona", async () => {
