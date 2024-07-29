@@ -31,7 +31,7 @@ RCT_EXTERN_METHOD(setReactNativeSDKVersion:(NSString *)version
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(setUserName:(NSString *)userName
+RCT_EXTERN_METHOD(setUsername:(NSString *)userName
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 

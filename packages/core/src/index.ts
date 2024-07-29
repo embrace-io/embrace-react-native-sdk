@@ -134,16 +134,6 @@ const buildVersionStr = ({
   return prerelease ? `${versionStr}.${prerelease}` : versionStr;
 };
 
-export const endAppStartup = (properties?: Properties): Promise<boolean> => {
-  // TODO REFACTOR FOR SPAN
-
-  // if (properties && Object.keys(properties).length > 0) {
-  //   return NativeModules.EmbraceManager.endAppStartupWithProperties(properties);
-  // }
-  // return NativeModules.EmbraceManager.endAppStartup();
-  return createFalsePromise();
-};
-
 export const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
   return NativeModules.EmbraceManager.setUserIdentifier(userIdentifier);
 };
@@ -185,12 +175,15 @@ export const addUserPersona = (persona: string): Promise<boolean> => {
 
   return createFalsePromise();
 };
+
 export const clearUserPersona = (persona: string): Promise<boolean> => {
   return NativeModules.EmbraceManager.clearUserPersona(persona);
 };
+
 export const clearAllUserPersonas = (): Promise<boolean> => {
   return NativeModules.EmbraceManager.clearAllUserPersonas();
 };
+
 export const WARNING = "warning";
 export const INFO = "info";
 export const ERROR = "error";
@@ -276,15 +269,7 @@ export const removeSessionProperty = (key: string) => {
   return NativeModules.EmbraceManager.removeSessionProperty(key);
 };
 
-export const getSessionProperties = () => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  // return NativeModules.EmbraceManager.getSessionProperties();
-
-  return createFalsePromise();
-};
-
-export const endSession = (clearUserInfo: boolean = false) => {
+export const endSession = () => {
   return NativeModules.EmbraceManager.endSession();
 };
 
