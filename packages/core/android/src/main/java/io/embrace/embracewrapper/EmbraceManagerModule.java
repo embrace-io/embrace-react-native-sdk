@@ -308,9 +308,9 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void endSession(boolean clearUserInfo, Promise promise) {
+    public void endSession(Promise promise) {
         try{
-            Embrace.getInstance().endSession(clearUserInfo);
+            Embrace.getInstance().endSession();
             promise.resolve(true);
         }catch(Exception e){
             promise.resolve(false);
