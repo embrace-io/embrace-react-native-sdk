@@ -187,7 +187,7 @@ class EmbraceManager: NSObject {
       try Embrace.client?.metadata.add(persona: PersonaTag(persona), lifespan: .session)
       resolve(true)
     } catch let error {
-      reject("ADD_USER_PERSOMAS", "Error adding an User Personas", error)
+      reject("ADD_USER_PERSONA", "Error adding User Persona", error)
     }
   }
   
