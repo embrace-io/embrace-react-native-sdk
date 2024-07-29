@@ -184,20 +184,10 @@ class EmbraceManager: NSObject {
   @objc(addUserPersona:resolver:rejecter:)
   func addUserPersona(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     do {
-      try Embrace.client?.metadata.add(persona: PersonaTag(persona), lifespan: .session)
+      try Embrace.client?.metadata.add(persona: persona, lifespan: .session)
       resolve(true)
     } catch let error {
       reject("ADD_USER_PERSOMAS", "Error adding an User Personas", error)
-    }
-  }
-  
-  @objc(clearUserPersonas:resolver:rejecter:)
-  func clearUserPersonas(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    do {
-      try Embrace.client?.metadata.remove(persona: PersonaTag(persona), lifespan: .session)
-      resolve(true)
-    } catch let error {
-      reject("CLEAR_USER_PERSOMAS", "Error clearing an User Persona", error)
     }
   }
   
@@ -211,7 +201,7 @@ class EmbraceManager: NSObject {
     }
   }
   
-  @objc
+  @objc(setReactNativeVersion:resolver:rejecter:)
   func setReactNativeVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     do {
       try Embrace.client?.metadata.addResource(key: EmbraceKeys.reactNativeVersion.rawValue, value: version)
@@ -221,7 +211,7 @@ class EmbraceManager: NSObject {
     }
   }
   
-  @objc
+  @objc(removeSessionProperty:resolver:rejecter:)
   func removeSessionProperty(_ key: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     do {
       // TODO REfactor to include lifespan
@@ -232,13 +222,14 @@ class EmbraceManager: NSObject {
     }
   }
   
-  @objc
+
+  @objc(setUserEmail:resolver:rejecter:)
   func setUserEmail(_ userEmail: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     Embrace.client?.metadata.userEmail = userEmail
     resolve(true)
   }
   
-  @objc
+  @objc(setUserEmail:value:resolver:rejecter:)
   func addSessionProperty(
     _ key: String,
     value: String,
@@ -258,14 +249,14 @@ class EmbraceManager: NSObject {
   @objc(clearUserPersona:resolver:rejecter:)
   func clearUserPersona(_ persona:String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     do {
-      try Embrace.client?.metadata.remove(persona: PersonaTag(persona), lifespan: .session)
+      try Embrace.client?.metadata.remove(persona: persona, lifespan: .session)
       resolve(true)
     }catch let error {
       reject("CLEAR_USER_PERSONA", "Error removing User Persona", error)
     }
   }
   
-  @objc
+  @objc(clearUserPersona:severity:properties:resolver:rejecter:)
   func logMessageWithSeverityAndProperties(
     _ message: String,
     severity: String,

@@ -179,18 +179,17 @@ export const logScreen = (screenName: string): Promise<boolean> => {
 };
 
 export const addUserPersona = (persona: string): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  // return NativeModules.EmbraceManager.addUserPersona(persona);
-
-  return createFalsePromise();
+  return NativeModules.EmbraceManager.addUserPersona(persona);
 };
+
 export const clearUserPersona = (persona: string): Promise<boolean> => {
   return NativeModules.EmbraceManager.clearUserPersona(persona);
 };
+
 export const clearAllUserPersonas = (): Promise<boolean> => {
   return NativeModules.EmbraceManager.clearAllUserPersonas();
 };
+
 export const WARNING = "warning";
 export const INFO = "info";
 export const ERROR = "error";
@@ -276,15 +275,7 @@ export const removeSessionProperty = (key: string) => {
   return NativeModules.EmbraceManager.removeSessionProperty(key);
 };
 
-export const getSessionProperties = () => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  // return NativeModules.EmbraceManager.getSessionProperties();
-
-  return createFalsePromise();
-};
-
-export const endSession = (clearUserInfo: boolean = false) => {
+export const endSession = () => {
   return NativeModules.EmbraceManager.endSession();
 };
 
@@ -349,9 +340,7 @@ export const logNetworkClientError = (
   return createFalsePromise();
 };
 export const getLastRunEndState = (): Promise<SessionStatus> =>
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-  NativeModules.EmbraceManager.getDeviceId();
-// NativeModules.EmbraceManager.getLastRunEndState();
+  NativeModules.EmbraceManager.getLastRunEndState();
 
 export const getDeviceId = (): Promise<string> =>
   NativeModules.EmbraceManager.getDeviceId();
