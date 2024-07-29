@@ -169,11 +169,7 @@ export const logScreen = (screenName: string): Promise<boolean> => {
 };
 
 export const addUserPersona = (persona: string): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  // return NativeModules.EmbraceManager.addUserPersona(persona);
-
-  return createFalsePromise();
+  return NativeModules.EmbraceManager.addUserPersona(persona);
 };
 
 export const clearUserPersona = (persona: string): Promise<boolean> => {
@@ -334,9 +330,7 @@ export const logNetworkClientError = (
   return createFalsePromise();
 };
 export const getLastRunEndState = (): Promise<SessionStatus> =>
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-  NativeModules.EmbraceManager.getDeviceId();
-// NativeModules.EmbraceManager.getLastRunEndState();
+  NativeModules.EmbraceManager.getLastRunEndState();
 
 export const getDeviceId = (): Promise<string> =>
   NativeModules.EmbraceManager.getDeviceId();
