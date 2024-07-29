@@ -1,6 +1,7 @@
 import Foundation
 import React
 import EmbraceIO
+import EmbraceCore
 import EmbraceCrash
 import EmbraceCommonInternal // TODO should not be needed
 
@@ -17,10 +18,11 @@ enum EmbraceKeys: String {
 
 @objc(EmbraceManager)
 class EmbraceManager: NSObject {
+    
     @objc(setJavaScriptBundlePath:resolver:rejecter:)
     func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: path, .process)
+            try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: path, lifespan: .process)
             resolve(true)
         }  catch let error {
             reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", error)
@@ -109,7 +111,7 @@ class EmbraceManager: NSObject {
     @objc(setReactNativeSDKVersion:resolver:rejecter:)
     func setReactNativeSDKVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.addResource(key: EmbraceKeys.embraceReactNativeSdkVersion.rawValue, value: version, .process)
+            try Embrace.client?.metadata.addResource(key: EmbraceKeys.embraceReactNativeSdkVersion.rawValue, value: version, lifespan: .process)
             resolve(true)
         } catch let error {
             reject("SET_RN_SDK_VERSION", "Error setting ReactNative SDK version", error)
@@ -132,7 +134,7 @@ class EmbraceManager: NSObject {
     @objc(setJavaScriptPatchNumber:resolver:rejecter:)
     func setJavaScriptPatchNumber(_ patch: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptPatchNumber.rawValue, value: patch, .process)
+            try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptPatchNumber.rawValue, value: patch, lifespan: .process)
             resolve(true)
         } catch let error {
             reject("SET_JAVASCRIPT_PATCH_NUMBER", "Error setting JavasScript Patch Number", error)
@@ -204,7 +206,7 @@ class EmbraceManager: NSObject {
     @objc(setReactNativeVersion:resolver:rejecter:)
     func setReactNativeVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.addResource(key: EmbraceKeys.reactNativeVersion.rawValue, value: version, .process)
+            try Embrace.client?.metadata.addResource(key: EmbraceKeys.reactNativeVersion.rawValue, value: version, lifespan: .process)
             resolve(true)
         } catch let error {
             reject("SET_RECT_NATIVE_VERSION", "Error setting React Native Number", error)
@@ -229,7 +231,7 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
     
-    @objc(setUserEmail:value:resolver:rejecter:)
+    @objc(addSessionProperty:value:permanent:resolver:rejecter:)
     func addSessionProperty(
         _ key: String,
         value: String,
@@ -249,7 +251,7 @@ class EmbraceManager: NSObject {
     @objc(clearUserPersona:resolver:rejecter:)
     func clearUserPersona(_ persona:String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.remove(persona: persona, lifespan: .session)
+            try Embrace.client?.metadata.remove(persona: PersonaTag(persona), lifespan: .session)
             resolve(true)
         }catch let error {
             reject("CLEAR_USER_PERSONA", "Error removing User Persona", error)
