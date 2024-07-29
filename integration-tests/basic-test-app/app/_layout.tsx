@@ -4,10 +4,7 @@ import {Stack} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import {useEffect} from "react";
 import "react-native-reanimated";
-import {
-  initialize as initEmbrace,
-  endAppStartup as endEmbraceAppStartup,
-} from "@embrace-io/react-native";
+import {initialize as initEmbrace} from "@embrace-io/react-native";
 
 import {useColorScheme} from "@/hooks/useColorScheme";
 
@@ -18,10 +15,6 @@ export default function RootLayout() {
   useEffect(() => {
     const init = async () => {
       const hasStarted = await initEmbrace();
-
-      if (hasStarted) {
-        endEmbraceAppStartup();
-      }
     };
 
     init();
