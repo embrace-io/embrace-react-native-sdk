@@ -1,4 +1,9 @@
 import {handleGlobalError} from "../utils/ErrorUtil";
+//TODO Check why its failing if we import the constants from the index.ts
+// import {INFO, ERROR, WARNING} from "../index";
+const WARNING = "warning";
+const INFO = "info";
+const ERROR = "error";
 
 const testView = "View";
 const testPersona = "Persona";
@@ -10,7 +15,6 @@ const testPermanent = false;
 const testProps = {testKey: testValue};
 const testMessage = "message";
 const testError = new Error();
-const {INFO, ERROR, WARNING} = require("../index");
 
 jest.useFakeTimers();
 
