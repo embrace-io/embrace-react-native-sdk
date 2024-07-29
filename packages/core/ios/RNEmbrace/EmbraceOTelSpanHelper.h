@@ -1,8 +1,10 @@
 
-#import <Embrace/EmbraceOTelSpanErrorCode.h>
+  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
 
-@interface EmbraceOTelSpanHelper : NSObject
+// #import <Embrace/EmbraceOTelSpanErrorCode.h>
 
-- (EmbraceOTelSpanErrorCode)getEmbraceOTelSpanErrorCodeByString:(NSString *)errorCode;
+// @interface EmbraceOTelSpanHelper : NSObject
 
-@end
+// - (EmbraceOTelSpanErrorCode)getEmbraceOTelSpanErrorCodeByString:(NSString *)errorCode;
+
+// @end
