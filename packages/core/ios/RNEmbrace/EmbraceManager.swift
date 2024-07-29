@@ -187,7 +187,7 @@ class EmbraceManager: NSObject {
       try Embrace.client?.metadata.add(persona: persona, lifespan: .session)
       resolve(true)
     } catch let error {
-      reject("ADD_USER_PERSOMAS", "Error adding an User Personas", error)
+      reject("ADD_USER_PERSONA", "Error adding User Persona", error)
     }
   }
   
@@ -197,7 +197,7 @@ class EmbraceManager: NSObject {
       try Embrace.client?.metadata.removeAllPersonas()
       resolve(true)
     } catch let error {
-      reject("CLEAR_ALL_USER_PERSOMAS", "Error clearing all User Personas", error)
+      reject("CLEAR_ALL_USER_PERSONAS", "Error clearing all User Personas", error)
     }
   }
   
