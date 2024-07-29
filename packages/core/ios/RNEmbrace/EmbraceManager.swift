@@ -207,7 +207,7 @@ class EmbraceManager: NSObject {
       try Embrace.client?.metadata.removeAllPersonas()
       resolve(true)
     } catch let error {
-      reject("CLEAR_ALL_USER_PERSOMAS", "Error clearing all User Personas", error)
+      reject("CLEAR_ALL_USER_PERSONAS", "Error clearing all User Personas", error)
     }
   }
   
