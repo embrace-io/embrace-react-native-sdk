@@ -529,7 +529,6 @@ class EmbraceManager: NSObject {
         }
 
         var attributeStrings = attributeStringsFrom(dict: attributes)
-        // TODO, there a helper or a constant for this?
         attributeStrings.updateValue("true", forKey: "emb.key")
         Embrace.client?.recordCompletedSpan(name: name, type: SpanType.performance, parent: parent,
                                             startTime: dateFrom(ms: startTimeMs), endTime: dateFrom(ms: endTimeMs),

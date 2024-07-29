@@ -518,3 +518,4 @@ class EmbraceSpansSDKNotStartedTests: XCTestCase {
         XCTAssertEqual(promise.rejectCalls[0], "Error recording span, Embrace SDK may not be initialized")
     }
 }
+

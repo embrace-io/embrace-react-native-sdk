@@ -84,7 +84,6 @@ RCT_EXTERN_METHOD(logMessageWithSeverityAndProperties:(NSString *)message
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-<<<<<<< HEAD
 RCT_EXTERN_METHOD(startSpan:(NSString *)name
                   parentSpanId:(NSString *)parentSpanId
                   startTimeMs:(nonnull NSNumber *)startTimeMs
