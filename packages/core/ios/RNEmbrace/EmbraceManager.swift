@@ -376,7 +376,7 @@ class EmbraceManager: NSObject {
     func startSpan(
         _ name: String,
         parentSpanId: String,
-        startTimeMS: NSNumber,
+        startTimeMs: NSNumber,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
@@ -394,8 +394,8 @@ class EmbraceManager: NSObject {
             spanBuilder?.markAsKeySpan()
         }
 
-        if !startTimeMS.doubleValue.isZero {
-            spanBuilder?.setStartTime(time: dateFrom(ms: startTimeMS.doubleValue))
+        if !startTimeMs.doubleValue.isZero {
+            spanBuilder?.setStartTime(time: dateFrom(ms: startTimeMs.doubleValue))
         }
 
         let span = spanBuilder?.startSpan()
@@ -416,7 +416,7 @@ class EmbraceManager: NSObject {
     func stopSpan(
         _ spanId: String,
         errorCodeString: String,
-        endTimeMS: NSNumber,
+        endTimeMs: NSNumber,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
@@ -429,10 +429,10 @@ class EmbraceManager: NSObject {
 
         let errorCode = spanErrorCodeFrom(str: errorCodeString)
 
-        if endTimeMS.doubleValue.isZero {
+        if endTimeMs.doubleValue.isZero {
             span?.end(errorCode: errorCode)
         } else {
-            span?.end(errorCode: errorCode, time: dateFrom(ms: endTimeMS.doubleValue))
+            span?.end(errorCode: errorCode, time: dateFrom(ms: endTimeMs.doubleValue))
         }
 
         spanRepository.spanEnded(span: span!)
@@ -488,8 +488,8 @@ class EmbraceManager: NSObject {
     @objc
     func recordCompletedSpan(
         _ name: String,
-        startTimeMS: Double,
-        endTimeMS: Double,
+        startTimeMs: Double,
+        endTimeMs: Double,
         errorCodeString: String,
         parentSpanId: String,
         attributes: NSDictionary,
@@ -511,7 +511,7 @@ class EmbraceManager: NSObject {
         // TODO, there a helper or a constant for this?
         attributeStrings.updateValue("true", forKey: "emb.key")
         Embrace.client?.recordCompletedSpan(name: name, type: SpanType.performance, parent: parent,
-                                            startTime: dateFrom(ms: startTimeMS), endTime: dateFrom(ms: endTimeMS),
+                                            startTime: dateFrom(ms: startTimeMs), endTime: dateFrom(ms: endTimeMs),
                                             attributes: attributeStrings,
                                             events: eventsFrom(array: events),
                                             errorCode: errorCodeFrom(str: errorCodeString))

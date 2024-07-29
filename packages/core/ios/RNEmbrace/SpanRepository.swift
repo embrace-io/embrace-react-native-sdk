@@ -18,7 +18,6 @@ class SpanRepository {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(onSessionEnded),
-            // TODO possible to reference this constant? https://github.com/embrace-io/embrace-apple-sdk/blob/main/Sources/EmbraceCore/Session/SessionController.swift#L13
             name: Notification.Name("embrace.session.will_end"),
             object: nil
         )
@@ -51,7 +50,6 @@ class SpanRepository {
     func spanStarted(span: Span) -> String {
         let key = getKey(span)
 
-        // TODO does concurrent access matter for grabbing count?
         if activeSpans.count > MAX_STORED_SPANS {
             os_log("too many active spans being tracked, ignoring", log: log, type: .error)
             return ""
@@ -71,7 +69,6 @@ class SpanRepository {
             self.activeSpans.removeValue(forKey: key)
         }
 
-        // TODO does concurrent access matter for grabbing count?
         if completedSpans.count > MAX_STORED_SPANS {
             os_log("too many completed spans being tracked, ignoring", log: log, type: .error)
             return

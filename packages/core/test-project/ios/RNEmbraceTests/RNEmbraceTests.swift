@@ -103,13 +103,13 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testStartSpan() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
-        module.startSpan("span-never-stopped", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("span-never-stopped", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 2)
         let spanId = (promise.resolveCalls[0] as? String)!
-        module.stopSpan(spanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 3)
         XCTAssertTrue((promise.resolveCalls[2] as? Bool)!)
@@ -126,20 +126,20 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testStartSpanWithParent() async throws {
-        module.startSpan("parent-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("parent-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
         let parentSpanId = (promise.resolveCalls[0] as? String)!
         promise.reset()
 
-        module.startSpan("child-span", parentSpanId: parentSpanId, startTimeMS: 0.0,
+        module.startSpan("child-span", parentSpanId: parentSpanId, startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
         let childSpanId = (promise.resolveCalls[0] as? String)!
 
-        module.stopSpan(parentSpanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(parentSpanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(childSpanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(childSpanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedSpans = try await getExportedSpans()
@@ -151,19 +151,19 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testStartSpanWithStoppedParent() async throws {
-        module.startSpan("stopped-parent-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("stopped-parent-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
         let parentSpanId = (promise.resolveCalls[0] as? String)!
-        module.stopSpan(parentSpanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(parentSpanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
         promise.reset()
 
-        module.startSpan("child-span", parentSpanId: parentSpanId, startTimeMS: 0.0,
+        module.startSpan("child-span", parentSpanId: parentSpanId, startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
         let childSpanId = (promise.resolveCalls[0] as? String)!
-        module.stopSpan(childSpanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(childSpanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedSpans = try await getExportedSpans()
@@ -175,11 +175,11 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testStartSpanWithTimes() async throws {
-        module.startSpan("span-with-times", parentSpanId: "", startTimeMS: 1721765402001.0,
+        module.startSpan("span-with-times", parentSpanId: "", startTimeMs: 1721765402001.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
         let spanId = (promise.resolveCalls[0] as? String)!
-        module.stopSpan(spanId, errorCodeString: "", endTimeMS: 1721765409002.0,
+        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 1721765409002.0,
                         resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedSpans = try await getExportedSpans()
@@ -190,13 +190,13 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testStopSpanWithErrorCode() async throws {
-        module.startSpan("failure-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("failure-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
-        module.startSpan("user-abandon-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("user-abandon-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
-        module.startSpan("unknown-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("unknown-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
-        module.startSpan("invalid-error-code-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("invalid-error-code-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 4)
         let failureSpanId = (promise.resolveCalls[0] as? String)!
@@ -204,13 +204,13 @@ class EmbraceSpansTests: XCTestCase {
         let unknownSpanId = (promise.resolveCalls[2] as? String)!
         let invalidErrorCodeSpanId = (promise.resolveCalls[3] as? String)!
 
-        module.stopSpan(failureSpanId, errorCodeString: "Failure", endTimeMS: 0.0,
+        module.stopSpan(failureSpanId, errorCodeString: "Failure", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(userAbandonSpanId, errorCodeString: "UserAbandon", endTimeMS: 0.0,
+        module.stopSpan(userAbandonSpanId, errorCodeString: "UserAbandon", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(unknownSpanId, errorCodeString: "Unknown", endTimeMS: 0.0,
+        module.stopSpan(unknownSpanId, errorCodeString: "Unknown", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(invalidErrorCodeSpanId, errorCodeString: "foo", endTimeMS: 0.0,
+        module.stopSpan(invalidErrorCodeSpanId, errorCodeString: "foo", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedSpans = try await getExportedSpans()
@@ -233,7 +233,7 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testStopSpanInvalidId() async throws {
-        module.stopSpan("invalid", errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan("invalid", errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 0)
         XCTAssertEqual(promise.rejectCalls.count, 1)
@@ -241,7 +241,7 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testAddSpanEvent() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
         let spanId = (promise.resolveCalls[0] as? String)!
@@ -250,7 +250,7 @@ class EmbraceSpansTests: XCTestCase {
                                   resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 2)
         XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
-        module.stopSpan(spanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
         // Events added after the span ends should be ignored
         module.addSpanEventToSpan(spanId, name: "my-event-after-stop", time: 0.0, attributes: NSDictionary(),
@@ -266,7 +266,7 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testAddSpanEventWithAttributes() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
         let spanId = (promise.resolveCalls[0] as? String)!
@@ -277,7 +277,7 @@ class EmbraceSpansTests: XCTestCase {
                                     "my-attr2": "bar"
                                   ]),
                                   resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(spanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedSpans = try await getExportedSpans()
@@ -300,7 +300,7 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testAddSpanAttribute() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
         let spanId = (promise.resolveCalls[0] as? String)!
@@ -311,7 +311,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
         module.addSpanAttributeToSpan(spanId, key: "my-attr2", value: "bar",
                                       resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(spanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
         // Attributes added after the span ends should be ignored
         module.addSpanAttributeToSpan(spanId, key: "my-attr3", value: "baz",
@@ -355,7 +355,7 @@ class EmbraceSpansTests: XCTestCase {
             ])
         ])
 
-        module.recordCompletedSpan("my-span", startTimeMS: 1721765404001.0, endTimeMS: 1721765407003.0,
+        module.recordCompletedSpan("my-span", startTimeMs: 1721765404001.0, endTimeMs: 1721765407003.0,
                                    errorCodeString: "", parentSpanId: "", attributes: attributes, events: events,
                                    resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
@@ -386,20 +386,20 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testRecordCompletedSpanWithParent() async throws {
-        module.startSpan("parent-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("parent-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
         let parentSpanId = (promise.resolveCalls[0] as? String)!
-        module.stopSpan(parentSpanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(parentSpanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
         promise.reset()
 
-        module.recordCompletedSpan("my-span-valid-parent", startTimeMS: 0.0, endTimeMS: 0.0,
+        module.recordCompletedSpan("my-span-valid-parent", startTimeMs: 0.0, endTimeMs: 0.0,
                                    errorCodeString: "", parentSpanId: parentSpanId,
                                    attributes: NSDictionary(), events: NSArray(),
                                    resolver: promise.resolve, rejecter: promise.reject)
         // An invalid parent ID shouldn't prevent the span from otherwise being recorded
-        module.recordCompletedSpan("my-span-invalid-parent", startTimeMS: 0.0, endTimeMS: 0.0,
+        module.recordCompletedSpan("my-span-invalid-parent", startTimeMs: 0.0, endTimeMs: 0.0,
                                    errorCodeString: "", parentSpanId: "invalid",
                                    attributes: NSDictionary(), events: NSArray(),
                                    resolver: promise.resolve, rejecter: promise.reject)
@@ -428,7 +428,7 @@ class EmbraceSpansTests: XCTestCase {
 
     // TODO fails on 6.2 currently
     func skipped_testRecordCompletedSpanWithErrorCode() async throws {
-        module.recordCompletedSpan("my-span", startTimeMS: 0.0, endTimeMS: 0.0,
+        module.recordCompletedSpan("my-span", startTimeMs: 0.0, endTimeMs: 0.0,
                                    errorCodeString: "Failure", parentSpanId: "",
                                    attributes: NSDictionary(), events: NSArray(),
                                    resolver: promise.resolve, rejecter: promise.reject)
@@ -443,14 +443,14 @@ class EmbraceSpansTests: XCTestCase {
     }
 
     func testCompletedSpansRemovedOnSessionEnd() async throws {
-        module.startSpan("stopped-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("stopped-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
-        module.startSpan("active-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("active-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 2)
         let stoppedSpanId = (promise.resolveCalls[0] as? String)!
         let activeSpanId = (promise.resolveCalls[1] as? String)!
-        module.stopSpan(stoppedSpanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(stoppedSpanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
         promise.reset()
 
@@ -477,7 +477,7 @@ class EmbraceSpansTests: XCTestCase {
         promise.reset()
 
         // Stopping the 2nd span and ending the session again should clear it as well
-        module.stopSpan(activeSpanId, errorCodeString: "", endTimeMS: 0.0,
+        module.stopSpan(activeSpanId, errorCodeString: "", endTimeMs: 0.0,
                         resolver: promise.resolve, rejecter: promise.reject)
         Embrace.client?.endCurrentSession()
         module.addSpanAttributeToSpan(stoppedSpanId, key: "attr2", value: "bar",
@@ -501,7 +501,7 @@ class EmbraceSpansSDKNotStartedTests: XCTestCase {
     }
 
     func testStartSpanEmbraceNotStarted() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMS: 0.0,
+        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 0)
         XCTAssertEqual(promise.rejectCalls.count, 1)
@@ -509,7 +509,7 @@ class EmbraceSpansSDKNotStartedTests: XCTestCase {
     }
 
     func testRecordCompletedSpanEmbraceNotStarted() async throws {
-        module.recordCompletedSpan("my-span", startTimeMS: 0.0, endTimeMS: 0.0,
+        module.recordCompletedSpan("my-span", startTimeMs: 0.0, endTimeMs: 0.0,
                                    errorCodeString: "", parentSpanId: "",
                                    attributes: NSDictionary(), events: NSArray(),
                                    resolver: promise.resolve, rejecter: promise.reject)
