@@ -18,47 +18,6 @@ beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
 
-test("endAppStartup", async () => {
-  const mock = jest.fn();
-  jest.mock("react-native", () => ({
-    NativeModules: {
-      EmbraceManager: {
-        endAppStartup: mock,
-      },
-    },
-  }));
-  const {endAppStartup} = require("../index");
-  const promiseToResolve = endAppStartup();
-  jest.runAllTimers();
-  const result = await promiseToResolve;
-  // TODO uncomment the expect once the endAppStartup is imeplemented
-  // expect(mock).toHaveBeenCalled();
-  expect(result).toBe(false);
-});
-
-test("endAppStartupWithProperties", async () => {
-  const mock = jest.fn();
-  jest.mock(
-    "react-native",
-    () => ({
-      NativeModules: {
-        EmbraceManager: {
-          endAppStartupWithProperties: mock,
-        },
-      },
-    }),
-    {virtual: true},
-  );
-  const {endAppStartup} = require("../index");
-  const promiseToResolve = endAppStartup(testProps);
-  // expect(mock).toHaveBeenCalledWith(testProps);
-  jest.runAllTimers();
-  const result = await promiseToResolve;
-  // TODO uncomment the expect once the method is imeplemented
-  // expect(mock).toHaveBeenCalled();
-  expect(result).toBe(false);
-});
-
 describe("User Identifier Tests", () => {
   test("setUserIdentifier", async () => {
     const mock = jest.fn();

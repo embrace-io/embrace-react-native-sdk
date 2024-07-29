@@ -134,16 +134,6 @@ const buildVersionStr = ({
   return prerelease ? `${versionStr}.${prerelease}` : versionStr;
 };
 
-export const endAppStartup = (properties?: Properties): Promise<boolean> => {
-  // TODO REFACTOR FOR SPAN
-
-  // if (properties && Object.keys(properties).length > 0) {
-  //   return NativeModules.EmbraceManager.endAppStartupWithProperties(properties);
-  // }
-  // return NativeModules.EmbraceManager.endAppStartup();
-  return createFalsePromise();
-};
-
 export const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
   return NativeModules.EmbraceManager.setUserIdentifier(userIdentifier);
 };

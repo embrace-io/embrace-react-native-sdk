@@ -43,16 +43,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void endAppStartup(Promise promise) {
-        try{
-            Embrace.getInstance().endAppStartup();
-            promise.resolve(true);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
     public void isStarted(Promise promise) {
         try{
             Boolean success = Embrace.getInstance().isStarted();
@@ -317,21 +307,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         }
     }
 
-    @ReactMethod
-    public void getSessionProperties(Promise promise) {
-        try{
-            Map<String, String> properties = Embrace.getInstance().getSessionProperties();
-
-            WritableMap propsMap = new WritableNativeMap();
-
-            for (Map.Entry<String, String> prop : properties.entrySet()) {
-                propsMap.putString(prop.getKey(), prop.getValue());
-            }
-            promise.resolve(propsMap);
-        }catch(Exception e){
-            promise.resolve(false);
-        }
-    }
     @ReactMethod
     public void endSession(boolean clearUserInfo, Promise promise) {
         try{
