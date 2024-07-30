@@ -3,6 +3,10 @@
  */
 export interface SDKConfig {
   ios?: {
-    appID: string;
+    appId: string;
+    appGroupId?: string;
+    disableCrashReporter?: boolean;
+    disabledAutomaticViewCapture?: boolean;
+    endpointBaseUrl?: string;
   };
 }

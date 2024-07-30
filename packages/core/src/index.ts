@@ -50,7 +50,7 @@ export const initialize = async ({
 }: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
   const hasNativeSDKStarted = await NativeModules.EmbraceManager.isStarted();
   if (!hasNativeSDKStarted) {
-    if (Platform.OS === "ios" && !sdkConfig?.ios?.appID) {
+    if (Platform.OS === "ios" && !sdkConfig?.ios?.appId) {
       console.warn(
         "[Embrace] sdkConfig.ios.AppID is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
@@ -58,9 +58,8 @@ export const initialize = async ({
     }
 
     const result = await NativeModules.EmbraceManager.startNativeEmbraceSDK(
-      sdkConfig?.ios?.appID || "",
+      (Platform.OS === "ios" && sdkConfig?.ios) || {},
     );
-
     if (!result) {
       console.warn(
         "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",

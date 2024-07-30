@@ -34,7 +34,7 @@ jest.mock("react-native", () => ({
           stacktrace,
         ),
       isStarted: () => mockIsStarted(),
-      startNativeEmbraceSDK: (appID?: string) => mockStart(appID),
+      startNativeEmbraceSDK: (appId?: string) => mockStart(appId),
     },
   },
   Platform: {OS: "android"},
@@ -79,7 +79,7 @@ describe("initialize", () => {
     const result = await initialize({patch: testValue});
 
     expect(result).toBe(true);
-    expect(mockStart).toHaveBeenCalledWith("");
+    expect(mockStart).toHaveBeenCalledWith({});
     expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.56.1");
     expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith(testValue);
     expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith("4.2.0");
@@ -106,10 +106,10 @@ describe("initialize", () => {
     mockIsStarted.mockReturnValue(false);
     const result = await initialize({
       patch: testValue,
-      sdkConfig: {ios: {appID: "abc12"}},
+      sdkConfig: {ios: {appId: "abc12"}},
     });
     expect(result).toBe(true);
-    expect(mockStart).toHaveBeenCalledWith("abc12");
+    expect(mockStart).toHaveBeenCalledWith({appId: "abc12"});
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalled();
     expect(mockLogMessageWithSeverityAndProperties.mock.calls[0][0]).toBe(
       "Unhandled promise rejection: ",
