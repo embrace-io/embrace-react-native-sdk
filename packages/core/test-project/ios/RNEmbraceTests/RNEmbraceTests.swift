@@ -327,6 +327,31 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]!.description, "bar")
     }
 
+    func testAddSpanAttributeDuplicate() async throws {
+        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
+                         resolver: promise.resolve, rejecter: promise.reject)
+        XCTAssertEqual(promise.resolveCalls.count, 1)
+        let spanId = (promise.resolveCalls[0] as? String)!
+
+        module.addSpanAttributeToSpan(spanId, key: "my-attr1", value: "foo",
+                                      resolver: promise.resolve, rejecter: promise.reject)
+        XCTAssertEqual(promise.resolveCalls.count, 2)
+        XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
+        // Add the same key again, the value should get overridden
+        module.addSpanAttributeToSpan(spanId, key: "my-attr1", value: "bar",
+                                      resolver: promise.resolve, rejecter: promise.reject)
+        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0,
+                        resolver: promise.resolve, rejecter: promise.reject)
+
+        let exportedSpans = try await getExportedSpans()
+        XCTAssertEqual(exportedSpans.count, 1)
+        XCTAssertEqual(exportedSpans[0].name, "my-span")
+        XCTAssertEqual(exportedSpans[0].attributes.count, 3)
+        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf")
+        XCTAssertEqual(exportedSpans[0].attributes["emb.key"]!.description, "true")
+        XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]!.description, "bar")
+    }
+
     func testAddSpanAttributeInvalidId() async throws {
         module.addSpanAttributeToSpan("invalid", key: "my-attr1", value: "foo",
                                       resolver: promise.resolve, rejecter: promise.reject)
