@@ -288,20 +288,20 @@ class EmbraceManager: NSObject {
         
     }
 
-    @objc(setUserAsPayer:resolver:rejecter:)
-    func setUserAsPayer(_ payer: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    @objc
+    func setUserAsPayer(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.add(persona: payer)
+            try Embrace.client?.metadata.add(persona: "payer")
             resolve(true)
         } catch let error {
             reject("SET_USER_PAYER", "Error adding User Payer", error)
         }
     }
         
-    @objc(clearUserAsPayer:resolver:rejecter:)
-    func clearUserAsPayer(_ payer:String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    @objc
+    func clearUserAsPayer(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.remove(persona: PersonaTag(payer), lifespan:.session)
+            try Embrace.client?.metadata.remove(persona: "payer", lifespan:.session)
             resolve(true)
         }catch let error {
             reject("CLEAR_USER_PAYER", "Error removing User Payer", error)

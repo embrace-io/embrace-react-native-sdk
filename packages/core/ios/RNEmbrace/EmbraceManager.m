@@ -57,12 +57,10 @@ RCT_EXTERN_METHOD(endSession:(RCTPromiseResolveBlock)resolve
 RCT_EXTERN_METHOD(checkAndSetCodePushBundleURL:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(setUserAsPayer:(NSString *)payer
-                  resolver:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(setUserAsPayer:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(clearUserAsPayer:(NSString *)payer
-                  resolver:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(clearUserAsPayer:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(setReactNativeVersion:(NSString *)version

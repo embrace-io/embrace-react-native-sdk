@@ -270,20 +270,13 @@ export const endSession = () => {
 };
 
 export const setUserAsPayer = (): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  // return NativeModules.EmbraceManager.setUserAsPayer();
-
-  return createFalsePromise();
+  return NativeModules.EmbraceManager.setUserAsPayer();
 };
 
 export const clearUserAsPayer = (): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  // return NativeModules.EmbraceManager.clearUserAsPayer();
-
-  return createFalsePromise();
+  return NativeModules.EmbraceManager.clearUserAsPayer();
 };
+
 export const recordNetworkRequest = (
   url: string,
   httpMethod: MethodType,
