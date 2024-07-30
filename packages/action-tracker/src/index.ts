@@ -28,6 +28,7 @@ export const buildEmbraceMiddleware = () => {
         "emb.send_immediately": true,
         payload_size: zip(action.payload || 0).length,
         "emb.type": "sys.rn_action",
+        outcome: "INCOMPLETE",
       };
       const spanId = await NativeModules.EmbraceManager.startSpan(
         "emb-rn-action",
@@ -56,15 +57,8 @@ export const buildEmbraceMiddleware = () => {
           );
 
           await Promise.all(attributePromises);
-          NativeModules.EmbraceManager.recordCompletedSpan(
-            "emb-rn-action",
-            startTime,
-            endTime,
-            null,
-            null,
-            attributes,
-            [],
-          );
+
+          NativeModules.EmbraceManager.stopSpan(spanId, undefined, endTime);
         }
         return result;
       } catch (e) {
