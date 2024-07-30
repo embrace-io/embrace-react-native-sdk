@@ -15,7 +15,7 @@ import {
 export const buildEmbraceMiddleware = () => {
   return (store: IMiddleware<IDispatch, any>) =>
     (next: IDispatch<IAnyAction>) =>
-    (action: IAnyAction) => {
+    async (action: IAnyAction) => {
       if (!next || typeof next !== "function") {
         console.warn(
           "[Embrace] The state managment middleware was not applied succesfully",
@@ -23,6 +23,21 @@ export const buildEmbraceMiddleware = () => {
         return 0;
       }
       const startTime = new Date().getTime();
+      const attributes = {
+        name: action.type.toString().toUpperCase(),
+        "emb.send_immediately": true,
+        payload_size: zip(action.payload || 0).length,
+        "emb.type": "sys.rn_action",
+      };
+      const spanId = await NativeModules.EmbraceManager.startSpan(
+        "emb-rn-action",
+        startTime,
+      );
+      const attributePromises: Promise<boolean>[] = Object.entries(
+        attributes,
+      ).map(([key, value]) =>
+        NativeModules.EmbraceManager.addSpanAttributeToSpan(spanId, key, value),
+      );
 
       try {
         const result = next(action);
@@ -32,13 +47,23 @@ export const buildEmbraceMiddleware = () => {
           );
         } else {
           const endTime = new Date().getTime();
-          NativeModules.EmbraceManager.logRNAction(
-            action.type.toString().toUpperCase(),
+          attributePromises.push(
+            NativeModules.EmbraceManager.addSpanAttributeToSpan(
+              spanId,
+              "outcome",
+              "SUCCESS",
+            ),
+          );
+
+          await Promise.all(attributePromises);
+          NativeModules.EmbraceManager.recordCompletedSpan(
+            "emb-rn-action",
             startTime,
             endTime,
-            {},
-            zip(action.payload || 0).length,
-            "SUCCESS",
+            null,
+            null,
+            attributes,
+            [],
           );
         }
         return result;
@@ -49,14 +74,17 @@ export const buildEmbraceMiddleware = () => {
           );
         } else {
           const endTime = new Date().getTime();
-          NativeModules.EmbraceManager.logRNAction(
-            action.type.toString().toUpperCase(),
-            startTime,
-            endTime,
-            {},
-            zip(action.payload || 0).length,
-            "FAIL",
+
+          attributePromises.push(
+            NativeModules.EmbraceManager.addSpanAttributeToSpan(
+              spanId,
+              "outcome",
+              "FAIL",
+            ),
           );
+          await Promise.all(attributePromises);
+
+          NativeModules.EmbraceManager.stopSpan(spanId, "Failure", endTime);
           throw e;
         }
       }
