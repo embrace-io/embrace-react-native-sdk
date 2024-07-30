@@ -11,6 +11,7 @@ import {
   NETWORK_INTERCEPTOR_TYPES,
 } from "./interfaces/NetworkMonitoring";
 import {MethodType} from "./interfaces/HTTP";
+import {SDKConfig} from "./interfaces/Config";
 
 interface Properties {
   [key: string]: any;
@@ -21,9 +22,7 @@ const tracking = require("promise/setimmediate/rejection-tracking");
 
 const stackLimit = 200;
 
-// TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-// const unhandledPromiseRejectionPrefix = "Unhandled promise rejection: ";
+const unhandledPromiseRejectionPrefix = "Unhandled promise rejection: ";
 
 const handleError = async (error: Error, callback: () => void) => {
   if (!(error instanceof Error)) {
@@ -47,19 +46,20 @@ const isObjectNonEmpty = (obj?: object): boolean =>
 
 export const initialize = async ({
   patch,
-  iosAppID,
-}: {patch?: string; iosAppID?: string} = {}): Promise<boolean> => {
+  sdkConfig,
+}: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
   const hasNativeSDKStarted = await NativeModules.EmbraceManager.isStarted();
   if (!hasNativeSDKStarted) {
-    if (Platform.OS === "ios" && !iosAppID) {
+    if (Platform.OS === "ios" && !sdkConfig?.ios?.appID) {
       console.warn(
-        "[Embrace] iosAppID required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+        "[Embrace] sdkConfig.ios.AppID is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
       return createFalsePromise();
     }
 
-    const result =
-      await NativeModules.EmbraceManager.startNativeEmbraceSDK(iosAppID);
+    const result = await NativeModules.EmbraceManager.startNativeEmbraceSDK(
+      sdkConfig?.ios?.appID || "",
+    );
 
     if (!result) {
       console.warn(
@@ -108,19 +108,19 @@ export const initialize = async ({
   tracking.enable({
     allRejections: true,
     onUnhandled: (_: any, error: Error) => {
-      // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-      // let message = `Unhandled promise rejection: ${error}`;
-      // let st = "";
-      // if (error instanceof Error) {
-      //   message = unhandledPromiseRejectionPrefix + error.message;
-      //   st = error.stack || "";
-      // }
-      // return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
-      //   message,
-      //   ERROR,
-      //   {},
-      //   st,
-      // );
+      let message = `Unhandled promise rejection: ${error}`;
+      let st = "";
+      if (error instanceof Error) {
+        message = unhandledPromiseRejectionPrefix + error.message;
+        st = error.stack || "";
+      }
+
+      return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
+        message,
+        ERROR,
+        {},
+        st,
+      );
     },
     onHandled: () => {},
   });
