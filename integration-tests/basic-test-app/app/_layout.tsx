@@ -15,7 +15,14 @@ export default function RootLayout() {
   const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(false);
   useEffect(() => {
     const init = async () => {
-      const hasStarted = await initEmbrace();
+      const hasStarted = await initEmbrace({
+        sdkConfig: {
+          ios: {
+            appId: "abcdf",
+            endpointBaseUrl: "http://localhost:8877",
+          },
+        },
+      });
 
       if (hasStarted) {
         setEmbraceSDKLoaded(true);

@@ -5,6 +5,7 @@ import EmbraceIO
 import EmbraceCrash
 import EmbraceCommonInternal // TODO should not be needed
 import EmbraceOTelInternal // TODO should not be needed
+import EmbraceCaptureService
 
 #if canImport(CodePush)
 import CodePush
@@ -21,6 +22,23 @@ enum EmbraceKeys: String {
 private let EVENT_NAME_KEY = "name"
 private let EVENT_TIMESTAMP_KEY = "timeStampMs"
 private let EVENT_ATTRIBUTES_KEY = "attributes"
+
+class SDKConfig: NSObject {
+    public let appId: String;
+    public let appGroupId: String?;
+    public let disableCrashReporter: Bool;
+    public let disableAutomaticViewCapture: Bool;
+    public let endpointBaseUrl: String?;
+
+    public init(from: NSDictionary) {
+        self.appId = from["appId"] as? String ?? ""
+        self.appGroupId = from["appGroupId"] as? String
+        self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
+        self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
+        self.endpointBaseUrl = from["endpointBaseUrl"] as? String
+   }
+}
+
 
 @objc(EmbraceManager)
 class EmbraceManager: NSObject {
@@ -47,17 +65,37 @@ class EmbraceManager: NSObject {
     }
     
     @objc(startNativeEmbraceSDK:resolver:rejecter:)
-    func startNativeEmbraceSDK(_ appId: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    func startNativeEmbraceSDK(configDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        let config = SDKConfig(from: configDict)
         DispatchQueue.main.async {
             do {
                 var embraceOptions: Embrace.Options {
+                    var crashReporter: CrashReporter?
+                    if config.disableCrashReporter {
+                        crashReporter = nil
+                    } else {
+                        crashReporter = EmbraceCrashReporter()
+                    }
+                    
+                    let servicesBuilder = CaptureServiceBuilder().addDefaults()
+                    if config.disableAutomaticViewCapture {
+                            servicesBuilder.remove(ofType: ViewCaptureService.self)
+                    }
+                    
+                    var endpoints: Embrace.Endpoints? = nil
+                    if config.endpointBaseUrl != nil {
+                        endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!,
+                                                      developmentBaseURL: config.endpointBaseUrl!,
+                                                      configBaseURL: config.endpointBaseUrl!)
+                    }
+                    
                     return .init(
-                        appId: appId,
-                        appGroupId: nil,
+                        appId: config.appId,
+                        appGroupId: config.appGroupId,
                         platform: .reactNative,
-                        endpoints: Embrace.Endpoints(baseURL: "http://localhost:8877", developmentBaseURL: "http://localhost:8877", configBaseURL: "http://localhost:8877"),
-                        captureServices: .automatic,
-                        crashReporter: EmbraceCrashReporter()
+                        endpoints: endpoints,
+                        captureServices: servicesBuilder.build(),
+                        crashReporter: crashReporter
                     )
                 }
                 
@@ -482,6 +520,8 @@ class EmbraceManager: NSObject {
         } else {
             span?.addEvent(name: name, attributes: attributeValuesFrom(dict: attributes), timestamp: dateFrom(ms: time))
         }
+        
+        Embrace.client?.flush(span!)
 
         resolve(true)
     }
@@ -502,6 +542,7 @@ class EmbraceManager: NSObject {
         }
 
         span?.setAttribute(key: key, value: value)
+        Embrace.client?.flush(span!)
 
         resolve(true)
     }

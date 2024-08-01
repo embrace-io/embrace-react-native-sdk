@@ -53,7 +53,8 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startNativeEmbraceSDK(Promise promise) {
+    public void startNativeEmbraceSDK(ReadableMap config, Promise promise) {
+        // config for now is only used to setup the iOS SDK, the Android SDK reads its config from a file
         try{
             Embrace.getInstance().start(this.context.getApplicationContext(), false, Embrace.AppFramework.REACT_NATIVE);
             promise.resolve(true);

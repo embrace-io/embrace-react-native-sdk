@@ -9,7 +9,7 @@ RCT_EXTERN_METHOD(setJavaScriptBundlePath:(NSString *)path
 RCT_EXTERN_METHOD(isStarted:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(startNativeEmbraceSDK:(NSString *)appId
+RCT_EXTERN_METHOD(startNativeEmbraceSDK:(NSDictionary)config
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
