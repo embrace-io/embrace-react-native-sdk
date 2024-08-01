@@ -24,30 +24,19 @@ private let EVENT_TIMESTAMP_KEY = "timeStampMs"
 private let EVENT_ATTRIBUTES_KEY = "attributes"
 
 class SDKConfig: NSObject {
-    public var appId = "";
-    public var appGroupId: String? = nil;
-    public var disableCrashReporter = false;
-    public var disableAutomaticViewCapture = false;
-    public var endpointBaseUrl: String? = nil;
+    public let appId: String;
+    public let appGroupId: String?;
+    public let disableCrashReporter: Bool;
+    public let disableAutomaticViewCapture: Bool;
+    public let endpointBaseUrl: String?;
 
     public init(from: NSDictionary) {
-        for (key, value) in from {
-            if let key = key as? String {
-                // Keys defined in packages/core/interfaces/Config.ts
-                if key == "appId", let value = value as? String {
-                    appId = value
-                } else if key == "appGroupId", let value = value as? String {
-                    appGroupId = value
-                } else if key == "disableCrashReporter", let value = value as? Bool {
-                    disableCrashReporter = value
-                } else if key == "disableAutomaticViewCapture", let value = value as? Bool {
-                    disableAutomaticViewCapture = value
-                } else if key == "endpointBaseUrl", let value = value as? String {
-                    endpointBaseUrl = value
-                }
-            }
-        }
-    }
+        self.appId = from["appId"] as? String ?? ""
+        self.appGroupId = from["appGroupId"] as? String
+        self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
+        self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
+        self.endpointBaseUrl = from["endpointBaseUrl"] as? String
+   }
 }
 
 
