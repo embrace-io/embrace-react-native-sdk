@@ -14,7 +14,14 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   useEffect(() => {
     const init = async () => {
-      const hasStarted = await initEmbrace();
+      await initEmbrace({
+        sdkConfig: {
+          ios: {
+            appId: "abcdf",
+            endpointBaseUrl: "http://localhost:8877",
+          },
+        },
+      });
     };
 
     init();
