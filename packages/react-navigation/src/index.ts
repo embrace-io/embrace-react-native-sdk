@@ -8,6 +8,7 @@ import {
   INavigationState,
 } from "../navigation/interfaces/NavigationInterfaces";
 import {findNavigationHistory} from "../navigation/Utils";
+import {startView, endView} from "@embrace-io/react-native";
 
 export const useEmbraceNavigationTracker = (
   navigationRefParam: RefObject<unknown>,
@@ -22,28 +23,26 @@ export const useEmbraceNavigationTracker = (
     const navigationHistory = findNavigationHistory(currentRoute);
     return navigationHistory.pop();
   };
-  const setLastScreenStart = (name: string) => {
-    const cS = {
+
+  const setLastScreenStart = async (name: string) => {
+    currentScreen.current = {
       name,
-      startTime: new Date().getTime(),
     };
-    currentScreen.current = cS;
-    if (NativeModules.EmbraceManager.startView) {
-      NativeModules.EmbraceManager.startView(cS.name);
+    if (startView) {
+      currentScreen.current["spanId"] = await startView(name);
     } else {
       console.warn(
         "[Embrace] The method startView was not found, please update the native SDK",
       );
     }
   };
+
   const updateLastScreen = ({name}: IHistory) => {
     if (!currentScreen.current?.name) {
       setLastScreenStart(name);
     } else if (currentScreen.current.name !== name) {
-      const cSEnd = {...currentScreen.current};
-      cSEnd.endTime = new Date().getTime();
-      if (NativeModules.EmbraceManager.endView) {
-        NativeModules.EmbraceManager.endView(cSEnd.name);
+      if (endView && currentScreen.current.spanId) {
+        endView(currentScreen.current.spanId);
         setLastScreenStart(name);
       } else {
         console.warn(
