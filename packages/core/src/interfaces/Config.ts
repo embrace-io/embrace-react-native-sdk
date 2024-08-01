@@ -6,7 +6,7 @@ export interface SDKConfig {
     appId: string;
     appGroupId?: string;
     disableCrashReporter?: boolean;
-    disabledAutomaticViewCapture?: boolean;
+    disableAutomaticViewCapture?: boolean;
     endpointBaseUrl?: string;
   };
 }
