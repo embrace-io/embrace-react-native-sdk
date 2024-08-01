@@ -11,9 +11,14 @@ import {FileUpdatable} from "../util/file";
 import {embraceJSON, getBuildGradlePatchable} from "../util/android";
 import EmbraceLogger from "../../src/logger";
 
-import {getTextToAddWithBreakingLine, SUPPORTED_PATCHES} from "./patches/patch";
+import {
+  getText,
+  getTextToAddWithBreakingLine,
+  SUPPORTED_REMOVALS,
+} from "./patches/patch";
 import {SUPPORTED_LANGUAGES} from "./patches/common";
 import {findNameWithCaseSensitiveFromPath} from "./ios";
+import {iosAppID} from "./common";
 import {androidEmbraceSwazzlerPlugin, androidGenericVersion} from "./android";
 
 const fs = require("fs");
@@ -117,13 +122,15 @@ export const removeEmbraceLinkFromFile = (
 
 export const removeEmbraceImportAndStartFromFile = (
   patch: SUPPORTED_LANGUAGES,
+  appId?: string,
 ): boolean => {
-  if (SUPPORTED_PATCHES[patch] === undefined) {
+  const definition = SUPPORTED_REMOVALS[patch];
+  if (definition === undefined) {
     logger.warn("This language is not supported");
     return false;
   }
 
-  const {fileName, textsToAdd, findFileFunction} = SUPPORTED_PATCHES[patch];
+  const {fileName, textsToAdd, findFileFunction} = definition;
 
   const file = findFileFunction(patch, packageJson.name);
 
@@ -132,22 +139,26 @@ export const removeEmbraceImportAndStartFromFile = (
     return false;
   }
 
-  const result = textsToAdd.map(item => {
-    const {textToAdd, breakingLine} = item;
+  let hasToPatch = false;
+  textsToAdd.map(item => {
+    const {breakingLine} = item;
+    const textToAdd = getText(item, appId);
+    const toDelete = Array.isArray(textToAdd) ? textToAdd : [textToAdd];
 
-    logger.log(`Deleting ${textToAdd} from ${fileName}`);
+    toDelete.forEach(line => {
+      logger.log(`Deleting ${line} from ${fileName}`);
 
-    const padding = file
-      .getPaddingFromString(textToAdd)
-      ?.replace(textToAdd, "");
-    const finalTextToDelet = getTextToAddWithBreakingLine(
-      `${padding}${textToAdd}`,
-      breakingLine,
-    );
-    file.deleteLine(finalTextToDelet);
-    return textToAdd;
+      const padding = file.getPaddingFromString(line)?.replace(line, "");
+      const finalTextToDelete = getTextToAddWithBreakingLine(
+        `${padding}${line}`,
+        breakingLine,
+      );
+      file.deleteLine(finalTextToDelete);
+
+      hasToPatch = true;
+    });
   });
-  const hasToPatch = result.some(item => item);
+
   if (hasToPatch) {
     file.patch();
   }
@@ -165,14 +176,12 @@ export const removeEmbraceConfigFileAndroid = async () => {
   }
 };
 
-export const removeEmbraceConfigFileIos = async (projectName: string) => {
+export const removeEmbraceConfigFileIos = async () => {
   try {
-    const iosConifgFile = await embracePlistPatchable({name: projectName});
-    fs.unlinkSync(iosConifgFile.path);
+    const iosConfigFile = await embracePlistPatchable();
+    fs.unlinkSync(iosConfigFile.path);
   } catch (_) {
-    logger.error(
-      "Could not find Embrace-Info.plist, Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually ",
-    );
+    // Only apps uninstalling from iOS 5.x would have this file so ignore if it's missing
   }
 };
 
@@ -191,6 +200,7 @@ export const removeEmbraceFromXcode = () => {
           packageJson.name,
         );
 
+        // Plist longer exists on iOS 6.x, keep this step to for 5.x upgrades
         project.removeResourceFile(
           nameWithCaseSensitive,
           `${nameWithCaseSensitive}/Embrace-Info.plist`,
@@ -232,12 +242,13 @@ const getRemoveEmbraceConfigFileAndroidStep = () => {
       "https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually",
   };
 };
+
 const getRemoveEmbraceConfigFileIosStep = () => {
   return {
     name: "Removing iOS Embrace Config File",
     run: (wizard: Wizard) =>
       new Promise(resolve => {
-        resolve(removeEmbraceConfigFileIos(packageJson));
+        resolve(removeEmbraceConfigFileIos());
       }),
     docURL:
       "https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually",
@@ -263,19 +274,25 @@ const getUnlinkFilesStep = () => {
 };
 
 const getUnlinkImportStartFilesStep = () => {
-  return Object.entries(SUPPORTED_PATCHES).map(([key, value]) => {
+  return Object.entries(SUPPORTED_REMOVALS).map(([key, value]) => {
     const run = (wizard: Wizard) =>
       new Promise((resolve, reject) => {
         try {
-          resolve(
-            removeEmbraceImportAndStartFromFile(key as SUPPORTED_LANGUAGES),
-          );
+          wizard.fieldValue(iosAppID).then((appId: string) => {
+            resolve(
+              removeEmbraceImportAndStartFromFile(
+                key as SUPPORTED_LANGUAGES,
+                appId,
+              ),
+            );
+          });
         } catch (e) {
           reject(e);
         }
       });
+
     return {
-      name: `Removing Embrace code in ${value.fileName}`,
+      name: `Removing Embrace code in ${value?.fileName}`,
       run,
       docURL:
         "https://embrace.io/docs/react-native/integration/session-reporting/#starting-embrace-sdk-from-android--ios",
@@ -287,13 +304,14 @@ const transformUninstalFunctionsToSteps = (): Step[] => {
   const steps = getUnlinkFilesStep();
   steps.push(...getUnlinkImportStartFilesStep());
   steps.push(getRemoveEmbraceConfigFileAndroidStep());
-  steps.push(getRemoveEmbraceConfigFileIosStep());
+  steps.push(getRemoveEmbraceConfigFileIosStep()); // Plist longer exists on iOS 6.x, keep this step to for 5.x upgrades
   steps.push(getRemoveEmbraceFromXcodeStep());
   return steps;
 };
 
 const run = () => {
   const wiz = new Wizard();
+  [iosAppID].map(field => wiz.registerField(field));
   [...transformUninstalFunctionsToSteps()].map(step => wiz.registerStep(step));
   wiz.runSteps();
 };

@@ -17,7 +17,6 @@ The setup script for ios includes
 `iosPodfile`: It patches the Podfile, only in < 0.6 adding the dependency. This is useful if the app does not have autolink for some reason.
 `patchXcodeBundlePhase`: It patches the `Bundle React Native code and images` created by React Native, adding a line to export the sourcemap to a desired path
 `addUploadBuildPhase`: It adds the `Upload Debug Symbols to Embrace` to the build phase
-`createEmbracePlist`: It creates a new file named `Embrace-Info.plist`, add the APPID to it and then link it to the ios project
 
 ## Android
 

@@ -17,9 +17,13 @@ export const bundlePhaseRE = /react-native-xcode\.sh/;
 export const exportSourcemapRNVariable =
   'export SOURCEMAP_FILE="$CONFIGURATION_BUILD_DIR/main.jsbundle.map";';
 
-export const EMBRACE_IMPORT_OBJECTIVEC = "#import <Embrace/Embrace.h>";
-export const EMBRACE_INIT_OBJECTIVEC =
-  "[[Embrace sharedInstance] startWithLaunchOptions:launchOptions framework:EMBAppFrameworkReactNative];";
+export const EMBRACE_IMPORT_OBJECTIVEC = "@import EmbraceIO;";
+export const EMBRACE_INIT_OBJECTIVEC = ({appId}: {appId?: string}) => [
+  // TODO, need to confirm these, the method names don't seem correct
+  `EMBOptions* options = [[EMBOptions alloc] initWithAppId:@"${appId}" appGroupId:nil platform:EMBPlatformReactNative];`,
+  "[Embrace setupWithOptions:options];",
+  "[[Embrace client] startAndReturnError:&error];",
+];
 
 export const embRunScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';
 
@@ -73,11 +77,7 @@ export const podfilePatchable = (): Promise<FileUpdatable> => {
   });
 };
 
-export const embracePlistPatchable = ({
-  name,
-}: {
-  name: string;
-}): Promise<FileUpdatable> => {
+export const embracePlistPatchable = (): Promise<FileUpdatable> => {
   return new Promise<FileUpdatable>((resolve, reject) => {
     const plistPath = glob.sync("ios/**/Embrace-Info.plist")[0];
     if (!plistPath) {

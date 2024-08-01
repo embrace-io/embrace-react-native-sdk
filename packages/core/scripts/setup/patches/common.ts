@@ -65,7 +65,7 @@ const addLineBeforeToTextInFile = (
 };
 
 type ANDROID_LANGUAGE = "kotlin" | "java";
-type IOS_LANGUAGE = "swift" | "objectivec";
+type IOS_LANGUAGE = "swift" | "objectivec" | "swift5x" | "objectivec5x";
 type SUPPORTED_LANGUAGES = IOS_LANGUAGE | ANDROID_LANGUAGE;
 
 const MAIN_CLASS_BY_LANGUAGE: Record<SUPPORTED_LANGUAGES, string> = {
@@ -73,6 +73,8 @@ const MAIN_CLASS_BY_LANGUAGE: Record<SUPPORTED_LANGUAGES, string> = {
   java: JAVA_MAIN_ACTIVITY,
   objectivec: OBJECTIVEC_APP_DELEGATE,
   swift: SWIFT_APP_DELEGATE,
+  swift5x: "",
+  objectivec5x: "",
 };
 
 export {

@@ -2,7 +2,6 @@ import Wizard from "../util/wizard";
 import {
   bundlePhaseRE,
   embraceNativePod,
-  embracePlistPatchable,
   embRunScript,
   exportSourcemapRNVariable,
   podfilePatchable,
@@ -13,21 +12,20 @@ import EmbraceLogger from "../../src/logger";
 import patch from "./patches/patch";
 import {apiToken, iosAppID, IPackageJson, packageJSON} from "./common";
 
-const path = require("path");
-const fs = require("fs");
-
 const semverGte = require("semver/functions/gte");
 
 const logger = new EmbraceLogger(console);
 
 export const tryToPatchAppDelegate = async ({
   name,
+  appId,
 }: {
   name: string;
+  appId: string;
 }): Promise<boolean> => {
-  const response = patch("objectivec", name);
+  const response = patch("objectivec", name, appId);
   if (!response) {
-    return patch("swift", name) || false;
+    return patch("swift", name, appId) || false;
   }
   return response;
 };
@@ -35,7 +33,11 @@ export const tryToPatchAppDelegate = async ({
 export const iosInitializeEmbrace = {
   name: "iOS initialize Embrace",
   run: (wizard: Wizard): Promise<any> =>
-    wizard.fieldValue(packageJSON).then(tryToPatchAppDelegate),
+    wizard.fieldValueList([iosAppID, packageJSON]).then(list => {
+      const [appId, packageJSON] = list;
+      const name = (packageJSON as IPackageJson).name;
+      return tryToPatchAppDelegate({name, appId});
+    }),
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
 };
@@ -149,60 +151,5 @@ export const findNameWithCaseSensitiveFromPath = (
     return nameFounded.replace(".xcodeproj", "");
   }
 
-  logger.warn("the xcodeproj file does not match with your project's name");
-  logger.warn(
-    `skipping adding Embrace-Info.plist to ${name}, this should be added to the project manually.
-    You can go https://embrace.io/docs/ios/integration/session-reporting/#import-embrace for more information`,
-  );
   return name;
-};
-
-export const createEmbracePlist = {
-  name: "Create Embrace plist file",
-  run: (wizard: Wizard): Promise<any> =>
-    wizard.fieldValue(packageJSON).then(({name}) => {
-      const p = path.join("ios", name, "Embrace-Info.plist");
-      if (fs.existsSync(p)) {
-        logger.warn("already has Embrace-Info.json file");
-        return;
-      }
-
-      fs.closeSync(fs.openSync(p, "a"));
-
-      return xcodePatchable({name})
-        .then(project => {
-          const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
-            project.path,
-            name,
-          );
-          project.addFile(
-            nameWithCaseSensitive,
-            `${nameWithCaseSensitive}/Embrace-Info.plist`,
-          );
-          project.sync();
-          project.patch();
-        })
-        .then(() => embracePlistPatchable({name}))
-        .then(file =>
-          wizard.fieldValue(iosAppID).then(iosAppIDValue => {
-            file.contents = plistContents(iosAppIDValue);
-            return file.patch();
-          }),
-        );
-    }),
-  docURL:
-    "https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually",
-};
-
-const plistContents = (iosAppIDValue: string) => {
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-  <dict>
-    <key>API_KEY</key>
-    <string>${iosAppIDValue}</string>
-    <key>CRASH_REPORT_ENABLED</key>
-    <true/>
-  </dict>
-</plist>`;
 };
