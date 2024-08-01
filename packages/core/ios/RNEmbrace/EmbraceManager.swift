@@ -482,6 +482,8 @@ class EmbraceManager: NSObject {
         } else {
             span?.addEvent(name: name, attributes: attributeValuesFrom(dict: attributes), timestamp: dateFrom(ms: time))
         }
+        
+        Embrace.client?.flush(span!)
 
         resolve(true)
     }
@@ -502,6 +504,7 @@ class EmbraceManager: NSObject {
         }
 
         span?.setAttribute(key: key, value: value)
+        Embrace.client?.flush(span!)
 
         resolve(true)
     }
