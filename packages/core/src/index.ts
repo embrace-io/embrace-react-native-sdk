@@ -52,7 +52,7 @@ export const initialize = async ({
   if (!hasNativeSDKStarted) {
     if (Platform.OS === "ios" && !sdkConfig?.ios?.appId) {
       console.warn(
-        "[Embrace] sdkConfig.ios.AppID is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+        "[Embrace] sdkConfig.ios.appId is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
       return createFalsePromise();
     }

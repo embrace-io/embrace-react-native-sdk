@@ -94,7 +94,6 @@ class EmbraceManager: NSObject {
                     }
                     
                     var endpoints: Embrace.Endpoints? = nil
-                    
                     if config.endpointBaseUrl != nil {
                         endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!,
                                                       developmentBaseURL: config.endpointBaseUrl!,
