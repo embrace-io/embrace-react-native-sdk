@@ -22,8 +22,6 @@ export default function RootLayout() {
           },
         },
       });
-
-      setEmbraceSDKLoaded(true);
     };
 
     init();

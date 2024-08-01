@@ -1,4 +1,3 @@
-import {handleGlobalError} from "../utils/ErrorUtil";
 //TODO Check why its failing if we import the constants from the index.ts
 // import {INFO, ERROR, WARNING} from "../index";
 const WARNING = "warning";
