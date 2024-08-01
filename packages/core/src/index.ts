@@ -226,18 +226,30 @@ export const logHandledError = (
   return createFalsePromise();
   // }
 };
-export const startView = (view: string): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
 
-  //   return NativeModules.EmbraceManager.startView(view);
-  return createFalsePromise();
+export const startView = async (view: string): Promise<string> => {
+  const id = await NativeModules.EmbraceManager.startSpan(
+    "emb-screen-view",
+    undefined,
+    new Date().getTime(),
+  );
+  NativeModules.EmbraceManager.addSpanAttributeToSpan(
+    id,
+    "emb.type",
+    "ux.view",
+  );
+  NativeModules.EmbraceManager.addSpanAttributeToSpan(id, "view.name", view);
+  return new Promise(resolve => {
+    resolve(id);
+  });
 };
 
-export const endView = (view: string): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  //   return NativeModules.EmbraceManager.endView(view);
-  return createFalsePromise();
+export const endView = (id: string): Promise<boolean> => {
+  return NativeModules.EmbraceManager.stopSpan(
+    id,
+    undefined,
+    new Date().getTime(),
+  );
 };
 
 export const generateStackTrace = (): string => {

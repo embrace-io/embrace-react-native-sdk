@@ -71,17 +71,23 @@ describe("Test Navigation Tracker", () => {
   };
   test("Navigation Ref was not Provided", () => {
     const mockStartView = jest.fn();
+    const mockEndView = jest.fn();
+
     jest.mock(
-      "react-native",
+      "@embrace-io/react-native",
       () => ({
-        NativeModules: {
-          EmbraceManager: {
-            startView: mockStartView,
-          },
+        startView: (viewName: string) => {
+          mockStartView();
+          return `id-${viewName}`;
+        },
+        endView: (id: string) => {
+          mockEndView();
+          return true;
         },
       }),
       {virtual: true},
     );
+
     jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
@@ -164,17 +170,23 @@ describe("Test Navigation Tracker", () => {
   });
   test("Track on nav state update", () => {
     const mockStartView = jest.fn();
+    const mockEndView = jest.fn();
+
     jest.mock(
-      "react-native",
+      "@embrace-io/react-native",
       () => ({
-        NativeModules: {
-          EmbraceManager: {
-            startView: mockStartView,
-          },
+        startView: (viewName: string) => {
+          mockStartView();
+          return `id-${viewName}`;
+        },
+        endView: (id: string) => {
+          mockEndView();
+          return true;
         },
       }),
       {virtual: true},
     );
+
     jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
@@ -199,6 +211,7 @@ describe("Test Navigation Tracker", () => {
     expect(mockStartView).toHaveBeenCalledTimes(1);
   });
   test("Track on Second Screen", () => {
+    const mockStartView = jest.fn();
     const mockEndView = jest.fn();
     jest.mock(
       "react",
@@ -214,16 +227,20 @@ describe("Test Navigation Tracker", () => {
       {virtual: true},
     );
     jest.mock(
-      "react-native",
+      "@embrace-io/react-native",
       () => ({
-        NativeModules: {
-          EmbraceManager: {
-            endView: mockEndView,
-          },
+        startView: (viewName: string) => {
+          mockStartView();
+          return `id-${viewName}`;
+        },
+        endView: (id: string) => {
+          mockEndView();
+          return true;
         },
       }),
       {virtual: true},
     );
+
     const {useEmbraceNavigationTracker} = require("../src/index");
     const navigationRef = {
       current: {
@@ -236,9 +253,11 @@ describe("Test Navigation Tracker", () => {
       },
     };
     useEmbraceNavigationTracker(navigationRef);
-    expect(mockEndView).toHaveBeenCalledTimes(1);
+    expect(mockStartView).toHaveBeenCalledTimes(1);
   });
   test("End View does not exist", () => {
+    const mockStartView = jest.fn();
+
     jest.mock(
       "react",
       () => ({
@@ -253,13 +272,13 @@ describe("Test Navigation Tracker", () => {
       {virtual: true},
     );
     jest.mock(
-      "react-native",
+      "@embrace-io/react-native",
       () => ({
-        NativeModules: {
-          EmbraceManager: {
-            endView: undefined,
-          },
+        startView: (viewName: string) => {
+          mockStartView();
+          return `id-${viewName}`;
         },
+        endView: undefined,
       }),
       {virtual: true},
     );

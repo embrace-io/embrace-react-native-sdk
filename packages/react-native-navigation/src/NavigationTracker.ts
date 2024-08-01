@@ -1,25 +1,26 @@
-import {NativeModules} from "react-native";
-
 import {
   ICurrentScreenInstance,
   INavigation,
 } from "../navigation/interfaces/NavigationInterfaces";
 
+import {startView, endView} from "@embrace-io/react-native";
+
 export default class NavigationTracker {
   public currentScreen?: ICurrentScreenInstance = undefined;
+  private lastId?: string = undefined;
 
   constructor(navigation: INavigation) {
     this.initNavigator(navigation);
   }
 
-  public setLastScreenStart = (name: string) => {
+  public setLastScreenStart = async (name: string) => {
     const cS = {
       name,
       startTime: new Date().getTime(),
     };
     this.currentScreen = cS;
-    if (NativeModules.EmbraceManager.startView) {
-      NativeModules.EmbraceManager.startView(cS.name);
+    if (startView) {
+      this.lastId = await startView(cS.name);
     } else {
       console.warn(
         "[Embrace] The method startView was not found, please update the native SDK",
@@ -31,8 +32,8 @@ export default class NavigationTracker {
     if (this.currentScreen && this.currentScreen.name !== name) {
       const cSEnd = {...this.currentScreen};
       cSEnd.endTime = new Date().getTime();
-      if (NativeModules.EmbraceManager.endView) {
-        NativeModules.EmbraceManager.endView(cSEnd.name);
+      if (endView && this.lastId) {
+        endView(this.lastId);
         this.setLastScreenStart(name);
       } else {
         console.warn(
@@ -41,6 +42,7 @@ export default class NavigationTracker {
       }
     }
   };
+
   public initNavigator = (navigation: INavigation) => {
     navigation.events().registerComponentDidAppearListener(event => {
       if (!this.currentScreen || !this.currentScreen.name) {

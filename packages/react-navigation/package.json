@@ -39,7 +39,8 @@
     "build": "tsc"
   },
   "peerDependencies": {
-    "react-native": ">=0.56.0"
+    "react-native": ">=0.56.0",
+    "@embrace-io/react-native": ">=4.0.1"
   },
   "devDependencies": {
     "typescript": "^4.7.4"
