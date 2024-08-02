@@ -1,5 +1,7 @@
 #import "AppDelegate.h"
 
+#import <EmbraceIO/EmbraceIO-Swift.h>
+
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 
@@ -7,6 +9,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  /*
+  EMBOptions* options = [[EMBOptions alloc] initWithAppId:@"afk23" appGroupId:nil platform:EMBPlatformReactNative];
+  [Embrace setupWithOptions:options];
+  [[Embrace client] startAndReturnError:&error];
+   */
+   
   self.moduleName = @"main";
 
   // You can add your custom initial props in the dictionary below.
