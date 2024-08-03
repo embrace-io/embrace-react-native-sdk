@@ -309,7 +309,7 @@ class EmbraceManager: NSObject {
         }
         
         if successfulAttributes == totalAttributes {
-          resolve(true)
+          resolve(spanId)
         }
       }
       
@@ -330,7 +330,7 @@ class EmbraceManager: NSObject {
     let endTimeDate = Date()
     let endTimeMS = NSNumber(value: endTimeDate.timeIntervalSince1970 * 1000)
     
-    stopSpan(spanId, errorCodeString: "", endTimeMs: <#T##NSNumber#>, resolver: resolve, rejecter: reject)
+    stopSpan(spanId, errorCodeString: "", endTimeMs: endTimeMS, resolver: resolve, rejecter: reject)
   }
   
   private func severityFromString(from inputString: String) -> LogSeverity {

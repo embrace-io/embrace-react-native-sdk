@@ -8,7 +8,6 @@ import {
   INavigationState,
 } from "../navigation/interfaces/NavigationInterfaces";
 import {findNavigationHistory} from "../navigation/Utils";
-import {startView, endView} from "@embrace-io/react-native";
 
 export const useEmbraceNavigationTracker = (
   navigationRefParam: RefObject<unknown>,
@@ -28,8 +27,9 @@ export const useEmbraceNavigationTracker = (
     currentScreen.current = {
       name,
     };
-    if (startView) {
-      currentScreen.current["spanId"] = await startView(name);
+    if (NativeModules.EmbraceManager.startView) {
+      currentScreen.current["spanId"] =
+        await NativeModules.EmbraceManager.startView(name);
     } else {
       console.warn(
         "[Embrace] The method startView was not found, please update the native SDK",
@@ -41,8 +41,11 @@ export const useEmbraceNavigationTracker = (
     if (!currentScreen.current?.name) {
       setLastScreenStart(name);
     } else if (currentScreen.current.name !== name) {
-      if (endView && currentScreen.current.spanId) {
-        endView(currentScreen.current.spanId);
+      if (
+        NativeModules.EmbraceManager.endView &&
+        currentScreen.current.spanId
+      ) {
+        NativeModules.EmbraceManager.endView(currentScreen.current.spanId);
         setLastScreenStart(name);
       } else {
         console.warn(

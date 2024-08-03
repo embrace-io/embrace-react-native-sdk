@@ -173,8 +173,14 @@ describe("Test React Native Navigation Tracker", () => {
       () => ({
         NativeModules: {
           EmbraceManager: {
-            startView: mockStartView,
-            endView: mockEndView,
+            endView: (spanId: string) => {
+              mockEndView();
+              return true;
+            },
+            startView: (spanName: string) => {
+              mockStartView();
+              return `id-${spanName}`;
+            },
           },
         },
       }),
@@ -190,10 +196,11 @@ describe("Test React Native Navigation Tracker", () => {
     const navigation = {
       events: () => {
         return {
-          registerComponentDidAppearListener: (
-            callable: (event: IEvent) => void,
+          registerComponentDidAppearListener: async (
+            callable: (event: IEvent) => Promise<void>,
           ) => {
             callable(event);
+            jest.runAllTicks();
             callable(event2);
           },
         };
@@ -201,7 +208,7 @@ describe("Test React Native Navigation Tracker", () => {
     };
 
     expect(EmbraceNavigationTracker.default.build(navigation)).toBe(1);
-    expect(mockStartView).toHaveBeenCalledTimes(2);
+    expect(mockStartView).toHaveBeenCalledTimes(1);
     expect(mockEndView).toHaveBeenCalledTimes(1);
   });
   test("Navigation navigate to the same screen", () => {
