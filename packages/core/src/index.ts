@@ -3,7 +3,7 @@ import {NativeModules, Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {handleGlobalError} from "./utils/ErrorUtil";
+import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import {SessionStatus} from "./interfaces/Types";
 import {
@@ -246,11 +246,6 @@ export const endView = (view: string): Promise<boolean> => {
 
   //   return NativeModules.EmbraceManager.endView(view);
   return createFalsePromise();
-};
-
-export const generateStackTrace = (): string => {
-  const err = new Error();
-  return err.stack || "";
 };
 
 export const setJavaScriptPatch = (patch: string) => {
