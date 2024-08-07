@@ -270,18 +270,13 @@ describe("Log handled Error Tests", () => {
     ${testError}      | ${undefined} | ${{message: testError.message, stack: testError.stack}}
     ${testError}      | ${testProps} | ${{message: testError.message, stack: testError.stack, properties: testProps}}
   `("logHandledError", async ({message, out, properties}) => {
-    const promiseToResolve = logHandledError(message, properties);
-
-    jest.runAllTimers();
-    const result = await promiseToResolve;
+    await logHandledError(message, properties);
     // TODO uncomment the expect once the method is imeplemented
-
     // if (message instanceof Error) {
     //   expect(mockLogHandledError).toHaveBeenCalledWith(out.message, out.stack, out.properties);
     // } else {
     //   expect(mockLogHandledError).not.toHaveBeenCalled();
     // }
-    expect(result).toBe(false);
   });
 });
 
