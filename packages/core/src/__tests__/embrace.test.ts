@@ -137,10 +137,9 @@ jest.mock("react-native", () => ({
 
 const mockSt = "this is a fake stack trace";
 const mockGenerateStackTrace = jest.fn();
-mockGenerateStackTrace.mockReturnValue(mockSt);
 jest.mock("../utils/ErrorUtil", () => ({
   ...jest.requireActual("../utils/ErrorUtil"),
-  generateStackTrace: mockGenerateStackTrace,
+  generateStackTrace: () => mockGenerateStackTrace(),
 }));
 
 describe("User Identifier Tests", () => {
@@ -190,6 +189,10 @@ describe("Logs Test", () => {
   const INFO = "info";
   const ERROR = "error";
   const testView = "View";
+
+  beforeEach(() => {
+    mockGenerateStackTrace.mockReturnValue(mockSt);
+  });
 
   test("addBreadcrumb", async () => {
     await addBreadcrumb(testView);
