@@ -262,8 +262,11 @@ class EmbraceManager: NSObject {
     @objc(removeSessionProperty:resolver:rejecter:)
     func removeSessionProperty(_ key: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            // TODO REfactor to include lifespan
-            try Embrace.client?.metadata.removeProperty(key: key)
+            // Depending on on how `addSessionProperty` was called we may have added this key as either
+            // .session or .permanent so remove both here, multiple calls to remove are safe
+            try Embrace.client?.metadata.removeProperty(key: key, lifespan: .permanent)
+            try Embrace.client?.metadata.removeProperty(key: key, lifespan: .session)
+            
             resolve(true)
         } catch let error {
             reject("REMOVE_SESSION_PROPERTY", "Error removing Session Property", error)
