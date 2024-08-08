@@ -434,11 +434,11 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod()
-    public void startSpan(String name, String parentSpanId, Double startTimeNanos, Promise promise) {
+    public void startSpan(String name, String parentSpanId, Double startTimeMs, Promise promise) {
         try{
             Long startTime = null;
-            if(startTimeNanos != null){
-                startTime = startTimeNanos.longValue();
+            if(startTimeMs != null && startTimeMs > 0){
+                startTime = startTimeMs.longValue();
             }
             promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().startSpan(name, parentSpanId, startTime));
         }catch(Exception e){
@@ -486,9 +486,9 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                 if (readableMap != null) {
                     Map<String, Object> map = readableMap.toHashMap();
                     // TODO Change when Android/iOS replace time in nano for ms
-                    if (map.containsKey("timestampNanos") && map.get("timestampNanos") instanceof Double) {
-                        double timestampNanos = (Double) map.get("timestampNanos");
-                        map.put("timestampNanos", (long) timestampNanos);
+                    if (map.containsKey("timestampMs") && map.get("timestampMs") instanceof Double) {
+                        double timestampMs = (Double) map.get("timestampMs");
+                        map.put("timestampMs", (long) timestampMs);
                     }
                     objectMapList.add(map);
                 }
@@ -501,12 +501,13 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod()
-    public void stopSpan(String spanId, String errorCodeString, Double endTimeNanos, Promise promise) {
+    public void stopSpan(String spanId, String errorCodeString, Double endTimeMs, Promise promise) {
         try{
             Long endTime = null;
-            if(endTimeNanos != null){
-                endTime = endTimeNanos.longValue();
+            if(endTimeMs != null && endTimeMs > 0){
+                endTime = endTimeMs.longValue();
             }
+
             ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
             promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().stopSpan(spanId, errorCodeInstance, endTime));
         }catch(Exception e){
@@ -534,11 +535,21 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod()
-    public void recordCompletedSpan(String name, Double startTimeNanos, Double endTimeNanos, String errorCodeString, String parentSpanId, ReadableMap attributes, ReadableArray events, Promise promise) {
+    public void recordCompletedSpan(String name, Double startTimeMs, Double endTimeMs, String errorCodeString, String parentSpanId, ReadableMap attributes, ReadableArray events, Promise promise) {
         try{
             ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
 
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().recordCompletedSpan(name, startTimeNanos.longValue(), endTimeNanos.longValue(), errorCodeInstance, parentSpanId, this.convertToReadableMap(attributes), this.transformListReadableMapToListMap(events)));
+            Long startTime = null;
+            if(startTimeMs != null && startTimeMs > 0){
+                startTime = startTimeMs.longValue();
+            }
+
+            Long endTime = null;
+            if(endTimeMs != null && endTimeMs > 0){
+                endTime = endTimeMs.longValue();
+            }
+
+            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().recordCompletedSpan(name, startTime, endTime, errorCodeInstance, parentSpanId, this.convertToReadableMap(attributes), this.transformListReadableMapToListMap(events)));
         }catch(Exception e){
             promise.resolve(false);
         }

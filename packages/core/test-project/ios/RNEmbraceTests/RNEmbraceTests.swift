@@ -41,7 +41,7 @@ class Promise {
     }
 }
 
-private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-process-launch",
+private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-setup", "emb-process-launch",
                                            "POST /v2/logs", "POST /v2/spans"]
 
 class EmbraceManagerTests: XCTestCase {
@@ -452,7 +452,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertTrue(exportedSpans[2].hasEnded)
     }
 
-    // TODO fails on 6.2 currently
+    // TODO fails on 6.3 currently
     func skipped_testRecordCompletedSpanWithErrorCode() async throws {
         module.recordCompletedSpan("my-span", startTimeMs: 0.0, endTimeMs: 0.0,
                                    errorCodeString: "Failure", parentSpanId: "",
