@@ -3,9 +3,8 @@ import React
 import OSLog
 import EmbraceIO
 import EmbraceCrash
-import EmbraceCommonInternal // TODO should not be needed
-import EmbraceOTelInternal // TODO should not be needed
-import EmbraceCaptureService
+import EmbraceCommonInternal
+import EmbraceOTelInternal
 
 #if canImport(CodePush)
 import CodePush
