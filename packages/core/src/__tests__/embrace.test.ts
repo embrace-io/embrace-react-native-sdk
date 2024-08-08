@@ -143,7 +143,7 @@ jest.mock("../utils/ErrorUtil", () => ({
 }));
 
 describe("User Identifier Tests", () => {
-  const testUserId = "Lucia";
+  const testUserId = "testUser";
   beforeEach(() => {
     jest.resetAllMocks();
   });
@@ -160,8 +160,8 @@ describe("User Identifier Tests", () => {
 });
 
 describe("User Data Tests", () => {
-  const testUserId = "Lucia";
-  const testEmail = "lucia@nimble.la";
+  const testUserId = "testUser";
+  const testEmail = "test@test.com";
 
   test("setUsername", async () => {
     await setUsername(testUserId);
