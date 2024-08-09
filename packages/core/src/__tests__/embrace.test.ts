@@ -377,7 +377,10 @@ describe("Custom Views Tests", () => {
       () => ({
         NativeModules: {
           EmbraceManager: {
-            startView: mock,
+            startView: () => {
+              mock();
+              return false;
+            },
           },
         },
       }),
@@ -385,12 +388,10 @@ describe("Custom Views Tests", () => {
     );
     const {startView} = require("../index");
     const promiseToResolve = startView(testView);
-    // expect(mock).toHaveBeenCalledWith(testView);
 
     jest.runAllTimers();
     const result = await promiseToResolve;
-    // TODO uncomment the expect once the method is imeplemented
-    // expect(mock).toHaveBeenCalled();
+    expect(mock).toHaveBeenCalled();
     expect(result).toBe(false);
   });
 
@@ -401,7 +402,10 @@ describe("Custom Views Tests", () => {
       () => ({
         NativeModules: {
           EmbraceManager: {
-            endView: mock,
+            endView: () => {
+              mock();
+              return false;
+            },
           },
         },
       }),
@@ -409,11 +413,9 @@ describe("Custom Views Tests", () => {
     );
     const {endView} = require("../index");
     const promiseToResolve = endView(testView);
-    // expect(mock).toHaveBeenCalledWith(testView);
     jest.runAllTimers();
     const result = await promiseToResolve;
-    // TODO uncomment the expect once the method is imeplemented
-    // expect(mock).toHaveBeenCalled();
+    expect(mock).toHaveBeenCalled();
     expect(result).toBe(false);
   });
 });
