@@ -197,15 +197,14 @@ export const logMessage = (
   severity: "info" | "warning" | "error" = "error",
   properties?: Properties,
 ): Promise<boolean> => {
-  {
-    const stacktrace = severity === INFO ? "" : generateStackTrace();
-    return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
-      message,
-      severity,
-      properties,
-      stacktrace,
-    );
-  }
+  const stacktrace = severity === INFO ? "" : generateStackTrace();
+
+  return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
+    message,
+    severity,
+    properties,
+    stacktrace,
+  );
 };
 
 export const logInfo = (message: string): Promise<boolean> => {
@@ -287,6 +286,7 @@ export const clearUserAsPayer = (): Promise<boolean> => {
 
   return createFalsePromise();
 };
+
 export const recordNetworkRequest = (
   url: string,
   httpMethod: MethodType,
@@ -297,19 +297,94 @@ export const recordNetworkRequest = (
   statusCode?: number,
   error?: string,
 ): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+  /**
+   * Android / Java
+  {
+    "trace_id" : "70da1fe78061e4491282ca56420c77aa",
+    "span_id" : "0999f87c9506795f",
+    "parent_span_id" : "0000000000000000",
+    "name" : "emb-GET /get",
+    "start_time_unix_nano" : 1723146380892000000,
+    "end_time_unix_nano" : 1723146390892000000,
+    "status" : "Unset",
+    "events" : [ ],
+    "attributes" : [ {
+      "key" : "http.response.body.size",
+      "value" : "222"
+    }, {
+      "key" : "http.request.method",
+      "value" : "GET"
+    }, {
+      "key" : "emb.private.sequence_id",
+      "value" : "11"
+    }, {
+      "key" : "http.request.body.size",
+      "value" : "111"
+    }, {
+      "key" : "emb.type",
+      "value" : "perf.network_request"
+    }, {
+      "key" : "emb.process_identifier",
+      "value" : "254ec58ba0931b64"
+    }, {
+      "key" : "url.full",
+      "value" : "https://httpbin.org/get"
+    }, {
+      "key" : "http.response.status_code",
+      "value" : "200"
+    } ]
+  }
+  */
 
-  // return NativeModules.EmbraceManager.logNetworkRequest(
-  //   url,
-  //   httpMethod,
-  //   startInMillis,
-  //   endInMillis,
-  //   bytesSent || -1,
-  //   bytesReceived || -1,
-  //   statusCode || -1,
-  //   error,
-  // );
-  return createFalsePromise();
+  /**
+   * iOS / Swift
+  {
+    "end_time_unix_nano" : 1723150350412000000,
+    "trace_id" : "4501f3bab412f48719997d9eac1f618e",
+    "status" : "ok",
+    "name" : "emb-GET /get",
+    "span_id" : "84e49684547d60b0",
+    "attributes" : [ {
+      "key" : "emb.private.sequence_id",
+      "value" : "?"
+    }, {
+      "key" : "http.response.body.size",
+      "value" : "222"
+    }, {
+      "key" : "http.request.method",
+      "value" : "GET"
+    }, {
+      "key" : "http.request.body.size",
+      "value" : "111"
+    }, {
+      "key" : "http.response.status_code",
+      "value" : "200"
+    }, {
+      "key" : "url.full",
+      "value" : "https://httpbin.org/get"
+    }, {
+      "key" : "emb.process_identifier",
+      "value" : "?"
+    }, {
+      "key" : "emb.type",
+      "value" : "perf.network_request"
+    } ],
+    "links" : [ ],
+    "start_time_unix_nano" : 1723150346412000000,
+    "events" : [ ]
+  }
+  */
+
+  return NativeModules.EmbraceManager.logNetworkRequest(
+    url,
+    httpMethod,
+    startInMillis,
+    endInMillis,
+    bytesSent || -1,
+    bytesReceived || -1,
+    statusCode || -1,
+    error,
+  );
 };
 
 export const logNetworkClientError = (
@@ -320,18 +395,81 @@ export const logNetworkClientError = (
   errorType: string,
   errorMessage: string,
 ): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+  /**
+   * Android / Java
+  {
+    "trace_id" : "b95f3899f4dc45b861eb2c1ee32d91f4",
+    "span_id" : "5ebc025d9c88b256",
+    "parent_span_id" : "0000000000000000",
+    "name" : "emb-POST /error",
+    "start_time_unix_nano" : 1723151955086000000,
+    "end_time_unix_nano" : 1723151970086000000,
+    "status" : "Error",
+    "events" : [ ],
+    "attributes" : [ {
+      "key" : "error.type",
+      "value" : "ERROR"
+    }, {
+      "key" : "http.request.method",
+      "value" : "POST"
+    }, {
+      "key" : "emb.private.sequence_id", // from where does it come?
+      "value" : "13"
+    }, {
+      "key" : "error.message",
+      "value" : "error message"
+    }, {
+      "key" : "emb.type",
+      "value" : "perf.network_request"
+    }, {
+      "key" : "emb.error_code",
+      "value" : "failure"
+    }, {
+      "key" : "emb.process_identifier", // from where does it come?
+      "value" : "0e047c8bb522a0d8"
+    }, {
+      "key" : "url.full",
+      "value" : "https://httpbin.org/error"
+    } ]
+  }
+   */
 
-  // return NativeModules.EmbraceManager.logNetworkClientError(
-  //   url,
-  //   httpMethod,
-  //   startInMillis,
-  //   endInMillis,
-  //   errorType,
-  //   errorMessage,
-  // );
-  return createFalsePromise();
+  /**
+   * iOS / Swift
+  {
+    "attributes" : [ {
+      "value" : "ERROR",
+      "key" : "http.response.status_code"
+    }, {
+      "key" : "url.full",
+      "value" : "https://httpbin.org/error"
+    }, {
+      "key" : "emb.type",
+      "value" : "perf.network_request"
+    }, {
+      "key" : "http.request.method",
+      "value" : "POST"
+    } ],
+    "events" : [ ],
+    "span_id" : "b60cb504564cccc5",
+    "name" : "emb-POST /POST",
+    "links" : [ ],
+    "start_time_unix_nano" : 1723152234916999936,
+    "trace_id" : "83230a439e1ce6b361ee189b1aa8f478",
+    "end_time_unix_nano" : 1723152210916999936,
+    "status" : "ok"
+  }
+   */
+  return NativeModules.EmbraceManager.logNetworkClientError(
+    url,
+    httpMethod,
+    startInMillis,
+    endInMillis,
+    errorType,
+    errorMessage,
+  );
 };
+
 export const getLastRunEndState = (): Promise<SessionStatus> =>
   NativeModules.EmbraceManager.getLastRunEndState();
 

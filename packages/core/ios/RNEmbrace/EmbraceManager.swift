@@ -432,6 +432,19 @@ class EmbraceManager: NSObject {
 
         return events
     }
+    
+    private func createNetworkSpanName(url: String, httpMethod: String) -> String {
+        var name = "emb-" + httpMethod.uppercased()
+
+        if let fullUrl = URL(string: url) {
+            let path = fullUrl.path
+            if !path.isEmpty && path != "/" {
+                name += " " + path
+            }
+        }
+        
+        return name
+    }
 
     @objc
     func startSpan(
@@ -578,6 +591,75 @@ class EmbraceManager: NSObject {
                                             attributes: attributeStrings,
                                             events: eventsFrom(array: events),
                                             errorCode: errorCodeFrom(str: errorCodeString))
+
+        resolve(true)
+    }
+    
+    @objc
+    func logNetworkRequest(
+        _ url: String,
+        httpMethod: String,
+        startInMillis: Double,
+        endInMillis: Double,
+        bytesSent: Double,
+        bytesReceived: Double,
+        statusCode: Double,
+        error: String,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        if Embrace.client == nil {
+            reject("RECORD_LOG_NETWORK_REQUEST_ERROR", "Error recording span, Embrace SDK may not be initialized", nil)
+            return
+        }
+
+        let attributes = attributeStringsFrom(dict: [
+            "http.response.status_code": String(Int(statusCode)),
+            "http.request.body.size": String(Int(bytesSent)),
+            "http.response.body.size": String(Int(bytesReceived)),
+            "http.request.method": httpMethod.uppercased(),
+            "url.full": url,
+        ]);
+
+        Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
+                                            type: SpanType.networkHTTP, parent: nil,
+                                            startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
+                                            attributes: attributes,
+                                            events: eventsFrom(array: []),
+                                            errorCode: errorCodeFrom(str: error))
+
+        resolve(true)
+    }
+   
+    @objc
+    func logNetworkClientError(
+        _ url: String,
+        httpMethod: String,
+        startInMillis: Double,
+        endInMillis: Double,
+        errorType: String,
+        error: String,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        if Embrace.client == nil {
+            reject("RECORD_LOG_NETWORK_CLIENT_ERROR_ERROR", "Error recording span, Embrace SDK may not be initialized", nil)
+            return
+        }
+        
+        let attributes = attributeStringsFrom(dict: [
+            "http.request.method": httpMethod.uppercased(),
+            "url.full": url,
+            "error.message": error,
+            "error.type": errorType,
+        ]);
+
+        Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod), type: SpanType.networkHTTP,
+                                            parent: nil,
+                                            startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
+                                            attributes: attributes,
+                                            events: eventsFrom(array: []),
+                                            errorCode: errorCodeFrom(str: error))
 
         resolve(true)
     }
