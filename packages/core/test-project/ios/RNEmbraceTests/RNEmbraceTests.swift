@@ -266,8 +266,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(promise.rejectCalls[0], "Could not retrieve a span with the given id")
     }
 
-    // TODO fails on 6.3 currently due to span.flush call
-    func skipped_testAddSpanEvent() async throws {
+    func testAddSpanEvent() async throws {
         module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
@@ -326,8 +325,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(promise.rejectCalls[0], "Could not retrieve a span with the given id")
     }
 
-    // TODO fails on 6.3 currently due to span.flush call
-    func skipped_testAddSpanAttribute() async throws {
+    func testAddSpanAttribute() async throws {
         module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
@@ -470,8 +468,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["emb.error_code"]!.description, "failure")
     }
 
-    // TODO fails on 6.3 currently due to span.flush call
-    func skipped_testCompletedSpansRemovedOnSessionEnd() async throws {
+    func testCompletedSpansRemovedOnSessionEnd() async throws {
         module.startSpan("stopped-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         module.startSpan("active-span", parentSpanId: "", startTimeMs: 0.0,
