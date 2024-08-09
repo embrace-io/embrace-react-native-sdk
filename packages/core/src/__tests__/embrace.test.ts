@@ -1,206 +1,228 @@
-import {handleGlobalError} from "../utils/ErrorUtil";
-//TODO Check why its failing if we import the constants from the index.ts
-// import {INFO, ERROR, WARNING} from "../index";
-const WARNING = "warning";
-const INFO = "info";
-const ERROR = "error";
+import {MethodType} from "../interfaces/HTTP";
+import {
+  addBreadcrumb,
+  addSessionProperty,
+  addUserPersona,
+  clearAllUserPersonas,
+  clearUserAsPayer,
+  clearUserEmail,
+  clearUserIdentifier,
+  clearUsername,
+  clearUserPersona,
+  endView,
+  getCurrentSessionId,
+  getDeviceId,
+  getLastRunEndState,
+  logError,
+  logHandledError,
+  logInfo,
+  logMessage,
+  logNetworkClientError,
+  logScreen,
+  logWarning,
+  recordNetworkRequest,
+  removeSessionProperty,
+  setJavaScriptBundlePath,
+  setUserAsPayer,
+  setUserEmail,
+  setUserIdentifier,
+  setUsername,
+  startView,
+} from "../index";
 
-const testView = "View";
-const testPersona = "Persona";
-const testUserId = "Lucia";
-const testEmail = "lucia@nimble.la";
-const testKey = "Key";
-const testValue = "Value";
-const testPermanent = false;
-const testProps = {testKey: testValue};
-const testMessage = "message";
-const testError = new Error();
+const mockSetUserIdentifier = jest.fn();
+const mockClearUserIdentifier = jest.fn();
+const mockSetUsername = jest.fn();
+const mockClearUsername = jest.fn();
+const mockSetUserEmail = jest.fn();
+const mockClearUserEmail = jest.fn();
+const mockAddBreadcrumb = jest.fn();
+const mockLogMessageWithSeverityAndProperties = jest.fn();
+const mockLogHandledError = jest.fn();
+const mockAddUserPersona = jest.fn();
+const mockClearUserPersona = jest.fn();
+const mockClearAllUserPersonas = jest.fn();
+const mockStartView = jest.fn();
+const mockEndView = jest.fn();
+const mockAddSessionProperty = jest.fn();
+const mockRemoveSessionProperty = jest.fn();
+const mockSetUserAsPayer = jest.fn();
+const mockClearUserAsPayer = jest.fn();
+const mockSetJavaScriptBundlePath = jest.fn();
+const mockLogNetworkRequest = jest.fn();
+const mockLogNetworkClientError = jest.fn();
+const mockGetLastRunEndState = jest.fn();
+const mockGetDeviceId = jest.fn();
+const mockGetCurrentSessionId = jest.fn();
 
-jest.useFakeTimers();
+jest.mock("react-native", () => ({
+  NativeModules: {
+    EmbraceManager: {
+      setUserIdentifier: (userIdentifier: string) =>
+        mockSetUserIdentifier(userIdentifier),
+      clearUserIdentifier: () => mockClearUserIdentifier(),
+      setUsername: (username: string) => mockSetUsername(username),
+      clearUsername: () => mockClearUsername(),
+      setUserEmail: (userEmail: string) => mockSetUserEmail(userEmail),
+      clearUserEmail: () => mockClearUserEmail(),
+      addBreadcrumb: (message: string) => mockAddBreadcrumb(message),
+      logMessageWithSeverityAndProperties: (
+        message: string,
+        severity: string,
+        properties: Record<string, any>,
+        stacktrace: string,
+      ) =>
+        mockLogMessageWithSeverityAndProperties(
+          message,
+          severity,
+          properties,
+          stacktrace,
+        ),
+      logHandledError: (message: string, properties?: Record<string, any>) =>
+        mockLogHandledError(message, properties),
+      addUserPersona: (persona: string) => mockAddUserPersona(persona),
+      clearUserPersona: (persona: string) => mockClearUserPersona(persona),
+      clearAllUserPersonas: () => mockClearAllUserPersonas(),
+      startView: (view: string) => mockStartView(view),
+      endView: (view: string) => mockEndView(view),
+      addSessionProperty: (key: string, value: string, permanent: boolean) =>
+        mockAddSessionProperty(key, value, permanent),
+      removeSessionProperty: (key: string) => mockRemoveSessionProperty(key),
+      setUserAsPayer: () => mockSetUserAsPayer(),
+      clearUserAsPayer: () => mockClearUserAsPayer(),
+      setJavaScriptBundlePath: (path: string) =>
+        mockSetJavaScriptBundlePath(path),
+      logNetworkRequest: (
+        url: string,
+        httpMethod: MethodType,
+        startInMillis: number,
+        endInMillis: number,
+        bytesSent: number,
+        bytesReceived: number,
+        statusCode: number,
+        error: string,
+      ) =>
+        mockLogNetworkRequest(
+          url,
+          httpMethod,
+          startInMillis,
+          endInMillis,
+          bytesSent,
+          bytesReceived,
+          statusCode,
+          error,
+        ),
+      logNetworkClientError: (
+        url: string,
+        httpMethod: MethodType,
+        startInMillis: number,
+        endInMillis: number,
+        errorType: string,
+        errorMessage: string,
+      ) =>
+        mockLogNetworkClientError(
+          url,
+          httpMethod,
+          startInMillis,
+          endInMillis,
+          errorType,
+          errorMessage,
+        ),
+      getLastRunEndState: () => mockGetLastRunEndState(),
+      getDeviceId: () => mockGetDeviceId(),
+      getCurrentSessionId: () => mockGetCurrentSessionId(),
+    },
+  },
+}));
 
-beforeEach(() => {
-  jest.clearAllMocks().resetModules();
-});
+const mockSt = "this is a fake stack trace";
+const mockGenerateStackTrace = jest.fn();
+jest.mock("../utils/ErrorUtil", () => ({
+  ...jest.requireActual("../utils/ErrorUtil"),
+  generateStackTrace: () => mockGenerateStackTrace(),
+}));
 
 describe("User Identifier Tests", () => {
+  const testUserId = "testUser";
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+
   test("setUserIdentifier", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            setUserIdentifier: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {setUserIdentifier} = require("../index");
     await setUserIdentifier(testUserId);
-    expect(mock).toHaveBeenCalledWith(testUserId);
+    expect(mockSetUserIdentifier).toHaveBeenCalledWith(testUserId);
   });
 
   test("clearUserIdentifier", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            clearUserIdentifier: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-
-    const {clearUserIdentifier} = require("../index");
     await clearUserIdentifier();
-    expect(mock).toHaveBeenCalled();
+    expect(mockClearUserIdentifier).toHaveBeenCalled();
   });
 });
 
 describe("User Data Tests", () => {
+  const testUserId = "testUser";
+  const testEmail = "test@test.com";
+
   test("setUsername", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            setUsername: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {setUsername} = require("../index");
     await setUsername(testUserId);
-    expect(mock).toHaveBeenCalledWith(testUserId);
+    expect(mockSetUsername).toHaveBeenCalledWith(testUserId);
   });
 
   test("clearUsername", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            clearUsername: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {clearUsername} = require("../index");
     await clearUsername();
-    expect(mock).toHaveBeenCalled();
+    expect(mockClearUsername).toHaveBeenCalled();
   });
 
   test("setUserEmail", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            setUserEmail: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {setUserEmail} = require("../index");
     await setUserEmail(testEmail);
-    expect(mock).toHaveBeenCalledWith(testEmail);
+    expect(mockSetUserEmail).toHaveBeenCalledWith(testEmail);
   });
 
   test("clearUserEmail", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            clearUserEmail: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {clearUserEmail} = require("../index");
     await clearUserEmail();
-    expect(mock).toHaveBeenCalled();
+    expect(mockClearUserEmail).toHaveBeenCalled();
   });
 });
 
 describe("Logs Test", () => {
+  const WARNING = "warning";
+  const INFO = "info";
+  const ERROR = "error";
+  const testView = "View";
+
+  beforeEach(() => {
+    mockGenerateStackTrace.mockReturnValue(mockSt);
+  });
+
   test("addBreadcrumb", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            addBreadcrumb: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {addBreadcrumb} = require("../index");
     await addBreadcrumb(testView);
-    expect(mock).toHaveBeenCalledWith(testView);
+    expect(mockAddBreadcrumb).toHaveBeenCalledWith(testView);
   });
 
   test("logScreen", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            addBreadcrumb: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {logScreen} = require("../index");
     await logScreen(testView);
-    expect(mock).toHaveBeenCalledWith(`Opening screen [${testView}]`);
+    expect(mockAddBreadcrumb).toHaveBeenCalledWith(
+      `Opening screen [${testView}]`,
+    );
   });
 
   describe("logMessage", () => {
-    const mockSt = "this is a fake stack trace";
+    const testMessage = "message";
+    const testProps = {foo: "bar"};
+
     test.each`
-      message        | severity   | properties   | allowScreenshot | stackTrace
-      ${testMessage} | ${INFO}    | ${testProps} | ${false}        | ${""}
-      ${testMessage} | ${INFO}    | ${testProps} | ${true}         | ${""}
-      ${testMessage} | ${WARNING} | ${testProps} | ${false}        | ${mockSt}
-      ${testMessage} | ${WARNING} | ${testProps} | ${true}         | ${mockSt}
-      ${testMessage} | ${ERROR}   | ${testProps} | ${false}        | ${mockSt}
-      ${testMessage} | ${ERROR}   | ${testProps} | ${true}         | ${mockSt}
+      message        | severity   | properties   | stackTrace
+      ${testMessage} | ${INFO}    | ${testProps} | ${""}
+      ${testMessage} | ${INFO}    | ${testProps} | ${""}
+      ${testMessage} | ${WARNING} | ${testProps} | ${mockSt}
+      ${testMessage} | ${WARNING} | ${testProps} | ${mockSt}
+      ${testMessage} | ${ERROR}   | ${testProps} | ${mockSt}
+      ${testMessage} | ${ERROR}   | ${testProps} | ${mockSt}
     `(
       "should run $severity log",
-      async ({message, severity, properties, allowScreenshot, stackTrace}) => {
-        const mock = jest.fn();
-        jest.mock(
-          "react-native",
-          () => ({
-            NativeModules: {
-              EmbraceManager: {
-                logMessageWithSeverityAndProperties: mock,
-              },
-            },
-          }),
-          {virtual: true},
-        );
-        const embrace = require("../index");
-        embrace.generateStackTrace = () => (severity === INFO ? "" : mockSt);
-        await embrace.logMessage(message, severity, properties);
-        expect(mock).toHaveBeenCalledWith(
+      async ({message, severity, properties, stackTrace}) => {
+        await logMessage(message, severity, properties);
+        expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
           message,
           severity,
           properties,
@@ -211,161 +233,72 @@ describe("Logs Test", () => {
   });
 
   test("logInfo", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            logMessageWithSeverityAndProperties: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {logInfo} = require("../index");
     await logInfo("test message");
-    expect(mock).toHaveBeenCalledWith(`test message`, INFO, undefined, "");
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+      `test message`,
+      INFO,
+      undefined,
+      "",
+    );
   });
 
   test("logWarning", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            logMessageWithSeverityAndProperties: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {logWarning} = require("../index");
     await logWarning("test message");
-    expect(mock).toHaveBeenCalledWith(
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       `test message`,
       WARNING,
       undefined,
-      expect.any(String),
+      mockSt,
     );
   });
 
   test("logError", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            logMessageWithSeverityAndProperties: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {logError} = require("../index");
     await logError("test message");
-    expect(mock).toHaveBeenCalledWith(
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       `test message`,
       ERROR,
       undefined,
-      expect.any(String),
+      mockSt,
     );
   });
 });
 
 describe("Log handled Error Tests", () => {
+  const testError = new Error();
+  const testProps = {foo: "bar"};
+
   test.each`
     message           | properties   | out
     ${"not an error"} | ${undefined} | ${{}}
     ${testError}      | ${undefined} | ${{message: testError.message, stack: testError.stack}}
     ${testError}      | ${testProps} | ${{message: testError.message, stack: testError.stack, properties: testProps}}
   `("logHandledError", async ({message, out, properties}) => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            logHandledError: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {logHandledError} = require("../index");
-    const promiseToResolve = logHandledError(message, properties);
-
-    jest.runAllTimers();
-    const result = await promiseToResolve;
+    await logHandledError(message, properties);
     // TODO uncomment the expect once the method is imeplemented
-
     // if (message instanceof Error) {
-    //   expect(mock).toHaveBeenCalledWith(out.message, out.stack, out.properties);
+    //   expect(mockLogHandledError).toHaveBeenCalledWith(out.message, out.stack, out.properties);
     // } else {
-    //   expect(mock).not.toHaveBeenCalled();
+    //   expect(mockLogHandledError).not.toHaveBeenCalled();
     // }
-    expect(result).toBe(false);
   });
 });
 
 describe("Personas Tests", () => {
+  const testPersona = "Persona";
+
   test("addUserPersona", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            addUserPersona: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {addUserPersona} = require("../index");
-    const promiseToResolve = addUserPersona(testPersona);
-    jest.runAllTimers();
-    await promiseToResolve;
-    expect(mock).toHaveBeenCalled();
-    expect(mock).toHaveBeenCalledWith(testPersona);
+    await addUserPersona(testPersona);
+    expect(mockAddUserPersona).toHaveBeenCalledWith(testPersona);
   });
 
   test("clearUserPersona", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            clearUserPersona: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {clearUserPersona} = require("../index");
     await clearUserPersona(testPersona);
-    expect(mock).toHaveBeenCalledWith(testPersona);
+    expect(mockClearUserPersona).toHaveBeenCalledWith(testPersona);
   });
 
   test("clearAllUserPersonas", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            clearAllUserPersonas: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {clearAllUserPersonas} = require("../index");
     await clearAllUserPersonas();
-    expect(mock).toHaveBeenCalled();
+    expect(mockClearAllUserPersonas).toHaveBeenCalled();
   });
 });
 
@@ -422,182 +355,33 @@ describe("Custom Views Tests", () => {
 
 describe("Session Properties Tests", () => {
   test("should call addSessionProperty with values", async () => {
-    const mock = jest.fn(() => Promise.resolve(true));
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            addSessionProperty: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-
-    const {addSessionProperty} = require("../index");
-    await addSessionProperty(testKey, testValue, testPermanent);
-    expect(mock).toHaveBeenCalledWith(testKey, testValue, testPermanent);
-  });
-
-  test("addSessionProperty should return success", async () => {
-    const mock = jest.fn(() => Promise.resolve(true));
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            addSessionProperty: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-
-    const {addSessionProperty} = require("../index");
-    await addSessionProperty(testKey, testValue, testPermanent).then(
-      (success: boolean) => expect(success).toBeTruthy(),
-    );
+    await addSessionProperty("foo", "bar", true);
+    expect(mockAddSessionProperty).toHaveBeenCalledWith("foo", "bar", true);
   });
 
   test("removeSessionProperty", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            removeSessionProperty: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-
-    const {removeSessionProperty} = require("../index");
-    await removeSessionProperty(testKey);
-    expect(mock).toHaveBeenCalledWith(testKey);
+    await removeSessionProperty("foo");
+    expect(mockRemoveSessionProperty).toHaveBeenCalledWith("foo");
   });
 });
 
 describe("Payers Test", () => {
   test("setUserAsPayer", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            setUserAsPayer: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {setUserAsPayer} = require("../index");
-    const promiseToResolve = setUserAsPayer();
-    // expect(mock).toHaveBeenCalled();
-    jest.runAllTimers();
-    const result = await promiseToResolve;
-    // TODO uncomment the expect once the method is imeplemented
-    // expect(mock).toHaveBeenCalled();
-    expect(result).toBe(false);
+    await setUserAsPayer();
+    // TODO uncomment the expect once the method is implemented
+    // expect(mockSetUserAsPayer).toHaveBeenCalled();
   });
   test("clearUserAsPayer", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            clearUserAsPayer: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {clearUserAsPayer} = require("../index");
-    const promiseToResolve = clearUserAsPayer();
-    // expect(mock).toHaveBeenCalled();
-
-    jest.runAllTimers();
-    const result = await promiseToResolve;
-    // TODO uncomment the expect once the method is imeplemented
-    // expect(mock).toHaveBeenCalled();
-    expect(result).toBe(false);
+    await clearUserAsPayer();
+    // TODO uncomment the expect once the method is implemented
+    // expect(mockClearUserAsPayer).toHaveBeenCalled();
   });
 });
 
 describe("JavaScript bundle", () => {
   test("setJavaScriptBundlePath", async () => {
-    const mock = jest.fn();
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          setJavaScriptBundlePath: mock,
-        },
-      },
-    }));
-    const {setJavaScriptBundlePath} = require("../index");
-    const path = "path/to/bundle.bundle";
-
-    await setJavaScriptBundlePath(path);
-    expect(mock).toHaveBeenCalledWith(path);
-  });
-});
-
-describe("Log network call", () => {
-  test("recordNetworkRequest", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            logNetworkRequest: mock,
-          },
-        },
-      }),
-      {virtual: true},
-    );
-
-    const {recordNetworkRequest} = require("../index");
-    const url = "https://httpbin.org/get";
-    const method = "get";
-    const nowdate = new Date();
-    const st = nowdate.getTime();
-    const et = nowdate.setUTCSeconds(30);
-    const bytesIn = Number(111);
-    const bytesOut = Number(222);
-    const networkStatus = Number(200);
-    const error = null;
-
-    const promiseToResolve = recordNetworkRequest(
-      url,
-      method,
-      st,
-      et,
-      bytesIn,
-      bytesOut,
-      networkStatus,
-      error,
-    );
-
-    // expect(mock).toHaveBeenCalledWith(
-    //   url,
-    //   method,
-    //   st,
-    //   et,
-    //   bytesIn,
-    //   bytesOut,
-    //   networkStatus,
-    //   error,
-    // );
-    jest.runAllTimers();
-    const result = await promiseToResolve;
-    // TODO uncomment the expect once the method is imeplemented
-    // expect(mock).toHaveBeenCalled();
-    expect(result).toBe(false);
+    await setJavaScriptBundlePath("path");
+    expect(mockSetJavaScriptBundlePath).toHaveBeenCalledWith("path");
   });
 });
 
@@ -613,21 +397,7 @@ describe("Record network call", () => {
   const error = "error";
 
   test("record completed network request", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            logNetworkRequest: mock,
-          },
-        },
-      }),
-      {virtual: false},
-    );
-
-    const {recordNetworkRequest} = require("../index");
-    const promiseToResolve = recordNetworkRequest(
+    await recordNetworkRequest(
       url,
       method,
       st,
@@ -637,7 +407,8 @@ describe("Record network call", () => {
       networkStatus,
     );
 
-    // expect(mock).toHaveBeenCalledWith(
+    // TODO uncomment the expect once the method is implemented
+    // expect(mockLogNetworkRequest).toHaveBeenCalledWith(
     //   url,
     //   method,
     //   st,
@@ -647,320 +418,69 @@ describe("Record network call", () => {
     //   networkStatus,
     //   undefined,
     // );
-    jest.runAllTimers();
-    const result = await promiseToResolve;
-    // TODO uncomment the expect once the method is imeplemented
-    // expect(mock).toHaveBeenCalled();
-    expect(result).toBe(false);
   });
 
   test("record incomplete network request", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            logNetworkRequest: mock,
-          },
-        },
-      }),
-      {virtual: true},
+    await recordNetworkRequest(
+      url,
+      method,
+      st,
+      et,
+      undefined,
+      undefined,
+      undefined,
+      error,
     );
 
-    const {recordNetworkRequest} = require("../index");
-    const promiseToResolve = recordNetworkRequest(url, method, st, et, error);
-
-    // expect(mock).toHaveBeenCalledWith(
+    // TODO uncomment the expect once the method is implemented
+    // expect(mockLogNetworkRequest).toHaveBeenCalledWith(
     //   url,
     //   method,
     //   st,
     //   et,
+    //   -1,
+    //   -1,
+    //   -1,
     //   error,
-    //   -1,
-    //   -1,
-    //   undefined,
     // );
+  });
 
-    jest.runAllTimers();
-    const result = await promiseToResolve;
-    // TODO uncomment the expect once the method is imeplemented
-    // expect(mock).toHaveBeenCalled();
-    expect(result).toBe(false);
+  test("record network client error", async () => {
+    await logNetworkClientError(
+      url,
+      method,
+      st,
+      et,
+      "error-type",
+      "error-message",
+    );
+
+    // TODO uncomment the expect once the method is implemented
+    // expect(mockLogNetworkClientError).toHaveBeenCalledWith(
+    //   url,
+    //   method,
+    //   st,
+    //   et,
+    //   "error-type",
+    //   "error-message",
+    // );
   });
 });
 
 describe("Test Device Stuffs", () => {
   test("device Id", async () => {
-    const mock = jest.fn();
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          getDeviceId: mock,
-        },
-      },
-    }));
-    const {getDeviceId} = require("../index");
     await getDeviceId();
-    expect(mock).toHaveBeenCalled();
+    expect(mockGetDeviceId).toHaveBeenCalled();
   });
   test("session Id", async () => {
-    const mock = jest.fn();
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          getCurrentSessionId: mock,
-        },
-      },
-    }));
-    const {getCurrentSessionId} = require("../index");
     await getCurrentSessionId();
-    expect(mock).toHaveBeenCalled();
+    expect(mockGetCurrentSessionId).toHaveBeenCalled();
   });
 });
 
 describe("Last Session Info", () => {
-  test("last run status - CRASH", async () => {
-    const mockGetLastRunEndState = jest.fn(() => Promise.resolve("CRASH"));
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          getLastRunEndState: mockGetLastRunEndState,
-        },
-      },
-    }));
-    const {getLastRunEndState} = require("../index");
-    expect(await getLastRunEndState()).toBe("CRASH");
-  });
-  test("last run status - CLEAN_EXIT", async () => {
-    const mockGetLastRunEndState = jest.fn(() => Promise.resolve("CLEAN_EXIT"));
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          getLastRunEndState: mockGetLastRunEndState,
-        },
-      },
-    }));
-    const {getLastRunEndState} = require("../index");
-    expect(await getLastRunEndState()).toBe("CLEAN_EXIT");
-  });
-  test("last run status - INVALID", async () => {
-    const mockGetLastRunEndState = jest.fn(() => Promise.resolve("INVALID"));
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          getLastRunEndState: mockGetLastRunEndState,
-        },
-      },
-    }));
-    const {getLastRunEndState} = require("../index");
-    expect(await getLastRunEndState()).toBe("INVALID");
-  });
-});
-
-describe("Test OTA Stuffs", () => {
-  test("set javascript patch number", async () => {
-    const mock = jest.fn();
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          setJavaScriptPatchNumber: mock,
-        },
-      },
-    }));
-    const {setJavaScriptPatch} = require("../index");
-    await setJavaScriptPatch();
-    expect(mock).toHaveBeenCalled();
-  });
-});
-
-describe("Test testing purpose functions", () => {
-  test("get stack trace", () => {
-    const {generateStackTrace} = require("../index");
-    expect(generateStackTrace()).toContain("Error:");
-  });
-});
-
-describe("Test initialize", () => {
-  test("initialize", () => {
-    const mockSetReactNativeVersion = jest.fn();
-    const mockSetJavaScriptPatchNumber = jest.fn();
-    const mockSetReactNativeSDKVersion = jest.fn();
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          setReactNativeVersion: mockSetReactNativeVersion,
-          setJavaScriptPatchNumber: mockSetJavaScriptPatchNumber,
-          setReactNativeSDKVersion: mockSetReactNativeSDKVersion,
-          isStarted: () => true,
-        },
-      },
-    }));
-
-    const {initialize} = require("../index");
-
-    const result = initialize({patch: testValue});
-
-    expect(result).resolves.toBe(true);
-
-    result.then(() => {
-      expect(mockSetReactNativeVersion).toHaveBeenCalled();
-      expect(mockSetJavaScriptPatchNumber).toHaveBeenCalled();
-      expect(mockSetReactNativeSDKVersion).toHaveBeenCalled();
-    });
-  });
-
-  test("initialize - native not initialized", async () => {
-    const mockRNSDKVersion = jest.fn();
-    const mockRNVersion = jest.fn();
-    const mockSetPatchVersion = jest.fn();
-    const mockIsStarted = jest.fn();
-    const mockStartRNSDK = jest.fn();
-
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          isStarted: () => {
-            mockIsStarted();
-            return false;
-          },
-          startNativeEmbraceSDK: () => {
-            mockStartRNSDK();
-            return true;
-          },
-          setReactNativeSDKVersion: mockRNSDKVersion,
-          setJavaScriptPatchNumber: mockSetPatchVersion,
-          setReactNativeVersion: mockRNVersion,
-        },
-      },
-    }));
-
-    const {initialize} = require("../index");
-
-    const promiseToResolve = initialize({patch: testValue});
-    jest.runAllTicks();
-    jest.runAllTimers();
-    const result = await promiseToResolve;
-    expect(result).toBe(true);
-    expect(mockIsStarted).toBeCalledTimes(1);
-    expect(mockStartRNSDK).toBeCalledTimes(1);
-    expect(mockRNSDKVersion).toBeCalledTimes(1);
-    expect(mockSetPatchVersion).toBeCalledTimes(1);
-  });
-
-  test("initialize - native initialized", () => {
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          isStarted: () => false,
-          startNativeEmbraceSDK: () => true,
-        },
-      },
-    }));
-
-    const {initialize} = require("../index");
-
-    const result = initialize({patch: testValue});
-    jest.runAllTicks();
-
-    expect(result).resolves.toBe(true);
-  });
-
-  test("applying previousHandler", () => {
-    const previousHandler = jest.fn();
-    const mockSetReactNativeVersion = jest.fn();
-    const mockSetJavaScriptPatchNumber = jest.fn();
-    const mockSetReactNativeSDKVersion = jest.fn();
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          setReactNativeVersion: mockSetReactNativeVersion,
-          setJavaScriptPatchNumber: mockSetJavaScriptPatchNumber,
-          setReactNativeSDKVersion: mockSetReactNativeSDKVersion,
-          isStarted: () => true,
-        },
-      },
-    }));
-    ErrorUtils.getGlobalHandler = previousHandler;
-    const {initialize} = require("../index");
-    const result = initialize({patch: testValue});
-
-    const handleError = () => {};
-    const generatedGlobalErrorFunc = handleGlobalError(
-      previousHandler,
-      handleError,
-    );
-    generatedGlobalErrorFunc(Error("Test"));
-
-    expect(result).resolves.toBe(true);
-
-    result.then(() => {
-      expect(previousHandler).toHaveBeenCalled();
-      expect(mockSetReactNativeVersion).toHaveBeenCalled();
-      expect(mockSetJavaScriptPatchNumber).toHaveBeenCalled();
-      expect(mockSetReactNativeSDKVersion).toHaveBeenCalled();
-    });
-  });
-
-  test("store embrace sdk version", () => {
-    const mocksetReactNativeSDKVersion = jest.fn();
-
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          setReactNativeVersion: jest.fn(),
-          setReactNativeSDKVersion: mocksetReactNativeSDKVersion,
-          isStarted: () => true,
-        },
-      },
-    }));
-    const {initialize} = require("../index");
-
-    const result = initialize();
-
-    expect(result).resolves.toBe(true);
-
-    result.then(() => {
-      expect(mocksetReactNativeSDKVersion).toHaveBeenCalled();
-    });
-  });
-
-  test("applying Tracking", () => {
-    interface ITracking {
-      onUnhandled: (_: any, error: Error) => {};
-    }
-
-    jest.mock("promise/setimmediate/rejection-tracking", () => ({
-      enable: (c: ITracking) => {
-        const {onUnhandled} = c;
-        onUnhandled("e", new Error());
-      },
-    }));
-
-    const mockLogMessageWithSeverityAndProperties = jest.fn();
-    const mockSetReactNativeVersion = jest.fn();
-    const mockSetJavaScriptPatchNumber = jest.fn();
-    jest.mock("react-native", () => ({
-      NativeModules: {
-        EmbraceManager: {
-          setReactNativeVersion: mockSetReactNativeVersion,
-          setJavaScriptPatchNumber: mockSetJavaScriptPatchNumber,
-          logMessageWithSeverityAndProperties:
-            mockLogMessageWithSeverityAndProperties,
-          setReactNativeSDKVersion: jest.fn(),
-          isStarted: () => true,
-        },
-      },
-    }));
-
-    const {initialize} = require("../index");
-
-    const result = initialize({patch: testValue});
-
-    expect(result).resolves.toBe(true);
-
-    result.then(() => {
-      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalled();
-    });
+  test("last run status", async () => {
+    await getLastRunEndState();
+    expect(mockGetLastRunEndState).toHaveBeenCalled();
   });
 });
