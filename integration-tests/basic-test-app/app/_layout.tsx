@@ -12,25 +12,36 @@ import {useColorScheme} from "@/hooks/useColorScheme";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(false);
+  const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(true);
+  /*
   useEffect(() => {
     const init = async () => {
-      const hasStarted = await initEmbrace({
-        sdkConfig: {
-          ios: {
-            appId: "abcdf",
-            endpointBaseUrl: "http://localhost:8877",
+      try {
+        console.log("starting Embrace...");
+        const hasStarted = await initEmbrace({
+          sdkConfig: {
+            ios: {
+              appId: "abcdf",
+              endpointBaseUrl: "http://localhost:8877",
+            },
           },
-        },
-      });
+        });
 
-      if (hasStarted) {
-        setEmbraceSDKLoaded(true);
+        console.log("hasStarted: ", hasStarted);
+
+        if (hasStarted) {
+          setEmbraceSDKLoaded(true);
+        }
+      } catch (e) {
+        console.log("failed to start: ", e);
       }
     };
 
     init();
   }, []);
+
+   */
+  console.log("HERE");
 
   const colorScheme = useColorScheme();
   const [fontsLoaded] = useFonts({

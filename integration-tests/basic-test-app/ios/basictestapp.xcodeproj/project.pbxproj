@@ -10,6 +10,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		3039DCCE2C66935F0026E385 /* StartEmbrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3039DCCD2C66935F0026E385 /* StartEmbrace.swift */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		5E3B92574E64022D6AFEC45B /* libPods-basictestapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 944729EF704C21B8EA6BD69C /* libPods-basictestapp.a */; };
 		6AA4F1CD8B974BB486CFAB20 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8BAAA6C27F45449B77BA5B /* noop-file.swift */; };
@@ -24,6 +25,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = basictestapp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = basictestapp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = basictestapp/main.m; sourceTree = "<group>"; };
+		3039DCCD2C66935F0026E385 /* StartEmbrace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartEmbrace.swift; sourceTree = "<group>"; };
 		6C0966463436C993EB8E74FB /* Pods-basictestapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basictestapp.release.xcconfig"; path = "Target Support Files/Pods-basictestapp/Pods-basictestapp.release.xcconfig"; sourceTree = "<group>"; };
 		927D8B0C1EAE4AE1A3FF6CFE /* basictestapp-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "basictestapp-Bridging-Header.h"; path = "basictestapp/basictestapp-Bridging-Header.h"; sourceTree = "<group>"; };
 		944729EF704C21B8EA6BD69C /* libPods-basictestapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-basictestapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +52,7 @@
 		13B07FAE1A68108700A75B9A /* basictestapp */ = {
 			isa = PBXGroup;
 			children = (
+				3039DCCD2C66935F0026E385 /* StartEmbrace.swift */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -349,6 +352,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3039DCCE2C66935F0026E385 /* StartEmbrace.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
@@ -484,10 +488,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -545,10 +546,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

@@ -1,19 +1,15 @@
 #import "AppDelegate.h"
 
-#import <EmbraceIO/EmbraceIO-Swift.h>
-
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
+
+#import <ExpoModulesCore-Swift.h>
+#import "basictestapp-Swift.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  /*
-  EMBOptions* options = [[EMBOptions alloc] initWithAppId:@"afk23" appGroupId:nil platform:EMBPlatformReactNative];
-  [Embrace setupWithOptions:options];
-  [[Embrace client] startAndReturnError:&error];
-   */
    
   self.moduleName = @"main";
 
@@ -21,7 +17,15 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
 
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+
+  [super application:application didFinishLaunchingWithOptions:launchOptions];
+  
+  dispatch_async(dispatch_get_main_queue(), ^ {
+    FooWrapper* wrapper = [[FooWrapper alloc]init];
+    [wrapper startEmbrace];
+  });
+  
+   return YES;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
