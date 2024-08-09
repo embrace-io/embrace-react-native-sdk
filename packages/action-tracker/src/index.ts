@@ -57,7 +57,7 @@ export const buildEmbraceMiddleware = () => {
 
           await Promise.all(attributePromises);
 
-          NativeModules.EmbraceManager.stopSpan(spanId, undefined, endTime);
+          NativeModules.EmbraceManager.stopSpan(spanId, "None", endTime);
         }
         return result;
       } catch (e) {
