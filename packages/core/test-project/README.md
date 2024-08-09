@@ -8,9 +8,10 @@ yarn install
 
 ## iOS
 
-To make sure we are pulling the latest iOS SDK version
+To make sure we are pulling the latest iOS SDK version:
 
 ```bash
+cd ios
 pod cache clean --all 
 pod repo update --verbose
 pod deintegrate ;

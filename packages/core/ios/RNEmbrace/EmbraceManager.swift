@@ -622,7 +622,7 @@ class EmbraceManager: NSObject {
         ]);
 
         Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
-                                            type: SpanType.networkHTTP, parent: nil,
+                                            type: SpanType.networkRequest, parent: nil,
                                             startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
                                             attributes: attributes,
                                             events: eventsFrom(array: []),
@@ -654,7 +654,8 @@ class EmbraceManager: NSObject {
             "error.type": errorType,
         ]);
 
-        Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod), type: SpanType.networkHTTP,
+        Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
+                                            type: SpanType.networkRequest,
                                             parent: nil,
                                             startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
                                             attributes: attributes,

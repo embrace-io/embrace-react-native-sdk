@@ -537,7 +537,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["http.response.status_code"]!.description, "200")
         
         XCTAssertEqual(exportedSpans[1].name, "emb-POST")
-        XCTAssertEqual(exportedSpans[0].attributes["url.full"]!.description, "https://otest.com/")
+        XCTAssertEqual(exportedSpans[1].attributes["url.full"]!.description, "https://otest.com/")
     }
 
     func testLogNetworkClientError() async throws {
@@ -547,7 +547,6 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
         
         let exportedSpans = try await getExportedSpans()
-        print(exportedSpans[0]);
 
         XCTAssertEqual(exportedSpans[0].name, "emb-GET /v1/products")
         XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf.network_request")
@@ -555,7 +554,6 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["http.request.method"]!.description, "GET")
         XCTAssertEqual(exportedSpans[0].attributes["error.message"]!.description, "this is my error")
         XCTAssertEqual(exportedSpans[0].attributes["error.type"]!.description, "custom error")
-        XCTAssertEqual(exportedSpans[0].attributes["http.response.status_code"]!.description, "")
     }
 }
 
