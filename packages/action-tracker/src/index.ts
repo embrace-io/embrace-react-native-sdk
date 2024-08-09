@@ -25,12 +25,13 @@ export const buildEmbraceMiddleware = () => {
       const startTime = new Date().getTime();
       const attributes = {
         name: action.type.toString().toUpperCase(),
-        payload_size: (zip(action.payload || 0).length).toString(),
+        payload_size: zip(action.payload || 0).length.toString(),
         "emb.type": "sys.rn_action",
         outcome: "INCOMPLETE",
       };
       const spanId = await NativeModules.EmbraceManager.startSpan(
         "emb-rn-action",
+        undefined,
         startTime,
       );
       const attributePromises: Promise<boolean>[] = Object.entries(
@@ -55,8 +56,6 @@ export const buildEmbraceMiddleware = () => {
             ),
           );
 
-          await Promise.all(attributePromises);
-
           NativeModules.EmbraceManager.stopSpan(spanId, "None", endTime);
         }
         return result;
@@ -75,7 +74,6 @@ export const buildEmbraceMiddleware = () => {
               "FAIL",
             ),
           );
-          await Promise.all(attributePromises);
 
           NativeModules.EmbraceManager.stopSpan(spanId, "Failure", endTime);
           throw e;
