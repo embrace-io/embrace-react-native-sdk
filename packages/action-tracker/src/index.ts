@@ -25,7 +25,7 @@ export const buildEmbraceMiddleware = () => {
       const startTime = new Date().getTime();
       const attributes = {
         name: action.type.toString().toUpperCase(),
-        payload_size: zip(action.payload || 0).length,
+        payload_size: (zip(action.payload || 0).length).toString(),
         "emb.type": "sys.rn_action",
         outcome: "INCOMPLETE",
       };
