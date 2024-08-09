@@ -98,7 +98,7 @@ class EmbraceManager: NSObject {
     
     @objc(addBreadcrumb:resolver:rejecter:)
     func addBreadcrumb(_ event: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        // Add function returns empty if it sucess, so I specify true as return
+        // Add function returns empty if it succeeds, so I specify true as return
         if ((Embrace.client?.add(event: .breadcrumb(event))) != nil){
             resolve(true)
         } else {
