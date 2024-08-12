@@ -391,14 +391,14 @@ class EmbraceManager: NSObject {
 
     private func errorCodeFrom(str: String) -> ErrorCode? {
         switch str {
-        case "Failure":
-            return .failure
-        case "UserAbandon":
-            return .userAbandon
-        case "Unknown":
-            return .unknown
-        default:
-            return nil
+            case "Failure":
+                return .failure
+            case "UserAbandon":
+                return .userAbandon
+            case "Unknown":
+                return .unknown
+            default:
+                return nil
         }
     }
 
@@ -603,30 +603,40 @@ class EmbraceManager: NSObject {
         endInMillis: Double,
         bytesSent: Double,
         bytesReceived: Double,
-        statusCode: Double,
+        statusCode: Int,
         error: String,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
         if Embrace.client == nil {
-            reject("RECORD_LOG_NETWORK_REQUEST_ERROR", "Error recording span, Embrace SDK may not be initialized", nil)
+            reject("RECORD_LOG_NETWORK_REQUEST_ERROR", "Error recording a network request, Embrace SDK may not be initialized", nil)
             return
         }
-
-        let attributes = attributeStringsFrom(dict: [
-            "http.response.status_code": String(Int(statusCode)),
-            "http.request.body.size": String(Int(bytesSent)),
-            "http.response.body.size": String(Int(bytesReceived)),
+        
+        var attributes = [
             "http.request.method": httpMethod.uppercased(),
             "url.full": url,
-        ]);
+        ];
+
+        if statusCode >= 0 {
+            attributes["http.response.status_code"] = String(statusCode);
+        }
+        
+        if bytesSent >= 0 {
+            attributes["http.request.body.size"] = String(Int(bytesSent));
+        }
+        
+        if bytesReceived >= 0 {
+            attributes["http.response.body.size"] = String(Int(bytesReceived));
+        }
 
         Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
                                             type: SpanType.networkRequest, parent: nil,
                                             startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
-                                            attributes: attributes,
+                                            attributes: attributeStringsFrom(dict: attributes as NSDictionary),
                                             events: eventsFrom(array: []),
-                                            errorCode: errorCodeFrom(str: error))
+                                            errorCode: errorCodeFrom(str: error)
+        );
 
         resolve(true)
     }
@@ -638,29 +648,33 @@ class EmbraceManager: NSObject {
         startInMillis: Double,
         endInMillis: Double,
         errorType: String,
-        error: String,
+        errorMessage: String,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
         if Embrace.client == nil {
-            reject("RECORD_LOG_NETWORK_CLIENT_ERROR_ERROR", "Error recording span, Embrace SDK may not be initialized", nil)
+            reject("RECORD_LOG_NETWORK_CLIENT_ERROR_ERROR", "Error recording a network client error, Embrace SDK may not be initialized", nil)
             return
         }
         
-        let attributes = attributeStringsFrom(dict: [
-            "http.request.method": httpMethod.uppercased(),
-            "url.full": url,
-            "error.message": error,
-            "error.type": errorType,
-        ]);
-
         Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
                                             type: SpanType.networkRequest,
                                             parent: nil,
                                             startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
-                                            attributes: attributes,
+                                            attributes: attributeStringsFrom(dict: [
+                                                "http.request.method": httpMethod.uppercased(),
+                                                "url.full": url,
+                                                "error.message": errorMessage,
+                                                "error.type": errorType,
+
+                                                // NOTE: this should be handled by iOS native sdk using `errorCode` value
+                                                // To remove from here when it's done.
+                                                "emb.error_code": "failure",
+                                            ]),
                                             events: eventsFrom(array: []),
-                                            errorCode: errorCodeFrom(str: error))
+                                            // this should be used to calc `emb.error_code`
+                                            errorCode: ErrorCode.failure
+        );
 
         resolve(true)
     }
