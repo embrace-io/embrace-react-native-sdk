@@ -145,8 +145,6 @@ export const removeEmbraceImportAndStartFromFile = (
     const textToAdd = getText(item);
     const toDelete = Array.isArray(textToAdd) ? textToAdd : [textToAdd];
 
-    console.log(item.textToAdd);
-
     toDelete.forEach(line => {
       logger.log(`Deleting ${line} from ${fileName}`);
 
@@ -236,7 +234,6 @@ export const removeEmbraceFromXcode = () => {
         resolve(project.writeSync());
       })
       .catch(r => {
-        console.log(r);
         logger.error(
           "Could not find bundle phase, Please refer to the docs at https://embrace.io/docs/react-native/integration/upload-symbol-files/",
         );

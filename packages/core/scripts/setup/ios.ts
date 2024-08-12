@@ -195,38 +195,3 @@ import EmbraceIO
 }
 `;
 };
-
-export const addBridgingHeader = async (projectName: string) => {
-  const project = await xcodePatchable({name: projectName});
-
-  // TODO check project to see if SWIFT_OBJC_BRIDGING_HEADER is already set
-  // if it is just return
-  // otherwise... add the bridging header file
-  const filename = `${projectName}-Bridging-Header.h`;
-  const p = path.join("ios", projectName);
-  if (fs.existsSync(p)) {
-    logger.warn("bridging header already exists");
-    return true;
-  }
-
-  fs.writeFileSync(p, getBridgingHeaderContents());
-
-  const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
-    project.path,
-    projectName,
-  );
-  project.addFile(
-    nameWithCaseSensitive,
-    `${nameWithCaseSensitive}/${filename}`,
-  );
-  project.patch();
-
-  // TODO SWIFT_OBJC_BRIDGING_HEADER = "${filename}";
-};
-
-const getBridgingHeaderContents = () => {
-  return `//
-//  Use this file to import your target's public headers that you would like to expose to Swift.
-//
-`;
-};
