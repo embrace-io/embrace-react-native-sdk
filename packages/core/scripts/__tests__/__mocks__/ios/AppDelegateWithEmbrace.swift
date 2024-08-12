@@ -1,11 +1,10 @@
-import EmbraceIO
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        DispatchQueue.main.async { try? Embrace.setup(options: .init(appId: "app123", platform: .reactNative)).start() }
+        EmbraceInitializer.start()
         let bridge = RCTBridge(delegate: self, launchOptions: launchOptions)
         let rootView = RCTRootView(bridge: bridge!, moduleName: "test741", initialProperties: nil)
         

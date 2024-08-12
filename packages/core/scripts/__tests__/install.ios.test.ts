@@ -34,7 +34,9 @@ describe("Install Script iOS", () => {
       {virtual: true},
     );
     const patchAppDelegate = require("../setup/patches/patch").default;
-    const result = await patchAppDelegate("objectivec", "test", "app123");
+    const result = await patchAppDelegate("objectivec", "test", {
+      bridgingHeader: "MyProductModuleName-Swift.h",
+    });
 
     expect(result).toBe(true);
     const afterPatch = fs.readFileSync(patchPath);

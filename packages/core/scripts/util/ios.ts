@@ -3,6 +3,7 @@ import EmbraceLogger from "../../src/logger";
 
 import {FileUpdatable, getFileContents, Patchable} from "./file";
 
+const osPath = require("path");
 const fs = require("fs");
 
 const xcode = require("xcode");
@@ -17,13 +18,13 @@ export const bundlePhaseRE = /react-native-xcode\.sh/;
 export const exportSourcemapRNVariable =
   'export SOURCEMAP_FILE="$CONFIGURATION_BUILD_DIR/main.jsbundle.map";';
 
-export const EMBRACE_IMPORT_OBJECTIVEC = "@import EmbraceIO;";
-export const EMBRACE_INIT_OBJECTIVEC = ({appId}: {appId?: string}) => [
-  // TODO, need to confirm these, the method names don't seem correct
-  `EMBOptions* options = [[EMBOptions alloc] initWithAppId:@"${appId}" appGroupId:nil platform:EMBPlatformReactNative];`,
-  "[Embrace setupWithOptions:options];",
-  "[[Embrace client] startAndReturnError:&error];",
-];
+export const EMBRACE_IMPORT_OBJECTIVEC = ({
+  bridgingHeader,
+}: {
+  bridgingHeader?: string;
+}) => [`#import "${bridgingHeader}"`];
+
+export const EMBRACE_INIT_OBJECTIVEC = "[EmbraceInitializer start];";
 
 export const embRunScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';
 
@@ -120,7 +121,7 @@ export const xcodePatchable = ({
 const docsMessage =
   "Please refer to the docs at https://embrace.io/docs to update manually.";
 
-const getXcodeProject = (path: string): Promise<XcodeProject> => {
+export const getXcodeProject = (path: string): Promise<XcodeProject> => {
   const project = xcode.project(path);
   return new Promise((resolve, reject) => {
     project.parse((err: any) => {
@@ -234,12 +235,12 @@ export class XcodeProject implements Patchable {
     }, {});
   }
 
-  public sync() {
-    this.project = this.project.writeSync();
+  public patch() {
+    fs.writeFileSync(this.path, this.writeSync());
   }
 
-  public patch() {
-    fs.writeFileSync(this.path, this.project);
+  public writeSync() {
+    return this.project.writeSync();
   }
 
   public addFile(groupName: string, path: string) {
@@ -257,6 +258,46 @@ export class XcodeProject implements Patchable {
       file.uuid = this.project.generateUuid();
       this.project.addToPbxBuildFileSection(file);
       this.project.addToPbxResourcesBuildPhase(file);
+    }
+  }
+
+  public getBridgingHeaderName(groupName: string) {
+    const productModuleName =
+      this.getBuildProperty(groupName, "PRODUCT_MODULE_NAME") || groupName;
+    return projectNameToBridgingHeader(productModuleName);
+  }
+
+  private getTargetHash(name: string) {
+    const target = this.project.pbxTargetByName(name);
+    return target ? target.buildConfigurationList : "";
+  }
+
+  private getBuildProperty(groupName: string, propertyName: string) {
+    return this.project.getBuildProperty(
+      propertyName,
+      undefined,
+      this.getTargetHash(groupName),
+    );
+  }
+
+  private updateBuildProperty(
+    groupName: string,
+    propertyName: string,
+    value: string,
+  ) {
+    const targetHash = this.getTargetHash(groupName);
+    const configurations = this.project.pbxXCBuildConfigurationSection();
+    const xcConfigList = this.project.pbxXCConfigurationList();
+    for (const configName in xcConfigList) {
+      if (configName !== targetHash) {
+        continue;
+      }
+      for (const item of xcConfigList[configName].buildConfigurations) {
+        const config = configurations[item.value];
+        if (config) {
+          config.buildSettings[propertyName] = value;
+        }
+      }
     }
   }
 
@@ -284,4 +325,70 @@ export class XcodeProject implements Patchable {
       return group.name === groupName;
     });
   }
+
+  public async addBridgingHeader(projectName: string) {
+    const bridgingHeader = this.getBuildProperty(
+      projectName,
+      "SWIFT_OBJC_BRIDGING_HEADER",
+    );
+
+    if (bridgingHeader) {
+      embLogger.warn("bridging header already exists");
+      return true;
+    }
+
+    // Add the bridging header file
+    const filename = `${projectName}-Bridging-Header.h`;
+    fs.writeFileSync(
+      osPath.join(this.path, "../../", projectName, filename),
+      getBridgingHeaderContents(),
+    );
+
+    const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
+      this.path,
+      projectName,
+    );
+    this.addFile(nameWithCaseSensitive, `${nameWithCaseSensitive}/${filename}`);
+
+    this.updateBuildProperty(
+      projectName,
+      "SWIFT_OBJC_BRIDGING_HEADER",
+      `"${filename}"`,
+    );
+
+    this.patch();
+
+    return true;
+  }
 }
+
+// https://developer.apple.com/documentation/swift/importing-swift-into-objective-c#Overview
+export const projectNameToBridgingHeader = (projectName: string): string => {
+  const alphanumericOnly = projectName.replace(/\W+/g, "_");
+  const firstNumberReplaced = alphanumericOnly.replace(/^\d/, "_");
+  return `${firstNumberReplaced}-Swift.h`;
+};
+
+const getBridgingHeaderContents = () => {
+  return `//
+//  Use this file to import your target's public headers that you would like to expose to Swift.
+//
+  `;
+};
+
+export const findNameWithCaseSensitiveFromPath = (
+  path: string,
+  name: string,
+) => {
+  const pathSplitted = path.split("/");
+  const nameInLowerCase = name.toLocaleLowerCase();
+
+  const nameFounded = pathSplitted.find(
+    element => element.toLocaleLowerCase() === `${nameInLowerCase}.xcodeproj`,
+  );
+  if (nameFounded) {
+    return nameFounded.replace(".xcodeproj", "");
+  }
+
+  return name;
+};

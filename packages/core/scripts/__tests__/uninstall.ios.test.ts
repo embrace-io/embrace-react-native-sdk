@@ -5,7 +5,7 @@ import {
   EMBRACE_INIT_OBJECTIVEC_5X,
   EMBRACE_INIT_SWIFT_5X,
 } from "../setup/patches/patch_ios_5x";
-import {EMBRACE_IMPORT_SWIFT, EMBRACE_INIT_SWIFT} from "../setup/patches/patch";
+import {EMBRACE_INIT_SWIFT} from "../setup/patches/patch";
 
 const fs = require("fs");
 
@@ -53,9 +53,20 @@ describe("Uninstall Script iOS", () => {
     await patchPodfile(mockPackageJson);
   });
   test("Remove Embrace From Xcode", async () => {
+    const tmp = "./packages/core/scripts/__tests__/tmp/";
+    const xcodeProj = `${tmp}/removeTest.xcodeproj`;
+
+    fs.existsSync(xcodeProj) && fs.rmdirSync(xcodeProj, {recursive: true});
+    fs.mkdirSync(xcodeProj, {recursive: true});
+
+    fs.copyFileSync(
+      "./packages/core/scripts/__tests__/__mocks__/ios/testMock.xcodeproj/project.pbxproj",
+      `${xcodeProj}/project.pbxproj`,
+    );
+
     jest.mock("glob", () => ({
       sync: () => [
-        "./packages/core/scripts/__tests__/__mocks__/ios/testMock.xcodeproj/project.pbxproj",
+        "./packages/core/scripts/__tests__/tmp/removeTest.xcodeproj/project.pbxproj",
       ],
     }));
 
@@ -81,10 +92,9 @@ describe("Uninstall Script iOS", () => {
     const {removeEmbraceFromXcode} = require("../setup/uninstall");
 
     const result = await removeEmbraceFromXcode();
-    expect(result.project.includes("EmbraceIO")).toBe(false);
-    expect(result.project.includes("SOURCEMAP_FILE")).toBe(false);
+    expect(result.includes("EmbraceIO")).toBe(false);
+    expect(result.includes("SOURCEMAP_FILE")).toBe(false);
 
-    xcode.sync();
     xcode.patch();
 
     const xcodeAfterPatch = await xcodePatchable(packageJsonMock);
@@ -162,23 +172,19 @@ describe("Uninstall Script iOS", () => {
       {virtual: true},
     );
     const {getAppDelegateByIOSLanguage} = require("../util/ios");
-    const appDelegate = await getAppDelegateByIOSLanguage(
-      "test",
-      "objectivec",
-      "app123",
-    );
+    const appDelegate = await getAppDelegateByIOSLanguage("test", "objectivec");
 
-    const initLines = EMBRACE_INIT_OBJECTIVEC({appId: "app123"});
-    expect(appDelegate.contents.includes(EMBRACE_IMPORT_OBJECTIVEC)).toBe(true);
-    initLines.forEach(line => {
-      expect(appDelegate.contents.includes(line)).toBe(true);
-    });
+    expect(appDelegate.contents.includes(EMBRACE_INIT_OBJECTIVEC)).toBe(true);
+    expect(
+      appDelegate.contents.includes(
+        EMBRACE_IMPORT_OBJECTIVEC({
+          bridgingHeader: "MyProductModuleName-Swift.h",
+        }),
+      ),
+    ).toBe(true);
 
     const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
-    const resultUnpatch = removeEmbraceImportAndStartFromFile(
-      "objectivec",
-      "app123",
-    );
+    const resultUnpatch = removeEmbraceImportAndStartFromFile("objectivec");
 
     expect(resultUnpatch).toBe(true);
     const afterRemoval = fs.readFileSync(unlinkedPath);
@@ -209,23 +215,12 @@ describe("Uninstall Script iOS", () => {
       {virtual: true},
     );
     const {getAppDelegateByIOSLanguage} = require("../util/ios");
-    const appDelegate = await getAppDelegateByIOSLanguage(
-      "test",
-      "swift",
-      "app123",
-    );
+    const appDelegate = await getAppDelegateByIOSLanguage("test", "swift");
 
-    const initLines = EMBRACE_INIT_SWIFT({appId: "app123"});
-    expect(appDelegate.contents.includes(EMBRACE_IMPORT_SWIFT)).toBe(true);
-    initLines.forEach(line => {
-      expect(appDelegate.contents.includes(line)).toBe(true);
-    });
+    expect(appDelegate.contents.includes(EMBRACE_INIT_SWIFT)).toBe(true);
 
     const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
-    const resultUnpatch = removeEmbraceImportAndStartFromFile(
-      "swift",
-      "app123",
-    );
+    const resultUnpatch = removeEmbraceImportAndStartFromFile("swift");
 
     expect(resultUnpatch).toBe(true);
     const afterRemoval = fs.readFileSync(unlinkedPath);
@@ -256,11 +251,7 @@ describe("Uninstall Script iOS", () => {
       {virtual: true},
     );
     const {getAppDelegateByIOSLanguage} = require("../util/ios");
-    const appDelegate = await getAppDelegateByIOSLanguage(
-      "test",
-      "objectivec",
-      "app123",
-    );
+    const appDelegate = await getAppDelegateByIOSLanguage("test", "objectivec");
 
     expect(appDelegate.contents.includes(EMBRACE_IMPORT_OBJECTIVEC_5X)).toBe(
       true,
@@ -270,15 +261,12 @@ describe("Uninstall Script iOS", () => {
     );
 
     const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
-    const resultUnpatch = removeEmbraceImportAndStartFromFile(
-      "objectivec5x",
-      "app123",
-    );
+    const resultUnpatch = removeEmbraceImportAndStartFromFile("objectivec5x");
 
     expect(resultUnpatch).toBe(true);
     const afterRemoval = fs.readFileSync(unlinkedPath);
     const mockWithoutEmbrace = fs.readFileSync(
-      "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace.mm",
+      "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace5x.mm",
     );
     expect(afterRemoval.toString()).toEqual(mockWithoutEmbrace.toString());
   });
@@ -304,20 +292,13 @@ describe("Uninstall Script iOS", () => {
       {virtual: true},
     );
     const {getAppDelegateByIOSLanguage} = require("../util/ios");
-    const appDelegate = await getAppDelegateByIOSLanguage(
-      "test",
-      "swift5x",
-      "app123",
-    );
+    const appDelegate = await getAppDelegateByIOSLanguage("test", "swift5x");
 
     expect(appDelegate.contents.includes(EMBRACE_IMPORT_SWIFT_5X)).toBe(true);
     expect(appDelegate.contents.includes(EMBRACE_INIT_SWIFT_5X)).toBe(true);
 
     const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
-    const resultUnpatch = removeEmbraceImportAndStartFromFile(
-      "swift5x",
-      "app123",
-    );
+    const resultUnpatch = removeEmbraceImportAndStartFromFile("swift5x");
 
     expect(resultUnpatch).toBe(true);
     const afterRemoval = fs.readFileSync(unlinkedPath);

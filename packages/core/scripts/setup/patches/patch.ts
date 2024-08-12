@@ -3,7 +3,6 @@ import {
   EMBRACE_INIT_OBJECTIVEC,
   getAppDelegateByIOSLanguage,
 } from "../../util/ios";
-import {FileUpdatable} from "../../util/file";
 import {getMainApplicationPatchable} from "../../util/android";
 import EmbraceLogger from "../../../src/logger";
 
@@ -15,16 +14,16 @@ import {
   addLineAfterToTextInFile,
   addLineBeforeToTextInFile,
   ANDROID_LANGUAGE,
+  BREAKINGLINE_ORDER,
+  DynamicTextParameters,
   IOS_LANGUAGE,
+  IPatchDefinition,
   MAIN_CLASS_BY_LANGUAGE,
   SUPPORTED_LANGUAGES,
+  TextToAdd,
 } from "./common";
 
-export const EMBRACE_IMPORT_SWIFT = "import EmbraceIO";
-
-export const EMBRACE_INIT_SWIFT = ({appId}: {appId?: string}) => [
-  `DispatchQueue.main.async { try? Embrace.setup(options: .init(appId: "${appId}", platform: .reactNative)).start() }`,
-];
+export const EMBRACE_INIT_SWIFT = "EmbraceInitializer.start()";
 
 export const EMBRACE_IMPORT_JAVA =
   "import io.embrace.android.embracesdk.Embrace;";
@@ -40,37 +39,9 @@ export const EMBRACE_INIT_KOTLIN =
 
 const logger = new EmbraceLogger(console);
 
-type ORDER = "after" | "before";
-type BREAKINGLINE_ORDER = ORDER | "none" | "both";
-
-type DynamicText = ({appId}: {appId?: string}) => string[];
-interface TextToAdd {
-  searchText: string | RegExp;
-  textToAdd: string | string[] | DynamicText;
-  order: ORDER;
-  breakingLine: BREAKINGLINE_ORDER;
-}
-
-type FindFileFunction = (
-  language: SUPPORTED_LANGUAGES,
-  projectName?: string,
-) => FileUpdatable | undefined;
-
-export interface IPatchDefinition {
-  fileName: string;
-  textsToAdd: TextToAdd[];
-  findFileFunction: FindFileFunction;
-}
-
 const PATCH_IOS_SWIFT_APPDELEGATE: IPatchDefinition = {
   fileName: MAIN_CLASS_BY_LANGUAGE.swift,
   textsToAdd: [
-    {
-      searchText: "@UIApplicationMain",
-      textToAdd: EMBRACE_IMPORT_SWIFT,
-      order: "before",
-      breakingLine: "after",
-    },
     {
       searchText: /func\s+application\(\s*_\s*[^}]*\{/,
       textToAdd: EMBRACE_INIT_SWIFT,
@@ -172,9 +143,12 @@ export const SUPPORTED_REMOVALS = {
   },
 };
 
-export const getText = (item: TextToAdd, appId?: string): string | string[] =>
+export const getText = (
+  item: TextToAdd,
+  dynamicTextParams?: DynamicTextParameters,
+): string | string[] =>
   typeof item.textToAdd === "function"
-    ? item.textToAdd({appId})
+    ? item.textToAdd(dynamicTextParams || {})
     : item.textToAdd;
 
 export const getTextToAddWithBreakingLine = (
@@ -201,7 +175,7 @@ export const getTextToAddWithBreakingLine = (
 const patch = (
   language: SUPPORTED_LANGUAGES,
   projectName?: string,
-  appId?: string,
+  dynamicTextParams?: DynamicTextParameters,
 ) => {
   const patchDefinition = SUPPORTED_PATCHES[language];
 
@@ -230,7 +204,7 @@ const patch = (
     }
 
     const finalTextToAdd = getTextToAddWithBreakingLine(
-      getText(item, appId),
+      getText(item, dynamicTextParams || {}),
       breakingLine,
       padding,
     );

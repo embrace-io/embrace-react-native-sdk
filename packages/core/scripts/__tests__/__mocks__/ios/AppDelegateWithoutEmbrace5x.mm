@@ -1,5 +1,4 @@
 #import "AppDelegate.h"
-#import "MyProductModuleName-Swift.h"
 
 #import <React/RCTBundleURLProvider.h>
 

@@ -77,6 +77,32 @@ const MAIN_CLASS_BY_LANGUAGE: Record<SUPPORTED_LANGUAGES, string> = {
   objectivec5x: "",
 };
 
+type ORDER = "after" | "before";
+type BREAKINGLINE_ORDER = ORDER | "none" | "both";
+
+type DynamicTextParameters = {
+  bridgingHeader?: string;
+};
+
+type DynamicText = (params: DynamicTextParameters) => string[];
+interface TextToAdd {
+  searchText: string | RegExp;
+  textToAdd: string | string[] | DynamicText;
+  order: ORDER;
+  breakingLine: BREAKINGLINE_ORDER;
+}
+
+type FindFileFunction = (
+  language: SUPPORTED_LANGUAGES,
+  projectName?: string,
+) => FileUpdatable | undefined;
+
+interface IPatchDefinition {
+  fileName: string;
+  textsToAdd: TextToAdd[];
+  findFileFunction: FindFileFunction;
+}
+
 export {
   addLineAfterToTextInFile,
   addLineBeforeToTextInFile,
@@ -84,4 +110,8 @@ export {
   SUPPORTED_LANGUAGES,
   ANDROID_LANGUAGE,
   IOS_LANGUAGE,
+  TextToAdd,
+  IPatchDefinition,
+  BREAKINGLINE_ORDER,
 };
+export type {DynamicTextParameters};

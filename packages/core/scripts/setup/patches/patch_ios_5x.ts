@@ -4,11 +4,11 @@
 import {getAppDelegateByIOSLanguage} from "../../util/ios";
 import EmbraceLogger from "../../../src/logger";
 
-import {IPatchDefinition} from "./patch";
 import {
   IOS_LANGUAGE,
   MAIN_CLASS_BY_LANGUAGE,
   SUPPORTED_LANGUAGES,
+  IPatchDefinition,
 } from "./common";
 
 const logger = new EmbraceLogger(console);

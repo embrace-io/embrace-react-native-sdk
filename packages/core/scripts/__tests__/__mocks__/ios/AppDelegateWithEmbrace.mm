@@ -1,5 +1,5 @@
 #import "AppDelegate.h"
-@import EmbraceIO;
+#import "MyProductModuleName-Swift.h"
 
 #import <React/RCTBundleURLProvider.h>
 
@@ -7,9 +7,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  EMBOptions* options = [[EMBOptions alloc] initWithAppId:@"app123" appGroupId:nil platform:EMBPlatformReactNative];
-  [Embrace setupWithOptions:options];
-  [[Embrace client] startAndReturnError:&error];
+  [EmbraceInitializer start];
   self.moduleName = @"test722";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.

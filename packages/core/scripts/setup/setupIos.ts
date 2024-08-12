@@ -3,6 +3,7 @@ import EmbraceLogger from "../../src/logger";
 
 import {
   addUploadBuildPhase,
+  addEmbraceInitializerSwift,
   iosInitializeEmbrace,
   iosPodfile,
   patchXcodeBundlePhase,
@@ -14,6 +15,7 @@ const logger = new EmbraceLogger(console);
 logger.log("initializing setup wizard for ios");
 
 const iosSteps = [
+  addEmbraceInitializerSwift,
   iosInitializeEmbrace,
   iosPodfile,
   patchXcodeBundlePhase,
