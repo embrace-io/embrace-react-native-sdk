@@ -136,6 +136,8 @@ jest.mock("react-native", () => ({
 }));
 
 const mockSt = "this is a fake stack trace";
+const testView = "View";
+
 const mockGenerateStackTrace = jest.fn();
 jest.mock("../utils/ErrorUtil", () => ({
   ...jest.requireActual("../utils/ErrorUtil"),
@@ -188,7 +190,6 @@ describe("Logs Test", () => {
   const WARNING = "warning";
   const INFO = "info";
   const ERROR = "error";
-  const testView = "View";
 
   beforeEach(() => {
     mockGenerateStackTrace.mockReturnValue(mockSt);
@@ -304,52 +305,18 @@ describe("Personas Tests", () => {
 
 describe("Custom Views Tests", () => {
   test("startView", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            startView: () => {
-              mock();
-              return false;
-            },
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {startView} = require("../index");
     const promiseToResolve = startView(testView);
 
     jest.runAllTimers();
-    const result = await promiseToResolve;
-    expect(mock).toHaveBeenCalled();
-    expect(result).toBe(false);
+    await promiseToResolve;
+    expect(mockStartView).toHaveBeenCalledWith(testView);
   });
 
   test("endView", async () => {
-    const mock = jest.fn();
-    jest.mock(
-      "react-native",
-      () => ({
-        NativeModules: {
-          EmbraceManager: {
-            endView: () => {
-              mock();
-              return false;
-            },
-          },
-        },
-      }),
-      {virtual: true},
-    );
-    const {endView} = require("../index");
     const promiseToResolve = endView(testView);
     jest.runAllTimers();
-    const result = await promiseToResolve;
-    expect(mock).toHaveBeenCalled();
-    expect(result).toBe(false);
+    await promiseToResolve;
+    expect(mockEndView).toHaveBeenCalledWith(testView);
   });
 });
 
