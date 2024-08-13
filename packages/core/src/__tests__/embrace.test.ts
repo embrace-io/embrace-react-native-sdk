@@ -100,7 +100,6 @@ jest.mock("react-native", () => ({
         bytesSent: number,
         bytesReceived: number,
         statusCode: number,
-        error: string,
       ) =>
         mockLogNetworkRequest(
           url,
@@ -110,7 +109,6 @@ jest.mock("react-native", () => ({
           bytesSent,
           bytesReceived,
           statusCode,
-          error,
         ),
       logNetworkClientError: (
         url: string,
