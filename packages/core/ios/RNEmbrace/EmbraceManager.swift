@@ -348,7 +348,7 @@ class EmbraceManager: NSObject {
     }
     
     if spanId.isEmpty {
-      reject("START_SPAN_ERROR", "Failed to start span", nil)
+      reject("START_VIEW_ERROR", "Failed to start view", nil)
     } else {
       resolve(spanId)
     }
