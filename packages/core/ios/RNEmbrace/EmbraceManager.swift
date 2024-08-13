@@ -603,7 +603,7 @@ class EmbraceManager: NSObject {
         endInMillis: Double,
         bytesSent: Double,
         bytesReceived: Double,
-        statusCode: Int,
+        statusCode: Double,
         error: String,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
@@ -619,7 +619,7 @@ class EmbraceManager: NSObject {
         ];
 
         if statusCode >= 0 {
-            attributes["http.response.status_code"] = String(statusCode);
+            attributes["http.response.status_code"] = String(Int(statusCode));
         }
         
         if bytesSent >= 0 {
