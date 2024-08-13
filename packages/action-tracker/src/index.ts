@@ -34,9 +34,7 @@ export const buildEmbraceMiddleware = () => {
         undefined,
         startTime,
       );
-      const attributePromises: Promise<boolean>[] = Object.entries(
-        attributes,
-      ).map(([key, value]) =>
+      Object.entries(attributes).forEach(([key, value]) =>
         NativeModules.EmbraceManager.addSpanAttributeToSpan(spanId, key, value),
       );
 
@@ -48,15 +46,12 @@ export const buildEmbraceMiddleware = () => {
           );
         } else {
           const endTime = new Date().getTime();
-          attributePromises.push(
-            NativeModules.EmbraceManager.addSpanAttributeToSpan(
-              spanId,
-              "outcome",
-              "SUCCESS",
-            ),
-          );
-
-          NativeModules.EmbraceManager.stopSpan(spanId, "None", endTime);
+          NativeModules.EmbraceManager.addSpanAttributeToSpan(
+            spanId,
+            "outcome",
+            "SUCCESS",
+          ),
+            NativeModules.EmbraceManager.stopSpan(spanId, "None", endTime);
         }
         return result;
       } catch (e) {
@@ -67,15 +62,12 @@ export const buildEmbraceMiddleware = () => {
         } else {
           const endTime = new Date().getTime();
 
-          attributePromises.push(
-            NativeModules.EmbraceManager.addSpanAttributeToSpan(
-              spanId,
-              "outcome",
-              "FAIL",
-            ),
-          );
-
-          NativeModules.EmbraceManager.stopSpan(spanId, "Failure", endTime);
+          NativeModules.EmbraceManager.addSpanAttributeToSpan(
+            spanId,
+            "outcome",
+            "FAIL",
+          ),
+            NativeModules.EmbraceManager.stopSpan(spanId, "Failure", endTime);
           throw e;
         }
       }
