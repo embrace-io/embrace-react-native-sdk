@@ -619,6 +619,15 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "ux.view")
         XCTAssertEqual(exportedSpans[0].attributes["view.name"]!.description, "my-view")
     }
+
+    func testLogHandledError() async throws {
+        module.logHandledError("my handled error", resolver: promise.resolve, rejecter: promise.reject)
+    }
+
+    func testLogUnhandledJSException() async throws {
+        module.logUnhandledJSException("my unhandled exception", message: "my unhandled message",
+                                       type: "my unhandled type", resolver: promise.resolve, rejecter: promise.reject)
+    }
 }
 
 class EmbraceSpansSDKNotStartedTests: XCTestCase {

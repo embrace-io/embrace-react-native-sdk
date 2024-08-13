@@ -160,6 +160,15 @@ RCT_EXTERN_METHOD(logNetworkClientError:(NSString *)url
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(logHandledError:(NSString *)name)
+
+RCT_EXTERN_METHOD(logUnhandledJSException:(NString *)name
+                  message:(NSString *)message
+                  type:(NSString *)type
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+
 + (BOOL)requiresMainQueueSetup
 {
     return NO;
