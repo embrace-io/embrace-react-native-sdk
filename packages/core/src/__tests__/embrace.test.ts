@@ -486,7 +486,10 @@ describe("Payers Test", () => {
       () => ({
         NativeModules: {
           EmbraceManager: {
-            setUserAsPayer: mock,
+            setUserAsPayer: () => {
+              mock();
+              return false;
+            },
           },
         },
       }),
@@ -494,11 +497,10 @@ describe("Payers Test", () => {
     );
     const {setUserAsPayer} = require("../index");
     const promiseToResolve = setUserAsPayer();
-    // expect(mock).toHaveBeenCalled();
     jest.runAllTimers();
     const result = await promiseToResolve;
-    // TODO uncomment the expect once the method is imeplemented
-    // expect(mock).toHaveBeenCalled();
+
+    expect(mock).toHaveBeenCalled();
     expect(result).toBe(false);
   });
   test("clearUserAsPayer", async () => {
@@ -508,7 +510,10 @@ describe("Payers Test", () => {
       () => ({
         NativeModules: {
           EmbraceManager: {
-            clearUserAsPayer: mock,
+            clearUserAsPayer: () => {
+              mock();
+              return false;
+            },
           },
         },
       }),
@@ -516,12 +521,11 @@ describe("Payers Test", () => {
     );
     const {clearUserAsPayer} = require("../index");
     const promiseToResolve = clearUserAsPayer();
-    // expect(mock).toHaveBeenCalled();
 
     jest.runAllTimers();
     const result = await promiseToResolve;
-    // TODO uncomment the expect once the method is imeplemented
-    // expect(mock).toHaveBeenCalled();
+
+    expect(mock).toHaveBeenCalled();
     expect(result).toBe(false);
   });
 });

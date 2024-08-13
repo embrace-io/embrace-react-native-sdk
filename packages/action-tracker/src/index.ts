@@ -22,6 +22,19 @@ export const buildEmbraceMiddleware = () => {
         );
         return 0;
       }
+
+      if (!action) {
+        console.warn(
+          "[Embrace] You have to provide an action in order to track actions",
+        );
+        return 0;
+      }
+      if (!action.type) {
+        console.warn(
+          "[Embrace] You have to provide an action type in order to track actions",
+        );
+        return 0;
+      }
       const startTime = new Date().getTime();
       const attributes = {
         name: action.type.toString().toUpperCase(),
