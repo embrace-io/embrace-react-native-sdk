@@ -41,7 +41,7 @@ class Promise {
     }
 }
 
-private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-process-launch",
+private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-setup", "emb-process-launch",
                                            "POST /v2/logs", "POST /v2/spans"]
 
 class EmbraceManagerTests: XCTestCase {
@@ -54,8 +54,8 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func testStartNativeEmbraceSDK() async throws {
-        module.startNativeEmbraceSDK("myApp", resolve: promise.resolve, rejecter: promise.reject)
-
+        module.startNativeEmbraceSDK(configDict: NSDictionary(dictionary: ["appId": "myApp"]),
+                                     resolve: promise.resolve, rejecter: promise.reject)
         try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
@@ -63,6 +63,32 @@ class EmbraceManagerTests: XCTestCase {
         module.isStarted(promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 2)
         XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
+    }
+
+    func testParseSDKConfig() {
+        let config = SDKConfig(from: NSDictionary(dictionary: [
+            "appId": "myApp",
+            "appGroupId": "myAppGroup",
+            "disableCrashReporter": true,
+            "disableAutomaticViewCapture": true,
+            "endpointBaseUrl": "http://example.com"
+        ]))
+
+        XCTAssertEqual(config.appId, "myApp")
+        XCTAssertEqual(config.appGroupId, "myAppGroup")
+        XCTAssertTrue(config.disableCrashReporter)
+        XCTAssertTrue(config.disableAutomaticViewCapture)
+        XCTAssertEqual(config.endpointBaseUrl, "http://example.com")
+    }
+
+    func testParseSDKConfigDefaults() {
+        let config = SDKConfig(from: NSDictionary(dictionary: ["appId": "myApp"]))
+
+        XCTAssertEqual(config.appId, "myApp")
+        XCTAssertNil(config.appGroupId)
+        XCTAssertFalse(config.disableCrashReporter)
+        XCTAssertFalse(config.disableAutomaticViewCapture)
+        XCTAssertNil(config.endpointBaseUrl)
     }
 }
 
@@ -451,7 +477,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertTrue(exportedSpans[2].hasEnded)
     }
 
-    // TODO fails on 6.2 currently
+    // TODO fails on 6.3 currently
     func skipped_testRecordCompletedSpanWithErrorCode() async throws {
         module.recordCompletedSpan("my-span", startTimeMs: 0.0, endTimeMs: 0.0,
                                    errorCodeString: "Failure", parentSpanId: "",

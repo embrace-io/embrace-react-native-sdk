@@ -3,24 +3,38 @@ import React
 import OSLog
 import EmbraceIO
 import EmbraceCrash
-import EmbraceCommonInternal // TODO should not be needed
-import EmbraceOTelInternal // TODO should not be needed
+import EmbraceCommonInternal
+import EmbraceOTelInternal
 
 #if canImport(CodePush)
 import CodePush
 #endif
 
-enum EmbraceKeys: String {
-    case reactNativeVersion = "io.embrace.reactnative.version"
-    case embraceReactNativeSdkVersion = "io.embrace.reactnative.sdk.version"
-    case javaScriptPatchNumber = "io.embrace.javascript.patch"
-    case javaScriptBundleURL = "io.embrace.jsbundle.url"
-}
+private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"
+private let HOSTED_PLATFORM_VERSION_RESOURCE_KEY = "hosted_platform_version"
+private let HOSTED_SDK_VERSION_RESOURCE_KEY = "hosted_sdk_version"
 
 // Keys defined in packages/spans/interfaces/ISpans.ts
 private let EVENT_NAME_KEY = "name"
 private let EVENT_TIMESTAMP_KEY = "timeStampMs"
 private let EVENT_ATTRIBUTES_KEY = "attributes"
+
+class SDKConfig: NSObject {
+    public let appId: String;
+    public let appGroupId: String?;
+    public let disableCrashReporter: Bool;
+    public let disableAutomaticViewCapture: Bool;
+    public let endpointBaseUrl: String?;
+
+    public init(from: NSDictionary) {
+        self.appId = from["appId"] as? String ?? ""
+        self.appGroupId = from["appGroupId"] as? String
+        self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
+        self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
+        self.endpointBaseUrl = from["endpointBaseUrl"] as? String
+   }
+}
+
 
 @objc(EmbraceManager)
 class EmbraceManager: NSObject {
@@ -30,7 +44,9 @@ class EmbraceManager: NSObject {
     @objc(setJavaScriptBundlePath:resolver:rejecter:)
     func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: path, lifespan: .process)
+            
+           // TODO, use path to compute a hash of the assets and add as a 'react_native_bundle_id' key to the resource
+           // try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: path, lifespan: .process)
             resolve(true)
         }  catch let error {
             reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", error)
@@ -47,17 +63,37 @@ class EmbraceManager: NSObject {
     }
     
     @objc(startNativeEmbraceSDK:resolver:rejecter:)
-    func startNativeEmbraceSDK(_ appId: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    func startNativeEmbraceSDK(configDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        let config = SDKConfig(from: configDict)
         DispatchQueue.main.async {
             do {
-                
                 var embraceOptions: Embrace.Options {
+                    var crashReporter: CrashReporter?
+                    if config.disableCrashReporter {
+                        crashReporter = nil
+                    } else {
+                        crashReporter = EmbraceCrashReporter()
+                    }
+                    
+                    let servicesBuilder = CaptureServiceBuilder().addDefaults()
+                    if config.disableAutomaticViewCapture {
+                            servicesBuilder.remove(ofType: ViewCaptureService.self)
+                    }
+                    
+                    var endpoints: Embrace.Endpoints? = nil
+                    if config.endpointBaseUrl != nil {
+                        endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!,
+                                                      developmentBaseURL: config.endpointBaseUrl!,
+                                                      configBaseURL: config.endpointBaseUrl!)
+                    }
+                    
                     return .init(
-                        appId: appId,
-                        appGroupId: nil,
+                        appId: config.appId,
+                        appGroupId: config.appGroupId,
                         platform: .reactNative,
-                        captureServices: .automatic,
-                        crashReporter: EmbraceCrashReporter()
+                        endpoints: endpoints,
+                        captureServices: servicesBuilder.build(),
+                        crashReporter: crashReporter
                     )
                 }
                 
@@ -118,7 +154,7 @@ class EmbraceManager: NSObject {
     @objc(setReactNativeSDKVersion:resolver:rejecter:)
     func setReactNativeSDKVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.addResource(key: EmbraceKeys.embraceReactNativeSdkVersion.rawValue, value: version, lifespan: .process)
+            try Embrace.client?.metadata.addResource(key: HOSTED_SDK_VERSION_RESOURCE_KEY, value: version, lifespan: .process)
             resolve(true)
         } catch let error {
             reject("SET_RN_SDK_VERSION", "Error setting ReactNative SDK version", error)
@@ -141,7 +177,7 @@ class EmbraceManager: NSObject {
     @objc(setJavaScriptPatchNumber:resolver:rejecter:)
     func setJavaScriptPatchNumber(_ patch: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptPatchNumber.rawValue, value: patch, lifespan: .process)
+            try Embrace.client?.metadata.addResource(key: JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY, value: patch, lifespan: .process)
             resolve(true)
         } catch let error {
             reject("SET_JAVASCRIPT_PATCH_NUMBER", "Error setting JavasScript Patch Number", error)
@@ -179,6 +215,7 @@ class EmbraceManager: NSObject {
                 return
             }
             
+           // TODO, use path to compute a hash of the assets and add as a 'react_native_bundle_id' key to the resource
             try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: url.path, .process)
             resolve(true)
             
@@ -223,7 +260,7 @@ class EmbraceManager: NSObject {
     @objc(setReactNativeVersion:resolver:rejecter:)
     func setReactNativeVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            try Embrace.client?.metadata.addResource(key: EmbraceKeys.reactNativeVersion.rawValue, value: version, lifespan: .process)
+            try Embrace.client?.metadata.addResource(key: HOSTED_PLATFORM_VERSION_RESOURCE_KEY, value: version, lifespan: .process)
             resolve(true)
         } catch let error {
             reject("SET_RECT_NATIVE_VERSION", "Error setting React Native Number", error)
@@ -233,8 +270,11 @@ class EmbraceManager: NSObject {
     @objc(removeSessionProperty:resolver:rejecter:)
     func removeSessionProperty(_ key: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
-            // TODO REfactor to include lifespan
-            try Embrace.client?.metadata.removeProperty(key: key)
+            // Depending on on how `addSessionProperty` was called we may have added this key as either
+            // .session or .permanent so remove both here, multiple calls to remove are safe
+            try Embrace.client?.metadata.removeProperty(key: key, lifespan: .permanent)
+            try Embrace.client?.metadata.removeProperty(key: key, lifespan: .session)
+            
             resolve(true)
         } catch let error {
             reject("REMOVE_SESSION_PROPERTY", "Error removing Session Property", error)
@@ -501,6 +541,8 @@ class EmbraceManager: NSObject {
         } else {
             span?.addEvent(name: name, attributes: attributeValuesFrom(dict: attributes), timestamp: dateFrom(ms: time))
         }
+        
+        Embrace.client?.flush(span!)
 
         resolve(true)
     }
@@ -521,6 +563,7 @@ class EmbraceManager: NSObject {
         }
 
         span?.setAttribute(key: key, value: value)
+        Embrace.client?.flush(span!)
 
         resolve(true)
     }

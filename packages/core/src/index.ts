@@ -1,9 +1,9 @@
 "use strict";
-import {NativeModules} from "react-native";
+import {NativeModules, Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {handleGlobalError} from "./utils/ErrorUtil";
+import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import {SessionStatus} from "./interfaces/Types";
 import {
@@ -11,6 +11,7 @@ import {
   NETWORK_INTERCEPTOR_TYPES,
 } from "./interfaces/NetworkMonitoring";
 import {MethodType} from "./interfaces/HTTP";
+import {SDKConfig} from "./interfaces/Config";
 
 interface Properties {
   [key: string]: any;
@@ -21,9 +22,7 @@ const tracking = require("promise/setimmediate/rejection-tracking");
 
 const stackLimit = 200;
 
-// TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-// const unhandledPromiseRejectionPrefix = "Unhandled promise rejection: ";
+const unhandledPromiseRejectionPrefix = "Unhandled promise rejection: ";
 
 const handleError = async (error: Error, callback: () => void) => {
   if (!(error instanceof Error)) {
@@ -47,18 +46,20 @@ const isObjectNonEmpty = (obj?: object): boolean =>
 
 export const initialize = async ({
   patch,
-}: {patch?: string} = {}): Promise<boolean> => {
-  if (!ErrorUtils) {
-    console.warn(
-      "[Embrace] ErrorUtils is not defined. Not setting exception handler.",
-    );
-    return createFalsePromise();
-  }
+  sdkConfig,
+}: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
   const hasNativeSDKStarted = await NativeModules.EmbraceManager.isStarted();
   if (!hasNativeSDKStarted) {
-    // TODO CHANGE TO CONFIG OR SOMETHING
-    const result =
-      await NativeModules.EmbraceManager.startNativeEmbraceSDK("Jso7A");
+    if (Platform.OS === "ios" && !sdkConfig?.ios?.appId) {
+      console.warn(
+        "[Embrace] sdkConfig.ios.appId is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+      );
+      return createFalsePromise();
+    }
+
+    const result = await NativeModules.EmbraceManager.startNativeEmbraceSDK(
+      (Platform.OS === "ios" && sdkConfig?.ios) || {},
+    );
     if (!result) {
       console.warn(
         "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
@@ -93,25 +94,32 @@ export const initialize = async ({
   if (!__DEV__) {
     NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
   }
+
+  if (!ErrorUtils) {
+    console.warn(
+      "[Embrace] ErrorUtils is not defined. Not setting exception handler.",
+    );
+    return createFalsePromise();
+  }
   const previousHandler = ErrorUtils.getGlobalHandler();
   ErrorUtils.setGlobalHandler(handleGlobalError(previousHandler, handleError));
 
   tracking.enable({
     allRejections: true,
     onUnhandled: (_: any, error: Error) => {
-      // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-      // let message = `Unhandled promise rejection: ${error}`;
-      // let st = "";
-      // if (error instanceof Error) {
-      //   message = unhandledPromiseRejectionPrefix + error.message;
-      //   st = error.stack || "";
-      // }
-      // return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
-      //   message,
-      //   ERROR,
-      //   {},
-      //   st,
-      // );
+      let message = `Unhandled promise rejection: ${error}`;
+      let st = "";
+      if (error instanceof Error) {
+        message = unhandledPromiseRejectionPrefix + error.message;
+        st = error.stack || "";
+      }
+
+      return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
+        message,
+        ERROR,
+        {},
+        st,
+      );
     },
     onHandled: () => {},
   });
@@ -238,11 +246,6 @@ export const endView = (view: string): Promise<boolean> => {
 
   //   return NativeModules.EmbraceManager.endView(view);
   return createFalsePromise();
-};
-
-export const generateStackTrace = (): string => {
-  const err = new Error();
-  return err.stack || "";
 };
 
 export const setJavaScriptPatch = (patch: string) => {
