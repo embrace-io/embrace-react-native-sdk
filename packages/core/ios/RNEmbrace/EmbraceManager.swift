@@ -340,7 +340,6 @@ class EmbraceManager: NSObject {
     let span = Embrace.client?.buildSpan(name: "emb-screen-view")
       .setAttribute(key:"view.name", value:viewName)
       .setAttribute(key:"emb.type", value:"ux.view")
-      .setStartTime(time: startTimeDate)
       .startSpan()
     
     var spanId = ""
