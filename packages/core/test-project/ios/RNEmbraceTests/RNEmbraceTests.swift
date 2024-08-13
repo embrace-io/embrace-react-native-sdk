@@ -521,12 +521,14 @@ class EmbraceSpansTests: XCTestCase {
    }
     
     func testLogNetworkRequest() async throws {
-        module.logNetworkRequest("https://otest.com/v1/products", httpMethod: "get", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: 1000, bytesReceived: 2000, statusCode: 200, error: "my error", resolver: promise.resolve, rejecter: promise.reject)
+        module.logNetworkRequest("https://otest.com/v1/products", httpMethod: "get", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: 1000, bytesReceived: 2000, statusCode: 200, resolver: promise.resolve, rejecter: promise.reject)
 
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
         
-        module.logNetworkRequest("https://otest.com/", httpMethod: "POST", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: -1, bytesReceived: -2, statusCode: -1, error: "", resolver: promise.resolve, rejecter: promise.reject)
+        module.logNetworkRequest("https://otest.com/", httpMethod: "POST", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: -1, bytesReceived: -2, statusCode: -1, resolver: promise.resolve, rejecter: promise.reject)
+
+        module.logNetworkRequest("https://otest.com/v2/error", httpMethod: "POST", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: -1, bytesReceived: -2, statusCode: 500, resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedSpans = try await getExportedSpans()
 
@@ -549,6 +551,14 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertNil(exportedSpans[1].attributes["http.response.body.size"])
         XCTAssertNil(exportedSpans[1].attributes["http.request.body.size"])
         XCTAssertNil(exportedSpans[1].attributes["http.response.status_code"])
+        
+        XCTAssertEqual(exportedSpans[2].name, "emb-POST /v2/error")
+        XCTAssertEqual(exportedSpans[2].startTime, Date(timeIntervalSince1970: 1723221815.889))
+        XCTAssertEqual(exportedSpans[2].endTime, Date(timeIntervalSince1970: 1723221815.891))
+        XCTAssertEqual(exportedSpans[2].attributes["url.full"]!.description, "https://otest.com/v2/error")
+        XCTAssertEqual(exportedSpans[2].attributes["http.response.status_code"]!.description, "500")
+        // NOTE: is this correct? Android is setting `status` as `Error` when the status code represents an error code (like in this case)
+        XCTAssertEqual(exportedSpans[2].status, Status.unset);
     }
 
     func testLogNetworkClientError() async throws {

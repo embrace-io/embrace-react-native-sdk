@@ -126,7 +126,6 @@ RCT_EXTERN_METHOD(logNetworkRequest:(NSString *)url
                   bytesSent:(double)bytesSent
                   bytesReceived:(double)bytesReceived
                   statusCode:(double)statusCode
-                  error:(NSString *)error
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 

@@ -295,7 +295,6 @@ export const recordNetworkRequest = (
   bytesSent?: number,
   bytesReceived?: number,
   statusCode?: number,
-  error?: string,
 ): Promise<boolean> => {
   return NativeModules.EmbraceManager.logNetworkRequest(
     url,
@@ -305,7 +304,6 @@ export const recordNetworkRequest = (
     bytesSent || -1,
     bytesReceived || -1,
     statusCode || -1,
-    error || "",
   );
 };
 

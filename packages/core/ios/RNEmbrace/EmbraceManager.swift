@@ -604,7 +604,6 @@ class EmbraceManager: NSObject {
         bytesSent: Double,
         bytesReceived: Double,
         statusCode: Double,
-        error: String,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
@@ -635,7 +634,7 @@ class EmbraceManager: NSObject {
                                             startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
                                             attributes: attributeStringsFrom(dict: attributes as NSDictionary),
                                             events: eventsFrom(array: []),
-                                            errorCode: errorCodeFrom(str: error)
+                                            errorCode: nil
         );
 
         resolve(true)
@@ -672,7 +671,7 @@ class EmbraceManager: NSObject {
                                                 "emb.error_code": "failure",
                                             ]),
                                             events: eventsFrom(array: []),
-                                            // this should be used to calc `emb.error_code`
+                                            // `errorCode` should be used to calc `emb.error_code` attr in native sdk
                                             errorCode: ErrorCode.failure
         );
 

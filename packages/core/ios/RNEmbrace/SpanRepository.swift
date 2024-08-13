@@ -48,11 +48,13 @@ class SpanRepository {
     }
 
     func spanStarted(span: Span) -> String {
-        let key = getKey(span)
+        var key = getKey(span)
 
         activeSpansQueue.async(flags: .barrier) {
             if self.activeSpans.count > MAX_STORED_SPANS {
                 os_log("too many active spans being tracked, ignoring", log: self.log, type: .error)
+                key = "";
+
                 return
             }
 
@@ -69,12 +71,12 @@ class SpanRepository {
             self.activeSpans.removeValue(forKey: key)
         }
 
-        if completedSpans.count > MAX_STORED_SPANS {
-            os_log("too many completed spans being tracked, ignoring", log: log, type: .error)
-            return
-        }
-
         completedSpansQueue.async(flags: .barrier) {
+            if self.completedSpans.count > MAX_STORED_SPANS {
+                os_log("too many completed spans being tracked, ignoring", log: self.log, type: .error)
+                return
+            }
+
             self.completedSpans.updateValue(span, forKey: key)
         }
     }

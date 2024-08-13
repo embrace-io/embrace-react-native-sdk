@@ -374,17 +374,18 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                                   Integer bytesSent,
                                   Integer bytesReceived,
                                   Integer statusCode,
-                                  String error,
                                   Promise promise) {
         long st = startInMillis.longValue();
         long et = endInMillis.longValue();
 
         Integer method = parseMethodFromString(httpMethod);
+
         if(method == null) {
             Log.e("Embrace", "Failed to log network requests. Unexpected or null http method.");
             promise.resolve(false);
             return;
         }
+
         try{
             Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromCompletedRequest(
                     url,
@@ -395,6 +396,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                     bytesReceived.intValue(),
                     statusCode.intValue()
             ));
+
             promise.resolve(true);
         }catch(Exception e){
             promise.resolve(false);
