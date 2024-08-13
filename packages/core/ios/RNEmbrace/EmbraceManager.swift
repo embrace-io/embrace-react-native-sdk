@@ -310,7 +310,7 @@ class EmbraceManager: NSObject {
     }
   }
   
-  @objc(clearUserPersona:severity:properties:resolver:rejecter:)
+  @objc(logMessageWithSeverityAndProperties:severity:properties:resolver:rejecter:)
   func logMessageWithSeverityAndProperties(
     _ message: String,
     severity: String,
