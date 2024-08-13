@@ -248,9 +248,10 @@ const getRemoveEmbraceFromXcodeStep = () => {
     docURL: "",
   };
 };
+
 const getRemoveEmbraceConfigFileAndroidStep = () => {
   return {
-    name: "Removing Andoird Embrace Config File",
+    name: "Removing Android Embrace Config File",
     run: (wizard: Wizard) =>
       new Promise(resolve => {
         resolve(removeEmbraceConfigFileAndroid());
@@ -316,7 +317,9 @@ const getUnlinkImportStartFilesStep = () => {
       });
 
     return {
-      name: `Removing Embrace code in ${value?.fileName}`,
+      name: value?.fileName
+        ? `Removing Embrace code in ${value?.fileName}`
+        : "Removing Embrace code",
       run,
       docURL:
         "https://embrace.io/docs/react-native/integration/session-reporting/#starting-embrace-sdk-from-android--ios",

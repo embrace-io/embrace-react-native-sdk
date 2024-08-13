@@ -142,31 +142,30 @@ export const addUploadBuildPhase = {
 
 export const addEmbraceInitializerSwift = {
   name: "Adding EmbraceInitializer.swift",
-  run: (wizard: Wizard): Promise<any> =>
-    wizard.fieldValue(packageJSON).then(list => {
-      const [appId, packageJSON] = list;
-      const {name} = packageJSON;
+  run: async (wizard: Wizard): Promise<any> => {
+    const [appId, json] = await wizard.fieldValueList([iosAppID, packageJSON]);
+    const {name} = json;
+    const project = await xcodePatchable({name});
 
-      const p = path.join("ios", name, "EmbraceInitializer.swift");
-      if (fs.existsSync(p)) {
-        logger.warn("EmbraceInitializer.swift already exists");
-        return;
-      }
+    const filePath = path.join("ios", name, "EmbraceInitializer.swift");
+    if (fs.existsSync(filePath)) {
+      logger.warn("EmbraceInitializer.swift already exists");
+      return;
+    }
 
-      fs.writeFileSync(p, getEmbraceInitializerContents(appId));
+    fs.writeFileSync(filePath, getEmbraceInitializerContents(appId));
 
-      return xcodePatchable({name}).then(project => {
-        const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
-          project.path,
-          name,
-        );
-        project.addFile(
-          nameWithCaseSensitive,
-          `${nameWithCaseSensitive}/EmbraceInitializer.swift`,
-        );
-        project.patch();
-      });
-    }),
+    const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
+      project.path,
+      name,
+    );
+    project.addFile(
+      nameWithCaseSensitive,
+      `${nameWithCaseSensitive}/EmbraceInitializer.swift`,
+      "source",
+    );
+    return project.patch();
+  },
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually",
 };

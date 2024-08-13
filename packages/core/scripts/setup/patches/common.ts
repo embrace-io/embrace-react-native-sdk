@@ -73,8 +73,8 @@ const MAIN_CLASS_BY_LANGUAGE: Record<SUPPORTED_LANGUAGES, string> = {
   java: JAVA_MAIN_ACTIVITY,
   objectivec: OBJECTIVEC_APP_DELEGATE,
   swift: SWIFT_APP_DELEGATE,
-  swift5x: "",
-  objectivec5x: "",
+  swift5x: SWIFT_APP_DELEGATE,
+  objectivec5x: OBJECTIVEC_APP_DELEGATE,
 };
 
 type ORDER = "after" | "before";

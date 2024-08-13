@@ -28,6 +28,8 @@ export const EMBRACE_INIT_OBJECTIVEC = "[EmbraceInitializer start];";
 
 export const embRunScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';
 
+export type ProjectFileType = "resource" | "source";
+
 export const getAppDelegateByIOSLanguage = (
   projectName: string,
   language: IOS_LANGUAGE,
@@ -243,7 +245,7 @@ export class XcodeProject implements Patchable {
     return this.project.writeSync();
   }
 
-  public addFile(groupName: string, path: string) {
+  public addFile(groupName: string, path: string, fileType?: ProjectFileType) {
     const target = this.findHash(
       this.project.hash.project.objects.PBXNativeTarget,
       groupName,
@@ -257,7 +259,12 @@ export class XcodeProject implements Patchable {
       file.target = target[0];
       file.uuid = this.project.generateUuid();
       this.project.addToPbxBuildFileSection(file);
-      this.project.addToPbxResourcesBuildPhase(file);
+
+      if (fileType === "resource") {
+        this.project.addToPbxResourcesBuildPhase(file);
+      } else if (fileType === "source") {
+        this.project.addToPbxSourcesBuildPhase(file);
+      }
     }
   }
 
@@ -348,7 +355,11 @@ export class XcodeProject implements Patchable {
       this.path,
       projectName,
     );
-    this.addFile(nameWithCaseSensitive, `${nameWithCaseSensitive}/${filename}`);
+    this.addFile(
+      nameWithCaseSensitive,
+      `${nameWithCaseSensitive}/${filename}`,
+      "source",
+    );
 
     this.updateBuildProperty(
       projectName,
