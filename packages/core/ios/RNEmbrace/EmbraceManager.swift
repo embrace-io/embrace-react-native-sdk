@@ -368,10 +368,8 @@ class EmbraceManager: NSObject {
 
   @objc(endView:resolver:rejecter:)
   func endView(_ spanId: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    let endTimeDate = Date()
-    let endTimeMS = NSNumber(value: endTimeDate.timeIntervalSince1970 * 1000)
 
-    stopSpan(spanId, errorCodeString: "", endTimeMs: endTimeMS, resolver: resolve, rejecter: reject)
+    stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0, resolver: resolve, rejecter: reject)
   }
 
     private func severityFromString(from inputString: String) -> LogSeverity {

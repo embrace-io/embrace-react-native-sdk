@@ -311,7 +311,6 @@ describe("Custom Views Tests", () => {
   test("startView", async () => {
     const promiseToResolve = startView(testView);
 
-    jest.runAllTimers();
     await promiseToResolve;
     expect(mockStartView).toHaveBeenCalledWith(testView);
   });
