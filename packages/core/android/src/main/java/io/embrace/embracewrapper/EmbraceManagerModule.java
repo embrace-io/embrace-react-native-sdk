@@ -489,7 +489,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
                 if (readableMap != null) {
                     Map<String, Object> map = readableMap.toHashMap();
-                    // TODO Change when Android/iOS replace time in nano for ms
                     if (map.containsKey("timestampMs") && map.get("timestampMs") instanceof Double) {
                         double timestampMs = (Double) map.get("timestampMs");
                         map.put("timestampMs", (long) timestampMs);

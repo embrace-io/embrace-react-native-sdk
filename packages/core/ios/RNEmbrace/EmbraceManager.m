@@ -83,7 +83,7 @@ RCT_EXTERN_METHOD(addSessionProperty:(NSString *)key
 
 RCT_EXTERN_METHOD(logMessageWithSeverityAndProperties:(NSString *)message
                   severity:(NSString *)severity
-                  properties:(NSDictionary *)properties
+                  properties:(NSDictionary)properties
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
