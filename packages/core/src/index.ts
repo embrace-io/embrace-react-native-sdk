@@ -197,15 +197,14 @@ export const logMessage = (
   severity: "info" | "warning" | "error" = "error",
   properties?: Properties,
 ): Promise<boolean> => {
-  {
-    const stacktrace = severity === INFO ? "" : generateStackTrace();
-    return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
-      message,
-      severity,
-      properties,
-      stacktrace,
-    );
-  }
+  const stacktrace = severity === INFO ? "" : generateStackTrace();
+
+  return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
+    message,
+    severity,
+    properties,
+    stacktrace,
+  );
 };
 
 export const logInfo = (message: string): Promise<boolean> => {
@@ -267,20 +266,13 @@ export const endSession = () => {
 };
 
 export const setUserAsPayer = (): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  // return NativeModules.EmbraceManager.setUserAsPayer();
-
-  return createFalsePromise();
+  return NativeModules.EmbraceManager.setUserAsPayer();
 };
 
 export const clearUserAsPayer = (): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  // return NativeModules.EmbraceManager.clearUserAsPayer();
-
-  return createFalsePromise();
+  return NativeModules.EmbraceManager.clearUserAsPayer();
 };
+
 export const recordNetworkRequest = (
   url: string,
   httpMethod: MethodType,
@@ -289,21 +281,16 @@ export const recordNetworkRequest = (
   bytesSent?: number,
   bytesReceived?: number,
   statusCode?: number,
-  error?: string,
 ): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  // return NativeModules.EmbraceManager.logNetworkRequest(
-  //   url,
-  //   httpMethod,
-  //   startInMillis,
-  //   endInMillis,
-  //   bytesSent || -1,
-  //   bytesReceived || -1,
-  //   statusCode || -1,
-  //   error,
-  // );
-  return createFalsePromise();
+  return NativeModules.EmbraceManager.logNetworkRequest(
+    url,
+    httpMethod,
+    startInMillis,
+    endInMillis,
+    bytesSent || -1,
+    bytesReceived || -1,
+    statusCode || -1,
+  );
 };
 
 export const logNetworkClientError = (
@@ -314,18 +301,16 @@ export const logNetworkClientError = (
   errorType: string,
   errorMessage: string,
 ): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  // return NativeModules.EmbraceManager.logNetworkClientError(
-  //   url,
-  //   httpMethod,
-  //   startInMillis,
-  //   endInMillis,
-  //   errorType,
-  //   errorMessage,
-  // );
-  return createFalsePromise();
+  return NativeModules.EmbraceManager.logNetworkClientError(
+    url,
+    httpMethod,
+    startInMillis,
+    endInMillis,
+    errorType,
+    errorMessage,
+  );
 };
+
 export const getLastRunEndState = (): Promise<SessionStatus> =>
   NativeModules.EmbraceManager.getLastRunEndState();
 
