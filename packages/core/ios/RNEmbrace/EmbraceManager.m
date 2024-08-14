@@ -16,6 +16,9 @@ RCT_EXTERN_METHOD(startNativeEmbraceSDK:(NSDictionary)config
 RCT_EXTERN_METHOD(getDeviceId:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(getLastRunEndState:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(setUserIdentifier:(NSString *)userIdentifier
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
@@ -54,7 +57,10 @@ RCT_EXTERN_METHOD(endSession:(RCTPromiseResolveBlock)resolve
 RCT_EXTERN_METHOD(checkAndSetCodePushBundleURL:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(clearAllUserPersonas:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(setUserAsPayer:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(clearUserAsPayer:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(setReactNativeVersion:(NSString *)version
@@ -73,9 +79,6 @@ RCT_EXTERN_METHOD(addSessionProperty:(NSString *)key
                   value:(NSString *)value
                   permanent:(BOOL)permanent
                   resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-
-RCT_EXTERN_METHOD(clearUserPersona:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(logMessageWithSeverityAndProperties:(NSString *)message
@@ -117,6 +120,17 @@ RCT_EXTERN_METHOD(recordCompletedSpan:(NSString *)name
                   attributes:(NSDictionary)attributes
                   events:(NSArray)events
                   resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(addUserPersona:(NSString *)persona
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(clearUserPersona:(NSString *)persona
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(clearAllUserPersonas:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(logNetworkRequest:(NSString *)url

@@ -88,8 +88,14 @@ jest.mock("react-native", () => ({
       addSessionProperty: (key: string, value: string, permanent: boolean) =>
         mockAddSessionProperty(key, value, permanent),
       removeSessionProperty: (key: string) => mockRemoveSessionProperty(key),
-      setUserAsPayer: () => mockSetUserAsPayer(),
-      clearUserAsPayer: () => mockClearUserAsPayer(),
+      setUserAsPayer: () => {
+        mockSetUserAsPayer();
+        return false;
+      },
+      clearUserAsPayer: () => {
+        mockClearUserAsPayer();
+        return false;
+      },
       setJavaScriptBundlePath: (path: string) =>
         mockSetJavaScriptBundlePath(path),
       logNetworkRequest: (
@@ -330,14 +336,21 @@ describe("Session Properties Tests", () => {
 
 describe("Payers Test", () => {
   test("setUserAsPayer", async () => {
-    await setUserAsPayer();
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockSetUserAsPayer).toHaveBeenCalled();
+    const promiseToResolve = setUserAsPayer();
+    jest.runAllTimers();
+    const result = await promiseToResolve;
+
+    expect(mockSetUserAsPayer).toHaveBeenCalled();
+    expect(result).toBe(false);
   });
   test("clearUserAsPayer", async () => {
-    await clearUserAsPayer();
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockClearUserAsPayer).toHaveBeenCalled();
+    const promiseToResolve = clearUserAsPayer();
+
+    jest.runAllTimers();
+    const result = await promiseToResolve;
+
+    expect(mockClearUserAsPayer).toHaveBeenCalled();
+    expect(result).toBe(false);
   });
 });
 

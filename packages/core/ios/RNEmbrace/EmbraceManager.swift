@@ -134,13 +134,12 @@ class EmbraceManager: NSObject {
     
     @objc(addBreadcrumb:resolver:rejecter:)
     func addBreadcrumb(_ event: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        //TODO Refactor SPAN
-        //      do {
-        //        try Embrace.client?.add(event: event)
-        //          resolve(true)
-        //      } catch {
-        //          reject(false)
-        //      }
+        // Add function returns empty if it succeeds, so I specify true as return
+        if ((Embrace.client?.add(event: .breadcrumb(event))) != nil){
+            resolve(true)
+        } else {
+            reject("ADD_BREADCRUMB", "Error adding breadcrumb", nil)
+        }
     }
     
     @objc
@@ -247,6 +246,16 @@ class EmbraceManager: NSObject {
             reject("CLEAR_ALL_USER_PERSONAS", "Error clearing all User Personas", error)
         }
     }
+
+    @objc(clearUserPersona:resolver:rejecter:)
+    func clearUserPersona(_ persona:String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        do {
+            try Embrace.client?.metadata.remove(persona: PersonaTag(persona), lifespan: .session)
+            resolve(true)
+        }catch let error {
+            reject("CLEAR_USER_PERSONA", "Error removing User Persona", error)
+        }
+    }
     
     @objc(setReactNativeVersion:resolver:rejecter:)
     func setReactNativeVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
@@ -296,17 +305,7 @@ class EmbraceManager: NSObject {
         }
     }
     
-    @objc(clearUserPersona:resolver:rejecter:)
-    func clearUserPersona(_ persona:String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            try Embrace.client?.metadata.remove(persona: PersonaTag(persona), lifespan: .session)
-            resolve(true)
-        }catch let error {
-            reject("CLEAR_USER_PERSONA", "Error removing User Persona", error)
-        }
-    }
-    
-    @objc(clearUserPersona:severity:properties:resolver:rejecter:)
+    @objc(logMessageWithSeverityAndProperties:severity:properties:resolver:rejecter:)
     func logMessageWithSeverityAndProperties(
         _ message: String,
         severity: String,
@@ -327,6 +326,26 @@ class EmbraceManager: NSObject {
         )
         resolve(true)
         
+    }
+
+    @objc
+    func setUserAsPayer(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        do {
+            try Embrace.client?.metadata.add(persona: "payer")
+            resolve(true)
+        } catch let error {
+            reject("SET_USER_PAYER", "Error adding User Payer", error)
+        }
+    }
+        
+    @objc
+    func clearUserAsPayer(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        do {
+            try Embrace.client?.metadata.remove(persona: "payer", lifespan:.session)
+            resolve(true)
+        }catch let error {
+            reject("CLEAR_USER_PAYER", "Error removing User Payer", error)
+        }
     }
     
     private func severityFromString(from inputString: String) -> LogSeverity {
@@ -446,7 +465,7 @@ class EmbraceManager: NSObject {
         return name
     }
 
-    @objc
+    @objc(startSpan:parentSpanId:startTimeMs:resolver:rejecter:)
     func startSpan(
         _ name: String,
         parentSpanId: String,
@@ -486,7 +505,7 @@ class EmbraceManager: NSObject {
         }
     }
 
-    @objc
+    @objc(stopSpan:errorCodeString:endTimeMs:resolver:rejecter:)
     func stopSpan(
         _ spanId: String,
         errorCodeString: String,
@@ -514,7 +533,7 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
 
-    @objc
+    @objc(addSpanEventToSpan:name:time:attributes:resolver:rejecter:)
     func addSpanEventToSpan(
         _ spanId: String,
         name: String,
@@ -541,7 +560,7 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
 
-    @objc
+    @objc(addSpanAttributeToSpan:key:value:resolver:rejecter:)
     func addSpanAttributeToSpan(
         _ spanId: String,
         key: String,
@@ -562,7 +581,7 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
 
-    @objc
+    @objc(recordCompletedSpan:startTimeMs:endTimeMs:errorCodeString:parentSpanId:attributes:events:resolver:rejecter:)
     func recordCompletedSpan(
         _ name: String,
         startTimeMs: Double,
