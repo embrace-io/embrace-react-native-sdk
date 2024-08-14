@@ -98,7 +98,7 @@ And then either publish a local artifact or if you need CI to pass - publish a b
 
 ### Local artifact
 
-You can test changes local changes to the iOS SDK by updating the example app's `podspec` and `Podfile` to point to the local copy.
+You can test local changes to the iOS SDK by updating the example app's `podspec` and `Podfile` to point to the local copy.
 
 1. In `examples/react-native-test-suite/node_modules/embrace-io/RNEmbrace.podspec`, change the dependency on the iOS SDK to `s.dependency 'EmbraceIO-LOCAL'`
 2. In `examples/react-native-test-suite/ios/Podfile`, add the following line `pod 'EmbraceIO-LOCAL', :path => 'path/to/ios_sdk'`
