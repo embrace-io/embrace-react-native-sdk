@@ -199,6 +199,7 @@ describe("Test Navigation Tracker", () => {
     expect(mockStartView).toHaveBeenCalledTimes(1);
   });
   test("Track on Second Screen", () => {
+    const mockStartView = jest.fn();
     const mockEndView = jest.fn();
     jest.mock(
       "react",
@@ -208,7 +209,7 @@ describe("Test Navigation Tracker", () => {
         },
         useState: () => [true, () => {}],
         useRef: () => {
-          return {current: {name: "HomeScreen", startTime: 123123}};
+          return {current: {name: "HomeScreen", spanId: "123123-MY-ID"}};
         },
       }),
       {virtual: true},
@@ -218,7 +219,14 @@ describe("Test Navigation Tracker", () => {
       () => ({
         NativeModules: {
           EmbraceManager: {
-            endView: mockEndView,
+            endView: (spanId: string) => {
+              mockEndView();
+              return true;
+            },
+            startView: (spanName: string) => {
+              mockStartView();
+              return `id-${spanName}`;
+            },
           },
         },
       }),
@@ -236,6 +244,7 @@ describe("Test Navigation Tracker", () => {
       },
     };
     useEmbraceNavigationTracker(navigationRef);
+    expect(mockStartView).toHaveBeenCalledTimes(1);
     expect(mockEndView).toHaveBeenCalledTimes(1);
   });
   test("End View does not exist", () => {
@@ -247,7 +256,7 @@ describe("Test Navigation Tracker", () => {
         },
         useState: () => [true, () => {}],
         useRef: () => {
-          return {current: {name: "HomeScreen", startTime: 123123}};
+          return {current: {name: "HomeScreen", spanId: "123123-MY-ID"}};
         },
       }),
       {virtual: true},

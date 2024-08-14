@@ -234,17 +234,11 @@ export const logHandledError = (
   // }
 };
 export const startView = (view: string): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  //   return NativeModules.EmbraceManager.startView(view);
-  return createFalsePromise();
+  return NativeModules.EmbraceManager.startView(view);
 };
 
-export const endView = (view: string): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
-
-  //   return NativeModules.EmbraceManager.endView(view);
-  return createFalsePromise();
+export const endView = (spanId: string): Promise<boolean> => {
+  return NativeModules.EmbraceManager.endView(spanId);
 };
 
 export const setJavaScriptPatch = (patch: string) => {

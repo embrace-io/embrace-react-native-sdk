@@ -194,7 +194,9 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void endView(String screen, Promise promise) {
+        promise.resolve(true)
         //This method is only for compatibility, Android does not need an end event to end the view, but iOS does
+        //TODO this should be changed to span in the future
     }
 
     @ReactMethod
@@ -256,7 +258,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
             final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<String, Object>();
             Embrace.getInstance().getReactNativeInternalInterface().logRnAction(name, st, et, props, payloadSize, output);
-            promise.resolve(true);
+            promise.resolve(name);
         }catch(Exception e){
             promise.resolve(false);
         }

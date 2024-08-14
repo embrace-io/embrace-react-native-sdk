@@ -140,6 +140,8 @@ jest.mock("react-native", () => ({
 }));
 
 const mockSt = "this is a fake stack trace";
+const testView = "View";
+
 const mockGenerateStackTrace = jest.fn();
 jest.mock("../utils/ErrorUtil", () => ({
   ...jest.requireActual("../utils/ErrorUtil"),
@@ -192,7 +194,6 @@ describe("Logs Test", () => {
   const WARNING = "warning";
   const INFO = "info";
   const ERROR = "error";
-  const testView = "View";
 
   beforeEach(() => {
     mockGenerateStackTrace.mockReturnValue(mockSt);
@@ -307,18 +308,18 @@ describe("Personas Tests", () => {
 });
 
 describe("Custom Views Tests", () => {
-  const testView = "View";
-
   test("startView", async () => {
-    await startView(testView);
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockStartView).toHaveBeenCalledWith(testView);
+    const promiseToResolve = startView(testView);
+
+    await promiseToResolve;
+    expect(mockStartView).toHaveBeenCalledWith(testView);
   });
 
   test("endView", async () => {
-    await endView(testView);
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockEndView).toHaveBeenCalledWith(testView);
+    const promiseToResolve = endView(testView);
+    jest.runAllTimers();
+    await promiseToResolve;
+    expect(mockEndView).toHaveBeenCalledWith(testView);
   });
 });
 
