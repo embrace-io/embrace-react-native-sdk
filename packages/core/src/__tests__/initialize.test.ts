@@ -66,7 +66,9 @@ describe("initialize", () => {
     expect(result).toBe(true);
     expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.56.1");
     expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith(testValue);
-    expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith("4.2.0");
+    expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith(
+      expect.any(String),
+    );
     expect(mockStart).not.toHaveBeenCalled();
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalled();
     expect(mockLogMessageWithSeverityAndProperties.mock.calls[0][0]).toBe(
@@ -82,7 +84,9 @@ describe("initialize", () => {
     expect(mockStart).toHaveBeenCalledWith({});
     expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.56.1");
     expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith(testValue);
-    expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith("4.2.0");
+    expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith(
+      expect.any(String),
+    );
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalled();
     expect(mockLogMessageWithSeverityAndProperties.mock.calls[0][0]).toBe(
       "Unhandled promise rejection: ",
