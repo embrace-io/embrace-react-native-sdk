@@ -1,12 +1,28 @@
 import {EMBRACE_IMPORT_OBJECTIVEC, EMBRACE_INIT_OBJECTIVEC} from "../util/ios";
-import {EMBRACE_IMPORT_SWIFT, EMBRACE_INIT_SWIFT} from "../setup/patches/patch";
+import {
+  EMBRACE_IMPORT_OBJECTIVEC_5X,
+  EMBRACE_IMPORT_SWIFT_5X,
+  EMBRACE_INIT_OBJECTIVEC_5X,
+  EMBRACE_INIT_SWIFT_5X,
+} from "../setup/patches/patch_ios_5x";
+import {EMBRACE_INIT_SWIFT} from "../setup/patches/patch";
+
+const fs = require("fs");
 
 jest.useFakeTimers();
 
 beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
-const flushPromises = () => new Promise(resolve => process.nextTick(resolve));
+
+const copyMock = (from: string, to: string) => {
+  const dir = "./packages/core/scripts/__tests__/tmp/";
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+  fs.copyFile(from, to, () => {});
+};
+
 describe("Uninstall Script iOS", () => {
   test("Remove Embrace From Podfile", async () => {
     jest.mock("glob", () => ({
@@ -37,9 +53,20 @@ describe("Uninstall Script iOS", () => {
     await patchPodfile(mockPackageJson);
   });
   test("Remove Embrace From Xcode", async () => {
+    const tmp = "./packages/core/scripts/__tests__/tmp/";
+    const xcodeProj = `${tmp}/removeTest.xcodeproj`;
+
+    fs.existsSync(xcodeProj) && fs.rmdirSync(xcodeProj, {recursive: true});
+    fs.mkdirSync(xcodeProj, {recursive: true});
+
+    fs.copyFileSync(
+      "./packages/core/scripts/__tests__/__mocks__/ios/testMock.xcodeproj/project.pbxproj",
+      `${xcodeProj}/project.pbxproj`,
+    );
+
     jest.mock("glob", () => ({
       sync: () => [
-        "./packages/core/scripts/__tests__/__mocks__/ios/testMock.xcodeproj/project.pbxproj",
+        "./packages/core/scripts/__tests__/tmp/removeTest.xcodeproj/project.pbxproj",
       ],
     }));
 
@@ -65,10 +92,9 @@ describe("Uninstall Script iOS", () => {
     const {removeEmbraceFromXcode} = require("../setup/uninstall");
 
     const result = await removeEmbraceFromXcode();
-    expect(result.project.includes("EmbraceIO")).toBe(false);
-    expect(result.project.includes("SOURCEMAP_FILE")).toBe(false);
+    expect(result.includes("EmbraceIO")).toBe(false);
+    expect(result.includes("SOURCEMAP_FILE")).toBe(false);
 
-    xcode.sync();
     xcode.patch();
 
     const xcodeAfterPatch = await xcodePatchable(packageJsonMock);
@@ -126,9 +152,16 @@ describe("Uninstall Script iOS", () => {
   });
 
   test("Unlink Embrace From AppDelegate.mm", async () => {
+    const originalMockPath =
+      "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithEmbrace.mm";
+    const unlinkedPath =
+      "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate.mm";
+
+    copyMock(originalMockPath, unlinkedPath);
+
     jest.mock("glob", () => ({
       sync: () => [
-        "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegate.mm",
+        "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate.mm",
       ],
     }));
     jest.mock(
@@ -141,26 +174,37 @@ describe("Uninstall Script iOS", () => {
     const {getAppDelegateByIOSLanguage} = require("../util/ios");
     const appDelegate = await getAppDelegateByIOSLanguage("test", "objectivec");
 
-    expect(appDelegate.contents.includes(EMBRACE_IMPORT_OBJECTIVEC)).toBe(true);
     expect(appDelegate.contents.includes(EMBRACE_INIT_OBJECTIVEC)).toBe(true);
+    expect(
+      appDelegate.contents.includes(
+        EMBRACE_IMPORT_OBJECTIVEC({
+          bridgingHeader: "MyProductModuleName-Swift.h",
+        }),
+      ),
+    ).toBe(true);
 
     const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
-
-    const resultUnpatch =
-      await removeEmbraceImportAndStartFromFile("objectivec");
+    const resultUnpatch = removeEmbraceImportAndStartFromFile("objectivec");
 
     expect(resultUnpatch).toBe(true);
-
-    const patchAppDelegate = require("../setup/patches/patch").default;
-    const result = await patchAppDelegate("objectivec", {name: "test"});
-
-    expect(result).toBe(true);
+    const afterRemoval = fs.readFileSync(unlinkedPath);
+    const mockWithoutEmbrace = fs.readFileSync(
+      "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace.mm",
+    );
+    expect(afterRemoval.toString()).toEqual(mockWithoutEmbrace.toString());
   });
 
   test("Unlink Embrace From AppDelegate.swift", async () => {
+    const originalMockPath =
+      "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithEmbrace.swift";
+    const unlinkedPath =
+      "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate.swift";
+
+    copyMock(originalMockPath, unlinkedPath);
+
     jest.mock("glob", () => ({
       sync: () => [
-        "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegate.swift",
+        "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate.swift",
       ],
     }));
     jest.mock(
@@ -173,19 +217,94 @@ describe("Uninstall Script iOS", () => {
     const {getAppDelegateByIOSLanguage} = require("../util/ios");
     const appDelegate = await getAppDelegateByIOSLanguage("test", "swift");
 
-    expect(appDelegate.contents.includes(EMBRACE_IMPORT_SWIFT)).toBe(true);
     expect(appDelegate.contents.includes(EMBRACE_INIT_SWIFT)).toBe(true);
 
     const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
-
-    const resultUnpatch = await removeEmbraceImportAndStartFromFile("swift");
+    const resultUnpatch = removeEmbraceImportAndStartFromFile("swift");
 
     expect(resultUnpatch).toBe(true);
+    const afterRemoval = fs.readFileSync(unlinkedPath);
+    const mockWithoutEmbrace = fs.readFileSync(
+      "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace.swift",
+    );
+    expect(afterRemoval.toString()).toEqual(mockWithoutEmbrace.toString());
+  });
 
-    await flushPromises();
-    const patchAppDelegate = require("../setup/patches/patch").default;
-    const result = await patchAppDelegate("swift", {name: "test"});
+  test("Unlink Embrace From AppDelegate5x.mm", async () => {
+    const originalMockPath =
+      "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithEmbrace5x.mm";
+    const unlinkedPath =
+      "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate5x.mm";
 
-    expect(result).toBe(true);
+    copyMock(originalMockPath, unlinkedPath);
+
+    jest.mock("glob", () => ({
+      sync: () => [
+        "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate5x.mm",
+      ],
+    }));
+    jest.mock(
+      "../../../../../../package.json",
+      () => ({
+        name: "test",
+      }),
+      {virtual: true},
+    );
+    const {getAppDelegateByIOSLanguage} = require("../util/ios");
+    const appDelegate = await getAppDelegateByIOSLanguage("test", "objectivec");
+
+    expect(appDelegate.contents.includes(EMBRACE_IMPORT_OBJECTIVEC_5X)).toBe(
+      true,
+    );
+    expect(appDelegate.contents.includes(EMBRACE_INIT_OBJECTIVEC_5X)).toBe(
+      true,
+    );
+
+    const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
+    const resultUnpatch = removeEmbraceImportAndStartFromFile("objectivec5x");
+
+    expect(resultUnpatch).toBe(true);
+    const afterRemoval = fs.readFileSync(unlinkedPath);
+    const mockWithoutEmbrace = fs.readFileSync(
+      "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace5x.mm",
+    );
+    expect(afterRemoval.toString()).toEqual(mockWithoutEmbrace.toString());
+  });
+
+  test("Unlink Embrace From AppDelegate5x.swift", async () => {
+    const originalMockPath =
+      "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithEmbrace5x.swift";
+    const unlinkedPath =
+      "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate5x.swift";
+
+    copyMock(originalMockPath, unlinkedPath);
+
+    jest.mock("glob", () => ({
+      sync: () => [
+        "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate5x.swift",
+      ],
+    }));
+    jest.mock(
+      "../../../../../../package.json",
+      () => ({
+        name: "test",
+      }),
+      {virtual: true},
+    );
+    const {getAppDelegateByIOSLanguage} = require("../util/ios");
+    const appDelegate = await getAppDelegateByIOSLanguage("test", "swift5x");
+
+    expect(appDelegate.contents.includes(EMBRACE_IMPORT_SWIFT_5X)).toBe(true);
+    expect(appDelegate.contents.includes(EMBRACE_INIT_SWIFT_5X)).toBe(true);
+
+    const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
+    const resultUnpatch = removeEmbraceImportAndStartFromFile("swift5x");
+
+    expect(resultUnpatch).toBe(true);
+    const afterRemoval = fs.readFileSync(unlinkedPath);
+    const mockWithoutEmbrace = fs.readFileSync(
+      "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace.swift",
+    );
+    expect(afterRemoval.toString()).toEqual(mockWithoutEmbrace.toString());
   });
 });

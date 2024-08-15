@@ -3,23 +3,27 @@ import {
   EMBRACE_INIT_OBJECTIVEC,
   getAppDelegateByIOSLanguage,
 } from "../../util/ios";
-import {FileUpdatable} from "../../util/file";
 import {getMainApplicationPatchable} from "../../util/android";
 import EmbraceLogger from "../../../src/logger";
 
 import {
+  PATCH_IOS_OBJECTIVEC_APPDELEGATE_5X,
+  PATCH_IOS_SWIFT_APPDELEGATE_5X,
+} from "./patch_ios_5x";
+import {
   addLineAfterToTextInFile,
   addLineBeforeToTextInFile,
   ANDROID_LANGUAGE,
+  BREAKINGLINE_ORDER,
+  DynamicTextParameters,
   IOS_LANGUAGE,
+  IPatchDefinition,
   MAIN_CLASS_BY_LANGUAGE,
   SUPPORTED_LANGUAGES,
+  TextToAdd,
 } from "./common";
 
-export const EMBRACE_IMPORT_SWIFT = "import Embrace";
-
-export const EMBRACE_INIT_SWIFT =
-  "Embrace.sharedInstance().start(launchOptions: launchOptions, framework:.reactNative)";
+export const EMBRACE_INIT_SWIFT = "EmbraceInitializer.start()";
 
 export const EMBRACE_IMPORT_JAVA =
   "import io.embrace.android.embracesdk.Embrace;";
@@ -35,35 +39,9 @@ export const EMBRACE_INIT_KOTLIN =
 
 const logger = new EmbraceLogger(console);
 
-type ORDER = "after" | "before";
-type BREAKINGLINE_ORDER = ORDER | "none" | "both";
-interface TextToAdd {
-  searchText: string | RegExp;
-  textToAdd: string;
-  order: ORDER;
-  breakingLine: BREAKINGLINE_ORDER;
-}
-
-type FindFileFunction = (
-  language: SUPPORTED_LANGUAGES,
-  projectName?: string,
-) => FileUpdatable | undefined;
-
-export interface IPatchDefinition {
-  fileName: string;
-  textsToAdd: TextToAdd[];
-  findFileFunction: FindFileFunction;
-}
-
 const PATCH_IOS_SWIFT_APPDELEGATE: IPatchDefinition = {
   fileName: MAIN_CLASS_BY_LANGUAGE.swift,
   textsToAdd: [
-    {
-      searchText: "@UIApplicationMain",
-      textToAdd: EMBRACE_IMPORT_SWIFT,
-      order: "before",
-      breakingLine: "after",
-    },
     {
       searchText: /func\s+application\(\s*_\s*[^}]*\{/,
       textToAdd: EMBRACE_INIT_SWIFT,
@@ -86,7 +64,7 @@ const PATCH_IOS_OBJECTIVEC_APPDELEGATE: IPatchDefinition = {
       searchText: '#import "AppDelegate.h"',
       textToAdd: EMBRACE_IMPORT_OBJECTIVEC,
       order: "after",
-      breakingLine: "both",
+      breakingLine: "before",
     },
     {
       searchText:
@@ -145,7 +123,7 @@ const PATCH_ANDROID_JAVA_MAIN_ACTIVITTY: IPatchDefinition = {
 };
 
 type SupportedPatches = {
-  [key in SUPPORTED_LANGUAGES]: IPatchDefinition;
+  [key in SUPPORTED_LANGUAGES]: IPatchDefinition | undefined;
 };
 
 export const SUPPORTED_PATCHES: SupportedPatches = {
@@ -153,13 +131,35 @@ export const SUPPORTED_PATCHES: SupportedPatches = {
   swift: PATCH_IOS_SWIFT_APPDELEGATE,
   java: PATCH_ANDROID_JAVA_MAIN_ACTIVITTY,
   kotlin: PATCH_ANDROID_KOTLIN_MAIN_ACTIVITTY,
+  swift5x: undefined,
+  objectivec5x: undefined,
 };
 
+export const SUPPORTED_REMOVALS = {
+  ...SUPPORTED_PATCHES,
+  ...{
+    swift5x: PATCH_IOS_SWIFT_APPDELEGATE_5X,
+    objectivec5x: PATCH_IOS_OBJECTIVEC_APPDELEGATE_5X,
+  },
+};
+
+export const getText = (
+  item: TextToAdd,
+  dynamicTextParams?: DynamicTextParameters,
+): string | string[] =>
+  typeof item.textToAdd === "function"
+    ? item.textToAdd(dynamicTextParams || {})
+    : item.textToAdd;
+
 export const getTextToAddWithBreakingLine = (
-  textToAdd: string,
+  textToAdd: string | string[],
   breakingLine: BREAKINGLINE_ORDER,
   padding: string = "",
 ) => {
+  if (Array.isArray(textToAdd)) {
+    textToAdd = textToAdd.join(`\n${padding}`);
+  }
+
   if (breakingLine === "both") {
     return `\n${padding}${textToAdd}\n${padding}`;
   }
@@ -172,21 +172,26 @@ export const getTextToAddWithBreakingLine = (
   return textToAdd;
 };
 
-const patch = (languague: SUPPORTED_LANGUAGES, projectName?: string) => {
-  if (SUPPORTED_PATCHES[languague] === undefined) {
+const patch = (
+  language: SUPPORTED_LANGUAGES,
+  projectName?: string,
+  dynamicTextParams?: DynamicTextParameters,
+) => {
+  const patchDefinition = SUPPORTED_PATCHES[language];
+
+  if (patchDefinition === undefined) {
     return logger.warn("This language is not supported");
   }
+  const {fileName, textsToAdd, findFileFunction} = patchDefinition;
 
-  const {fileName, textsToAdd, findFileFunction} = SUPPORTED_PATCHES[languague];
-
-  const file = findFileFunction(languague, projectName);
+  const file = findFileFunction(language, projectName);
 
   if (!file) {
     return logger.warn("The file to be patched not found");
   }
 
   const result = textsToAdd.map(item => {
-    const {order, textToAdd, searchText, breakingLine} = item;
+    const {order, searchText, breakingLine} = item;
 
     let padding = "";
     // If its a regex we take the spaces from the next breaking line to the next line
@@ -199,7 +204,7 @@ const patch = (languague: SUPPORTED_LANGUAGES, projectName?: string) => {
     }
 
     const finalTextToAdd = getTextToAddWithBreakingLine(
-      textToAdd,
+      getText(item, dynamicTextParams || {}),
       breakingLine,
       padding,
     );

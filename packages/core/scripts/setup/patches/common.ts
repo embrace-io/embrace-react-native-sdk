@@ -65,7 +65,7 @@ const addLineBeforeToTextInFile = (
 };
 
 type ANDROID_LANGUAGE = "kotlin" | "java";
-type IOS_LANGUAGE = "swift" | "objectivec";
+type IOS_LANGUAGE = "swift" | "objectivec" | "swift5x" | "objectivec5x";
 type SUPPORTED_LANGUAGES = IOS_LANGUAGE | ANDROID_LANGUAGE;
 
 const MAIN_CLASS_BY_LANGUAGE: Record<SUPPORTED_LANGUAGES, string> = {
@@ -73,7 +73,35 @@ const MAIN_CLASS_BY_LANGUAGE: Record<SUPPORTED_LANGUAGES, string> = {
   java: JAVA_MAIN_ACTIVITY,
   objectivec: OBJECTIVEC_APP_DELEGATE,
   swift: SWIFT_APP_DELEGATE,
+  swift5x: SWIFT_APP_DELEGATE,
+  objectivec5x: OBJECTIVEC_APP_DELEGATE,
 };
+
+type ORDER = "after" | "before";
+type BREAKINGLINE_ORDER = ORDER | "none" | "both";
+
+type DynamicTextParameters = {
+  bridgingHeader?: string;
+};
+
+type DynamicText = (params: DynamicTextParameters) => string[];
+interface TextToAdd {
+  searchText: string | RegExp;
+  textToAdd: string | string[] | DynamicText;
+  order: ORDER;
+  breakingLine: BREAKINGLINE_ORDER;
+}
+
+type FindFileFunction = (
+  language: SUPPORTED_LANGUAGES,
+  projectName?: string,
+) => FileUpdatable | undefined;
+
+interface IPatchDefinition {
+  fileName: string;
+  textsToAdd: TextToAdd[];
+  findFileFunction: FindFileFunction;
+}
 
 export {
   addLineAfterToTextInFile,
@@ -82,4 +110,8 @@ export {
   SUPPORTED_LANGUAGES,
   ANDROID_LANGUAGE,
   IOS_LANGUAGE,
+  TextToAdd,
+  IPatchDefinition,
+  BREAKINGLINE_ORDER,
 };
+export type {DynamicTextParameters};
