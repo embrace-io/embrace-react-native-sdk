@@ -346,12 +346,10 @@ class EmbraceManager: NSObject {
 
     @objc(startView:resolver:rejecter:)
     func startView(_ viewName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        let startTimeDate = Date()
 
         let span = Embrace.client?.buildSpan(name: "emb-screen-view")
         .setAttribute(key: "view.name", value: viewName)
         .setAttribute(key: "emb.type", value: "ux.view")
-        .setStartTime(time: startTimeDate)
         .startSpan()
 
         var spanId = ""
@@ -383,7 +381,8 @@ class EmbraceManager: NSObject {
         }
     }
 
-    @objc
+    
+    @objc(logNetworkRequest:httpMethod:startInMillis:endInMillis:bytesSent:bytesReceived:statusCode:resolver:rejecter:)
     func logNetworkRequest(
         _ url: String,
         httpMethod: String,
@@ -428,7 +427,7 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
 
-    @objc
+    @objc(logNetworkClientError:httpMethod:startInMillis:endInMillis:errorType:errorMessage:resolver:rejecter:)
     func logNetworkClientError(
         _ url: String,
         httpMethod: String,
@@ -590,7 +589,6 @@ class EmbraceManager: NSObject {
         if !parentSpanId.isEmpty, let parent = spanRepository.get(spanId: parentSpanId) {
             spanBuilder?.setParent(parent)
         } else {
-            // TODO, do we also need to do this in the case that there's parent?
             spanBuilder?.markAsKeySpan()
         }
 

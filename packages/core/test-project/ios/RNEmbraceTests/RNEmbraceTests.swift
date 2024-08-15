@@ -601,6 +601,24 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["error.message"]!.description, "this is my error")
         XCTAssertEqual(exportedSpans[0].attributes["error.type"]!.description, "custom error")
     }
+    
+    func testStartEndView() async throws {
+        module.startView("my-view", resolver: promise.resolve, rejecter: promise.reject)
+        XCTAssertEqual(promise.resolveCalls.count, 1)
+        let viewSpanId = (promise.resolveCalls[0] as? String)!
+        module.startView("my-not-ended-view", resolver: promise.resolve, rejecter: promise.reject)
+        promise.reset()
+
+        module.endView(viewSpanId, resolver: promise.resolve, rejecter: promise.reject)
+        XCTAssertEqual(promise.resolveCalls.count, 1)
+        XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
+
+        let exportedSpans = try await getExportedSpans()
+        XCTAssertEqual(exportedSpans.count, 1)
+        XCTAssertEqual(exportedSpans[0].name, "emb-screen-view")
+        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "ux.view")
+        XCTAssertEqual(exportedSpans[0].attributes["view.name"]!.description, "my-view")
+    }
 }
 
 class EmbraceSpansSDKNotStartedTests: XCTestCase {
