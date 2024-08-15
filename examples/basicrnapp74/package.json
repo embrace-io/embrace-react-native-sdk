@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@embrace-io/react-native": "^4.2.0",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "react": "18.2.0",

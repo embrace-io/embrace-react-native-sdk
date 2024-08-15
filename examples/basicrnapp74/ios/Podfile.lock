@@ -1,6 +1,7 @@
 PODS:
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
+  - EmbraceIO (5.25.2)
   - FBLazyVector (0.74.5)
   - fmt (9.1.0)
   - glog (0.3.5)
@@ -1166,6 +1167,9 @@ PODS:
     - React-logger (= 0.74.5)
     - React-perflogger (= 0.74.5)
     - React-utils (= 0.74.5)
+  - RNEmbrace (1.1.1):
+    - EmbraceIO (= 5.25.2)
+    - React-Core
   - RNScreens (3.34.0):
     - DoubleConversion
     - glog
@@ -1248,11 +1252,13 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNEmbrace (from `../node_modules/@embrace-io/react-native`)"
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
+    - EmbraceIO
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1365,6 +1371,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNEmbrace:
+    :path: "../node_modules/@embrace-io/react-native"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   Yoga:
@@ -1373,6 +1381,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
+  EmbraceIO: a29704b8ee0c83a52fb2416a8de422256c7e706c
   FBLazyVector: ac12dc084d1c8ec4cc4d7b3cf1b0ebda6dab85af
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
@@ -1425,6 +1434,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: cfbe85c3510c541ec6dc815c7729b41304b67961
   React-utils: f242eb7e7889419d979ca0e1c02ccc0ea6e43b29
   ReactCommon: f7da14a8827b72704169a48c929bcde802698361
+  RNEmbrace: 26063c48c7f0dd688f39af068fa546cbf76e2ba9
   RNScreens: aa943ad421c3ced3ef5a47ede02b0cbfc43a012e
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 2246eea72aaf1b816a68a35e6e4b74563653ae09

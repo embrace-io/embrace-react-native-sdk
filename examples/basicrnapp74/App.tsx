@@ -5,10 +5,12 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+
 import {Button, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {initialize} from '@embrace-io/react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +39,32 @@ function SecondScreen({navigation}) {
 }
 
 function App(): React.JSX.Element {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const startEmbrace = async () => {
+      try {
+        const hasStarted = await initialize();
+        if (hasStarted) {
+          setLoading(false);
+        } else {
+          console.log("embrace didn't start");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    startEmbrace();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <Text>Loading Embrace</Text>
+      </View>
+    );
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="FirstScreen">
