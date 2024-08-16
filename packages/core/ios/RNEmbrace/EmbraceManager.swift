@@ -610,11 +610,13 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
     
+    
     @objc
     func logUnhandledJSException(
         _ name: String,
         message: String,
         type: String,
+        stacktrace: String,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
@@ -623,7 +625,12 @@ class EmbraceManager: NSObject {
             return
         }
 
-        print("logUnhandledJSException [placeholder]", name, message, type);
+        Embrace.client?.log(
+            message,
+            severity: LogSeverity.error,
+            type: LogType.message
+        );
+
         resolve(true)
     }
 }

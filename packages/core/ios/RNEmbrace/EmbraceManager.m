@@ -158,6 +158,7 @@ RCT_EXTERN_METHOD(logHandledError:(NSString *)message
 RCT_EXTERN_METHOD(logUnhandledJSException:(NString *)name
                   message:(NSString *)message
                   type:(NSString *)type
+                  stacktrace:(NSString *)stacktrace
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 

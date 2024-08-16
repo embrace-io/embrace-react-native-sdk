@@ -29,17 +29,18 @@ class TestLogExporter: EmbraceLogRecordExporter {
 
     func export(logRecords: [OpenTelemetrySdk.ReadableLogRecord]) -> OpenTelemetrySdk.ExportResult {
         exportedLogs.append(contentsOf: logRecords)
-        return EmbraceLogRecordExporter
+        return OpenTelemetrySdk.ExportResult.success
     }
-    
-    func shutdown() {
-        <#code#>
+        
+    func reset() {
+        exportedLogs.removeAll()
     }
-    
+
     func forceFlush() -> OpenTelemetrySdk.ExportResult {
-        <#code#>
+        return OpenTelemetrySdk.ExportResult.success
     }
     
+    func shutdown() {}
 }
 
 class Promise {
