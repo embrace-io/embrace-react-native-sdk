@@ -583,7 +583,10 @@ class EmbraceManager: NSObject {
     }
 
     func logHandledError(
-        _ name: String,
+        _ message: String,
+        // NOTE: should we inject the stacktrace as a property?
+        stacktrace: String,
+        properties: NSDictionary,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
@@ -591,8 +594,19 @@ class EmbraceManager: NSObject {
             reject("LOG_HANDLED_ERROR_ERROR", "Error recording a log handled error, Embrace SDK may not be initialized", nil)
             return
         }
+        
+        guard let attributes = properties as? [String: String] else {
+            reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
+            return
+        }
 
-        print("Hey, this is 'logHandledError' working", name);
+        Embrace.client?.log(
+            message,
+            severity: LogSeverity.error,
+            type: LogType.message,
+            attributes: attributes
+        );
+
         resolve(true)
     }
     
@@ -605,11 +619,11 @@ class EmbraceManager: NSObject {
         rejecter reject: RCTPromiseRejectBlock
     ) {
         if Embrace.client == nil {
-            reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error recording a log unhandled js exception, Embrace SDK may not be initialized", nil)
+            reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error recording an unhandled js exception, Embrace SDK may not be initialized", nil)
             return
         }
 
-        print("Hey, this is 'logUnhandledJSException' working", name, message, type);
+        print("logUnhandledJSException [placeholder]", name, message, type);
         resolve(true)
     }
 }
