@@ -12,27 +12,6 @@ const HomeScreen = () => {
     endSession();
   }, []);
 
-  const handleLogUnhandledError = useCallback(() => {
-    /**
-     * Android Log
-     */
-
-    /**
-     * iOS Log
-     * TBD
-     */
-
-    throw new Error("handleLogUnhandledError (auto-captured by init sdk)");
-  }, []);
-
-  const handleLogHandledError = useCallback(() => {
-    const error1 = new Error("logHandledError");
-    const error2 = new Error("logHandledError with properties");
-
-    logHandledError(error1);
-    logHandledError(error2, {prop1: "test", prop2: "hey"});
-  }, []);
-
   return (
     <ParallaxScrollView
       headerBackgroundColor={{light: "#A1CEDC", dark: "#1D3D47"}}
@@ -45,15 +24,6 @@ const HomeScreen = () => {
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">End Session</ThemedText>
         <Button onPress={handleEndSession} title="END SESSION" />
-      </ThemedView>
-
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Errors</ThemedText>
-        <Button
-          onPress={handleLogUnhandledError}
-          title="Unhandled JS Exception"
-        />
-        <Button onPress={handleLogHandledError} title="Handled JS Error" />
       </ThemedView>
     </ParallaxScrollView>
   );
