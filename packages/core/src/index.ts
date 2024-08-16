@@ -24,9 +24,9 @@ const STACK_LIMIT = 200;
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
 
 // NOTE: This can be an enum
-export const WARNING = "warning";
-export const INFO = "info";
-export const ERROR = "error";
+const WARNING = "warning";
+const INFO = "info";
+const ERROR = "error";
 
 const noOp = () => {};
 const handleError = async (error: Error, callback: () => void) => {
@@ -104,8 +104,6 @@ export const initialize = async ({
   if (!__DEV__) {
     NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
   }
-
-  console.log("ErrorUtils", ErrorUtils);
 
   if (!ErrorUtils) {
     console.warn(
@@ -375,3 +373,5 @@ const createTruePromise = (): Promise<boolean> => {
     }, 0);
   });
 };
+
+export {WARNING, ERROR, INFO};

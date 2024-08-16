@@ -2,9 +2,10 @@ import XCTest
 import EmbraceIO
 import EmbraceOTelInternal
 import OpenTelemetryApi
+import OpenTelemetrySdk
 @testable import RNEmbrace
 
-class TestExporter: EmbraceSpanExporter {
+class TestSpanExporter: EmbraceSpanExporter {
     var exportedSpans: [SpanData] = []
 
     func export(spans: [SpanData]) -> SpanExporterResultCode {
@@ -21,6 +22,24 @@ class TestExporter: EmbraceSpanExporter {
     }
 
     func shutdown() {}
+}
+
+class TestLogExporter: EmbraceLogRecordExporter {
+    var exportedLogs: [OpenTelemetrySdk.ReadableLogRecord] = []
+
+    func export(logRecords: [OpenTelemetrySdk.ReadableLogRecord]) -> OpenTelemetrySdk.ExportResult {
+        exportedLogs.append(contentsOf: logRecords)
+        return EmbraceLogRecordExporter
+    }
+    
+    func shutdown() {
+        <#code#>
+    }
+    
+    func forceFlush() -> OpenTelemetrySdk.ExportResult {
+        <#code#>
+    }
+    
 }
 
 class Promise {
@@ -93,13 +112,13 @@ class EmbraceManagerTests: XCTestCase {
 }
 
 class EmbraceSpansTests: XCTestCase {
-    static var exporter: TestExporter!
+    static var exporter: TestSpanExporter!
     var module: EmbraceManager!
     var promise: Promise!
 
     override class func setUp() {
         super.setUp()
-        exporter = TestExporter()
+        exporter = TestSpanExporter()
 
         do {
             try Embrace
