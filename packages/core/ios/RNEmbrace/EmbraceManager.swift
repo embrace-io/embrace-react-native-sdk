@@ -13,6 +13,7 @@ import CodePush
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"
 private let HOSTED_PLATFORM_VERSION_RESOURCE_KEY = "hosted_platform_version"
 private let HOSTED_SDK_VERSION_RESOURCE_KEY = "hosted_sdk_version"
+private let REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY = "react_native_bundle_id"
 
 // Keys defined in packages/spans/interfaces/ISpans.ts
 private let EVENT_NAME_KEY = "name"
@@ -43,10 +44,9 @@ class EmbraceManager: NSObject {
   @objc(setJavaScriptBundlePath:resolver:rejecter:)
   func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     do {
-
-      // TODO, use path to compute a hash of the assets and add as a 'react_native_bundle_id' key to the resource
-      // try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: path, lifespan: .process)
-      resolve(true)
+        let bundleID = try computeBundleID(path: path)
+        try Embrace.client?.metadata.addResource(key: REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, value: bundleID.id, lifespan: .process)
+        resolve(true)
     } catch let error {
       reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", error)
     }
@@ -204,23 +204,22 @@ class EmbraceManager: NSObject {
         _ resolve: @escaping RCTPromiseResolveBlock,
         rejecter reject: @escaping RCTPromiseRejectBlock
     ) {
-        //         do {
-        // #if canImport(CodePush)
-        //             guard let url = try CodePush.bundleURL() else {
-        //                 reject("GET_CODEPUSH_BUNDLE_URL", "Error getting Codepush Bundle URL", nil)
-        //                 return
-        //             }
+                 do {
+         #if canImport(CodePush)
+                     guard let url = try CodePush.bundleURL() else {
+                         reject("GET_CODEPUSH_BUNDLE_URL", "Error getting Codepush Bundle URL", nil)
+                         return
+                     }
 
-        //            // TODO, use path to compute a hash of the assets and add as a 'react_native_bundle_id' key to the resource
-        //             try Embrace.client?.metadata.addResource(key: EmbraceKeys.javaScriptBundleURL.rawValue, value: url.path, .process)
-        //             resolve(true)
-
-        // #else
-        //             resolve(false)
-        // #endif
-        //         } catch let error {
-        //             reject("CHECK_AND_SET_CODEPUSH_BUNDLE_URL", "Error setting Codepush Bundle URL", error)
-        //         }
+                     let bundleID = try computeBundleID(path: path)
+                     try Embrace.client?.metadata.addResource(key: REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, value: bundleID.id, lifespan: .process)
+                     resolve(true)
+         #else
+                     resolve(false)
+         #endif
+                 } catch let error {
+                     reject("CHECK_AND_SET_CODEPUSH_BUNDLE_URL", "Error setting Codepush Bundle URL", error)
+                 }
          resolve(false)
     }
 
@@ -381,7 +380,6 @@ class EmbraceManager: NSObject {
         }
     }
 
-    
     @objc(logNetworkRequest:httpMethod:startInMillis:endInMillis:bytesSent:bytesReceived:statusCode:resolver:rejecter:)
     func logNetworkRequest(
         _ url: String,
@@ -718,4 +716,5 @@ class EmbraceManager: NSObject {
 
         resolve(true)
     }
+
 }
