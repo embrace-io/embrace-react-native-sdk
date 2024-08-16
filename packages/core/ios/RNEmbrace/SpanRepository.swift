@@ -53,7 +53,7 @@ class SpanRepository {
         activeSpansQueue.async(flags: .barrier) {
             if self.activeSpans.count > MAX_STORED_SPANS {
                 os_log("too many active spans being tracked, ignoring", log: self.log, type: .error)
-                key = "";
+                key = ""
 
                 return
             }

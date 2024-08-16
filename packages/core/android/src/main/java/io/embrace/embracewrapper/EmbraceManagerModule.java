@@ -194,7 +194,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void endView(String screen, Promise promise) {
-        promise.resolve(true)
+        promise.resolve(true);
         //This method is only for compatibility, Android does not need an end event to end the view, but iOS does
         //TODO this should be changed to span in the future
     }
