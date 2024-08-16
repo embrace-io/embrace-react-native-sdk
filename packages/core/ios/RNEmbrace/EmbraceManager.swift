@@ -718,4 +718,10 @@ class EmbraceManager: NSObject {
 
         resolve(true)
     }
+
+
+    @objc
+    func triggerCrash(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        Embrace.client?.crash()
+    }
 }

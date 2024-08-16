@@ -10,7 +10,8 @@ import React, {useEffect, useState} from 'react';
 import {Button, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {initialize} from '@embrace-io/react-native';
+import {initialize, triggerNativeCrash} from '@embrace-io/react-native';
+//import CrashTester from 'react-native-crash-tester';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,23 @@ function FirstScreen({navigation}) {
       <Button
         title="Go to Second Screen"
         onPress={() => navigation.navigate('SecondScreen')}
+      />
+
+      <Button
+        title="native crash"
+        onPress={() => {
+          console.log('trigger native crash');
+          triggerNativeCrash();
+          //CrashTester.nativeCrash('Custom message for native crash!')
+        }}
+      />
+
+      <Button
+        title="js crash"
+        onPress={() => {
+          console.log('trigger js crash');
+          throw new Error('This is a crash');
+        }}
       />
     </View>
   );
@@ -44,7 +62,13 @@ function App(): React.JSX.Element {
   useEffect(() => {
     const startEmbrace = async () => {
       try {
-        const hasStarted = await initialize();
+        const hasStarted = await initialize({
+          sdkConfig: {
+            ios: {
+              appId: 'cvKeD',
+            },
+          },
+        });
         if (hasStarted) {
           setLoading(false);
         } else {

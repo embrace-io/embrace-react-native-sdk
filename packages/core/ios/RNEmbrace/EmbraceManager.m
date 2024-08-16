@@ -160,6 +160,10 @@ RCT_EXTERN_METHOD(logNetworkClientError:(NSString *)url
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+
+RCT_EXTERN_METHOD(triggerCrash:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 + (BOOL)requiresMainQueueSetup
 {
     return NO;

@@ -10,11 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "@embrace-io/react-native": "^4.2.0",
+    "@embrace-io/react-native": "file:./package.tgz",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "react": "18.2.0",
     "react-native": "0.74.5",
+    "react-native-crash-tester": "^0.2.3",
     "react-native-safe-area-context": "^4.10.9",
     "react-native-screens": "^3.34.0"
   },
