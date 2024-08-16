@@ -5,7 +5,7 @@ import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import {endSession} from "@embrace-io/react-native";
+import {endSession, logHandledError} from "@embrace-io/react-native";
 import {
   startSpan,
   stopSpan,
@@ -22,6 +22,27 @@ const getTimeWithSuffix = (last4digits: number) => {
 const HomeScreen = () => {
   const handleEndSession = useCallback(() => {
     endSession();
+  }, []);
+
+  const handleLogUnhandledError = useCallback(() => {
+    /**
+     * Android Log
+     */
+
+    /**
+     * iOS Log
+     * TBD
+     */
+
+    throw new Error("handleLogUnhandledError (auto-captured by init sdk)");
+  }, []);
+
+  const handleLogHandledError = useCallback(() => {
+    const error1 = new Error("logHandledError");
+    const error2 = new Error("logHandledError with properties");
+
+    logHandledError(error1);
+    logHandledError(error2, {prop1: "test", prop2: "hey"});
   }, []);
 
   return (
@@ -209,6 +230,15 @@ const HomeScreen = () => {
           }}
           title={"RECORD COMPLETED SPAN OUTSIDE TEST"}
         />
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Errors</ThemedText>
+        <Button
+          onPress={handleLogUnhandledError}
+          title="Unhandled JS Exception"
+        />
+        <Button onPress={handleLogHandledError} title="Handled JS Error" />
       </ThemedView>
     </ParallaxScrollView>
   );

@@ -119,6 +119,45 @@ RCT_EXTERN_METHOD(recordCompletedSpan:(NSString *)name
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(addUserPersona:(NSString *)persona
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(clearUserPersona:(NSString *)persona
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(clearAllUserPersonas:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(logNetworkRequest:(NSString *)url
+                  httpMethod:(NSString *)httpMethod
+                  startInMillis:(double)startInMillis
+                  endInMillis:(double)endInMillis
+                  bytesSent:(double)bytesSent
+                  bytesReceived:(double)bytesReceived
+                  statusCode:(double)statusCode
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(logNetworkClientError:(NSString *)url
+                  httpMethod:(NSString *)httpMethod
+                  startInMillis:(double)startInMillis
+                  endInMillis:(double)endInMillis
+                  errorType:(NSString *)errorType
+                  errorMessage:(NSString *)errorMessage
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(logHandledError:(NSString *)name)
+
+RCT_EXTERN_METHOD(logUnhandledJSException:(NString *)name
+                  message:(NSString *)message
+                  type:(NSString *)type
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+
 + (BOOL)requiresMainQueueSetup
 {
     return NO;

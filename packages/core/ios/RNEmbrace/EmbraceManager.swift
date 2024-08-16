@@ -581,4 +581,35 @@ class EmbraceManager: NSObject {
 
         resolve(true)
     }
+
+    func logHandledError(
+        _ name: String,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        if Embrace.client == nil {
+            reject("LOG_HANDLED_ERROR_ERROR", "Error recording a log handled error, Embrace SDK may not be initialized", nil)
+            return
+        }
+
+        print("Hey, this is 'logHandledError' working", name);
+        resolve(true)
+    }
+    
+    @objc
+    func logUnhandledJSException(
+        _ name: String,
+        message: String,
+        type: String,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        if Embrace.client == nil {
+            reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error recording a log unhandled js exception, Embrace SDK may not be initialized", nil)
+            return
+        }
+
+        print("Hey, this is 'logUnhandledJSException' working", name, message, type);
+        resolve(true)
+    }
 }
