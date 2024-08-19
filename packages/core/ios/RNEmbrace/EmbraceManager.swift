@@ -719,7 +719,7 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
 
-    @objc(logHandledError:stacktrace:properties:resolve:reject:)
+    @objc(logHandledError:stacktrace:properties:resolver:rejecter:)
     func logHandledError(
         _ message: String,
         stacktrace: String,
@@ -753,7 +753,7 @@ class EmbraceManager: NSObject {
     }
     
     
-    @objc(logUnhandledJSException:message:type:stacktrace:resolve:reject:)
+    @objc(logUnhandledJSException:message:type:stacktrace:resolver:rejecter:)
     func logUnhandledJSException(
         _ name: String,
         message: String,
