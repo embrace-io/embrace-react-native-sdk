@@ -582,6 +582,7 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
 
+    @objc(logHandledError:stacktrace:properties:resolver:rejecter:)
     func logHandledError(
         _ message: String,
         // NOTE: should we inject the stacktrace as a property?
@@ -611,7 +612,7 @@ class EmbraceManager: NSObject {
     }
     
     
-    @objc
+    @objc(logUnhandledJSException:message:type:stacktrace:resolver:rejecter:)
     func logUnhandledJSException(
         _ name: String,
         message: String,
