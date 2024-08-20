@@ -3,6 +3,8 @@ import EmbraceIO
 import EmbraceOTelInternal
 import OpenTelemetryApi
 import OpenTelemetrySdk
+import EmbraceCommonInternal
+
 @testable import RNEmbrace
 
 class TestSpanExporter: EmbraceSpanExporter {
@@ -109,6 +111,81 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertFalse(config.disableCrashReporter)
         XCTAssertFalse(config.disableAutomaticViewCapture)
         XCTAssertNil(config.endpointBaseUrl)
+    }
+}
+
+class EmbraceLogsTests: XCTestCase {
+    static var exporter: TestLogExporter!
+    var module: EmbraceManager!
+    var promise: Promise!
+
+    override class func setUp() {
+        super.setUp()
+        exporter = TestLogExporter()
+
+        do {
+            try Embrace
+                .setup( options: .init(
+                    appId: "xxLog",
+                    export:
+                        OpenTelemetryExport(
+                            logExporter: self.exporter
+                        )
+                ) )
+                .start()
+        } catch let error as EmbraceCore.Embrace {
+            print(error);
+        }  catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    override func setUp() async throws {
+        promise = Promise()
+        module = EmbraceManager()
+        EmbraceLogsTests.exporter.reset()
+    }
+
+    func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
+        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+        return EmbraceLogsTests.exporter.exportedLogs
+    }
+    
+    func testLogHandledError() async throws {
+        module.logHandledError("my handled error", stacktrace: "stacktrace as string", properties: NSDictionary(), resolver: promise.resolve, rejecter: promise.reject);
+        
+        let exportedLogs = try await getExportedLogs()
+        
+        XCTAssertEqual(promise.resolveCalls.count, 1)
+        XCTAssertEqual(exportedLogs.count, 1)
+        XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
+        XCTAssertEqual(exportedLogs[0].body?.description, "my handled error")
+        XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"]?.description)
+        XCTAssertNotNil(exportedLogs[0].attributes["emb.session_id"]!.description)
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.exception")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
+        XCTAssertEqual(exportedLogs[0].attributes["exception.stacktrace"]!.description, "stacktrace as string")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.exception_handling"]!.description, "handled")
+    }
+
+    func testLogUnhandledJSException() async throws {
+        module.logUnhandledJSException("my unhandled exception", message: "unhandled message", type: LogType.exception.rawValue, stacktrace: "stacktrace as string", resolver: promise.resolve, rejecter: promise.reject)
+        
+        let exportedLogs = try await getExportedLogs()
+        XCTAssertEqual(promise.resolveCalls.count, 1)
+        XCTAssertEqual(exportedLogs.count, 1)
+        
+        XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
+        XCTAssertEqual(exportedLogs[0].body?.description, "unhandled message")
+        XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"]?.description)
+        XCTAssertNotNil(exportedLogs[0].attributes["emb.session_id"]!.description)
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.exception")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
+        XCTAssertEqual(exportedLogs[0].attributes["exception.stacktrace"]!.description, "stacktrace as string")
+
+        XCTAssertEqual(exportedLogs[0].attributes["emb.exception_handling"]!.description, "unhandled")
+        XCTAssertEqual(exportedLogs[0].attributes["exception.message"]!.description, "unhandled message")
+        XCTAssertEqual(exportedLogs[0].attributes["exception.type"]!.description, "sys.exception")
     }
 }
 
@@ -608,15 +685,6 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].name, "emb-screen-view")
         XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "ux.view")
         XCTAssertEqual(exportedSpans[0].attributes["view.name"]!.description, "my-view")
-    }
-
-    func testLogHandledError() async throws {
-        module.logHandledError("my handled error", resolver: promise.resolve, rejecter: promise.reject)
-    }
-
-    func testLogUnhandledJSException() async throws {
-        module.logUnhandledJSException("my unhandled exception", message: "my unhandled message",
-                                       type: "my unhandled type", resolver: promise.resolve, rejecter: promise.reject)
     }
 }
 

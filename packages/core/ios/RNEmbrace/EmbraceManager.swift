@@ -585,7 +585,6 @@ class EmbraceManager: NSObject {
     @objc(logHandledError:stacktrace:properties:resolver:rejecter:)
     func logHandledError(
         _ message: String,
-        // NOTE: should we inject the stacktrace as a property?
         stacktrace: String,
         properties: NSDictionary,
         resolver resolve: RCTPromiseResolveBlock,
@@ -596,18 +595,23 @@ class EmbraceManager: NSObject {
             return
         }
         
-        guard let attributes = properties as? [String: String] else {
+        guard var attributes = properties as? [String: String] else {
             reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
             return
         }
-
+        
+        // injecting stacktrace as attribute
+        attributes["exception.stacktrace"] = stacktrace;
+        // not added by native sdk
+        attributes["emb.exception_handling"] = "handled";
+        
         Embrace.client?.log(
             message,
             severity: LogSeverity.error,
-            type: LogType.message,
+            type: LogType.exception,
             attributes: attributes
         );
-
+        
         resolve(true)
     }
     
@@ -625,11 +629,21 @@ class EmbraceManager: NSObject {
             reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error recording an unhandled js exception, Embrace SDK may not be initialized", nil)
             return
         }
+        
+        let attributes: [String: String] = [
+            // injecting stacktrace as attribute
+            "exception.stacktrace": stacktrace,
+            // not added by native sdk
+            "emb.exception_handling": "unhandled",
+            "exception.message": message,
+            "exception.type": type
+        ];
 
         Embrace.client?.log(
             message,
             severity: LogSeverity.error,
-            type: LogType.message
+            type: LogType.exception,
+            attributes: attributes as [String: String]
         );
 
         resolve(true)
