@@ -7,13 +7,16 @@ beforeEach(() => {
 });
 
 describe("Test State Managment", () => {
-  test("Applying middleware - With Name", () => {
-    const mockLogBreadcrumb = jest.fn();
-
+  test("Applying middleware - With Name", async () => {
+    const mockStartSpan = jest.fn();
+    const mockStopSpan = jest.fn();
+    const mockAddSpanAttributeToSpan = jest.fn();
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logRNAction: mockLogBreadcrumb,
+          startSpan: mockStartSpan,
+          stopSpan: mockStopSpan,
+          addSpanAttributeToSpan: mockAddSpanAttributeToSpan,
         },
       },
     }));
@@ -25,17 +28,22 @@ describe("Test State Managment", () => {
       return d;
     };
     const action = {type: "CREATE_USER"};
-
-    expect(store(dispatch)(action)).toEqual(action);
-    expect(mockLogBreadcrumb).toHaveBeenCalled();
+    const response = await store(dispatch)(action);
+    expect(response).toEqual(action);
+    expect(mockStartSpan).toHaveBeenCalled();
+    expect(mockStopSpan).toHaveBeenCalled();
+    expect(mockAddSpanAttributeToSpan).toHaveBeenCalled();
   });
-  test("Applying middleware - Without Name", () => {
-    const mockLogBreadcrumb = jest.fn();
-
+  test("Applying middleware - Without Name", async () => {
+    const mockStartSpan = jest.fn();
+    const mockStopSpan = jest.fn();
+    const mockAddSpanAttributeToSpan = jest.fn();
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logRNAction: mockLogBreadcrumb,
+          startSpan: mockStartSpan,
+          stopSpan: mockStopSpan,
+          addSpanAttributeToSpan: mockAddSpanAttributeToSpan,
         },
       },
     }));
@@ -48,16 +56,22 @@ describe("Test State Managment", () => {
     };
     const action = {type: undefined};
 
-    expect(store(dispatch)(action)).toEqual(action);
-    expect(mockLogBreadcrumb).toHaveBeenCalledTimes(0);
+    const response = await store(dispatch)(action);
+    expect(response).toEqual(0);
+    expect(mockStartSpan).toBeCalledTimes(0);
+    expect(mockStopSpan).toBeCalledTimes(0);
+    expect(mockAddSpanAttributeToSpan).toBeCalledTimes(0);
   });
-  test("Dispatch not provided", () => {
-    const mockLogBreadcrumb = jest.fn();
-
+  test("Dispatch not provided", async () => {
+    const mockStartSpan = jest.fn();
+    const mockStopSpan = jest.fn();
+    const mockAddSpanAttributeToSpan = jest.fn();
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logRNAction: mockLogBreadcrumb,
+          startSpan: mockStartSpan,
+          stopSpan: mockStopSpan,
+          addSpanAttributeToSpan: mockAddSpanAttributeToSpan,
         },
       },
     }));
@@ -68,15 +82,22 @@ describe("Test State Managment", () => {
 
     const action = {type: "CREATE_USER"};
 
-    expect(store()(action)).toEqual(0);
+    const response = await store()(action);
+    expect(response).toEqual(0);
+    expect(mockStartSpan).toBeCalledTimes(0);
+    expect(mockStopSpan).toBeCalledTimes(0);
+    expect(mockAddSpanAttributeToSpan).toBeCalledTimes(0);
   });
-  test("Dispatch is not a function", () => {
-    const mockLogBreadcrumb = jest.fn();
-
+  test("Dispatch is not a function", async () => {
+    const mockStartSpan = jest.fn();
+    const mockStopSpan = jest.fn();
+    const mockAddSpanAttributeToSpan = jest.fn();
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logRNAction: mockLogBreadcrumb,
+          startSpan: mockStartSpan,
+          stopSpan: mockStopSpan,
+          addSpanAttributeToSpan: mockAddSpanAttributeToSpan,
         },
       },
     }));
@@ -87,15 +108,22 @@ describe("Test State Managment", () => {
 
     const action = {type: "CREATE_USER"};
 
-    expect(store({})(action)).toEqual(0);
+    const response = await store({})(action);
+    expect(response).toEqual(0);
+    expect(mockStartSpan).toHaveBeenCalledTimes(0);
+    expect(mockStopSpan).toHaveBeenCalledTimes(0);
+    expect(mockAddSpanAttributeToSpan).toHaveBeenCalledTimes(0);
   });
-  test("Action not provided", () => {
-    const mockLogBreadcrumb = jest.fn();
-
+  test("Action not provided", async () => {
+    const mockStartSpan = jest.fn();
+    const mockStopSpan = jest.fn();
+    const mockAddSpanAttributeToSpan = jest.fn();
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logRNAction: mockLogBreadcrumb,
+          startSpan: mockStartSpan,
+          stopSpan: mockStopSpan,
+          addSpanAttributeToSpan: mockAddSpanAttributeToSpan,
         },
       },
     }));
@@ -107,16 +135,23 @@ describe("Test State Managment", () => {
     const dispatch = (d: IAnyAction) => {
       return d;
     };
-    expect(store(dispatch)()).toEqual(undefined);
-    expect(mockLogBreadcrumb).toHaveBeenCalledTimes(0);
-  });
-  test("Action provided is not a String", () => {
-    const mockLogBreadcrumb = jest.fn();
 
+    const response = await store(dispatch)();
+    expect(response).toEqual(0);
+    expect(mockStartSpan).toBeCalledTimes(0);
+    expect(mockStopSpan).toBeCalledTimes(0);
+    expect(mockAddSpanAttributeToSpan).toBeCalledTimes(0);
+  });
+  test("Action provided is not a String", async () => {
+    const mockStartSpan = jest.fn();
+    const mockStopSpan = jest.fn();
+    const mockAddSpanAttributeToSpan = jest.fn();
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logRNAction: mockLogBreadcrumb,
+          startSpan: mockStartSpan,
+          stopSpan: mockStopSpan,
+          addSpanAttributeToSpan: mockAddSpanAttributeToSpan,
         },
       },
     }));
@@ -129,8 +164,11 @@ describe("Test State Managment", () => {
     };
     const action = {type: 1};
 
-    expect(store(dispatch)(action)).toEqual(action);
-    expect(mockLogBreadcrumb).toHaveBeenCalled();
+    const response = await store(dispatch)(action);
+    expect(response).toEqual(action);
+    expect(mockStartSpan).toHaveBeenCalled();
+    expect(mockStopSpan).toHaveBeenCalled();
+    expect(mockAddSpanAttributeToSpan).toHaveBeenCalled();
   });
 
   test("Error occurred", () => {

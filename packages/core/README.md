@@ -26,6 +26,12 @@ Or
     yarn add @embrace-io/react-native
 ```
 
+For iOS you will also need to install the pod:
+
+```shell
+cd ios && pod install --repo-update
+```
+
 ## Run the setup scripts
 
 The JavaScript Embrace SDK ships with a setup script to modify the files in your
@@ -53,11 +59,15 @@ import {initialize} from '@embrace-io/react-native';
 const App = ()=> {
 
   useEffect(()=>{
-    // `initialize` is a Promise
-    // If you want to perform an action that must be tracked
-    // it is recommended to use await to wait for the method to finish
+    // Note: Initialize is a promise, so if you want to perform an action and it must be tracked, it is recommended to use await to wait for the method to finish
 
-    initialize().then(hasStarted=>{
+    initialize({
+      sdkConfig: {
+        ios: {
+          appId: "abcdf",
+        }
+      }
+    }).then(hasStarted=>{
       if(hasStarted){
          //doSomething
       }

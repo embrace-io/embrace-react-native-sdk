@@ -27,6 +27,5 @@ export interface IEvents {
  */
 export interface ICurrentScreenInstance {
   name: string;
-  startTime: number;
-  endTime?: number;
+  spanId?: string;
 }

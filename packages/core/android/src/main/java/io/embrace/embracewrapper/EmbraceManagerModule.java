@@ -194,7 +194,9 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void endView(String screen, Promise promise) {
+        promise.resolve(true);
         //This method is only for compatibility, Android does not need an end event to end the view, but iOS does
+        //TODO this should be changed to span in the future
     }
 
     @ReactMethod
@@ -256,7 +258,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
             final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<String, Object>();
             Embrace.getInstance().getReactNativeInternalInterface().logRnAction(name, st, et, props, payloadSize, output);
-            promise.resolve(true);
+            promise.resolve(name);
         }catch(Exception e){
             promise.resolve(false);
         }
@@ -374,17 +376,18 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                                   Integer bytesSent,
                                   Integer bytesReceived,
                                   Integer statusCode,
-                                  String error,
                                   Promise promise) {
         long st = startInMillis.longValue();
         long et = endInMillis.longValue();
 
         Integer method = parseMethodFromString(httpMethod);
+
         if(method == null) {
             Log.e("Embrace", "Failed to log network requests. Unexpected or null http method.");
             promise.resolve(false);
             return;
         }
+
         try{
             Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromCompletedRequest(
                     url,
@@ -395,6 +398,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                     bytesReceived.intValue(),
                     statusCode.intValue()
             ));
+
             promise.resolve(true);
         }catch(Exception e){
             promise.resolve(false);
@@ -485,7 +489,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
                 if (readableMap != null) {
                     Map<String, Object> map = readableMap.toHashMap();
-                    // TODO Change when Android/iOS replace time in nano for ms
                     if (map.containsKey("timestampMs") && map.get("timestampMs") instanceof Double) {
                         double timestampMs = (Double) map.get("timestampMs");
                         map.put("timestampMs", (long) timestampMs);

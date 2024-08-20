@@ -88,8 +88,14 @@ jest.mock("react-native", () => ({
       addSessionProperty: (key: string, value: string, permanent: boolean) =>
         mockAddSessionProperty(key, value, permanent),
       removeSessionProperty: (key: string) => mockRemoveSessionProperty(key),
-      setUserAsPayer: () => mockSetUserAsPayer(),
-      clearUserAsPayer: () => mockClearUserAsPayer(),
+      setUserAsPayer: () => {
+        mockSetUserAsPayer();
+        return false;
+      },
+      clearUserAsPayer: () => {
+        mockClearUserAsPayer();
+        return false;
+      },
       setJavaScriptBundlePath: (path: string) =>
         mockSetJavaScriptBundlePath(path),
       logNetworkRequest: (
@@ -100,7 +106,6 @@ jest.mock("react-native", () => ({
         bytesSent: number,
         bytesReceived: number,
         statusCode: number,
-        error: string,
       ) =>
         mockLogNetworkRequest(
           url,
@@ -110,7 +115,6 @@ jest.mock("react-native", () => ({
           bytesSent,
           bytesReceived,
           statusCode,
-          error,
         ),
       logNetworkClientError: (
         url: string,
@@ -136,6 +140,8 @@ jest.mock("react-native", () => ({
 }));
 
 const mockSt = "this is a fake stack trace";
+const testView = "View";
+
 const mockGenerateStackTrace = jest.fn();
 jest.mock("../utils/ErrorUtil", () => ({
   ...jest.requireActual("../utils/ErrorUtil"),
@@ -188,7 +194,6 @@ describe("Logs Test", () => {
   const WARNING = "warning";
   const INFO = "info";
   const ERROR = "error";
-  const testView = "View";
 
   beforeEach(() => {
     mockGenerateStackTrace.mockReturnValue(mockSt);
@@ -303,18 +308,18 @@ describe("Personas Tests", () => {
 });
 
 describe("Custom Views Tests", () => {
-  const testView = "View";
-
   test("startView", async () => {
-    await startView(testView);
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockStartView).toHaveBeenCalledWith(testView);
+    const promiseToResolve = startView(testView);
+
+    await promiseToResolve;
+    expect(mockStartView).toHaveBeenCalledWith(testView);
   });
 
   test("endView", async () => {
-    await endView(testView);
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockEndView).toHaveBeenCalledWith(testView);
+    const promiseToResolve = endView(testView);
+    jest.runAllTimers();
+    await promiseToResolve;
+    expect(mockEndView).toHaveBeenCalledWith(testView);
   });
 });
 
@@ -332,14 +337,21 @@ describe("Session Properties Tests", () => {
 
 describe("Payers Test", () => {
   test("setUserAsPayer", async () => {
-    await setUserAsPayer();
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockSetUserAsPayer).toHaveBeenCalled();
+    const promiseToResolve = setUserAsPayer();
+    jest.runAllTimers();
+    const result = await promiseToResolve;
+
+    expect(mockSetUserAsPayer).toHaveBeenCalled();
+    expect(result).toBe(false);
   });
   test("clearUserAsPayer", async () => {
-    await clearUserAsPayer();
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockClearUserAsPayer).toHaveBeenCalled();
+    const promiseToResolve = clearUserAsPayer();
+
+    jest.runAllTimers();
+    const result = await promiseToResolve;
+
+    expect(mockClearUserAsPayer).toHaveBeenCalled();
+    expect(result).toBe(false);
   });
 });
 
@@ -351,17 +363,16 @@ describe("JavaScript bundle", () => {
 });
 
 describe("Record network call", () => {
-  const url = "https://httpbin.org/get";
+  const url = "https://httpbin.org/v1/random/api";
   const method = "get";
   const nowdate = new Date();
   const st = nowdate.getTime();
   const et = nowdate.setUTCSeconds(30);
-  const bytesIn = Number(111);
-  const bytesOut = Number(222);
-  const networkStatus = Number(200);
-  const error = "error";
+  const bytesIn = 111;
+  const bytesOut = 222;
+  const networkStatus = 200;
 
-  test("record completed network request", async () => {
+  it("record a Completed network request", async () => {
     await recordNetworkRequest(
       url,
       method,
@@ -372,45 +383,32 @@ describe("Record network call", () => {
       networkStatus,
     );
 
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockLogNetworkRequest).toHaveBeenCalledWith(
-    //   url,
-    //   method,
-    //   st,
-    //   et,
-    //   bytesIn,
-    //   bytesOut,
-    //   networkStatus,
-    //   undefined,
-    // );
-  });
-
-  test("record incomplete network request", async () => {
-    await recordNetworkRequest(
+    expect(mockLogNetworkRequest).toHaveBeenCalledWith(
       url,
       method,
       st,
       et,
-      undefined,
-      undefined,
-      undefined,
-      error,
+      bytesIn,
+      bytesOut,
+      networkStatus,
     );
-
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockLogNetworkRequest).toHaveBeenCalledWith(
-    //   url,
-    //   method,
-    //   st,
-    //   et,
-    //   -1,
-    //   -1,
-    //   -1,
-    //   error,
-    // );
   });
 
-  test("record network client error", async () => {
+  it("record an Incomplete network request", async () => {
+    await recordNetworkRequest(url, method, st, et);
+
+    expect(mockLogNetworkRequest).toHaveBeenCalledWith(
+      url,
+      method,
+      st,
+      et,
+      -1,
+      -1,
+      -1,
+    );
+  });
+
+  it("record a network client error", async () => {
     await logNetworkClientError(
       url,
       method,
@@ -420,15 +418,14 @@ describe("Record network call", () => {
       "error-message",
     );
 
-    // TODO uncomment the expect once the method is implemented
-    // expect(mockLogNetworkClientError).toHaveBeenCalledWith(
-    //   url,
-    //   method,
-    //   st,
-    //   et,
-    //   "error-type",
-    //   "error-message",
-    // );
+    expect(mockLogNetworkClientError).toHaveBeenCalledWith(
+      url,
+      method,
+      st,
+      et,
+      "error-type",
+      "error-message",
+    );
   });
 });
 
@@ -437,6 +434,7 @@ describe("Test Device Stuffs", () => {
     await getDeviceId();
     expect(mockGetDeviceId).toHaveBeenCalled();
   });
+
   test("session Id", async () => {
     await getCurrentSessionId();
     expect(mockGetCurrentSessionId).toHaveBeenCalled();
