@@ -1,12 +1,4 @@
 {
-  "app_id": "abcdf",
-  "api_token": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  "sdk_config": {
-    "base_urls": {
-      "config": "http://10.0.2.2:8877",
-      "data": "http://10.0.2.2:8877",
-      "data_dev": "http://10.0.2.2:8877",
-      "images": "http://10.0.2.2:8877"
-    }
-  }
+  "app_id": "8FCf9",
+  "api_token": "13f327e891ad45858949004eb755b9f1"
 }
