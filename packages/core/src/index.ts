@@ -273,10 +273,6 @@ export const clearUserAsPayer = (): Promise<boolean> => {
   return NativeModules.EmbraceManager.clearUserAsPayer();
 };
 
-export const triggerNativeCrash = (): Promise<boolean> => {
-  return NativeModules.EmbraceManager.triggerCrash();
-};
-
 export const recordNetworkRequest = (
   url: string,
   httpMethod: MethodType,

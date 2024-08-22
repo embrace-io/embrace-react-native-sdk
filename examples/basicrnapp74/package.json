@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@embrace-io/react-native": "file:./package.tgz",
+    "@embrace-io/react-native": "^5.0.0-alpha.199",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "react": "18.2.0",

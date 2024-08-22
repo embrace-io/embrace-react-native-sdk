@@ -17,8 +17,7 @@ export default function RootLayout() {
       await initEmbrace({
         sdkConfig: {
           ios: {
-            appId: "abcdf",
-            endpointBaseUrl: "http://localhost:8877",
+            appId: "cvKeD",
           },
         },
       });

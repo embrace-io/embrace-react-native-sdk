@@ -10,7 +10,8 @@ import React, {useEffect, useState} from 'react';
 import {Button, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {initialize, triggerNativeCrash} from '@embrace-io/react-native';
+import {initialize, addBreadcrumb} from '@embrace-io/react-native';
+
 //import CrashTester from 'react-native-crash-tester';
 
 const Stack = createNativeStackNavigator();
@@ -25,11 +26,12 @@ function FirstScreen({navigation}) {
       />
 
       <Button
-        title="native crash"
+        title="breadcrumb"
         onPress={() => {
-          console.log('trigger native crash');
-          triggerNativeCrash();
-          //CrashTester.nativeCrash('Custom message for native crash!')
+          console.log('breadcrumb');
+          addBreadcrumb(
+            "component updated -- 'show' prop changed from true to false",
+          );
         }}
       />
 
