@@ -1,11 +1,12 @@
 #import "AppDelegate.h"
-
+#import "basicrnapp74-Swift.h"
 #import <React/RCTBundleURLProvider.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [EmbraceInitializer start];
   self.moduleName = @"basicrnapp74";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.

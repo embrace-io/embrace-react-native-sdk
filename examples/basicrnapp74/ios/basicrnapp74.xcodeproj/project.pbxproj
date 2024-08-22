@@ -12,6 +12,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		304A20702C77A04E00F482C6 /* EmbraceInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304A206F2C77A04E00F482C6 /* EmbraceInitializer.swift */; };
 		30F6FCBE2C6E73CD00B7B8C7 /* Embrace-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30F6FCBD2C6E73CD00B7B8C7 /* Embrace-Info.plist */; };
 		457AEF19646750E43C8CD557 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 75F355131D31E2A098227F47 /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-basicrnapp74-basicrnapp74Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-basicrnapp74-basicrnapp74Tests.a */; };
@@ -40,6 +41,8 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = basicrnapp74/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = basicrnapp74/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-basicrnapp74-basicrnapp74Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-basicrnapp74-basicrnapp74Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		304A206E2C77A04D00F482C6 /* basicrnapp74-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "basicrnapp74-Bridging-Header.h"; sourceTree = "<group>"; };
+		304A206F2C77A04E00F482C6 /* EmbraceInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbraceInitializer.swift; sourceTree = "<group>"; };
 		30F6FCBD2C6E73CD00B7B8C7 /* Embrace-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Embrace-Info.plist"; path = "basicrnapp74/Embrace-Info.plist"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-basicrnapp74.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74.debug.xcconfig"; path = "Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-basicrnapp74.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74.release.xcconfig"; path = "Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74.release.xcconfig"; sourceTree = "<group>"; };
@@ -100,6 +103,8 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 				75F355131D31E2A098227F47 /* PrivacyInfo.xcprivacy */,
+				304A206F2C77A04E00F482C6 /* EmbraceInitializer.swift */,
+				304A206E2C77A04D00F482C6 /* basicrnapp74-Bridging-Header.h */,
 			);
 			name = basicrnapp74;
 			sourceTree = "<group>";
@@ -214,7 +219,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1540;
 					};
 				};
 			};
@@ -404,6 +409,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				304A20702C77A04E00F482C6 /* EmbraceInitializer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,6 +428,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -449,6 +456,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = basicrnapp74Tests/Info.plist;
@@ -490,6 +498,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = basicrnapp74;
+				SWIFT_OBJC_BRIDGING_HEADER = "basicrnapp74-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -516,6 +525,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = basicrnapp74;
+				SWIFT_OBJC_BRIDGING_HEADER = "basicrnapp74-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -594,10 +604,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -669,10 +676,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

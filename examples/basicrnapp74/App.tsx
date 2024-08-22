@@ -10,7 +10,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {initialize, triggerNativeCrash} from '@embrace-io/react-native';
+import {triggerNativeCrash} from '@embrace-io/react-native';
 //import CrashTester from 'react-native-crash-tester';
 
 const Stack = createNativeStackNavigator();
@@ -62,6 +62,7 @@ function App(): React.JSX.Element {
   useEffect(() => {
     const startEmbrace = async () => {
       try {
+        /*
         const hasStarted = await initialize({
           sdkConfig: {
             ios: {
@@ -69,6 +70,8 @@ function App(): React.JSX.Element {
             },
           },
         });
+         */
+        const hasStarted = true;
         if (hasStarted) {
           setLoading(false);
         } else {
