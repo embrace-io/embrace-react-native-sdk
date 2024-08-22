@@ -14,23 +14,29 @@ import {MethodType} from "./interfaces/HTTP";
 import {SDKConfig} from "./interfaces/Config";
 
 interface Properties {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
 const tracking = require("promise/setimmediate/rejection-tracking");
 
-const stackLimit = 200;
+const STACK_LIMIT = 200;
+const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
 
-const unhandledPromiseRejectionPrefix = "Unhandled promise rejection: ";
+// NOTE: This can be an enum
+const WARNING = "warning";
+const INFO = "info";
+const ERROR = "error";
 
+const noOp = () => {};
 const handleError = async (error: Error, callback: () => void) => {
   if (!(error instanceof Error)) {
     console.warn("[Embrace] error must be of type Error");
     return;
   }
+
   const {name, message, stack = ""} = error;
-  const truncated = stack.split("\n").slice(0, stackLimit).join("\n");
+  const truncated = stack.split("\n").slice(0, STACK_LIMIT).join("\n");
 
   await NativeModules.EmbraceManager.logUnhandledJSException(
     name,
@@ -38,6 +44,7 @@ const handleError = async (error: Error, callback: () => void) => {
     error.constructor.name,
     truncated,
   );
+
   callback();
 };
 
@@ -49,21 +56,25 @@ export const initialize = async ({
   sdkConfig,
 }: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
   const hasNativeSDKStarted = await NativeModules.EmbraceManager.isStarted();
+
   if (!hasNativeSDKStarted) {
     if (Platform.OS === "ios" && !sdkConfig?.ios?.appId) {
       console.warn(
         "[Embrace] sdkConfig.ios.appId is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
+
       return createFalsePromise();
     }
 
     const result = await NativeModules.EmbraceManager.startNativeEmbraceSDK(
       (Platform.OS === "ios" && sdkConfig?.ios) || {},
     );
+
     if (!result) {
       console.warn(
         "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
+
       return createFalsePromise();
     } else {
       console.log("[Embrace] native SDK was started");
@@ -71,9 +82,8 @@ export const initialize = async ({
   }
 
   if (embracePackage) {
-    NativeModules.EmbraceManager.setReactNativeSDKVersion(
-      embracePackage.version,
-    );
+    const {version} = embracePackage;
+    NativeModules.EmbraceManager.setReactNativeSDKVersion(version);
   }
 
   if (patch) {
@@ -99,30 +109,35 @@ export const initialize = async ({
     console.warn(
       "[Embrace] ErrorUtils is not defined. Not setting exception handler.",
     );
+
     return createFalsePromise();
   }
-  const previousHandler = ErrorUtils.getGlobalHandler();
-  ErrorUtils.setGlobalHandler(handleGlobalError(previousHandler, handleError));
+
+  ErrorUtils.setGlobalHandler(
+    handleGlobalError(ErrorUtils.getGlobalHandler(), handleError),
+  );
 
   tracking.enable({
     allRejections: true,
-    onUnhandled: (_: any, error: Error) => {
-      let message = `Unhandled promise rejection: ${error}`;
-      let st = "";
+    onUnhandled: (_: unknown, error: Error) => {
+      let message = `${UNHANDLED_PROMISE_REJECTION_PREFIX}: ${error}`;
+      let stackTrace = "";
+
       if (error instanceof Error) {
-        message = unhandledPromiseRejectionPrefix + error.message;
-        st = error.stack || "";
+        message = `${UNHANDLED_PROMISE_REJECTION_PREFIX}: ${error.message}`;
+        stackTrace = error.stack || "";
       }
 
       return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
         message,
         ERROR,
         {},
-        st,
+        stackTrace,
       );
     },
-    onHandled: () => {},
+    onHandled: noOp,
   });
+
   // If there are no errors, it will return true
   return createTruePromise();
 };
@@ -188,10 +203,6 @@ export const clearAllUserPersonas = (): Promise<boolean> => {
   return NativeModules.EmbraceManager.clearAllUserPersonas();
 };
 
-export const WARNING = "warning";
-export const INFO = "info";
-export const ERROR = "error";
-
 export const logMessage = (
   message: string,
   severity: "info" | "warning" | "error" = "error",
@@ -221,18 +232,19 @@ export const logHandledError = (
   error: Error,
   properties?: Properties,
 ): Promise<boolean> => {
-  // TODO REFACTOR WHEN iOS IMPLEMENT THE METHOD
+  if (error instanceof Error) {
+    const {stack, message} = error;
 
-  // if (error instanceof Error) {
-  //   return NativeModules.EmbraceManager.logHandledError(
-  //     error.message,
-  //     error.stack,
-  //     properties,
-  //   );
-  // } else {
+    return NativeModules.EmbraceManager.logHandledError(
+      message,
+      stack,
+      properties || {},
+    );
+  }
+
   return createFalsePromise();
-  // }
 };
+
 export const startView = (view: string): Promise<boolean> => {
   return NativeModules.EmbraceManager.startView(view);
 };
@@ -361,3 +373,5 @@ const createTruePromise = (): Promise<boolean> => {
     }, 0);
   });
 };
+
+export {WARNING, ERROR, INFO};
