@@ -70,14 +70,8 @@ jest.mock("react-native", () => ({
         message: string,
         severity: string,
         properties: Record<string, any>,
-        stacktrace: string,
       ) =>
-        mockLogMessageWithSeverityAndProperties(
-          message,
-          severity,
-          properties,
-          stacktrace,
-        ),
+        mockLogMessageWithSeverityAndProperties(message, severity, properties),
       logHandledError: (message: string, properties?: Record<string, any>) =>
         mockLogHandledError(message, properties),
       addUserPersona: (persona: string) => mockAddUserPersona(persona),
@@ -209,17 +203,14 @@ describe("Logs Test", () => {
       ${testMessage} | ${INFO}    | ${testProps}
       ${testMessage} | ${WARNING} | ${testProps}
       ${testMessage} | ${ERROR}   | ${testProps}
-    `(
-      "should run $severity log",
-      async ({message, severity, properties, stackTrace}) => {
-        await logMessage(message, severity, properties);
-        expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-          message,
-          severity,
-          properties,
-        );
-      },
-    );
+    `("should run $severity log", async ({message, severity, properties}) => {
+      await logMessage(message, severity, properties);
+      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+        message,
+        severity,
+        properties,
+      );
+    });
   });
 
   test("logInfo", async () => {
@@ -298,9 +289,7 @@ describe("Custom Views Tests", () => {
   });
 
   test("endView", async () => {
-    const promiseToResolve = endView(testView);
-    jest.runAllTimers();
-    await promiseToResolve;
+    await endView(testView);
     expect(mockEndView).toHaveBeenCalledWith(testView);
   });
 });
@@ -319,19 +308,12 @@ describe("Session Properties Tests", () => {
 
 describe("Payers Test", () => {
   test("setUserAsPayer", async () => {
-    const promiseToResolve = setUserAsPayer();
-    jest.runAllTimers();
-    const result = await promiseToResolve;
-
+    const result = await setUserAsPayer();
     expect(mockSetUserAsPayer).toHaveBeenCalled();
     expect(result).toBe(false);
   });
   test("clearUserAsPayer", async () => {
-    const promiseToResolve = clearUserAsPayer();
-
-    jest.runAllTimers();
-    const result = await promiseToResolve;
-
+    const result = await clearUserAsPayer();
     expect(mockClearUserAsPayer).toHaveBeenCalled();
     expect(result).toBe(false);
   });
