@@ -762,27 +762,7 @@ class EmbraceManager: NSObject {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
-        if Embrace.client == nil {
-            reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error recording an unhandled js exception, Embrace SDK may not be initialized", nil)
-            return
-        }
-        
-        let attributes: [String: String] = [
-            // injecting stacktrace as attribute
-            "exception.stacktrace": stacktrace,
-            // not added by native sdk
-            "emb.exception_handling": "unhandled",
-            "exception.message": message,
-            "exception.type": type
-        ];
-
-        Embrace.client?.log(
-            message,
-            severity: LogSeverity.error,
-            type: LogType.exception,
-            attributes: attributes as [String: String]
-        );
-
+        // TBD after guild discussion
         resolve(true)
     }
 }
