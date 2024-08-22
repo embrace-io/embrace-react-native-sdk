@@ -718,4 +718,51 @@ class EmbraceManager: NSObject {
 
         resolve(true)
     }
+
+    @objc(logHandledError:stacktrace:properties:resolver:rejecter:)
+    func logHandledError(
+        _ message: String,
+        stacktrace: String,
+        properties: NSDictionary,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        if Embrace.client == nil {
+            reject("LOG_HANDLED_ERROR_ERROR", "Error recording a log handled error, Embrace SDK may not be initialized", nil)
+            return
+        }
+        
+        guard var attributes = properties as? [String: String] else {
+            reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
+            return
+        }
+        
+        // injecting stacktrace as attribute
+        attributes["exception.stacktrace"] = stacktrace;
+        // not added by native sdk
+        attributes["emb.exception_handling"] = "handled";
+        
+        Embrace.client?.log(
+            message,
+            severity: LogSeverity.error,
+            type: LogType.exception,
+            attributes: attributes
+        );
+        
+        resolve(true)
+    }
+    
+    
+    @objc(logUnhandledJSException:message:type:stacktrace:resolver:rejecter:)
+    func logUnhandledJSException(
+        _ name: String,
+        message: String,
+        type: String,
+        stacktrace: String,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        // TBD after guild discussion
+        resolve(true)
+    }
 }

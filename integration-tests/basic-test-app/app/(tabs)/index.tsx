@@ -5,7 +5,7 @@ import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import {endSession, logError} from "@embrace-io/react-native";
+import {endSession} from "@embrace-io/react-native";
 
 const HomeScreen = () => {
   const handleEndSession = useCallback(() => {
