@@ -34,6 +34,19 @@ cd basic-test-app
 npx expo run:android --variant release
 ```
 
+For ios it doesn't apply the `--variant release` mode, so we can do it through xcode:
+
+- Open your project in Xcode.
+- Select your target and go to Product > Scheme > Edit Scheme.
+- Under the Run section, change the Build Configuration from Debug to Release.
+- Press Cmd + R to build and run the app in release mode.
+
+or simple run 
+
+```bash
+npx expo run:ios --configuration Release
+```
+
 For ios it doesn't apply the `--variant release` mode, so we need to do it through xcode:
 
 - Open your project in Xcode.
