@@ -139,14 +139,7 @@ jest.mock("react-native", () => ({
   },
 }));
 
-const mockSt = "this is a fake stack trace";
 const testView = "View";
-
-const mockGenerateStackTrace = jest.fn();
-jest.mock("../utils/ErrorUtil", () => ({
-  ...jest.requireActual("../utils/ErrorUtil"),
-  generateStackTrace: () => mockGenerateStackTrace(),
-}));
 
 describe("User Identifier Tests", () => {
   const testUserId = "testUser";
@@ -195,10 +188,6 @@ describe("Logs Test", () => {
   const INFO = "info";
   const ERROR = "error";
 
-  beforeEach(() => {
-    mockGenerateStackTrace.mockReturnValue(mockSt);
-  });
-
   test("addBreadcrumb", async () => {
     await addBreadcrumb(testView);
     expect(mockAddBreadcrumb).toHaveBeenCalledWith(testView);
@@ -216,13 +205,10 @@ describe("Logs Test", () => {
     const testProps = {foo: "bar"};
 
     test.each`
-      message        | severity   | properties   | stackTrace
-      ${testMessage} | ${INFO}    | ${testProps} | ${""}
-      ${testMessage} | ${INFO}    | ${testProps} | ${""}
-      ${testMessage} | ${WARNING} | ${testProps} | ${mockSt}
-      ${testMessage} | ${WARNING} | ${testProps} | ${mockSt}
-      ${testMessage} | ${ERROR}   | ${testProps} | ${mockSt}
-      ${testMessage} | ${ERROR}   | ${testProps} | ${mockSt}
+      message        | severity   | properties
+      ${testMessage} | ${INFO}    | ${testProps}
+      ${testMessage} | ${WARNING} | ${testProps}
+      ${testMessage} | ${ERROR}   | ${testProps}
     `(
       "should run $severity log",
       async ({message, severity, properties, stackTrace}) => {
@@ -231,7 +217,6 @@ describe("Logs Test", () => {
           message,
           severity,
           properties,
-          stackTrace,
         );
       },
     );
@@ -243,7 +228,6 @@ describe("Logs Test", () => {
       `test message`,
       INFO,
       undefined,
-      "",
     );
   });
 
@@ -253,7 +237,6 @@ describe("Logs Test", () => {
       `test message`,
       WARNING,
       undefined,
-      mockSt,
     );
   });
 
@@ -263,7 +246,6 @@ describe("Logs Test", () => {
       `test message`,
       ERROR,
       undefined,
-      mockSt,
     );
   });
 });
