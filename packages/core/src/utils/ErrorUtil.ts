@@ -15,9 +15,4 @@ const handleGlobalError: GlobalErrorHandler =
     handleError(error, callback);
   };
 
-const generateStackTrace = (): string => {
-  const err = new Error();
-  return err.stack || "";
-};
-
-export {handleGlobalError, generateStackTrace};
+export {handleGlobalError};
