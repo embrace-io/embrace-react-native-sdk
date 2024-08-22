@@ -218,7 +218,7 @@ describe("Logs Test", () => {
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       `test message`,
       INFO,
-      undefined,
+      {},
     );
   });
 
@@ -227,7 +227,7 @@ describe("Logs Test", () => {
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       `test message`,
       WARNING,
-      undefined,
+      {},
     );
   });
 
@@ -236,7 +236,7 @@ describe("Logs Test", () => {
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       `test message`,
       ERROR,
-      undefined,
+      {},
     );
   });
 });
