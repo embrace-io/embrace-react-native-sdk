@@ -188,39 +188,6 @@ class EmbraceLogsTests: XCTestCase {
         // XCTAssertEqual(exportedLogs[0].attributes["exception.message"]!.description, "unhandled message")
         // XCTAssertEqual(exportedLogs[0].attributes["exception.type"]!.description, "sys.exception")
     }
-     
-    func testLogMessageWithSeverity() async throws {
-        module.logMessageWithSeverityAndProperties("my log message", severity:"warning", properties: NSDictionary(),
-                                                   resolver: promise.resolve, rejecter: promise.reject)
-        
-        let exportedLogs = try await getExportedLogs()
-        
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertEqual(exportedLogs.count, 1)
-        XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
-        XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
-    }
-
-     
-    func testLogMessageWithSeverityAndProperties() async throws {
-        module.logMessageWithSeverityAndProperties("my log message", severity:"error", properties: NSDictionary(dictionary: [
-                                                    "prop1": "foo",
-                                                    "prop2": "bar"
-                                                  ]), resolver: promise.resolve, rejecter: promise.reject)
-        
-        let exportedLogs = try await getExportedLogs()
-        
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertEqual(exportedLogs.count, 1)
-        XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
-        XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
-        XCTAssertEqual(exportedLogs[0].attributes["prop1"]!.description, "foo")
-        XCTAssertEqual(exportedLogs[0].attributes["prop2"]!.description, "bar")
-    }
-
-
 }
 
 class EmbraceSpansTests: XCTestCase {

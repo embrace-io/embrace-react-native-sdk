@@ -165,7 +165,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void logMessageWithSeverityAndProperties(String message, String severity, ReadableMap properties,
-                                                    Promise promise) {
+                                                    String stacktrace, Promise promise) {
         try {
             final Map<String, Object> props = properties != null ? properties.toHashMap() : null;
             if (severity.equals("info")) {

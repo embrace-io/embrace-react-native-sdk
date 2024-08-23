@@ -3,7 +3,7 @@ import {NativeModules, Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {handleGlobalError} from "./utils/ErrorUtil";
+import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import {SessionStatus} from "./interfaces/Types";
 import {
@@ -121,15 +121,18 @@ export const initialize = async ({
     allRejections: true,
     onUnhandled: (_: unknown, error: Error) => {
       let message = `${UNHANDLED_PROMISE_REJECTION_PREFIX}: ${error}`;
+      let stackTrace = "";
 
       if (error instanceof Error) {
         message = `${UNHANDLED_PROMISE_REJECTION_PREFIX}: ${error.message}`;
+        stackTrace = error.stack || "";
       }
 
       return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
         message,
         ERROR,
         {},
+        stackTrace,
       );
     },
     onHandled: noOp,
@@ -205,10 +208,13 @@ export const logMessage = (
   severity: "info" | "warning" | "error" = "error",
   properties?: Properties,
 ): Promise<boolean> => {
+  const stacktrace = severity === INFO ? "" : generateStackTrace();
+
   return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
     message,
     severity,
-    properties || {},
+    properties,
+    stacktrace,
   );
 };
 
