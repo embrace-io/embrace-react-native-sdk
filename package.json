@@ -13,11 +13,13 @@
     "publish-modules": "npx lerna run build && npx lerna publish",
     "build": "npx lerna run build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
-    "test": "jest"
+    "test": "jest",
+    "lint:ios": "bash ./scripts/run-clang-format.sh"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "yarn lint"
+      "yarn lint",
+      "yarn lint:ios"
     ]
   },
   "devDependencies": {
