@@ -1,0 +1,2 @@
+# Run your custom script here
+yarn run lint:clang-format
