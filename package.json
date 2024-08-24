@@ -19,7 +19,13 @@
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
       "yarn lint"
-    ]
+    ],
+    "*.{m,mm,h}": "yarn run lint:clang-format"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
