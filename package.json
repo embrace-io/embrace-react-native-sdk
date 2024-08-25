@@ -21,7 +21,7 @@
     "**/*.{js,jsx,ts,tsx}": [
       "yarn lint"
     ],
-    "*.{m,h}": "yarn run lint:clang-format"
+    "*.{m,mm,h}": "yarn run lint:clang-format"
   },
   "husky": {
     "hooks": {
