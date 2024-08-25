@@ -1,26 +1,71 @@
 #!/bin/bash
+FORMATTER="clang-format"
 
-# Define the directory name for iOS
-IOS_DIR="ios"
+# install if the formatter is not found
+if ! command -v ${FORMATTER} &> /dev/null; then
+    echo "${FORMATTER} not found. Proceeding to install."  
 
-# Define paths
+    # Install llvm (includes clang-format)
+    brew install llvm
+
+    export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+fi
+
+# 1) Paths to formart
 SOURCE_DIRS=(
-    "$(pwd)/integration-tests/basic-test-app/${IOS_DIR}/basictestapp"
+    "$(pwd)/integration-tests/basic-test-app/ios/basictestapp"
     "$(pwd)/examples/react-native-test-suite"
     "$(pwd)/packages"
     "$(pwd)/packages/core/test-project"
 )
 
-# Initialize find command
+# find command
 FIND_CMD="find"
-
-# Add each directory to the find command
 for dir in "${SOURCE_DIRS[@]}"; do
     FIND_CMD+=" $dir"
 done
 
-# Append the find options to exclude node_modules and build directories
-FIND_CMD+=" -type d \( -name 'node_modules' -o -name 'build' \) -prune -o -type f \( -name '*.m' -o -name '*.mm' -o -name '*.h' \) -print"
+# 2) Exclude directories. Add more directories if needed
+EXCLUDE_DIRS=(
+    "node_modules"
+    "build"
+)
 
-# Execute the find command and run clang-format on each file
+EXCLUDE_CMD=""
+EXCLUDE_COUNTER=1
+EXCLUDE_DIRS_LEN=${#EXCLUDE_DIRS[@]}
+for exc_dir in "${EXCLUDE_DIRS[@]}"; do
+    if [ $EXCLUDE_COUNTER -eq $EXCLUDE_DIRS_LEN ]; then
+        # do not add '-o' at the end
+        EXCLUDE_CMD+=" -name $exc_dir"
+    else
+        EXCLUDE_CMD+=" -name $exc_dir -o"
+    fi
+    ((EXCLUDE_COUNTER++))
+done
+
+# 3) Exclude file extensions. Add more file extensions if needed
+FILE_EXTS=(
+    "*.m"
+    "*.mm"
+    "*.h"
+)
+
+FILE_CMD=""
+FILE_EXTS_COUNTER=1
+FILE_EXT_LEN=${#FILE_EXTS[@]}
+for file_ext in "${FILE_EXTS[@]}"; do
+    if [ $FILE_EXTS_COUNTER -eq $FILE_EXT_LEN ]; then
+        # do not add '-o' at the end
+        FILE_CMD+=" -name '$file_ext'"
+    else
+        FILE_CMD+=" -name '$file_ext' -o"
+    fi
+    ((FILE_EXTS_COUNTER++))
+done
+
+# 4) final eval
+FIND_CMD+=" -type d \( ${EXCLUDE_CMD} \) -prune -o -type f \( ${FILE_CMD} \) -print"
+
+# 5) Execute the find command and run `clang-format` on each file
 eval "$FIND_CMD" | xargs -r clang-format -i
