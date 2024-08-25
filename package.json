@@ -15,7 +15,7 @@
     "build": "npx lerna run build",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
-    "lint:clang-format": "bash ./scripts/run-clang-format.sh"
+    "lint:clang-format": "./scripts/run-clang-format.sh"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
