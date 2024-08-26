@@ -26,7 +26,7 @@ export const useEmbraceOrientationLogger = () => {
 
   const logFirstOrientation = () => {
     if (lastOrientation.current) {
-      NativeModules.EmbraceManager.logBreadcrumb(
+      NativeModules.EmbraceManager.addBreadcrumb(
         `${BREADCRUMB_PREFIX_DEFAULT.replace(
           "${orientation}",
           lastOrientation.current,
@@ -39,7 +39,7 @@ export const useEmbraceOrientationLogger = () => {
     prevOrientation: string | undefined,
     newOrientation: string,
   ) => {
-    NativeModules.EmbraceManager.logBreadcrumb(
+    NativeModules.EmbraceManager.addBreadcrumb(
       `${BREADCRUMB_PREFIX} ${prevOrientation} -> ${newOrientation}`,
     );
   };

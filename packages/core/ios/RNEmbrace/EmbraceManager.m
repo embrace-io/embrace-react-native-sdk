@@ -84,6 +84,7 @@ RCT_EXTERN_METHOD(addSessionProperty:(NSString *)key
 RCT_EXTERN_METHOD(logMessageWithSeverityAndProperties:(NSString *)message
                   severity:(NSString *)severity
                   properties:(NSDictionary)properties
+                  stacktrace:(NSString *)stacktrace
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
@@ -159,6 +160,20 @@ RCT_EXTERN_METHOD(logNetworkClientError:(NSString *)url
                   errorMessage:(NSString *)errorMessage
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(logHandledError:(NSString *)message
+                  stacktrace:(NSString *)stacktrace
+                  properties:(NSDictionary)properties
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(logUnhandledJSException:(NSString *)name
+                  message:(NSString *)message
+                  type:(NSString *)type
+                  stacktrace:(NSString *)stacktrace
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 
 + (BOOL)requiresMainQueueSetup
 {

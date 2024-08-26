@@ -300,20 +300,26 @@ class EmbraceManager: NSObject {
         }
     }
 
-    @objc(logMessageWithSeverityAndProperties:severity:properties:resolver:rejecter:)
+    @objc(logMessageWithSeverityAndProperties:severity:properties:stacktrace:resolver:rejecter:)
     func logMessageWithSeverityAndProperties(
         _ message: String,
         severity: String,
         properties: NSDictionary,
+        stacktrace: String,
         resolver resolve: @escaping RCTPromiseResolveBlock,
         rejecter reject: @escaping RCTPromiseRejectBlock
     ) {
 
         let severityValue = self.severityFromString(from: severity)
-        guard let attributes = properties as? [String: String] else {
+        guard var attributes = properties as? [String: String] else {
             reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
             return
         }
+        
+        if (!stacktrace.isEmpty) {
+            attributes.updateValue(stacktrace, forKey: "exception.stacktrace")
+        }
+        
         Embrace.client?.log(
             message,
             severity: severityValue,
@@ -717,4 +723,50 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
 
+    @objc(logHandledError:stacktrace:properties:resolver:rejecter:)
+    func logHandledError(
+        _ message: String,
+        stacktrace: String,
+        properties: NSDictionary,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        if Embrace.client == nil {
+            reject("LOG_HANDLED_ERROR_ERROR", "Error recording a log handled error, Embrace SDK may not be initialized", nil)
+            return
+        }
+        
+        guard var attributes = properties as? [String: String] else {
+            reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
+            return
+        }
+        
+        // injecting stacktrace as attribute
+        attributes["exception.stacktrace"] = stacktrace;
+        // not added by native sdk
+        attributes["emb.exception_handling"] = "handled";
+        
+        Embrace.client?.log(
+            message,
+            severity: LogSeverity.error,
+            type: LogType.exception,
+            attributes: attributes
+        );
+        
+        resolve(true)
+    }
+    
+    
+    @objc(logUnhandledJSException:message:type:stacktrace:resolver:rejecter:)
+    func logUnhandledJSException(
+        _ name: String,
+        message: String,
+        type: String,
+        stacktrace: String,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        // TBD after guild discussion
+        resolve(true)
+    }
 }
