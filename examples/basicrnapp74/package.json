@@ -10,9 +10,14 @@
     "test": "jest"
   },
   "dependencies": {
-    "@embrace-io/react-native": "^5.0.0-alpha.199",
+    "@embrace-io/react-native": "^5.0.0-alpha.206",
+    "@embrace-io/react-native-action-tracker": "^5.0.0-alpha.206",
+    "@embrace-io/react-native-orientation-change-tracker": "^5.0.0-alpha.206",
+    "@embrace-io/react-native-spans": "^5.0.0-alpha.206",
+    "@embrace-io/react-navigation": "^5.0.0-alpha.206",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
+    "@reduxjs/toolkit": "^2.2.7",
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-crash-tester": "^0.2.3",
