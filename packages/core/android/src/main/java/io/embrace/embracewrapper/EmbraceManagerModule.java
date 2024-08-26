@@ -186,7 +186,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     public void startView(String screen, Promise promise) {
         try{
             Embrace.getInstance().getReactNativeInternalInterface().logRnView(screen);
-            promise.resolve(true);
+            promise.resolve(screen);
         }catch(Exception e){
             promise.resolve(false);
         }
@@ -258,7 +258,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
             final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<String, Object>();
             Embrace.getInstance().getReactNativeInternalInterface().logRnAction(name, st, et, props, payloadSize, output);
-            promise.resolve(name);
+            promise.resolve(true);
         }catch(Exception e){
             promise.resolve(false);
         }
