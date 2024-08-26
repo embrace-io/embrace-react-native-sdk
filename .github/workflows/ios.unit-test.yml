@@ -1,0 +1,35 @@
+name: packages/core/ios Unit Test
+
+on:
+  pull_request:
+    branches:
+      - 5.0 # TBD update branch name
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    - name: Yarn dependencies
+      run: |
+        cd packages/core
+        yarn install
+
+    - name: CocoaPods
+      run: |
+        cd packages/core/ios
+        sudo gem install cocoapods
+        pod install
+
+    - name: Run iOS unit tests
+      run: |
+        cd packages/core
+        yarn run ios:test
