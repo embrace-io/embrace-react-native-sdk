@@ -140,10 +140,22 @@ class EmbraceManager: NSObject {
         }
     }
 
+    // Should match strings defined in: packages/core/src/interfaces/Types.ts
+    private func lastRunEndStateToString(endState: LastRunEndState) -> String{
+        switch endState {
+        case .crash:
+            return "CRASH"
+        case .cleanExit:
+            return "CLEAN_EXIT"
+        default:
+            return "INVALID"
+        }
+    }
+
     @objc
     func getLastRunEndState(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         if let endState = Embrace.client?.lastRunEndState() {
-            resolve(endState)
+            resolve(lastRunEndStateToString(endState: endState))
         } else {
             reject("GET_LAST_RUN_END_STATE", "Error getting Last Run End State", nil)
         }
