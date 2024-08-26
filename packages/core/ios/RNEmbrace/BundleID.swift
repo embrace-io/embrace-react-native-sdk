@@ -2,6 +2,12 @@ import Foundation
 import EmbraceIO
 import CryptoKit
 
+extension UserDefaults {
+    static var embrace: UserDefaults {
+        UserDefaults(suiteName: "EmbraceReactNative") ?? .standard
+    }
+}
+
 private struct LastBundleComputation: Codable {
     private static let STORAGE_KEY = "EMBRACE_LAST_BUNDLE_COMPUTATION"
     var path: String
@@ -10,12 +16,12 @@ private struct LastBundleComputation: Codable {
 
     func store () {
         if let encoded = try? JSONEncoder().encode(self) {
-            UserDefaults.standard.set(encoded, forKey: LastBundleComputation.STORAGE_KEY)
+            UserDefaults.embrace.set(encoded, forKey: LastBundleComputation.STORAGE_KEY)
         }
     }
 
     static func fromStorage() -> LastBundleComputation {
-        if let storedData = UserDefaults.standard.object(forKey: LastBundleComputation.STORAGE_KEY) as? Data,
+        if let storedData = UserDefaults.embrace.object(forKey: LastBundleComputation.STORAGE_KEY) as? Data,
            let loaded = try? JSONDecoder().decode(LastBundleComputation.self, from: storedData) {
             return loaded
         }

@@ -800,6 +800,10 @@ class EmbraceSpansSDKNotStartedTests: XCTestCase {
 }
 
 class ComputeBundleIDTests: XCTestCase {
+    override func tearDownWithError() throws {
+          UserDefaults.standard.removePersistentDomain(forName: "EmbraceReactNative")
+    }
+
     // https://nshipster.com/temporary-files/
     func writeTempFile(contents: String, url: URL? = nil) throws -> URL {
         var to = url
