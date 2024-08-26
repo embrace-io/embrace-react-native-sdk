@@ -301,20 +301,26 @@ class EmbraceManager: NSObject {
         }
     }
 
-    @objc(logMessageWithSeverityAndProperties:severity:properties:resolver:rejecter:)
+    @objc(logMessageWithSeverityAndProperties:severity:properties:stacktrace:resolver:rejecter:)
     func logMessageWithSeverityAndProperties(
         _ message: String,
         severity: String,
         properties: NSDictionary,
+        stacktrace: String,
         resolver resolve: @escaping RCTPromiseResolveBlock,
         rejecter reject: @escaping RCTPromiseRejectBlock
     ) {
 
         let severityValue = self.severityFromString(from: severity)
-        guard let attributes = properties as? [String: String] else {
+        guard var attributes = properties as? [String: String] else {
             reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
             return
         }
+        
+        if (!stacktrace.isEmpty) {
+            attributes.updateValue(stacktrace, forKey: "exception.stacktrace")
+        }
+        
         Embrace.client?.log(
             message,
             severity: severityValue,
