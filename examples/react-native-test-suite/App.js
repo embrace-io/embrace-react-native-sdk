@@ -1,15 +1,23 @@
 import React, {useEffect} from 'react';
 import {SafeAreaView, Text, TouchableOpacity} from 'react-native';
-
+import MainNavigation from './src/navigation/MainNavigation';
 import {initialize} from '@embrace-io/react-native';
 // To test with Codepush
 // import codePush from 'react-native-code-push';
 
-import MainNavigation from './src/navigation/MainNavigation';
-
 const App = () => {
   useEffect(() => {
-    initialize();
+    initialize({
+      sdkConfig: {
+        ios: {
+          appId: 'SgNw5',
+        },
+      },
+    }).then(hasStarted => {
+      if (hasStarted) {
+        //doSomething
+      }
+    });
   }, []);
 
   return (
