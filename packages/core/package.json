@@ -50,7 +50,10 @@
     "bug tracker"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "ios:build:clean": "xcodebuild clean -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme Pods-RNEmbrace-RNEmbraceTests",
+    "ios:scheme": "xcodebuild -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -list",
+    "ios:test": "xcodebuild test -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme Pods-RNEmbrace-RNEmbraceTests -destination 'platform=iOS Simulator,name=iPhone 15 Pro'"
   },
   "devDependencies": {
     "typescript": "^4.7.4"
