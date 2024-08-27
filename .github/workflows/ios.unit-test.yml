@@ -17,7 +17,9 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18.x'
-    - run: corepack enable
+
+    - name: Enable Corepack
+      run: corepack enable
 
     - name: Yarn dependencies
       run: |
@@ -28,7 +30,7 @@ jobs:
       run: |
         cd packages/core/test-project/ios
         sudo gem install cocoapods
-        pod install
+        pod install --repo-update
 
     - name: Run iOS unit tests
       run: |
