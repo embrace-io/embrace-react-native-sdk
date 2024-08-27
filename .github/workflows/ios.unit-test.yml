@@ -23,7 +23,7 @@ jobs:
 
     - name: Yarn dependencies
       run: |
-        cd packages/core
+        cd packages/core/test-project/ios
         yarn install
 
     - name: CocoaPods
