@@ -26,7 +26,7 @@ jobs:
 
     - name: CocoaPods
       run: |
-        cd packages/core/ios
+        cd packages/core/test-project/ios
         sudo gem install cocoapods
         pod install
 
