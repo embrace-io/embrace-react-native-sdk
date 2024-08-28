@@ -214,11 +214,10 @@ class EmbraceManager: NSObject {
         _ resolve: @escaping RCTPromiseResolveBlock,
         rejecter reject: @escaping RCTPromiseRejectBlock
     ) {
-#if canImport(CodePush)
         DispatchQueue.global(qos: .background).async {
             do {
-                guard let url = CodePush.bundleURL() else {
-                    reject("GET_CODEPUSH_BUNDLE_URL", "Error getting Codepush Bundle URL", nil)
+                guard let url = CodePushHelper.getCodePushURL() else {
+                    resolve(false)
                     return
                 }
                 
@@ -229,9 +228,6 @@ class EmbraceManager: NSObject {
                 reject("CHECK_AND_SET_CODEPUSH_BUNDLE_URL", "Error setting Codepush Bundle URL", error)
             }
         }
-#else
-        resolve(false)
-#endif
     }
 
     @objc(addUserPersona:resolver:rejecter:)
