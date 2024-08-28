@@ -7,7 +7,19 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+        os: [macos-latest]
+        swift: ["5.3"]
+
+    runs-on: ${{ matrix.os }}
+    env:
+      PLATFORM: "iOS Simulator"
+      DEVICE: "iPhone 15 Pro"
+      WORKSPACE: "RNEmbraceTestProject"
+      SCHEME: "RNEmbraceTests"
+      TEST_PROJECT_PATH: packages/core/test-project
 
     steps:
     - name: Checkout code
@@ -16,23 +28,27 @@ jobs:
     - name: Install Node
       uses: actions/setup-node@v3
       with:
-        node-version: '18.x'
+        node-version: ${{ matrix.node-version }}
+        cache: "npm"
 
     - name: Enable Corepack
       run: corepack enable
 
-    - name: Yarn dependencies
+    - name: Yarn dependencies | Global
+      run: yarn install --immutable
+
+    - name: Yarn dependencies | Test Project
       run: |
-        cd packages/core/test-project/ios
+        cd ${{ env.TEST_PROJECT_PATH }}
         yarn install
 
-    - name: CocoaPods
+    - name: CocoaPods Install
       run: |
-        cd packages/core/test-project/ios
+        cd ${{ env.TEST_PROJECT_PATH }}/ios
         sudo gem install cocoapods
         pod install --repo-update
 
     - name: Run iOS unit tests
       run: |
-        cd packages/core
-        yarn run ios:test
+        cd ${{ env.TEST_PROJECT_PATH }}/ios
+        xcodebuild test -workspace ${{ env.WORKSPACE }}.xcworkspace -scheme ${{ env.SCHEME }} -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }}"
