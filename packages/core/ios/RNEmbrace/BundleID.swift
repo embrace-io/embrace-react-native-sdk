@@ -48,7 +48,6 @@ func computeBundleID(path: String) throws -> BundleID {
 
     // Check if we can re-use our last computed bundle ID, this is true only if the path hasn't changed and
     // the file contents at that path haven't been modified since the last time we computed the ID
-    // TODO in ios 5.x and Android implementation we are just returning last.id in this case without checking modified at...is that correct?
     if path == last.path {
         let attributes = try? FileManager.default.attributesOfItem(atPath: path)
         if let lastComputed = last.computedAt, let modifiedAt = attributes?[FileAttributeKey.modificationDate] as? Date,

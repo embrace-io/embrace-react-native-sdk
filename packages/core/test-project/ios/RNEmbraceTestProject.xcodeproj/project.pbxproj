@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3005423F2C7F669F0006D505 /* RNEmbrace-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 3005423E2C7F669E0006D505 /* RNEmbrace-Bridging-Header.h */; };
 		308F09292C4EED4200C1EB4C /* EmbraceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 308F09282C4EED4200C1EB4C /* EmbraceManager.m */; };
 		308F092B2C4EF1FE00C1EB4C /* SpanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 308F092A2C4EF1FE00C1EB4C /* SpanRepository.swift */; };
 		30DFDA6A2C486677009F2ECC /* RNEmbrace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30DFDA622C486677009F2ECC /* RNEmbrace.framework */; };
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3005423E2C7F669E0006D505 /* RNEmbrace-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNEmbrace-Bridging-Header.h"; sourceTree = "<group>"; };
 		308F09282C4EED4200C1EB4C /* EmbraceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbraceManager.m; sourceTree = "<group>"; };
 		308F092A2C4EF1FE00C1EB4C /* SpanRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpanRepository.swift; sourceTree = "<group>"; };
 		30DFDA622C486677009F2ECC /* RNEmbrace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbrace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				308F092A2C4EF1FE00C1EB4C /* SpanRepository.swift */,
+				3005423E2C7F669E0006D505 /* RNEmbrace-Bridging-Header.h */,
 				308F09282C4EED4200C1EB4C /* EmbraceManager.m */,
 				30DFDA782C4866AA009F2ECC /* EmbraceManager.swift */,
 				30FA20DA2C6FC44200340B1E /* BundleID.swift */,
@@ -131,6 +134,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3005423F2C7F669F0006D505 /* RNEmbrace-Bridging-Header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,7 +446,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -508,7 +515,10 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
