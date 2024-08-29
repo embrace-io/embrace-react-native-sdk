@@ -15,11 +15,13 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     env:
+      OS: 17.5
       PLATFORM: "iOS Simulator"
       DEVICE: "iPhone 15 Pro"
       TEST_PROJECT_PATH: packages/core/test-project
       WORKSPACE: "RNEmbraceTestProject"
       SCHEME: "RNEmbraceTests"
+      XCPRETTY_JSON_FILE_OUTPUT: reports/tests.json
 
     steps:
     - name: Checkout code
@@ -57,23 +59,16 @@ jobs:
       run: |
         cd ${{ env.TEST_PROJECT_PATH }}/ios
         sudo gem install cocoapods
-        pod install --repo-update
+        pod install --verbose
       if: steps.cache-cocoapods.outputs.cache-hit != 'true'
-
-    - name: Cache Derived Data
-      uses: actions/cache@v3
-      with:
-        path: ~/Library/Developer/Xcode/DerivedData
-        key: derived-data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}-${{ hashFiles('Podfile.lock') }}
-        restore-keys: |
-          derived-data-${{ runner.os }}-
 
     - name: Run iOS unit tests
       run: |
         cd ${{ env.TEST_PROJECT_PATH }}
-        xcodebuild test -workspace ios/${{ env.WORKSPACE }}.xcworkspace -scheme ${{ env.SCHEME }} -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }}" | xcpretty --test --color
+        xcodebuild test -workspace ios/${{ env.WORKSPACE }}.xcworkspace -scheme ${{ env.SCHEME }} -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS }}" \
+        OTHER_SWIFT_FLAGS="-Wno-documentation" | xcpretty --test --color
       env:
-        XCPRETTY_JSON_FILE_OUTPUT: reports/tests.json
+        XCPRETTY_JSON_FILE_OUTPUT: ${{ env.XCPRETTY_JSON_FILE_OUTPUT }}
       continue-on-error: true
 
     - name: Upload Unit Test Results
@@ -81,4 +76,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: unit-test-report
-        path: reports/tests.json
+        path: ${{ env.XCPRETTY_JSON_FILE_OUTPUT }}

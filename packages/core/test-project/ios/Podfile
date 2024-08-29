@@ -16,6 +16,8 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+rn_embrace_tests_scheme = 'RNEmbraceTests'
+
 target 'RNEmbrace' do
   config = use_native_modules!
 
@@ -27,7 +29,7 @@ target 'RNEmbrace' do
 
   pod 'EmbraceIO', '6.3.0'
 
-  target 'RNEmbraceTests' do
+  target rn_embrace_tests_scheme do
     inherit! :complete
     # Pods for testing
   end
@@ -40,5 +42,14 @@ target 'RNEmbrace' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        # Check if the target's scheme matches the test scheme
+        if config.name == rn_embrace_tests_scheme
+          config.build_settings['GCC_WARN_DOCUMENTATION_COMMENTS'] = 'NO'
+        end
+      end
+    end
   end
 end
