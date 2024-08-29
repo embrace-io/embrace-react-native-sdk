@@ -36,14 +36,6 @@ jobs:
 
     - name: Enables corepack
       run: corepack enable
-    
-    - name: Yarn dependencies | Global
-      run: yarn install --immutable
-
-    - name: Yarn dependencies | Test Project
-      run: |
-        cd ${{ env.PROJECT_PATH }}
-        yarn install
 
     - name: Cache CocoaPods
       id: cache-cocoapods
@@ -52,24 +44,34 @@ jobs:
         path: |
           ${{ env.PROJECT_PATH }}/ios/Pods
           ${{ env.PROJECT_PATH }}/ios/Podfile.lock
-        key: ${{ runner.os }}-pods-${{ hashFiles('${{ env.PROJECT_PATH }}/ios/Podfile.lock') }}
+          # Exclude Codegen-related files or directories
+          !${{ env.PROJECT_PATH }}/ios/Pods/Headers/Public/React-Codegen
+          !${{ env.PROJECT_PATH }}/ios/Pods/React-Codegen
+          !${{ env.PROJECT_PATH }}/ios/build/
+        key: ${{env.SCHEME}}-${{ runner.os }}-pods-${{ hashFiles('${{ env.PROJECT_PATH }}/ios/Podfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-pods-
+          ${{env.SCHEME}}-${{ runner.os }}-pods-
 
     - name: Cache Derived Data
       uses: actions/cache@v3
       with:
         path: ~/Library/Developer/Xcode/DerivedData
-        key: derived-data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}-${{ hashFiles('Podfile.lock') }}
+        key: ${{env.SCHEME}}-Derived-data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}-${{ hashFiles('Podfile.lock') }}
         restore-keys: |
-          derived-data-${{ runner.os }}-
+          ${{env.SCHEME}}-Derived-data-${{ runner.os }}-
 
-    - name: Install CocoaPods
+    - name: Install Yarn Dependencies
       run: |
-        cd ${{ env.PROJECT_PATH }}/ios
+        yarn install --immutable
+
+    - name: Install Yarn Dependencies + CocoaPods
+      run: |
+        cd ${{ env.PROJECT_PATH }}
+        yarn install --immutable
+        cd ios
         pod install --verbose
       if: steps.cache-cocoapods.outputs.cache-hit != 'true'
-
+    
     - name: Run iOS unit tests
       run: |
         cd ${{ env.PROJECT_PATH }}/ios
@@ -77,7 +79,9 @@ jobs:
           -workspace ${{ env.WORKSPACE }}.xcworkspace \
           -scheme ${{ env.SCHEME }} \
           -sdk ${{ env.SDK }} \
-          -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS }}" | xcbeautify
+          -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS }}" \
+          -resultBundlePath ${{ env.REPORT_PATH }} \
+          | xcbeautify
       continue-on-error: false
 
     - name: Upload Unit Test Results
