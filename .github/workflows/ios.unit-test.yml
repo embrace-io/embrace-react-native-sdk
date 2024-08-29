@@ -60,7 +60,25 @@ jobs:
         pod install --repo-update
       if: steps.cache-cocoapods.outputs.cache-hit != 'true'
 
+    - name: Cache Derived Data
+      uses: actions/cache@v3
+      with:
+        path: ~/Library/Developer/Xcode/DerivedData
+        key: derived-data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}-${{ hashFiles('Podfile.lock') }}
+        restore-keys: |
+          derived-data-${{ runner.os }}-
+
     - name: Run iOS unit tests
       run: |
         cd ${{ env.TEST_PROJECT_PATH }}
-        xcodebuild test -workspace ios/${{ env.WORKSPACE }}.xcworkspace -scheme ${{ env.SCHEME }} -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }}"
+        xcodebuild test -workspace ios/${{ env.WORKSPACE }}.xcworkspace -scheme ${{ env.SCHEME }} -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }}" | xcpretty --test --color
+      env:
+        XCPRETTY_JSON_FILE_OUTPUT: reports/tests.json
+      continue-on-error: true
+
+    - name: Upload Unit Test Results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: unit-test-report
+        path: reports/tests.json
