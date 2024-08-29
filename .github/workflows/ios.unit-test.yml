@@ -17,9 +17,9 @@ jobs:
     env:
       PLATFORM: "iOS Simulator"
       DEVICE: "iPhone 15 Pro"
+      TEST_PROJECT_PATH: packages/core/test-project
       WORKSPACE: "RNEmbraceTestProject"
       SCHEME: "RNEmbraceTests"
-      TEST_PROJECT_PATH: packages/core/test-project
 
     steps:
     - name: Checkout code
@@ -31,9 +31,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: "npm"
 
-    - name: Enable Corepack
+    - name: Enables corepack
       run: corepack enable
-
+    
     - name: Yarn dependencies | Global
       run: yarn install --immutable
 
@@ -42,13 +42,25 @@ jobs:
         cd ${{ env.TEST_PROJECT_PATH }}
         yarn install
 
-    - name: CocoaPods Install
+    - name: Cache CocoaPods
+      id: cache-cocoapods
+      uses: actions/cache@v3
+      with:
+        path: |
+          ${{ env.TEST_PROJECT_PATH }}/ios/Pods
+          ${{ env.TEST_PROJECT_PATH }}/ios/Podfile.lock
+        key: ${{ runner.os }}-pods-${{ hashFiles('${{ env.TEST_PROJECT_PATH }}/ios/Podfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pods-
+
+    - name: Install CocoaPods
       run: |
         cd ${{ env.TEST_PROJECT_PATH }}/ios
         sudo gem install cocoapods
         pod install --repo-update
+      if: steps.cache-cocoapods.outputs.cache-hit != 'true'
 
     - name: Run iOS unit tests
       run: |
-        cd ${{ env.TEST_PROJECT_PATH }}/ios
-        xcodebuild test -workspace ${{ env.WORKSPACE }}.xcworkspace -scheme ${{ env.SCHEME }} -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }}"
+        cd ${{ env.TEST_PROJECT_PATH }}
+        xcodebuild test -workspace ios/${{ env.WORKSPACE }}.xcworkspace -scheme ${{ env.SCHEME }} -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }}"
