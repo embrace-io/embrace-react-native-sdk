@@ -18,10 +18,11 @@ jobs:
       OS: 17.5
       PLATFORM: "iOS Simulator"
       DEVICE: "iPhone 15 Pro"
-      TEST_PROJECT_PATH: packages/core/test-project
       WORKSPACE: "RNEmbraceTestProject"
       SCHEME: "RNEmbraceTests"
-      XCPRETTY_JSON_FILE_OUTPUT: reports/tests.json
+      PROJECT_PATH: packages/core/test-project
+      REPORT_PATH: reports/tests.json
+      SDK: "iphonesimulator"
 
     steps:
     - name: Checkout code
@@ -41,7 +42,7 @@ jobs:
 
     - name: Yarn dependencies | Test Project
       run: |
-        cd ${{ env.TEST_PROJECT_PATH }}
+        cd ${{ env.PROJECT_PATH }}
         yarn install
 
     - name: Cache CocoaPods
@@ -49,9 +50,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
-          ${{ env.TEST_PROJECT_PATH }}/ios/Pods
-          ${{ env.TEST_PROJECT_PATH }}/ios/Podfile.lock
-        key: ${{ runner.os }}-pods-${{ hashFiles('${{ env.TEST_PROJECT_PATH }}/ios/Podfile.lock') }}
+          ${{ env.PROJECT_PATH }}/ios/Pods
+          ${{ env.PROJECT_PATH }}/ios/Podfile.lock
+        key: ${{ runner.os }}-pods-${{ hashFiles('${{ env.PROJECT_PATH }}/ios/Podfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-pods-
 
@@ -62,32 +63,21 @@ jobs:
         key: derived-data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}-${{ hashFiles('Podfile.lock') }}
         restore-keys: |
           derived-data-${{ runner.os }}-
-      
 
     - name: Install CocoaPods
       run: |
-        cd ${{ env.TEST_PROJECT_PATH }}/ios
-        bundle install
-        bundle exec pod install --verbose
+        cd ${{ env.PROJECT_PATH }}/ios
+        pod install --verbose
       if: steps.cache-cocoapods.outputs.cache-hit != 'true'
 
-    - name: Debug Environment
-      run: |
-        echo "Current Directory: $(pwd)"
-        echo "Directory Contents:"
-        ls -la
-
     - name: Run iOS unit tests
-      env:
-        XCPRETTY_JSON_FILE_OUTPUT: ${{ env.XCPRETTY_JSON_FILE_OUTPUT }}
-        OTHER_SWIFT_FLAGS: '-Wno-documentation'
-        OTHER_CFLAGS: '-Wno-documentation'
       run: |
-        cd ${{ env.TEST_PROJECT_PATH }}/ios
+        cd ${{ env.PROJECT_PATH }}/ios
         xcodebuild test \
           -workspace ${{ env.WORKSPACE }}.xcworkspace \
           -scheme ${{ env.SCHEME }} \
-          -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS }}"
+          -sdk ${{ env.SDK }} \
+          -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS }}" | xcbeautify
       continue-on-error: false
 
     - name: Upload Unit Test Results
@@ -95,4 +85,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: unit-test-report
-        path: ${{ env.XCPRETTY_JSON_FILE_OUTPUT }}
+        path: ${{ env.REPORT_PATH }}

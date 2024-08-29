@@ -159,7 +159,6 @@
 			buildConfigurationList = 30DFDA742C486677009F2ECC /* Build configuration list for PBXNativeTarget "RNEmbraceTests" */;
 			buildPhases = (
 				66F3676CF57850F02AB4CB17 /* [CP] Check Pods Manifest.lock */,
-				3023F50B2C52EA4300981C97 /* ShellScript */,
 				30DFDA652C486677009F2ECC /* Sources */,
 				30DFDA662C486677009F2ECC /* Frameworks */,
 				30DFDA672C486677009F2ECC /* Resources */,
@@ -270,24 +269,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNEmbrace/Pods-RNEmbrace-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		3023F50B2C52EA4300981C97 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		3F0253B8A0E201AA453CBA3D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
