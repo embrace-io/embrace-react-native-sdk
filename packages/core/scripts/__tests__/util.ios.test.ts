@@ -66,7 +66,7 @@ describe("iOS utils", () => {
       updatedPBX
         .toString()
         .includes(
-          'SWIFT_OBJC_BRIDGING_HEADER = "EmbraceTestSuite-Bridging-Header.h";',
+          'SWIFT_OBJC_BRIDGING_HEADER = "EmbraceTestSuite/EmbraceTestSuite-Bridging-Header.h";',
         ),
     ).toBe(true);
   });

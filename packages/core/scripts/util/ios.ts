@@ -364,7 +364,7 @@ export class XcodeProject implements Patchable {
     this.updateBuildProperty(
       projectName,
       "SWIFT_OBJC_BRIDGING_HEADER",
-      `"${filename}"`,
+      `"${nameWithCaseSensitive}/${filename}"`,
     );
 
     this.patch();
