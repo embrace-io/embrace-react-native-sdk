@@ -1,4 +1,4 @@
-name: packages/core/ios Unit Test
+name: iOS Unit Tests
 
 on:
   pull_request:
@@ -11,7 +11,6 @@ jobs:
       matrix:
         node-version: [18.x]
         os: [macos-latest]
-        swift: ["5.3"]
 
     runs-on: ${{ matrix.os }}
     env:
@@ -21,15 +20,15 @@ jobs:
       WORKSPACE: "RNEmbraceTestProject"
       SCHEME: "RNEmbraceTests"
       PROJECT_PATH: packages/core/test-project
-      REPORT_PATH: reports/tests.json
+      DERIVED_DATA_PATH: ~/Library/Developer/Xcode/DerivedData
       SDK: "iphonesimulator"
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Install Node
-      uses: actions/setup-node@v3
+    - name: Install Node (${{ matrix.node-version }})
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: "npm"
@@ -46,6 +45,7 @@ jobs:
           ${{ env.PROJECT_PATH }}/package-lock.json
           ${{ env.PROJECT_PATH }}/ios/Pods
           ${{ env.PROJECT_PATH }}/ios/Podfile.lock
+
           # Exclude Codegen-related files or directories
           !${{ env.PROJECT_PATH }}/ios/Pods/Headers/Public/React-Codegen
           !${{ env.PROJECT_PATH }}/ios/Pods/React-Codegen
@@ -57,21 +57,17 @@ jobs:
     - name: Cache Derived Data
       uses: actions/cache@v3
       with:
-        path: ~/Library/Developer/Xcode/DerivedData
+        path: ${{ env.DERIVED_DATA_PATH }}
         key: ${{env.SCHEME}}-Derived-data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}-${{ hashFiles('Podfile.lock') }}
         restore-keys: |
           ${{env.SCHEME}}-Derived-data-${{ runner.os }}-
 
-    - name: Install Yarn Dependencies
-      run: |
-        yarn install --immutable
-
-    - name: Install Yarn Dependencies + CocoaPods
+    - name: Install Yarn + CocoaPods Dependencies
       run: |
         cd ${{ env.PROJECT_PATH }}
-        yarn install --immutable
+        yarn install
         cd ios
-        pod install --verbose
+        pod install
       if: steps.test-project.outputs.cache-hit != 'true'
     
     - name: Run iOS unit tests
@@ -82,13 +78,11 @@ jobs:
           -scheme ${{ env.SCHEME }} \
           -sdk ${{ env.SDK }} \
           -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS }}" \
-          -resultBundlePath ${{ env.REPORT_PATH }} \
           | xcbeautify
       continue-on-error: false
 
-    - name: Upload Unit Test Results
-      if: always()
-      uses: actions/upload-artifact@v3
+    - name: Codecov
+      uses: codecov/codecov-action@v4
       with:
-        name: unit-test-report
-        path: ${{ env.REPORT_PATH }}
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: false
