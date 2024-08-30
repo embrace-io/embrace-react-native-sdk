@@ -47,7 +47,7 @@ jobs:
           # Exclude Codegen-related files or directories
           !${{ env.PROJECT_PATH }}/ios/Pods/Headers/Public/React-Codegen
           !${{ env.PROJECT_PATH }}/ios/Pods/React-Codegen
-        key: ${{ env.SCHEME }}-${{ runner.os }}-pods-${{ hashFiles('${{ env.PROJECT_PATH }}/ios/Podfile.lock, ${{ env.PROJECT_PATH }}/package-lock.json') }}
+        key: ${{ env.SCHEME }}-${{ runner.os }}-pods-${{ hashFiles('packages/core/test-project/ios/Podfile.lock, packages/core/test-project/yarn.lock') }}
         restore-keys: |
           ${{env.SCHEME}}-${{ runner.os }}-pods-
 
