@@ -47,22 +47,26 @@ jobs:
           # Exclude Codegen-related files or directories
           !${{ env.PROJECT_PATH }}/ios/Pods/Headers/Public/React-Codegen
           !${{ env.PROJECT_PATH }}/ios/Pods/React-Codegen
-        key: ${{ env.SCHEME }}-${{ runner.os }}-pods-${{ hashFiles('packages/core/test-project/ios/Podfile.lock, packages/core/test-project/yarn.lock') }}
+        key: ${{ env.SCHEME }}-App-${{ runner.os }}-pods-${{ hashFiles('packages/core/test-project/ios/Podfile.lock, packages/core/test-project/yarn.lock') }}
         restore-keys: |
-          ${{env.SCHEME}}-${{ runner.os }}-pods-
+          ${{env.SCHEME}}-App-${{ runner.os }}-pods
 
     - name: Cache Derived Data
       uses: actions/cache@v3
       with:
         path: ${{ env.DERIVED_DATA_PATH }}
-        key: ${{env.SCHEME}}-Derived-data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}-${{ hashFiles('Podfile.lock') }}
+        key: ${{env.SCHEME}}-Derived-Data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj, Podfile.lock') }}
         restore-keys: |
-          ${{env.SCHEME}}-Derived-data-${{ runner.os }}-
+          ${{env.SCHEME}}-Derived-Data-${{ runner.os }}
 
     - name: Install Yarn + CocoaPods Dependencies
       run: |
         cd ${{ env.PROJECT_PATH }}
         yarn install
+        echo "Directory contents:"
+        pwd
+        echo "Structure"
+        ls -la
         cd ios
         pod install
       if: steps.test-project.outputs.cache-hit != 'true'
