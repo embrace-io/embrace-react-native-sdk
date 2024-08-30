@@ -76,8 +76,6 @@ jobs:
           -scheme ${{ env.SCHEME }} \
           -sdk ${{ env.SDK }} \
           -enableCodeCoverage YES \
-          -showTestPlans \
-          -version \
           -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS }}" \
           | xcbeautify
 
