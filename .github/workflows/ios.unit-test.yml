@@ -37,18 +37,20 @@ jobs:
     - name: Enables corepack
       run: corepack enable
 
-    - name: Cache CocoaPods
-      id: cache-cocoapods
+    - name: Cache Yarn + CocoaPods
+      id: test-project
       uses: actions/cache@v3
       with:
         path: |
+          ${{ env.PROJECT_PATH }}/node_modules
+          ${{ env.PROJECT_PATH }}/package-lock.json
           ${{ env.PROJECT_PATH }}/ios/Pods
           ${{ env.PROJECT_PATH }}/ios/Podfile.lock
           # Exclude Codegen-related files or directories
           !${{ env.PROJECT_PATH }}/ios/Pods/Headers/Public/React-Codegen
           !${{ env.PROJECT_PATH }}/ios/Pods/React-Codegen
           !${{ env.PROJECT_PATH }}/ios/build/
-        key: ${{env.SCHEME}}-${{ runner.os }}-pods-${{ hashFiles('${{ env.PROJECT_PATH }}/ios/Podfile.lock') }}
+        key: ${{env.SCHEME}}-${{ runner.os }}-pods-${{ hashFiles('${{ env.PROJECT_PATH }}/ios/Podfile.lock') }}-${{ hashFiles('${{ env.PROJECT_PATH }}/package-lock.json') }}
         restore-keys: |
           ${{env.SCHEME}}-${{ runner.os }}-pods-
 
@@ -70,7 +72,7 @@ jobs:
         yarn install --immutable
         cd ios
         pod install --verbose
-      if: steps.cache-cocoapods.outputs.cache-hit != 'true'
+      if: steps.test-project.outputs.cache-hit != 'true'
     
     - name: Run iOS unit tests
       run: |
