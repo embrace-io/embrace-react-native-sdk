@@ -48,9 +48,9 @@ jobs:
           !${{ env.PROJECT_PATH }}/ios/Pods/Headers/Public/React-Codegen
           !${{ env.PROJECT_PATH }}/ios/Pods/React-Codegen
           !${{ env.PROJECT_PATH }}/ios/build
-        key: ${{ env.SCHEME }}-App-${{ runner.os }}-pods-${{ hashFiles('packages/core/test-project/ios/Podfile.lock, packages/core/test-project/yarn.lock') }}
+        key: ${{ env.SCHEME }}-Test-Project-${{ runner.os }}-${{ hashFiles('packages/core/test-project/ios/Podfile.lock, packages/core/test-project/yarn.lock') }}
         restore-keys: |
-          ${{env.SCHEME}}-App-${{ runner.os }}-pods
+          ${{env.SCHEME}}-Test-Project-${{ runner.os }}
 
     - name: Cache Derived Data
       uses: actions/cache@v3
@@ -64,10 +64,6 @@ jobs:
       run: |
         cd ${{ env.PROJECT_PATH }}
         yarn install
-        echo "Directory contents:"
-        pwd
-        echo "Structure"
-        ls -la
         cd ios
         pod install
       if: steps.test-project.outputs.cache-hit != 'true'
@@ -82,7 +78,6 @@ jobs:
           -enableCodeCoverage YES \
           -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS }}" \
           | xcbeautify
-      continue-on-error: false
 
     - name: Codecov
       uses: codecov/codecov-action@v4
