@@ -21,7 +21,7 @@ jobs:
       SCHEME: RNEmbraceTests
       PROJECT_PATH: packages/core/test-project
       DERIVED_DATA_PATH: ~/Library/Developer/Xcode/DerivedData
-      SDK: iphonesimulator"
+      SDK: iphonesimulator
 
     steps:
     - name: Checkout code
@@ -42,14 +42,12 @@ jobs:
       with:
         path: |
           ${{ env.PROJECT_PATH }}/node_modules
-          ${{ env.PROJECT_PATH }}/package-lock.json
           ${{ env.PROJECT_PATH }}/ios/Pods
-          ${{ env.PROJECT_PATH }}/ios/Podfile.lock
 
           # Exclude Codegen-related files or directories
           !${{ env.PROJECT_PATH }}/ios/Pods/Headers/Public/React-Codegen
           !${{ env.PROJECT_PATH }}/ios/Pods/React-Codegen
-        key: ${{env.SCHEME}}-${{ runner.os }}-pods-${{ hashFiles('${{ env.PROJECT_PATH }}/ios/Podfile.lock') }}-${{ hashFiles('${{ env.PROJECT_PATH }}/package-lock.json') }}
+        key: ${{ env.SCHEME }}-${{ runner.os }}-pods-${{ hashFiles('${{ env.PROJECT_PATH }}/ios/Podfile.lock, ${{ env.PROJECT_PATH }}/package-lock.json') }}
         restore-keys: |
           ${{env.SCHEME}}-${{ runner.os }}-pods-
 
