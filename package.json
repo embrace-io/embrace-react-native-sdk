@@ -15,13 +15,15 @@
     "build": "npx lerna run build",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
-    "lint:clang-format": "./scripts/run-clang-format.sh"
+    "lint:clang-format": "./scripts/run-clang-format.sh",
+    "lint:swift": "swiftlint --fix"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
       "yarn lint"
     ],
-    "*.{m,mm,h}": "yarn run lint:clang-format"
+    "*.{m,mm,h}": "yarn run lint:clang-format",
+    "*.swift": "yarn run lint:swift"
   },
   "husky": {
     "hooks": {
