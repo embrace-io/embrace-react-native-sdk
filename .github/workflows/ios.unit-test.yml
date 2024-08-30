@@ -17,7 +17,7 @@ jobs:
       OS: 17.5
       PLATFORM: iOS Simulator
       DEVICE: iPhone 15 Pro
-      WORKSPACE: RNEmbraceTestProject
+      WORKSPACE: RNEmbraceTestProject.xcworkspace
       SCHEME: RNEmbraceTests
       PROJECT_PATH: packages/core/test-project
       DERIVED_DATA_PATH: ~/Library/Developer/Xcode/DerivedData
@@ -60,7 +60,7 @@ jobs:
         restore-keys: |
           ${{env.SCHEME}}-Derived-Data-${{ runner.os }}
 
-    - name: Install Yarn + CocoaPods Dependencies
+    - name: Install Node Modules + CocoaPods Dependencies
       run: |
         cd ${{ env.PROJECT_PATH }}
         yarn install
@@ -68,14 +68,16 @@ jobs:
         pod install
       if: steps.test-project.outputs.cache-hit != 'true'
     
-    - name: Run iOS unit tests
+    - name: Run iOS Unit Tests
       run: |
         cd ${{ env.PROJECT_PATH }}/ios
         xcodebuild test \
-          -workspace ${{ env.WORKSPACE }}.xcworkspace \
+          -workspace ${{ env.WORKSPACE }} \
           -scheme ${{ env.SCHEME }} \
           -sdk ${{ env.SDK }} \
           -enableCodeCoverage YES \
+          -showTestPlans \
+          -version \
           -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS }}" \
           | xcbeautify
 
