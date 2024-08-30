@@ -19,11 +19,9 @@
     "lint:swift": "bash ./scripts/run-swiftlint.sh"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "yarn lint"
-    ],
-    "*.{m,mm,h}": "yarn run lint:clang",
-    "*.swift": "yarn run lint:swift"
+    "**/*.{js,jsx,ts,tsx}": "yarn lint",
+    "*.{m,mm,h}": "yarn lint:clang",
+    "*.swift": "yarn lint:swift"
   },
   "husky": {
     "hooks": {
