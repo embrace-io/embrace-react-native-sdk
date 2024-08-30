@@ -15,13 +15,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       OS: 17.5
-      PLATFORM: "iOS Simulator"
-      DEVICE: "iPhone 15 Pro"
-      WORKSPACE: "RNEmbraceTestProject"
-      SCHEME: "RNEmbraceTests"
+      PLATFORM: iOS Simulator
+      DEVICE: iPhone 15 Pro
+      WORKSPACE: RNEmbraceTestProject
+      SCHEME: RNEmbraceTests
       PROJECT_PATH: packages/core/test-project
       DERIVED_DATA_PATH: ~/Library/Developer/Xcode/DerivedData
-      SDK: "iphonesimulator"
+      SDK: iphonesimulator"
 
     steps:
     - name: Checkout code
@@ -49,7 +49,6 @@ jobs:
           # Exclude Codegen-related files or directories
           !${{ env.PROJECT_PATH }}/ios/Pods/Headers/Public/React-Codegen
           !${{ env.PROJECT_PATH }}/ios/Pods/React-Codegen
-          !${{ env.PROJECT_PATH }}/ios/build/
         key: ${{env.SCHEME}}-${{ runner.os }}-pods-${{ hashFiles('${{ env.PROJECT_PATH }}/ios/Podfile.lock') }}-${{ hashFiles('${{ env.PROJECT_PATH }}/package-lock.json') }}
         restore-keys: |
           ${{env.SCHEME}}-${{ runner.os }}-pods-
@@ -77,6 +76,7 @@ jobs:
           -workspace ${{ env.WORKSPACE }}.xcworkspace \
           -scheme ${{ env.SCHEME }} \
           -sdk ${{ env.SDK }} \
+          -enableCodeCoverage YES \
           -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS }}" \
           | xcbeautify
       continue-on-error: false
