@@ -19,7 +19,7 @@ import {
 export const EMBRACE_IMPORT_SWIFT = "import Embrace";
 
 export const EMBRACE_INIT_SWIFT =
-  "Embrace.sharedInstance().start(launchOptions: launchOptions, framework:.reactNative)";
+  "Embrace.sharedInstance().start(launchOptions: launchOptions, framework: .reactNative)";
 
 export const EMBRACE_IMPORT_JAVA =
   "import io.embrace.android.embracesdk.Embrace;";
