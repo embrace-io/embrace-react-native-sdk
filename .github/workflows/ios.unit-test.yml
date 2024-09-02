@@ -52,13 +52,13 @@ jobs:
         restore-keys: |
           ${{env.SCHEME}}-Test-Project-${{ runner.os }}
 
-    - name: Cache Derived Data
-      uses: actions/cache@v3
-      with:
-        path: ${{ env.DERIVED_DATA_PATH }}
-        key: ${{env.SCHEME}}-Derived-Data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj, Podfile.lock') }}
-        restore-keys: |
-          ${{env.SCHEME}}-Derived-Data-${{ runner.os }}
+    # - name: Cache Derived Data
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: ${{ env.DERIVED_DATA_PATH }}
+    #     key: ${{env.SCHEME}}-Derived-Data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj, Podfile.lock') }}
+    #     restore-keys: |
+    #       ${{env.SCHEME}}-Derived-Data-${{ runner.os }}
 
     - name: Install Node Modules + CocoaPods Dependencies
       run: |
