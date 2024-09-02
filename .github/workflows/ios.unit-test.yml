@@ -1,9 +1,11 @@
 name: iOS Unit Tests
 
 on:
+  push:
+    branches: [master]
   pull_request:
     branches:
-      - 5.0 # TBD update branch name
+      - 5.0 # TBD remove particular branch
 
 jobs:
   build:
@@ -36,22 +38,6 @@ jobs:
     - name: Enables corepack
       run: corepack enable
 
-    - name: Cache Test Project (Node Modules + CocoaPods)
-      id: test-project
-      uses: actions/cache@v3
-      with:
-        path: |
-          ${{ env.PROJECT_PATH }}/node_modules
-          ${{ env.PROJECT_PATH }}/ios/Pods
-
-          # Exclude Codegen-related files or directories
-          !${{ env.PROJECT_PATH }}/ios/Pods/Headers/Public/React-Codegen
-          !${{ env.PROJECT_PATH }}/ios/Pods/React-Codegen
-          !${{ env.PROJECT_PATH }}/ios/build
-        key: ${{ env.SCHEME }}-Test-Project-${{ runner.os }}-${{ hashFiles('packages/core/test-project/ios/Podfile.lock, packages/core/test-project/yarn.lock') }}
-        restore-keys: |
-          ${{env.SCHEME}}-Test-Project-${{ runner.os }}
-
     - name: Cache Derived Data
       uses: actions/cache@v3
       with:
@@ -66,7 +52,6 @@ jobs:
         yarn install
         cd ios
         pod install
-      if: steps.test-project.outputs.cache-hit != 'true'
     
     - name: Run iOS Unit Tests
       run: |
