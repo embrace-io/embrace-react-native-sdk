@@ -27,8 +27,9 @@ done
 
 # 2) Exclude directories. Add more directories if needed
 EXCLUDE_DIRS=(
-    "node_modules"
-    "build"
+    "$(pwd)/node_modules"
+    "$(pwd)/build"
+    "$(pwd)/packages/core/scripts"
 )
 
 EXCLUDE_CMD=""
@@ -37,9 +38,9 @@ EXCLUDE_DIRS_LEN=${#EXCLUDE_DIRS[@]}
 for exc_dir in "${EXCLUDE_DIRS[@]}"; do
     if [ $EXCLUDE_COUNTER -eq $EXCLUDE_DIRS_LEN ]; then
         # do not add '-o' at the end
-        EXCLUDE_CMD+=" -name $exc_dir"
+        EXCLUDE_CMD+=" -path $exc_dir -prune"
     else
-        EXCLUDE_CMD+=" -name $exc_dir -o"
+        EXCLUDE_CMD+=" -path $exc_dir -prune -o"
     fi
     ((EXCLUDE_COUNTER++))
 done
