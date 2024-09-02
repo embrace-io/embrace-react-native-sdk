@@ -66,7 +66,7 @@ jobs:
         yarn install
         cd ios
         pod install
-      if: steps.test-project.outputs.cache-hit != 'true'
+      # if: steps.test-project.outputs.cache-hit != 'true'
     
     - name: Run iOS Unit Tests
       run: |
