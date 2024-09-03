@@ -789,8 +789,8 @@ class EmbraceManager: NSObject {
         ];
 
         Embrace.client?.log(
-            message,
-            severity: LogSeverity.error,
+            name,
+            severity: LogSeverity.fatal,
             type: LogType.crash,
             attributes: attributes
         );

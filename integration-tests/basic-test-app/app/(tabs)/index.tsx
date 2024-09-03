@@ -5,12 +5,25 @@ import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import {endSession} from "@embrace-io/react-native";
+import {endSession, logHandledError} from "@embrace-io/react-native";
 
 const HomeScreen = () => {
   const handleEndSession = useCallback(() => {
-    console.log("end session was clicked");
     endSession();
+  }, []);
+
+  const handleErrorLog = useCallback(() => {
+    logHandledError(new Error("error log test (manually triggered)"));
+  }, []);
+
+  const handleLogUnhandledError = useCallback(() => {
+    throw new Error("new approach for js crashes (auto-captured by sdk)");
+  }, []);
+
+  const handlePromiseUnhandledError = useCallback(async () => {
+    await new Promise((_, reject) => {
+      reject(new Error("rejecting manually promise - testing"));
+    });
   }, []);
 
   return (
@@ -25,6 +38,9 @@ const HomeScreen = () => {
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">End Session</ThemedText>
         <Button onPress={handleEndSession} title="END SESSION" />
+        <Button onPress={handleErrorLog} title="HANDLED ERROR LOG" />
+        <Button onPress={handleLogUnhandledError} title="CRASH" />
+        <Button onPress={handlePromiseUnhandledError} title="PROMISE" />
       </ThemedView>
     </ParallaxScrollView>
   );
