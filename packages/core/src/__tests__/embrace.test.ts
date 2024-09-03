@@ -28,7 +28,11 @@ import {
   setUserIdentifier,
   setUsername,
   startView,
+  ERROR,
+  INFO,
+  WARNING,
 } from "../index";
+import type {Properties} from "../index";
 
 const mockSetUserIdentifier = jest.fn();
 const mockClearUserIdentifier = jest.fn();
@@ -69,7 +73,7 @@ jest.mock("react-native", () => ({
       logMessageWithSeverityAndProperties: (
         message: string,
         severity: string,
-        properties: Record<string, any>,
+        properties: Properties,
         stacktrace: string,
       ) =>
         mockLogMessageWithSeverityAndProperties(
@@ -78,8 +82,11 @@ jest.mock("react-native", () => ({
           properties,
           stacktrace,
         ),
-      logHandledError: (message: string, properties?: Record<string, any>) =>
-        mockLogHandledError(message, properties),
+      logHandledError: (
+        message: string,
+        stackTrace: string,
+        properties?: Properties,
+      ) => mockLogHandledError(message, stackTrace, properties),
       addUserPersona: (persona: string) => mockAddUserPersona(persona),
       clearUserPersona: (persona: string) => mockClearUserPersona(persona),
       clearAllUserPersonas: () => mockClearAllUserPersonas(),
@@ -139,14 +146,14 @@ jest.mock("react-native", () => ({
   },
 }));
 
-const mockSt = "this is a fake stack trace";
-const testView = "View";
-
 const mockGenerateStackTrace = jest.fn();
 jest.mock("../utils/ErrorUtil", () => ({
   ...jest.requireActual("../utils/ErrorUtil"),
   generateStackTrace: () => mockGenerateStackTrace(),
 }));
+
+const MOCK_STACKTRACE = "this is a fake stack trace";
+const MOCK_VIEW = "View";
 
 describe("User Identifier Tests", () => {
   const testUserId = "testUser";
@@ -191,23 +198,19 @@ describe("User Data Tests", () => {
 });
 
 describe("Logs Test", () => {
-  const WARNING = "warning";
-  const INFO = "info";
-  const ERROR = "error";
-
   beforeEach(() => {
-    mockGenerateStackTrace.mockReturnValue(mockSt);
+    mockGenerateStackTrace.mockReturnValue(MOCK_STACKTRACE);
   });
 
   test("addBreadcrumb", async () => {
-    await addBreadcrumb(testView);
-    expect(mockAddBreadcrumb).toHaveBeenCalledWith(testView);
+    await addBreadcrumb(MOCK_VIEW);
+    expect(mockAddBreadcrumb).toHaveBeenCalledWith(MOCK_VIEW);
   });
 
   test("logScreen", async () => {
-    await logScreen(testView);
+    await logScreen(MOCK_VIEW);
     expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-      `Opening screen [${testView}]`,
+      `Opening screen [${MOCK_VIEW}]`,
     );
   });
 
@@ -219,10 +222,10 @@ describe("Logs Test", () => {
       message        | severity   | properties   | stackTrace
       ${testMessage} | ${INFO}    | ${testProps} | ${""}
       ${testMessage} | ${INFO}    | ${testProps} | ${""}
-      ${testMessage} | ${WARNING} | ${testProps} | ${mockSt}
-      ${testMessage} | ${WARNING} | ${testProps} | ${mockSt}
-      ${testMessage} | ${ERROR}   | ${testProps} | ${mockSt}
-      ${testMessage} | ${ERROR}   | ${testProps} | ${mockSt}
+      ${testMessage} | ${WARNING} | ${testProps} | ${MOCK_STACKTRACE}
+      ${testMessage} | ${WARNING} | ${testProps} | ${MOCK_STACKTRACE}
+      ${testMessage} | ${ERROR}   | ${testProps} | ${MOCK_STACKTRACE}
+      ${testMessage} | ${ERROR}   | ${testProps} | ${MOCK_STACKTRACE}
     `(
       "should run $severity log",
       async ({message, severity, properties, stackTrace}) => {
@@ -253,7 +256,7 @@ describe("Logs Test", () => {
       `test message`,
       WARNING,
       undefined,
-      mockSt,
+      MOCK_STACKTRACE,
     );
   });
 
@@ -263,28 +266,42 @@ describe("Logs Test", () => {
       `test message`,
       ERROR,
       undefined,
-      mockSt,
+      MOCK_STACKTRACE,
     );
   });
 });
 
-describe("Log handled Error Tests", () => {
-  const testError = new Error();
-  const testProps = {foo: "bar"};
+describe("Log Handled Errors", () => {
+  const testError = new Error("This is a test error");
 
-  test.each`
-    message           | properties   | out
-    ${"not an error"} | ${undefined} | ${{}}
-    ${testError}      | ${undefined} | ${{message: testError.message, stack: testError.stack}}
-    ${testError}      | ${testProps} | ${{message: testError.message, stack: testError.stack, properties: testProps}}
-  `("logHandledError", async ({message, out, properties}) => {
-    await logHandledError(message, properties);
-    // TODO uncomment the expect once the method is imeplemented
-    // if (message instanceof Error) {
-    //   expect(mockLogHandledError).toHaveBeenCalledWith(out.message, out.stack, out.properties);
-    // } else {
-    //   expect(mockLogHandledError).not.toHaveBeenCalled();
-    // }
+  it("error (instance of Error) with properties", async () => {
+    const testProps = {foo: "bar"};
+    await logHandledError(testError, testProps);
+
+    expect(mockLogHandledError).toHaveBeenCalledWith(
+      testError.message,
+      testError.stack,
+      testProps,
+    );
+  });
+
+  it("error (instance of Error) without properties", async () => {
+    await logHandledError(testError, undefined);
+
+    expect(mockLogHandledError).toHaveBeenCalledWith(
+      testError.message,
+      testError.stack,
+      {},
+    );
+  });
+
+  it("not an instance of error", async () => {
+    // even when ts complains about the type, we want to test this scenario
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await logHandledError("not an error", undefined);
+
+    expect(mockLogHandledError).not.toHaveBeenCalled();
   });
 });
 
@@ -309,17 +326,19 @@ describe("Personas Tests", () => {
 
 describe("Custom Views Tests", () => {
   test("startView", async () => {
-    const promiseToResolve = startView(testView);
+    const promiseToResolve = startView(MOCK_VIEW);
 
     await promiseToResolve;
-    expect(mockStartView).toHaveBeenCalledWith(testView);
+    expect(mockStartView).toHaveBeenCalledWith(MOCK_VIEW);
   });
 
   test("endView", async () => {
-    const promiseToResolve = endView(testView);
+    jest.useFakeTimers();
+
+    const promiseToResolve = endView(MOCK_VIEW);
     jest.runAllTimers();
     await promiseToResolve;
-    expect(mockEndView).toHaveBeenCalledWith(testView);
+    expect(mockEndView).toHaveBeenCalledWith(MOCK_VIEW);
   });
 });
 

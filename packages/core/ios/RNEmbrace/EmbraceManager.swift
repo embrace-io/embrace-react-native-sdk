@@ -759,7 +759,7 @@ class EmbraceManager: NSObject {
         Embrace.client?.log(
             message,
             severity: LogSeverity.error,
-            type: LogType.exception,
+            type: LogType.crash,
             attributes: attributes
         );
         
@@ -783,12 +783,9 @@ class EmbraceManager: NSObject {
         
         let attributes: [String: String] = [
             "emb.type": "sys.ios.react_native_crash",
-            // not added by native sdk
-            "emb.exception_handling": "unhandled",
-            "js_exception": stacktrace,
+            "emb.ios.react_native_crash.js_exception": stacktrace,
             "exception.message": message,
             "exception.type": type
-            // "ios.react_native_crash.js_exception": stacktrace
         ];
 
         Embrace.client?.log(

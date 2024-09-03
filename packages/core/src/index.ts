@@ -375,3 +375,4 @@ const createTruePromise = (): Promise<boolean> => {
 };
 
 export {WARNING, ERROR, INFO};
+export {type Properties};

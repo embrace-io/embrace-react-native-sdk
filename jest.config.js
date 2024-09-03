@@ -12,6 +12,7 @@ module.exports = {
     "<rootDir>/packages/*/lib/",
     "<rootDir>/examples/",
     "<rootDir>/integration-tests/",
+    "<rootDir>/packages/core/test-project/",
   ],
   collectCoverage: true,
   coverageThreshold: {
