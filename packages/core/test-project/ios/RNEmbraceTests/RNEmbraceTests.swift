@@ -162,7 +162,7 @@ class EmbraceLogsTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].body?.description, "my handled error")
         XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"]?.description)
         XCTAssertNotNil(exportedLogs[0].attributes["emb.session_id"]!.description)
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.exception")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
         XCTAssertEqual(exportedLogs[0].attributes["exception.stacktrace"]!.description, "stacktrace as string")
         XCTAssertEqual(exportedLogs[0].attributes["emb.exception_handling"]!.description, "handled")
