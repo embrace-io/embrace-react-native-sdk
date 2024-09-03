@@ -16,6 +16,9 @@ private let EVENT_NAME_KEY = "name"
 private let EVENT_TIMESTAMP_KEY = "timeStampMs"
 private let EVENT_ATTRIBUTES_KEY = "attributes"
 
+// Crash metadata
+private let EMB_EXC = "emb-js"
+
 class SDKConfig: NSObject {
   public let appId: String
   public let appGroupId: String?
@@ -773,7 +776,48 @@ class EmbraceManager: NSObject {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
-        // TBD after guild discussion
+        if Embrace.client == nil {
+            reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error recording a unhandled js exception, Embrace SDK may not be initialized", nil)
+            return
+        }
+        
+        let attributes: [String: String] = [
+            "emb.type": "sys.ios.react_native_crash",
+            // not added by native sdk
+            "emb.exception_handling": "unhandled",
+            "js_exception": stacktrace,
+            "exception.message": message,
+            "exception.type": type
+            // "ios.react_native_crash.js_exception": stacktrace
+        ];
+
+        Embrace.client?.log(
+            message,
+            severity: LogSeverity.error,
+            type: LogType.crash,
+            attributes: attributes
+        );
+        
+        // needed in backend
+//        let jsExceptionEncodedId = UUID().uuidString
+//        Embrace.client?.appendCrashInfo(EMB_EXC, jsExceptionEncodedId)
+
+        resolve(true)
+    }
+    
+    @objc(appendCrashInfo:value:resolver:rejecter:)
+    func appendCrashInfo(
+        _ key: String,
+        value: String,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+    ) {
+        if Embrace.client == nil {
+            reject("APPEND_CRASH_INFO_ERROR", "Error appending crash information, Embrace SDK may not be initialized", nil)
+            return
+        }
+
+//        Embrace.client?.appendCrashInfo(key, value)
         resolve(true)
     }
 }
