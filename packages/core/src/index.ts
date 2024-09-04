@@ -36,13 +36,17 @@ const handleError = async (error: Error, callback: () => void) => {
   }
 
   const {name, message, stack = ""} = error;
-  const truncated = stack.split("\n").slice(0, STACK_LIMIT).join("\n");
+
+  // truncating stacktrace to 200 lines
+  const stTruncated = stack.split("\n").slice(0, STACK_LIMIT).join("\n");
+  // NOTE: same as error.name? why it's pulled differently?
+  const errorType = error.constructor.name;
 
   await NativeModules.EmbraceManager.logUnhandledJSException(
     name,
     message,
-    error.constructor.name,
-    truncated,
+    errorType,
+    stTruncated,
   );
 
   callback();

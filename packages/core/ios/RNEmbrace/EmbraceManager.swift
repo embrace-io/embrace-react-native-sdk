@@ -780,24 +780,27 @@ class EmbraceManager: NSObject {
             reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error recording a unhandled js exception, Embrace SDK may not be initialized", nil)
             return
         }
-        
+
+        // needed in backend
+        let jsExceptionUUID = UUID().uuidString
+
         let attributes: [String: String] = [
             "emb.type": "sys.ios.react_native_crash",
             "emb.ios.react_native_crash.js_exception": stacktrace,
+
             "exception.message": message,
-            "exception.type": type
+            "exception.type": type,
+            "exception.id": jsExceptionUUID
         ];
 
         Embrace.client?.log(
             name,
-            severity: LogSeverity.fatal,
-            type: LogType.crash,
+            severity: LogSeverity.error,
+            type: LogType.message,
             attributes: attributes
         );
-        
-        // needed in backend
-//        let jsExceptionEncodedId = UUID().uuidString
-//        Embrace.client?.appendCrashInfo(EMB_EXC, jsExceptionEncodedId)
+
+//        Embrace.client?.appendCrashInfo(EMB_EXC, jsExceptionUUID)
 
         resolve(true)
     }
@@ -813,7 +816,7 @@ class EmbraceManager: NSObject {
             reject("APPEND_CRASH_INFO_ERROR", "Error appending crash information, Embrace SDK may not be initialized", nil)
             return
         }
-
+        
 //        Embrace.client?.appendCrashInfo(key, value)
         resolve(true)
     }

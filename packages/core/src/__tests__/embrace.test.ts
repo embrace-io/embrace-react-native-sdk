@@ -243,7 +243,7 @@ describe("Logs Test", () => {
   test("logInfo", async () => {
     await logInfo("test message");
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-      `test message`,
+      "test message",
       INFO,
       undefined,
       "",
@@ -253,7 +253,7 @@ describe("Logs Test", () => {
   test("logWarning", async () => {
     await logWarning("test message");
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-      `test message`,
+      "test message",
       WARNING,
       undefined,
       MOCK_STACKTRACE,
@@ -263,7 +263,7 @@ describe("Logs Test", () => {
   test("logError", async () => {
     await logError("test message");
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-      `test message`,
+      "test message",
       ERROR,
       undefined,
       MOCK_STACKTRACE,

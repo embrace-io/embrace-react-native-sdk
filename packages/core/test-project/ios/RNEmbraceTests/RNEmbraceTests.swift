@@ -169,24 +169,23 @@ class EmbraceLogsTests: XCTestCase {
     }
 
     func testLogUnhandledJSException() async throws {
-        module.logUnhandledJSException("my unhandled exception", message: "unhandled message", type: LogType.exception.rawValue, stacktrace: "stacktrace as string", resolver: promise.resolve, rejecter: promise.reject)
+        module.logUnhandledJSException("my unhandled exception", message: "unhandled message", type: "Error", stacktrace: "stacktrace as string", resolver: promise.resolve, rejecter: promise.reject)
+        
+        let exportedLogs = try await getExportedLogs()
+        XCTAssertEqual(promise.resolveCalls.count, 1)
+        XCTAssertEqual(exportedLogs.count, 1)
+        
+        XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
+        XCTAssertEqual(exportedLogs[0].body?.description, "my unhandled exception")
 
-        // TBD
-        // let exportedLogs = try await getExportedLogs()
-        // XCTAssertEqual(promise.resolveCalls.count, 1)
-        // XCTAssertEqual(exportedLogs.count, 1)
-        //
-        // XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
-        // XCTAssertEqual(exportedLogs[0].body?.description, "unhandled message")
-        // XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"]?.description)
-        // XCTAssertNotNil(exportedLogs[0].attributes["emb.session_id"]!.description)
-        // XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.exception")
-        // XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
-        // XCTAssertEqual(exportedLogs[0].attributes["exception.stacktrace"]!.description, "stacktrace as string")
-        //
-        // XCTAssertEqual(exportedLogs[0].attributes["emb.exception_handling"]!.description, "unhandled")
-        // XCTAssertEqual(exportedLogs[0].attributes["exception.message"]!.description, "unhandled message")
-        // XCTAssertEqual(exportedLogs[0].attributes["exception.type"]!.description, "sys.exception")
+        XCTAssertNotNil(exportedLogs[0].attributes["emb.session_id"]!.description)
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.ios.react_native_crash")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.ios.react_native_crash.js_exception"]!.description, "stacktrace as string")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
+
+        XCTAssertEqual(exportedLogs[0].attributes["exception.message"]!.description, "unhandled message")
+        XCTAssertEqual(exportedLogs[0].attributes["exception.type"]!.description, "Error")
+        XCTAssertNotNil(exportedLogs[0].attributes["exception.id"])
     }
      
     func testLogMessageWithSeverity() async throws {
