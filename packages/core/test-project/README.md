@@ -1,4 +1,4 @@
-## Usage
+### Usage
 
 From this directory (`packages/core/test-project`) install the required npm packages (`react-native`):
 
@@ -28,3 +28,11 @@ Once it's completed, open through `xcode` the `RNEmbraceTestProject.xcworkspace`
 The goal here is to run the tests. From `xcode` go to `Product -> Test` or simple press `command + U` to start running the test suite.
 
 NOTE: Simulator will be triggered but there is not such app there.
+
+For running unit tests using Node:
+
+```bash
+// back to the root `packages/core` directory
+cd ..
+yarn run ios:test
+```
