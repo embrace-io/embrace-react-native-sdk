@@ -7,11 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3005423F2C7F669F0006D505 /* RNEmbrace-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 3005423E2C7F669E0006D505 /* RNEmbrace-Bridging-Header.h */; };
 		308F09292C4EED4200C1EB4C /* EmbraceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 308F09282C4EED4200C1EB4C /* EmbraceManager.m */; };
 		308F092B2C4EF1FE00C1EB4C /* SpanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 308F092A2C4EF1FE00C1EB4C /* SpanRepository.swift */; };
+		30D432282C7FB6B2005D5D30 /* CodePushHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 30D432272C7FB6B2005D5D30 /* CodePushHelper.m */; };
+		30D4322A2C7FB9A1005D5D30 /* CodePushHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 30D432292C7FB9A1005D5D30 /* CodePushHelper.h */; };
 		30DFDA6A2C486677009F2ECC /* RNEmbrace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30DFDA622C486677009F2ECC /* RNEmbrace.framework */; };
 		30DFDA6F2C486677009F2ECC /* RNEmbraceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFDA6E2C486677009F2ECC /* RNEmbraceTests.swift */; };
 		30DFDA7A2C4866AA009F2ECC /* EmbraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFDA782C4866AA009F2ECC /* EmbraceManager.swift */; };
+		30FA20DB2C6FC44200340B1E /* BundleID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FA20DA2C6FC44200340B1E /* BundleID.swift */; };
 		B4299F22FA7B4BCC15BA5909 /* libPods-RNEmbrace-RNEmbraceTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 558DC3867B10B4FE49B73190 /* libPods-RNEmbrace-RNEmbraceTests.a */; };
 		DFB266F6D6D6B83330A0A1C0 /* libPods-RNEmbrace.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDEF5231D91290910B8BF4B8 /* libPods-RNEmbrace.a */; };
 /* End PBXBuildFile section */
@@ -27,12 +31,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3005423E2C7F669E0006D505 /* RNEmbrace-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNEmbrace-Bridging-Header.h"; sourceTree = "<group>"; };
 		308F09282C4EED4200C1EB4C /* EmbraceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbraceManager.m; sourceTree = "<group>"; };
 		308F092A2C4EF1FE00C1EB4C /* SpanRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpanRepository.swift; sourceTree = "<group>"; };
+		30D432272C7FB6B2005D5D30 /* CodePushHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CodePushHelper.m; sourceTree = "<group>"; };
+		30D432292C7FB9A1005D5D30 /* CodePushHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CodePushHelper.h; sourceTree = "<group>"; };
 		30DFDA622C486677009F2ECC /* RNEmbrace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbrace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		30DFDA692C486677009F2ECC /* RNEmbraceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNEmbraceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		30DFDA6E2C486677009F2ECC /* RNEmbraceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNEmbraceTests.swift; sourceTree = "<group>"; };
 		30DFDA782C4866AA009F2ECC /* EmbraceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbraceManager.swift; sourceTree = "<group>"; };
+		30FA20DA2C6FC44200340B1E /* BundleID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleID.swift; sourceTree = "<group>"; };
 		558DC3867B10B4FE49B73190 /* libPods-RNEmbrace-RNEmbraceTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNEmbrace-RNEmbraceTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A6DF13D181A3FCB1CB97565 /* Pods-RNEmbrace-RNEmbraceTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbrace-RNEmbraceTests.release.xcconfig"; path = "Target Support Files/Pods-RNEmbrace-RNEmbraceTests/Pods-RNEmbrace-RNEmbraceTests.release.xcconfig"; sourceTree = "<group>"; };
 		9E3D177C261BFCB36EE71F4A /* Pods-RNEmbrace.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbrace.release.xcconfig"; path = "Target Support Files/Pods-RNEmbrace/Pods-RNEmbrace.release.xcconfig"; sourceTree = "<group>"; };
@@ -106,8 +114,12 @@
 			isa = PBXGroup;
 			children = (
 				308F092A2C4EF1FE00C1EB4C /* SpanRepository.swift */,
+				30D432292C7FB9A1005D5D30 /* CodePushHelper.h */,
+				3005423E2C7F669E0006D505 /* RNEmbrace-Bridging-Header.h */,
+				30D432272C7FB6B2005D5D30 /* CodePushHelper.m */,
 				308F09282C4EED4200C1EB4C /* EmbraceManager.m */,
 				30DFDA782C4866AA009F2ECC /* EmbraceManager.swift */,
+				30FA20DA2C6FC44200340B1E /* BundleID.swift */,
 			);
 			name = RNEmbrace;
 			path = ../../ios/RNEmbrace;
@@ -128,6 +140,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3005423F2C7F669F0006D505 /* RNEmbrace-Bridging-Header.h in Headers */,
+				30D4322A2C7FB9A1005D5D30 /* CodePushHelper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,6 +365,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30D432282C7FB6B2005D5D30 /* CodePushHelper.m in Sources */,
+				30FA20DB2C6FC44200340B1E /* BundleID.swift in Sources */,
 				30DFDA7A2C4866AA009F2ECC /* EmbraceManager.swift in Sources */,
 				308F092B2C4EF1FE00C1EB4C /* SpanRepository.swift in Sources */,
 				308F09292C4EED4200C1EB4C /* EmbraceManager.m in Sources */,
@@ -438,10 +454,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -507,10 +520,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -552,7 +562,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "../../ios/RNEmbrace/RNEmbrace-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -590,7 +600,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "../../ios/RNEmbrace/RNEmbrace-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -694,13 +694,13 @@ class EmbraceSpansTests: XCTestCase {
         let exportedSpans = try await getExportedSpans()
         XCTAssertEqual(exportedSpans.count, 2)
    }
-    
+
     func testLogNetworkRequest() async throws {
         module.logNetworkRequest("https://otest.com/v1/products", httpMethod: "get", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: 1000, bytesReceived: 2000, statusCode: 200, resolver: promise.resolve, rejecter: promise.reject)
 
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
-        
+
         module.logNetworkRequest("https://otest.com/", httpMethod: "POST", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: -1, bytesReceived: -2, statusCode: -1, resolver: promise.resolve, rejecter: promise.reject)
 
         module.logNetworkRequest("https://otest.com/v2/error", httpMethod: "POST", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: -1, bytesReceived: -2, statusCode: 500, resolver: promise.resolve, rejecter: promise.reject)
@@ -716,7 +716,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["http.response.body.size"]!.description, "2000")
         XCTAssertEqual(exportedSpans[0].attributes["http.request.body.size"]!.description, "1000")
         XCTAssertEqual(exportedSpans[0].attributes["http.response.status_code"]!.description, "200")
-        
+
         XCTAssertEqual(exportedSpans[1].name, "emb-POST")
         XCTAssertEqual(exportedSpans[1].startTime, Date(timeIntervalSince1970: 1723221815.889))
         XCTAssertEqual(exportedSpans[1].endTime, Date(timeIntervalSince1970: 1723221815.891))
@@ -726,14 +726,14 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertNil(exportedSpans[1].attributes["http.response.body.size"])
         XCTAssertNil(exportedSpans[1].attributes["http.request.body.size"])
         XCTAssertNil(exportedSpans[1].attributes["http.response.status_code"])
-        
+
         XCTAssertEqual(exportedSpans[2].name, "emb-POST /v2/error")
         XCTAssertEqual(exportedSpans[2].startTime, Date(timeIntervalSince1970: 1723221815.889))
         XCTAssertEqual(exportedSpans[2].endTime, Date(timeIntervalSince1970: 1723221815.891))
         XCTAssertEqual(exportedSpans[2].attributes["url.full"]!.description, "https://otest.com/v2/error")
         XCTAssertEqual(exportedSpans[2].attributes["http.response.status_code"]!.description, "500")
         // NOTE: is this correct? Android is setting `status` as `Error` when the status code represents an error code (like in this case)
-        XCTAssertEqual(exportedSpans[2].status, Status.unset);
+        XCTAssertEqual(exportedSpans[2].status, Status.unset)
     }
 
     func testLogNetworkClientError() async throws {
@@ -741,7 +741,7 @@ class EmbraceSpansTests: XCTestCase {
 
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
-        
+
         let exportedSpans = try await getExportedSpans()
 
         XCTAssertEqual(exportedSpans[0].name, "emb-GET /v1/products")
@@ -751,7 +751,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["error.message"]!.description, "this is my error")
         XCTAssertEqual(exportedSpans[0].attributes["error.type"]!.description, "custom error")
     }
-    
+
     func testStartEndView() async throws {
         module.startView("my-view", resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
@@ -799,3 +799,74 @@ class EmbraceSpansSDKNotStartedTests: XCTestCase {
     }
 }
 
+class ComputeBundleIDTests: XCTestCase {
+    override func tearDownWithError() throws {
+          UserDefaults.standard.removePersistentDomain(forName: "EmbraceReactNative")
+    }
+
+    // https://nshipster.com/temporary-files/
+    func writeTempFile(contents: String, url: URL? = nil) throws -> URL {
+        var to = url
+        if to == nil {
+            let tmpDir = try FileManager.default.url(for: .itemReplacementDirectory,
+                                    in: .userDomainMask,
+                                    appropriateFor: URL(fileURLWithPath: "sample_bundle.js"),
+                                    create: true)
+
+            to = tmpDir.appendingPathComponent(ProcessInfo().globallyUniqueString)
+        }
+
+        try contents.write(to: to!, atomically: true, encoding: String.Encoding.utf8)
+
+        return to!
+    }
+
+    func testEmptyPath() {
+       XCTAssertThrowsError(try computeBundleID(path: "")) { error in
+           XCTAssertEqual(error as? ComputeBundleIDErrors, ComputeBundleIDErrors.emptyPath)
+       }
+    }
+
+    func testNothingCached() {
+        let fileURL = try? writeTempFile(contents: "console.log('my js bundle');")
+        let bundleID = try? computeBundleID(path: fileURL!.path())
+        XCTAssertEqual(bundleID?.id, "29da484ad2a259e9de64a991cfec7f10")
+        XCTAssertFalse(bundleID!.cached)
+    }
+
+    func testDifferentPath() {
+        let fileURL = try? writeTempFile(contents: "console.log('my js bundle');")
+        var bundleID = try? computeBundleID(path: fileURL!.path())
+        XCTAssertEqual(bundleID?.id, "29da484ad2a259e9de64a991cfec7f10")
+        XCTAssertFalse(bundleID!.cached)
+
+        let otherURL = try? writeTempFile(contents: "console.log('my other bundle');")
+        bundleID = try? computeBundleID(path: otherURL!.path())
+        XCTAssertEqual(bundleID?.id, "9a7ef24cdaf5cdb927eab12cb0bfd30d")
+        XCTAssertFalse(bundleID!.cached)
+    }
+
+    func testSamePathNotModified() {
+        let fileURL = try? writeTempFile(contents: "console.log('my js bundle');")
+        var bundleID = try? computeBundleID(path: fileURL!.path())
+        XCTAssertEqual(bundleID?.id, "29da484ad2a259e9de64a991cfec7f10")
+        XCTAssertFalse(bundleID!.cached)
+
+        bundleID = try? computeBundleID(path: fileURL!.path())
+        XCTAssertEqual(bundleID?.id, "29da484ad2a259e9de64a991cfec7f10")
+        XCTAssertTrue(bundleID!.cached)
+    }
+
+    func testSamePathModified() {
+        let fileURL = try? writeTempFile(contents: "console.log('my js bundle');")
+        var bundleID = try? computeBundleID(path: fileURL!.path())
+        XCTAssertEqual(bundleID?.id, "29da484ad2a259e9de64a991cfec7f10")
+        XCTAssertFalse(bundleID!.cached)
+
+        let sameURL = try? writeTempFile(contents: "console.log('my other bundle');", url: fileURL)
+        XCTAssertEqual(fileURL, sameURL)
+        bundleID = try? computeBundleID(path: sameURL!.path())
+        XCTAssertEqual(bundleID?.id, "9a7ef24cdaf5cdb927eab12cb0bfd30d")
+        XCTAssertFalse(bundleID!.cached)
+    }
+}
