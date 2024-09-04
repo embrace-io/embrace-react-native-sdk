@@ -27,9 +27,25 @@ Once it's completed, open through `xcode` the `RNEmbraceTestProject.xcworkspace`
 
 The goal here is to run the tests. From `xcode` go to `Product -> Test` or simple press `command + U` to start running the test suite.
 
-NOTE: Simulator will be triggered but there is not such app there.
+> Simulator will be triggered but there is not such app there.
 
-For running unit tests using Node:
+Notice that you can run this suite using Node. The script placed in `packages/core/package.json` uses environment variables. These can be exported in your favorite terminal:
+
+```bash
+export IOS_TEST_PLATFORM="iOS Simulator"
+export IOS_TEST_DEVICE="iPhone 15 Pro"
+export IOS_TEST_OS="17.5"
+export IOS_TEST_SDK="iphonesimulator"
+```
+
+Load those new environment variables to make sure they are correctly in place:
+
+```bash
+// depending on your terminal
+source ~./bashrc
+```
+
+And now from the `packages/core` directory:
 
 ```bash
 // back to the root `packages/core` directory
