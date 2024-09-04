@@ -16,13 +16,13 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     env:
+      IOS_TEST_OS: 17.5
+      IOS_TEST_PLATFORM: iOS Simulator
+      IOS_TEST_DEVICE: iPhone 15 Pro
       IOS_TEST_SCHEME: RNEmbraceTests
+      IOS_TEST_SDK: iphonesimulator
       IOS_TEST_PROJECT_PATH: packages/core/test-project
       IOS_TEST_DERIVED_DATA_PATH: ~/Library/Developer/Xcode/DerivedData
-      IOS_TEST_PLATFORM: "iOS Simulator"
-      IOS_TEST_DEVICE: "iPhone 15 Pro"
-      IOS_TEST_OS: "17.5"
-      IOS_TEST_SDK: "iphonesimulator"
 
     steps:
       - name: Checkout code
