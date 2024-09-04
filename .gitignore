@@ -1,9 +1,6 @@
 # Xcode
-!**/*.xcodeproj
 !**/*.pbxproj
-!**/*.xcworkspacedata
 !**/*.xcsettings
-!**/*.xcscheme
 *.pbxuser
 !default.pbxuser
 *.mode1v3
