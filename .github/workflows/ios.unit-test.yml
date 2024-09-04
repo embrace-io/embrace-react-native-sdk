@@ -2,7 +2,9 @@ name: iOS Unit Tests
 
 on:
   push:
-    branches: [master]
+    branches: 
+      - master
+      - 5.0 # TBD remove particular branch
   pull_request:
     branches:
       - 5.0 # TBD remove particular branch
