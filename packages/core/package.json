@@ -52,9 +52,8 @@
   "scripts": {
     "build": "tsc",
     "ios:build:clean": "xcodebuild clean -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests",
-    "ios:scheme": "xcodebuild -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -list",
-    "ios:test": "xcodebuild test -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=17.5'",
-    "ios:test:xcpretty": "xcodebuild test -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=17.5' | xcpretty --color --test"
+    "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -list",
+    "ios:test": "xcodebuild test -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests -sdk $IOS_TEST_SDK -enableCodeCoverage YES -destination \"platform=$IOS_TEST_PLATFORM,name=$IOS_TEST_DEVICE,OS=$IOS_TEST_OS\""
   },
   "devDependencies": {
     "typescript": "^4.7.4"
