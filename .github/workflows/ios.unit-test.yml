@@ -46,10 +46,12 @@ jobs:
           key: ${{env.IOS_TEST_SCHEME}}-Derived-Data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj, Podfile.lock') }}
           restore-keys: |
             ${{env.IOS_TEST_SCHEME}}-Derived-Data-${{ runner.os }}
+      
+      - name: Install Root Node Modules
+        run: yarn install
 
       - name: Install Node Modules + CocoaPods Dependencies
         run: |
-          yarn install        
           cd ${{ env.IOS_TEST_PROJECT_PATH }}
           yarn install
           cd ios
