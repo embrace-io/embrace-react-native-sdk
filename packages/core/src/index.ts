@@ -22,8 +22,6 @@ const tracking = require("promise/setimmediate/rejection-tracking");
 
 const STACK_LIMIT = 200;
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
-
-// NOTE: This can be an enum
 const WARNING = "warning";
 const INFO = "info";
 const ERROR = "error";
@@ -37,16 +35,27 @@ const handleError = async (error: Error, callback: () => void) => {
 
   const {name, message, stack = ""} = error;
 
-  // truncating stacktrace to 200 lines
-  const stTruncated = stack.split("\n").slice(0, STACK_LIMIT).join("\n");
-  // NOTE: same as error.name? why it's pulled differently?
+  // same as error.name? why it's pulled differently?
   const errorType = error.constructor.name;
+
+  // truncating stacktrace to 200 lines
+  const stTruncated = stack.split("\n").slice(0, STACK_LIMIT);
+
+  // specifically for iOS for now, the same formatting is done in the Android layer
+  // in the future Android will get rid of all related to js and use this format as well
+  const iosStackTrace = JSON.stringify({
+    n: name,
+    m: message,
+    t: errorType,
+    // removing the Type from the first part of the stacktrace.
+    st: stTruncated.slice(1, stTruncated.length).join("\n"),
+  });
 
   await NativeModules.EmbraceManager.logUnhandledJSException(
     name,
     message,
     errorType,
-    stTruncated,
+    Platform.OS === "android" ? stTruncated.join("\n") : iosStackTrace,
   );
 
   callback();

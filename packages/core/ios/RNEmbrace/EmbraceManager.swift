@@ -327,7 +327,7 @@ class EmbraceManager: NSObject {
         }
         
         if (!stacktrace.isEmpty) {
-            attributes.updateValue(stacktrace, forKey: "exception.stacktrace")
+            attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
         }
         
         Embrace.client?.log(
@@ -752,7 +752,7 @@ class EmbraceManager: NSObject {
         }
         
         // injecting stacktrace as attribute
-        attributes["exception.stacktrace"] = stacktrace;
+        attributes["emb.stacktrace.rn"] = stacktrace;
         // not added by native sdk
         attributes["emb.exception_handling"] = "handled";
         
@@ -798,6 +798,7 @@ class EmbraceManager: NSObject {
             severity: LogSeverity.error,
             type: LogType.message,
             attributes: attributes
+//            .notInjected // or something like this
         );
 
 //        Embrace.client?.appendCrashInfo(EMB_EXC, jsExceptionUUID)
