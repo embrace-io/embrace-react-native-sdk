@@ -3724,11 +3724,11 @@ __metadata:
   linkType: hard
 
 "@types/gzip-js@npm:^0.3.3":
-  version: 0.3.3
-  resolution: "@types/gzip-js@npm:0.3.3"
+  version: 0.3.5
+  resolution: "@types/gzip-js@npm:0.3.5"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10c0/f3f37bee444102e491f80f27d97e2745b4f53700411e5e020be8cddeb535cb697b24019f714452f6a8750f622d3e9faa280a9e29e07cef088325a06c4a620b74
+  checksum: 10c0/63fedcf1262e8d5fa0aac62114598967f39194b94f494a530f6e1eeafc2114211c6f7a31f2a4f68b73ff567036c54065f692d4718a13c99ef3268ca6a19ff24d
   languageName: node
   linkType: hard
 
