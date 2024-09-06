@@ -2437,6 +2437,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@embrace-io/react-native-otlp@workspace:packages/react-native-otlp":
+  version: 0.0.0-use.local
+  resolution: "@embrace-io/react-native-otlp@workspace:packages/react-native-otlp"
+  dependencies:
+    typescript: "npm:^4.7.4"
+    xcode: "npm:^2.0.0"
+  peerDependencies:
+    react-native: ">=0.56.0"
+  languageName: unknown
+  linkType: soft
+
 "@embrace-io/react-native-spans@workspace:packages/spans":
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-spans@workspace:packages/spans"

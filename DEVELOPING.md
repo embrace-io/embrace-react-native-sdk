@@ -13,7 +13,9 @@ Any new package under ./packages/ will get automatically picked up as a new Yarn
 - `package.json` with name, description, main, typings (other fields will be filled by yarn constraints, version is supplied by Lerna)
 - `tsconfig.json` that extends from the one at the root
 - `README.md`
-- `src/` and `__tests__/` folders to contain the code for the package
+- `src/` and `__tests__/` folders to contain the code for the package.
+
+If an item from the previous list is missing, the package won't compile.
 
 ## Adding dependencies
 
@@ -117,9 +119,9 @@ Automated integration testing is being actively developed to replace some of the
 
 ## Branching strategy
 
-Generally all proposed changes should target the `master` branch and new releases are cut from there after QA. One exception
+Generally all proposed changes should target the `main` branch and new releases are cut from there after QA. One exception
 is urgent patch fixes, in those cases a branch should be made from the latest released tag to isolate the fix from any
-unreleased changes on `master` and a patch release will be cut from that new branch.
+unreleased changes on `main` and a patch release will be cut from that new branch.
 
 ## Releasing
 
@@ -129,5 +131,5 @@ unreleased changes on `master` and a patch release will be cut from that new bra
 2. Bump the RN SDK version according to semver in `./lerna.json`
 3. Run the example app on Android + iOS (in release mode) and confirm that a session is captured & appears in the dashboard with useful info
 4. Release to npm with `yarn publish-modules`
-5. Create a PR with all these changes and merge to `master`
-6. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/master/docs/react-native/changelog.md) for the release
+5. Create a PR with all these changes and merge to `main`
+6. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
