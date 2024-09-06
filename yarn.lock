@@ -2471,7 +2471,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-action-tracker@workspace:packages/action-tracker"
   dependencies:
-    typescript: "npm:^4.7.4"
+    typescript: "npm:^5.5.4"
   peerDependencies:
     react-native: ">=0.56.0"
   languageName: unknown
@@ -2481,7 +2481,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-apollo-graphql@workspace:packages/apollo-graphql"
   dependencies:
-    typescript: "npm:^4.7.4"
+    typescript: "npm:^5.5.4"
   peerDependencies:
     react-native: ">=0.56.0"
   languageName: unknown
@@ -2491,7 +2491,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-navigation@workspace:packages/react-native-navigation"
   dependencies:
-    typescript: "npm:^4.7.4"
+    typescript: "npm:^5.5.4"
   peerDependencies:
     react-native: ">=0.56.0"
   languageName: unknown
@@ -2501,7 +2501,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-orientation-change-tracker@workspace:packages/screen-orientation"
   dependencies:
-    typescript: "npm:^4.7.4"
+    typescript: "npm:^5.5.4"
   peerDependencies:
     react-native: ">=0.56.0"
   languageName: unknown
@@ -2511,7 +2511,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-spans@workspace:packages/spans"
   dependencies:
-    typescript: "npm:^4.7.4"
+    typescript: "npm:^5.5.4"
   peerDependencies:
     react-native: ">=0.56.0"
   languageName: unknown
@@ -2521,7 +2521,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-webview-tracker@workspace:packages/webview-tracker"
   dependencies:
-    typescript: "npm:^4.7.4"
+    typescript: "npm:^5.5.4"
   peerDependencies:
     react-native: ">=0.56.0"
   languageName: unknown
@@ -2536,7 +2536,7 @@ __metadata:
     inquirer: "npm:^6.5.1"
     promise: "npm:^8.0.3"
     semver: "npm:^7.1.3"
-    typescript: "npm:^4.7.4"
+    typescript: "npm:^5.5.4"
     xcode: "npm:^2.0.0"
   peerDependencies:
     react-native: ">=0.56.0"
@@ -2547,7 +2547,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-navigation@workspace:packages/react-navigation"
   dependencies:
-    typescript: "npm:^4.7.4"
+    typescript: "npm:^5.5.4"
   peerDependencies:
     react-native: ">=0.56.0"
   languageName: unknown
@@ -7293,7 +7293,7 @@ __metadata:
     react-native: "npm:^0.56.0"
     react-test-renderer: "npm:^18.2.0"
     ts-jest: "npm:^25.3.1"
-    typescript: "npm:^4.7.4"
+    typescript: "npm:^5.5.4"
   languageName: unknown
   linkType: soft
 
@@ -16777,13 +16777,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.7.4":
-  version: 4.8.4
-  resolution: "typescript@npm:4.8.4"
+"typescript@npm:^5.5.4":
+  version: 5.5.4
+  resolution: "typescript@npm:5.5.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/663bf455b21ac024e719bb8c6a07bcaaa027a9943abfb58a694b59789e7d08578badb5556170267ad480e31786b8b4c8ab3c9c0e597d3b8df39af800e43c6ed5
+  checksum: 10c0/422be60f89e661eab29ac488c974b6cc0a660fb2228003b297c3d10c32c90f3bcffc1009b43876a082515a3c376b1eefcce823d6e78982e6878408b9a923199c
   languageName: node
   linkType: hard
 
@@ -16797,13 +16797,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^4.7.4#optional!builtin<compat/typescript>":
-  version: 4.8.4
-  resolution: "typescript@patch:typescript@npm%3A4.8.4#optional!builtin<compat/typescript>::version=4.8.4&hash=1a91c8"
+"typescript@patch:typescript@npm%3A^5.5.4#optional!builtin<compat/typescript>":
+  version: 5.5.4
+  resolution: "typescript@patch:typescript@npm%3A5.5.4#optional!builtin<compat/typescript>::version=5.5.4&hash=379a07"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/eecab597a5a8c6e7f14804f1447cfce02e214e32c02efcfe5219c94290e3d572490e8a0d8033fd075ac429d35babf85182541a50c50bfb0c21df33c59fb9bf82
+  checksum: 10c0/73409d7b9196a5a1217b3aaad929bf76294d3ce7d6e9766dd880ece296ee91cf7d7db6b16c6c6c630ee5096eccde726c0ef17c7dfa52b01a243e57ae1f09ef07
   languageName: node
   linkType: hard
 
