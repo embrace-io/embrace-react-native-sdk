@@ -3812,10 +3812,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^12.7.2":
-  version: 12.12.29
-  resolution: "@types/node@npm:12.12.29"
-  checksum: 10c0/ed722897a1cd815fbe84b18b5b1007800b233242b663580077ef2b4c77e6c7a28bf9da97e1fd05d264417cc9c0c4725b72402895d911c1ee6a037dbb5cdc8e61
+"@types/node@npm:^22.5.4":
+  version: 22.5.4
+  resolution: "@types/node@npm:22.5.4"
+  dependencies:
+    undici-types: "npm:~6.19.2"
+  checksum: 10c0/b445daa7eecd761ad4d778b882d6ff7bcc3b4baad2086ea9804db7c5d4a4ab0298b00d7f5315fc640a73b5a1d52bbf9628e09c9fec0cf44dbf9b4df674a8717d
   languageName: node
   linkType: hard
 
@@ -7269,7 +7271,7 @@ __metadata:
     "@react-native-community/eslint-config": "npm:^3.2.0"
     "@types/gzip-js": "npm:^0.3.3"
     "@types/jest": "npm:^28.1.7"
-    "@types/node": "npm:^12.7.2"
+    "@types/node": "npm:^22.5.4"
     "@types/react-native": "npm:^0.60.2"
     "@types/semver": "npm:^7.1.0"
     "@typescript-eslint/eslint-plugin": "npm:^7.10.0"
@@ -16858,6 +16860,13 @@ __metadata:
     has-symbols: "npm:^1.0.3"
     which-boxed-primitive: "npm:^1.0.2"
   checksum: 10c0/81ca2e81134167cc8f75fa79fbcc8a94379d6c61de67090986a2273850989dd3bae8440c163121b77434b68263e34787a675cbdcb34bb2f764c6b9c843a11b66
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~6.19.2":
+  version: 6.19.8
+  resolution: "undici-types@npm:6.19.8"
+  checksum: 10c0/078afa5990fba110f6824823ace86073b4638f1d5112ee26e790155f481f2a868cc3e0615505b6f4282bdf74a3d8caad715fd809e870c2bb0704e3ea6082f344
   languageName: node
   linkType: hard
 
