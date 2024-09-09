@@ -1,4 +1,12 @@
 {
   "app_id": "8FCf9",
-  "api_token": "13f327e891ad45858949004eb755b9f1"
+  "api_token": "13f327e891ad45858949004eb755b9f1",
+  "sdk_config": {
+    "base_urls": {
+      "config": "http://10.0.2.2:8989/namespace/jon/api",
+      "data": "http://10.0.2.2:8989/namespace/jon/api",
+      "data_dev": "http://10.0.2.2:8989/namespace/jon/api",
+      "images": "http://10.0.2.2:8989/namespace/jon/api"
+    }
+  }
 }

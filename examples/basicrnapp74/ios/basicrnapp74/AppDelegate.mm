@@ -1,16 +1,33 @@
 #import "AppDelegate.h"
+#import "basicrnapp74-Swift.h"
 
+//#import <CodePush/CodePush.h>
 #import <React/RCTBundleURLProvider.h>
+
+/*
+#import <AppCenterReactNative.h>
+#import <AppCenterReactNativeAnalytics.h>
+#import <AppCenterReactNativeCrashes.h>
+ 
+ */
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [EmbraceInitializer start];
+  /*
+  [AppCenterReactNative register];
+  [AppCenterReactNativeAnalytics registerWithInitiallyEnabled:true];
+  [AppCenterReactNativeCrashes registerWithAutomaticProcessing];
+   */
+  
   self.moduleName = @"basicrnapp74";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
 
+ 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 

@@ -92,7 +92,7 @@ export const initialize = async ({
   // Only attempt to check for CodePush bundle URL in release mode. Otherwise CodePush will throw an exception.
   // https://docs.microsoft.com/en-us/appcenter/distribution/codepush/react-native#plugin-configuration-ios
   if (!__DEV__) {
-    NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
+    await NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
   }
 
   if (!ErrorUtils) {

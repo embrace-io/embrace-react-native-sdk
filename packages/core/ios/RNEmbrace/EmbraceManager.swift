@@ -500,20 +500,7 @@ class EmbraceManager: NSObject {
 
         return attributes
     }
-
-    private func spanErrorCodeFrom(str: String) -> SpanErrorCode? {
-        switch str {
-        case "Failure":
-            return .failure
-        case "UserAbandon":
-            return .userAbandon
-        case "Unknown":
-            return .unknown
-        default:
-            return nil
-        }
-    }
-
+    
     private func errorCodeFrom(str: String) -> ErrorCode? {
         switch str {
             case "Failure":
@@ -625,7 +612,7 @@ class EmbraceManager: NSObject {
             return
         }
 
-        let errorCode = spanErrorCodeFrom(str: errorCodeString)
+        let errorCode = errorCodeFrom(str: errorCodeString)
 
         if endTimeMs.doubleValue.isZero {
             span?.end(errorCode: errorCode)

@@ -7,9 +7,11 @@
 
 import React, {useEffect, useRef, useState} from 'react';
 
-import {Button, Text, View} from 'react-native';
+//import codePush from 'react-native-code-push';
+import {Button, NativeModules, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+/*
 import {
   initialize,
   addBreadcrumb,
@@ -25,17 +27,22 @@ import {
   getCurrentSessionId,
   getDeviceId,
   getLastRunEndState,
+  logMessage,
+  logNetworkClientError,
 } from '@embrace-io/react-native';
 import {useEmbraceNavigationTracker} from '@embrace-io/react-navigation';
+
+ */
 import {
   applyMiddleware,
   compose,
   configureStore,
   createSlice,
 } from '@reduxjs/toolkit';
-import {buildEmbraceMiddleware} from '@embrace-io/react-native-action-tracker';
-import {useEmbraceOrientationLogger} from '@embrace-io/react-native-orientation-change-tracker';
+//import {buildEmbraceMiddleware} from '@embrace-io/react-native-action-tracker';
+//import {useEmbraceOrientationLogger} from '@embrace-io/react-native-orientation-change-tracker';
 
+/*
 import {
   startSpan,
   stopSpan,
@@ -44,6 +51,9 @@ import {
   recordSpan,
   recordCompletedSpan,
 } from '@embrace-io/react-native-spans';
+
+ */
+import {MethodType} from '@embrace-io/react-native/lib/src/interfaces/HTTP';
 
 const counterSlice = createSlice({
   name: 'counter',
@@ -66,11 +76,14 @@ const counterSlice = createSlice({
 
 export const {incremented, decremented} = counterSlice.actions;
 
+/*
 const store = configureStore({
   reducer: counterSlice.reducer,
   enhancers: getDefaultEnhancers =>
     getDefaultEnhancers().concat(applyMiddleware(buildEmbraceMiddleware())),
 });
+
+ */
 
 //import CrashTester from 'react-native-crash-tester';
 
@@ -80,6 +93,7 @@ function FirstScreen({navigation}) {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>First Screen</Text>
+      {/*
       <Button
         title="Go to Second Screen"
         onPress={() => navigation.navigate('SecondScreen')}
@@ -99,6 +113,27 @@ function FirstScreen({navigation}) {
           getLastRunEndState().then(resp => {
             console.log('LastRunEndState', resp);
           });
+        }}
+      />
+      <Button
+        title={'log testing'}
+        onPress={async () => {
+          logMessage('my info message', 'info', {propA: 'foo'});
+          logMessage('my warning message', 'warning');
+          logMessage('my error message', 'error', {propA: 'foo'});
+        }}
+      />
+      <Button
+        title={'log network error'}
+        onPress={() => {
+          logNetworkClientError(
+            'example.com/foo',
+            'GET',
+            new Date().getTime() - 5,
+            new Date().getTime(),
+            'some error type',
+            'some error message',
+          );
         }}
       />
       <Button
@@ -244,14 +279,24 @@ function FirstScreen({navigation}) {
       />
 
       <Button
-        title="js crash"
+        title="js crash (OTA update ios 6th)"
         onPress={() => {
           console.log('trigger js crash');
-          throw new Error('This is a crash');
+          startOfCrashTheStackTrace();
         }}
       />
+      */}
     </View>
   );
+}
+
+function startOfCrashTheStackTrace() {
+  anotherStackFromOTA();
+}
+
+function anotherStackFromOTA() {
+  console.log('trigger js crash inner');
+  throw new Error('This is a crash');
 }
 
 function SecondScreen({navigation}) {
@@ -281,6 +326,7 @@ function App(): React.JSX.Element {
   const [loading, setLoading] = useState(true);
 
   const navigationRef = useRef();
+  /*
   useEmbraceOrientationLogger();
 
   useEffect(() => {
@@ -290,7 +336,7 @@ function App(): React.JSX.Element {
           sdkConfig: {
             ios: {
               appId: 'cvKeD',
-              disableAutomaticViewCapture: true,
+              endpointBaseUrl: 'http://localhost:8989/namespace/jon/api',
             },
           },
         });
@@ -306,6 +352,8 @@ function App(): React.JSX.Element {
     startEmbrace();
   }, []);
 
+   */
+
   if (loading) {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -316,9 +364,10 @@ function App(): React.JSX.Element {
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <NavWithEmbrace navigationRef={navigationRef} />
+      {/* <NavWithEmbrace navigationRef={navigationRef} /> */}
     </NavigationContainer>
   );
 }
 
+//export default codePush(App);
 export default App;
