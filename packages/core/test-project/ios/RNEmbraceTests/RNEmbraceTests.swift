@@ -582,7 +582,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].events[1].attributes.count, 2)
         XCTAssertEqual(exportedSpans[0].events[1].attributes["event-2-attr-1"]!.description, "foo")
         XCTAssertEqual(exportedSpans[0].events[1].attributes["event-2-attr-2"]!.description, "bar")
-        XCTAssertEqual(exportedSpans[0].status, Status.unset)
+        XCTAssertEqual(exportedSpans[0].status, Status.ok)
         XCTAssertTrue(exportedSpans[0].hasEnded)
     }
 
@@ -732,8 +732,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[2].endTime, Date(timeIntervalSince1970: 1723221815.891))
         XCTAssertEqual(exportedSpans[2].attributes["url.full"]!.description, "https://otest.com/v2/error")
         XCTAssertEqual(exportedSpans[2].attributes["http.response.status_code"]!.description, "500")
-        // NOTE: is this correct? Android is setting `status` as `Error` when the status code represents an error code (like in this case)
-        XCTAssertEqual(exportedSpans[2].status, Status.unset)
+        XCTAssertEqual(exportedSpans[2].status, Status.ok)
     }
 
     func testLogNetworkClientError() async throws {
