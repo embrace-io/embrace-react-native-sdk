@@ -515,19 +515,6 @@ class EmbraceManager: NSObject {
         return attributes
     }
 
-    private func spanErrorCodeFrom(str: String) -> SpanErrorCode? {
-        switch str {
-        case "Failure":
-            return .failure
-        case "UserAbandon":
-            return .userAbandon
-        case "Unknown":
-            return .unknown
-        default:
-            return nil
-        }
-    }
-
     private func errorCodeFrom(str: String) -> ErrorCode? {
         switch str {
             case "Failure":
@@ -639,7 +626,7 @@ class EmbraceManager: NSObject {
             return
         }
 
-        let errorCode = spanErrorCodeFrom(str: errorCodeString)
+        let errorCode = errorCodeFrom(str: errorCodeString)
 
         if endTimeMs.doubleValue.isZero {
             span?.end(errorCode: errorCode)
@@ -781,7 +768,7 @@ class EmbraceManager: NSObject {
             return
         }
 
-        // needed in backend
+        // injecting custom ID for js exception
         let jsExceptionUUID = UUID().uuidString
 
         let attributes: [String: String] = [
@@ -797,28 +784,17 @@ class EmbraceManager: NSObject {
             name,
             severity: LogSeverity.error,
             type: LogType.message,
-            attributes: attributes
-//            .notInjected // or something like this
+            attributes: attributes,
+            stackTraceBehavior: StackTraceBehavior.notIncluded
         );
 
-//        Embrace.client?.appendCrashInfo(EMB_EXC, jsExceptionUUID)
-
-        resolve(true)
-    }
-    
-    @objc(appendCrashInfo:value:resolver:rejecter:)
-    func appendCrashInfo(
-        _ key: String,
-        value: String,
-        resolver resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-    ) {
-        if Embrace.client == nil {
-            reject("APPEND_CRASH_INFO_ERROR", "Error appending crash information, Embrace SDK may not be initialized", nil)
-            return
+        do {
+            // adding crash metadata
+            try Embrace.client?.appendCrashInfo(key: EMB_EXC, value: jsExceptionUUID)
+        } catch let error {
+            reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error adding metadata to Crash", error)
         }
-        
-//        Embrace.client?.appendCrashInfo(key, value)
+
         resolve(true)
     }
 }
