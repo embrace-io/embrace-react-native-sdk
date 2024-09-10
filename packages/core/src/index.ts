@@ -27,6 +27,8 @@ const INFO = "info";
 const ERROR = "error";
 
 const noOp = () => {};
+
+// will cover unhandled errors, js crashes
 const handleError = async (error: Error, callback: () => void) => {
   if (!(error instanceof Error)) {
     console.warn("[Embrace] error must be of type Error");
@@ -35,7 +37,7 @@ const handleError = async (error: Error, callback: () => void) => {
 
   const {name, message, stack = ""} = error;
 
-  // same as error.name? why it's pulled differently?
+  // same as error.name? why is it pulled differently?
   const errorType = error.constructor.name;
 
   // truncating stacktrace to 200 lines
@@ -126,6 +128,7 @@ export const initialize = async ({
     return createFalsePromise();
   }
 
+  // setting the global error handler. this is available through React Native's ErrorUtils
   ErrorUtils.setGlobalHandler(
     handleGlobalError(ErrorUtils.getGlobalHandler(), handleError),
   );

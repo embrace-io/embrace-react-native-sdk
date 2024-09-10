@@ -197,7 +197,7 @@ describe("User Data Tests", () => {
   });
 });
 
-describe("Logs Test", () => {
+describe("Info/Warning/Error Logs", () => {
   beforeEach(() => {
     mockGenerateStackTrace.mockReturnValue(MOCK_STACKTRACE);
   });
@@ -271,7 +271,7 @@ describe("Logs Test", () => {
   });
 });
 
-describe("Log Handled Errors", () => {
+describe("Handled JS Exceptions", () => {
   const testError = new Error("This is a test error");
 
   it("error (instance of Error) with properties", async () => {
