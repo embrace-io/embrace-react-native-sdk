@@ -325,7 +325,7 @@ class EmbraceManager: NSObject {
             reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
             return
         }
-        
+                
         if (!stacktrace.isEmpty) {
             attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
         }
@@ -333,7 +333,8 @@ class EmbraceManager: NSObject {
         Embrace.client?.log(
             message,
             severity: severityValue,
-            attributes: attributes
+            attributes: attributes,
+            stackTraceBehavior: stacktrace.isEmpty ? StackTraceBehavior.default : StackTraceBehavior.notIncluded
         )
         resolve(true)
 
@@ -739,15 +740,17 @@ class EmbraceManager: NSObject {
         }
         
         // injecting stacktrace as attribute
-        attributes["emb.stacktrace.rn"] = stacktrace;
+        attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
         // not added by native sdk
-        attributes["emb.exception_handling"] = "handled";
+        attributes.updateValue("handled", forKey: "emb.exception_handling")
         
         Embrace.client?.log(
             message,
             severity: LogSeverity.error,
             type: LogType.message,
-            attributes: attributes
+            attributes: attributes,
+            // will always include a js stacktrace as per implementation
+            stackTraceBehavior: StackTraceBehavior.notIncluded
         );
         
         resolve(true)
@@ -785,6 +788,7 @@ class EmbraceManager: NSObject {
             severity: LogSeverity.error,
             type: LogType.message,
             attributes: attributes,
+            // will always include a js stacktrace as per implementation
             stackTraceBehavior: StackTraceBehavior.notIncluded
         );
 

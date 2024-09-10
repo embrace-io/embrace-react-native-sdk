@@ -161,13 +161,13 @@ class EmbraceLogsTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my handled error")
         
-        // should not be present in 6.4.0
+        XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "stacktrace as string")
+        // should not be present since the js one is added
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
-        
+
         XCTAssertNotNil(exportedLogs[0].attributes["emb.session_id"]!.description)
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "stacktrace as string")
         XCTAssertEqual(exportedLogs[0].attributes["emb.exception_handling"]!.description, "handled")
     }
 
@@ -183,11 +183,12 @@ class EmbraceLogsTests: XCTestCase {
 
         XCTAssertNotNil(exportedLogs[0].attributes["emb.session_id"]!.description)
 
-        // should not be present in 6.4.0
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.ios.react_native_crash")
+
+        XCTAssertEqual(exportedLogs[0].attributes["emb.ios.react_native_crash.js_exception"]!.description, "stacktrace as string")
+        // should not be present since the js one is added
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
 
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.ios.react_native_crash")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.ios.react_native_crash.js_exception"]!.description, "stacktrace as string")
         XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
 
         XCTAssertEqual(exportedLogs[0].attributes["exception.message"]!.description, "unhandled message")
@@ -207,7 +208,11 @@ class EmbraceLogsTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
+        
+        // empty js stacktrace
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
+        // if the js stacktrace is empty, will add the native one
+        XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
     }
      
     func testLogMessageWithSeverityAndProperties() async throws {
@@ -227,7 +232,10 @@ class EmbraceLogsTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["prop1"]!.description, "foo")
         XCTAssertEqual(exportedLogs[0].attributes["prop2"]!.description, "bar")
+
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
+        // if the js stacktrace is empty, will add the native one
+        XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
     }
 
 
@@ -588,7 +596,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].events[1].attributes.count, 2)
         XCTAssertEqual(exportedSpans[0].events[1].attributes["event-2-attr-1"]!.description, "foo")
         XCTAssertEqual(exportedSpans[0].events[1].attributes["event-2-attr-2"]!.description, "bar")
-        XCTAssertEqual(exportedSpans[0].status, Status.unset)
+        XCTAssertEqual(exportedSpans[0].status, Status.ok)
         XCTAssertTrue(exportedSpans[0].hasEnded)
     }
 
@@ -647,11 +655,11 @@ class EmbraceSpansTests: XCTestCase {
 
         // NOTE: this is not covered by native ios sdk. skipping until fix is done.
         // 'status' is set as 'unset'
-        // XCTAssertEqual(exportedSpans[0].status, Status.error(description: "failure"))
+         XCTAssertEqual(exportedSpans[0].status, Status.error(description: "failure"))
 
         // NOTE: this should be added by native ios sdk. skipping until fix is done.
         // no 'emb.error_code' present
-        // XCTAssertEqual(exportedSpans[0].attributes["emb.error_code"]!.description, "failure")
+         XCTAssertEqual(exportedSpans[0].attributes["emb.error_code"]!.description, "failure")
     }
 
     func testCompletedSpansRemovedOnSessionEnd() async throws {
@@ -738,8 +746,7 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[2].endTime, Date(timeIntervalSince1970: 1723221815.891))
         XCTAssertEqual(exportedSpans[2].attributes["url.full"]!.description, "https://otest.com/v2/error")
         XCTAssertEqual(exportedSpans[2].attributes["http.response.status_code"]!.description, "500")
-        // NOTE: is this correct? Android is setting `status` as `Error` when the status code represents an error code (like in this case)
-        XCTAssertEqual(exportedSpans[2].status, Status.unset)
+        XCTAssertEqual(exportedSpans[2].status, Status.ok)
     }
 
     func testLogNetworkClientError() async throws {
