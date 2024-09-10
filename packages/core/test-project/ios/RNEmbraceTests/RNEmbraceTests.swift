@@ -652,14 +652,8 @@ class EmbraceSpansTests: XCTestCase {
         let exportedSpans = try await getExportedSpans()
         XCTAssertEqual(exportedSpans.count, 1)
         XCTAssertEqual(exportedSpans[0].name, "my-span")
-
-        // NOTE: this is not covered by native ios sdk. skipping until fix is done.
-        // 'status' is set as 'unset'
-         XCTAssertEqual(exportedSpans[0].status, Status.error(description: "failure"))
-
-        // NOTE: this should be added by native ios sdk. skipping until fix is done.
-        // no 'emb.error_code' present
-         XCTAssertEqual(exportedSpans[0].attributes["emb.error_code"]!.description, "failure")
+        XCTAssertEqual(exportedSpans[0].status, Status.error(description: "failure"))
+        XCTAssertEqual(exportedSpans[0].attributes["emb.error_code"]!.description, "failure")
     }
 
     func testCompletedSpansRemovedOnSessionEnd() async throws {
