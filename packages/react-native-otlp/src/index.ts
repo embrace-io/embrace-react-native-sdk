@@ -1,7 +1,4 @@
-/**
- * RNEmbraceOTLP
- */
-
+"use strict";
 import {NativeModules, Platform} from "react-native";
 
 import {createTruePromise} from "./utils";
@@ -37,8 +34,10 @@ const configureCustomExporter = async (config: CustomExporterConfig) => {
   }
 
   try {
+    const {key, token} = header;
+
     // Configure Custom Exporter
-    await NativeModules.RNEmbraceOTLP.setCustomExporter(endpoint, header);
+    await NativeModules.RNEmbraceOTLP.setCustomExporter(endpoint, key, token);
 
     console.log(
       `NativeModules.RNEmbraceOTLP.setCustomExporter working in basic-test-app for ${Platform.OS}`,

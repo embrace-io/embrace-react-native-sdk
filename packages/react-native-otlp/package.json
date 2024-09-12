@@ -10,7 +10,8 @@
   },
   "files": [
     "lib",
-    "android"
+    "android",
+    "ios"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {

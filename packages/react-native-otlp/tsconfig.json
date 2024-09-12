@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib"
+    "outDir": "./lib/src"
   },
   "include": ["src"],
   "exclude": [
@@ -9,6 +9,6 @@
     "ios",
     "android",
     "./dist",
-    "./src/__tests__"
+    "./src/__tests__",
   ]
 }

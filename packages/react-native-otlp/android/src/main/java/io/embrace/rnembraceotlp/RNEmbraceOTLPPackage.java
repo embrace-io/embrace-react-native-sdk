@@ -1,4 +1,4 @@
-package src.main.java.io.embraceotlp;
+package io.embrace.rnembraceotlp;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;

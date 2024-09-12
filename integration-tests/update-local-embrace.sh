@@ -6,8 +6,7 @@ popd
 
 # pack required packages into tarballs
 yarn --cwd ../packages/core pack --out ../../integration-tests/artifacts/embrace-io-react-native-local.tgz
-yarn --cwd ../packages/core pack --out ../../integration-tests/artifacts/embrace-io-react-native-otlp-local.tgz
+yarn --cwd ../packages/react-native-otlp pack --out ../../integration-tests/artifacts/embrace-io-react-native-otlp-local.tgz
 
 # install
-npm --prefix basic-test-app add ./artifacts/embrace-io-react-native-local.tgz
-npm --prefix basic-test-app add ./artifacts/embrace-io-react-native-otlp-local.tgz
+npm --prefix basic-test-app add ./artifacts/embrace-io-react-native-local.tgz ./artifacts/embrace-io-react-native-otlp-local.tgz

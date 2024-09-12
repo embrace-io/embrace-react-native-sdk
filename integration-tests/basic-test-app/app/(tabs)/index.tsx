@@ -71,9 +71,15 @@ const HomeScreen = () => {
         <Button
           onPress={() => {
             console.log("testing custom export");
-            configureCustomExporter("my endpoint", "my header", "my token");
+            configureCustomExporter({
+              endpoint: "my endpoint",
+              header: {
+                key: "my header",
+                token: "my token",
+              },
+            });
           }}
-          title="END SESSION"
+          title="CONFIG CUSTOM EXPORTER"
         />
       </ThemedView>
 
