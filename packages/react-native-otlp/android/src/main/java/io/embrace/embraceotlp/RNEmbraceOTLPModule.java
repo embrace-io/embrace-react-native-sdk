@@ -1,4 +1,4 @@
-package io.embrace.rnembraceotlp;
+package io.embrace.embraceotlp;
 
 import android.util.Log;
 

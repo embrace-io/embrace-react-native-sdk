@@ -33,6 +33,8 @@ const configureCustomExporter = async (config: CustomExporterConfig) => {
     return;
   }
 
+  console.log("NativeModules.RNEmbraceOTLP", NativeModules.RNEmbraceOTLP);
+
   try {
     const {key, token} = header;
 
