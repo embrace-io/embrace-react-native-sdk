@@ -26,7 +26,9 @@ const HomeScreen = () => {
   }, []);
 
   const handleLogUnhandledError = useCallback(() => {
-    throw new ReferenceError("triggering a crash (unhandled js exception)");
+    throw new ReferenceError(
+      "testing 6.4.0-rc4 / triggering a crash (unhandled js exception)",
+    );
   }, []);
 
   const handleLogUnhandledErrorNotAnonymous = useCallback(
