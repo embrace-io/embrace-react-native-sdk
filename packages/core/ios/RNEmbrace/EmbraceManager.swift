@@ -16,6 +16,9 @@ private let EVENT_NAME_KEY = "name"
 private let EVENT_TIMESTAMP_KEY = "timeStampMs"
 private let EVENT_ATTRIBUTES_KEY = "attributes"
 
+// Crash metadata
+private let EMB_EXC = "emb-js"
+
 class SDKConfig: NSObject {
   public let appId: String
   public let appGroupId: String?
@@ -322,15 +325,16 @@ class EmbraceManager: NSObject {
             reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
             return
         }
-        
+                
         if (!stacktrace.isEmpty) {
-            attributes.updateValue(stacktrace, forKey: "exception.stacktrace")
+            attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
         }
         
         Embrace.client?.log(
             message,
             severity: severityValue,
-            attributes: attributes
+            attributes: attributes,
+            stackTraceBehavior: stacktrace.isEmpty ? StackTraceBehavior.default : StackTraceBehavior.notIncluded
         )
         resolve(true)
 
@@ -736,15 +740,17 @@ class EmbraceManager: NSObject {
         }
         
         // injecting stacktrace as attribute
-        attributes["exception.stacktrace"] = stacktrace;
+        attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
         // not added by native sdk
-        attributes["emb.exception_handling"] = "handled";
+        attributes.updateValue("handled", forKey: "emb.exception_handling")
         
         Embrace.client?.log(
             message,
             severity: LogSeverity.error,
-            type: LogType.exception,
-            attributes: attributes
+            type: LogType.message,
+            attributes: attributes,
+            // will always include a js stacktrace as per implementation
+            stackTraceBehavior: StackTraceBehavior.notIncluded
         );
         
         resolve(true)
@@ -760,7 +766,39 @@ class EmbraceManager: NSObject {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
-        // TBD after guild discussion
+        if Embrace.client == nil {
+            reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error recording a unhandled js exception, Embrace SDK may not be initialized", nil)
+            return
+        }
+
+        // injecting custom ID for js exception
+        let jsExceptionUUID = UUID().uuidString
+
+        let attributes: [String: String] = [
+            "emb.type": "sys.ios.react_native_crash",
+            "emb.ios.react_native_crash.js_exception": stacktrace,
+
+            "exception.message": message,
+            "exception.type": type,
+            "exception.id": jsExceptionUUID
+        ];
+
+        Embrace.client?.log(
+            name,
+            severity: LogSeverity.error,
+            type: LogType.message,
+            attributes: attributes,
+            // will always include a js stacktrace as per implementation
+            stackTraceBehavior: StackTraceBehavior.notIncluded
+        );
+
+        do {
+            // adding crash metadata
+            try Embrace.client?.appendCrashInfo(key: EMB_EXC, value: jsExceptionUUID)
+        } catch let error {
+            reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error adding metadata to Crash", error)
+        }
+
         resolve(true)
     }
 }

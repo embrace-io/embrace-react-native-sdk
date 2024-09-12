@@ -174,7 +174,6 @@ RCT_EXTERN_METHOD(logUnhandledJSException:(NSString *)name
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-
 + (BOOL)requiresMainQueueSetup
 {
     return NO;

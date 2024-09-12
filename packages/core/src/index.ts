@@ -22,13 +22,13 @@ const tracking = require("promise/setimmediate/rejection-tracking");
 
 const STACK_LIMIT = 200;
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
-
-// NOTE: This can be an enum
 const WARNING = "warning";
 const INFO = "info";
 const ERROR = "error";
 
 const noOp = () => {};
+
+// will cover unhandled errors, js crashes
 const handleError = async (error: Error, callback: () => void) => {
   if (!(error instanceof Error)) {
     console.warn("[Embrace] error must be of type Error");
@@ -36,13 +36,28 @@ const handleError = async (error: Error, callback: () => void) => {
   }
 
   const {name, message, stack = ""} = error;
-  const truncated = stack.split("\n").slice(0, STACK_LIMIT).join("\n");
+
+  // same as error.name? why is it pulled differently?
+  const errorType = error.constructor.name;
+
+  // truncating stacktrace to 200 lines
+  const stTruncated = stack.split("\n").slice(0, STACK_LIMIT);
+
+  // specifically for iOS for now, the same formatting is done in the Android layer
+  // in the future Android will get rid of all related to js and use this format as well
+  const iosStackTrace = JSON.stringify({
+    n: name,
+    m: message,
+    t: errorType,
+    // removing the Type from the first part of the stacktrace.
+    st: stTruncated.slice(1, stTruncated.length).join("\n"),
+  });
 
   await NativeModules.EmbraceManager.logUnhandledJSException(
     name,
     message,
-    error.constructor.name,
-    truncated,
+    errorType,
+    Platform.OS === "android" ? stTruncated.join("\n") : iosStackTrace,
   );
 
   callback();
@@ -113,6 +128,7 @@ export const initialize = async ({
     return createFalsePromise();
   }
 
+  // setting the global error handler. this is available through React Native's ErrorUtils
   ErrorUtils.setGlobalHandler(
     handleGlobalError(ErrorUtils.getGlobalHandler(), handleError),
   );
@@ -375,3 +391,4 @@ const createTruePromise = (): Promise<boolean> => {
 };
 
 export {WARNING, ERROR, INFO};
+export {type Properties};

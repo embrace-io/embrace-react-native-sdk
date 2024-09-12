@@ -167,7 +167,13 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     public void logMessageWithSeverityAndProperties(String message, String severity, ReadableMap properties,
                                                     String stacktrace, Promise promise) {
         try {
-            final Map<String, Object> props = properties != null ? properties.toHashMap() : null;
+            final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<>();
+            
+            // we don't want to send info stacktraces to sdk, this is already prevented in the js layer as well
+            if (!stacktrace.isEmpty() && !severity.equals("info")) {
+                props.put("emb.stacktrace.rn", stacktrace);
+            }
+
             if (severity.equals("info")) {
                 Embrace.getInstance().logMessage(message, Severity.INFO, props);
             } else if (severity.equals("warning")) {
@@ -202,8 +208,15 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void logHandledError(String message, String javascriptStackTrace, ReadableMap properties, Promise promise) {
         try{
-            final Map<String, Object> props = properties != null ? properties.toHashMap() : null;
-            Embrace.getInstance().getReactNativeInternalInterface().logHandledJsException("Javascript Error", message, props, javascriptStackTrace);
+            final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<>();
+
+            props.put("emb.exception_handling", "handled");
+
+            if (!javascriptStackTrace.isEmpty()) {
+                props.put("emb.stacktrace.rn", javascriptStackTrace);
+            }
+
+            Embrace.getInstance().logMessage(message, Severity.ERROR, props);
             promise.resolve(true);
         }catch(Exception e){
             promise.resolve(false);
