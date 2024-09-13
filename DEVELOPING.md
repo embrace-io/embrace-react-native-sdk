@@ -27,6 +27,119 @@ are shared between multiple packages then they should be added to the Yarn const
 This is also where we define common peerDependencies and enforce a common version. These are packages such as React Native
 that our packages require but that we leave to the customer to have defined as explicit dependencies.
 
+## Adding new Native Modules
+
+If new packages needs to connect with native code there are few things to have in mind.
+The folder structure should be something like the following:
+
+```
+packages/
+└── my-new-package/
+    ├── ios/                 # containing an Xcode workspace/project
+    ├── android/             # containing an Android workspace/project
+    ├── src/
+    │   ├── __tests__/
+    │   └── index.ts
+    ├── tsconfig.json
+    ├── package.json
+    ├── .eslintrc.js
+    ├── README.md
+    └── MyNewPackage.podspec
+```
+
+> Make sure the new `package.json` file list all files/folders we want to get packed during the build and pack process. Example:
+
+```json
+{
+  "files": [
+    "lib",
+    "android",
+    "ios",
+    "NewPackageModule.podspec"
+  ],
+}
+```
+
+This example is configured to pack lib/, android/, ios/ and NewPackageModule.podspec into the package we will publish in the future. All folders/files that should be packed and published should be listed here. If they are not there, the pack/publish process will ignore them.
+
+## iOS Native Module
+
+References are very important when developing a new iOS Standalone Native Module, we encourage developers to create new modules through Xcode to avoid any issue related to this.
+
+### Recommended steps
+
+- Open Xcode and create a new workspace.
+- Create a new target with the same name
+- Create the proper files following the [iOS Native Modules for React Native](https://reactnative.dev/docs/native-modules-ios) official documentation.
+
+This repository already contains classes using Swift. We highly recommend to keep this approach. More information about how to do it can be found in the (official documentation)[https://reactnative.dev/docs/native-modules-ios#exporting-swift].
+
+At the end of this process the ios folder structure should contain something like the following:
+
+```
+ios/
+└── MyNewModule.xcworkspace
+└── MyNewModule/
+    ├── MyNewModule.xcodeproj
+    ├── MyNewModule-Bridging-Header.h
+    ├── MyNewModule.m
+    └── MyNewModule.swift
+```
+
+This is the bare minimum we need to create a new iOS Native Module.
+
+> Do not forget to properly create the .podspec file outside the ios folder listing all dependencies. Also it's a good idea to check in that this file is in place after run the build and pack the new package. Without this file the new iOS Native Module won't be recognized by the application and won't be installed.
+
+## Android Native Module
+
+Also for Android Standalone Native Modules we highly recommend to start the development process using Android Studio.
+
+### Recommended steps
+
+- Open Android Studio and create a new project using Empty Activity template.
+- Provide a proper Project and Package Name (i.e MyNewPiece and io.embrace.mynewpiece respectively)
+- Choose a location to save the new project (under android/ folder), select the languaje for the project and the build configuration and finish the process.
+
+This process is going to create several folders/files with an structure like
+
+```
+android/
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── io/
+│       │       └── embrace/
+│       │           └── mynewpiece/
+│       │               └── MyNewPiece.java  # we will tweak this file name in following steps
+│       ├── res/
+│       └── AndroidManifest.xml
+├── gradlew.bat
+├── gradlew
+├── gradle/
+│   └── wrapper/
+│       ├── gradle-wrapper.properties
+│       └── gradle-wrapper.jar
+├── local.properties
+├── gradle.properties
+├── settings.gradle (or settings.gradle.kts)
+└── build.gradle (or build.gradle.kts)
+```
+
+In order to create an (Android React Native Module)[https://reactnative.dev/docs/native-modules-android] it's also recommended to follow the official documentation
+
+Once this is done files should be the following inside `io.embrace.mynewpiece`:
+
+```
+src/
+└── main/
+    └── java/
+       └── io/
+           └── embrace/
+               └── myapplication/
+                   ├── MyNewPieceModule.java
+                   └── MyNewPiecePackage.java
+```
+
 ## Testing changes during development
 
 From the root of the project you can lint and test all packages with:
