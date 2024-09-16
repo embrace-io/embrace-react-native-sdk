@@ -248,11 +248,19 @@ function FirstScreen({navigation}) {
         title="js crash"
         onPress={() => {
           console.log('trigger js crash');
-          throw new Error('This is a crash');
+          firstPartofJSCrashStack();
         }}
       />
     </View>
   );
+}
+
+function firstPartofJSCrashStack() {
+  secondPartofJSCrashStack();
+}
+
+function secondPartofJSCrashStack() {
+  throw new Error('This is a crash');
 }
 
 function SecondScreen({navigation}) {
