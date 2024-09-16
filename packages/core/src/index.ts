@@ -14,7 +14,7 @@ import {MethodType} from "./interfaces/HTTP";
 import {SDKConfig} from "./interfaces/Config";
 
 interface Properties {
-  [key: string]: unknown;
+  [key: string]: string;
 }
 
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
