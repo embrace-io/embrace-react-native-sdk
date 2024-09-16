@@ -15,8 +15,10 @@
   },
   "files": [
     "lib",
-    "android",
-    "ios",
+    "android/src",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "ios/RNEmbrace",
     "RNEmbrace.podspec"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",

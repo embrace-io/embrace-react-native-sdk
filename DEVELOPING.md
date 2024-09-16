@@ -45,7 +45,7 @@ To get started generate a new artifact from whichever packages you modified:
 ```bash
 cd packages/<package-modified>/
 yarn build
-yarn pack
+npm pack    # yarn pack behaves differently, stick to npm pack because that's what lerna publish uses
 ```
 
 Then update the example app with that local artifact:
