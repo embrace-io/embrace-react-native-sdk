@@ -11,10 +11,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		14A2FE3768415A0EB7380B57 /* libPods-basicrnapp74.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F40B51CDBB8B83FAB9FCAB /* libPods-basicrnapp74.a */; };
 		457AEF19646750E43C8CD557 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 75F355131D31E2A098227F47 /* PrivacyInfo.xcprivacy */; };
-		672BB934F53948025787DA3F /* libPods-basicrnapp74.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECF181494D6DECF9B69BDE07 /* libPods-basicrnapp74.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		8FDCFB87CC50A34C13DAC469 /* libPods-basicrnapp74-basicrnapp74Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87271F9BC5D785417DE16FC7 /* libPods-basicrnapp74-basicrnapp74Tests.a */; };
+		E9F4D5C3A7E555AAA67824BC /* libPods-basicrnapp74-basicrnapp74Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F81670C0138EEEF13C31CED /* libPods-basicrnapp74-basicrnapp74Tests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,15 +38,15 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = basicrnapp74/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = basicrnapp74/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = basicrnapp74/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		417758DA683F000D486F4C03 /* Pods-basicrnapp74.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74.release.xcconfig"; path = "Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74.release.xcconfig"; sourceTree = "<group>"; };
+		4730EC236A68DABE541F6D50 /* Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig"; path = "Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		5BDDE5481778CD5251BFB1B8 /* Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig"; path = "Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig"; sourceTree = "<group>"; };
 		75F355131D31E2A098227F47 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = basicrnapp74/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		798E4581C32655BFD36E5F13 /* Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig"; path = "Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig"; sourceTree = "<group>"; };
+		7F3B5C73047B2813DCFB5D04 /* Pods-basicrnapp74.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74.debug.xcconfig"; path = "Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = basicrnapp74/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		87271F9BC5D785417DE16FC7 /* libPods-basicrnapp74-basicrnapp74Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-basicrnapp74-basicrnapp74Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC166FCE53B60A4A6E1D7F77 /* Pods-basicrnapp74.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74.debug.xcconfig"; path = "Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74.debug.xcconfig"; sourceTree = "<group>"; };
-		B439735F38E866DBADCF59DE /* Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig"; path = "Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		ECF181494D6DECF9B69BDE07 /* libPods-basicrnapp74.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-basicrnapp74.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F81670C0138EEEF13C31CED /* libPods-basicrnapp74-basicrnapp74Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-basicrnapp74-basicrnapp74Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2F40B51CDBB8B83FAB9FCAB /* libPods-basicrnapp74.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-basicrnapp74.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F74E4304DB50846F926C5DBD /* Pods-basicrnapp74.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74.release.xcconfig"; path = "Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FDCFB87CC50A34C13DAC469 /* libPods-basicrnapp74-basicrnapp74Tests.a in Frameworks */,
+				E9F4D5C3A7E555AAA67824BC /* libPods-basicrnapp74-basicrnapp74Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				672BB934F53948025787DA3F /* libPods-basicrnapp74.a in Frameworks */,
+				14A2FE3768415A0EB7380B57 /* libPods-basicrnapp74.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,8 +105,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				ECF181494D6DECF9B69BDE07 /* libPods-basicrnapp74.a */,
-				87271F9BC5D785417DE16FC7 /* libPods-basicrnapp74-basicrnapp74Tests.a */,
+				B2F40B51CDBB8B83FAB9FCAB /* libPods-basicrnapp74.a */,
+				9F81670C0138EEEF13C31CED /* libPods-basicrnapp74-basicrnapp74Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -145,10 +145,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AC166FCE53B60A4A6E1D7F77 /* Pods-basicrnapp74.debug.xcconfig */,
-				F74E4304DB50846F926C5DBD /* Pods-basicrnapp74.release.xcconfig */,
-				B439735F38E866DBADCF59DE /* Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig */,
-				798E4581C32655BFD36E5F13 /* Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig */,
+				7F3B5C73047B2813DCFB5D04 /* Pods-basicrnapp74.debug.xcconfig */,
+				417758DA683F000D486F4C03 /* Pods-basicrnapp74.release.xcconfig */,
+				4730EC236A68DABE541F6D50 /* Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig */,
+				5BDDE5481778CD5251BFB1B8 /* Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -160,12 +160,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "basicrnapp74Tests" */;
 			buildPhases = (
-				6423534906DB7F9371876802 /* [CP] Check Pods Manifest.lock */,
+				4D5BB7BF26488DD85B715FF4 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				1BF470648E28D30295916CD2 /* [CP] Embed Pods Frameworks */,
-				AFE84232C9AD69BF451DF3A0 /* [CP] Copy Pods Resources */,
+				7705737A48BB30A035E7AD01 /* [CP] Embed Pods Frameworks */,
+				1D51D4D188E57F71257FEDC9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -181,13 +181,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "basicrnapp74" */;
 			buildPhases = (
-				E18588F17B13A7620B7B52F6 /* [CP] Check Pods Manifest.lock */,
+				AB9787532329B55F8379C657 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				A01CF17829D23DCA0D088D7D /* [CP] Embed Pods Frameworks */,
-				0EE74E5E8D1EA42CFB991E66 /* [CP] Copy Pods Resources */,
+				2B5404E3076335565DBC5ABE /* [CP] Embed Pods Frameworks */,
+				B2717AC4F67CC9A1E101EE7D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -271,41 +271,41 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		0EE74E5E8D1EA42CFB991E66 /* [CP] Copy Pods Resources */ = {
+		1D51D4D188E57F71257FEDC9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1BF470648E28D30295916CD2 /* [CP] Embed Pods Frameworks */ = {
+		2B5404E3076335565DBC5ABE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6423534906DB7F9371876802 /* [CP] Check Pods Manifest.lock */ = {
+		4D5BB7BF26488DD85B715FF4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -327,41 +327,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A01CF17829D23DCA0D088D7D /* [CP] Embed Pods Frameworks */ = {
+		7705737A48BB30A035E7AD01 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AFE84232C9AD69BF451DF3A0 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E18588F17B13A7620B7B52F6 /* [CP] Check Pods Manifest.lock */ = {
+		AB9787532329B55F8379C657 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -381,6 +364,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B2717AC4F67CC9A1E101EE7D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -416,7 +416,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B439735F38E866DBADCF59DE /* Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig */;
+			baseConfigurationReference = 4730EC236A68DABE541F6D50 /* Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -443,7 +443,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 798E4581C32655BFD36E5F13 /* Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig */;
+			baseConfigurationReference = 5BDDE5481778CD5251BFB1B8 /* Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -467,7 +467,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AC166FCE53B60A4A6E1D7F77 /* Pods-basicrnapp74.debug.xcconfig */;
+			baseConfigurationReference = 7F3B5C73047B2813DCFB5D04 /* Pods-basicrnapp74.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -494,7 +494,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F74E4304DB50846F926C5DBD /* Pods-basicrnapp74.release.xcconfig */;
+			baseConfigurationReference = 417758DA683F000D486F4C03 /* Pods-basicrnapp74.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

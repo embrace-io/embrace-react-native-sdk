@@ -1222,7 +1222,7 @@ PODS:
     - React-logger (= 0.74.5)
     - React-perflogger (= 0.74.5)
     - React-utils (= 0.74.5)
-  - "RNEmbrace (5.0.0-alpha.214+4bbac7f)":
+  - "RNEmbrace (5.0.0-alpha.220+2607a61)":
     - EmbraceIO (= 6.4.0)
     - React-Core
   - RNScreens (3.34.0):
@@ -1493,7 +1493,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: cfbe85c3510c541ec6dc815c7729b41304b67961
   React-utils: f242eb7e7889419d979ca0e1c02ccc0ea6e43b29
   ReactCommon: f7da14a8827b72704169a48c929bcde802698361
-  RNEmbrace: c352d34d17a4098c071863d323815b3712e6fdc5
+  RNEmbrace: 99c58e62d8667e0245b0c3e3f96f422359365852
   RNScreens: aa943ad421c3ced3ef5a47ede02b0cbfc43a012e
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 2246eea72aaf1b816a68a35e6e4b74563653ae09
