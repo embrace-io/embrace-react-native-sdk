@@ -131,3 +131,5 @@ unreleased changes on `master` and a patch release will be cut from that new bra
 4. Release to npm with `yarn publish-modules`
 5. Create a PR with all these changes and merge to `master`
 6. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/master/docs/react-native/changelog.md) for the release
+
+NOTE: If you make a mistake while publishing you can remove the specific version w/ `npm unpublish <package-name>@<version>`, see [Unpublishing a single version of a package](https://docs.npmjs.com/unpublishing-packages-from-the-registry#unpublishing-a-single-version-of-a-package)
