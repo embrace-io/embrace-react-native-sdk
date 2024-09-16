@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "A React Native wrapper for the Embrace SDK",
   "dependencies": {
     "glob": "^7.1.4",
@@ -15,8 +15,14 @@
   },
   "files": [
     "lib",
-    "android",
-    "ios",
+    "android/src",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "ios/RNEmbrace/EmbraceManager.h",
+    "ios/RNEmbrace/EmbraceManager.m",
+    "ios/RNEmbrace/EmbraceOTelSpanHelper.h",
+    "ios/RNEmbrace/EmbraceOTelSpanHelper.m",
+    "ios/RNEmbrace.xcodeproj",
     "RNEmbrace.podspec"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
