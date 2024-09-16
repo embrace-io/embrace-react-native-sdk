@@ -223,7 +223,7 @@ const getRemoveEmbraceFromXcodeStep = () => {
 };
 const getRemoveEmbraceConfigFileAndroidStep = () => {
   return {
-    name: "Removing Andoird Embrace Config File",
+    name: "Removing Android Embrace Config File",
     run: (wizard: Wizard) =>
       new Promise(resolve => {
         resolve(removeEmbraceConfigFileAndroid());

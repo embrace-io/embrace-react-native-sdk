@@ -18,8 +18,8 @@ export const exportSourcemapRNVariable =
   'export SOURCEMAP_FILE="$CONFIGURATION_BUILD_DIR/main.jsbundle.map";';
 
 export const EMBRACE_IMPORT_OBJECTIVEC = "#import <Embrace/Embrace.h>";
-export const EMBRACE_INIT_OBJECTIVEC =
-  "[[Embrace sharedInstance] startWithLaunchOptions:launchOptions framework:EMBAppFrameworkReactNative];";
+export const EMBRACE_INIT_OBJECTIVEC = `[[Embrace sharedInstance] startWithLaunchOptions:launchOptions
+                                           framework:EMBAppFrameworkReactNative];`;
 
 export const embRunScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';
 

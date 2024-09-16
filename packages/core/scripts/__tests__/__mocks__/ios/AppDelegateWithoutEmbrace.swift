@@ -6,7 +6,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let bridge = RCTBridge(delegate: self, launchOptions: launchOptions)
         let rootView = RCTRootView(bridge: bridge!, moduleName: "test741", initialProperties: nil)
-        
+
         rootView.backgroundColor = UIColor.white
 
         self.window = UIWindow(frame: UIScreen.main.bounds)

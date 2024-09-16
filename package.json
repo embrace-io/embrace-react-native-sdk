@@ -10,15 +10,24 @@
     "node": ">=18.0.0"
   },
   "scripts": {
+    "prepare": "husky",
     "publish-modules": "npx lerna run build && npx lerna publish",
     "build": "npx lerna run build",
+    "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
-    "test": "jest"
+    "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
+    "lint:clang": "bash ./scripts/run-clang-format.sh",
+    "lint:swift": "bash ./scripts/run-swiftlint.sh"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "yarn lint"
-    ]
+    "*.{js,jsx,ts,tsx}": "yarn lint:js",
+    "*.{m,mm,h}": "yarn lint:clang",
+    "*.swift": "yarn lint:swift"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -42,6 +51,7 @@
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-native": "^4.1.0",
+    "husky": "^9.1.5",
     "jest": "^25.3.0",
     "lerna": "^8.1.5",
     "lint-staged": "^10.1.7",
