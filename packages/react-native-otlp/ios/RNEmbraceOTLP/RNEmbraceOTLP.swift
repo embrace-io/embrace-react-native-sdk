@@ -1,5 +1,6 @@
 import React
 import Foundation
+import EmbraceIO
 
 @objc(RNEmbraceOTLP)
 class RNEmbraceOTLP: NSObject {
@@ -13,4 +14,9 @@ class RNEmbraceOTLP: NSObject {
 
         resolve(true)
     }
+  
+  @objc
+  func setCustomOtlpGrpcSpanExporter() {
+    
+  }
 }

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: "org.jetbrains.kotlin.android"
+
 buildscript {
     repositories {
         mavenCentral()
@@ -7,13 +9,19 @@ buildscript {
             name 'Google'
         }
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:8.0.0'
+        classpath "io.embrace:embrace-swazzler:$emb_android_sdk"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
+
 android {
     compileSdkVersion 31
     buildToolsVersion "28.0.3"
+
+    namespace 'io.embrace.embraceotlp'
 
     defaultConfig {
         minSdkVersion 16
@@ -33,6 +41,7 @@ android {
 
 dependencies {
     api 'com.facebook.react:react-native:+'
+    api "io.embrace:embrace-android-sdk:$emb_android_sdk"
 }
 
 repositories {
