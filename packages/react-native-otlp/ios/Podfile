@@ -1,7 +1,7 @@
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
-    "react-native/scripts/react_native_pods.rb",
+    "../node_modules/react-native/scripts/react_native_pods.rb",
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
@@ -22,6 +22,9 @@ target 'RNEmbraceOTLP' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+
+  # Custom dependencies
+  pod 'EmbraceIO', '6.4.0'
 
   target 'RNEmbraceOTLPTests' do
     inherit! :complete

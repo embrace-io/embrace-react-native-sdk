@@ -3,10 +3,8 @@
   "version": "5.0.0-alpha.0",
   "description": "A React Native wrapper for the Embrace SDK that allows to connect to an OTLP endpoint",
   "dependencies": {
+    "react-native": ">=0.64.0",
     "xcode": "^2.0.0"
-  },
-  "peerDependencies": {
-    "react-native": ">=0.56.0"
   },
   "files": [
     "lib",

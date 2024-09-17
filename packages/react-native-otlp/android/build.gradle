@@ -50,3 +50,5 @@ repositories {
         name 'Google'
     }
 }
+
+apply from: file("../node_modules/react-native/build.gradle.kts");
