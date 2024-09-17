@@ -12,11 +12,12 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		14A2FE3768415A0EB7380B57 /* libPods-basicrnapp74.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F40B51CDBB8B83FAB9FCAB /* libPods-basicrnapp74.a */; };
+		30285CB42C98D8F6004A0778 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30285CB32C98D8F6004A0778 /* AppCenter-Config.plist */; };
 		457AEF19646750E43C8CD557 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 75F355131D31E2A098227F47 /* PrivacyInfo.xcprivacy */; };
+		68040B6B7BCA402D846AFF00 /* EmbraceInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627B079694094C4C8F648096 /* EmbraceInitializer.swift */; };
+		7C55F36461064FCFB9703A15 /* basicrnapp74-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = E4AA2467E3C949E59270D9FC /* basicrnapp74-Bridging-Header.h */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E9F4D5C3A7E555AAA67824BC /* libPods-basicrnapp74-basicrnapp74Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F81670C0138EEEF13C31CED /* libPods-basicrnapp74-basicrnapp74Tests.a */; };
-		68040B6B7BCA402D846AFF00 /* EmbraceInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627B079694094C4C8F648096 /* EmbraceInitializer.swift */; };
-		7C55F36461064FCFB9703A15 /* basicrnapp74-Bridging-Header.h in Resources */ = {isa = PBXBuildFile; fileRef = E4AA2467E3C949E59270D9FC /* basicrnapp74-Bridging-Header.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,17 +41,18 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = basicrnapp74/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = basicrnapp74/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = basicrnapp74/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		30285CB32C98D8F6004A0778 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		417758DA683F000D486F4C03 /* Pods-basicrnapp74.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74.release.xcconfig"; path = "Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74.release.xcconfig"; sourceTree = "<group>"; };
 		4730EC236A68DABE541F6D50 /* Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig"; path = "Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		5BDDE5481778CD5251BFB1B8 /* Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig"; path = "Target Support Files/Pods-basicrnapp74-basicrnapp74Tests/Pods-basicrnapp74-basicrnapp74Tests.release.xcconfig"; sourceTree = "<group>"; };
+		627B079694094C4C8F648096 /* EmbraceInitializer.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = EmbraceInitializer.swift; path = basicrnapp74/EmbraceInitializer.swift; sourceTree = "<group>"; };
 		75F355131D31E2A098227F47 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = basicrnapp74/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		7F3B5C73047B2813DCFB5D04 /* Pods-basicrnapp74.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-basicrnapp74.debug.xcconfig"; path = "Target Support Files/Pods-basicrnapp74/Pods-basicrnapp74.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = basicrnapp74/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9F81670C0138EEEF13C31CED /* libPods-basicrnapp74-basicrnapp74Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-basicrnapp74-basicrnapp74Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2F40B51CDBB8B83FAB9FCAB /* libPods-basicrnapp74.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-basicrnapp74.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4AA2467E3C949E59270D9FC /* basicrnapp74-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "basicrnapp74-Bridging-Header.h"; path = "basicrnapp74/basicrnapp74-Bridging-Header.h"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		627B079694094C4C8F648096 /* EmbraceInitializer.swift */ = {isa = PBXFileReference; name = "EmbraceInitializer.swift"; path = "basicrnapp74/EmbraceInitializer.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		E4AA2467E3C949E59270D9FC /* basicrnapp74-Bridging-Header.h */ = {isa = PBXFileReference; name = "basicrnapp74-Bridging-Header.h"; path = "basicrnapp74/basicrnapp74-Bridging-Header.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				30285CB32C98D8F6004A0778 /* AppCenter-Config.plist */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -254,6 +257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				30285CB42C98D8F6004A0778 /* AppCenter-Config.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				457AEF19646750E43C8CD557 /* PrivacyInfo.xcprivacy in Resources */,
 			);
@@ -395,12 +399,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
-			name = "Upload Debug Symbols to Embrace";
 			inputPaths = (
 			);
+			name = "Upload Debug Symbols to Embrace";
 			outputPaths = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/main.jsbundle.map\" EMBRACE_ID=cvKeD EMBRACE_TOKEN=13f327e891ad45858949004eb755b9f1 \"${PODS_ROOT}/EmbraceIO/run.sh\"";
 		};
@@ -422,7 +426,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				68040B6B7BCA402D846AFF00 /* EmbraceInitializer.swift in Sources */,
-				7C55F36461064FCFB9703A15 /* basicrnapp74-Bridging-Header.h in Resources */,
+				7C55F36461064FCFB9703A15 /* basicrnapp74-Bridging-Header.h in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,10 +513,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = basicrnapp74;
+				SWIFT_OBJC_BRIDGING_HEADER = "basicrnapp74/basicrnapp74-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
-				SWIFT_OBJC_BRIDGING_HEADER = "basicrnapp74/basicrnapp74-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -536,9 +540,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = basicrnapp74;
+				SWIFT_OBJC_BRIDGING_HEADER = "basicrnapp74/basicrnapp74-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
-				SWIFT_OBJC_BRIDGING_HEADER = "basicrnapp74/basicrnapp74-Bridging-Header.h";
 			};
 			name = Release;
 		};

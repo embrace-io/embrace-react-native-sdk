@@ -6,7 +6,7 @@
  */
 
 import React, {useEffect, useRef, useState} from 'react';
-
+import codePush from 'react-native-code-push';
 import {Button, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -22,6 +22,7 @@ import {
   startView,
   endView,
   logScreen,
+  logMessage,
   getCurrentSessionId,
   getDeviceId,
   getLastRunEndState,
@@ -100,6 +101,14 @@ function FirstScreen({navigation}) {
           getLastRunEndState().then(resp => {
             console.log('LastRunEndState', resp);
           });
+        }}
+      />
+      <Button
+        title={'log testing'}
+        onPress={async () => {
+          logMessage('my warning message', 'warning');
+          logMessage('my info message', 'info');
+          logMessage('my error message', 'error');
         }}
       />
       <Button
@@ -245,22 +254,22 @@ function FirstScreen({navigation}) {
       />
 
       <Button
-        title="js crash"
+        title="js crash ota4"
         onPress={() => {
           console.log('trigger js crash');
-          firstPartofJSCrashStack();
+          firstPartofJSCrashStack('ota update 4');
         }}
       />
     </View>
   );
 }
 
-function firstPartofJSCrashStack() {
-  secondPartofJSCrashStack();
+function firstPartofJSCrashStack(msg: string) {
+  secondPartofJSCrashStack(msg);
 }
 
-function secondPartofJSCrashStack() {
-  throw new Error('This is a crash');
+function secondPartofJSCrashStack(msg: string) {
+  throw new Error('This is a crash: ' + msg);
 }
 
 function SecondScreen({navigation}) {
@@ -330,4 +339,4 @@ function App(): React.JSX.Element {
   );
 }
 
-export default App;
+export default codePush(App);
