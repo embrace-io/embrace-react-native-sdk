@@ -3778,10 +3778,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^12.7.2":
-  version: 12.20.55
-  resolution: "@types/node@npm:12.20.55"
-  checksum: 10c0/3b190bb0410047d489c49bbaab592d2e6630de6a50f00ba3d7d513d59401d279972a8f5a598b5bb8ddc1702f8a2f4ec57a65d93852f9c329639738e7053637d1
+"@types/node@npm:^22.5.5":
+  version: 22.5.5
+  resolution: "@types/node@npm:22.5.5"
+  dependencies:
+    undici-types: "npm:~6.19.2"
+  checksum: 10c0/ead9495cfc6b1da5e7025856dcce2591e9bae635357410c0d2dd619fce797d2a1d402887580ca4b336cb78168b195224869967de370a23f61663cf1e4836121c
   languageName: node
   linkType: hard
 
@@ -7282,7 +7284,7 @@ __metadata:
     "@react-native-community/eslint-config": "npm:^3.2.0"
     "@types/gzip-js": "npm:^0.3.3"
     "@types/jest": "npm:^28.1.7"
-    "@types/node": "npm:^12.7.2"
+    "@types/node": "npm:^22.5.5"
     "@types/react-native": "npm:^0.60.2"
     "@types/semver": "npm:^7.1.0"
     "@typescript-eslint/eslint-plugin": "npm:^7.10.0"
