@@ -90,7 +90,7 @@ class ReactNativeTracerProviderModuleTest {
                 on { getIdentifier(any(), any(), any()) } doReturn 0
             }
 
-            val mockPackageInfo  = PackageInfo()
+            val mockPackageInfo = PackageInfo()
             mockPackageInfo.packageName = "mocked-package"
 
             val mockPackageManager = mock<PackageManager> {
