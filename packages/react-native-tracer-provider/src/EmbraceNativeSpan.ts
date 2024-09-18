@@ -75,7 +75,7 @@ export class EmbraceNativeSpan implements Span {
    *  - return a blank span context
    *  - throw an error
    *
-   * Behaviour can be figured on the EmbraceNativeTracerProvider by supplying spanContextSyncBehaviour
+   * Behaviour can be configured on the EmbraceNativeTracerProvider by supplying spanContextSyncBehaviour
    */
   public spanContext(): SpanContext {
     if (this.savedSpanContext) {
