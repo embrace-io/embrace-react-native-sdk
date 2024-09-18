@@ -27,6 +27,9 @@ jobs:
       - name: Enables corepack
         run: corepack enable
 
+      - name: Install Root Node Modules
+        run: yarn install
+
       - name: Install JDK ${{ matrix.jdk-version }}
         uses: actions/setup-java@v4
         with:
