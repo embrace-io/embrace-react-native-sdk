@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "A React Native wrapper for the Embrace SDK",
   "dependencies": {
     "glob": "^7.1.4",
@@ -15,8 +15,10 @@
   },
   "files": [
     "lib",
-    "android",
-    "ios",
+    "android/src",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "ios/RNEmbrace",
     "RNEmbrace.podspec"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
@@ -50,7 +52,10 @@
     "bug tracker"
   ],
   "scripts": {
-    "build": "node update_android_version.ts && tsc"
+    "build": "node update_android_version.ts && tsc",
+    "ios:build:clean": "xcodebuild clean -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests",
+    "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -list",
+    "ios:test": "xcodebuild test -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests -sdk $IOS_TEST_SDK -enableCodeCoverage YES -destination \"platform=$IOS_TEST_PLATFORM,name=$IOS_TEST_DEVICE,OS=$IOS_TEST_OS\""
   },
   "devDependencies": {
     "typescript": "^4.7.4"

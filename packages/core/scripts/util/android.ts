@@ -62,8 +62,13 @@ export const embraceJSON = (): Promise<FileUpdatable> => {
 };
 
 export const getMainApplicationPatchable = (platform: ANDROID_LANGUAGE) => {
-  const p = path.join("android", "app", "src", "main", "java", "com");
+  const p = path.join("android", "app", "src", "main", "java");
   const mainApp = MAIN_CLASS_BY_LANGUAGE[platform];
+
+  if (!fs.existsSync(p)) {
+    return;
+  }
+
   const foldersInJava: IDirectory[] = fs
     .readdirSync(p, {withFileTypes: true})
     .filter((dirent: IDirectory) => dirent.isDirectory());

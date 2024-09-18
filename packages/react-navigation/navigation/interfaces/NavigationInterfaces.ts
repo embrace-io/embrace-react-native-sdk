@@ -52,6 +52,5 @@ interface INavigationInstance {
  */
 export interface ICurrentScreenInstance {
   name: string;
-  startTime: number;
-  endTime?: number;
+  spanId?: string;
 }

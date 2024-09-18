@@ -13,11 +13,11 @@ node node_modules/@embrace-io/react-native/lib/scripts/setup/installIos.js
 That `run` function will register `iosAppID and apiToken` asker fields, they have an `asker` method, that asks in the terminal for those input. Also it will add the step for the install script and execute the `wizard`
 
 The setup script for ios includes
-`iosInitializeEmbrace`: It patches the AppDelegate m|mm or swift adding the import/s and start embrace method.
+`addEmbraceInitializerSwift`: Adds `EmbraceInitializer.swift` to the project which includes the code for setting up and starting the iOS SDK.
+`iosInitializeEmbrace`: It patches the AppDelegate m|mm or swift to call the start method from `EmbraceInitializer.swift`
 `iosPodfile`: It patches the Podfile, only in < 0.6 adding the dependency. This is useful if the app does not have autolink for some reason.
 `patchXcodeBundlePhase`: It patches the `Bundle React Native code and images` created by React Native, adding a line to export the sourcemap to a desired path
 `addUploadBuildPhase`: It adds the `Upload Debug Symbols to Embrace` to the build phase
-`createEmbracePlist`: It creates a new file named `Embrace-Info.plist`, add the APPID to it and then link it to the ios project
 
 ## Android
 

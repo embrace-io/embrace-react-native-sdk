@@ -43,7 +43,7 @@ describe("Test Orientation Tracker", () => {
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logBreadcrumb: (message: string) => {
+          addBreadcrumb: (message: string) => {
             if (message.includes("landscape")) {
               mockBreadcrumb();
             }
@@ -80,7 +80,7 @@ describe("Test Orientation Tracker", () => {
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logBreadcrumb: (message: string) => {
+          addBreadcrumb: (message: string) => {
             if (message.includes("portrait")) {
               mockBreadcrumb();
             }
@@ -117,7 +117,7 @@ describe("Test Orientation Tracker", () => {
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logBreadcrumb: (message: string) => {
+          addBreadcrumb: (message: string) => {
             if (message.includes("portrait")) {
               mockBreadcrumb();
             }
@@ -155,7 +155,7 @@ describe("Test Orientation Tracker", () => {
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logBreadcrumb: (message: string) => {
+          addBreadcrumb: (message: string) => {
             if (message.includes("portrait")) {
               mockBreadcrumb();
             }
@@ -192,7 +192,7 @@ describe("Test Orientation Tracker", () => {
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logBreadcrumb: (message: string) => {
+          addBreadcrumb: (message: string) => {
             if (message.includes("portrait")) {
               mockBreadcrumb();
             }
@@ -237,7 +237,7 @@ describe("Test Orientation Tracker", () => {
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
-          logBreadcrumb: (message: string) => {
+          addBreadcrumb: (message: string) => {
             if (message.includes("portrait")) {
               mockBreadcrumb();
             }

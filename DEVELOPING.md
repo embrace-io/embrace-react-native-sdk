@@ -45,7 +45,7 @@ To get started generate a new artifact from whichever packages you modified:
 ```bash
 cd packages/<package-modified>/
 yarn build
-yarn pack
+npm pack    # yarn pack behaves differently, stick to npm pack because that's what lerna publish uses
 ```
 
 Then update the example app with that local artifact:
@@ -98,7 +98,7 @@ And then either publish a local artifact or if you need CI to pass - publish a b
 
 ### Local artifact
 
-You can test changes local changes to the iOS SDK by updating the example app's `podspec` and `Podfile` to point to the local copy.
+You can test local changes to the iOS SDK by updating the example app's `podspec` and `Podfile` to point to the local copy.
 
 1. In `examples/react-native-test-suite/node_modules/embrace-io/RNEmbrace.podspec`, change the dependency on the iOS SDK to `s.dependency 'EmbraceIO-LOCAL'`
 2. In `examples/react-native-test-suite/ios/Podfile`, add the following line `pod 'EmbraceIO-LOCAL', :path => 'path/to/ios_sdk'`
@@ -130,4 +130,6 @@ unreleased changes on `master` and a patch release will be cut from that new bra
 5. Run the example app on Android + iOS (in release mode) and confirm that a session is captured & appears in the dashboard with useful info
 6. Release to npm with `yarn publish-modules`
 7. Create a PR with all these changes and merge to `master`
-8. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/master/docs/react-native/changelog.md) for the release
+8. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
+
+NOTE: If you make a mistake while publishing you can remove the specific version w/ `npm unpublish <package-name>@<version>`, see [Unpublishing a single version of a package](https://docs.npmjs.com/unpublishing-packages-from-the-registry#unpublishing-a-single-version-of-a-package)

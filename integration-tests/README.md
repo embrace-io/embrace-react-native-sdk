@@ -25,13 +25,27 @@ Make sure the test apps have the latest local @embrace-io/react-native changes:
     ```
 
 Make sure the test apps are installed on the device/emulator before running tests. Note that building the debug variant
-of the app may interfere with the tests as the debug menu gets in the way of UI elements:
+of the app may interfere with the tests as the debug menu gets in the way of UI elements.
 
-    ```bash
-    cd basic-test-app
-    npx expo run:android --variant release
-    npx expo run:ios --variant release
-    ```
+Android can run in release mode:
+
+```bash
+cd basic-test-app
+npx expo run:android --variant release
+```
+
+For ios it doesn't apply the `--variant release` mode, so we can do it through xcode:
+
+- Open your project in Xcode.
+- Select your target and go to Product > Scheme > Edit Scheme.
+- Under the Run section, change the Build Configuration from Debug to Release.
+- Press Cmd + R to build and run the app in release mode.
+
+or simply run 
+
+```bash
+npx expo run:ios --configuration Release
+```
 
 Run the test suite:
 
