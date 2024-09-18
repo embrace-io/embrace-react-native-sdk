@@ -5,12 +5,54 @@ import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import {endSession, logError} from "@embrace-io/react-native";
+import {
+  endSession,
+  logHandledError,
+  logError,
+  logInfo,
+  logMessage,
+  logWarning,
+} from "@embrace-io/react-native";
 
 const HomeScreen = () => {
   const handleEndSession = useCallback(() => {
-    console.log("end session was clicked");
     endSession();
+  }, []);
+
+  const handleErrorLog = useCallback(() => {
+    logHandledError(
+      new TypeError("triggering handled error (will show js stacktrace)"),
+    );
+  }, []);
+
+  const handleLogUnhandledError = useCallback(() => {
+    throw new ReferenceError(
+      "testing 6.4.0-rc4 / triggering a crash (unhandled js exception)",
+    );
+  }, []);
+
+  const handleLogUnhandledErrorNotAnonymous = useCallback(
+    function myLovellyUnhandledError() {
+      throw new ReferenceError("triggering a crash (unhandled js exception)");
+    },
+    [],
+  );
+
+  const sendLogs = useCallback(() => {
+    logWarning("Warning log (manually triggered)");
+
+    logInfo("Info log (manually triggered)");
+
+    logError("Error log (manually triggered)");
+  }, []);
+
+  const sendMessage = useCallback(() => {
+    logMessage("Message log (manually triggered) with severity", "warning", {
+      "custom.property.test": "hey",
+      "another.property": "ho",
+      "yet.another": "hum",
+      "rn.sdk.test": 1234567,
+    });
   }, []);
 
   return (
@@ -25,6 +67,22 @@ const HomeScreen = () => {
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">End Session</ThemedText>
         <Button onPress={handleEndSession} title="END SESSION" />
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Logs</ThemedText>
+        <Button onPress={sendLogs} title="LOGs (war/info/error)" />
+        <Button onPress={sendMessage} title="Custom Message (also a log)" />
+        <Button onPress={handleErrorLog} title="Handled JS Exception" />
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Crashes (Unhandled Exceptions)</ThemedText>
+        <Button onPress={handleLogUnhandledError} title="CRASH" />
+        <Button
+          onPress={handleLogUnhandledErrorNotAnonymous}
+          title="CRASH (not anonymous)"
+        />
       </ThemedView>
     </ParallaxScrollView>
   );
