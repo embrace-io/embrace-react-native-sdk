@@ -2,12 +2,12 @@
 # this script wraps `npm pack` to allow a name to be set
 
 # Usage: 
-# ./local-pack [package-dir] [output-file]
+# ./pack [package-dir] [output-file]
 
 package_dir=$1
 out_dir=$(dirname "$2")
 out_filename=$(basename "$2")
-tmp_dir="$out_dir/local_pack_tmp"
+tmp_dir="$out_dir/pack_tmp"
 
 mkdir "$tmp_dir"
 npm pack "$package_dir" --pack-destination "$tmp_dir"
