@@ -7,15 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8401BD5421C8543A00560DBD /* EmbraceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8401BD5221C8543A00560DBD /* EmbraceManager.h */; };
-		8401BD5521C8543A00560DBD /* EmbraceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8401BD5321C8543A00560DBD /* EmbraceManager.m */; };
+		4B36F47D2C470CD400C5F034 /* EmbraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B36F47C2C470CD400C5F034 /* EmbraceManager.swift */; };
+		4B36F4822C488A4400C5F034 /* RNEmbrace-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B36F4812C488A4400C5F034 /* RNEmbrace-Bridging-Header.h */; };
+		4B36F4842C488AD300C5F034 /* EmbraceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B36F4832C488AD300C5F034 /* EmbraceManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4B36F47C2C470CD400C5F034 /* EmbraceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbraceManager.swift; sourceTree = "<group>"; };
+		4B36F4812C488A4400C5F034 /* RNEmbrace-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNEmbrace-Bridging-Header.h"; sourceTree = "<group>"; };
+		4B36F4832C488AD300C5F034 /* EmbraceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbraceManager.m; sourceTree = "<group>"; };
 		8401BD4721C8519000560DBD /* RNEmbrace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbrace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8401BD4B21C8519000560DBD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8401BD5221C8543A00560DBD /* EmbraceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmbraceManager.h; sourceTree = "<group>"; };
-		8401BD5321C8543A00560DBD /* EmbraceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbraceManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,9 +50,10 @@
 		8401BD4921C8519000560DBD /* RNEmbrace */ = {
 			isa = PBXGroup;
 			children = (
-				8401BD5221C8543A00560DBD /* EmbraceManager.h */,
-				8401BD5321C8543A00560DBD /* EmbraceManager.m */,
+				4B36F4832C488AD300C5F034 /* EmbraceManager.m */,
+				4B36F47C2C470CD400C5F034 /* EmbraceManager.swift */,
 				8401BD4B21C8519000560DBD /* Info.plist */,
+				4B36F4812C488A4400C5F034 /* RNEmbrace-Bridging-Header.h */,
 			);
 			path = RNEmbrace;
 			sourceTree = "<group>";
@@ -62,7 +65,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8401BD5421C8543A00560DBD /* EmbraceManager.h in Headers */,
+				4B36F4822C488A4400C5F034 /* RNEmbrace-Bridging-Header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +101,7 @@
 				TargetAttributes = {
 					8401BD4621C8519000560DBD = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1540;
 					};
 				};
 			};
@@ -133,7 +137,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8401BD5521C8543A00560DBD /* EmbraceManager.m in Sources */,
+				4B36F47D2C470CD400C5F034 /* EmbraceManager.swift in Sources */,
+				4B36F4842C488AD300C5F034 /* EmbraceManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +270,7 @@
 		8401BD5021C8519000560DBD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -282,6 +288,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbrace;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -290,6 +297,7 @@
 		8401BD5121C8519000560DBD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;

@@ -4,10 +4,7 @@ import {Stack} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import {useEffect, useMemo, useState} from "react";
 import "react-native-reanimated";
-import {
-  initialize as initEmbrace,
-  endAppStartup as endEmbraceAppStartup,
-} from "@embrace-io/react-native";
+import {initialize as initEmbrace} from "@embrace-io/react-native";
 
 import {useColorScheme} from "@/hooks/useColorScheme";
 
@@ -15,13 +12,19 @@ import {useColorScheme} from "@/hooks/useColorScheme";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(false)
+  const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(false);
   useEffect(() => {
     const init = async () => {
-      const hasStarted = await initEmbrace();
+      const hasStarted = await initEmbrace({
+        sdkConfig: {
+          ios: {
+            appId: "abcdf",
+            // endpointBaseUrl: "http://localhost:8877",
+          },
+        },
+      });
 
       if (hasStarted) {
-        endEmbraceAppStartup();
         setEmbraceSDKLoaded(true);
       }
     };

@@ -14,7 +14,7 @@
     "build": "npx lerna run build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
     "test": "jest",
-    "android-test": "npx lerna run android-test"
+    "android:test": "npx lerna run android:test"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [

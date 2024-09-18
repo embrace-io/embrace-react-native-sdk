@@ -2,16 +2,12 @@ import {NativeModules} from "react-native";
 
 import {Attributes, Events, SPAN_ERROR_CODES} from "../interfaces/ISpans";
 
-import {
-  convertMSToNano,
-  createFalsePromise,
-  validateAndLogRequiredProperties,
-} from "./Utils";
+import {createFalsePromise, validateAndLogRequiredProperties} from "./Utils";
 
 export const startSpan = (
   name: string,
   parentSpanId?: string,
-  startTimeMS?: number,
+  startTimeMs: number = 0,
 ): Promise<boolean | string> => {
   if (!validateAndLogRequiredProperties({name})) {
     return createFalsePromise();
@@ -20,7 +16,7 @@ export const startSpan = (
     return NativeModules.EmbraceManager.startSpan(
       name,
       parentSpanId,
-      convertMSToNano(startTimeMS),
+      startTimeMs,
     );
   } catch (e) {
     console.warn(
@@ -34,17 +30,13 @@ export const startSpan = (
 export const stopSpan = (
   spanId: string,
   errorCode: SPAN_ERROR_CODES = "None",
-  endTimeMS?: number,
+  endTimeMs: number = 0,
 ): Promise<boolean> => {
   if (!validateAndLogRequiredProperties({spanId})) {
     return createFalsePromise();
   }
   try {
-    return NativeModules.EmbraceManager.stopSpan(
-      spanId,
-      errorCode,
-      convertMSToNano(endTimeMS),
-    );
+    return NativeModules.EmbraceManager.stopSpan(spanId, errorCode, endTimeMs);
   } catch (e) {
     console.warn(
       `[Embrace] The method stopSpan was not found, please update the SDK.`,
@@ -67,7 +59,7 @@ export const addSpanEventToSpan = (
     return NativeModules.EmbraceManager.addSpanEventToSpan(
       spanId,
       name,
-      convertMSToNano(timeStampMs),
+      timeStampMs,
       attributes,
     );
   } catch (e) {
@@ -115,7 +107,7 @@ export const recordSpan = async (
   }
   let id = "";
   try {
-    id = await NativeModules.EmbraceManager.startSpan(name, parentSpanId);
+    id = await NativeModules.EmbraceManager.startSpan(name, parentSpanId, 0);
   } catch (e) {
     console.warn(
       `[Embrace] The method startSpan was not found, please update the SDK.`,
@@ -146,7 +138,7 @@ export const recordSpan = async (
       NativeModules.EmbraceManager.addSpanEventToSpan(
         id,
         event.name,
-        convertMSToNano(event.timeStampMs),
+        event.timeStampMs,
         event.attributes,
       );
     });
@@ -159,42 +151,33 @@ export const recordSpan = async (
       await callback();
     }
   } catch (e) {
-    await NativeModules.EmbraceManager.stopSpan(id, "Failure");
+    await NativeModules.EmbraceManager.stopSpan(id, "Failure", 0);
     throw e;
   }
-  return NativeModules.EmbraceManager.stopSpan(id, "None");
+  return NativeModules.EmbraceManager.stopSpan(id, "None", 0);
 };
 
 export const recordCompletedSpan = (
   name: string,
-  startTimeMS: number,
-  endTimeMS: number,
+  startTimeMs: number,
+  endTimeMs: number,
   errorCode: SPAN_ERROR_CODES = "None",
   parentSpanId?: string,
   attributes?: Attributes,
   events?: Events[],
 ): Promise<boolean> => {
-  if (!validateAndLogRequiredProperties({name, startTimeMS, endTimeMS})) {
+  if (!validateAndLogRequiredProperties({name, startTimeMs, endTimeMs})) {
     return createFalsePromise();
-  }
-  let tmpEvent = [] as Events[];
-  if (events && events.length > 0) {
-    tmpEvent = events.map(event => {
-      return {
-        ...event,
-        timestampNanos: convertMSToNano(event.timeStampMs),
-      };
-    });
   }
   try {
     return NativeModules.EmbraceManager.recordCompletedSpan(
       name,
-      convertMSToNano(startTimeMS),
-      convertMSToNano(endTimeMS),
+      startTimeMs,
+      endTimeMs,
       errorCode,
       parentSpanId,
       attributes,
-      tmpEvent,
+      events || [],
     );
   } catch (e) {
     console.warn(

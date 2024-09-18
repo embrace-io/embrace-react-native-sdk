@@ -1,10 +1,5 @@
 import type {Options} from "@wdio/types";
-import {
-  clearServer,
-  startServer,
-  stopServer,
-} from "./helpers/embrace_server";
-
+import {clearServer, startServer, stopServer} from "./helpers/embrace_server";
 
 export const config: Options.Testrunner = {
   //

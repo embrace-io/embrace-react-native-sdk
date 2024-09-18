@@ -5,8 +5,19 @@ import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import {endSession} from "@embrace-io/react-native";
-import {generateBasicSpan, generateNestedSpans, generateTestSpans} from "@/helpers/generateSpans";
+import {
+  endSession,
+  logHandledError,
+  logError,
+  logInfo,
+  logMessage,
+  logWarning,
+} from "@embrace-io/react-native";
+import {
+  generateBasicSpan,
+  generateNestedSpans,
+  generateTestSpans,
+} from "@/helpers/generateSpans";
 import {Tracer} from "@opentelemetry/api";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 
@@ -15,20 +26,57 @@ const HomeScreen = () => {
     endSession();
   }, []);
 
-  const {isLoading, isError, error, tracerProvider} = useEmbraceNativeTracerProvider()
-  const tracer = useMemo<Tracer|undefined>(() => {
+  const {isLoading, isError, error, tracerProvider} =
+    useEmbraceNativeTracerProvider();
+  const tracer = useMemo<Tracer | undefined>(() => {
     if (tracerProvider) {
       return tracerProvider.getTracer("span-test", "1.0");
     }
   }, [isLoading, isError, error, tracerProvider]);
 
   if (isLoading) {
-    return <ThemedText type="subtitle">Loading Tracer Provider</ThemedText>
+    return <ThemedText type="subtitle">Loading Tracer Provider</ThemedText>;
   }
 
   if (isError) {
-    return <ThemedText type="subtitle">{error}</ThemedText>
+    return <ThemedText type="subtitle">{error}</ThemedText>;
   }
+
+  const handleErrorLog = useCallback(() => {
+    logHandledError(
+      new TypeError("triggering handled error (will show js stacktrace)"),
+    );
+  }, []);
+
+  const handleLogUnhandledError = useCallback(() => {
+    throw new ReferenceError(
+      "testing 6.4.0-rc4 / triggering a crash (unhandled js exception)",
+    );
+  }, []);
+
+  const handleLogUnhandledErrorNotAnonymous = useCallback(
+    function myLovellyUnhandledError() {
+      throw new ReferenceError("triggering a crash (unhandled js exception)");
+    },
+    [],
+  );
+
+  const sendLogs = useCallback(() => {
+    logWarning("Warning log (manually triggered)");
+
+    logInfo("Info log (manually triggered)");
+
+    logError("Error log (manually triggered)");
+  }, []);
+
+  const sendMessage = useCallback(() => {
+    logMessage("Message log (manually triggered) with severity", "warning", {
+      "custom.property.test": "hey",
+      "another.property": "ho",
+      "yet.another": "hum",
+      "rn.sdk.test": 1234567,
+    });
+  }, []);
 
   return (
     <ParallaxScrollView
@@ -56,6 +104,22 @@ const HomeScreen = () => {
         <Button
           onPress={() => generateNestedSpans(tracer!)}
           title={"GENERATE NESTED SPANS"}
+        />
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Logs</ThemedText>
+        <Button onPress={sendLogs} title="LOGs (war/info/error)" />
+        <Button onPress={sendMessage} title="Custom Message (also a log)" />
+        <Button onPress={handleErrorLog} title="Handled JS Exception" />
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Crashes (Unhandled Exceptions)</ThemedText>
+        <Button onPress={handleLogUnhandledError} title="CRASH" />
+        <Button
+          onPress={handleLogUnhandledErrorNotAnonymous}
+          title="CRASH (not anonymous)"
         />
       </ThemedView>
     </ParallaxScrollView>

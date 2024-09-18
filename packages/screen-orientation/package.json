@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native-orientation-change-tracker",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "Allows tracking the App orientation using the Embrace SDK",
   "peerDependencies": {
     "react-native": ">=0.56.0"
@@ -45,7 +45,7 @@
     "typescript": "^4.7.4"
   },
   "embrace": {
-    "iosVersion": "6.0.0",
-    "androidVersion": "6.9.1"
+    "iosVersion": "6.4.0",
+    "androidVersion": "6.13.0"
   }
 }

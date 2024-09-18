@@ -1,9 +1,9 @@
 "use strict";
-import {NativeModules} from "react-native";
+import {NativeModules, Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {handleGlobalError} from "./utils/ErrorUtil";
+import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import {SessionStatus} from "./interfaces/Types";
 import {
@@ -11,32 +11,55 @@ import {
   NETWORK_INTERCEPTOR_TYPES,
 } from "./interfaces/NetworkMonitoring";
 import {MethodType} from "./interfaces/HTTP";
+import {SDKConfig} from "./interfaces/Config";
 
 interface Properties {
-  [key: string]: any;
+  [key: string]: string;
 }
 
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
 const tracking = require("promise/setimmediate/rejection-tracking");
 
-const stackLimit = 200;
+const STACK_LIMIT = 200;
+const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
+const WARNING = "warning";
+const INFO = "info";
+const ERROR = "error";
 
-const unhandledPromiseRejectionPrefix = "Unhandled promise rejection: ";
+const noOp = () => {};
 
+// will cover unhandled errors, js crashes
 const handleError = async (error: Error, callback: () => void) => {
   if (!(error instanceof Error)) {
     console.warn("[Embrace] error must be of type Error");
     return;
   }
+
   const {name, message, stack = ""} = error;
-  const truncated = stack.split("\n").slice(0, stackLimit).join("\n");
+
+  // same as error.name? why is it pulled differently?
+  const errorType = error.constructor.name;
+
+  // truncating stacktrace to 200 lines
+  const stTruncated = stack.split("\n").slice(0, STACK_LIMIT);
+
+  // specifically for iOS for now, the same formatting is done in the Android layer
+  // in the future Android will get rid of all related to js and use this format as well
+  const iosStackTrace = JSON.stringify({
+    n: name,
+    m: message,
+    t: errorType,
+    // removing the Type from the first part of the stacktrace.
+    st: stTruncated.slice(1, stTruncated.length).join("\n"),
+  });
 
   await NativeModules.EmbraceManager.logUnhandledJSException(
     name,
     message,
-    error.constructor.name,
-    truncated,
+    errorType,
+    Platform.OS === "android" ? stTruncated.join("\n") : iosStackTrace,
   );
+
   callback();
 };
 
@@ -45,20 +68,28 @@ const isObjectNonEmpty = (obj?: object): boolean =>
 
 export const initialize = async ({
   patch,
-}: {patch?: string} = {}): Promise<boolean> => {
-  if (!ErrorUtils) {
-    console.warn(
-      "[Embrace] ErrorUtils is not defined. Not setting exception handler.",
-    );
-    return createFalsePromise();
-  }
+  sdkConfig,
+}: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
   const hasNativeSDKStarted = await NativeModules.EmbraceManager.isStarted();
+
   if (!hasNativeSDKStarted) {
-    const result = await NativeModules.EmbraceManager.startNativeEmbraceSDK();
+    if (Platform.OS === "ios" && !sdkConfig?.ios?.appId) {
+      console.warn(
+        "[Embrace] sdkConfig.ios.appId is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+      );
+
+      return createFalsePromise();
+    }
+
+    const result = await NativeModules.EmbraceManager.startNativeEmbraceSDK(
+      (Platform.OS === "ios" && sdkConfig?.ios) || {},
+    );
+
     if (!result) {
       console.warn(
         "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
+
       return createFalsePromise();
     } else {
       console.log("[Embrace] native SDK was started");
@@ -66,9 +97,8 @@ export const initialize = async ({
   }
 
   if (embracePackage) {
-    NativeModules.EmbraceManager.setReactNativeSDKVersion(
-      embracePackage.version,
-    );
+    const {version} = embracePackage;
+    NativeModules.EmbraceManager.setReactNativeSDKVersion(version);
   }
 
   if (patch) {
@@ -89,27 +119,41 @@ export const initialize = async ({
   if (!__DEV__) {
     NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
   }
-  const previousHandler = ErrorUtils.getGlobalHandler();
-  ErrorUtils.setGlobalHandler(handleGlobalError(previousHandler, handleError));
+
+  if (!ErrorUtils) {
+    console.warn(
+      "[Embrace] ErrorUtils is not defined. Not setting exception handler.",
+    );
+
+    return createFalsePromise();
+  }
+
+  // setting the global error handler. this is available through React Native's ErrorUtils
+  ErrorUtils.setGlobalHandler(
+    handleGlobalError(ErrorUtils.getGlobalHandler(), handleError),
+  );
 
   tracking.enable({
     allRejections: true,
-    onUnhandled: (_: any, error: Error) => {
-      let message = `Unhandled promise rejection: ${error}`;
-      let st = "";
+    onUnhandled: (_: unknown, error: Error) => {
+      let message = `${UNHANDLED_PROMISE_REJECTION_PREFIX}: ${error}`;
+      let stackTrace = "";
+
       if (error instanceof Error) {
-        message = unhandledPromiseRejectionPrefix + error.message;
-        st = error.stack || "";
+        message = `${UNHANDLED_PROMISE_REJECTION_PREFIX}: ${error.message}`;
+        stackTrace = error.stack || "";
       }
+
       return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
         message,
         ERROR,
         {},
-        st,
+        stackTrace,
       );
     },
-    onHandled: () => {},
+    onHandled: noOp,
   });
+
   // If there are no errors, it will return true
   return createTruePromise();
 };
@@ -127,13 +171,6 @@ const buildVersionStr = ({
 }): string => {
   const versionStr = `${major || "0"}.${minor || "0"}.${patch || "0"}`;
   return prerelease ? `${versionStr}.${prerelease}` : versionStr;
-};
-
-export const endAppStartup = (properties?: Properties): Promise<boolean> => {
-  if (properties && Object.keys(properties).length > 0) {
-    return NativeModules.EmbraceManager.endAppStartupWithProperties(properties);
-  }
-  return NativeModules.EmbraceManager.endAppStartup();
 };
 
 export const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
@@ -170,80 +207,31 @@ export const logScreen = (screenName: string): Promise<boolean> => {
   );
 };
 
-export const startMoment = (
-  name: string,
-  identifier?: string,
-  properties?: Properties,
-): Promise<boolean> => {
-  if (!name) {
-    console.warn("[Embrace] Name is not defined. The moment was not started.");
-    return createFalsePromise();
-  }
-  if (identifier && properties) {
-    return NativeModules.EmbraceManager.startMomentWithNameAndIdentifierAndProperties(
-      name,
-      identifier,
-      properties,
-    );
-  } else if (identifier) {
-    return NativeModules.EmbraceManager.startMomentWithNameAndIdentifier(
-      name,
-      identifier,
-    );
-  } else if (properties) {
-    return NativeModules.EmbraceManager.startMomentWithNameAndIdentifierAndProperties(
-      name,
-      null,
-      properties,
-    );
-  } else {
-    return NativeModules.EmbraceManager.startMomentWithName(name);
-  }
-};
-
-export const endMoment = (
-  name: string,
-  identifier?: string,
-  properties?: Properties,
-): Promise<boolean> => {
-  if (identifier) {
-    return NativeModules.EmbraceManager.endMomentWithNameAndIdentifier(
-      name,
-      identifier,
-      properties,
-    );
-  } else {
-    return NativeModules.EmbraceManager.endMomentWithName(name, properties);
-  }
-};
-
 export const addUserPersona = (persona: string): Promise<boolean> => {
   return NativeModules.EmbraceManager.addUserPersona(persona);
 };
+
 export const clearUserPersona = (persona: string): Promise<boolean> => {
   return NativeModules.EmbraceManager.clearUserPersona(persona);
 };
+
 export const clearAllUserPersonas = (): Promise<boolean> => {
   return NativeModules.EmbraceManager.clearAllUserPersonas();
 };
-export const WARNING = "warning";
-export const INFO = "info";
-export const ERROR = "error";
 
 export const logMessage = (
   message: string,
   severity: "info" | "warning" | "error" = "error",
   properties?: Properties,
 ): Promise<boolean> => {
-  {
-    const stacktrace = severity === INFO ? "" : generateStackTrace();
-    return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
-      message,
-      severity,
-      properties,
-      stacktrace,
-    );
-  }
+  const stacktrace = severity === INFO ? "" : generateStackTrace();
+
+  return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
+    message,
+    severity,
+    properties,
+    stacktrace,
+  );
 };
 
 export const logInfo = (message: string): Promise<boolean> => {
@@ -261,26 +249,24 @@ export const logHandledError = (
   properties?: Properties,
 ): Promise<boolean> => {
   if (error instanceof Error) {
+    const {stack, message} = error;
+
     return NativeModules.EmbraceManager.logHandledError(
-      error.message,
-      error.stack,
-      properties,
+      message,
+      stack,
+      properties || {},
     );
-  } else {
-    return createFalsePromise();
   }
+
+  return createFalsePromise();
 };
+
 export const startView = (view: string): Promise<boolean> => {
   return NativeModules.EmbraceManager.startView(view);
 };
 
-export const endView = (view: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.endView(view);
-};
-
-export const generateStackTrace = (): string => {
-  const err = new Error();
-  return err.stack || "";
+export const endView = (spanId: string): Promise<boolean> => {
+  return NativeModules.EmbraceManager.endView(spanId);
 };
 
 export const setJavaScriptPatch = (patch: string) => {
@@ -303,12 +289,8 @@ export const removeSessionProperty = (key: string) => {
   return NativeModules.EmbraceManager.removeSessionProperty(key);
 };
 
-export const getSessionProperties = () => {
-  return NativeModules.EmbraceManager.getSessionProperties();
-};
-
-export const endSession = (clearUserInfo: boolean = false) => {
-  return NativeModules.EmbraceManager.endSession(clearUserInfo);
+export const endSession = () => {
+  return NativeModules.EmbraceManager.endSession();
 };
 
 export const setUserAsPayer = (): Promise<boolean> => {
@@ -318,6 +300,7 @@ export const setUserAsPayer = (): Promise<boolean> => {
 export const clearUserAsPayer = (): Promise<boolean> => {
   return NativeModules.EmbraceManager.clearUserAsPayer();
 };
+
 export const recordNetworkRequest = (
   url: string,
   httpMethod: MethodType,
@@ -326,7 +309,6 @@ export const recordNetworkRequest = (
   bytesSent?: number,
   bytesReceived?: number,
   statusCode?: number,
-  error?: string,
 ): Promise<boolean> => {
   return NativeModules.EmbraceManager.logNetworkRequest(
     url,
@@ -336,7 +318,6 @@ export const recordNetworkRequest = (
     bytesSent || -1,
     bytesReceived || -1,
     statusCode || -1,
-    error,
   );
 };
 
@@ -357,6 +338,7 @@ export const logNetworkClientError = (
     errorMessage,
   );
 };
+
 export const getLastRunEndState = (): Promise<SessionStatus> =>
   NativeModules.EmbraceManager.getLastRunEndState();
 
@@ -407,3 +389,6 @@ const createTruePromise = (): Promise<boolean> => {
     }, 0);
   });
 };
+
+export {WARNING, ERROR, INFO};
+export {type Properties};
