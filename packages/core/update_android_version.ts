@@ -1,3 +1,5 @@
+export {};
+
 const fs = require("fs");
 
 const packageJSON = require("./package.json");
