@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native-tracer-provider",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "A React Native for the Embrace SDK that conforms to the OpenTelemetry TracerProvider interface",
   "dependencies": {
     "@opentelemetry/api": "^1.9.0"
