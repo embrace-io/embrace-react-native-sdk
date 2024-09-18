@@ -90,8 +90,11 @@ class ReactNativeTracerProviderModuleTest {
                 on { getIdentifier(any(), any(), any()) } doReturn 0
             }
 
+            val mockPackageInfo  = PackageInfo()
+            mockPackageInfo.packageName = "mocked-package"
+
             val mockPackageManager = mock<PackageManager> {
-                on { getPackageInfo(anyString(), anyInt()) } doReturn mock<PackageInfo>()
+                on { getPackageInfo(anyString(), anyInt()) } doReturn mockPackageInfo
             }
 
             val mockApplication: Application = mock {
@@ -106,6 +109,7 @@ class ReactNativeTracerProviderModuleTest {
             val embraceInstance = Embrace.getInstance()
             embraceInstance.addSpanExporter(exporter)
             embraceInstance.start(mockApplication, Embrace.AppFramework.REACT_NATIVE)
+            assertTrue(Embrace.getInstance().isStarted)
 
             extraAttributes = listOf("emb.process_identifier", "emb.key", "emb.type", "emb.private.sequence_id")
 
