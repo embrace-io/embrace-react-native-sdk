@@ -10759,21 +10759,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-message-util@npm:^25.4.0":
-  version: 25.4.0
-  resolution: "jest-message-util@npm:25.4.0"
-  dependencies:
-    "@babel/code-frame": "npm:^7.0.0"
-    "@jest/types": "npm:^25.4.0"
-    "@types/stack-utils": "npm:^1.0.1"
-    chalk: "npm:^3.0.0"
-    micromatch: "npm:^4.0.2"
-    slash: "npm:^3.0.0"
-    stack-utils: "npm:^1.0.1"
-  checksum: 10c0/f7dedc2cbf282dd4a9eaf48ff895e2665c9b3a2e285f64a52b8dfc39cd72e58af44272b461584761cd06ed7f12106ba712231a6aadb9626a4a77b0809f596d5e
-  languageName: node
-  linkType: hard
-
 "jest-message-util@npm:^25.5.0":
   version: 25.5.0
   resolution: "jest-message-util@npm:25.5.0"
