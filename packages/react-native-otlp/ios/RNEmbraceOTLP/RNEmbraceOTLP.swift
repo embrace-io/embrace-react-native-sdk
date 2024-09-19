@@ -1,6 +1,7 @@
 import React
 import Foundation
 import EmbraceIO
+import OpenTelemetrySdk
 import EmbraceCommonInternal
 
 @objc(RNEmbraceOTLP)
@@ -16,34 +17,25 @@ class RNEmbraceOTLP: NSObject {
       reject("INIT_CUSTOM_EXPORTER_ERROR", "Token can't be empty", nil)
     }
     
-    let urlConfig = URLSessionConfiguration.default
-    urlConfig.httpAdditionalHeaders = ["Authorization": "Basic \(token)"]
-    
-//    try? Embrace
-//      .setup(
-//        options: Embrace.Options(
-//          appId: "AppID",
-//          logLevel: .debug,
-//          export: OpenTelemetryExport(
-//            spanExporter: OtlpHttpTraceExporter(
-//              endpoint: URL(string: "https://otlp-gateway-prod-us-west-0.grafana.net/otlp/v1/traces")!,
-//              useSession: URLSession(configuration: urlConfig)
-//            ),
-//            logExporter: OtlpHttpLogExporter(
-//              endpoint: URL(string: "https://otlp-gateway-prod-us-west-0.grafana.net/otlp/v1/logs")!,
-//              useSession: URLSession(configuration: urlConfig)
-//            )
-//          )
-//        )
-//      )
-//      .start()
-    
-    
+    if (header.isEmpty) {
+      reject("INIT_CUSTOM_EXPORTER_ERROR", "Header can't be empty", nil)
+    }
+
     resolve(true)
+  }
+  
+  private func setCustomSpanExporter () -> NSObject {
+    var spanExporter: OtlpHttpExporterBase
+    
+    return spanExporter.toDictionary() as NSObject
+  }
+  
+  private func setCustomLogExporter () -> NSObject {
+    
   }
 
   @objc
-  func initCustomExporter() {
+  func getCustomExporter() {
 
   }
 }

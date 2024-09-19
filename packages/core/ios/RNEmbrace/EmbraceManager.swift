@@ -65,6 +65,7 @@ class EmbraceManager: NSObject {
     @objc(startNativeEmbraceSDK:resolver:rejecter:)
     func startNativeEmbraceSDK(configDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         let config = SDKConfig(from: configDict)
+
         DispatchQueue.main.async {
             do {
                 var embraceOptions: Embrace.Options {
@@ -93,7 +94,10 @@ class EmbraceManager: NSObject {
                         platform: .reactNative,
                         endpoints: endpoints,
                         captureServices: servicesBuilder.build(),
-                        crashReporter: crashReporter
+                        crashReporter: crashReporter,
+                        // if config is here, add it
+                        // config.exporter
+                        export: nil
                     )
                 }
 
