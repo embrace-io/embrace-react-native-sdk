@@ -1,4 +1,4 @@
-import {NativeModules} from "react-native";
+import {NativeModules, AppState} from "react-native";
 import {useEffect, useState} from "react";
 import {
   context,
@@ -106,6 +106,12 @@ class EmbraceNativeTracerProvider implements TracerProvider {
 
     this.spanContextSyncBehaviour =
       config.spanContextSyncBehaviour || "return_empty";
+
+    AppState.addEventListener("change", () => {
+      // Embrace ends the current session when the app switches between foreground and background, at that point
+      // we can clear any completed spans from memory as they won't be valid to reference anymore
+      TracerProviderModule.clearCompletedSpans();
+    });
   }
 
   public getTracer(

@@ -61,7 +61,7 @@ const MyScreen = () => {
 
 * Adding links to spans is not currently supported, `span.addLink(...)` and `span.addLinks(...)` behave as noops.
 * Only string span attributes are currently supported, other types will be converted to their string representations
-* `parentSpanId` will not be set if the parent span has already ended when the child span is started
+* `parentSpanId` will not be set if the parent span was already ended in a previous session when the child span is started
 * Since communication with the native modules is asynchronous `span.spanContext()` will return a blank span context if
 executed immediately after a call to `startSpan` without yielding, for example:
 

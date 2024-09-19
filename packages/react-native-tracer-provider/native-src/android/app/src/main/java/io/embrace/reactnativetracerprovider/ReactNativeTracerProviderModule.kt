@@ -45,11 +45,14 @@ private const val SPAN_CONTEXT_TRACE_ID_KEY = "traceId"
 private const val SPAN_CONTEXT_SPAN_ID_KEY = "spanId"
 private const val SPAN_STATUS_CODE_KEY = "code"
 private const val SPAN_STATUS_MESSAGE_KEY = "message"
+// Should not get hit under normal circumstances, add as a guard against misinstrumentation
+private const val MAX_STORED_SPANS = 10000
 
 class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     private val log = Logger.getLogger("[Embrace]")
     private val tracers = ConcurrentHashMap<String, Tracer>()
-    private val spans = ConcurrentHashMap<String, Span>()
+    private val activeSpans = ConcurrentHashMap<String, Span>()
+    private val completedSpans = ConcurrentHashMap<String, Span>()
     private var tracerProvider: TracerProvider? = null
     private var writableMapBuilder: WritableMapBuilder
 
@@ -163,10 +166,10 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         return "$name $version $schemaUrl"
     }
 
-    private fun getSpan(id: String): Span? {
-        val span = spans[id]
+    private fun getSpan(spanBridgeId: String): Span? {
+        val span = activeSpans[spanBridgeId] ?: completedSpans[spanBridgeId]
         if (span == null) {
-            log.warning("could not retrieve span with id: $id")
+            log.warning("could not retrieve span with bridge id: $spanBridgeId")
         }
         return span
     }
@@ -269,9 +272,15 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
             }
         }
 
-        val span = spanBuilder.startSpan()
-        spans[spanBridgeId] = span
-        promise.resolve(spanContextToWritableMap(span.spanContext))
+        if (activeSpans.size > MAX_STORED_SPANS) {
+            val msg = "too many active spans being tracked, ignoring"
+            log.warning(msg)
+            promise.reject("START_SPAN", msg)
+        } else {
+            val span = spanBuilder.startSpan()
+            activeSpans[spanBridgeId] = span
+            promise.resolve(spanContextToWritableMap(span.spanContext))
+        }
     }
 
     @ReactMethod
@@ -340,6 +349,16 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
             span.end(endTime.toLong(), TimeUnit.MILLISECONDS)
         }
 
-        spans.remove(spanBridgeId)
+        activeSpans.remove(spanBridgeId)
+        if (completedSpans.size > MAX_STORED_SPANS) {
+            log.warning("too many completed spans being tracked, ignoring")
+        } else {
+            completedSpans[spanBridgeId] = span
+        }
+    }
+
+    @ReactMethod
+    fun clearCompletedSpans() {
+        completedSpans.clear();
     }
 }

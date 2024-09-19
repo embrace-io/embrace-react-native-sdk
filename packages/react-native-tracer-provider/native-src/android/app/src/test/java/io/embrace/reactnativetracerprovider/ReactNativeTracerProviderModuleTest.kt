@@ -327,6 +327,85 @@ class ReactNativeTracerProviderModuleTest {
     }
 
     @Test
+    fun startSpanWithEndedParent() {
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
+            "parent-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+            "", promise
+        )
+        tracerProviderModule.endSpan("span_0", 0.0)
+
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_1",
+            "child-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+            "span_0", promise
+        )
+        tracerProviderModule.endSpan("span_1", 0.0)
+
+        var parentSpanContext: ReadableMap?
+        var childSpanContext: ReadableMap?
+
+        argumentCaptor<WritableMap>().apply {
+            verify(promise, times(2)).resolve(capture())
+            assertEquals(2, allValues.size)
+            parentSpanContext = allValues[0]
+            childSpanContext = allValues[1]
+        }
+
+        argumentCaptor<Collection<SpanData>>().apply {
+            verify(exporter, times(2)).export(capture())
+            assertEquals(2, allValues.size)
+
+            val parentSpan = allValues[0].asSequence().withIndex().elementAt(0).value
+            val childSpan = allValues[1].asSequence().withIndex().elementAt(0).value
+
+            assertEquals(SpanId.getInvalid(), parentSpan.parentSpanId)
+            assertEquals(parentSpanContext?.getString("spanId"), childSpan.parentSpanId)
+            assertEquals(parentSpanContext?.getString("traceId"), childSpanContext?.getString("traceId"))
+        }
+    }
+
+    @Test
+    fun startSpanWithEndedParentAfterClear() {
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
+            "parent-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+            "", promise
+        )
+        tracerProviderModule.endSpan("span_0", 0.0)
+        tracerProviderModule.clearCompletedSpans()
+
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_1",
+            "child-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+            "span_0", promise
+        )
+        tracerProviderModule.endSpan("span_1", 0.0)
+
+        var parentSpanContext: ReadableMap?
+        var childSpanContext: ReadableMap?
+
+        argumentCaptor<WritableMap>().apply {
+            verify(promise, times(2)).resolve(capture())
+            assertEquals(2, allValues.size)
+            parentSpanContext = allValues[0]
+            childSpanContext = allValues[1]
+        }
+
+        argumentCaptor<Collection<SpanData>>().apply {
+            verify(exporter, times(2)).export(capture())
+            assertEquals(2, allValues.size)
+
+            val parentSpan = allValues[0].asSequence().withIndex().elementAt(0).value
+            val childSpan = allValues[1].asSequence().withIndex().elementAt(0).value
+
+            assertEquals(SpanId.getInvalid(), parentSpan.parentSpanId)
+            assertEquals(SpanId.getInvalid(), childSpan.parentSpanId)
+            assertNotEquals(parentSpanContext?.getString("traceId"), childSpanContext?.getString("traceId"))
+        }
+    }
+
+    @Test
     fun setAttributes() {
         tracerProviderModule.startSpan(
             "test", "v1", "", "span_0",
