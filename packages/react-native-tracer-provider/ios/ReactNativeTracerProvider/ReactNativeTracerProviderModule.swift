@@ -24,19 +24,6 @@ class ReactNativeTracerProviderModule: NSObject {
   private var tracerProvider: TracerProvider!;
   private var log = OSLog(subsystem: "Embrace", category: "ReactNativeTracerProviderModule")
   
-  override init() {
-    super.init()
-    
-    // Embrace.client?.
-    // TODO replace with Embrace OTEL provider from 6.x
-    // tracerProvider = OpenTelemetry.instance.tracerProvider
-  }
-  
-  init(withTracerProvider: TracerProvider) {
-    super.init()
-    tracerProvider = withTracerProvider
-  }
-  
   /**
    * Various deserializer helpers to go to and from NSDictionary / NSArray to
    * actual OTEL API objects
@@ -123,8 +110,18 @@ class ReactNativeTracerProviderModule: NSObject {
    * Methods to allow the JS side to conform to @opentelemetry-js/api
    */
   
-  @objc(getTracer:version:schemaUrl:)
-  func getTracer(name: String, version: String, schemaUrl: String) -> Void {
+  @objc(setupTracer:version:schemaUrl:)
+  func setupTracer(name: String, version: String, schemaUrl: String) -> Void {
+    if (tracerProvider == nil) {
+      guard let isStarted = Embrace.client?.started else {
+        os_log("cannot access tracer provider, Embrace SDK has not been started", log:log, type: .error)
+        return
+      }
+      
+      tracerProvider = OpenTelemetry.instance.tracerProvider
+    }
+
+    
     let id = getTracerKey(name: name, version: version, schemaUrl: schemaUrl)
     var existingTracer: Tracer?
     
@@ -147,35 +144,6 @@ class ReactNativeTracerProviderModule: NSObject {
   
   @objc(startSpan:tracerVersion:tracerSchemaUrl:spanBridgeId:name:kind:time:attributes:links:parentId:resolve:reject:)
   func startSpan(tracerName: String, tracerVersion: String, tracerSchemaUrl: String, spanBridgeId: String, name: String, kind: String, time: Double, attributes: NSDictionary, links: NSArray, parentId: String, resolve: @escaping RCTPromiseResolveBlock, reject:RCTPromiseRejectBlock) -> Void {
-    
-    
-    let instance = OpenTelemetry.instance
-    
-    /*
-    let tracerProvider = instance.tracerProvider
-     
-     */
-    
-    
-    /*
-    
-    let tracer = tracerProvider.get(
-                instrumentationName: "a_name",
-                instrumentationVersion: "1.2.3-versionSemVer"
-    )
-     */
-    
-    /*
-    let builder = tracer.spanBuilder(spanName: name)
-    
-    let span = builder.startSpan()
-    
-    span.end()
-     */
-    
-    
-    
-    /*
     let tracerKey = getTracerKey(name: tracerName, version: tracerVersion, schemaUrl: tracerSchemaUrl)
     var tracer: Tracer?
     
@@ -239,8 +207,6 @@ class ReactNativeTracerProviderModule: NSObject {
       self.spans.updateValue(span, forKey: spanBridgeId)
       resolve(self.spanContextToDict(spanContext: span.context))
     }
-     
-     */
   }
    
   @objc(setAttributes:attributes:)

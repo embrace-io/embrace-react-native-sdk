@@ -11,11 +11,10 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		302CB9FF2C35ED830097B129 /* ReactNativeTracerProviderModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302CB9FC2C35ED830097B129 /* ReactNativeTracerProviderModule.swift */; };
 		302CBA002C35ED830097B129 /* ReactNativeTracerProviderModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 302CB9FE2C35ED830097B129 /* ReactNativeTracerProviderModule.mm */; };
-		307650582C374E040071B976 /* InMemoryExporter in Frameworks */ = {isa = PBXBuildFile; productRef = 307650572C374E040071B976 /* InMemoryExporter */; };
 		30A45DF02C35E94400D82B2B /* ReactNativeTracerProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A45DEF2C35E94400D82B2B /* ReactNativeTracerProviderTests.swift */; };
-		7829AC64FD0C7E5810535C11 /* libPods-ReactNativeTracerProvider.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0126BE9C45703ED88BCD331E /* libPods-ReactNativeTracerProvider.a */; };
+		47F728C1C51643FA1FAB45F0 /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD5798A0A6657EA4FAA7814 /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a */; };
 		7FC7DF53AD6A1128E3C05990 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B57F0C751587B8FEAF642578 /* PrivacyInfo.xcprivacy */; };
-		D92228F1850B97CCC7355F7F /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FD6702B59A6A1549EC4CD08 /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a */; };
+		F3074BDD251CC425EE257667 /* libPods-ReactNativeTracerProvider.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D9A81CF063DC96E3E6D2491 /* libPods-ReactNativeTracerProvider.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,22 +30,22 @@
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* ReactNativeTracerProviderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactNativeTracerProviderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0126BE9C45703ED88BCD331E /* libPods-ReactNativeTracerProvider.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeTracerProvider.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* ReactNativeTracerProvider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReactNativeTracerProvider.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ReactNativeTracerProvider/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = ReactNativeTracerProvider/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ReactNativeTracerProvider/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ReactNativeTracerProvider/main.m; sourceTree = "<group>"; };
+		1D9A81CF063DC96E3E6D2491 /* libPods-ReactNativeTracerProvider.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeTracerProvider.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		302CB9FB2C35ED820097B129 /* ReactNativeTracerProviderModule-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ReactNativeTracerProviderModule-Bridging-Header.h"; path = "../../ios/ReactNativeTracerProvider/ReactNativeTracerProviderModule-Bridging-Header.h"; sourceTree = "<group>"; };
 		302CB9FC2C35ED830097B129 /* ReactNativeTracerProviderModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReactNativeTracerProviderModule.swift; path = ../../ios/ReactNativeTracerProvider/ReactNativeTracerProviderModule.swift; sourceTree = "<group>"; };
 		302CB9FE2C35ED830097B129 /* ReactNativeTracerProviderModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ReactNativeTracerProviderModule.mm; path = ../../ios/ReactNativeTracerProvider/ReactNativeTracerProviderModule.mm; sourceTree = "<group>"; };
 		30A45DEF2C35E94400D82B2B /* ReactNativeTracerProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeTracerProviderTests.swift; sourceTree = "<group>"; };
-		3C54078D771F177BE9FC1A46 /* Pods-ReactNativeTracerProvider.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeTracerProvider.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider.release.xcconfig"; sourceTree = "<group>"; };
-		4FD6702B59A6A1549EC4CD08 /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		907BD426FC783EDFBF663940 /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.release.xcconfig"; sourceTree = "<group>"; };
+		62DAD0894CE5991E94186954 /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig"; sourceTree = "<group>"; };
+		95724DF11AEDE10154288CAC /* Pods-ReactNativeTracerProvider.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeTracerProvider.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider.release.xcconfig"; sourceTree = "<group>"; };
+		9BD5798A0A6657EA4FAA7814 /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B57F0C751587B8FEAF642578 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ReactNativeTracerProvider/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		BF7FD5265090E7A483B97F4C /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig"; sourceTree = "<group>"; };
-		E90E8962E7BB3A2A940B078A /* Pods-ReactNativeTracerProvider.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeTracerProvider.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider.debug.xcconfig"; sourceTree = "<group>"; };
+		BC81676721279F723FA15E43 /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.release.xcconfig"; sourceTree = "<group>"; };
+		D47B6FF0A0D9982C0B094100 /* Pods-ReactNativeTracerProvider.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeTracerProvider.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -55,8 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				307650582C374E040071B976 /* InMemoryExporter in Frameworks */,
-				D92228F1850B97CCC7355F7F /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a in Frameworks */,
+				47F728C1C51643FA1FAB45F0 /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7829AC64FD0C7E5810535C11 /* libPods-ReactNativeTracerProvider.a in Frameworks */,
+				F3074BDD251CC425EE257667 /* libPods-ReactNativeTracerProvider.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,8 +105,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				0126BE9C45703ED88BCD331E /* libPods-ReactNativeTracerProvider.a */,
-				4FD6702B59A6A1549EC4CD08 /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a */,
+				1D9A81CF063DC96E3E6D2491 /* libPods-ReactNativeTracerProvider.a */,
+				9BD5798A0A6657EA4FAA7814 /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -147,10 +145,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E90E8962E7BB3A2A940B078A /* Pods-ReactNativeTracerProvider.debug.xcconfig */,
-				3C54078D771F177BE9FC1A46 /* Pods-ReactNativeTracerProvider.release.xcconfig */,
-				BF7FD5265090E7A483B97F4C /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig */,
-				907BD426FC783EDFBF663940 /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.release.xcconfig */,
+				D47B6FF0A0D9982C0B094100 /* Pods-ReactNativeTracerProvider.debug.xcconfig */,
+				95724DF11AEDE10154288CAC /* Pods-ReactNativeTracerProvider.release.xcconfig */,
+				62DAD0894CE5991E94186954 /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig */,
+				BC81676721279F723FA15E43 /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -162,12 +160,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ReactNativeTracerProviderTests" */;
 			buildPhases = (
-				8A6F7D2BADC6F46C17C498D3 /* [CP] Check Pods Manifest.lock */,
+				77B3482A5E3AD84AADD20D9F /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				E7A64615EF79D42695669A5F /* [CP] Embed Pods Frameworks */,
-				DB3BD622A41F456BA88920CE /* [CP] Copy Pods Resources */,
+				29E64802BD947CEFDAB49B2C /* [CP] Embed Pods Frameworks */,
+				8A5A05133BF522C8539ADBB0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -175,9 +173,6 @@
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
 			name = ReactNativeTracerProviderTests;
-			packageProductDependencies = (
-				307650572C374E040071B976 /* InMemoryExporter */,
-			);
 			productName = ReactNativeTracerProviderTests;
 			productReference = 00E356EE1AD99517003FC87E /* ReactNativeTracerProviderTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -186,13 +181,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ReactNativeTracerProvider" */;
 			buildPhases = (
-				352AA79DCC11C3C3CA29B193 /* [CP] Check Pods Manifest.lock */,
+				1464E2FF4E41412466949E47 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				E14631EE54BC944C49013D3E /* [CP] Embed Pods Frameworks */,
-				0C4CA7838F36E71DFB6B003A /* [CP] Copy Pods Resources */,
+				447400801772A84C9F7DFF49 /* [CP] Embed Pods Frameworks */,
+				DC4927D7D9893C66CE254DC6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -230,9 +225,6 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
-			packageReferences = (
-				307650562C374E040071B976 /* XCRemoteSwiftPackageReference "opentelemetry-swift" */,
-			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -278,24 +270,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		0C4CA7838F36E71DFB6B003A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		352AA79DCC11C3C3CA29B193 /* [CP] Check Pods Manifest.lock */ = {
+		1464E2FF4E41412466949E47 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -317,7 +292,41 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8A6F7D2BADC6F46C17C498D3 /* [CP] Check Pods Manifest.lock */ = {
+		29E64802BD947CEFDAB49B2C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		447400801772A84C9F7DFF49 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		77B3482A5E3AD84AADD20D9F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -339,7 +348,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DB3BD622A41F456BA88920CE /* [CP] Copy Pods Resources */ = {
+		8A5A05133BF522C8539ADBB0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -356,38 +365,21 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E14631EE54BC944C49013D3E /* [CP] Embed Pods Frameworks */ = {
+		DC4927D7D9893C66CE254DC6 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E7A64615EF79D42695669A5F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -425,7 +417,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BF7FD5265090E7A483B97F4C /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig */;
+			baseConfigurationReference = 62DAD0894CE5991E94186954 /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -456,7 +448,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 907BD426FC783EDFBF663940 /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.release.xcconfig */;
+			baseConfigurationReference = BC81676721279F723FA15E43 /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -483,7 +475,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E90E8962E7BB3A2A940B078A /* Pods-ReactNativeTracerProvider.debug.xcconfig */;
+			baseConfigurationReference = D47B6FF0A0D9982C0B094100 /* Pods-ReactNativeTracerProvider.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -511,7 +503,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3C54078D771F177BE9FC1A46 /* Pods-ReactNativeTracerProvider.release.xcconfig */;
+			baseConfigurationReference = 95724DF11AEDE10154288CAC /* Pods-ReactNativeTracerProvider.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -725,25 +717,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		307650562C374E040071B976 /* XCRemoteSwiftPackageReference "opentelemetry-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/open-telemetry/opentelemetry-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.9.2;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		307650572C374E040071B976 /* InMemoryExporter */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 307650562C374E040071B976 /* XCRemoteSwiftPackageReference "opentelemetry-swift" */;
-			productName = InMemoryExporter;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }

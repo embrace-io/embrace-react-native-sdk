@@ -1,9 +1,10 @@
+require "json"
+
 def load_dependencies(spec = nil)
+  package = JSON.parse(File.read(File.join(__dir__, "../package.json")))
   if spec.nil?
-    # pod 'OpenTelemetrySwiftApi', '~> 1.6.0'
-    pod 'EmbraceIO-DEV'
+    pod 'EmbraceIO', package["embrace"]["iosVersion"]
   else
-    # spec.dependency 'OpenTelemetrySwiftApi', '~> 1.6.0'
-    spec.dependency 'EmbraceIO-DEV'
+    spec.dependency 'EmbraceIO', package["embrace"]["iosVersion"]
   end
 end

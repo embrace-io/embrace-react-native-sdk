@@ -2,7 +2,7 @@
 
 @interface RCT_EXTERN_MODULE(ReactNativeTracerProviderModule, NSObject)
 
-RCT_EXTERN_METHOD(getTracer:(NSString *)name version:(NSString *)version schemaUrl:(NSString *)schemaUrl)
+RCT_EXTERN_METHOD(setupTracer:(NSString *)name version:(NSString *)version schemaUrl:(NSString *)schemaUrl)
 
 RCT_EXTERN_METHOD(startSpan:(NSString *)tracerName tracerVersion:(NSString *)tracerVersion tracerSchemaUrl:(NSString *)tracerSchemaUrl spanBridgeId:(NSString *)spanBridgeId name:(NSString *)name kind:(NSString *)kind time:(double)time attributes:(NSDictionary)attributes links:(NSArray)links parentId:(NSString *)parentId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 

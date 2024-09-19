@@ -1,99 +1,108 @@
 import XCTest
+import EmbraceIO
+import EmbraceOTelInternal
+import OpenTelemetryApi
+import OpenTelemetrySdk
+import EmbraceCommonInternal
+
 @testable import ReactNativeTracerProvider
 
-import OpenTelemetryApi
-import InMemoryExporter
-import EmbraceIO
+class Promise {
+    var resolveCalls: [Any?] = []
+    var rejectCalls: [String] = []
 
-final class Promise {
-  var resolveCalls: [NSDictionary] = []
-  
-  func resolve(val: Any?) -> Void {
-    if let val = val as? NSDictionary {
-      resolveCalls.append(val)
+    func resolve(val: Any?) {
+        resolveCalls.append(val)
     }
-  }
-  
-  func reject(a: String?, b: String?, c: Error?) -> Void {}
+
+    func reject(a: String?, b: String?, c: Error?) {
+        rejectCalls.append(b!)
+    }
+
+    func reset() {
+        resolveCalls.removeAll()
+        rejectCalls.removeAll()
+    }
 }
 
-final class ReactNativeTracerProviderTests: XCTestCase {
-  var module: ReactNativeTracerProviderModule!;
-  var exporter: InMemoryExporter!;
-  var promise: Promise!;
 
-  override func setUp() {
-    promise = Promise()
-    exporter = InMemoryExporter()
-    
-    do {
-      try Embrace
-        .setup( options: .init(
-          appId: "myApp",
-          export:
-            OpenTelemetryExport(
-              spanExporter: exporter
-            )
-        ) )
-        // TODO, do we actually need to start?
-        .start()
-   
-      let tracer = OpenTelemetry.instance.tracerProvider.get(
-                  instrumentationName: "a_name",
-                  instrumentationVersion: "1.2.3-versionSemVer"
-      )
-      
-      let builder = tracer.spanBuilder(spanName: name)
-      
-      let span = builder.startSpan()
-      
-      span.end()
-      
-    } catch {
-      // Unable to start Embrace
+class TestSpanExporter: EmbraceSpanExporter {
+    var exportedSpans: [SpanData] = []
+
+    func export(spans: [SpanData]) -> SpanExporterResultCode {
+        exportedSpans.append(contentsOf: spans)
+        return SpanExporterResultCode.success
     }
-    
-    module = ReactNativeTracerProviderModule();
 
-    
-    /*
-    
-    let tracerProvider = TracerProviderBuilder()
-      .add(spanProcessor: SimpleSpanProcessor(spanExporter: exporter))
-      .build()
-    
-    module = ReactNativeTracerProviderModule(withTracerProvider: tracerProvider);
-    module.getTracer(name: "test", version: "v1", schemaUrl: "")
-     */
-    
+    func flush() -> SpanExporterResultCode {
+        return SpanExporterResultCode.success
+    }
+
+    func reset() {
+        exportedSpans.removeAll()
+    }
+
+    func shutdown() {}
+}
+
+
+private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-setup", "emb-process-launch",
+                                           "POST /v2/logs", "POST /v2/spans"]
+
+class ReactNativeTracerProviderTests: XCTestCase {
+  static var exporter: TestSpanExporter!
+  var module: ReactNativeTracerProviderModule!;
+  var promise: Promise!
+
+  override class func setUp() {
+      super.setUp()
+      exporter = TestSpanExporter()
+
+      do {
+          try Embrace
+              .setup( options: .init(
+                  appId: "myApp",
+                  export:
+                      OpenTelemetryExport(
+                          spanExporter: self.exporter
+                      )
+              ))
+              .start()
+      } catch let error as EmbraceCore.Embrace {
+          print(error);
+      }  catch {
+          print(error.localizedDescription)
+      }
   }
   
-  /*
+  override func setUp() async throws {
+      promise = Promise()
+      module = ReactNativeTracerProviderModule()
+      ReactNativeTracerProviderTests.exporter.reset()
+      module.setupTracer(name: "test", version: "v1", schemaUrl: "")
+  }
+
   func getExportedSpans() async throws -> [SpanData] {
-    // spans are sent to the exporter asynchronously so need to pause in order to see them
-    // TODO reduce this wait time until it passes reliably
-    try await Task.sleep(nanoseconds: UInt64(5.01 * Double(NSEC_PER_SEC)))
-    return exporter.getFinishedSpanItems()
+      try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+      return ReactNativeTracerProviderTests.exporter.exportedSpans.filter { span in
+          !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
+      }
   }
-   */
-   
   
-  func testBasic() async throws {
-    /*
-    module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "", spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0, attributes: NSDictionary(), links: NSArray(), parentId: "", resolve: promise.resolve, reject: promise.reject)
+  func testBasicProvider() async throws {
+    let tracer = OpenTelemetry.instance.tracerProvider.get(
+        instrumentationName: "a_name",
+        instrumentationVersion: "1.2.3-versionSemVer"
+    )
+    let builder = tracer.spanBuilder(spanName: "my-span")
+    let span = builder.startSpan()
+    span.end()
     
     let exportedSpans = try await getExportedSpans()
     XCTAssertEqual(exportedSpans.count, 1)
-     
-     */
-    // XCTAssertEqual(exportedSpans[0].name, "my-span")
-    
-    
- 
+    XCTAssertEqual(exportedSpans[0].name, "my-span")
   }
   
-
-  /*
   func testStartSpanSimple() async throws {
     module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "", spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0, attributes: NSDictionary(), links: NSArray(), parentId: "", resolve: promise.resolve, reject: promise.reject)
     module.endSpan(spanBridgeId: "span_0", time: 0.0)
@@ -106,8 +115,8 @@ final class ReactNativeTracerProviderTests: XCTestCase {
     XCTAssertTrue(exportedSpans[0].traceId.isValid)
     
     XCTAssertEqual(promise.resolveCalls.count, 1)
-    let promiseSpanId = promise.resolveCalls[0].object(forKey: "spanId") as? String
-    let promiseTraceId = promise.resolveCalls[0].object(forKey: "traceId") as? String
+    let promiseSpanId = (promise.resolveCalls[0] as? NSDictionary)!.object(forKey: "spanId") as? String
+    let promiseTraceId = (promise.resolveCalls[0] as? NSDictionary)!.object(forKey: "traceId") as? String
     XCTAssertEqual(promiseSpanId, exportedSpans[0].spanId.hexString)
     XCTAssertEqual(promiseTraceId, exportedSpans[0].traceId.hexString)
   }
@@ -183,8 +192,8 @@ final class ReactNativeTracerProviderTests: XCTestCase {
     XCTAssertTrue(exportedSpans[0].traceId.isValid)
     
     XCTAssertEqual(promise.resolveCalls.count, 2)
-    let parentSpanId = promise.resolveCalls[0].object(forKey: "spanId") as? String
-    let parentTraceId = promise.resolveCalls[0].object(forKey: "traceId") as? String
+    let parentSpanId = (promise.resolveCalls[0] as? NSDictionary)!.object(forKey: "spanId") as? String
+    let parentTraceId = (promise.resolveCalls[0] as? NSDictionary)!.object(forKey: "traceId") as? String
     
     XCTAssertNotNil(exportedSpans[1].parentSpanId)
     XCTAssertEqual(parentSpanId, exportedSpans[1].parentSpanId!.hexString)
@@ -292,7 +301,7 @@ final class ReactNativeTracerProviderTests: XCTestCase {
     
     // Create a tracer with that schemaUrl, should work now
     
-    module.getTracer(name: "test", version: "v1", schemaUrl: "schema")
+    module.setupTracer(name: "test", version: "v1", schemaUrl: "schema")
     module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "schema", spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0, attributes: NSDictionary(), links: NSArray(), parentId: "", resolve: promise.resolve, reject: promise.reject)
     module.endSpan(spanBridgeId: "span_0", time: 0.0)
 
@@ -301,6 +310,4 @@ final class ReactNativeTracerProviderTests: XCTestCase {
     XCTAssertEqual(exportedSpans[0].name, "my-span")
     XCTAssertTrue(exportedSpans[0].hasEnded)
   }
-   */
-   
 }
