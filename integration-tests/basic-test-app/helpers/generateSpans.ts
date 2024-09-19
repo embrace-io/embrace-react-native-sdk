@@ -12,7 +12,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  context, SpanContext,
+  context,
+  SpanContext,
   SpanKind,
   SpanStatusCode,
   trace,
@@ -103,10 +104,6 @@ export function generateNestedSpans(tracer: Tracer) {
   span2.end();
   span3.end();
 
-  // Parent span ID won't be set if the parent was already ended
-  tracer.startSpan(
-    "test-6",
-    {},
-    contextWithSpan1,
-  ).end();
+  // Parent span ID should still be set if the parent was already ended
+  tracer.startSpan("test-6", {}, contextWithSpan1).end();
 }

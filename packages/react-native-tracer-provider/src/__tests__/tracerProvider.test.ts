@@ -15,7 +15,7 @@ import {
   useEmbraceNativeTracerProvider,
 } from "../index";
 
-const mockGetTracer = jest.fn();
+const mockSetupTracer = jest.fn();
 const mockStartSpan = jest.fn();
 const mockSetAttributes = jest.fn();
 const mockAddEvent = jest.fn();
@@ -23,8 +23,10 @@ const mockAddLinks = jest.fn();
 const mockSetStatus = jest.fn();
 const mockUpdateName = jest.fn();
 const mockEndSpan = jest.fn();
+const mockClearCompletedSpans = jest.fn();
 
 const mockIsStarted = jest.fn();
+const mockAppStateListener = jest.fn();
 
 jest.mock("react-native", () => ({
   NativeModules: {
@@ -32,12 +34,16 @@ jest.mock("react-native", () => ({
       isStarted: () => mockIsStarted(),
     },
   },
+  AppState: {
+    addEventListener: (type: string, listener: () => void) =>
+      mockAppStateListener(type, listener),
+  },
 }));
 
 jest.mock("../TracerProviderModule", () => ({
   TracerProviderModule: {
-    getTracer: (name: string, version?: string, schemaUrl?: string) =>
-      mockGetTracer(name, version, schemaUrl),
+    setupTracer: (name: string, version?: string, schemaUrl?: string) =>
+      mockSetupTracer(name, version, schemaUrl),
     startSpan: (
       tracerName: string,
       tracerVersion: string,
@@ -75,6 +81,7 @@ jest.mock("../TracerProviderModule", () => ({
       mockSetStatus(id, status),
     updateName: (id: string, name: string) => mockUpdateName(id, name),
     endSpan: (id: string, time: number) => mockEndSpan(id, time),
+    clearCompletedSpans: () => mockClearCompletedSpans(),
   },
 }));
 
@@ -116,7 +123,7 @@ describe("Embrace Native Tracer Provider", () => {
 
   it("should allow getting a tracer", async () => {
     await getTestTracer({name: "some-tracer", version: "v17"});
-    expect(mockGetTracer).toHaveBeenCalledWith("some-tracer", "v17", "");
+    expect(mockSetupTracer).toHaveBeenCalledWith("some-tracer", "v17", "");
   });
 
   it("should error if getting a tracer provider before the Embrace SDK has started", async () => {
@@ -698,7 +705,7 @@ describe("Embrace Native Tracer Provider", () => {
         schemaUrl: "s1",
       },
     });
-    expect(mockGetTracer).toHaveBeenCalledWith("test", "v1", "s1");
+    expect(mockSetupTracer).toHaveBeenCalledWith("test", "v1", "s1");
 
     tracer.startSpan("my-span");
 
@@ -717,7 +724,7 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
-  it("should not allow setting a parent that already ended", async () => {
+  it("should allow setting a parent that already ended", async () => {
     const tracer = await getTestTracer({});
     const parent = tracer.startSpan("my-parent-span");
     const parentContext = trace.setSpan(context.active(), parent);
@@ -736,7 +743,18 @@ describe("Embrace Native Tracer Provider", () => {
       0,
       {},
       [],
-      "",
+      "test_v1__1",
     );
+  });
+
+  it("should clear completed spans when the app state changes", async () => {
+    await getTestTracer({});
+    expect(mockAppStateListener).toHaveBeenCalled();
+    expect(mockAppStateListener.mock.calls[0][0]).toBe("change");
+
+    // Should only be called after the app state change handler was triggered
+    expect(mockClearCompletedSpans).not.toHaveBeenCalled();
+    mockAppStateListener.mock.calls[0][1]();
+    expect(mockClearCompletedSpans).toHaveBeenCalled();
   });
 });

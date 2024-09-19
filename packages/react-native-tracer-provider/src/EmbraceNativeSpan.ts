@@ -59,9 +59,13 @@ export class EmbraceNativeSpan implements Span {
 
   public creatingNativeSide(creating: Promise<SpanContext>) {
     this.creating = creating;
-    this.creating.then((spanContext: SpanContext) => {
-      this.savedSpanContext = spanContext;
-    });
+    this.creating
+      .then((spanContext: SpanContext) => {
+        this.savedSpanContext = spanContext;
+      })
+      .catch(reason => {
+        logWarning(`Failed to create span: ${reason}`);
+      });
   }
 
   public isReadonly() {

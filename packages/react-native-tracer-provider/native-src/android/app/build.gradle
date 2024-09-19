@@ -1,3 +1,7 @@
+plugins {
+    id("io.gitlab.arturbosch.detekt") version("1.23.6")
+}
+
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
@@ -74,9 +78,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "io.embrace.tracerproviderexample"
+    namespace "io.embrace.reactnativetracerprovider"
     defaultConfig {
-        applicationId "io.embrace.tracerproviderexample"
+        applicationId "io.embrace.reactnativetracerprovider"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -121,16 +125,32 @@ dependencies {
         implementation jscFlavor
     }
 
-  testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
-  testImplementation 'junit:junit:4.12'
-  testImplementation "org.mockito.kotlin:mockito-kotlin:5.3.1"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito.kotlin:mockito-kotlin:5.3.1"
+    testImplementation("io.mockk:mockk:1.13.11")
 
+    // Sometimes useful to test against the OTEL Tracer Provider to compare differences
+    testImplementation(platform("io.opentelemetry:opentelemetry-bom:1.38.0"))
+    testImplementation("io.opentelemetry:opentelemetry-sdk")
+    testImplementation("io.opentelemetry:opentelemetry-exporter-logging")
 
-  // OTEL dependencies
-  implementation(platform("io.opentelemetry:opentelemetry-bom:1.38.0"));
-  implementation("io.opentelemetry:opentelemetry-api");
-  implementation("io.opentelemetry:opentelemetry-sdk");
-  implementation("io.opentelemetry:opentelemetry-exporter-logging");
+    add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
+}
+
+android {
+    useLibrary 'android.test.mock'
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    autoCorrect = true
+    config.from(project.files("${project.rootDir}/config/detekt/detekt.yml"))
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: file("dependencies.gradle")

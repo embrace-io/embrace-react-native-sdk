@@ -3,13 +3,19 @@ import {driver} from "@wdio/globals";
 import {endSession} from "../helpers/session";
 import {getSpanPayloads} from "../helpers/embrace_server";
 import {EmbraceSpanData} from "../typings/embrace";
-import {commonEmbraceSpanAttributes, commonEmbraceSpanSnapshotAttributes, sortSpanAttributes} from "../helpers/span";
+import {
+  commonEmbraceSpanAttributes,
+  commonEmbraceSpanSnapshotAttributes,
+  sortSpanAttributes,
+} from "../helpers/span";
 
 const msToNano = (ms: number) => ms * 1000000;
 
 describe("Tracer Provider", () => {
-  const expectValidSpans = (spans: EmbraceSpanData[]) => {
-    const reasonableEpochNanos= msToNano(new Date("2024-01-01T00:00:00Z").getTime())
+  const expectValidSpans = (spans: EmbraceSpanData[], snapshots = false) => {
+    const reasonableEpochNanos = msToNano(
+      new Date("2024-01-01T00:00:00Z").getTime(),
+    );
     spans.forEach(span => {
       // span and trace ids are not deterministic so just check they aren't invalid
       expect(span.span_id).toHaveLength(16);
@@ -19,8 +25,13 @@ describe("Tracer Provider", () => {
 
       // unless explicitly set start/end times are based on current time so just assert they are reasonable
       expect(span.start_time_unix_nano).toBeGreaterThan(reasonableEpochNanos);
-      expect(span.end_time_unix_nano).toBeGreaterThan(reasonableEpochNanos);
-    })
+
+      if (snapshots) {
+        expect(span.end_time_unix_nano).toBeUndefined();
+      } else {
+        expect(span.end_time_unix_nano).toBeGreaterThan(reasonableEpochNanos);
+      }
+    });
   };
 
   it("should record a basic span", async () => {
@@ -34,20 +45,19 @@ describe("Tracer Provider", () => {
       const spans = spanPayloads[0].userSpans;
       expect(spans.length).toBe(1);
       expectValidSpans(spans);
-      const span = spans[0]
+      const span = spans[0];
 
-      expect(span).toEqual(
-        {
-          trace_id: span.trace_id,
-          span_id: span.span_id,
-          parent_span_id: "0000000000000000",
-          name: "test-1",
-          start_time_unix_nano: span.start_time_unix_nano,
-          end_time_unix_nano: span.end_time_unix_nano,
-          status: "Unset",
-          events: [],
-          attributes: commonEmbraceSpanAttributes(span),
-        });
+      expect(span).toEqual({
+        trace_id: span.trace_id,
+        span_id: span.span_id,
+        parent_span_id: "0000000000000000",
+        name: "test-1",
+        start_time_unix_nano: span.start_time_unix_nano,
+        end_time_unix_nano: span.end_time_unix_nano,
+        status: "Unset",
+        events: [],
+        attributes: commonEmbraceSpanAttributes(span),
+      });
     }
   });
 
@@ -85,8 +95,8 @@ describe("Tracer Provider", () => {
               key: "bool-attr",
               value: "true",
             },
-            ...commonEmbraceSpanAttributes(spans[0])
-          ])
+            ...commonEmbraceSpanAttributes(spans[0]),
+          ]),
         },
         {
           trace_id: spans[1].trace_id,
@@ -94,13 +104,15 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-2",
           start_time_unix_nano: spans[1].start_time_unix_nano,
-          end_time_unix_nano: msToNano(new Date("2099-01-01T00:00:00Z").getTime()),
+          end_time_unix_nano: msToNano(
+            new Date("2099-01-01T00:00:00Z").getTime(),
+          ),
           status: "Unset",
           events: [
             {
               name: "test-2-event-1",
               attributes: [],
-              time_unix_nano:  spans[1].events[0].time_unix_nano,
+              time_unix_nano: spans[1].events[0].time_unix_nano,
             },
             {
               name: "test-2-event-2",
@@ -113,7 +125,7 @@ describe("Tracer Provider", () => {
                 {
                   key: "test-2-event-attr",
                   value: "my-event-attr",
-                }
+                },
               ],
               time_unix_nano: 1700009002000 * 1000000,
             },
@@ -148,7 +160,9 @@ describe("Tracer Provider", () => {
           parent_span_id: "0000000000000000",
           name: "test-4",
           start_time_unix_nano: spans[3].start_time_unix_nano,
-          end_time_unix_nano: msToNano(new Date("2024-03-03T00:00:00Z").getTime()),
+          end_time_unix_nano: msToNano(
+            new Date("2024-03-03T00:00:00Z").getTime(),
+          ),
           status: "Unset",
           events: [],
           attributes: commonEmbraceSpanAttributes(spans[3]),
@@ -157,7 +171,7 @@ describe("Tracer Provider", () => {
 
       const snapshots = spanPayloads[0].userSpanSnapshots;
       expect(snapshots.length).toBe(1);
-      expectValidSpans(snapshots);
+      expectValidSpans(snapshots, true);
       expect(snapshots).toEqual([
         {
           trace_id: snapshots[0].trace_id,
@@ -171,7 +185,6 @@ describe("Tracer Provider", () => {
           attributes: commonEmbraceSpanSnapshotAttributes(),
         },
       ] as EmbraceSpanData[]);
-
     }
   });
 
@@ -212,7 +225,7 @@ describe("Tracer Provider", () => {
               key: "test-2-attr",
               value: "my-attr",
             },
-            ...commonEmbraceSpanAttributes(spans[1])
+            ...commonEmbraceSpanAttributes(spans[1]),
           ]),
         },
         {
@@ -229,7 +242,7 @@ describe("Tracer Provider", () => {
               key: "test-3-attr",
               value: "my-attr",
             },
-            ...commonEmbraceSpanAttributes(spans[2])
+            ...commonEmbraceSpanAttributes(spans[2]),
           ]),
         },
         {
@@ -257,7 +270,7 @@ describe("Tracer Provider", () => {
         {
           trace_id: spans[5].trace_id,
           span_id: spans[5].span_id,
-          parent_span_id: "0000000000000000", // test-1 already ended so blank parent ID
+          parent_span_id: spans[0].span_id, // parent should be test-1
           name: "test-6",
           start_time_unix_nano: spans[5].start_time_unix_nano,
           end_time_unix_nano: spans[5].end_time_unix_nano,

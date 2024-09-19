@@ -68,6 +68,7 @@ export const config: Options.Testrunner = {
       "appium:automationName": "UiAutomator2",
       "appium:appPackage": "io.embrace.basictestapp",
       "appium:appActivity": ".MainActivity",
+      "appium:uiautomator2ServerLaunchTimeout": 60000,
 
       //  TODO: for CI/CD we probably want to point to the prebuilt release
       //  APK rather than having to have the app running in an emulator beforehand, e.g.

@@ -28,19 +28,12 @@ const HomeScreen = () => {
 
   const {isLoading, isError, error, tracerProvider} =
     useEmbraceNativeTracerProvider();
+
   const tracer = useMemo<Tracer | undefined>(() => {
     if (tracerProvider) {
       return tracerProvider.getTracer("span-test", "1.0");
     }
   }, [isLoading, isError, error, tracerProvider]);
-
-  if (isLoading) {
-    return <ThemedText type="subtitle">Loading Tracer Provider</ThemedText>;
-  }
-
-  if (isError) {
-    return <ThemedText type="subtitle">{error}</ThemedText>;
-  }
 
   const handleErrorLog = useCallback(() => {
     logHandledError(
@@ -77,6 +70,14 @@ const HomeScreen = () => {
       "rn.sdk.test": 1234567,
     });
   }, []);
+
+  if (isLoading) {
+    return <ThemedText type="subtitle">Loading Tracer Provider</ThemedText>;
+  }
+
+  if (isError) {
+    return <ThemedText type="subtitle">{error}</ThemedText>;
+  }
 
   return (
     <ParallaxScrollView

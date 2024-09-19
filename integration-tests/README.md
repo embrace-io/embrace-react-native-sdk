@@ -82,3 +82,17 @@ endpoints (Note this may include some binary output that doesn't play nice with 
 TODO for the moment the utility here is to be able to run tests locally during development, as a next task need to hook this up to
 CI tools to verify a passing suite for new releases. Likely this means updating or creating a new `wdio.conf.ts` that
 can be configured to point to a remote environment. See what capabilities are available for that [here](https://appium.io/docs/en/2.1/guides/caps/)
+
+## Troubleshooting
+
+
+### Appium gives 500 during test run
+
+"Could not proxy command to remote server. Original error: Error: socket hang up"
+
+Try:
+
+```shell
+adb uninstall io.appium.uiautomator2.server
+adb uninstall io.appium.uiautomator2.server.test
+```

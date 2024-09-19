@@ -60,12 +60,7 @@ export class EmbraceNativeTracer implements Tracer {
     const parentSpan = trace.getSpan(
       context || this.contextManager.active(),
     ) as EmbraceNativeSpan;
-    const parentNativeID =
-      (!root &&
-        parentSpan &&
-        parentSpan.isRecording() &&
-        parentSpan.nativeID()) ||
-      "";
+    const parentNativeID = (!root && parentSpan && parentSpan.nativeID()) || "";
 
     this.spansCreated += 1;
     const nativeSpan = new EmbraceNativeSpan(
@@ -79,12 +74,6 @@ export class EmbraceNativeTracer implements Tracer {
     if (links && links.length) {
       logWarning(
         "Adding span links is not currently supported by the Embrace SDK",
-      );
-    }
-
-    if (parentSpan && !parentSpan.isRecording()) {
-      logWarning(
-        "parent span already ended, not setting as parent for this span",
       );
     }
 

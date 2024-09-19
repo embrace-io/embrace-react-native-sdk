@@ -56,3 +56,27 @@ const MyScreen = () => {
   return <View />;
 };
 ```
+
+### Limitations
+
+* Adding links to spans is not currently supported, `span.addLink(...)` and `span.addLinks(...)` behave as noops.
+* Only string span attributes are currently supported, other types will be converted to their string representations
+* `parentSpanId` will not be set if the parent span was already ended in a previous session when the child span is started
+* Since communication with the native modules is asynchronous `span.spanContext()` will return a blank span context if
+executed immediately after a call to `startSpan` without yielding, for example:
+
+    ```javascript
+    const mySpan = tracer.startSpan("my-span");
+    const spanContext = mySpan.spanContext(); // can be configured to throw an error instead through EmbraceNativeTracerProviderConfig
+    console.log(spanContext.traceId) // prints ""
+    console.log(spanContext.spanId) // prints ""
+    ```
+
+    To avoid this issue you can use the async version:
+
+    ```javascript
+    const mySpan = tracer.startSpan("my-span");
+    const spanContext = await (mySpan as EmbraceNativeSpan).spanContextAsync();
+    console.log(spanContext.traceId) // prints "51e60a6917dfe46871d7f1d39f66d02c"
+    console.log(spanContext.spanId) // prints "b2248eb58720064e"
+    ```
