@@ -47,11 +47,7 @@ jobs:
         run: yarn install
 
       - name: Install Node Modules + CocoaPods Dependencies
-        run: |
-          cd ${{ env.IOS_TEST_PROJECT_PATH }}
-          yarn install
-          cd ios
-          pod install
+        run: yarn run ios:install
       
       - name: Run iOS Unit Tests
         run: yarn run ios:test
