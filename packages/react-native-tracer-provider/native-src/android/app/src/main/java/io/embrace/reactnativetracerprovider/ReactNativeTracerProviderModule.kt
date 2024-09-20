@@ -45,6 +45,7 @@ private const val SPAN_CONTEXT_TRACE_ID_KEY = "traceId"
 private const val SPAN_CONTEXT_SPAN_ID_KEY = "spanId"
 private const val SPAN_STATUS_CODE_KEY = "code"
 private const val SPAN_STATUS_MESSAGE_KEY = "message"
+
 // Should not get hit under normal circumstances, add as a guard against misinstrumentation
 private const val MAX_STORED_SPANS = 10000
 
@@ -359,6 +360,6 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
 
     @ReactMethod
     fun clearCompletedSpans() {
-        completedSpans.clear();
+        completedSpans.clear()
     }
 }
