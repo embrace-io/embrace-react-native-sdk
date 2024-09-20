@@ -56,7 +56,7 @@
     "ios:build:clean": "xcodebuild clean -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests",
     "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -list",
     "ios:install": "cd test-project && yarn install && cd ios && pod install",
-    "ios:test": "xcodebuild test -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests -sdk $IOS_TEST_SDK -destination \"platform=$IOS_TEST_PLATFORM,name=$IOS_TEST_DEVICE,OS=$IOS_TEST_OS\""
+    "ios:test": "xcodebuild test -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests -sdk $IOS_TEST_SDK -enableCodeCoverage YES -destination \"platform=$IOS_TEST_PLATFORM,name=$IOS_TEST_DEVICE,OS=$IOS_TEST_OS\""
   },
   "devDependencies": {
     "typescript": "^4.7.4"
