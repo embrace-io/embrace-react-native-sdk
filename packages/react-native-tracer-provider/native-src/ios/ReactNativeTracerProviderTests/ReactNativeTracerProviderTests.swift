@@ -101,6 +101,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
     XCTAssertEqual(exportedSpans.count, 1)
     XCTAssertEqual(exportedSpans[0].name, "my-span")
+    XCTAssertTrue(exportedSpans[0].hasEnded)
   }
   
   func testStartSpanSimple() async throws {
@@ -164,7 +165,6 @@ class ReactNativeTracerProviderTests: XCTestCase {
     XCTAssertEqual(exportedSpans[0].attributes["my-attr4"]!.description, ["str1", "str2"].description)
     XCTAssertEqual(exportedSpans[0].attributes["my-attr5"]!.description, [22,44].description)
     XCTAssertEqual(exportedSpans[0].attributes["my-attr6"]!.description, "[1, 0]")
-
     
     XCTAssertEqual(exportedSpans[0].links.count, 2)
     XCTAssertEqual(exportedSpans[0].links[0].context.spanId.hexString, "1111000011110000")
@@ -200,6 +200,50 @@ class ReactNativeTracerProviderTests: XCTestCase {
     XCTAssertEqual(parentTraceId, exportedSpans[1].traceId.hexString)
   }
   
+  func testStartSpanWithEndedParent() async throws {
+    module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "", spanBridgeId: "span_0", name: "parent-span", kind: "", time: 0.0, attributes: NSDictionary(), links: NSArray(), parentId: "", resolve: promise.resolve, reject: promise.reject)
+    module.endSpan(spanBridgeId: "span_0", time: 0.0)
+    
+    module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "", spanBridgeId: "span_1", name: "child-span", kind: "", time: 0.0, attributes: NSDictionary(), links: NSArray(), parentId: "span_0", resolve: promise.resolve, reject: promise.reject)
+    module.endSpan(spanBridgeId: "span_1", time: 0.0)
+      
+    let exportedSpans = try await getExportedSpans()
+    XCTAssertEqual(exportedSpans.count, 2)
+    XCTAssertEqual(exportedSpans[0].name, "parent-span")
+    XCTAssertNil(exportedSpans[0].parentSpanId)
+    XCTAssertTrue(exportedSpans[0].traceId.isValid)
+    
+    XCTAssertEqual(promise.resolveCalls.count, 2)
+    let parentSpanId = (promise.resolveCalls[0] as? NSDictionary)!.object(forKey: "spanId") as? String
+    let parentTraceId = (promise.resolveCalls[0] as? NSDictionary)!.object(forKey: "traceId") as? String
+    
+    XCTAssertNotNil(exportedSpans[1].parentSpanId)
+    XCTAssertEqual(parentSpanId, exportedSpans[1].parentSpanId!.hexString)
+    XCTAssertEqual(parentTraceId, exportedSpans[1].traceId.hexString)
+  }
+
+ func testStartSpanWithEndedParentAfterClear() async throws {
+    module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "", spanBridgeId: "span_0", name: "parent-span", kind: "", time: 0.0, attributes: NSDictionary(), links: NSArray(), parentId: "", resolve: promise.resolve, reject: promise.reject)
+    module.endSpan(spanBridgeId: "span_0", time: 0.0)
+   module.clearCompletedSpans()
+    
+    module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "", spanBridgeId: "span_1", name: "child-span", kind: "", time: 0.0, attributes: NSDictionary(), links: NSArray(), parentId: "span_0", resolve: promise.resolve, reject: promise.reject)
+    module.endSpan(spanBridgeId: "span_1", time: 0.0)
+      
+    let exportedSpans = try await getExportedSpans()
+    XCTAssertEqual(exportedSpans.count, 2)
+    XCTAssertEqual(exportedSpans[0].name, "parent-span")
+    XCTAssertNil(exportedSpans[0].parentSpanId)
+    XCTAssertTrue(exportedSpans[0].traceId.isValid)
+    
+    XCTAssertEqual(promise.resolveCalls.count, 2)
+    let parentSpanId = (promise.resolveCalls[0] as? NSDictionary)!.object(forKey: "spanId") as? String
+    let parentTraceId = (promise.resolveCalls[0] as? NSDictionary)!.object(forKey: "traceId") as? String
+    
+    XCTAssertNil(exportedSpans[1].parentSpanId)
+    XCTAssertNotEqual(parentTraceId, exportedSpans[1].traceId.hexString)
+  }
+ 
   func testSetAttributes() async throws {
     module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "", spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0, attributes: NSDictionary(), links: NSArray(), parentId: "", resolve: promise.resolve, reject: promise.reject)
     module.setAttributes(spanBridgeId: "span_0", attributes: NSDictionary(dictionary:[
@@ -310,4 +354,19 @@ class ReactNativeTracerProviderTests: XCTestCase {
     XCTAssertEqual(exportedSpans[0].name, "my-span")
     XCTAssertTrue(exportedSpans[0].hasEnded)
   }
+}
+
+
+class EmbraceSpansSDKNotStartedTests: XCTestCase {
+  func testStartSpanEmbraceNotStarted() async throws {
+    let promise = Promise()
+    let module = ReactNativeTracerProviderModule()
+    
+    // Without the Embrace SDK having started interactions should be no-ops
+    module.setupTracer(name: "test", version: "v1", schemaUrl: "")
+    module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "", spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0, attributes: NSDictionary(), links: NSArray(), parentId: "", resolve: promise.resolve, reject: promise.reject)
+    XCTAssertEqual(promise.resolveCalls.count, 0)
+    XCTAssertEqual(promise.rejectCalls.count, 1)
+    XCTAssertEqual(promise.rejectCalls[0], "tracer not found")
+   }
 }
