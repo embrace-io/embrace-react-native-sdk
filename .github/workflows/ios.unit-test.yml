@@ -39,7 +39,7 @@ jobs:
           key: Derived-Data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj, Podfile.lock') }}
           restore-keys: |
             Derived-Data-${{ runner.os }}
-      
+
       - name: Install Root Node Modules
         run: yarn install
 
@@ -47,4 +47,4 @@ jobs:
         run: yarn run ios:install
 
       - name: Run iOS Unit Tests
-        run: yarn run ios:test | xcbeautify
+        run: yarn run ios:test
