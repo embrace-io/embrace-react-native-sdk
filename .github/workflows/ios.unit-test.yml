@@ -54,4 +54,4 @@ jobs:
           pod install
       
       - name: Run iOS Unit Tests
-        run: yarn run ios:test | xcbeautify
+        run: yarn run ios:test
