@@ -38,16 +38,6 @@ jest.mock("react-native", () => ({
     addEventListener: (type: string, listener: () => void) =>
       mockAppStateListener(type, listener),
   },
-}));
-
-const mockIsStarted = jest.fn();
-
-jest.mock("react-native", () => ({
-  NativeModules: {
-    EmbraceManager: {
-      isStarted: () => mockIsStarted(),
-    },
-  },
   Platform: {
     OS: "ios",
   },
