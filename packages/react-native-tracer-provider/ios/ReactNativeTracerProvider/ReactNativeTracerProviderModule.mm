@@ -18,6 +18,8 @@ RCT_EXTERN_METHOD(updateName:(NSString *)spanBridgeId name:(NSString *)name)
 
 RCT_EXTERN_METHOD(endSpan:(NSString *)spanBridgeId time:(double)time)
 
+RCT_EXTERN_METHOD(clearCompletedSpans)
+
 + (BOOL)requiresMainQueueSetup
 {
   return NO;
