@@ -2,12 +2,8 @@ name: iOS Unit Tests
 
 on:
   push:
-    branches: 
-      - master
-      - 5.0 # TBD remove particular branch
+    branches: [master]
   pull_request:
-    branches:
-      - 5.0 # TBD remove particular branch
 
 jobs:
   build:
@@ -59,9 +55,3 @@ jobs:
       
       - name: Run iOS Unit Tests
         run: yarn run ios:test | xcbeautify
-
-      - name: Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
