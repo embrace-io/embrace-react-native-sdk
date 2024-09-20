@@ -1,4 +1,9 @@
-import {EmbracePayloadSpans, EmbraceSpanAttribute, EmbraceSpanData, ParsedSpanPayload} from "../typings/embrace";
+import {
+  EmbracePayloadSpans,
+  EmbraceSpanAttribute,
+  EmbraceSpanData,
+  ParsedSpanPayload,
+} from "../typings/embrace";
 
 /**
  * spans are all included on the same array in the payload, to make testing easier separate them into
@@ -12,7 +17,7 @@ const parseSpanPayload = (payload: EmbracePayloadSpans): ParsedSpanPayload => {
   let sessionSpan: EmbraceSpanData = null;
 
   payload.spans.forEach(span => {
-    sortSpanAttributes(span.attributes)
+    sortSpanAttributes(span.attributes);
 
     if (span.name === "emb-session") {
       sessionSpan = span;
@@ -25,24 +30,27 @@ const parseSpanPayload = (payload: EmbracePayloadSpans): ParsedSpanPayload => {
     }
 
     const embType = getAttributeValue(span, "emb.type");
-    if (embType  === "perf.network_request") {
+    if (embType === "perf.network_request") {
       networkSpans.push(span);
       return;
     } else if (embType === "perf") {
+      userSpans.push(span);
+      return;
+    } else {
+      // TODO, iOS not setting emb.type ?
       userSpans.push(span);
       return;
     }
   });
 
   payload.span_snapshots.forEach(span => {
-    sortSpanAttributes(span.attributes)
+    sortSpanAttributes(span.attributes);
 
     if (getAttributeValue(span, "emb.type") === "perf") {
       userSpanSnapshots.push(span);
       return;
     }
-
-  })
+  });
 
   return {
     sessionSpan,
@@ -52,45 +60,60 @@ const parseSpanPayload = (payload: EmbracePayloadSpans): ParsedSpanPayload => {
     userSpans: sortSpans(userSpans),
     userSpanSnapshots: sortSpans(userSpanSnapshots),
   };
-}
+};
 
-const commonEmbraceSpanAttributes = (span: EmbraceSpanData) : EmbraceSpanAttribute[] => sortSpanAttributes([
-  {
-    key: "emb.private.sequence_id",
-    value: span.attributes.find(attr => attr.key === "emb.private.sequence_id")?.value
-  },
-  {
-    key: "emb.process_identifier",
-    value: span.attributes.find(attr => attr.key === "emb.process_identifier")?.value
-  },
-  {
-    key: "emb.key",
-    value: "true"
-  },
-  {
-    key: "emb.type",
-    value: "perf"
-  }
-]);
+const commonEmbraceSpanAttributes = (
+  span: EmbraceSpanData,
+): EmbraceSpanAttribute[] =>
+  sortSpanAttributes([
+    {
+      key: "emb.private.sequence_id",
+      value: span.attributes.find(
+        attr => attr.key === "emb.private.sequence_id",
+      )?.value,
+    },
+    {
+      key: "emb.process_identifier",
+      value: span.attributes.find(attr => attr.key === "emb.process_identifier")
+        ?.value,
+    },
+    {
+      key: "emb.key",
+      value: "true",
+    },
+    {
+      key: "emb.type",
+      value: "perf",
+    },
+  ]);
 
-const commonEmbraceSpanSnapshotAttributes = () : EmbraceSpanAttribute[] => sortSpanAttributes([
-  {
-    key: "emb.key",
-    value: "true"
-  },
-  {
-    key: "emb.type",
-    value: "perf"
-  }
-]);
+const commonEmbraceSpanSnapshotAttributes = (): EmbraceSpanAttribute[] =>
+  sortSpanAttributes([
+    {
+      key: "emb.key",
+      value: "true",
+    },
+    {
+      key: "emb.type",
+      value: "perf",
+    },
+  ]);
 
 const sortSpans = (spans: EmbraceSpanData[]): EmbraceSpanData[] =>
   spans.sort((a, b) => a.name.localeCompare(b.name));
 
-const sortSpanAttributes = (attributes: EmbraceSpanAttribute[]): EmbraceSpanAttribute[] =>
+const sortSpanAttributes = (
+  attributes: EmbraceSpanAttribute[],
+): EmbraceSpanAttribute[] =>
   attributes.sort((a, b) => a.key.localeCompare(b.key));
 
 const getAttributeValue = (span: EmbraceSpanData, key: string): string =>
   span.attributes.find(attr => attr.key === key)?.value || "";
 
-export {parseSpanPayload, getAttributeValue, sortSpanAttributes, commonEmbraceSpanAttributes, commonEmbraceSpanSnapshotAttributes};
+export {
+  parseSpanPayload,
+  getAttributeValue,
+  sortSpanAttributes,
+  commonEmbraceSpanAttributes,
+  commonEmbraceSpanSnapshotAttributes,
+};

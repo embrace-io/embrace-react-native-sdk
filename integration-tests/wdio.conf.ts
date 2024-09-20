@@ -1,5 +1,6 @@
 import type {Options} from "@wdio/types";
 import {clearServer, startServer, stopServer} from "./helpers/embrace_server";
+import {firstAvailableDevice} from "./helpers/ios.ts";
 
 export const config: Options.Testrunner = {
   //
@@ -68,7 +69,7 @@ export const config: Options.Testrunner = {
       "appium:automationName": "UiAutomator2",
       "appium:appPackage": "io.embrace.basictestapp",
       "appium:appActivity": ".MainActivity",
-      "appium:uiautomator2ServerLaunchTimeout": 60000,
+      "appium:uiautomator2ServerLaunchTimeout": 60_000,
 
       //  TODO: for CI/CD we probably want to point to the prebuilt release
       //  APK rather than having to have the app running in an emulator beforehand, e.g.
@@ -78,7 +79,7 @@ export const config: Options.Testrunner = {
       // capabilities for local Appium web tests on an iOS Emulator
       platformName: "iOS",
       "appium:automationName": "XCUITest",
-      "appium:deviceName": "iPhone 15",
+      "appium:udid": firstAvailableDevice(), // TODO will need to change for CI/CD
       "appium:appPackage": "io.embrace.basictestapp",
     },
   ],

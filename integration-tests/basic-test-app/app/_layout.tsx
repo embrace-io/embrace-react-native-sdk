@@ -19,7 +19,7 @@ export default function RootLayout() {
         sdkConfig: {
           ios: {
             appId: "abcdf",
-            // endpointBaseUrl: "http://localhost:8877",
+            endpointBaseUrl: "http://localhost:8877",
           },
         },
       });

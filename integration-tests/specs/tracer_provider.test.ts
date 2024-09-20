@@ -40,7 +40,8 @@ describe("Tracer Provider", () => {
     await endSession();
     const spanPayloads = await getSpanPayloads();
 
-    expect(spanPayloads).toHaveLength(1);
+    // One payload for the foreground session ending, another for the background session ending when we return to foreground
+    expect(spanPayloads).toHaveLength(2);
     if (spanPayloads.length > 0) {
       const spans = spanPayloads[0].userSpans;
       expect(spans.length).toBe(1);
@@ -67,7 +68,7 @@ describe("Tracer Provider", () => {
     await endSession();
     const spanPayloads = await getSpanPayloads();
 
-    expect(spanPayloads).toHaveLength(1);
+    expect(spanPayloads).toHaveLength(2);
     if (spanPayloads.length > 0) {
       const spans = spanPayloads[0].userSpans;
       expect(spans.length).toBe(4);
@@ -194,7 +195,7 @@ describe("Tracer Provider", () => {
     await endSession();
     const spanPayloads = await getSpanPayloads();
 
-    expect(spanPayloads).toHaveLength(1);
+    expect(spanPayloads).toHaveLength(2);
     if (spanPayloads.length > 0) {
       const spans = spanPayloads[0].userSpans;
       expect(spans.length).toBe(6);
