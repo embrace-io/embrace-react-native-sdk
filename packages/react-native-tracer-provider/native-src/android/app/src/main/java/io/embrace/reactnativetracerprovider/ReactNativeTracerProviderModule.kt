@@ -152,6 +152,16 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
     }
 
     /**
+     * Exposed for unit testing to allow a writableMapBuilder to be injected
+     */
+    constructor(
+        reactContext: ReactApplicationContext,
+        writableMapBuilder: WritableMapBuilder
+    ) : this(reactContext) {
+        this.writableMapBuilder = writableMapBuilder
+    }
+
+    /**
      * Exposed for unit testing to allow a different trace provider and writableMapBuilder to be injected
      */
     constructor(
@@ -229,7 +239,13 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         parentId: String,
         promise: Promise
     ) {
-        val tracer = tracers[getTracerKey(tracerName, tracerVersion, tracerSchemaUrl)] ?: return
+        val tracer = tracers[getTracerKey(tracerName, tracerVersion, tracerSchemaUrl)]
+
+        if (tracer == null) {
+            promise.reject("START_SPAN", "tracer not found")
+            return
+        }
+
         val spanBuilder = tracer.spanBuilder(name)
 
         // Set kind
