@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # build required packages
 pushd ..
 npx lerna run build --scope=@embrace-io/react-native
