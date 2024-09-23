@@ -17,7 +17,6 @@ jobs:
       IOS_TEST_OS: 17.5
       IOS_TEST_PLATFORM: iOS Simulator
       IOS_TEST_DEVICE: iPhone 15 Pro
-      IOS_TEST_SCHEME: RNEmbraceTests
       IOS_TEST_SDK: iphonesimulator
 
     steps:
