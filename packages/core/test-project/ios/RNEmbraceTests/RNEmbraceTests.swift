@@ -33,7 +33,7 @@ class TestLogExporter: EmbraceLogRecordExporter {
         exportedLogs.append(contentsOf: logRecords)
         return OpenTelemetrySdk.ExportResult.success
     }
-        
+
     func reset() {
         exportedLogs.removeAll()
     }
@@ -41,7 +41,7 @@ class TestLogExporter: EmbraceLogRecordExporter {
     func forceFlush() -> OpenTelemetrySdk.ExportResult {
         return OpenTelemetrySdk.ExportResult.success
     }
-    
+
     func shutdown() {}
 }
 
@@ -66,13 +66,82 @@ class Promise {
 private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-setup", "emb-process-launch",
                                            "POST /v2/logs", "POST /v2/spans"]
 
-class EmbraceManagerTests: XCTestCase {
+// There isn't a way to stop the Embrace SDK once started so this Test case must run before the subsequent ones that start the SDK
+// prepend 'Aa' as a hack to force it first in the alphabetical execution order
+class AaEmbraceSpansSDKNotStartedTests: XCTestCase {
     var module: EmbraceManager!
     var promise: Promise!
 
     override func setUp() async throws {
         promise = Promise()
         module = EmbraceManager()
+    }
+
+    func testStartSpanEmbraceNotStarted() async throws {
+        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
+                         resolver: promise.resolve, rejecter: promise.reject)
+        XCTAssertEqual(promise.resolveCalls.count, 0)
+        XCTAssertEqual(promise.rejectCalls.count, 1)
+        XCTAssertEqual(promise.rejectCalls[0], "Error starting span, Embrace SDK may not be initialized")
+    }
+
+    func testRecordCompletedSpanEmbraceNotStarted() async throws {
+        module.recordCompletedSpan("my-span", startTimeMs: 0.0, endTimeMs: 0.0,
+                                   errorCodeString: "", parentSpanId: "",
+                                   attributes: NSDictionary(), events: NSArray(),
+                                   resolver: promise.resolve, rejecter: promise.reject)
+        XCTAssertEqual(promise.resolveCalls.count, 0)
+        XCTAssertEqual(promise.rejectCalls.count, 1)
+        XCTAssertEqual(promise.rejectCalls[0], "Error recording span, Embrace SDK may not be initialized")
+    }
+}
+
+class EmbraceManagerTests: XCTestCase {
+    static var logExporter: TestLogExporter!
+    static var spanExporter: TestSpanExporter!
+    var module: EmbraceManager!
+    var promise: Promise!
+
+    override class func setUp() {
+        super.setUp()
+        logExporter = TestLogExporter()
+        spanExporter = TestSpanExporter()
+
+        do {
+            try Embrace
+                .setup( options: .init(
+                    appId: "myApp",
+                    export:
+                        OpenTelemetryExport(
+                            spanExporter: self.spanExporter,
+                            logExporter: self.logExporter
+                        )
+                ) )
+                .start()
+        } catch let error as EmbraceCore.Embrace {
+            print(error)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+
+    override func setUp() async throws {
+        promise = Promise()
+        module = EmbraceManager()
+        EmbraceManagerTests.logExporter.reset()
+        EmbraceManagerTests.spanExporter.reset()
+    }
+
+    func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
+        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+        return EmbraceManagerTests.logExporter.exportedLogs
+    }
+
+    func getExportedSpans() async throws -> [SpanData] {
+        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+        return EmbraceManagerTests.spanExporter.exportedSpans.filter { span in
+            !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
+        }
     }
 
     func testStartNativeEmbraceSDK() async throws {
@@ -112,55 +181,17 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertFalse(config.disableAutomaticViewCapture)
         XCTAssertNil(config.endpointBaseUrl)
     }
-}
 
-class EmbraceLogsTests: XCTestCase {
-    static var exporter: TestLogExporter!
-    var module: EmbraceManager!
-    var promise: Promise!
-
-    override class func setUp() {
-        super.setUp()
-        exporter = TestLogExporter()
-
-        do {
-            try Embrace
-                .setup( options: .init(
-                    appId: "xxLog",
-                    export:
-                        OpenTelemetryExport(
-                            logExporter: self.exporter
-                        )
-                ) )
-                .start()
-        } catch let error as EmbraceCore.Embrace {
-            print(error);
-        }  catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    override func setUp() async throws {
-        promise = Promise()
-        module = EmbraceManager()
-        EmbraceLogsTests.exporter.reset()
-    }
-
-    func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
-        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
-        return EmbraceLogsTests.exporter.exportedLogs
-    }
-    
     func testLogHandledError() async throws {
-        module.logHandledError("my handled error", stacktrace: "stacktrace as string", properties: NSDictionary(), resolver: promise.resolve, rejecter: promise.reject);
-        
+        module.logHandledError("my handled error", stacktrace: "stacktrace as string", properties: NSDictionary(), resolver: promise.resolve, rejecter: promise.reject)
+
         let exportedLogs = try await getExportedLogs()
-        
+
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertEqual(exportedLogs.count, 1)
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my handled error")
-        
+
         XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "stacktrace as string")
         // should not be present since the js one is added
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
@@ -173,11 +204,11 @@ class EmbraceLogsTests: XCTestCase {
 
     func testLogUnhandledJSException() async throws {
         module.logUnhandledJSException("my unhandled exception", message: "unhandled message", type: "Error", stacktrace: "stacktrace as string", resolver: promise.resolve, rejecter: promise.reject)
-        
+
         let exportedLogs = try await getExportedLogs()
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertEqual(exportedLogs.count, 1)
-        
+
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my unhandled exception")
 
@@ -195,26 +226,26 @@ class EmbraceLogsTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].attributes["exception.type"]!.description, "Error")
         XCTAssertNotNil(exportedLogs[0].attributes["exception.id"])
     }
-     
+
     func testLogMessageWithSeverity() async throws {
         module.logMessageWithSeverityAndProperties("my log message", severity: "warning", properties: NSDictionary(),
                                                    stacktrace: "",
                                                    resolver: promise.resolve, rejecter: promise.reject)
-        
+
         let exportedLogs = try await getExportedLogs()
-        
+
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertEqual(exportedLogs.count, 1)
         XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
-        
+
         // empty js stacktrace
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
         // if the js stacktrace is empty, will add the native one
         XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
     }
-     
+
     func testLogMessageWithSeverityAndProperties() async throws {
         module.logMessageWithSeverityAndProperties("my log message", severity: "error", properties: NSDictionary(dictionary: [
                                                     "prop1": "foo",
@@ -222,9 +253,9 @@ class EmbraceLogsTests: XCTestCase {
                                                   ]),
                                                    stacktrace: "",
                                                    resolver: promise.resolve, rejecter: promise.reject)
-        
+
         let exportedLogs = try await getExportedLogs()
-        
+
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertEqual(exportedLogs.count, 1)
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
@@ -238,58 +269,19 @@ class EmbraceLogsTests: XCTestCase {
         XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
     }
 
-
     func testLogMessageWithStackTrace() async throws {
-        module.logMessageWithSeverityAndProperties("my log message", severity:"warning", properties: NSDictionary(),
+        module.logMessageWithSeverityAndProperties("my log message", severity: "warning", properties: NSDictionary(),
                                                    stacktrace: "my stack trace",
                                                    resolver: promise.resolve, rejecter: promise.reject)
-        
+
         let exportedLogs = try await getExportedLogs()
-        
+
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertEqual(exportedLogs.count, 1)
         XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "my stack trace")
-    }
-     
-}
-
-class EmbraceSpansTests: XCTestCase {
-    static var exporter: TestSpanExporter!
-    var module: EmbraceManager!
-    var promise: Promise!
-
-    override class func setUp() {
-        super.setUp()
-        exporter = TestSpanExporter()
-
-        do {
-            try Embrace
-                .setup( options: .init(
-                    appId: "myApp",
-                    export:
-                        OpenTelemetryExport(
-                            spanExporter: self.exporter
-                        )
-                ) )
-                .start()
-        } catch {
-        }
-    }
-
-    override func setUp() async throws {
-        promise = Promise()
-        module = EmbraceManager()
-        EmbraceSpansTests.exporter.reset()
-    }
-
-    func getExportedSpans() async throws -> [SpanData] {
-        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
-        return EmbraceSpansTests.exporter.exportedSpans.filter { span in
-            !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
-        }
     }
 
     func testStartSpan() async throws {
@@ -775,34 +767,6 @@ class EmbraceSpansTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].name, "emb-screen-view")
         XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "ux.view")
         XCTAssertEqual(exportedSpans[0].attributes["view.name"]!.description, "my-view")
-    }
-}
-
-class EmbraceSpansSDKNotStartedTests: XCTestCase {
-    var module: EmbraceManager!
-    var promise: Promise!
-
-    override func setUp() async throws {
-        promise = Promise()
-        module = EmbraceManager()
-    }
-
-    func testStartSpanEmbraceNotStarted() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 0)
-        XCTAssertEqual(promise.rejectCalls.count, 1)
-        XCTAssertEqual(promise.rejectCalls[0], "Error starting span, Embrace SDK may not be initialized")
-    }
-
-    func testRecordCompletedSpanEmbraceNotStarted() async throws {
-        module.recordCompletedSpan("my-span", startTimeMs: 0.0, endTimeMs: 0.0,
-                                   errorCodeString: "", parentSpanId: "",
-                                   attributes: NSDictionary(), events: NSArray(),
-                                   resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 0)
-        XCTAssertEqual(promise.rejectCalls.count, 1)
-        XCTAssertEqual(promise.rejectCalls[0], "Error recording span, Embrace SDK may not be initialized")
     }
 }
 
