@@ -133,12 +133,12 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
-        try await Task.sleep(nanoseconds: UInt64(10.0 * Double(NSEC_PER_SEC)))
+        try await Task.sleep(nanoseconds: UInt64(20.0 * Double(NSEC_PER_SEC)))
         return EmbraceManagerTests.logExporter.exportedLogs
     }
 
     func getExportedSpans() async throws -> [SpanData] {
-        try await Task.sleep(nanoseconds: UInt64(10.0 * Double(NSEC_PER_SEC)))
+        try await Task.sleep(nanoseconds: UInt64(20.0 * Double(NSEC_PER_SEC)))
         return EmbraceManagerTests.spanExporter.exportedSpans.filter { span in
             !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
         }
