@@ -19,6 +19,7 @@ import {
   Tracer,
 } from "@opentelemetry/api";
 import {EmbraceNativeSpan} from "@embrace-io/react-native-tracer-provider";
+import {Platform} from "react-native";
 
 export function generateBasicSpan(tracer: Tracer) {
   const span1 = tracer.startSpan("test-1");
@@ -62,8 +63,14 @@ export async function generateTestSpans(tracer: Tracer) {
     {"test-2-event-attr": "my-event-attr"},
     1700009002000,
   );
-  // Future end time should be allowed
-  span2.end(new Date("2099-01-01T00:00:00Z"));
+
+  if (Platform.OS === "ios") {
+    // Future end times on iOS cause the span to appear in all future sessions so skip that test on this platform
+    span2.end();
+  } else {
+    // Future end time should be allowed
+    span2.end(new Date("2099-01-01T00:00:00Z"));
+  }
 
   // Links are not included in the Embrace payload
   const span1Context = await (span1 as EmbraceNativeSpan).spanContextAsync();

@@ -1,6 +1,6 @@
 import type {Options} from "@wdio/types";
 import {clearServer, startServer, stopServer} from "./helpers/embrace_server";
-import {firstAvailableDevice} from "./helpers/ios.ts";
+import {firstAvailableDevice} from "./helpers/ios";
 
 export const config: Options.Testrunner = {
   //
@@ -54,7 +54,8 @@ export const config: Options.Testrunner = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  maxInstances: 10,
+  // TODO increase this when hooking up to CI/CD
+  maxInstances: 1,
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -70,6 +71,7 @@ export const config: Options.Testrunner = {
       "appium:appPackage": "io.embrace.basictestapp",
       "appium:appActivity": ".MainActivity",
       "appium:uiautomator2ServerLaunchTimeout": 60_000,
+      "appium:noReset": true,
 
       //  TODO: for CI/CD we probably want to point to the prebuilt release
       //  APK rather than having to have the app running in an emulator beforehand, e.g.
