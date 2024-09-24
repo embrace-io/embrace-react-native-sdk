@@ -47,7 +47,7 @@
     "build": "node update_android_version.ts && ./copy-native-src.sh && tsc",
     "android:test": "node update_android_version.ts && cd native-src && yarn install && cd android && ./gradlew :app:detekt && ./gradlew :app:testDebugUnitTest && cd ../../",
     "ios:install": "cd native-src && yarn install && cd ios && pod install && rm .xcode.env.local",
-    "ios:test": "xcodebuild test -workspace native-src/ios/ReactNativeTracerProvider.xcworkspace -scheme ReactNativeTracerProvider -sdk $IOS_TEST_SDK -enableCodeCoverage YES -destination \"platform=$IOS_TEST_PLATFORM,name=$IOS_TEST_DEVICE,OS=$IOS_TEST_OS\""
+    "ios:test": "../../run-ios-tests.sh native-src/ios/ReactNativeTracerProvider.xcworkspace ReactNativeTracerProvider"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"
