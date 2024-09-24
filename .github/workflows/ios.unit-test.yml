@@ -17,10 +17,7 @@ jobs:
       IOS_TEST_OS: 17.5
       IOS_TEST_PLATFORM: iOS Simulator
       IOS_TEST_DEVICE: iPhone 15 Pro
-      IOS_TEST_SCHEME: RNEmbraceTests
       IOS_TEST_SDK: iphonesimulator
-      IOS_TEST_PROJECT_PATH: packages/core/test-project
-      IOS_TEST_DERIVED_DATA_PATH: ~/Library/Developer/Xcode/DerivedData
 
     steps:
       - name: Checkout code
@@ -38,20 +35,16 @@ jobs:
       - name: Cache Derived Data
         uses: actions/cache@v3
         with:
-          path: ${{ env.IOS_TEST_DERIVED_DATA_PATH }}
-          key: ${{env.IOS_TEST_SCHEME}}-Derived-Data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj, Podfile.lock') }}
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: Derived-Data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj, Podfile.lock') }}
           restore-keys: |
-            ${{env.IOS_TEST_SCHEME}}-Derived-Data-${{ runner.os }}
-      
+            Derived-Data-${{ runner.os }}
+
       - name: Install Root Node Modules
         run: yarn install
 
       - name: Install Node Modules + CocoaPods Dependencies
-        run: |
-          cd ${{ env.IOS_TEST_PROJECT_PATH }}
-          yarn install
-          cd ios
-          pod install
+        run: yarn run ios:install
       
       - name: Run iOS Unit Tests
-        run: yarn run ios:test | xcbeautify
+        run: yarn run ios:test
