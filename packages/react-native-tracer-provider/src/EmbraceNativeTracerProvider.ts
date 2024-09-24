@@ -1,4 +1,4 @@
-import {NativeModules, AppState} from "react-native";
+import {NativeModules, AppState, Platform} from "react-native";
 import {useEffect, useState} from "react";
 import {
   context,
@@ -121,6 +121,11 @@ class EmbraceNativeTracerProvider implements TracerProvider {
   ): Tracer {
     const schemaUrl = options?.schemaUrl || "";
     const tracerVersion = version || "";
+
+    if (schemaUrl && Platform.OS === "ios") {
+      logWarning("`schemaUrl` is ignored when running on iOS");
+    }
+
     TracerProviderModule.setupTracer(name, tracerVersion, schemaUrl);
     return new EmbraceNativeTracer(
       this.contextManager,

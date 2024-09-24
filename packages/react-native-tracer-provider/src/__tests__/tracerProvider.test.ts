@@ -38,6 +38,9 @@ jest.mock("react-native", () => ({
     addEventListener: (type: string, listener: () => void) =>
       mockAppStateListener(type, listener),
   },
+  Platform: {
+    OS: "ios",
+  },
 }));
 
 jest.mock("../TracerProviderModule", () => ({

@@ -62,6 +62,7 @@ const MyScreen = () => {
 * Adding links to spans is not currently supported, `span.addLink(...)` and `span.addLinks(...)` behave as noops.
 * Only string span attributes are currently supported, other types will be converted to their string representations
 * `parentSpanId` will not be set if the parent span was already ended in a previous session when the child span is started
+* Due to a limitation in the OTEL Swift API `schemaUrl` in calls to `getTracer` is ignored on iOS
 * Since communication with the native modules is asynchronous `span.spanContext()` will return a blank span context if
 executed immediately after a call to `startSpan` without yielding, for example:
 

@@ -16,7 +16,7 @@
     "test": "jest",
     "android:test": "npx lerna run android:test",
     "ios:install": "npx lerna run ios:install",
-    "ios:test": "npx lerna run ios:test"
+    "ios:test": "npx lerna run ios:test --concurrency=1"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [

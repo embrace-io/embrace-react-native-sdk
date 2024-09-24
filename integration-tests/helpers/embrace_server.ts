@@ -16,16 +16,16 @@ const startServer = async (trace: boolean) => {
   await new Promise(r => setTimeout(r, 5000));
 
   try {
-    const client =  mockServerClient("localhost", PORT);
+    const client = mockServerClient("localhost", PORT);
     await client.mockAnyResponse({
       httpResponse: {
-        "body": "{}",
-        "statusCode": 200,
+        body: "{}",
+        statusCode: 200,
       },
       times: {
         unlimited: true,
-      }
-    })
+      },
+    });
     console.log("setup mock response");
   } catch (error) {
     console.log(error);
@@ -46,7 +46,7 @@ const clearServer = async () => {
 
 const getSpanPayloads = async (delay = 5000): Promise<ParsedSpanPayload[]> => {
   if (delay) {
-    console.log(`waiting ${delay}ms before checking for span payloads`)
+    console.log(`waiting ${delay}ms before checking for span payloads`);
     await new Promise(r => setTimeout(r, delay));
   }
 
@@ -62,6 +62,6 @@ const getSpanPayloads = async (delay = 5000): Promise<ParsedSpanPayload[]> => {
     const body = r.body as EmbracePayload;
     return parseSpanPayload(body.json.data);
   });
-}
+};
 
 export {startServer, stopServer, clearServer, getSpanPayloads};

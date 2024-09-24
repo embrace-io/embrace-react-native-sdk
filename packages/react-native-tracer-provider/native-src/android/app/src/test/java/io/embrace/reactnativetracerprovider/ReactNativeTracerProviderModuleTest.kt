@@ -57,14 +57,13 @@ class JavaOnlyMapMapBuilder : WritableMapBuilder {
 
 class ReactNativeTracerProviderModuleTest {
     companion object {
-        private lateinit var provider: TracerProvider
         private lateinit var tracerProviderModule: ReactNativeTracerProviderModule
         private lateinit var exporter: SpanExporter
         private lateinit var promise: Promise
         private lateinit var extraAttributes: List<String>
 
         @JvmStatic
-        fun setupEmbraceTracerProvider(exporter: SpanExporter): TracerProvider {
+        fun startEmbraceSDK(exporter: SpanExporter) {
             /*
              *  Mocks for static functions that the Embrace SDK ends up calling during `start`
              */
@@ -113,7 +112,7 @@ class ReactNativeTracerProviderModuleTest {
 
             extraAttributes = listOf("emb.process_identifier", "emb.key", "emb.type", "emb.private.sequence_id")
 
-            return Embrace.getInstance().getOpenTelemetry().tracerProvider
+            return
         }
 
         @JvmStatic
@@ -134,11 +133,12 @@ class ReactNativeTracerProviderModuleTest {
                 on { export(any()) } doReturn CompletableResultCode.ofSuccess()
             }
 
-            provider = setupEmbraceTracerProvider(exporter)
             // Sometimes useful to test against the OTEL Tracer Provider to compare differences
-            // provider = setupOTELTracerProvider(exporter)
+            // val provider = setupOTELTracerProvider(exporter)
+            // tracerProviderModule = ReactNativeTracerProviderModule(context, provider, JavaOnlyMapMapBuilder())
 
-            tracerProviderModule = ReactNativeTracerProviderModule(context, provider, JavaOnlyMapMapBuilder())
+            startEmbraceSDK(exporter)
+            tracerProviderModule = ReactNativeTracerProviderModule(context, JavaOnlyMapMapBuilder())
             tracerProviderModule.setupTracer("test", "v1", "")
         }
     }
@@ -151,6 +151,7 @@ class ReactNativeTracerProviderModuleTest {
 
     @Test
     fun basicProviderExport() {
+        val provider = Embrace.getInstance().getOpenTelemetry().tracerProvider
         val tracer = provider.get("basic-provider-export")
         val spanBuilder = tracer.spanBuilder("my-span")
         val span = spanBuilder.startSpan()
@@ -700,5 +701,16 @@ class ReactNativeTracerProviderModuleTest {
             "", promise
         )
         verify(embraceMock, times(0)).getOpenTelemetry()
+
+        argumentCaptor<WritableMap>().apply {
+            verify(promise, times(0)).resolve(capture())
+            assertEquals(0, allValues.size)
+        }
+
+        argumentCaptor<String, String>().apply {
+            verify(promise, times(1)).reject(this.first.capture(), this.second.capture())
+            assertEquals(1, this.second.allValues.size)
+            assertEquals(this.second.allValues[0], "tracer not found")
+        }
     }
 }

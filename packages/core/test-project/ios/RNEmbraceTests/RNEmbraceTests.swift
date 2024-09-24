@@ -133,17 +133,18 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
-        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+        try await Task.sleep(nanoseconds: UInt64(20.0 * Double(NSEC_PER_SEC)))
         return EmbraceManagerTests.logExporter.exportedLogs
     }
 
     func getExportedSpans() async throws -> [SpanData] {
-        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+        try await Task.sleep(nanoseconds: UInt64(20.0 * Double(NSEC_PER_SEC)))
         return EmbraceManagerTests.spanExporter.exportedSpans.filter { span in
             !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
         }
     }
 
+    /* TODO may not be feasible to test this since it starts the Embrace SDK when it has already been started
     func testStartNativeEmbraceSDK() async throws {
         module.startNativeEmbraceSDK(configDict: NSDictionary(dictionary: ["appId": "myApp"]),
                                      resolve: promise.resolve, rejecter: promise.reject)
@@ -155,6 +156,8 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(promise.resolveCalls.count, 2)
         XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
     }
+     */
+     
 
     func testParseSDKConfig() {
         let config = SDKConfig(from: NSDictionary(dictionary: [

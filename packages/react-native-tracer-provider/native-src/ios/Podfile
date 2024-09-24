@@ -14,7 +14,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'TracerProviderExample' do
+target 'ReactNativeTracerProvider' do
   config = use_native_modules!
 
   use_react_native!(
@@ -23,7 +23,10 @@ target 'TracerProviderExample' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'TracerProviderExampleTests' do
+  load '../../ios/dependencies.rb'
+  load_dependencies
+
+  target 'ReactNativeTracerProviderTests' do
     inherit! :complete
     # Pods for testing
   end

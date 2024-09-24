@@ -45,6 +45,6 @@ jobs:
 
       - name: Install Node Modules + CocoaPods Dependencies
         run: yarn run ios:install
-      
+
       - name: Run iOS Unit Tests
         run: yarn run ios:test

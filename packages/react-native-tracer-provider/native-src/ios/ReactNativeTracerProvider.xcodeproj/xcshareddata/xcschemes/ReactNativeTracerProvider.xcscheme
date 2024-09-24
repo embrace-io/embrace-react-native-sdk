@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "TracerProviderExample.app"
-               BlueprintName = "TracerProviderExample"
-               ReferencedContainer = "container:TracerProviderExample.xcodeproj">
+               BuildableName = "ReactNativeTracerProvider.app"
+               BlueprintName = "ReactNativeTracerProvider"
+               ReferencedContainer = "container:ReactNativeTracerProvider.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "TracerProviderExampleTests.xctest"
-               BlueprintName = "TracerProviderExampleTests"
-               ReferencedContainer = "container:TracerProviderExample.xcodeproj">
+               BuildableName = "ReactNativeTracerProviderTests.xctest"
+               BlueprintName = "ReactNativeTracerProviderTests"
+               ReferencedContainer = "container:ReactNativeTracerProvider.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "TracerProviderExample.app"
-            BlueprintName = "TracerProviderExample"
-            ReferencedContainer = "container:TracerProviderExample.xcodeproj">
+            BuildableName = "ReactNativeTracerProvider.app"
+            BlueprintName = "ReactNativeTracerProvider"
+            ReferencedContainer = "container:ReactNativeTracerProvider.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "TracerProviderExample.app"
-            BlueprintName = "TracerProviderExample"
-            ReferencedContainer = "container:TracerProviderExample.xcodeproj">
+            BuildableName = "ReactNativeTracerProvider.app"
+            BlueprintName = "ReactNativeTracerProvider"
+            ReferencedContainer = "container:ReactNativeTracerProvider.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
