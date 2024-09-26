@@ -5,6 +5,7 @@ import EmbraceIO
 import EmbraceCrash
 import EmbraceCommonInternal
 import EmbraceOTelInternal
+import OpenTelemetryApi
 
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"
 private let HOSTED_PLATFORM_VERSION_RESOURCE_KEY = "hosted_platform_version"
