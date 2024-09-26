@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
   s.source = {:path => "ios/RNEmbrace/"}
 
   s.dependency 'React-Core'
-  s.dependency 'EmbraceIO', '6.4.1-rc5'
+  s.dependency 'EmbraceIO', '6.4.1'
 end
