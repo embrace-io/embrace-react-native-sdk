@@ -10,11 +10,11 @@
     "test": "jest"
   },
   "dependencies": {
-    "@embrace-io/react-native": "file:../../packages/core/embrace-io-react-native-5.0.0-alpha.0.tgz",
-    "@embrace-io/react-native-action-tracker": "file:../../packages/action-tracker/embrace-io-react-native-action-tracker-5.0.0-alpha.0.tgz",
-    "@embrace-io/react-native-orientation-change-tracker": "file:../../packages/screen-orientation/embrace-io-react-native-orientation-change-tracker-5.0.0-alpha.0.tgz",
-    "@embrace-io/react-native-spans": "file:../../packages/spans/embrace-io-react-native-spans-5.0.0-alpha.0.tgz",
-    "@embrace-io/react-navigation": "file:../../packages/react-navigation/embrace-io-react-navigation-5.0.0-alpha.0.tgz",
+    "@embrace-io/react-native": "^5.0.0",
+    "@embrace-io/react-native-action-tracker": "^5.0.0",
+    "@embrace-io/react-native-orientation-change-tracker": "^5.0.0",
+    "@embrace-io/react-native-spans": "^5.0.0",
+    "@embrace-io/react-navigation": "^5.0.0",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "@reduxjs/toolkit": "^2.2.7",
