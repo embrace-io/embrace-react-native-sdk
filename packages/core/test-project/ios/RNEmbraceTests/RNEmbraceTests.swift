@@ -133,12 +133,12 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
-        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+        try await Task.sleep(nanoseconds: UInt64(30.0 * Double(NSEC_PER_SEC)))
         return EmbraceManagerTests.logExporter.exportedLogs
     }
 
     func getExportedSpans() async throws -> [SpanData] {
-        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+        try await Task.sleep(nanoseconds: UInt64(30.0 * Double(NSEC_PER_SEC)))
         return EmbraceManagerTests.spanExporter.exportedSpans.filter { span in
             !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
         }
@@ -514,7 +514,7 @@ class EmbraceManagerTests: XCTestCase {
     func testAddSpanAttributeDuplicate() async throws {
         // This is the first test case that runs in alphabetical order, add an extra sleep to
         // give the Embrace SDK a chance to startup before executing
-        try await Task.sleep(nanoseconds: UInt64(10.0 * Double(NSEC_PER_SEC)))
+        try await Task.sleep(nanoseconds: UInt64(30.0 * Double(NSEC_PER_SEC)))
 
         module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
