@@ -510,6 +510,10 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func testAddSpanAttributeDuplicate() async throws {
+        // This is the first test case that runs in alphabetical order, add an extra sleep to
+        // give the Embrace SDK a chance to startup before executing
+        try await Task.sleep(nanoseconds: UInt64(10.0 * Double(NSEC_PER_SEC)))
+
         module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
