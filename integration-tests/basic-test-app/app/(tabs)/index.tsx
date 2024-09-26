@@ -98,6 +98,22 @@ const HomeScreen = () => {
           title="CRASH (not anonymous)"
         />
       </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Logs</ThemedText>
+        <Button onPress={sendLogs} title="LOGs (war/info/error)" />
+        <Button onPress={sendMessage} title="Custom Message (also a log)" />
+        <Button onPress={handleErrorLog} title="Handled JS Exception" />
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Crashes (Unhandled Exceptions)</ThemedText>
+        <Button onPress={handleLogUnhandledError} title="CRASH" />
+        <Button
+          onPress={handleLogUnhandledErrorNotAnonymous}
+          title="CRASH (not anonymous)"
+        />
+      </ThemedView>
     </ParallaxScrollView>
   );
 };

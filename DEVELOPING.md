@@ -160,7 +160,7 @@ To get started generate a new artifact from whichever packages you modified:
 ```bash
 cd packages/<package-modified>/
 yarn build
-yarn pack
+npm pack    # yarn pack behaves differently, stick to npm pack because that's what lerna publish uses
 ```
 
 Then update the example app with that local artifact:
@@ -246,3 +246,5 @@ unreleased changes on `main` and a patch release will be cut from that new branc
 4. Release to npm with `yarn publish-modules`
 5. Create a PR with all these changes and merge to `main`
 6. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
+
+NOTE: If you make a mistake while publishing you can remove the specific version w/ `npm unpublish <package-name>@<version>`, see [Unpublishing a single version of a package](https://docs.npmjs.com/unpublishing-packages-from-the-registry#unpublishing-a-single-version-of-a-package)

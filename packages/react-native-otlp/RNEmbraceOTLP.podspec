@@ -18,6 +18,6 @@ Pod::Spec.new do |s|
   s.dependency 'React-Core'
   s.dependency 'gRPC', :modular_headers => true
   s.dependency 'SwiftProtobuf'
-  s.dependency 'EmbraceIO', '6.4.0'
+  s.dependency 'EmbraceIO', '6.4.1'
   s.dependency 'EmbraceInternalSwiftLog'
 end

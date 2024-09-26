@@ -5,6 +5,7 @@ import EmbraceIO
 import EmbraceCrash
 import EmbraceCommonInternal
 import EmbraceOTelInternal
+import OpenTelemetryApi
 
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"
 private let HOSTED_PLATFORM_VERSION_RESOURCE_KEY = "hosted_platform_version"
@@ -65,7 +66,6 @@ class EmbraceManager: NSObject {
     @objc(startNativeEmbraceSDK:resolver:rejecter:)
     func startNativeEmbraceSDK(configDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         let config = SDKConfig(from: configDict)
-
         DispatchQueue.main.async {
             do {
                 var embraceOptions: Embrace.Options {
