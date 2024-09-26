@@ -25,23 +25,23 @@ class Promise {
     }
 }
 
-class TestSpanExporter: EmbraceSpanExporter {
+class TestSpanExporter: SpanExporter {
     var exportedSpans: [SpanData] = []
 
-    func export(spans: [SpanData]) -> SpanExporterResultCode {
+    func export(spans: [SpanData], explicitTimeout: TimeInterval?) -> SpanExporterResultCode {
         exportedSpans.append(contentsOf: spans)
         return SpanExporterResultCode.success
     }
 
-    func flush() -> SpanExporterResultCode {
+    func flush(explicitTimeout: TimeInterval?) -> SpanExporterResultCode {
         return SpanExporterResultCode.success
     }
 
-    func reset() {
+    func reset(explicitTimeout: TimeInterval?) {
         exportedSpans.removeAll()
     }
 
-    func shutdown() {}
+    func shutdown(explicitTimeout: TimeInterval?) {}
 }
 
 private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-setup", "emb-process-launch",
@@ -76,7 +76,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
   override func setUp() async throws {
       promise = Promise()
       module = ReactNativeTracerProviderModule()
-      ReactNativeTracerProviderTests.exporter.reset()
+      ReactNativeTracerProviderTests.exporter.reset(explicitTimeout: nil)
       module.setupTracer(name: "test", version: "v1", schemaUrl: "")
   }
 
@@ -165,11 +165,11 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     XCTAssertEqual(exportedSpans[0].attributes.count, 6)
     XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]!.description, "some-string")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]!.description, "1")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr3"]!.description, 344.description)
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr4"]!.description, ["str1", "str2"].description)
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr5"]!.description, [22, 44].description)
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr6"]!.description, "[1, 0]")
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]!.description, "true")
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr3"]!.description, "344")
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr4"]!.description, "[str1, str2]")
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr5"]!.description, "[22, 44]")
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr6"]!.description, "[true, false]")
 
     XCTAssertEqual(exportedSpans[0].links.count, 2)
     XCTAssertEqual(exportedSpans[0].links[0].context.spanId.hexString, "1111000011110000")
@@ -286,11 +286,11 @@ class ReactNativeTracerProviderTests: XCTestCase {
     XCTAssertEqual(exportedSpans[0].name, "my-span")
     XCTAssertEqual(exportedSpans[0].attributes.count, 6)
     XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]!.description, "some-string")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]!.description, "1")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr3"]!.description, 344.description)
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr4"]!.description, ["str1", "str2"].description)
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr5"]!.description, [22, 44].description)
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr6"]!.description, "[1, 0]")
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]!.description, "true")
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr3"]!.description, "344")
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr4"]!.description, "[str1, str2]")
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr5"]!.description, "[22, 44]")
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr6"]!.description, "[true, false]")
   }
 
   func testAddEvent() async throws {
