@@ -2,9 +2,13 @@
 
 @interface RCT_EXTERN_MODULE(RNEmbraceOTLP, NSObject)
 
-RCT_EXTERN_METHOD(setCustomExporter:(NSString *)endpoint
-                  header:(NSString *)header
-                  token:(NSString *)token
+RCT_EXTERN_METHOD(setHttpExporters:(NSDictionary *)spanConfigDict
+                  logConfigDict:(NSDictionary *)logConfigDict
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(setGrpExporters:(NSDictionary *)spanConfigDict
+                  logConfigDict:(NSDictionary *)logConfigDict
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 

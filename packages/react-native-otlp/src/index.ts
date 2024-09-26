@@ -6,6 +6,7 @@ import {createTruePromise} from "./utils";
 interface CustomExporterConfig {
   endpoint: string;
   header: {key: string; token: string};
+  timeout?: number;
 }
 
 const WARN_MESSAGES = {
@@ -21,7 +22,7 @@ const configureCustomExporter = async (config: CustomExporterConfig) => {
     return;
   }
 
-  const {endpoint, header} = config;
+  const {endpoint, header, timeout} = config;
 
   if (!endpoint || typeof endpoint !== "string") {
     console.warn(WARN_MESSAGES.endpoint);
@@ -37,10 +38,14 @@ const configureCustomExporter = async (config: CustomExporterConfig) => {
     const {key, token} = header;
 
     // Configure Custom Exporter
-    await NativeModules.RNEmbraceOTLP.setCustomExporter(endpoint, key, token);
+    await NativeModules.RNEmbraceOTLP.setHttpExporters({
+      endpoint: "http://localhost:4317/v1/traces",
+      header: [key, token],
+      timeout,
+    });
 
     console.log(
-      `NativeModules.RNEmbraceOTLP.setCustomExporter working in basic-test-app for ${Platform.OS}`,
+      `NativeModules.RNEmbraceOTLP.setHttpExporters working in basic-test-app for ${Platform.OS}`,
     );
   } catch (error) {
     console.warn(WARN_MESSAGES.error, error);

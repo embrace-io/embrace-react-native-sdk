@@ -13,6 +13,7 @@ module.exports = {
     "<rootDir>/examples/",
     "<rootDir>/integration-tests/",
     "<rootDir>/packages/core/test-project/",
+    "<rootDir>/packages/.*/node_modules/",
   ],
   collectCoverage: true,
   coverageThreshold: {
