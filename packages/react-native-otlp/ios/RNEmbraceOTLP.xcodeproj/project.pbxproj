@@ -1,0 +1,881 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00E356F31AD99517003FC87E /* RNEmbraceOTLPTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RNEmbraceOTLPTests.m */; };
+		105CA7A4B655E4334334A098 /* libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 345BDEA1F58AD35CB35F078C /* libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a */; };
+		1BA1C531D3D99D0F8B690358 /* libPods-RNEmbraceOTLP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4316EFC5FCF0B3CC903AC893 /* libPods-RNEmbraceOTLP.a */; };
+		27692B0BED2268EB3A55EF8B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FA0732D13AACA7A9E9F84910 /* PrivacyInfo.xcprivacy */; };
+		6D08C4CC2C98982200A53823 /* RNEmbraceOTLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D08C4CB2C98982200A53823 /* RNEmbraceOTLP.swift */; };
+		6D08C4CD2C98982200A53823 /* RNEmbraceOTLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D08C4CB2C98982200A53823 /* RNEmbraceOTLP.swift */; };
+		6D08C4CF2C98987700A53823 /* RNEmbraceOTLP.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D08C4CE2C98987700A53823 /* RNEmbraceOTLP.m */; };
+		6D08C4D02C98A0B400A53823 /* RNEmbraceOTLP.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D08C4CE2C98987700A53823 /* RNEmbraceOTLP.m */; };
+		6D18521B2C98D9B500D12250 /* RNEmbraceOTLP-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 6D08C4C92C98982100A53823 /* RNEmbraceOTLP-Bridging-Header.h */; };
+		6D1852202C98DBA300D12250 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D18521F2C98DBA300D12250 /* Info.plist */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = RNEmbraceOTLP;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* RNEmbraceOTLPTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNEmbraceOTLPTests.m; sourceTree = "<group>"; };
+		345BDEA1F58AD35CB35F078C /* libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4316EFC5FCF0B3CC903AC893 /* libPods-RNEmbraceOTLP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNEmbraceOTLP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5AF568D458119774B51CBBCB /* Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.release.xcconfig"; sourceTree = "<group>"; };
+		6D08C4C92C98982100A53823 /* RNEmbraceOTLP-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "RNEmbraceOTLP-Bridging-Header.h"; path = "RNEmbraceOTLP/RNEmbraceOTLP-Bridging-Header.h"; sourceTree = "<group>"; };
+		6D08C4CB2C98982200A53823 /* RNEmbraceOTLP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RNEmbraceOTLP.swift; path = RNEmbraceOTLP/RNEmbraceOTLP.swift; sourceTree = SOURCE_ROOT; };
+		6D08C4CE2C98987700A53823 /* RNEmbraceOTLP.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNEmbraceOTLP.m; path = RNEmbraceOTLP/RNEmbraceOTLP.m; sourceTree = SOURCE_ROOT; };
+		6D18521F2C98DBA300D12250 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6D1852232C98E32100D12250 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6D1877D02C98E4BC00D12250 /* EmbraceCaptureService.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceCaptureService.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceCaptureService.xcframework; sourceTree = "<group>"; };
+		6D1877D22C98E4BC00D12250 /* EmbraceCommonInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceCommonInternal.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceCommonInternal.xcframework; sourceTree = "<group>"; };
+		6D1877D42C98E4BC00D12250 /* EmbraceConfigInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceConfigInternal.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceConfigInternal.xcframework; sourceTree = "<group>"; };
+		6D1877D62C98E4BC00D12250 /* EmbraceCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceCore.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceCore.xcframework; sourceTree = "<group>"; };
+		6D1877D82C98E4BC00D12250 /* EmbraceCrash.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceCrash.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceCrash.xcframework; sourceTree = "<group>"; };
+		6D1877DA2C98E4BC00D12250 /* EmbraceIO.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceIO.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceIO.xcframework; sourceTree = "<group>"; };
+		6D1877DC2C98E4BC00D12250 /* EmbraceObjCUtilsInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceObjCUtilsInternal.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceObjCUtilsInternal.xcframework; sourceTree = "<group>"; };
+		6D1877DE2C98E4BC00D12250 /* EmbraceOTelInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceOTelInternal.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceOTelInternal.xcframework; sourceTree = "<group>"; };
+		6D1877E02C98E4BC00D12250 /* EmbraceSemantics.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceSemantics.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceSemantics.xcframework; sourceTree = "<group>"; };
+		6D1877E22C98E4BC00D12250 /* EmbraceStorageInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceStorageInternal.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceStorageInternal.xcframework; sourceTree = "<group>"; };
+		6D1877E42C98E4BC00D12250 /* EmbraceUploadInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = EmbraceUploadInternal.xcframework; path = Pods/EmbraceIO/xcframeworks/EmbraceUploadInternal.xcframework; sourceTree = "<group>"; };
+		6D1877EC2C98E50500D12250 /* GRDB.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GRDB.xcframework; path = Pods/EmbraceIO/xcframeworks/GRDB.xcframework; sourceTree = "<group>"; };
+		6D1877EE2C98E50500D12250 /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
+		6D1877F02C98E50500D12250 /* KSCrashCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = KSCrashCore.xcframework; path = Pods/EmbraceIO/xcframeworks/KSCrashCore.xcframework; sourceTree = "<group>"; };
+		6D1877F22C98E50500D12250 /* KSCrashRecording.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = KSCrashRecording.xcframework; path = Pods/EmbraceIO/xcframeworks/KSCrashRecording.xcframework; sourceTree = "<group>"; };
+		6D1877F42C98E50500D12250 /* KSCrashRecordingCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = KSCrashRecordingCore.xcframework; path = Pods/EmbraceIO/xcframeworks/KSCrashRecordingCore.xcframework; sourceTree = "<group>"; };
+		6D1877F62C98E50500D12250 /* OpenTelemetryApi.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenTelemetryApi.xcframework; path = Pods/EmbraceIO/xcframeworks/OpenTelemetryApi.xcframework; sourceTree = "<group>"; };
+		6D1877F82C98E50500D12250 /* OpenTelemetrySdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenTelemetrySdk.xcframework; path = Pods/EmbraceIO/xcframeworks/OpenTelemetrySdk.xcframework; sourceTree = "<group>"; };
+		6D93103A2C98F4D300D256D9 /* RNEmbraceOTLP.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RNEmbraceOTLP.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DB015152C98F5F100E382DB /* RNEmbraceOTLPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNEmbraceOTLPTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DB7D3BF2C98F2D600B14830 /* EmbraceCaptureService.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceCaptureService.xcframework; sourceTree = "<group>"; };
+		6DB7D3C02C98F2D600B14830 /* EmbraceCommonInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceCommonInternal.xcframework; sourceTree = "<group>"; };
+		6DB7D3C12C98F2D600B14830 /* EmbraceConfigInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceConfigInternal.xcframework; sourceTree = "<group>"; };
+		6DB7D3C22C98F2D600B14830 /* EmbraceCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceCore.xcframework; sourceTree = "<group>"; };
+		6DB7D3C32C98F2D600B14830 /* EmbraceCrash.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceCrash.xcframework; sourceTree = "<group>"; };
+		6DB7D3C42C98F2D600B14830 /* EmbraceIO.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceIO.xcframework; sourceTree = "<group>"; };
+		6DB7D3C52C98F2D600B14830 /* EmbraceObjCUtilsInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceObjCUtilsInternal.xcframework; sourceTree = "<group>"; };
+		6DB7D3C62C98F2D600B14830 /* EmbraceOTelInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceOTelInternal.xcframework; sourceTree = "<group>"; };
+		6DB7D3C72C98F2D600B14830 /* EmbraceSemantics.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceSemantics.xcframework; sourceTree = "<group>"; };
+		6DB7D3C82C98F2D600B14830 /* EmbraceStorageInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceStorageInternal.xcframework; sourceTree = "<group>"; };
+		6DB7D3C92C98F2D600B14830 /* EmbraceUploadInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceUploadInternal.xcframework; sourceTree = "<group>"; };
+		6DB7D3CA2C98F2D600B14830 /* GRDB.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GRDB.xcframework; sourceTree = "<group>"; };
+		6DB7D3CB2C98F2D600B14830 /* KSCrashCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = KSCrashCore.xcframework; sourceTree = "<group>"; };
+		6DB7D3CC2C98F2D600B14830 /* KSCrashRecording.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = KSCrashRecording.xcframework; sourceTree = "<group>"; };
+		6DB7D3CD2C98F2D600B14830 /* KSCrashRecordingCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = KSCrashRecordingCore.xcframework; sourceTree = "<group>"; };
+		6DB7D3CE2C98F2D600B14830 /* OpenTelemetryApi.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OpenTelemetryApi.xcframework; sourceTree = "<group>"; };
+		6DB7D3CF2C98F2D600B14830 /* OpenTelemetrySdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OpenTelemetrySdk.xcframework; sourceTree = "<group>"; };
+		6DB7D3D12C98F2D600B14830 /* embrace_symbol_upload.darwin */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = embrace_symbol_upload.darwin; sourceTree = "<group>"; };
+		6DB7D3D22C98F2D600B14830 /* run.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = run.sh; sourceTree = "<group>"; };
+		7E0042EBEA90C2846C62C3DE /* Pods-RNEmbraceOTLP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceOTLP.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceOTLP/Pods-RNEmbraceOTLP.debug.xcconfig"; sourceTree = "<group>"; };
+		94CA783C46E465D61E282395 /* Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9C7D6E2629A3AB884290E97F /* Pods-RNEmbraceOTLP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceOTLP.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceOTLP/Pods-RNEmbraceOTLP.release.xcconfig"; sourceTree = "<group>"; };
+		B6B0221C553BC15C38E84B6A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		D5C73199122E0C89F1A9818E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		FA0732D13AACA7A9E9F84910 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		00E356EB1AD99517003FC87E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				105CA7A4B655E4334334A098 /* libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BA1C531D3D99D0F8B690358 /* libPods-RNEmbraceOTLP.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00E356EF1AD99517003FC87E /* RNEmbraceOTLPTests */ = {
+			isa = PBXGroup;
+			children = (
+				00E356F21AD99517003FC87E /* RNEmbraceOTLPTests.m */,
+				00E356F01AD99517003FC87E /* Supporting Files */,
+				6D18521F2C98DBA300D12250 /* Info.plist */,
+			);
+			path = RNEmbraceOTLPTests;
+			sourceTree = "<group>";
+		};
+		00E356F01AD99517003FC87E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				00E356F11AD99517003FC87E /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		13B07FAE1A68108700A75B9A /* RNEmbraceOTLP */ = {
+			isa = PBXGroup;
+			children = (
+				6D08C4CB2C98982200A53823 /* RNEmbraceOTLP.swift */,
+				6D08C4C92C98982100A53823 /* RNEmbraceOTLP-Bridging-Header.h */,
+				6D08C4CE2C98987700A53823 /* RNEmbraceOTLP.m */,
+				D5C73199122E0C89F1A9818E /* PrivacyInfo.xcprivacy */,
+				B6B0221C553BC15C38E84B6A /* PrivacyInfo.xcprivacy */,
+				FA0732D13AACA7A9E9F84910 /* PrivacyInfo.xcprivacy */,
+			);
+			name = RNEmbraceOTLP;
+			sourceTree = "<group>";
+		};
+		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6D1877EC2C98E50500D12250 /* GRDB.xcframework */,
+				6D1877EE2C98E50500D12250 /* hermes.xcframework */,
+				6D1877F02C98E50500D12250 /* KSCrashCore.xcframework */,
+				6D1877F22C98E50500D12250 /* KSCrashRecording.xcframework */,
+				6D1877F42C98E50500D12250 /* KSCrashRecordingCore.xcframework */,
+				6D1877F62C98E50500D12250 /* OpenTelemetryApi.xcframework */,
+				6D1877F82C98E50500D12250 /* OpenTelemetrySdk.xcframework */,
+				6D1877D02C98E4BC00D12250 /* EmbraceCaptureService.xcframework */,
+				6D1877D22C98E4BC00D12250 /* EmbraceCommonInternal.xcframework */,
+				6D1877D42C98E4BC00D12250 /* EmbraceConfigInternal.xcframework */,
+				6D1877D62C98E4BC00D12250 /* EmbraceCore.xcframework */,
+				6D1877D82C98E4BC00D12250 /* EmbraceCrash.xcframework */,
+				6D1877DA2C98E4BC00D12250 /* EmbraceIO.xcframework */,
+				6D1877DC2C98E4BC00D12250 /* EmbraceObjCUtilsInternal.xcframework */,
+				6D1877DE2C98E4BC00D12250 /* EmbraceOTelInternal.xcframework */,
+				6D1877E02C98E4BC00D12250 /* EmbraceSemantics.xcframework */,
+				6D1877E22C98E4BC00D12250 /* EmbraceStorageInternal.xcframework */,
+				6D1877E42C98E4BC00D12250 /* EmbraceUploadInternal.xcframework */,
+				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				4316EFC5FCF0B3CC903AC893 /* libPods-RNEmbraceOTLP.a */,
+				345BDEA1F58AD35CB35F078C /* libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6DB7D3D02C98F2D600B14830 /* xcframeworks */ = {
+			isa = PBXGroup;
+			children = (
+				6DB7D3BF2C98F2D600B14830 /* EmbraceCaptureService.xcframework */,
+				6DB7D3C02C98F2D600B14830 /* EmbraceCommonInternal.xcframework */,
+				6DB7D3C12C98F2D600B14830 /* EmbraceConfigInternal.xcframework */,
+				6DB7D3C22C98F2D600B14830 /* EmbraceCore.xcframework */,
+				6DB7D3C32C98F2D600B14830 /* EmbraceCrash.xcframework */,
+				6DB7D3C42C98F2D600B14830 /* EmbraceIO.xcframework */,
+				6DB7D3C52C98F2D600B14830 /* EmbraceObjCUtilsInternal.xcframework */,
+				6DB7D3C62C98F2D600B14830 /* EmbraceOTelInternal.xcframework */,
+				6DB7D3C72C98F2D600B14830 /* EmbraceSemantics.xcframework */,
+				6DB7D3C82C98F2D600B14830 /* EmbraceStorageInternal.xcframework */,
+				6DB7D3C92C98F2D600B14830 /* EmbraceUploadInternal.xcframework */,
+				6DB7D3CA2C98F2D600B14830 /* GRDB.xcframework */,
+				6DB7D3CB2C98F2D600B14830 /* KSCrashCore.xcframework */,
+				6DB7D3CC2C98F2D600B14830 /* KSCrashRecording.xcframework */,
+				6DB7D3CD2C98F2D600B14830 /* KSCrashRecordingCore.xcframework */,
+				6DB7D3CE2C98F2D600B14830 /* OpenTelemetryApi.xcframework */,
+				6DB7D3CF2C98F2D600B14830 /* OpenTelemetrySdk.xcframework */,
+			);
+			path = xcframeworks;
+			sourceTree = "<group>";
+		};
+		6DB7D3D32C98F2D600B14830 /* EmbraceIO */ = {
+			isa = PBXGroup;
+			children = (
+				6DB7D3D02C98F2D600B14830 /* xcframeworks */,
+				6DB7D3D12C98F2D600B14830 /* embrace_symbol_upload.darwin */,
+				6DB7D3D22C98F2D600B14830 /* run.sh */,
+			);
+			path = EmbraceIO;
+			sourceTree = "<group>";
+		};
+		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		83CBB9F61A601CBA00E9B192 = {
+			isa = PBXGroup;
+			children = (
+				6D1852232C98E32100D12250 /* Info.plist */,
+				13B07FAE1A68108700A75B9A /* RNEmbraceOTLP */,
+				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				00E356EF1AD99517003FC87E /* RNEmbraceOTLPTests */,
+				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				6D93103A2C98F4D300D256D9 /* RNEmbraceOTLP.framework */,
+				6DB015152C98F5F100E382DB /* RNEmbraceOTLPTests.xctest */,
+			);
+			indentWidth = 2;
+			sourceTree = "<group>";
+			tabWidth = 2;
+			usesTabs = 0;
+		};
+		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6DB7D3D32C98F2D600B14830 /* EmbraceIO */,
+				7E0042EBEA90C2846C62C3DE /* Pods-RNEmbraceOTLP.debug.xcconfig */,
+				9C7D6E2629A3AB884290E97F /* Pods-RNEmbraceOTLP.release.xcconfig */,
+				94CA783C46E465D61E282395 /* Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.debug.xcconfig */,
+				5AF568D458119774B51CBBCB /* Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		00E356ED1AD99517003FC87E /* RNEmbraceOTLPTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "RNEmbraceOTLPTests" */;
+			buildPhases = (
+				BC2FC82F9534161BB8C080F9 /* [CP] Check Pods Manifest.lock */,
+				00E356EA1AD99517003FC87E /* Sources */,
+				00E356EB1AD99517003FC87E /* Frameworks */,
+				00E356EC1AD99517003FC87E /* Resources */,
+				CC6A347D8E00C3AB78686AC4 /* [CP] Embed Pods Frameworks */,
+				B5DC508838B39F5E19A96FB0 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00E356F51AD99517003FC87E /* PBXTargetDependency */,
+			);
+			name = RNEmbraceOTLPTests;
+			productName = RNEmbraceOTLPTests;
+			productReference = 6DB015152C98F5F100E382DB /* RNEmbraceOTLPTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		13B07F861A680F5B00A75B9A /* RNEmbraceOTLP */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "RNEmbraceOTLP" */;
+			buildPhases = (
+				A9A09F35FBF1DBFAD8F40D7B /* [CP] Check Pods Manifest.lock */,
+				13B07F871A680F5B00A75B9A /* Sources */,
+				13B07F8C1A680F5B00A75B9A /* Frameworks */,
+				13B07F8E1A680F5B00A75B9A /* Resources */,
+				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				22490D8E8200CE84BDA9D6EF /* [CP] Embed Pods Frameworks */,
+				8522DCA65683B3E61C4DA2A5 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RNEmbraceOTLP;
+			productName = RNEmbraceOTLP;
+			productReference = 6D93103A2C98F4D300D256D9 /* RNEmbraceOTLP.framework */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		83CBB9F71A601CBA00E9B192 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					00E356ED1AD99517003FC87E = {
+						CreatedOnToolsVersion = 6.2;
+						LastSwiftMigration = 1540;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1540;
+					};
+				};
+			};
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "RNEmbraceOTLP" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 83CBB9F61A601CBA00E9B192;
+			productRefGroup = 83CBB9F61A601CBA00E9B192;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				13B07F861A680F5B00A75B9A /* RNEmbraceOTLP */,
+				00E356ED1AD99517003FC87E /* RNEmbraceOTLPTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00E356EC1AD99517003FC87E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D1852202C98DBA300D12250 /* Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F8E1A680F5B00A75B9A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27692B0BED2268EB3A55EF8B /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		22490D8E8200CE84BDA9D6EF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP/Pods-RNEmbraceOTLP-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP/Pods-RNEmbraceOTLP-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP/Pods-RNEmbraceOTLP-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8522DCA65683B3E61C4DA2A5 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP/Pods-RNEmbraceOTLP-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP/Pods-RNEmbraceOTLP-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP/Pods-RNEmbraceOTLP-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A9A09F35FBF1DBFAD8F40D7B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RNEmbraceOTLP-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B5DC508838B39F5E19A96FB0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BC2FC82F9534161BB8C080F9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC6A347D8E00C3AB78686AC4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00E356EA1AD99517003FC87E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D08C4D02C98A0B400A53823 /* RNEmbraceOTLP.m in Sources */,
+				6D08C4CD2C98982200A53823 /* RNEmbraceOTLP.swift in Sources */,
+				00E356F31AD99517003FC87E /* RNEmbraceOTLPTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F871A680F5B00A75B9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D18521B2C98D9B500D12250 /* RNEmbraceOTLP-Bridging-Header.h in Sources */,
+				6D08C4CF2C98987700A53823 /* RNEmbraceOTLP.m in Sources */,
+				6D08C4CC2C98982200A53823 /* RNEmbraceOTLP.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* RNEmbraceOTLP */;
+			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		00E356F61AD99517003FC87E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 94CA783C46E465D61E282395 /* Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/hermes-engine/destroot/Library/Frameworks/macosx",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = RNEmbraceOTLPTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RNEmbraceOTLPTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RNEmbraceOTLP.app/RNEmbraceOTLP";
+			};
+			name = Debug;
+		};
+		00E356F71AD99517003FC87E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5AF568D458119774B51CBBCB /* Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/hermes-engine/destroot/Library/Frameworks/macosx",
+				);
+				INFOPLIST_FILE = RNEmbraceOTLPTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RNEmbraceOTLPTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RNEmbraceOTLP.app/RNEmbraceOTLP";
+			};
+			name = Release;
+		};
+		13B07F941A680F5B00A75B9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7E0042EBEA90C2846C62C3DE /* Pods-RNEmbraceOTLP.debug.xcconfig */;
+			buildSettings = {
+				APPLY_RULES_IN_COPY_HEADERS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/hermes-engine/destroot/Library/Frameworks/macosx",
+					"$(PROJECT_DIR)/Pods",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbraceOTLP;
+				PRODUCT_NAME = RNEmbraceOTLP;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "RNEmbraceOTLP/RNEmbraceOTLP-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		13B07F951A680F5B00A75B9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9C7D6E2629A3AB884290E97F /* Pods-RNEmbraceOTLP.release.xcconfig */;
+			buildSettings = {
+				APPLY_RULES_IN_COPY_HEADERS = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/hermes-engine/destroot/Library/Frameworks/macosx",
+					"$(PROJECT_DIR)/Pods",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbraceOTLP;
+				PRODUCT_NAME = RNEmbraceOTLP;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "RNEmbraceOTLP/RNEmbraceOTLP-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		83CBBA201A601CBA00E9B192 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CXX = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				EXECUTABLE_EXTENSION = framework;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"$(SRCROOT)/Pods/**",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PODS_ROOT)/Headers/Public/**",
+					"$(inherited)/**",
+					"$(PODS_ROOT)/Headers/Private/**",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD = "";
+				LDPLUSPLUS = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/lib/swift\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+					"-DFOLLY_CFG_NO_COROUTINES=1",
+					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Pods/**";
+				SYSTEM_HEADER_SEARCH_PATHS = "$(SRCROOT)/Pods/**";
+				USE_HERMES = true;
+			};
+			name = Debug;
+		};
+		83CBBA211A601CBA00E9B192 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				CXX = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				EXECUTABLE_EXTENSION = framework;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"$(SRCROOT)/Pods/**",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PODS_ROOT)/Headers/Public/**",
+					"$(inherited)/**",
+					"$(PODS_ROOT)/Headers/Private/**",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD = "";
+				LDPLUSPLUS = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/lib/swift\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+					"-DFOLLY_CFG_NO_COROUTINES=1",
+					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Pods/**";
+				SYSTEM_HEADER_SEARCH_PATHS = "$(SRCROOT)/Pods/**";
+				USE_HERMES = true;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "RNEmbraceOTLPTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00E356F61AD99517003FC87E /* Debug */,
+				00E356F71AD99517003FC87E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "RNEmbraceOTLP" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13B07F941A680F5B00A75B9A /* Debug */,
+				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "RNEmbraceOTLP" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83CBBA201A601CBA00E9B192 /* Debug */,
+				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
+}
