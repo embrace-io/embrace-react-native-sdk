@@ -7,42 +7,42 @@ import EmbraceCommonInternal
 
 @testable import RNEmbrace
 
-class TestSpanExporter: EmbraceSpanExporter {
+class TestSpanExporter: SpanExporter {
     var exportedSpans: [SpanData] = []
 
-    func export(spans: [SpanData]) -> SpanExporterResultCode {
+    func export(spans: [SpanData], explicitTimeout: TimeInterval?) -> SpanExporterResultCode {
         exportedSpans.append(contentsOf: spans)
         return SpanExporterResultCode.success
     }
 
-    func flush() -> SpanExporterResultCode {
+    func flush(explicitTimeout: TimeInterval?) -> SpanExporterResultCode {
         return SpanExporterResultCode.success
     }
 
-    func reset() {
+    func reset(explicitTimeout: TimeInterval?) {
         exportedSpans.removeAll()
     }
 
-    func shutdown() {}
+    func shutdown(explicitTimeout: TimeInterval?) {}
 }
 
-class TestLogExporter: EmbraceLogRecordExporter {
+class TestLogExporter: LogRecordExporter {
     var exportedLogs: [OpenTelemetrySdk.ReadableLogRecord] = []
 
-    func export(logRecords: [OpenTelemetrySdk.ReadableLogRecord]) -> OpenTelemetrySdk.ExportResult {
+    func export(logRecords: [OpenTelemetrySdk.ReadableLogRecord], explicitTimeout: TimeInterval?) -> OpenTelemetrySdk.ExportResult {
         exportedLogs.append(contentsOf: logRecords)
         return OpenTelemetrySdk.ExportResult.success
     }
 
-    func reset() {
+    func reset(explicitTimeout: TimeInterval?) {
         exportedLogs.removeAll()
     }
 
-    func forceFlush() -> OpenTelemetrySdk.ExportResult {
+    func forceFlush(explicitTimeout: TimeInterval?) -> OpenTelemetrySdk.ExportResult {
         return OpenTelemetrySdk.ExportResult.success
     }
 
-    func shutdown() {}
+    func shutdown(explicitTimeout: TimeInterval?) {}
 }
 
 class Promise {
@@ -128,8 +128,8 @@ class EmbraceManagerTests: XCTestCase {
     override func setUp() async throws {
         promise = Promise()
         module = EmbraceManager()
-        EmbraceManagerTests.logExporter.reset()
-        EmbraceManagerTests.spanExporter.reset()
+        EmbraceManagerTests.logExporter.reset(explicitTimeout: nil)
+        EmbraceManagerTests.spanExporter.reset(explicitTimeout: nil)
     }
 
     func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {

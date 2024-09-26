@@ -1,15 +1,15 @@
 PODS:
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
-  - EmbraceIO (6.4.0):
-    - EmbraceIO/EmbraceIO (= 6.4.0)
-  - EmbraceIO/EmbraceCaptureService (6.4.0):
+  - EmbraceIO (6.4.1-rc5):
+    - EmbraceIO/EmbraceIO (= 6.4.1-rc5)
+  - EmbraceIO/EmbraceCaptureService (6.4.1-rc5):
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceCommonInternal (6.4.0)
-  - EmbraceIO/EmbraceConfigInternal (6.4.0):
+  - EmbraceIO/EmbraceCommonInternal (6.4.1-rc5)
+  - EmbraceIO/EmbraceConfigInternal (6.4.1-rc5):
     - EmbraceIO/EmbraceCommonInternal
-  - EmbraceIO/EmbraceCore (6.4.0):
+  - EmbraceIO/EmbraceCore (6.4.1-rc5):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfigInternal
@@ -18,42 +18,42 @@ PODS:
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/EmbraceUploadInternal
-  - EmbraceIO/EmbraceCrash (6.4.0):
+  - EmbraceIO/EmbraceCrash (6.4.1-rc5):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/KSCrash
-  - EmbraceIO/EmbraceIO (6.4.0):
+  - EmbraceIO/EmbraceIO (6.4.1-rc5):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCore
     - EmbraceIO/EmbraceCrash
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceObjCUtilsInternal (6.4.0)
-  - EmbraceIO/EmbraceOTelInternal (6.4.0):
+  - EmbraceIO/EmbraceObjCUtilsInternal (6.4.1-rc5)
+  - EmbraceIO/EmbraceOTelInternal (6.4.1-rc5):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceSemantics (6.4.0)
-  - EmbraceIO/EmbraceStorageInternal (6.4.0):
+  - EmbraceIO/EmbraceSemantics (6.4.1-rc5):
+    - EmbraceIO/EmbraceCommonInternal
+  - EmbraceIO/EmbraceStorageInternal (6.4.1-rc5):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/GRDB
-    - EmbraceIO/OpenTelemetryApi
-  - EmbraceIO/EmbraceUploadInternal (6.4.0):
+  - EmbraceIO/EmbraceUploadInternal (6.4.1-rc5):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/GRDB
-  - EmbraceIO/GRDB (6.4.0)
-  - EmbraceIO/KSCrash (6.4.0):
+  - EmbraceIO/GRDB (6.4.1-rc5)
+  - EmbraceIO/KSCrash (6.4.1-rc5):
     - EmbraceIO/KSCrashCore
     - EmbraceIO/KSCrashRecording
     - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashCore (6.4.0)
-  - EmbraceIO/KSCrashRecording (6.4.0):
+  - EmbraceIO/KSCrashCore (6.4.1-rc5)
+  - EmbraceIO/KSCrashRecording (6.4.1-rc5):
     - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashRecordingCore (6.4.0):
+  - EmbraceIO/KSCrashRecordingCore (6.4.1-rc5):
     - EmbraceIO/KSCrashCore
-  - EmbraceIO/OpenTelemetryApi (6.4.0)
-  - EmbraceIO/OpenTelemetrySdk (6.4.0):
+  - EmbraceIO/OpenTelemetryApi (6.4.1-rc5)
+  - EmbraceIO/OpenTelemetrySdk (6.4.1-rc5):
     - EmbraceIO/OpenTelemetryApi
   - FBLazyVector (0.74.2)
   - fmt (9.1.0)
@@ -1224,7 +1224,7 @@ PODS:
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - EmbraceIO (= 6.4.0)
+  - EmbraceIO (= 6.4.1-rc5)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
@@ -1281,7 +1281,7 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - EmbraceIO
     - SocketRocket
 
@@ -1399,7 +1399,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  EmbraceIO: 4b5116e58700dda16a241b542724066980bf7cde
+  EmbraceIO: a2c80fe00bf8805f07140db23bf79435d93b0f2d
   FBLazyVector: 4bc164e5b5e6cfc288d2b5ff28643ea15fa1a589
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
@@ -1454,6 +1454,6 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 2f71ecf38d934aecb366e686278102a51679c308
 
-PODFILE CHECKSUM: 1191be937549850a2ebac0380ce2f738a3e13efd
+PODFILE CHECKSUM: a747471d6bde7e017f3e57677183b84f10eebc62
 
 COCOAPODS: 1.15.2
