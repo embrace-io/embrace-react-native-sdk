@@ -18,7 +18,7 @@ jobs:
       IOS_TEST_PLATFORM: iOS Simulator
       IOS_TEST_DEVICE: iPhone 15 Pro
       IOS_TEST_SDK: iphonesimulator
-      IOS_TEST_WAIT_TIME: 15
+      IOS_TEST_WAIT_TIME: 5
 
     steps:
       - name: Checkout code
