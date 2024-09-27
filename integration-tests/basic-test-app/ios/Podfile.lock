@@ -1,15 +1,15 @@
 PODS:
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
-  - EmbraceIO (6.4.0):
-    - EmbraceIO/EmbraceIO (= 6.4.0)
-  - EmbraceIO/EmbraceCaptureService (6.4.0):
+  - EmbraceIO (6.4.1):
+    - EmbraceIO/EmbraceIO (= 6.4.1)
+  - EmbraceIO/EmbraceCaptureService (6.4.1):
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceCommonInternal (6.4.0)
-  - EmbraceIO/EmbraceConfigInternal (6.4.0):
+  - EmbraceIO/EmbraceCommonInternal (6.4.1)
+  - EmbraceIO/EmbraceConfigInternal (6.4.1):
     - EmbraceIO/EmbraceCommonInternal
-  - EmbraceIO/EmbraceCore (6.4.0):
+  - EmbraceIO/EmbraceCore (6.4.1):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfigInternal
@@ -18,42 +18,42 @@ PODS:
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/EmbraceUploadInternal
-  - EmbraceIO/EmbraceCrash (6.4.0):
+  - EmbraceIO/EmbraceCrash (6.4.1):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/KSCrash
-  - EmbraceIO/EmbraceIO (6.4.0):
+  - EmbraceIO/EmbraceIO (6.4.1):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCore
     - EmbraceIO/EmbraceCrash
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceObjCUtilsInternal (6.4.0)
-  - EmbraceIO/EmbraceOTelInternal (6.4.0):
+  - EmbraceIO/EmbraceObjCUtilsInternal (6.4.1)
+  - EmbraceIO/EmbraceOTelInternal (6.4.1):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceSemantics (6.4.0)
-  - EmbraceIO/EmbraceStorageInternal (6.4.0):
+  - EmbraceIO/EmbraceSemantics (6.4.1):
+    - EmbraceIO/EmbraceCommonInternal
+  - EmbraceIO/EmbraceStorageInternal (6.4.1):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/GRDB
-    - EmbraceIO/OpenTelemetryApi
-  - EmbraceIO/EmbraceUploadInternal (6.4.0):
+  - EmbraceIO/EmbraceUploadInternal (6.4.1):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/GRDB
-  - EmbraceIO/GRDB (6.4.0)
-  - EmbraceIO/KSCrash (6.4.0):
+  - EmbraceIO/GRDB (6.4.1)
+  - EmbraceIO/KSCrash (6.4.1):
     - EmbraceIO/KSCrashCore
     - EmbraceIO/KSCrashRecording
     - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashCore (6.4.0)
-  - EmbraceIO/KSCrashRecording (6.4.0):
+  - EmbraceIO/KSCrashCore (6.4.1)
+  - EmbraceIO/KSCrashRecording (6.4.1):
     - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashRecordingCore (6.4.0):
+  - EmbraceIO/KSCrashRecordingCore (6.4.1):
     - EmbraceIO/KSCrashCore
-  - EmbraceIO/OpenTelemetryApi (6.4.0)
-  - EmbraceIO/OpenTelemetrySdk (6.4.0):
+  - EmbraceIO/OpenTelemetryApi (6.4.1)
+  - EmbraceIO/OpenTelemetrySdk (6.4.1):
     - EmbraceIO/OpenTelemetryApi
   - EXConstants (16.0.2):
     - ExpoModulesCore
@@ -1495,10 +1495,8 @@ PODS:
     - React-logger (= 0.74.1)
     - React-perflogger (= 0.74.1)
     - React-utils (= 0.74.1)
-  - RNEmbrace (5.0.0-alpha.0):
-    - EmbraceIO (= 6.4.0)
-    - React-Core
-  - RNEmbraceOTLP (5.0.0-alpha.0):
+  - RNEmbrace (5.0.0):
+    - EmbraceIO (= 6.4.1)
     - React-Core
   - RNGestureHandler (2.16.2):
     - DoubleConversion
@@ -1643,7 +1641,6 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNEmbrace (from `../node_modules/@embrace-io/react-native`)"
-  - "RNEmbraceOTLP (from `../node_modules/@embrace-io/react-native-otlp`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -1802,8 +1799,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNEmbrace:
     :path: "../node_modules/@embrace-io/react-native"
-  RNEmbraceOTLP:
-    :path: "../node_modules/@embrace-io/react-native-otlp"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -1816,7 +1811,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  EmbraceIO: 4b5116e58700dda16a241b542724066980bf7cde
+  EmbraceIO: d1bbe42704fc9859854c5b74f815053a5916219d
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
@@ -1887,8 +1882,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: e2152ed146b6a35c07386fc2ac4827b27e6aad12
   React-utils: 3285151c9d1e3a28a9586571fc81d521678c196d
   ReactCommon: f42444e384d82ab89184aed5d6f3142748b54768
-  RNEmbrace: 64a046ee5cc6a75068aa3511827185c7dfd9220d
-  RNEmbraceOTLP: 3a9a8008a897d80dc8a59f9466221db194d75bde
+  RNEmbrace: 670eb0c919aab66cc8abeeb324da11a7a706d772
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208

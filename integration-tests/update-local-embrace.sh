@@ -8,7 +8,7 @@ popd
 
 # pack required packages into tarballs
 ./pack.sh ../packages/core/ artifacts/embrace-io-react-native-local.tgz
-./pack.sh ../packages/core/ artifacts/embrace-io-react-native-otlp-local.tgz
+./pack.sh ../packages/react-native-otlp/ artifacts/embrace-io-react-native-otlp-local.tgz
 
 # install
 npm --prefix basic-test-app add ./artifacts/embrace-io-react-native-local.tgz
