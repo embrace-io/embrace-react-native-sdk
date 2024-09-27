@@ -43,20 +43,18 @@ describe("Tracer Provider", () => {
 
     expect(spanPayloads).toHaveLength(backgroundSessionsEnabled() ? 2 : 1);
     if (spanPayloads.length > 0) {
-      const spans = spanPayloads[0].userSpans;
+      const spans = spanPayloads[0].perfSpans;
       expect(spans.length).toBe(1);
       expectValidSpans(spans);
-      const span = spans[0];
-
-      expect(span).toEqual({
+      expect(spans[0]).toEqual({
         ...embraceSpanDefaults(),
-        trace_id: span.trace_id,
-        span_id: span.span_id,
+        trace_id: spans[0].trace_id,
+        span_id: spans[0].span_id,
         name: "test-1",
-        start_time_unix_nano: span.start_time_unix_nano,
-        end_time_unix_nano: span.end_time_unix_nano,
+        start_time_unix_nano: spans[0].start_time_unix_nano,
+        end_time_unix_nano: spans[0].end_time_unix_nano,
         events: [],
-        attributes: commonEmbraceSpanAttributes(span),
+        attributes: commonEmbraceSpanAttributes(spans[0]),
       });
     }
   });
@@ -69,7 +67,7 @@ describe("Tracer Provider", () => {
 
     expect(spanPayloads).toHaveLength(backgroundSessionsEnabled() ? 2 : 1);
     if (spanPayloads.length > 0) {
-      const spans = spanPayloads[0].userSpans;
+      const spans = spanPayloads[0].perfSpans;
       expect(spans.length).toBe(4);
       expectValidSpans(spans);
       expect(spans).toEqual([
@@ -93,7 +91,7 @@ describe("Tracer Provider", () => {
             },
             {
               key: "bool-attr",
-              value: driver.isIOS ? "1" : "true",
+              value: "true",
             },
             ...commonEmbraceSpanAttributes(spans[0]),
           ]),
@@ -166,8 +164,7 @@ describe("Tracer Provider", () => {
         },
       ] as EmbraceSpanData[]);
 
-      const snapshots = spanPayloads[0].userSpanSnapshots;
-      console.log(snapshots);
+      const snapshots = spanPayloads[0].perfSpanSnapshots;
       expect(snapshots.length).toBe(1);
       expectValidSpans(snapshots, true);
       expect(snapshots).toEqual([
@@ -194,7 +191,7 @@ describe("Tracer Provider", () => {
 
     expect(spanPayloads).toHaveLength(backgroundSessionsEnabled() ? 2 : 1);
     if (spanPayloads.length > 0) {
-      const spans = spanPayloads[0].userSpans;
+      const spans = spanPayloads[0].perfSpans;
       expect(spans.length).toBe(6);
       expectValidSpans(spans);
       expect(spans).toEqual([

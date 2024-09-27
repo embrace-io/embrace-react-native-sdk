@@ -29,6 +29,7 @@ import {EmbraceNativeTracer} from "./EmbraceNativeTracer";
  */
 export const useEmbraceNativeTracerProvider = (
   config?: EmbraceNativeTracerProviderConfig,
+  enabled = true,
 ): UseEmbraceNativeTracerProviderResult => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
@@ -44,6 +45,10 @@ export const useEmbraceNativeTracerProvider = (
   }, [error]);
 
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     if (!NativeModules.EmbraceManager) {
       setError(
         "You must have the Embrace SDK available to use the TracerProvider, please install `@embrace-io/react-native`.",
@@ -56,13 +61,13 @@ export const useEmbraceNativeTracerProvider = (
     if (isLoading) {
       NativeModules.EmbraceManager.isStarted()
         .then((started: boolean) => {
-          if (started) {
-            setTracerProvider(new EmbraceNativeTracerProvider(config));
-          } else {
+          if (!started) {
             setError(
               "The Embrace SDK must be started to use the TracerProvider, please invoke `initialize` from `@embrace-io/react-native`.",
             );
             setIsError(true);
+          } else if (!tracerProvider) {
+            setTracerProvider(new EmbraceNativeTracerProvider(config));
           }
         })
         .catch(() => {
@@ -71,7 +76,7 @@ export const useEmbraceNativeTracerProvider = (
         })
         .finally(() => setIsLoading(false));
     }
-  }, [isLoading, config]);
+  }, [isLoading, config, enabled]);
 
   return {
     isLoading,

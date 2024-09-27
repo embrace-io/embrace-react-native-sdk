@@ -91,8 +91,12 @@ can be configured to point to a remote environment. See what capabilities are av
 "Could not proxy command to remote server. Original error: Error: socket hang up"
 
 Try:
-
     ```bash
+    # Android
     adb uninstall io.appium.uiautomator2.server
     adb uninstall io.appium.uiautomator2.server.test
+
+    # iOS
+    xcrun simctl uninstall booted io.appium.uiautomator2.server
+    xcrun simctl uninstall booted io.appium.uiautomator2.server.test
     ```

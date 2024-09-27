@@ -33,6 +33,33 @@ const optionalConfig = {...}; // See EmbraceNativeTracerProviderConfig in ./src/
 trace.setGlobalTracerProvider(new EmbraceNativeTracerProvider(optionalConfig));
 ```
 
+The Embrace SDK will need to have started before you can use the tracer provider. To achieve this you can either start
+the SDK before the component that sets up the provider renders, or you can make use of the `enabled` parameter on the
+`useEmbraceNativeTracerProvider` hook to prevent it from triggering until the SDK is ready as in this example:
+
+```javascript
+  const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(false);
+  const {tracerProvider} = useEmbraceNativeTracerProvider({}, embraceSDKLoaded);
+
+  useEffect(() => {
+    const init = async () => {
+      const hasStarted = await initEmbrace({
+        sdkConfig: {
+          ios: {
+            appId: "myAppId",
+          },
+        },
+      });
+
+      if (hasStarted) {
+        setEmbraceSDKLoaded(true);
+      }
+    };
+
+    init();
+  }, []);
+```
+
 Any opentelemetry instrumentation libraries in your app will now find Embrace's provider and use it for tracing.
 
 > [!NOTE]

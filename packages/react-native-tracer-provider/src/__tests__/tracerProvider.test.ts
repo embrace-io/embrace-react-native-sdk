@@ -160,6 +160,14 @@ describe("Embrace Native Tracer Provider", () => {
     });
   });
 
+  it("should allow preventing the creation of a tracer provider until a condition is met", async () => {
+    const {result} = renderHook(() =>
+      useEmbraceNativeTracerProvider({}, false),
+    );
+    await new Promise(r => setTimeout(r, 1));
+    await waitFor(() => expect(result.current.tracerProvider).toBeFalsy());
+  });
+
   it("should allow starting a span", async () => {
     const tracer = await getTestTracer({});
     tracer.startSpan("my-span");
