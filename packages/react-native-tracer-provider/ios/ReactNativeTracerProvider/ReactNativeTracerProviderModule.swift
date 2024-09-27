@@ -54,24 +54,20 @@ class ReactNativeTracerProviderModule: NSObject {
       if let key = key as? String {
         if let value = value as? String {
           attributes.updateValue(AttributeValue(value), forKey: key)
+        } else if let value = value as? Bool {
+          attributes.updateValue(AttributeValue(value), forKey: key)
         } else if let value = value as? Int {
           attributes.updateValue(AttributeValue(value), forKey: key)
         } else if let value = value as? Double {
           attributes.updateValue(AttributeValue(value), forKey: key)
-        } else if let value = value as? Bool {
-          attributes.updateValue(AttributeValue(value), forKey: key)
         } else if let value = value as? [String] {
+          attributes.updateValue(AttributeValue(value), forKey: key)
+        } else if let value = value as? [Bool] {
           attributes.updateValue(AttributeValue(value), forKey: key)
         } else if let value = value as? [Int] {
           attributes.updateValue(AttributeValue(value), forKey: key)
         } else if let value = value as? [Double] {
           attributes.updateValue(AttributeValue(value), forKey: key)
-        } else if let value = value as? [Bool] {
-          // This is missing in the Swift OTEL API currently, should be fixed but in
-          // the meantime we can take the string representation since that is what the
-          // Embrace SDK will end up doing anyway
-          // see: https://github.com/open-telemetry/opentelemetry-swift/blob/31d22dc174530d6f207a102b1ccdecb5938a1b08/Sources/OpenTelemetryApi/Common/AttributeValue.swift#L69
-          attributes.updateValue(AttributeValue(value.description), forKey: key)
         } else {
           os_log("invalid attribute for key:%@", log: log, type: .error, key)
           continue

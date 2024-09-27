@@ -1,5 +1,4 @@
-import {Link} from "@opentelemetry/api/build/src/trace/link";
-import {Attributes, TimeInput} from "@opentelemetry/api";
+import {Attributes, TimeInput, Link} from "@opentelemetry/api";
 
 /**
  * Several different primitive types are valid as TimeInput, normalize to a number representing epoch milliseconds

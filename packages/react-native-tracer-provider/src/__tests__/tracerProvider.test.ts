@@ -1,11 +1,11 @@
 import {renderHook, waitFor} from "@testing-library/react-native";
-import {Link} from "@opentelemetry/api/build/src/trace/link";
 import {
   Attributes,
   context,
   SpanContext,
   SpanKind,
   SpanStatusCode,
+  Link,
   trace,
 } from "@opentelemetry/api";
 
