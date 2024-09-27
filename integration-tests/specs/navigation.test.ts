@@ -10,6 +10,13 @@ import {
 } from "../helpers/span";
 
 describe("Navigation", () => {
+  const backgroundViewState = () => {
+    // On iOS we get the "inactive" state which represents a transition between foreground and background instead of
+    // "background" due to how our integration tests run
+    // See https://reactnative.dev/docs/appstate#app-states
+    return driver.isAndroid ? "background" : "inactive";
+  };
+
   it("should record the initially rendered screen", async () => {
     await endSession();
     const spanPayloads = await getSpanPayloads();
@@ -42,7 +49,7 @@ describe("Navigation", () => {
           },
           {
             key: "view.state.end",
-            value: driver.isAndroid ? "background" : "inactive", // TODO, is this coming from the instrumentation library or a react native difference?
+            value: backgroundViewState(),
           },
           ...commonEmbraceSpanAttributes(span),
         ]),
@@ -143,7 +150,7 @@ describe("Navigation", () => {
             },
             {
               key: "view.state.end",
-              value: driver.isAndroid ? "background" : "inactive", // TODO, is this coming from the instrumentation library or a react native difference?
+              value: backgroundViewState(),
             },
             ...commonEmbraceSpanAttributes(spans[2]),
           ]),
