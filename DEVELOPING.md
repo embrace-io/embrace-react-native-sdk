@@ -124,7 +124,7 @@ unreleased changes on `main` and a patch release will be cut from that new branc
 ## Releasing
 
 1. Create a release branch off of main
-2. Make sure you are logged into the npmjs register (`npm login`)
+2. Make sure you are logged into the npmjs registry (`npm login`)
 3. Release to npm with `yarn publish-modules`, you will be prompted to choose the version number to update to
 4. Check https://www.npmjs.com/org/embrace-io, the latest versions should have been published
 5. Check https://github.com/embrace-io/embrace-react-native-sdk/tags, a vX.X.X tag should have been pushed
