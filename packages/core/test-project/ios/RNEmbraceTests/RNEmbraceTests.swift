@@ -1,5 +1,4 @@
 import XCTest
-import OSLog
 import EmbraceIO
 import EmbraceOTelInternal
 import OpenTelemetryApi
@@ -64,7 +63,6 @@ class Promise {
     }
 }
 
-private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
 private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-setup", "emb-process-launch",
                                            "POST /dev/null/v2/logs", "POST /dev/null/v2/spans"]
 
