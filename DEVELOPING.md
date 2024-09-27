@@ -34,7 +34,7 @@ yarn lint
 yarn test
 ```
 
-## Manual integration testing
+## Manual integration testing (TODO update after changes to integration testing workflow)
 
 The [example app](examples/react-native-test-suite/) allows you to test out the React Native Embrace SDK in a representative app.
 
@@ -74,7 +74,7 @@ pushd ios; pod install; popd;
 yarn ios --mode=Release
 ```
 
-## Testing against new Embrace Android SDK versions
+## Testing against new Embrace Android SDK versions (TODO update after changes to integration testing workflow)
 
 You can test Embrace Android SDK changes by altering the dependency in the core package's [build.gradle](./packages/core/android/build.gradle).
 And then either publish a local artifact or if you need CI to pass - publish a beta:
@@ -94,7 +94,7 @@ And then either publish a local artifact or if you need CI to pass - publish a b
 4. Set the correct `embrace-android-sdk` version in `examples/react-native-test-suite/node_modules/embrace-io/android/build.gradle`
 5. Run the app in the normal way
 
-## Testing against new Embrace iOS SDK versions
+## Testing against new Embrace iOS SDK versions (TODO update after changes to integration testing workflow)
 
 ### Local artifact
 
@@ -111,25 +111,31 @@ You can test local changes to the iOS SDK by updating the example app's `podspec
 3. In `examples/react-native-test-suite/ios/Podfile`, add the following line `pod 'EmbraceIO-DEV'`
 4. In `examples/react-native-test-suite/ios`, run the `pod update` command
 
+## Updating native SDK dependencies
+
+1. Bump the Android (SDK + Swazzler)/iOS dependencies to the latest available stable versions in `./yarn.config.cjs`
+2. Run `yarn constraints --fix` to propagate this change to all package.json files
+3. Run `yarn build` to update build files to the latest versions
+
 ## Automated integration testing
 
 Automated integration testing is being actively developed to replace some of the manual testing outlined above, see [here](./integration-tests/README.md) for more details.
 
 ## Branching strategy
 
-Generally all proposed changes should target the `master` branch and new releases are cut from there after QA. One exception
+Generally all proposed changes should target the `main` branch and new releases are cut from there after QA. One exception
 is urgent patch fixes, in those cases a branch should be made from the latest released tag to isolate the fix from any
-unreleased changes on `master` and a patch release will be cut from that new branch.
+unreleased changes on `main` and a patch release will be cut from that new branch.
 
 ## Releasing
 
-1. Bump the Android (SDK + Swazzler)/iOS dependencies to the latest available stable versions in `./yarn.config.cjs`
-2. Run `yarn constraints --fix` to propagate this change to all package.json files
-3. Run `yarn build`
-4. Bump the RN SDK version according to semver in `./lerna.json`
-5. Run the example app on Android + iOS (in release mode) and confirm that a session is captured & appears in the dashboard with useful info
-6. Release to npm with `yarn publish-modules`
-7. Create a PR with all these changes and merge to `master`
+1. Create a release branch off of main
+2. Make sure you are logged into the npmjs registry (`npm login`)
+3. Release to npm with `yarn publish-modules`, you will be prompted to choose the version number to update to
+4. Check https://www.npmjs.com/org/embrace-io, the latest versions should have been published
+5. Check https://github.com/embrace-io/embrace-react-native-sdk/tags, a vX.X.X tag should have been pushed
+6. Create a PR from your release branch against `main` to merge all the version updates
+7. Run an example app and point to the latest released packages to confirm basic behaviour
 8. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
 
 NOTE: If you make a mistake while publishing you can remove the specific version w/ `npm unpublish <package-name>@<version>`, see [Unpublishing a single version of a package](https://docs.npmjs.com/unpublishing-packages-from-the-registry#unpublishing-a-single-version-of-a-package)

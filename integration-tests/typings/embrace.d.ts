@@ -1,8 +1,8 @@
 // Types here are a very simplified subset of the full Embrace SDK payload,
 // add more properties as they become relevant for test specs, see:
-// https://github.com/embrace-io/embrace-android-sdk/blob/master/embrace-android-sdk/src/main/java/io/embrace/android/embracesdk/internal/payload/Envelope.kt
-// https://github.com/embrace-io/embrace-android-sdk/blob/master/embrace-android-sdk/src/main/java/io/embrace/android/embracesdk/internal/payload/SessionPayload.kt
-// https://github.com/embrace-io/embrace-android-sdk/blob/master/embrace-android-sdk/src/main/java/io/embrace/android/embracesdk/internal/payload/Span.kt
+// https://github.com/embrace-io/embrace-android-sdk/blob/4a17932389328144ff3f7bd97b09f1dd79058e81/embrace-android-payload/src/main/kotlin/io/embrace/android/embracesdk/internal/payload/Envelope.kt
+// https://github.com/embrace-io/embrace-android-sdk/blob/4a17932389328144ff3f7bd97b09f1dd79058e81/embrace-android-payload/src/main/kotlin/io/embrace/android/embracesdk/internal/payload/SessionPayload.kt
+// https://github.com/embrace-io/embrace-android-sdk/blob/4a17932389328144ff3f7bd97b09f1dd79058e81/embrace-android-payload/src/main/kotlin/io/embrace/android/embracesdk/internal/payload/Span.kt
 
 interface EmbraceSpanAttribute {
   key: string;
@@ -41,22 +41,22 @@ interface EmbracePayloadMetadata {
 }
 
 interface ParsedSpanPayload {
-  sessionSpan: EmbraceSpanData,
-  spanSnapshots: EmbraceSpanData[],
-  privateSpans: EmbraceSpanData[],
-  networkSpans: EmbraceSpanData[],
-  userSpans: EmbraceSpanData[],
-  userSpanSnapshots: EmbraceSpanData[],
+  sessionSpan: EmbraceSpanData;
+  spanSnapshots: EmbraceSpanData[];
+  privateSpans: EmbraceSpanData[];
+  networkSpans: EmbraceSpanData[];
+  userSpans: EmbraceSpanData[];
+  userSpanSnapshots: EmbraceSpanData[];
 }
 
 interface EmbracePayload {
   json: {
-    resource: EmbracePayloadResource
-    metadata: EmbracePayloadMetadata
-    version: string,
-    type: "spans", // TODO logs
-    data: EmbracePayloadSpans, // TODO logs
-  }
+    resource: EmbracePayloadResource;
+    metadata: EmbracePayloadMetadata;
+    version: string;
+    type: "spans"; // TODO logs
+    data: EmbracePayloadSpans; // TODO logs
+  };
 }
 
 export type {
