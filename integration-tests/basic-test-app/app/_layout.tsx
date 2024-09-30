@@ -7,6 +7,7 @@ import "react-native-reanimated";
 import {initialize as initEmbrace} from "@embrace-io/react-native";
 
 import {useColorScheme} from "@/hooks/useColorScheme";
+import {Alert} from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -18,7 +19,7 @@ export default function RootLayout() {
         sdkConfig: {
           ios: {
             appId: "abcdf",
-            // endpointBaseUrl: "http://localhost:8877",
+            endpointBaseUrl: "https://mock-api.emb-eng.com/namespace/SgNw5/api",
           },
         },
       });
