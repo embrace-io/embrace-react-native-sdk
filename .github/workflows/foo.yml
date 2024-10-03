@@ -14,6 +14,13 @@ jobs:
         node-version: [18.x]
 
     steps:
+      - uses: dorny/paths-filter@v3
+        id: changed_files
+        with:
+          list-files: json
+          filters: |
+            txt:
+            - '**/*.txt'
       - uses: actions/checkout@v4
       - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -23,3 +30,4 @@ jobs:
       - run: corepack enable
       - run: yarn
       - run: yarn run foo
+      - run: echo ${{ steps.changed_files.outputs.txt_files }}
