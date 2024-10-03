@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import {useCallback, useEffect, useState} from "react";
+import {useRouter} from "expo-router";
 
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
@@ -32,30 +33,9 @@ export const LOG_MESSAGE_INFO = "Info log (manually triggered)";
 export const LOG_MESSAGE_ERROR = "Error log (manually triggered)";
 
 const HomeScreen = () => {
-  const [refreshSessionId, setRefreshSessionId] = useState<boolean>(true);
-  const [sessionId, setSessionId] = useState<string>("SESSION_ID_NOT_LOADED");
-  const [lastRunEndState, setLastRunEndState] = useState<string>(
-    "SESSION_ID_NOT_LOADED",
-  );
+  const router = useRouter();
+
   const [deviceId, setDeviceId] = useState<string>("DEVICE_ID_NOT_LOADED");
-
-  useEffect(() => {
-    if (refreshSessionId) {
-      setTimeout(() => {
-        getCurrentSessionId().then(sId => {
-          setSessionId(sId);
-          setRefreshSessionId(false);
-          Alert.alert(`Session Id: ${sId}`);
-        });
-      }, 2000);
-    }
-  }, [refreshSessionId]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      getLastRunEndState().then(setLastRunEndState);
-    }, 2000);
-  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -63,8 +43,16 @@ const HomeScreen = () => {
     }, 2000);
   }, []);
 
-  const handleRefreshCurrentSessionId = () => {
-    setRefreshSessionId(true);
+  const showLastRunEndState = () => {
+    getLastRunEndState().then(state => {
+      Alert.alert(`Last Exit State: ${state}`);
+    });
+  };
+
+  const handleShowCurrentSessionId = () => {
+    getCurrentSessionId().then(sId => {
+      Alert.alert(`Session Id: ${sId}`);
+    });
   };
 
   const handleEndSession = () => {
@@ -127,34 +115,24 @@ const HomeScreen = () => {
   const handleClearPayer = () => {
     clearUserAsPayer();
   };
+
+  const handleNavigateToSpans = () => {
+    router.push("/spans");
+  };
   return (
     <SafeAreaView>
       <ScrollView>
         <ThemedView style={styles.stepContainer}>
-          <ThemedText type="subtitle">Current Session Id</ThemedText>
-          {/* <Button
-            testID="CURRENT_SESSION_ID"
-            accessibilityLabel="CURRENT_SESSION_ID"
-            title={sessionId}
-          /> */}
-          {/* <TextComponent
-            testID="CURRENT_SESSION_ID"
-            accessibilityLabel="CURRENT_SESSION_ID" 
->
-            {sessionId}
-          </TextComponent> */}
           <Button
-            onPress={handleRefreshCurrentSessionId}
-            title="REFRESH SESSION ID"
+            onPress={handleShowCurrentSessionId}
+            title="SHOW SESSION ID"
           />
         </ThemedView>
         <ThemedView style={styles.stepContainer}>
-          <ThemedText type="subtitle">Last Session exit</ThemedText>
-          <ThemedText
-            type="defaultSemiBold"
-            accessibilityLabel="LAST_SESSION_EXIT">
-            LAST_SESSION_EXIT:{lastRunEndState}
-          </ThemedText>
+          <Button
+            onPress={showLastRunEndState}
+            title="SHOW LAST SESSION EXIT STATE"
+          />
         </ThemedView>
         <ThemedView style={styles.stepContainer}>
           <Button
@@ -186,7 +164,7 @@ const HomeScreen = () => {
 
         <ThemedView style={styles.stepContainer}>
           <ThemedText type="subtitle">Logs</ThemedText>
-          <Button onPress={sendLogs} title="LOGs (war/info/error)" />
+          <Button onPress={sendLogs} title="LOGS (WAR/INFO/ERROR)" />
           <Button onPress={sendMessage} title="Custom Message (also a log)" />
           <Button onPress={handleErrorLog} title="Handled JS Exception" />
         </ThemedView>
@@ -200,6 +178,9 @@ const HomeScreen = () => {
             onPress={handleLogUnhandledErrorNotAnonymous}
             title="CRASH (not anonymous)"
           />
+        </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button onPress={handleNavigateToSpans} title="NAVIGATE TO SPANS" />
         </ThemedView>
       </ScrollView>
     </SafeAreaView>

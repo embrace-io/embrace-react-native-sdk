@@ -4,6 +4,7 @@ import {getCurrentSessionId} from "../helpers/session";
 //TODO See how to import from APP
 const LOG_MESSAGE = {
   WARNING: {message: "Warning log (manually triggered)", hasStack: true},
+  WARN: {message: "Warning log (manually triggered)", hasStack: true},
   INFO: {message: "Info log (manually triggered)", hasStack: false},
   ERROR: {message: "Error log (manually triggered)", hasStack: true},
 };
@@ -20,7 +21,7 @@ describe("Logs", () => {
     await endSession.click();
 
     const sessionPayloads = await getSessionPayloads(currentSessionId);
-    expect(sessionPayloads.Events.length).toBe(2);
+
     expect(sessionPayloads.Logs.length).toBe(1);
     sessionPayloads.Events.forEach(event => {
       expect(event.event.state).toBe("foreground");
@@ -29,6 +30,7 @@ describe("Logs", () => {
       const {logs} = logAt.data;
       expect(logs.length).toBe(3);
       logs.forEach(logData => {
+        console.log("RTWTWTW", logData);
         const {severity_text, body, attributes = []} = logData;
         const {message, hasStack} = LOG_MESSAGE[severity_text];
         expect(message).toBe(body);

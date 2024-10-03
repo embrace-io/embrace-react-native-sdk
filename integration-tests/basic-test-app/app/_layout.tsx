@@ -18,7 +18,7 @@ export default function RootLayout() {
       await initEmbrace({
         sdkConfig: {
           ios: {
-            appId: "abcdf",
+            appId: "qPAnd",
             endpointBaseUrl: "https://mock-api.emb-eng.com/namespace/SgNw5/api",
           },
         },

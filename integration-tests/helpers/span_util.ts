@@ -74,6 +74,14 @@ const countSpanEvent = (
   Object.entries(spanEventExpected).forEach(([key, value]) => {
     const spanFound = value;
     const span = transformedSpan[key];
+
+    if (!spanEventCountResponse[key]) {
+      spanEventCountResponse[key] = {
+        request: spanFound,
+        response: {found: 0},
+      };
+    }
+
     if (span) {
       if (spanFound.status && spanFound.status !== span.status) {
         return;
@@ -83,12 +91,6 @@ const countSpanEvent = (
         spanFound.parentSpanId !== span.parent_span_id
       ) {
         return;
-      }
-      if (!spanEventCountResponse[span.name]) {
-        spanEventCountResponse[span.name] = {
-          request: spanFound,
-          response: {found: 0},
-        };
       }
       let shouldCount = true;
 

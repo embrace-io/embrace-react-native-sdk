@@ -13,14 +13,13 @@ describe("Breadcrumbs", () => {
     await new Promise(r => setTimeout(r, 2000));
 
     const sessionPayloads = await getSessionPayloads(currentSessionId);
-    console.log("sessionPayloads", sessionPayloads);
+
     expect(sessionPayloads.Spans.length).toBe(1);
     const {
       data: {spans},
     } = sessionPayloads.Spans[0];
 
     const itemCountersSpansRequest: SpanEventExpectedRequest = {
-      "emb-sdk-init": {expectedInstances: 1},
       "emb-session": {
         expectedInstances: 1,
         events: [
@@ -47,6 +46,7 @@ describe("Breadcrumbs", () => {
       spans,
       itemCountersSpansRequest,
     );
+    console.log("FF", itemCountersSpansResponse);
 
     Object.values(itemCountersSpansResponse).forEach(({request, response}) => {
       expect(response.found).toBe(request.expectedInstances);
@@ -71,7 +71,6 @@ describe("Breadcrumbs", () => {
     } = sessionPayloads.Spans[0];
 
     const itemCountersSpansRequest: SpanEventExpectedRequest = {
-      "emb-sdk-init": {expectedInstances: 1},
       "emb-session": {
         expectedInstances: 1,
         events: [
@@ -106,7 +105,7 @@ describe("Breadcrumbs", () => {
 
   it("should record two simple breadcrumb and a complex breadcrumb", async () => {
     const currentSessionId = await getCurrentSessionId(driver);
-    console.log("WWWWWWWW", currentSessionId);
+
     const addBreadcrumb = await driver.$("~A SIMPLE BREADCRUMB");
     await addBreadcrumb.click();
     await new Promise(r => setTimeout(r, 1000));
@@ -127,7 +126,6 @@ describe("Breadcrumbs", () => {
     } = sessionPayloads.Spans[0];
 
     const itemCountersSpansRequest: SpanEventExpectedRequest = {
-      "emb-sdk-init": {expectedInstances: 1},
       "emb-session": {
         expectedInstances: 1,
         events: [

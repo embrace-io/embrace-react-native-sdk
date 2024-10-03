@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@embrace-io/react-native": "^5.0.0",
-    "@embrace-io/react-native-spans": "^4.3.0",
+    "@embrace-io/react-native-spans": "^5.0.0",
     "@expo/vector-icons": "^14.0.0",
     "@react-navigation/native": "^6.0.2",
     "expo": "~51.0.9",

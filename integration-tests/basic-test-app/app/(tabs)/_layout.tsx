@@ -34,6 +34,8 @@ export default function TabLayout() {
           title: "Spans",
           tabBarIcon: ({color, focused}) => (
             <TabBarIcon
+              id="TAB-SPAN"
+              nativeID="TAB-SPAN"
               testID="TAB-SPAN"
               accessibilityLabel="TAB-SPAN"
               name={focused ? "code-slash" : "code-slash-outline"}
