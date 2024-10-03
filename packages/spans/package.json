@@ -36,8 +36,7 @@
     "lib"
   ],
   "scripts": {
-    "build": "tsc",
-    "foo": "echo 'ran foo for spans package'"
+    "build": "tsc"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"

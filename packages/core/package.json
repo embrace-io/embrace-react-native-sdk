@@ -56,8 +56,7 @@
     "ios:build:clean": "xcodebuild clean -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests",
     "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -list",
     "ios:install": "cd test-project && yarn install && cd ios && pod install && rm .xcode.env.local",
-    "ios:test": "../../run-ios-tests.sh test-project/ios/RNEmbraceTestProject.xcworkspace RNEmbraceTests",
-    "foo": "echo 'ran foo for core package'"
+    "ios:test": "../../run-ios-tests.sh test-project/ios/RNEmbraceTestProject.xcworkspace RNEmbraceTests"
   },
   "devDependencies": {
     "typescript": "^4.7.4"
