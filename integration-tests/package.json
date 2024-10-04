@@ -1,8 +1,8 @@
 {
   "name": "integration-tests",
-  "private": true,
   "description": "Integration test harness",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "wdio run ./wdio.conf.ts",
     "update-local-embrace": "./update-local-embrace.sh"
@@ -25,5 +25,10 @@
     "tsx": "^4.11.2",
     "typescript": "^5.4.5",
     "webdriverio": "^8.38.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "metro-symbolicate": "^0.80.12",
+    "node-fetch": "^3.3.2"
   }
 }

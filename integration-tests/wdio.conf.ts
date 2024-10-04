@@ -1,7 +1,6 @@
 import type {Options} from "@wdio/types";
-import {clearServer, startServer, stopServer} from "./helpers/embrace_server";
-
-export const config: Options.Testrunner = {
+const PACKAGE = "io.embrace.basictestapp";
+const config: Options.Testrunner = {
   //
   // ====================
   // Runner Configuration
@@ -60,25 +59,27 @@ export const config: Options.Testrunner = {
   // https://saucelabs.com/platform/platform-configurator
   //
   capabilities: [
-    {
-      // capabilities for local Appium web tests on an Android Emulator
-      platformName: "Android",
-      "appium:deviceName": "Android GoogleAPI Emulator",
-      "appium:platformVersion": "14.0",
-      "appium:automationName": "UiAutomator2",
-      "appium:appPackage": "io.embrace.basictestapp",
-      "appium:appActivity": ".MainActivity",
+    // {
+    //   // capabilities for local Appium web tests on an Android Emulator
+    //   platformName: "Android",
+    //   "appium:deviceName": "Android GoogleAPI Emulator",
+    //   "appium:platformVersion": "13.0",
+    //   "appium:automationName": "UiAutomator2",
+    //   "appium:appPackage": PACKAGE,
+    //   "appium:appActivity": ".MainActivity",
+    //   "appium:autoDismissAlerts": true,
+    //   maxInstances: 1,
 
-      //  TODO: for CI/CD we probably want to point to the prebuilt release
-      //  APK rather than having to have the app running in an emulator beforehand, e.g.
-      //  "appium:app": "./basic-test-app/android/app/build/outputs/apk/debug/app-debug.apk",
-    },
+    //   //  TODO: for CI/CD we probably want to point to the prebuilt release
+    //   //  APK rather than having to have the app running in an emulator beforehand, e.g.
+    //   //  "appium:app": "./basic-test-app/android/app/build/outputs/apk/debug/app-debug.apk",
+    // },
     {
       // capabilities for local Appium web tests on an iOS Emulator
       platformName: "iOS",
       "appium:automationName": "XCUITest",
-      "appium:deviceName": "iPhone 15",
-      "appium:appPackage": "io.embrace.basictestapp",
+      "appium:deviceName": "iPhone 16 Pro",
+      "appium:bundleId": "io.embrace.basictestapp",
       "appium:noReset": true,
     },
   ],
@@ -175,9 +176,7 @@ export const config: Options.Testrunner = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  onPrepare() {
-    startServer(false);
-  },
+  onPrepare() {},
   /**
    * Gets executed before a worker process is spawned and can be used to initialize specific service
    * for that worker as well as modify runtime environments in an async fashion.
@@ -233,8 +232,13 @@ export const config: Options.Testrunner = {
   /**
    * Function to be executed before a test (in Mocha/Jasmine) starts.
    */
-  beforeTest() {
-    clearServer();
+  async beforeTest() {
+    await driver.terminateApp(PACKAGE);
+
+    await driver.execute("mobile: activateApp", {
+      appId: PACKAGE,
+      bundleId: PACKAGE,
+    });
   },
   /**
    * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
@@ -311,9 +315,7 @@ export const config: Options.Testrunner = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  onComplete() {
-    stopServer();
-  },
+  onComplete() {},
   /**
    * Gets executed when a refresh happens.
    * @param {string} oldSessionId session ID of the old session
@@ -334,3 +336,5 @@ export const config: Options.Testrunner = {
   // afterAssertion: function(params) {
   // }
 };
+
+export {config, PACKAGE};
