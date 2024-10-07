@@ -64,7 +64,9 @@ class Promise {
 }
 
 private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-setup", "emb-process-launch",
-                                           "POST /v2/logs", "POST /v2/spans"]
+                                           "POST /dev/null/v2/logs", "POST /dev/null/v2/spans"]
+
+private let DEFAULT_WAIT_TIME = Double(ProcessInfo.processInfo.environment["IOS_TEST_WAIT_TIME"] ?? "") ?? 5.0
 
 // There isn't a way to stop the Embrace SDK once started so this Test case must run before the subsequent ones that start the SDK
 // prepend 'Aa' as a hack to force it first in the alphabetical execution order
@@ -111,6 +113,10 @@ class EmbraceManagerTests: XCTestCase {
             try Embrace
                 .setup( options: .init(
                     appId: "myApp",
+                    // Set a fake endpoint for unit tests otherwise we'll end up sending actual payloads to Embrace
+                    endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null",
+                                                 developmentBaseURL: "http://localhost/dev/null",
+                                                 configBaseURL:  "http://localhost/dev/null"),
                     export:
                         OpenTelemetryExport(
                             spanExporter: self.spanExporter,
@@ -133,17 +139,21 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
-        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
-        return EmbraceManagerTests.logExporter.exportedLogs
+        try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
+        return EmbraceManagerTests.logExporter.exportedLogs.filter { log in
+            log.severity != .debug &&
+            log.attributes["emb.type"]?.description != "sys.internal"
+        }
     }
 
     func getExportedSpans() async throws -> [SpanData] {
-        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+        try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
         return EmbraceManagerTests.spanExporter.exportedSpans.filter { span in
             !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
         }
     }
 
+    /* TODO, currently we have no way to stop the started SDK instance so can't have another test start a new instance
     func testStartNativeEmbraceSDK() async throws {
         module.startNativeEmbraceSDK(configDict: NSDictionary(dictionary: ["appId": "myApp"]),
                                      resolve: promise.resolve, rejecter: promise.reject)
@@ -155,6 +165,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(promise.resolveCalls.count, 2)
         XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
     }
+     */
 
     func testParseSDKConfig() {
         let config = SDKConfig(from: NSDictionary(dictionary: [
@@ -510,6 +521,10 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func testAddSpanAttributeDuplicate() async throws {
+        // This is the first test case that runs in alphabetical order, add an extra sleep to
+        // give the Embrace SDK a chance to startup before executing
+        try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
+
         module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
                          resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 1)
