@@ -40,6 +40,7 @@
 		302CB9FC2C35ED830097B129 /* ReactNativeTracerProviderModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReactNativeTracerProviderModule.swift; path = ../../ios/ReactNativeTracerProvider/ReactNativeTracerProviderModule.swift; sourceTree = "<group>"; };
 		302CB9FE2C35ED830097B129 /* ReactNativeTracerProviderModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ReactNativeTracerProviderModule.mm; path = ../../ios/ReactNativeTracerProvider/ReactNativeTracerProviderModule.mm; sourceTree = "<group>"; };
 		30A45DEF2C35E94400D82B2B /* ReactNativeTracerProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeTracerProviderTests.swift; sourceTree = "<group>"; };
+		30D1DDEB2CA7008D00DF18CE /* ReactNativeTracerProvider.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReactNativeTracerProvider.xctestplan; sourceTree = SOURCE_ROOT; };
 		62DAD0894CE5991E94186954 /* Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests/Pods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.debug.xcconfig"; sourceTree = "<group>"; };
 		95724DF11AEDE10154288CAC /* Pods-ReactNativeTracerProvider.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeTracerProvider.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeTracerProvider/Pods-ReactNativeTracerProvider.release.xcconfig"; sourceTree = "<group>"; };
 		9BD5798A0A6657EA4FAA7814 /* libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeTracerProvider-ReactNativeTracerProviderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,6 +75,7 @@
 			children = (
 				00E356F01AD99517003FC87E /* Supporting Files */,
 				30A45DEF2C35E94400D82B2B /* ReactNativeTracerProviderTests.swift */,
+				30D1DDEB2CA7008D00DF18CE /* ReactNativeTracerProvider.xctestplan */,
 			);
 			path = ReactNativeTracerProviderTests;
 			sourceTree = "<group>";
@@ -600,10 +602,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -675,10 +674,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
