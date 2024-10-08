@@ -3,8 +3,12 @@ import {getSessionPayloads} from "../helpers/embrace_server";
 import {SpanEventExpectedRequest, countSpanEvent} from "../helpers/span_util";
 import {getCurrentSessionId} from "../helpers/session";
 import {getCurrentPlatform} from "../helpers/platform";
+import {getAttributesNameByCurrentPlatform} from "../helpers/attributes";
+
+const COMMON_ATTRIBUTES_NAME = getAttributesNameByCurrentPlatform()
 
 const platform = getCurrentPlatform();
+
 
 const validateSpanPayee = (sessionPayloads, attributesToFind) => {
   expect(sessionPayloads.Spans.length).toBe(1);
@@ -47,8 +51,8 @@ const validateUserPayerForAndroid = (
   });
   const attributesToFind = {
     "emb.usage.set_user_as_payer": "1",
-    "emb.session_id": currentSessionId,
   };
+  attributesToFind[COMMON_ATTRIBUTES_NAME.session_id] = currentSessionId
   if (payeeCleaned) {
     attributesToFind["emb.usage.clear_user_as_payer"] = "1";
   }
@@ -61,10 +65,11 @@ const validateUserPayerForIOS = (
   payeeCleaned?,
 ) => {
   expect(sessionPayloads.Events.length).toBe(0);
+  const payeeToValidate = {}
 
-  validateSpanPayee(sessionPayloads, {
-    "emb.session_id": currentSessionId,
-  });
+  payeeToValidate[COMMON_ATTRIBUTES_NAME.session_id]=currentSessionId
+
+  validateSpanPayee(sessionPayloads, payeeToValidate);
 
   expect(sessionPayloads.Spans.length).toBe(1);
 

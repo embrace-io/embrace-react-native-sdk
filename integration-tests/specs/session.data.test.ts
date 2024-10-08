@@ -7,22 +7,18 @@ const platform = getCurrentPlatform();
 
 const androidApplicationData = {
   app_version: "1.0.0",
-  build: "1",
-  sdkversion: "6.9.2",
-  framework: 2,
-  build_type: "release",
+  bundle_version: "1",
+  sdk_version: "6.13.0",
+  app_framework: 2,
+  environment: "prod",
 };
 
 const androidDeviceData = {
-  architecture: "x86_64",
-  locale: "en_US",
-  manufacturer: "Google",
-  model: "sdk_gphone64_x86_64",
-  num_cores: 4,
-  ostype: "android",
-  osversion: "13",
-  osversion_code: 33,
-  timezone: "GMT",
+  device_manufacturer: "Google",
+  device_model: "sdk_gphone64_x86_64",
+  os_name: "android",
+  os_type: "linux",
+  os_version: "13",
 };
 
 const iOSApplicationData = {
@@ -41,15 +37,7 @@ const iosDeviceData = {
   os_version: "18.0",
 };
 
-const validateAndroid = (sessionPayloads, dataToValidate) => {
-  expect(sessionPayloads.Events.length).toBe(1);
-  const {application} = sessionPayloads.Events[0];
-  Object.entries(dataToValidate).forEach(([key, value]) => {
-    expect(application[key]).toBe(value);
-  });
-};
-
-const validateIOS = (sessionPayloads, dataToValidate) => {
+const validateAttributes = (sessionPayloads, dataToValidate) => {
   expect(sessionPayloads.Spans.length).toBe(1);
   const {resource} = sessionPayloads.Spans[0];
 
@@ -60,12 +48,12 @@ const validateIOS = (sessionPayloads, dataToValidate) => {
 
 const SESSION_DATA_FUNCTIONS = {
   android: {
-    validateFunc: validateAndroid,
+    validateFunc: validateAttributes,
     deviceData: androidDeviceData,
     appData: androidApplicationData,
   },
   iOS: {
-    validateFunc: validateIOS,
+    validateFunc: validateAttributes,
     deviceData: iosDeviceData,
     appData: iOSApplicationData,
   },

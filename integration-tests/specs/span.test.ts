@@ -9,13 +9,13 @@ import {PACKAGE} from "../wdio.conf";
 describe("Session data - Spans", () => {
   it("should display a span tracked", async () => {
     const currentSessionId = await getCurrentSessionId(driver);
-    const goToSpanTab = await $("~NAVIGATE TO SPANS");
+    const goToSpanTab = await driver.$("~NAVIGATE TO SPANS");
     await goToSpanTab.click();
     await new Promise(r => setTimeout(r, 1000));
-    const startSpan1 = await $("~START SPAN PARENT - A");
+    const startSpan1 = await driver.$("~START SPAN PARENT - A");
     await startSpan1.click();
     await new Promise(r => setTimeout(r, 1000));
-    const stopSpan1 = await $("~STOP SPAN PARENT - A");
+    const stopSpan1 = await driver.$("~STOP SPAN PARENT - A");
     await stopSpan1.click();
     await new Promise(r => setTimeout(r, 4000));
     // This is needed because spans are not being sent if I terminate the app
@@ -45,7 +45,7 @@ describe("Session data - Spans", () => {
   });
   it("should display 2 span tracked", async () => {
     const currentSessionId = await getCurrentSessionId(driver);
-    const goToSpanTab = await $("~NAVIGATE TO SPANS");
+    const goToSpanTab = await driver.$("~NAVIGATE TO SPANS");
     await goToSpanTab.click();
     await iterateAndClickArrayButton([
       "~START SPAN PARENT - A",
@@ -90,7 +90,7 @@ describe("Session data - Spans", () => {
   });
   it("should display 1 span with a child", async () => {
     const currentSessionId = await getCurrentSessionId(driver);
-    const goToSpanTab = await $("~NAVIGATE TO SPANS");
+    const goToSpanTab = await driver.$("~NAVIGATE TO SPANS");
     await goToSpanTab.click();
     await iterateAndClickArrayButton([
       "~START SPAN PARENT - A",
@@ -185,7 +185,7 @@ describe("Session data - Spans", () => {
 
     expect(currentSessionId !== "SESSION_ID_NOT_LOADED").toBe(true);
 
-    const goToSpanTab = await $("~NAVIGATE TO SPANS");
+    const goToSpanTab = await driver.$("~NAVIGATE TO SPANS");
     await goToSpanTab.click();
     await iterateAndClickArrayButton([
       "~START SPAN PARENT - A",
@@ -246,7 +246,7 @@ describe("Session data - Spans", () => {
   });
   it("should display 1 span parent and two child tracked", async () => {
     const currentSessionId = await getCurrentSessionId(driver);
-    const goToSpanTab = await $("~NAVIGATE TO SPANS");
+    const goToSpanTab = await driver.$("~NAVIGATE TO SPANS");
     await goToSpanTab.click();
     await iterateAndClickArrayButton([
       "~START SPAN PARENT - A",

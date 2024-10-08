@@ -2,7 +2,9 @@ import {driver} from "@wdio/globals";
 import {getSessionPayloads} from "../helpers/embrace_server";
 import {getCurrentSessionId} from "../helpers/session";
 import {SpanEventExpectedRequest, countSpanEvent} from "../helpers/span_util";
+import {getAttributesNameByCurrentPlatform} from "../helpers/attributes";
 
+const COMMON_ATTRIBUTES_NAME = getAttributesNameByCurrentPlatform()
 describe("Breadcrumbs", () => {
   it("should record a simple breadcrumb", async () => {
     const currentSessionId = await getCurrentSessionId(driver);
@@ -34,19 +36,19 @@ describe("Breadcrumbs", () => {
           },
         ],
         attributes: {
-          "emb.session_id": currentSessionId,
           "emb.cold_start": "true",
           "emb.clean_exit": "true",
           "emb.type": "ux.session",
         },
       },
     };
+    
+    itemCountersSpansRequest["emb-session"].attributes[COMMON_ATTRIBUTES_NAME.session_id]=currentSessionId
 
     const itemCountersSpansResponse = countSpanEvent(
       spans,
       itemCountersSpansRequest,
     );
-    console.log("FF", itemCountersSpansResponse);
 
     Object.values(itemCountersSpansResponse).forEach(({request, response}) => {
       expect(response.found).toBe(request.expectedInstances);
@@ -85,13 +87,13 @@ describe("Breadcrumbs", () => {
           },
         ],
         attributes: {
-          "emb.session_id": currentSessionId,
           "emb.cold_start": "true",
           "emb.clean_exit": "true",
           "emb.type": "ux.session",
         },
       },
     };
+  itemCountersSpansRequest["emb-session"].attributes[COMMON_ATTRIBUTES_NAME.session_id]=currentSessionId
 
     const itemCountersSpansResponse = countSpanEvent(
       spans,
@@ -124,7 +126,7 @@ describe("Breadcrumbs", () => {
     const {
       data: {spans},
     } = sessionPayloads.Spans[0];
-
+ 
     const itemCountersSpansRequest: SpanEventExpectedRequest = {
       "emb-session": {
         expectedInstances: 1,
@@ -149,13 +151,14 @@ describe("Breadcrumbs", () => {
           },
         ],
         attributes: {
-          "emb.session_id": currentSessionId,
           "emb.cold_start": "true",
           "emb.clean_exit": "true",
           "emb.type": "ux.session",
         },
       },
     };
+
+    itemCountersSpansRequest["emb-session"].attributes[COMMON_ATTRIBUTES_NAME.session_id]=currentSessionId
 
     const itemCountersSpansResponse = countSpanEvent(
       spans,

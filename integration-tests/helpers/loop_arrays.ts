@@ -1,5 +1,3 @@
-import {driver} from "@wdio/globals";
-
 /**
  * Iterates over an array of strings and clicks buttons corresponding to each string.
  * The buttons are selected based on the provided index, and the iteration can be done

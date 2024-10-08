@@ -120,7 +120,7 @@ const HomeScreen = () => {
     router.push("/spans");
   };
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.wrapper}>
       <ScrollView>
         <ThemedView style={styles.stepContainer}>
           <Button
@@ -153,7 +153,6 @@ const HomeScreen = () => {
           <Button onPress={handleCallApi} title="Call API" />
         </ThemedView>
         <ThemedView style={styles.stepContainer}>
-          <ThemedText type="subtitle">End Session</ThemedText>
           <Button onPress={handleEndSession} title="END SESSION" />
         </ThemedView>
 
@@ -163,16 +162,12 @@ const HomeScreen = () => {
         </ThemedView>
 
         <ThemedView style={styles.stepContainer}>
-          <ThemedText type="subtitle">Logs</ThemedText>
           <Button onPress={sendLogs} title="LOGS (WAR/INFO/ERROR)" />
           <Button onPress={sendMessage} title="Custom Message (also a log)" />
           <Button onPress={handleErrorLog} title="Handled JS Exception" />
         </ThemedView>
 
         <ThemedView style={styles.stepContainer}>
-          <ThemedText type="subtitle">
-            Crashes (Unhandled Exceptions)
-          </ThemedText>
           <Button onPress={handleLogUnhandledError} title="CRASH" />
           <Button
             onPress={handleLogUnhandledErrorNotAnonymous}
@@ -188,6 +183,7 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  wrapper:{marginTop:20},
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -195,7 +191,7 @@ const styles = StyleSheet.create({
   },
   stepContainer: {
     gap: 8,
-    marginBottom: 8,
+    marginBottom: 5,
   },
   reactLogo: {
     height: 178,

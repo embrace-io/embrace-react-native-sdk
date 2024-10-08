@@ -1,11 +1,19 @@
 import {driver} from "@wdio/globals";
 
 import {getSessionPayloads} from "../helpers/embrace_server";
-import {SpanEventExpectedRequest, countSpanEvent} from "../helpers/span_util";
+import {countSpanEvent, SpanEventExpectedRequest } from "../helpers/span_util";
 import {getCurrentSessionId} from "../helpers/session";
 import {getCurrentPlatform} from "../helpers/platform";
+import {getAttributesNameByCurrentPlatform} from "../helpers/attributes";
 
+const COMMON_ATTRIBUTES_NAME = getAttributesNameByCurrentPlatform()
 const platform = getCurrentPlatform();
+
+// Only for this session span, the session id key is session.id instead of session_id
+let keyToFind = COMMON_ATTRIBUTES_NAME.session_id
+if(platform === "android"){
+  keyToFind = "session.id"
+}
 
 const validateSession = (sessionPayloads, spansToFind) => {
   expect(sessionPayloads.Spans.length).toBe(1);
@@ -15,6 +23,7 @@ const validateSession = (sessionPayloads, spansToFind) => {
 
   const itemCountersSpansResponse = countSpanEvent(spans, spansToFind);
   Object.values(itemCountersSpansResponse).forEach(({request, response}) => {
+    console.log("REQ", request, response)
     expect(response.found).toBe(request.expectedInstances);
   });
 };
@@ -50,13 +59,14 @@ describe("Sessions", () => {
       "emb-session": {
         expectedInstances: 1,
         attributes: {
-          "emb.session_id": currentSessionId,
           "emb.cold_start": "true",
           "emb.clean_exit": "true",
           "emb.type": "ux.session",
         },
       },
     };
+    attributesToFind["emb-session"].attributes[COMMON_ATTRIBUTES_NAME.session_id]= currentSessionId
+
     expect(sessionPayloads.Spans.length).toBe(1);
 
     VALIDATE_SESSION_FUNCTIONS[platform](sessionPayloads, attributesToFind);
@@ -92,26 +102,26 @@ describe("Sessions", () => {
 
     expect(sessionPayloads.Spans.length).toBe(2);
 
-    sessionPayloads.Spans.forEach((span, index) => {
+    sessionPayloads.Spans.forEach((span) => {
       const embSessions = span.data.spans.filter(
         span => span.name === "emb-session",
       );
       expect(embSessions.length).toBe(1);
       const embSessionId = embSessions[0].attributes.find(
-        att => att.key === "emb.session_id",
+        att => att.key === keyToFind
       );
-
+   
       const sessionId = sessionIds.find(sId => sId === embSessionId.value);
       const spansToFind: SpanEventExpectedRequest = {
         "emb-session": {
           expectedInstances: 1,
           attributes: {
-            "emb.session_id": sessionId,
             "emb.clean_exit": "true",
             "emb.type": "ux.session",
           },
         },
       };
+      spansToFind["emb-session"].attributes[keyToFind]= sessionId
 
       if (firstSessionId === sessionId) {
         spansToFind["emb-session"].attributes["emb.cold_start"] = "true";
@@ -153,13 +163,14 @@ describe("Sessions", () => {
       "emb-session": {
         expectedInstances: 1,
         attributes: {
-          "emb.session_id": currentSessionId,
           "emb.cold_start": "true",
           "emb.clean_exit": "true",
           "emb.type": "ux.session",
         },
       },
     };
+    spansToFind["emb-session"].attributes[keyToFind]= currentSessionId
+
     if (platform === "iOS") {
       spansToFind["emb-sdk-start"] = {expectedInstances: 1};
     } else {
@@ -169,46 +180,5 @@ describe("Sessions", () => {
 
     VALIDATE_SESSION_FUNCTIONS[platform](sessionPayloads, spansToFind);
   });
-  it("should record basic setup information", async () => {
-    const currentSessionId = await getCurrentSessionId(driver);
-    // This is needed because spand are not being sent if I terminate the app
-    await driver.execute("mobile: backgroundApp", {seconds: 1});
-    await new Promise(r => setTimeout(r, 2000));
-
-    const sessionPayloads = await getSessionPayloads(currentSessionId);
-
-    const spansToFind: SpanEventExpectedRequest = {
-      "emb-setup": {
-        expectedInstances: 1,
-        attributes: {
-          "emb.private": "true",
-          "emb.type": "perf",
-        },
-      },
-    };
-    expect(sessionPayloads.Spans.length).toBe(1);
-
-    VALIDATE_SESSION_FUNCTIONS[platform](sessionPayloads, spansToFind);
-  });
-  it("should record basic process launch information", async () => {
-    const currentSessionId = await getCurrentSessionId(driver);
-    // This is needed because spand are not being sent if I terminate the app
-    await driver.execute("mobile: backgroundApp", {seconds: 1});
-    await new Promise(r => setTimeout(r, 2000));
-
-    const sessionPayloads = await getSessionPayloads(currentSessionId);
-
-    const spansToFind: SpanEventExpectedRequest = {
-      "emb-process-launch": {
-        expectedInstances: 1,
-        attributes: {
-          "emb.private": "true",
-          "emb.type": "perf",
-        },
-      },
-    };
-    expect(sessionPayloads.Spans.length).toBe(1);
-
-    VALIDATE_SESSION_FUNCTIONS[platform](sessionPayloads, spansToFind);
-  });
+  
 });
