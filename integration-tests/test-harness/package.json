@@ -1,0 +1,21 @@
+{
+  "name": "@embrace-io/react-native-test-harness",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "peerDependencies": {
+    "react-native": "*",
+    "react": "*",
+    "@embrace-io/react-native": "*"
+  },
+  "devDependencies": {
+    "typescript": "~5.3.3"
+  }
+}
