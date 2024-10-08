@@ -12,4 +12,4 @@ popd
 
 # add tarballs as local packages to the basic-test-app
 # use npm since that's what the basic-test-app is configured with
-npm --prefix basic-test-app add ./artifacts/embrace-io-react-native-local.tgz ./artifacts/embrace-io-react-native-tracer-provider-local.tgz
+npm --prefix basic-test-app add ./artifacts/embrace-io-react-native-local.tgz ./artifacts/embrace-io-react-native-tracer-provider-local.tgz ./artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz

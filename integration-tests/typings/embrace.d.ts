@@ -45,8 +45,9 @@ interface ParsedSpanPayload {
   spanSnapshots: EmbraceSpanData[];
   privateSpans: EmbraceSpanData[];
   networkSpans: EmbraceSpanData[];
-  userSpans: EmbraceSpanData[];
-  userSpanSnapshots: EmbraceSpanData[];
+  viewSpans: EmbraceSpanData[];
+  perfSpans: EmbraceSpanData[];
+  perfSpanSnapshots: EmbraceSpanData[];
 }
 
 interface EmbracePayload {

@@ -15,10 +15,11 @@ const EMBRACE_INTERNAL_SPAN_NAMES = {
  * categories and sort them
  */
 const parseSpanPayload = (payload: EmbracePayloadSpans): ParsedSpanPayload => {
-  const userSpans: EmbraceSpanData[] = [];
+  const perfSpans: EmbraceSpanData[] = [];
+  const viewSpans: EmbraceSpanData[] = [];
   const privateSpans: EmbraceSpanData[] = [];
   const networkSpans: EmbraceSpanData[] = [];
-  const userSpanSnapshots: EmbraceSpanData[] = [];
+  const perfSpanSnapshots: EmbraceSpanData[] = [];
   let sessionSpan: EmbraceSpanData = null;
 
   payload.spans.forEach(span => {
@@ -41,12 +42,14 @@ const parseSpanPayload = (payload: EmbracePayloadSpans): ParsedSpanPayload => {
     if (embType === "perf.network_request") {
       networkSpans.push(span);
       return;
+    } else if (embType === "ux.view") {
+      viewSpans.push(span);
     } else if (driver.isAndroid && embType === "perf") {
-      userSpans.push(span);
+      perfSpans.push(span);
       return;
-    } else if (driver.isIOS) {
+    } else if (driver.isIOS && !embType) {
       // iOS does not set emb.type automatically
-      userSpans.push(span);
+      perfSpans.push(span);
       return;
     }
   });
@@ -61,12 +64,13 @@ const parseSpanPayload = (payload: EmbracePayloadSpans): ParsedSpanPayload => {
       return;
     }
 
-    if (driver.isAndroid && getAttributeValue(span, "emb.type") === "perf") {
-      userSpanSnapshots.push(span);
+    const embType = getAttributeValue(span, "emb.type");
+    if (driver.isAndroid && embType === "perf") {
+      perfSpanSnapshots.push(span);
       return;
-    } else if (driver.isIOS) {
+    } else if (driver.isIOS && !embType) {
       // iOS does not set emb.type automatically
-      userSpanSnapshots.push(span);
+      perfSpanSnapshots.push(span);
       return;
     }
   });
@@ -76,8 +80,9 @@ const parseSpanPayload = (payload: EmbracePayloadSpans): ParsedSpanPayload => {
     spanSnapshots: sortSpans(payload.span_snapshots),
     privateSpans: sortSpans(privateSpans),
     networkSpans: sortSpans(networkSpans),
-    userSpans: sortSpans(userSpans),
-    userSpanSnapshots: sortSpans(userSpanSnapshots),
+    viewSpans: sortSpans(viewSpans),
+    perfSpans: sortSpans(perfSpans),
+    perfSpanSnapshots: sortSpans(perfSpanSnapshots),
   };
 };
 
@@ -105,6 +110,7 @@ const commonEmbraceSpanAttributes = (
   }
 
   if (driver.isAndroid) {
+    const perfSpan = getAttributeValue(span, "emb.type") === "perf";
     return sortSpanAttributes([
       {
         key: "emb.private.sequence_id",
@@ -122,10 +128,14 @@ const commonEmbraceSpanAttributes = (
         key: "emb.key",
         value: "true",
       },
-      {
-        key: "emb.type",
-        value: "perf",
-      },
+      ...(perfSpan
+        ? [
+            {
+              key: "emb.type",
+              value: "perf",
+            },
+          ]
+        : []),
     ]);
   }
 };
@@ -150,7 +160,13 @@ const commonEmbraceSpanSnapshotAttributes = (): EmbraceSpanAttribute[] => {
 };
 
 const sortSpans = (spans: EmbraceSpanData[]): EmbraceSpanData[] =>
-  spans.sort((a, b) => a.name.localeCompare(b.name));
+  spans.sort((a, b) => {
+    if (a.start_time_unix_nano === b.start_time_unix_nano) {
+      return a.name.localeCompare(b.name);
+    } else {
+      return a.start_time_unix_nano > b.start_time_unix_nano ? 1 : -1;
+    }
+  });
 
 const sortSpanAttributes = (
   attributes: EmbraceSpanAttribute[],
