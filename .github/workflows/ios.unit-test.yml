@@ -18,7 +18,7 @@ jobs:
       IOS_TEST_PLATFORM: iOS Simulator
       IOS_TEST_DEVICE: iPhone 15 Pro
       IOS_TEST_SDK: iphonesimulator
-      IOS_TEST_WAIT_TIME: 5
+      IOS_TEST_WAIT_TIME: 15
 
     steps:
       - name: Checkout code
@@ -33,6 +33,16 @@ jobs:
       - name: Enables corepack
         run: corepack enable
 
+      - uses: dorny/paths-filter@v2
+        id: changed_files
+        with:
+          list-files: shell
+          filters: |
+            ios:
+            - 'packages/**/*.swift'
+            - 'packages/**/*.m'
+            - 'packages/**/*.h'
+
       - name: Cache Derived Data
         uses: actions/cache@v3
         with:
@@ -40,12 +50,16 @@ jobs:
           key: Derived-Data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj, Podfile.lock') }}
           restore-keys: |
             Derived-Data-${{ runner.os }}
+        if: steps.changed_files.outputs.ios == 'true'
 
       - name: Install Root Node Modules
         run: yarn install
+        if: steps.changed_files.outputs.ios == 'true'
 
       - name: Install Node Modules + CocoaPods Dependencies
         run: yarn run ios:install
+        if: steps.changed_files.outputs.ios == 'true'
 
       - name: Run iOS Unit Tests
-        run: yarn run ios:test
+        run: yarn run ios:test $(./scopes-from-file-changes.ts ${{ steps.changed_files.outputs.ios_files }})
+        if: steps.changed_files.outputs.ios == 'true'

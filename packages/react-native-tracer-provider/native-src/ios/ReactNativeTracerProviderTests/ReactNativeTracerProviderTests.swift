@@ -45,7 +45,9 @@ class TestSpanExporter: SpanExporter {
 }
 
 private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-setup", "emb-process-launch",
-                                           "POST /v2/logs", "POST /v2/spans"]
+                                           "POST /dev/null/v2/logs", "POST /dev/null/v2/spans"]
+
+private let DEFAULT_WAIT_TIME = Double(ProcessInfo.processInfo.environment["IOS_TEST_WAIT_TIME"] ?? "") ?? 5.0
 
 class ReactNativeTracerProviderTests: XCTestCase {
   static var exporter: TestSpanExporter!
@@ -60,6 +62,10 @@ class ReactNativeTracerProviderTests: XCTestCase {
           try Embrace
               .setup( options: .init(
                   appId: "myApp",
+                  // Set a fake endpoint for unit tests otherwise we'll end up sending actual payloads to Embrace
+                  endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null",
+                                               developmentBaseURL: "http://localhost/dev/null",
+                                               configBaseURL:  "http://localhost/dev/null"),
                   export:
                       OpenTelemetryExport(
                           spanExporter: self.exporter
@@ -81,7 +87,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
   }
 
   func getExportedSpans() async throws -> [SpanData] {
-      try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+      try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
       return ReactNativeTracerProviderTests.exporter.exportedSpans.filter { span in
           !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
       }
@@ -259,7 +265,6 @@ class ReactNativeTracerProviderTests: XCTestCase {
     XCTAssertTrue(exportedSpans[0].traceId.isValid)
 
     XCTAssertEqual(promise.resolveCalls.count, 2)
-    let parentSpanId = (promise.resolveCalls[0] as? NSDictionary)!.object(forKey: "spanId") as? String
     let parentTraceId = (promise.resolveCalls[0] as? NSDictionary)!.object(forKey: "traceId") as? String
 
     XCTAssertNil(exportedSpans[1].parentSpanId)
@@ -294,6 +299,10 @@ class ReactNativeTracerProviderTests: XCTestCase {
   }
 
   func testAddEvent() async throws {
+    // This is the first test case that runs in alphabetical order, add an extra sleep to
+    // give the Embrace SDK a chance to startup before executing
+    try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
+    
     module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
                      spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0,
                      attributes: NSDictionary(), links: NSArray(), parentId: "",
