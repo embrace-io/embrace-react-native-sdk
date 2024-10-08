@@ -59,29 +59,30 @@ const config: Options.Testrunner = {
   // https://saucelabs.com/platform/platform-configurator
   //
   capabilities: [
-    {
-      // capabilities for local Appium web tests on an Android Emulator
-      platformName: "android",
-      "appium:deviceName": "Android GoogleAPI Emulator",
-      "appium:platformVersion": "13.0",
-      "appium:automationName": "UiAutomator2",
-      "appium:appPackage": PACKAGE,
-      "appium:appActivity": ".MainActivity",
-      "appium:autoDismissAlerts": true,
-      maxInstances: 1,
-
-      //  TODO: for CI/CD we probably want to point to the prebuilt release
-      //  APK rather than having to have the app running in an emulator beforehand, e.g.
-      //  "appium:app": "./basic-test-app/android/app/build/outputs/apk/debug/app-debug.apk",
-    },
     // {
-    //   // capabilities for local Appium web tests on an iOS Emulator
-    //   platformName: "iOS",
-    //   "appium:automationName": "XCUITest",
-    //   "appium:deviceName": "iPhone 16 Pro",
-    //   "appium:bundleId": "io.embrace.basictestapp",
-    //   "appium:noReset": true,
+    //   // capabilities for local Appium web tests on an Android Emulator
+    //   platformName: "android",
+    //   "appium:deviceName": "Android GoogleAPI Emulator",
+    //   "appium:platformVersion": "13.0",
+    //   "appium:automationName": "UiAutomator2",
+    //   "appium:appPackage": PACKAGE,
+    //   "appium:appActivity": ".MainActivity",
+    //   "appium:autoDismissAlerts": true,
+    //   maxInstances: 1,
+
+    //   //  TODO: for CI/CD we probably want to point to the prebuilt release
+    //   //  APK rather than having to have the app running in an emulator beforehand, e.g.
+    //   //  "appium:app": "./basic-test-app/android/app/build/outputs/apk/debug/app-debug.apk",
     // },
+    {
+      // capabilities for local Appium web tests on an iOS Emulator
+      platformName: "iOS",
+      "appium:automationName": "XCUITest",
+      "appium:deviceName": "iPhone 16 Pro",
+      "appium:bundleId": "io.embrace.basictestapp",
+      "appium:noReset": true,
+      maxInstances: 1,
+    },
   ],
 
   //

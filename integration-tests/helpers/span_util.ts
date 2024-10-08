@@ -98,9 +98,8 @@ const countSpanEvent = (
         spanFound.attributes,
         span.attributes,
       );
-      console.log("SPANSSS",countSpanAttributesResponse, spanFound.attributes, span.attributes)
       if (countSpanAttributesResponse === "NO_COUNT") {
-        // shouldCount = false;
+        shouldCount = false;
         console.error(
           "countSpanAttributesResponse",
           countSpanAttributesResponse,
@@ -116,7 +115,6 @@ const countSpanEvent = (
           );
           countSpanEventResponse.push(countSpanEventResponseTmp);
         });
-        console.log("NOSE",countSpanEventResponse )
         const noCountItem = countSpanEventResponse.find(
           item => item === "NO_COUNT",
         );
