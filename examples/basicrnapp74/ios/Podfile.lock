@@ -10,13 +10,13 @@ PODS:
     - AppCenter/Crashes (~> 5.0)
     - AppCenterReactNativeShared (~> 5.0)
     - React-Core
-  - AppCenter/Analytics (5.0.4):
+  - AppCenter/Analytics (5.0.5):
     - AppCenter/Core
-  - AppCenter/Core (5.0.4)
-  - AppCenter/Crashes (5.0.4):
+  - AppCenter/Core (5.0.5)
+  - AppCenter/Crashes (5.0.5):
     - AppCenter/Core
-  - AppCenterReactNativeShared (5.0.1):
-    - AppCenter/Core (= 5.0.4)
+  - AppCenterReactNativeShared (5.0.2):
+    - AppCenter/Core (= 5.0.5)
   - Base64 (1.1.2)
   - boost (1.83.0)
   - CodePush (9.0.0):
@@ -25,15 +25,15 @@ PODS:
     - React-Core
     - SSZipArchive (~> 2.5.5)
   - DoubleConversion (1.1.6)
-  - EmbraceIO (6.4.1):
-    - EmbraceIO/EmbraceIO (= 6.4.1)
-  - EmbraceIO/EmbraceCaptureService (6.4.1):
+  - EmbraceIO (6.4.2):
+    - EmbraceIO/EmbraceIO (= 6.4.2)
+  - EmbraceIO/EmbraceCaptureService (6.4.2):
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceCommonInternal (6.4.1)
-  - EmbraceIO/EmbraceConfigInternal (6.4.1):
+  - EmbraceIO/EmbraceCommonInternal (6.4.2)
+  - EmbraceIO/EmbraceConfigInternal (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
-  - EmbraceIO/EmbraceCore (6.4.1):
+  - EmbraceIO/EmbraceCore (6.4.2):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfigInternal
@@ -42,42 +42,42 @@ PODS:
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/EmbraceUploadInternal
-  - EmbraceIO/EmbraceCrash (6.4.1):
+  - EmbraceIO/EmbraceCrash (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/KSCrash
-  - EmbraceIO/EmbraceIO (6.4.1):
+  - EmbraceIO/EmbraceIO (6.4.2):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCore
     - EmbraceIO/EmbraceCrash
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceObjCUtilsInternal (6.4.1)
-  - EmbraceIO/EmbraceOTelInternal (6.4.1):
+  - EmbraceIO/EmbraceObjCUtilsInternal (6.4.2)
+  - EmbraceIO/EmbraceOTelInternal (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceSemantics (6.4.1):
+  - EmbraceIO/EmbraceSemantics (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
-  - EmbraceIO/EmbraceStorageInternal (6.4.1):
+  - EmbraceIO/EmbraceStorageInternal (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/GRDB
-  - EmbraceIO/EmbraceUploadInternal (6.4.1):
+  - EmbraceIO/EmbraceUploadInternal (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/GRDB
-  - EmbraceIO/GRDB (6.4.1)
-  - EmbraceIO/KSCrash (6.4.1):
+  - EmbraceIO/GRDB (6.4.2)
+  - EmbraceIO/KSCrash (6.4.2):
     - EmbraceIO/KSCrashCore
     - EmbraceIO/KSCrashRecording
     - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashCore (6.4.1)
-  - EmbraceIO/KSCrashRecording (6.4.1):
+  - EmbraceIO/KSCrashCore (6.4.2)
+  - EmbraceIO/KSCrashRecording (6.4.2):
     - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashRecordingCore (6.4.1):
+  - EmbraceIO/KSCrashRecordingCore (6.4.2):
     - EmbraceIO/KSCrashCore
-  - EmbraceIO/OpenTelemetryApi (6.4.1)
-  - EmbraceIO/OpenTelemetrySdk (6.4.1):
+  - EmbraceIO/OpenTelemetryApi (6.4.2)
+  - EmbraceIO/OpenTelemetrySdk (6.4.2):
     - EmbraceIO/OpenTelemetryApi
   - FBLazyVector (0.74.5)
   - fmt (9.1.0)
@@ -1248,8 +1248,8 @@ PODS:
     - React-logger (= 0.74.5)
     - React-perflogger (= 0.74.5)
     - React-utils (= 0.74.5)
-  - RNEmbrace (5.0.0):
-    - EmbraceIO (= 6.4.1)
+  - RNEmbrace (5.0.1):
+    - EmbraceIO (= 6.4.2)
     - React-Core
   - RNScreens (3.34.0):
     - DoubleConversion
@@ -1481,16 +1481,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AppCenter: 85c92db0759d2792a65eb61d6842d2e86611a49a
+  AppCenter: 994875ea7941b9e168babb98299f900a94bcef13
   appcenter-analytics: b3a60e025b8db7013a71053c1ced96bcf7acba75
   appcenter-core: 53cc7b5d9a2cdd6a484cae8e50977bab91e0780e
   appcenter-crashes: 9cb825ee8f89715a1b0a7164a71fc8c582b0e796
-  AppCenterReactNativeShared: 22aea9046e80c449137f4e574ae1f229616e2358
+  AppCenterReactNativeShared: e6f6bd4d0e055bf1a3d7337edb4993bfce79185b
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   CodePush: ea174f879b85dff65380bee54243bbe523ea16b2
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  EmbraceIO: d1bbe42704fc9859854c5b74f815053a5916219d
+  EmbraceIO: ebbe930c0d46039a533979bf98f8cef1c1a347f1
   FBLazyVector: ac12dc084d1c8ec4cc4d7b3cf1b0ebda6dab85af
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
@@ -1545,7 +1545,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: cfbe85c3510c541ec6dc815c7729b41304b67961
   React-utils: f242eb7e7889419d979ca0e1c02ccc0ea6e43b29
   ReactCommon: f7da14a8827b72704169a48c929bcde802698361
-  RNEmbrace: 670eb0c919aab66cc8abeeb324da11a7a706d772
+  RNEmbrace: 62fa472d78c9e0e1fcbdbb3281c85b20220cc837
   RNScreens: aa943ad421c3ced3ef5a47ede02b0cbfc43a012e
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   SSZipArchive: c69881e8ac5521f0e622291387add5f60f30f3c4
