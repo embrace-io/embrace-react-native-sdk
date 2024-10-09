@@ -24,7 +24,7 @@ target 'RNEmbraceOTLP' do
   )
 
   # Custom dependencies
-  pod 'EmbraceIO', '6.4.1'
+  pod 'EmbraceIO', '6.4.2'
   pod 'SwiftProtobuf', '1.20.2'
   pod 'EmbraceInternalSwiftLog', '1.4.4-internal'
   # pod 'EmbraceInternalGrpcSwift'

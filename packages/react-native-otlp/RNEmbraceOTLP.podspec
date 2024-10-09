@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.dependency 'React-Core'
   s.dependency 'SwiftProtobuf', '1.20.2'
   s.dependency 'EmbraceInternalSwiftLog', '1.4.4-internal'
-  s.dependency 'EmbraceIO', '6.4.1'
+  s.dependency 'EmbraceIO', '6.4.2'
 
   # not ready yet to be added
   # s.dependency 'EmbraceInternalGrpcSwift'

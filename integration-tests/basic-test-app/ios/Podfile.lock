@@ -2,15 +2,15 @@ PODS:
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
   - EmbraceInternalSwiftLog (1.4.4-internal)
-  - EmbraceIO (6.4.1):
-    - EmbraceIO/EmbraceIO (= 6.4.1)
-  - EmbraceIO/EmbraceCaptureService (6.4.1):
+  - EmbraceIO (6.4.2):
+    - EmbraceIO/EmbraceIO (= 6.4.2)
+  - EmbraceIO/EmbraceCaptureService (6.4.2):
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceCommonInternal (6.4.1)
-  - EmbraceIO/EmbraceConfigInternal (6.4.1):
+  - EmbraceIO/EmbraceCommonInternal (6.4.2)
+  - EmbraceIO/EmbraceConfigInternal (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
-  - EmbraceIO/EmbraceCore (6.4.1):
+  - EmbraceIO/EmbraceCore (6.4.2):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfigInternal
@@ -19,42 +19,42 @@ PODS:
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/EmbraceUploadInternal
-  - EmbraceIO/EmbraceCrash (6.4.1):
+  - EmbraceIO/EmbraceCrash (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/KSCrash
-  - EmbraceIO/EmbraceIO (6.4.1):
+  - EmbraceIO/EmbraceIO (6.4.2):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCore
     - EmbraceIO/EmbraceCrash
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceObjCUtilsInternal (6.4.1)
-  - EmbraceIO/EmbraceOTelInternal (6.4.1):
+  - EmbraceIO/EmbraceObjCUtilsInternal (6.4.2)
+  - EmbraceIO/EmbraceOTelInternal (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceSemantics (6.4.1):
+  - EmbraceIO/EmbraceSemantics (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
-  - EmbraceIO/EmbraceStorageInternal (6.4.1):
+  - EmbraceIO/EmbraceStorageInternal (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/GRDB
-  - EmbraceIO/EmbraceUploadInternal (6.4.1):
+  - EmbraceIO/EmbraceUploadInternal (6.4.2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/GRDB
-  - EmbraceIO/GRDB (6.4.1)
-  - EmbraceIO/KSCrash (6.4.1):
+  - EmbraceIO/GRDB (6.4.2)
+  - EmbraceIO/KSCrash (6.4.2):
     - EmbraceIO/KSCrashCore
     - EmbraceIO/KSCrashRecording
     - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashCore (6.4.1)
-  - EmbraceIO/KSCrashRecording (6.4.1):
+  - EmbraceIO/KSCrashCore (6.4.2)
+  - EmbraceIO/KSCrashRecording (6.4.2):
     - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashRecordingCore (6.4.1):
+  - EmbraceIO/KSCrashRecordingCore (6.4.2):
     - EmbraceIO/KSCrashCore
-  - EmbraceIO/OpenTelemetryApi (6.4.1)
-  - EmbraceIO/OpenTelemetrySdk (6.4.1):
+  - EmbraceIO/OpenTelemetryApi (6.4.2)
+  - EmbraceIO/OpenTelemetrySdk (6.4.2):
     - EmbraceIO/OpenTelemetryApi
   - EXConstants (16.0.2):
     - ExpoModulesCore
@@ -1497,11 +1497,11 @@ PODS:
     - React-perflogger (= 0.74.1)
     - React-utils (= 0.74.1)
   - RNEmbrace (5.0.0):
-    - EmbraceIO (= 6.4.1)
+    - EmbraceIO (= 6.4.2)
     - React-Core
   - RNEmbraceOTLP (5.0.0):
     - EmbraceInternalSwiftLog (= 1.4.4-internal)
-    - EmbraceIO (= 6.4.1)
+    - EmbraceIO (= 6.4.2)
     - React-Core
     - SwiftProtobuf (= 1.20.2)
   - RNGestureHandler (2.16.2):
@@ -1824,7 +1824,7 @@ SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   EmbraceInternalSwiftLog: a7b20002f2ca34400678012c3c3e8f7d51da5c79
-  EmbraceIO: d1bbe42704fc9859854c5b74f815053a5916219d
+  EmbraceIO: ebbe930c0d46039a533979bf98f8cef1c1a347f1
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
@@ -1895,8 +1895,8 @@ SPEC CHECKSUMS:
   React-runtimescheduler: e2152ed146b6a35c07386fc2ac4827b27e6aad12
   React-utils: 3285151c9d1e3a28a9586571fc81d521678c196d
   ReactCommon: f42444e384d82ab89184aed5d6f3142748b54768
-  RNEmbrace: 670eb0c919aab66cc8abeeb324da11a7a706d772
-  RNEmbraceOTLP: c733eecb78b211d8eed97ad3e73a9c0a949d63cc
+  RNEmbrace: 73c04decc2c9c546269a99ce8bbf3110e2ca7d9d
+  RNEmbraceOTLP: 3b13b432d3a8030c8c432d790dcff7ed4113430e
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
@@ -1904,6 +1904,6 @@ SPEC CHECKSUMS:
   SwiftProtobuf: 9f458aaa7844a2fc0b910053e66578bc4e2da9c1
   Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372
 
-PODFILE CHECKSUM: 335e6bd4531c60570d710ceb1413b89dc8223b73
+PODFILE CHECKSUM: cdb0285a603c422871c56b4e8612b56df6bca33e
 
 COCOAPODS: 1.15.2
