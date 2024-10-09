@@ -24,10 +24,10 @@ target 'RNEmbraceOTLP' do
   )
 
   # Custom dependencies
-  pod 'EmbraceIO', '6.4.0'
-  pod 'gRPC', :modular_headers => true
-  pod 'SwiftProtobuf'
-  pod 'EmbraceInternalSwiftLog'
+  pod 'EmbraceIO', '6.4.1'
+  pod 'SwiftProtobuf', '1.20.2'
+  pod 'EmbraceInternalSwiftLog', '1.4.4-internal'
+  # pod 'EmbraceInternalGrpcSwift'
 
   target 'RNEmbraceOTLPTests' do
     inherit! :complete

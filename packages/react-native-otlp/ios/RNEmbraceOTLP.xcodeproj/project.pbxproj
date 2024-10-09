@@ -17,6 +17,60 @@
 		6D08C4D02C98A0B400A53823 /* RNEmbraceOTLP.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D08C4CE2C98987700A53823 /* RNEmbraceOTLP.m */; };
 		6D18521B2C98D9B500D12250 /* RNEmbraceOTLP-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 6D08C4C92C98982100A53823 /* RNEmbraceOTLP-Bridging-Header.h */; };
 		6D1852202C98DBA300D12250 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D18521F2C98DBA300D12250 /* Info.plist */; };
+		6D58CAB22CB45C11001F6CA8 /* StableOtlpHTTPExporterBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAAF2CB45C11001F6CA8 /* StableOtlpHTTPExporterBase.swift */; };
+		6D58CAB32CB45C11001F6CA8 /* OtlpHttpTraceExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAAA2CB45C11001F6CA8 /* OtlpHttpTraceExporter.swift */; };
+		6D58CAB42CB45C11001F6CA8 /* common.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA892CB45C11001F6CA8 /* common.pb.swift */; };
+		6D58CAB52CB45C11001F6CA8 /* CommonAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA7E2CB45C11001F6CA8 /* CommonAdapter.swift */; };
+		6D58CAB92CB45C11001F6CA8 /* trace_service.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8F2CB45C11001F6CA8 /* trace_service.pb.swift */; };
+		6D58CABA2CB45C11001F6CA8 /* ResourceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA832CB45C11001F6CA8 /* ResourceAdapter.swift */; };
+		6D58CABB2CB45C11001F6CA8 /* OtlpHttpLogExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAA52CB45C11001F6CA8 /* OtlpHttpLogExporter.swift */; };
+		6D58CABC2CB45C11001F6CA8 /* trace.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA902CB45C11001F6CA8 /* trace.pb.swift */; };
+		6D58CABD2CB45C11001F6CA8 /* LogRecordAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA852CB45C11001F6CA8 /* LogRecordAdapter.swift */; };
+		6D58CABE2CB45C11001F6CA8 /* OltpHTTPMetricExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAA72CB45C11001F6CA8 /* OltpHTTPMetricExporter.swift */; };
+		6D58CAC02CB45C11001F6CA8 /* StableOtlpHTTPMetricExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAA82CB45C11001F6CA8 /* StableOtlpHTTPMetricExporter.swift */; };
+		6D58CAC12CB45C11001F6CA8 /* EnvVarHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA802CB45C11001F6CA8 /* EnvVarHeaders.swift */; };
+		6D58CAC22CB45C11001F6CA8 /* OtlpSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA942CB45C11001F6CA8 /* OtlpSpan.swift */; };
+		6D58CAC32CB45C11001F6CA8 /* SpanAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA952CB45C11001F6CA8 /* SpanAdapter.swift */; };
+		6D58CAC42CB45C11001F6CA8 /* MetricsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA872CB45C11001F6CA8 /* MetricsAdapter.swift */; };
+		6D58CAC52CB45C11001F6CA8 /* OtlpConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA822CB45C11001F6CA8 /* OtlpConfiguration.swift */; };
+		6D58CAC62CB45C11001F6CA8 /* metrics.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8D2CB45C11001F6CA8 /* metrics.pb.swift */; };
+		6D58CAC82CB45C11001F6CA8 /* metrics_service.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8C2CB45C11001F6CA8 /* metrics_service.pb.swift */; };
+		6D58CAC92CB45C11001F6CA8 /* resource.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8E2CB45C11001F6CA8 /* resource.pb.swift */; };
+		6D58CACC2CB45C11001F6CA8 /* Headers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA812CB45C11001F6CA8 /* Headers.swift */; };
+		6D58CACD2CB45C11001F6CA8 /* logs.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8B2CB45C11001F6CA8 /* logs.pb.swift */; };
+		6D58CACF2CB45C11001F6CA8 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAAC2CB45C11001F6CA8 /* HTTPClient.swift */; };
+		6D58CAD02CB45C11001F6CA8 /* TraceProtoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA922CB45C11001F6CA8 /* TraceProtoUtils.swift */; };
+		6D58CAD12CB45C11001F6CA8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA7F2CB45C11001F6CA8 /* Constants.swift */; };
+		6D58CAD22CB45C11001F6CA8 /* OtlpHttpExporterBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAAE2CB45C11001F6CA8 /* OtlpHttpExporterBase.swift */; };
+		6D58CAD32CB45C11001F6CA8 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAAD2CB45C11001F6CA8 /* Lock.swift */; };
+		6D58CAD42CB45C11001F6CA8 /* logs_service.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8A2CB45C11001F6CA8 /* logs_service.pb.swift */; };
+		6D58CAD52CB45C11001F6CA8 /* StableOtlpHTTPExporterBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAAF2CB45C11001F6CA8 /* StableOtlpHTTPExporterBase.swift */; };
+		6D58CAD62CB45C11001F6CA8 /* OtlpHttpTraceExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAAA2CB45C11001F6CA8 /* OtlpHttpTraceExporter.swift */; };
+		6D58CAD72CB45C11001F6CA8 /* common.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA892CB45C11001F6CA8 /* common.pb.swift */; };
+		6D58CAD82CB45C11001F6CA8 /* CommonAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA7E2CB45C11001F6CA8 /* CommonAdapter.swift */; };
+		6D58CADC2CB45C11001F6CA8 /* trace_service.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8F2CB45C11001F6CA8 /* trace_service.pb.swift */; };
+		6D58CADD2CB45C11001F6CA8 /* ResourceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA832CB45C11001F6CA8 /* ResourceAdapter.swift */; };
+		6D58CADE2CB45C11001F6CA8 /* OtlpHttpLogExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAA52CB45C11001F6CA8 /* OtlpHttpLogExporter.swift */; };
+		6D58CADF2CB45C11001F6CA8 /* trace.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA902CB45C11001F6CA8 /* trace.pb.swift */; };
+		6D58CAE02CB45C11001F6CA8 /* LogRecordAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA852CB45C11001F6CA8 /* LogRecordAdapter.swift */; };
+		6D58CAE12CB45C11001F6CA8 /* OltpHTTPMetricExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAA72CB45C11001F6CA8 /* OltpHTTPMetricExporter.swift */; };
+		6D58CAE32CB45C11001F6CA8 /* StableOtlpHTTPMetricExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAA82CB45C11001F6CA8 /* StableOtlpHTTPMetricExporter.swift */; };
+		6D58CAE42CB45C11001F6CA8 /* EnvVarHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA802CB45C11001F6CA8 /* EnvVarHeaders.swift */; };
+		6D58CAE52CB45C11001F6CA8 /* OtlpSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA942CB45C11001F6CA8 /* OtlpSpan.swift */; };
+		6D58CAE62CB45C11001F6CA8 /* SpanAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA952CB45C11001F6CA8 /* SpanAdapter.swift */; };
+		6D58CAE72CB45C11001F6CA8 /* MetricsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA872CB45C11001F6CA8 /* MetricsAdapter.swift */; };
+		6D58CAE82CB45C11001F6CA8 /* OtlpConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA822CB45C11001F6CA8 /* OtlpConfiguration.swift */; };
+		6D58CAE92CB45C11001F6CA8 /* metrics.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8D2CB45C11001F6CA8 /* metrics.pb.swift */; };
+		6D58CAEB2CB45C11001F6CA8 /* metrics_service.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8C2CB45C11001F6CA8 /* metrics_service.pb.swift */; };
+		6D58CAEC2CB45C11001F6CA8 /* resource.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8E2CB45C11001F6CA8 /* resource.pb.swift */; };
+		6D58CAEF2CB45C11001F6CA8 /* Headers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA812CB45C11001F6CA8 /* Headers.swift */; };
+		6D58CAF02CB45C11001F6CA8 /* logs.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8B2CB45C11001F6CA8 /* logs.pb.swift */; };
+		6D58CAF22CB45C11001F6CA8 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAAC2CB45C11001F6CA8 /* HTTPClient.swift */; };
+		6D58CAF32CB45C11001F6CA8 /* TraceProtoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA922CB45C11001F6CA8 /* TraceProtoUtils.swift */; };
+		6D58CAF42CB45C11001F6CA8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA7F2CB45C11001F6CA8 /* Constants.swift */; };
+		6D58CAF52CB45C11001F6CA8 /* OtlpHttpExporterBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAAE2CB45C11001F6CA8 /* OtlpHttpExporterBase.swift */; };
+		6D58CAF62CB45C11001F6CA8 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CAAD2CB45C11001F6CA8 /* Lock.swift */; };
+		6D58CAF72CB45C11001F6CA8 /* logs_service.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D58CA8A2CB45C11001F6CA8 /* logs_service.pb.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +112,33 @@
 		6D1877F42C98E50500D12250 /* KSCrashRecordingCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = KSCrashRecordingCore.xcframework; path = Pods/EmbraceIO/xcframeworks/KSCrashRecordingCore.xcframework; sourceTree = "<group>"; };
 		6D1877F62C98E50500D12250 /* OpenTelemetryApi.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenTelemetryApi.xcframework; path = Pods/EmbraceIO/xcframeworks/OpenTelemetryApi.xcframework; sourceTree = "<group>"; };
 		6D1877F82C98E50500D12250 /* OpenTelemetrySdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenTelemetrySdk.xcframework; path = Pods/EmbraceIO/xcframeworks/OpenTelemetrySdk.xcframework; sourceTree = "<group>"; };
+		6D58CA7E2CB45C11001F6CA8 /* CommonAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonAdapter.swift; sourceTree = "<group>"; };
+		6D58CA7F2CB45C11001F6CA8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		6D58CA802CB45C11001F6CA8 /* EnvVarHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvVarHeaders.swift; sourceTree = "<group>"; };
+		6D58CA812CB45C11001F6CA8 /* Headers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Headers.swift; sourceTree = "<group>"; };
+		6D58CA822CB45C11001F6CA8 /* OtlpConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtlpConfiguration.swift; sourceTree = "<group>"; };
+		6D58CA832CB45C11001F6CA8 /* ResourceAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAdapter.swift; sourceTree = "<group>"; };
+		6D58CA852CB45C11001F6CA8 /* LogRecordAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogRecordAdapter.swift; sourceTree = "<group>"; };
+		6D58CA872CB45C11001F6CA8 /* MetricsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsAdapter.swift; sourceTree = "<group>"; };
+		6D58CA892CB45C11001F6CA8 /* common.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = common.pb.swift; sourceTree = "<group>"; };
+		6D58CA8A2CB45C11001F6CA8 /* logs_service.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = logs_service.pb.swift; sourceTree = "<group>"; };
+		6D58CA8B2CB45C11001F6CA8 /* logs.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = logs.pb.swift; sourceTree = "<group>"; };
+		6D58CA8C2CB45C11001F6CA8 /* metrics_service.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = metrics_service.pb.swift; sourceTree = "<group>"; };
+		6D58CA8D2CB45C11001F6CA8 /* metrics.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = metrics.pb.swift; sourceTree = "<group>"; };
+		6D58CA8E2CB45C11001F6CA8 /* resource.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = resource.pb.swift; sourceTree = "<group>"; };
+		6D58CA8F2CB45C11001F6CA8 /* trace_service.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trace_service.pb.swift; sourceTree = "<group>"; };
+		6D58CA902CB45C11001F6CA8 /* trace.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trace.pb.swift; sourceTree = "<group>"; };
+		6D58CA922CB45C11001F6CA8 /* TraceProtoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceProtoUtils.swift; sourceTree = "<group>"; };
+		6D58CA942CB45C11001F6CA8 /* OtlpSpan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtlpSpan.swift; sourceTree = "<group>"; };
+		6D58CA952CB45C11001F6CA8 /* SpanAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpanAdapter.swift; sourceTree = "<group>"; };
+		6D58CAA52CB45C11001F6CA8 /* OtlpHttpLogExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtlpHttpLogExporter.swift; sourceTree = "<group>"; };
+		6D58CAA72CB45C11001F6CA8 /* OltpHTTPMetricExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OltpHTTPMetricExporter.swift; sourceTree = "<group>"; };
+		6D58CAA82CB45C11001F6CA8 /* StableOtlpHTTPMetricExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StableOtlpHTTPMetricExporter.swift; sourceTree = "<group>"; };
+		6D58CAAA2CB45C11001F6CA8 /* OtlpHttpTraceExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtlpHttpTraceExporter.swift; sourceTree = "<group>"; };
+		6D58CAAC2CB45C11001F6CA8 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		6D58CAAD2CB45C11001F6CA8 /* Lock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
+		6D58CAAE2CB45C11001F6CA8 /* OtlpHttpExporterBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtlpHttpExporterBase.swift; sourceTree = "<group>"; };
+		6D58CAAF2CB45C11001F6CA8 /* StableOtlpHTTPExporterBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StableOtlpHTTPExporterBase.swift; sourceTree = "<group>"; };
 		6D93103A2C98F4D300D256D9 /* RNEmbraceOTLP.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RNEmbraceOTLP.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DB015152C98F5F100E382DB /* RNEmbraceOTLPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNEmbraceOTLPTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DB7D3BF2C98F2D600B14830 /* EmbraceCaptureService.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = EmbraceCaptureService.xcframework; sourceTree = "<group>"; };
@@ -129,6 +210,7 @@
 		13B07FAE1A68108700A75B9A /* RNEmbraceOTLP */ = {
 			isa = PBXGroup;
 			children = (
+				6D58CAB12CB45C11001F6CA8 /* InternalOpenTelemetry */,
 				6D08C4CB2C98982200A53823 /* RNEmbraceOTLP.swift */,
 				6D08C4C92C98982100A53823 /* RNEmbraceOTLP-Bridging-Header.h */,
 				6D08C4CE2C98987700A53823 /* RNEmbraceOTLP.m */,
@@ -165,6 +247,129 @@
 				345BDEA1F58AD35CB35F078C /* libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6D58CA842CB45C11001F6CA8 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CA7E2CB45C11001F6CA8 /* CommonAdapter.swift */,
+				6D58CA7F2CB45C11001F6CA8 /* Constants.swift */,
+				6D58CA802CB45C11001F6CA8 /* EnvVarHeaders.swift */,
+				6D58CA812CB45C11001F6CA8 /* Headers.swift */,
+				6D58CA822CB45C11001F6CA8 /* OtlpConfiguration.swift */,
+				6D58CA832CB45C11001F6CA8 /* ResourceAdapter.swift */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		6D58CA862CB45C11001F6CA8 /* logs */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CA852CB45C11001F6CA8 /* LogRecordAdapter.swift */,
+			);
+			path = logs;
+			sourceTree = "<group>";
+		};
+		6D58CA882CB45C11001F6CA8 /* metric */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CA872CB45C11001F6CA8 /* MetricsAdapter.swift */,
+			);
+			path = metric;
+			sourceTree = "<group>";
+		};
+		6D58CA912CB45C11001F6CA8 /* proto */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CA892CB45C11001F6CA8 /* common.pb.swift */,
+				6D58CA8A2CB45C11001F6CA8 /* logs_service.pb.swift */,
+				6D58CA8B2CB45C11001F6CA8 /* logs.pb.swift */,
+				6D58CA8C2CB45C11001F6CA8 /* metrics_service.pb.swift */,
+				6D58CA8D2CB45C11001F6CA8 /* metrics.pb.swift */,
+				6D58CA8E2CB45C11001F6CA8 /* resource.pb.swift */,
+				6D58CA8F2CB45C11001F6CA8 /* trace_service.pb.swift */,
+				6D58CA902CB45C11001F6CA8 /* trace.pb.swift */,
+			);
+			path = proto;
+			sourceTree = "<group>";
+		};
+		6D58CA932CB45C11001F6CA8 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CA922CB45C11001F6CA8 /* TraceProtoUtils.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		6D58CA962CB45C11001F6CA8 /* trace */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CA932CB45C11001F6CA8 /* utils */,
+				6D58CA942CB45C11001F6CA8 /* OtlpSpan.swift */,
+				6D58CA952CB45C11001F6CA8 /* SpanAdapter.swift */,
+			);
+			path = trace;
+			sourceTree = "<group>";
+		};
+		6D58CA972CB45C11001F6CA8 /* OpenTelemetryProtocolCommon */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CA842CB45C11001F6CA8 /* common */,
+				6D58CA862CB45C11001F6CA8 /* logs */,
+				6D58CA882CB45C11001F6CA8 /* metric */,
+				6D58CA912CB45C11001F6CA8 /* proto */,
+				6D58CA962CB45C11001F6CA8 /* trace */,
+			);
+			path = OpenTelemetryProtocolCommon;
+			sourceTree = "<group>";
+		};
+		6D58CAA62CB45C11001F6CA8 /* logs */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CAA52CB45C11001F6CA8 /* OtlpHttpLogExporter.swift */,
+			);
+			path = logs;
+			sourceTree = "<group>";
+		};
+		6D58CAA92CB45C11001F6CA8 /* metric */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CAA72CB45C11001F6CA8 /* OltpHTTPMetricExporter.swift */,
+				6D58CAA82CB45C11001F6CA8 /* StableOtlpHTTPMetricExporter.swift */,
+			);
+			path = metric;
+			sourceTree = "<group>";
+		};
+		6D58CAAB2CB45C11001F6CA8 /* trace */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CAAA2CB45C11001F6CA8 /* OtlpHttpTraceExporter.swift */,
+			);
+			path = trace;
+			sourceTree = "<group>";
+		};
+		6D58CAB02CB45C11001F6CA8 /* OpenTelemetryProtocolHttp */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CAA62CB45C11001F6CA8 /* logs */,
+				6D58CAA92CB45C11001F6CA8 /* metric */,
+				6D58CAAB2CB45C11001F6CA8 /* trace */,
+				6D58CAAC2CB45C11001F6CA8 /* HTTPClient.swift */,
+				6D58CAAD2CB45C11001F6CA8 /* Lock.swift */,
+				6D58CAAE2CB45C11001F6CA8 /* OtlpHttpExporterBase.swift */,
+				6D58CAAF2CB45C11001F6CA8 /* StableOtlpHTTPExporterBase.swift */,
+			);
+			path = OpenTelemetryProtocolHttp;
+			sourceTree = "<group>";
+		};
+		6D58CAB12CB45C11001F6CA8 /* InternalOpenTelemetry */ = {
+			isa = PBXGroup;
+			children = (
+				6D58CA972CB45C11001F6CA8 /* OpenTelemetryProtocolCommon */,
+				6D58CAB02CB45C11001F6CA8 /* OpenTelemetryProtocolHttp */,
+			);
+			name = InternalOpenTelemetry;
+			path = RNEmbraceOTLP/InternalOpenTelemetry;
 			sourceTree = "<group>";
 		};
 		6DB7D3D02C98F2D600B14830 /* xcframeworks */ = {
@@ -476,6 +681,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D08C4D02C98A0B400A53823 /* RNEmbraceOTLP.m in Sources */,
+				6D58CAB22CB45C11001F6CA8 /* StableOtlpHTTPExporterBase.swift in Sources */,
+				6D58CAB32CB45C11001F6CA8 /* OtlpHttpTraceExporter.swift in Sources */,
+				6D58CAB42CB45C11001F6CA8 /* common.pb.swift in Sources */,
+				6D58CAB52CB45C11001F6CA8 /* CommonAdapter.swift in Sources */,
+				6D58CAB92CB45C11001F6CA8 /* trace_service.pb.swift in Sources */,
+				6D58CABA2CB45C11001F6CA8 /* ResourceAdapter.swift in Sources */,
+				6D58CABB2CB45C11001F6CA8 /* OtlpHttpLogExporter.swift in Sources */,
+				6D58CABC2CB45C11001F6CA8 /* trace.pb.swift in Sources */,
+				6D58CABD2CB45C11001F6CA8 /* LogRecordAdapter.swift in Sources */,
+				6D58CABE2CB45C11001F6CA8 /* OltpHTTPMetricExporter.swift in Sources */,
+				6D58CAC02CB45C11001F6CA8 /* StableOtlpHTTPMetricExporter.swift in Sources */,
+				6D58CAC12CB45C11001F6CA8 /* EnvVarHeaders.swift in Sources */,
+				6D58CAC22CB45C11001F6CA8 /* OtlpSpan.swift in Sources */,
+				6D58CAC32CB45C11001F6CA8 /* SpanAdapter.swift in Sources */,
+				6D58CAC42CB45C11001F6CA8 /* MetricsAdapter.swift in Sources */,
+				6D58CAC52CB45C11001F6CA8 /* OtlpConfiguration.swift in Sources */,
+				6D58CAC62CB45C11001F6CA8 /* metrics.pb.swift in Sources */,
+				6D58CAC82CB45C11001F6CA8 /* metrics_service.pb.swift in Sources */,
+				6D58CAC92CB45C11001F6CA8 /* resource.pb.swift in Sources */,
+				6D58CACC2CB45C11001F6CA8 /* Headers.swift in Sources */,
+				6D58CACD2CB45C11001F6CA8 /* logs.pb.swift in Sources */,
+				6D58CACF2CB45C11001F6CA8 /* HTTPClient.swift in Sources */,
+				6D58CAD02CB45C11001F6CA8 /* TraceProtoUtils.swift in Sources */,
+				6D58CAD12CB45C11001F6CA8 /* Constants.swift in Sources */,
+				6D58CAD22CB45C11001F6CA8 /* OtlpHttpExporterBase.swift in Sources */,
+				6D58CAD32CB45C11001F6CA8 /* Lock.swift in Sources */,
+				6D58CAD42CB45C11001F6CA8 /* logs_service.pb.swift in Sources */,
 				6D08C4CD2C98982200A53823 /* RNEmbraceOTLP.swift in Sources */,
 				00E356F31AD99517003FC87E /* RNEmbraceOTLPTests.m in Sources */,
 			);
@@ -486,6 +718,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D18521B2C98D9B500D12250 /* RNEmbraceOTLP-Bridging-Header.h in Sources */,
+				6D58CAD52CB45C11001F6CA8 /* StableOtlpHTTPExporterBase.swift in Sources */,
+				6D58CAD62CB45C11001F6CA8 /* OtlpHttpTraceExporter.swift in Sources */,
+				6D58CAD72CB45C11001F6CA8 /* common.pb.swift in Sources */,
+				6D58CAD82CB45C11001F6CA8 /* CommonAdapter.swift in Sources */,
+				6D58CADC2CB45C11001F6CA8 /* trace_service.pb.swift in Sources */,
+				6D58CADD2CB45C11001F6CA8 /* ResourceAdapter.swift in Sources */,
+				6D58CADE2CB45C11001F6CA8 /* OtlpHttpLogExporter.swift in Sources */,
+				6D58CADF2CB45C11001F6CA8 /* trace.pb.swift in Sources */,
+				6D58CAE02CB45C11001F6CA8 /* LogRecordAdapter.swift in Sources */,
+				6D58CAE12CB45C11001F6CA8 /* OltpHTTPMetricExporter.swift in Sources */,
+				6D58CAE32CB45C11001F6CA8 /* StableOtlpHTTPMetricExporter.swift in Sources */,
+				6D58CAE42CB45C11001F6CA8 /* EnvVarHeaders.swift in Sources */,
+				6D58CAE52CB45C11001F6CA8 /* OtlpSpan.swift in Sources */,
+				6D58CAE62CB45C11001F6CA8 /* SpanAdapter.swift in Sources */,
+				6D58CAE72CB45C11001F6CA8 /* MetricsAdapter.swift in Sources */,
+				6D58CAE82CB45C11001F6CA8 /* OtlpConfiguration.swift in Sources */,
+				6D58CAE92CB45C11001F6CA8 /* metrics.pb.swift in Sources */,
+				6D58CAEB2CB45C11001F6CA8 /* metrics_service.pb.swift in Sources */,
+				6D58CAEC2CB45C11001F6CA8 /* resource.pb.swift in Sources */,
+				6D58CAEF2CB45C11001F6CA8 /* Headers.swift in Sources */,
+				6D58CAF02CB45C11001F6CA8 /* logs.pb.swift in Sources */,
+				6D58CAF22CB45C11001F6CA8 /* HTTPClient.swift in Sources */,
+				6D58CAF32CB45C11001F6CA8 /* TraceProtoUtils.swift in Sources */,
+				6D58CAF42CB45C11001F6CA8 /* Constants.swift in Sources */,
+				6D58CAF52CB45C11001F6CA8 /* OtlpHttpExporterBase.swift in Sources */,
+				6D58CAF62CB45C11001F6CA8 /* Lock.swift in Sources */,
+				6D58CAF72CB45C11001F6CA8 /* logs_service.pb.swift in Sources */,
 				6D08C4CF2C98987700A53823 /* RNEmbraceOTLP.m in Sources */,
 				6D08C4CC2C98982200A53823 /* RNEmbraceOTLP.swift in Sources */,
 			);

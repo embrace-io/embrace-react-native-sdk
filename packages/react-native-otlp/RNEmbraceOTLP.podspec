@@ -13,11 +13,13 @@ Pod::Spec.new do |s|
   s.swift_version = '5.8'
 
   s.source_files = "ios/RNEmbraceOTLP/**/*.{h,m,mm,swift}"
-  s.source = {:path => "ios/RNEmbraceOTLP/"}
+  s.source = { :path => "ios/RNEmbraceOTLP/" }
 
   s.dependency 'React-Core'
-  s.dependency 'gRPC', :modular_headers => true
-  s.dependency 'SwiftProtobuf'
+  s.dependency 'SwiftProtobuf', '1.20.2'
+  s.dependency 'EmbraceInternalSwiftLog', '1.4.4-internal'
   s.dependency 'EmbraceIO', '6.4.1'
-  s.dependency 'EmbraceInternalSwiftLog'
+
+  # not ready yet to be added
+  # s.dependency 'EmbraceInternalGrpcSwift'
 end

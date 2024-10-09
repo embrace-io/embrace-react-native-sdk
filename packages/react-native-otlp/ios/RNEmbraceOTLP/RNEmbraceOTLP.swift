@@ -3,7 +3,6 @@ import Foundation
 import EmbraceIO
 import OpenTelemetrySdk
 import EmbraceCommonInternal
-import
 
 @objc class CustomExporterConfig: NSObject {
     var endpoint: String
@@ -105,58 +104,58 @@ class RNEmbraceOTLP: NSObject {
   }
   // Http ends
   
-  // Grpc starts
-  private func setOtlpGrpcTraceExporter(endpoint: String,
-                                        timeout: NSNumber,
-                                        header: [(String,String)]?) -> OtlpTraceExporter {
-    return OtlpTraceExporter(endpoint: endpoint,
-                               config: OtlpConfiguration(
-                                  timeout: timeout as TimeInterval,
-                                  headers: header
-                               )
-    );
-  }
-  
-  private func setOtlpGrpcLogExporter(endpoint: String,
-                                      header: [(String,String)]?,
-                                      timeout: NSNumber?) -> OtlpLogExporter {
-    return OtlpLogExporter(endpoint: endpoint,
-                             config: OtlpConfiguration(
-                                timeout: timeout as TimeInterval,
-                                headers: header
-                             )
-    );
-  }
-
-  @objc(setGrpcExporters:logConfig:resolver:rejecter:)
-  func setGrpExporters(_ spanConfigDict: NSDictionary?,
-                              logConfigDict: NSDictionary?,
-                              resolver resolve: @escaping RCTPromiseResolveBlock,
-                              rejecter reject: @escaping RCTPromiseRejectBlock) -> OpenTelemetryExport? {
-    if (spanConfigDict == nil && logConfigDict == nil) {
-      reject("SET_OTLP_GRPC_CUSTOM_EXPORTER", "Error setting grpc custom exporter, it should receive at least one configuration", nil)
-      return nil
-    }
-
-    let customSpanExporter: OtlpTraceExporter?
-    let customLogExporter: OtlpLogExporter?
-    
-    // OTLP GRPC Trace Exporter
-    if spanConfigDict != nil {
-      var spanConfig = CustomExporterConfig.fromDictionary(spanConfigDict!)
-      customSpanExporter = this.setOtlpGrpcTraceExporter(endpoint: spanConfig.endpoint,
-                                                         header: spanConfig.header,
-                                                         timeout: spanConfig?.timeout);
-    }
-    
-    // OTLP GRPC Log Exporter
-    if logConfigDict != nil {
-      var spanConfig = CustomExporterConfig.fromDictionary(logConfigDict!)
-      customLogExporter = this.setOtlpGrpcLogExporter(endpoint: logConfig.endpoint,
-                                                      header: logConfig.header,
-                                                      timeout: logConfig.timeout)
-    }
-    
-    resolve(OpenTelemetryExport(spanExporter: customSpanExporter, logExporter: customLogExporter))
-  }
+//  // Grpc starts
+//  private func setOtlpGrpcTraceExporter(endpoint: String,
+//                                        timeout: NSNumber,
+//                                        header: [(String,String)]?) -> OtlpTraceExporter {
+//    return OtlpTraceExporter(endpoint: endpoint,
+//                               config: OtlpConfiguration(
+//                                  timeout: timeout as TimeInterval,
+//                                  headers: header
+//                               )
+//    );
+//  }
+//  
+//  private func setOtlpGrpcLogExporter(endpoint: String,
+//                                      header: [(String,String)]?,
+//                                      timeout: NSNumber?) -> OtlpLogExporter {
+//    return OtlpLogExporter(endpoint: endpoint,
+//                             config: OtlpConfiguration(
+//                                timeout: timeout as TimeInterval,
+//                                headers: header
+//                             )
+//    );
+//  }
+//
+//  @objc(setGrpcExporters:logConfig:resolver:rejecter:)
+//  func setGrpExporters(_ spanConfigDict: NSDictionary?,
+//                              logConfigDict: NSDictionary?,
+//                              resolver resolve: @escaping RCTPromiseResolveBlock,
+//                              rejecter reject: @escaping RCTPromiseRejectBlock) -> OpenTelemetryExport? {
+//    if (spanConfigDict == nil && logConfigDict == nil) {
+//      reject("SET_OTLP_GRPC_CUSTOM_EXPORTER", "Error setting grpc custom exporter, it should receive at least one configuration", nil)
+//      return nil
+//    }
+//
+//    let customSpanExporter: OtlpTraceExporter?
+//    let customLogExporter: OtlpLogExporter?
+//    
+//    // OTLP GRPC Trace Exporter
+//    if spanConfigDict != nil {
+//      var spanConfig = CustomExporterConfig.fromDictionary(spanConfigDict!)
+//      customSpanExporter = this.setOtlpGrpcTraceExporter(endpoint: spanConfig.endpoint,
+//                                                         header: spanConfig.header,
+//                                                         timeout: spanConfig?.timeout);
+//    }
+//    
+//    // OTLP GRPC Log Exporter
+//    if logConfigDict != nil {
+//      var spanConfig = CustomExporterConfig.fromDictionary(logConfigDict!)
+//      customLogExporter = this.setOtlpGrpcLogExporter(endpoint: logConfig.endpoint,
+//                                                      header: logConfig.header,
+//                                                      timeout: logConfig.timeout)
+//    }
+//    
+//    resolve(OpenTelemetryExport(spanExporter: customSpanExporter, logExporter: customLogExporter))
+//  }
 }
