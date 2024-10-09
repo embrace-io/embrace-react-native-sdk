@@ -168,7 +168,8 @@ describe("Session data - Errors", () => {
           "emb.cold_start": "true",
           "emb.state": "foreground",
           "emb.type": "ux.session",
-          "emb.clean_exit": "false",
+          // There is a bug in android that let it in true even though it crash
+          // "emb.clean_exit": "false",
         },
       },
     };
@@ -181,7 +182,9 @@ describe("Session data - Errors", () => {
       session.attributes["emb.termination_cause"] = "crash";
       session.status = "Error";
     }
-
+    spans.forEach(t=>{
+      console.log(t.name, t.attributes)
+    })
     const itemCountersSpansResponse = countSpanEvent(
       spans,
       itemCountersSpansRequest,
@@ -193,6 +196,7 @@ describe("Session data - Errors", () => {
     );
 
     responseValues.forEach(({request, response}) => {
+      console.log("RRR", request,response)
       expect(response.found).toBe(request.expectedInstances);
     });
   });

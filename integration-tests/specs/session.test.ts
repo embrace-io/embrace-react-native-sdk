@@ -9,12 +9,6 @@ import {getAttributesNameByCurrentPlatform} from "../helpers/attributes";
 const COMMON_ATTRIBUTES_NAME = getAttributesNameByCurrentPlatform()
 const platform = getCurrentPlatform();
 
-// Only for this session span, the session id key is session.id instead of session_id
-let keyToFind = COMMON_ATTRIBUTES_NAME.session_id
-if(platform === "android"){
-  keyToFind = "session.id"
-}
-
 const validateSession = (sessionPayloads, spansToFind) => {
   expect(sessionPayloads.Spans.length).toBe(1);
   const {
@@ -108,7 +102,7 @@ describe("Sessions", () => {
       );
       expect(embSessions.length).toBe(1);
       const embSessionId = embSessions[0].attributes.find(
-        att => att.key === keyToFind
+        att => att.key === COMMON_ATTRIBUTES_NAME.session_id
       );
    
       const sessionId = sessionIds.find(sId => sId === embSessionId.value);
@@ -121,7 +115,7 @@ describe("Sessions", () => {
           },
         },
       };
-      spansToFind["emb-session"].attributes[keyToFind]= sessionId
+      spansToFind["emb-session"].attributes[COMMON_ATTRIBUTES_NAME.session_id]= sessionId
 
       if (firstSessionId === sessionId) {
         spansToFind["emb-session"].attributes["emb.cold_start"] = "true";
@@ -169,7 +163,7 @@ describe("Sessions", () => {
         },
       },
     };
-    spansToFind["emb-session"].attributes[keyToFind]= currentSessionId
+    spansToFind["emb-session"].attributes[COMMON_ATTRIBUTES_NAME.session_id]= currentSessionId
 
     if (platform === "iOS") {
       spansToFind["emb-sdk-start"] = {expectedInstances: 1};

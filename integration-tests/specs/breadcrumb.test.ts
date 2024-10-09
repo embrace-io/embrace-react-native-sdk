@@ -126,7 +126,7 @@ describe("Breadcrumbs", () => {
     const {
       data: {spans},
     } = sessionPayloads.Spans[0];
- 
+
     const itemCountersSpansRequest: SpanEventExpectedRequest = {
       "emb-session": {
         expectedInstances: 1,
