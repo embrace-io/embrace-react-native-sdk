@@ -4,7 +4,7 @@
 //
 
 import OpenTelemetrySdk
-import OpenTelemetryProtocolExporterCommon
+//import OpenTelemetryProtocolExporterCommon
 import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking

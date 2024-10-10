@@ -52,7 +52,7 @@ const HomeScreen = () => {
       "custom.property.test": "hey",
       "another.property": "ho",
       "yet.another": "hum",
-      "rn.sdk.test": 1234567,
+      "rn.sdk.test": "1234567",
     });
   }, []);
 
@@ -77,6 +77,7 @@ const HomeScreen = () => {
                 key: "my header",
                 token: "my token",
               },
+              timeout: 1000,
             });
           }}
           title="CONFIG CUSTOM EXPORTER"

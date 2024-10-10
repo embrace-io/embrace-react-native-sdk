@@ -38,11 +38,14 @@ const configureCustomExporter = async (config: CustomExporterConfig) => {
     const {key, token} = header;
 
     // Configure Custom Exporter
-    await NativeModules.RNEmbraceOTLP.setHttpExporters({
-      endpoint: "http://localhost:4317/v1/traces",
-      header: [key, token],
-      timeout,
-    });
+    await NativeModules.RNEmbraceOTLP.setHttpExporters(
+      {
+        endpoint: "http://localhost:4317/v1/traces",
+        header: [key, token],
+        timeout,
+      },
+      null,
+    );
 
     console.log(
       `NativeModules.RNEmbraceOTLP.setHttpExporters working in basic-test-app for ${Platform.OS}`,
