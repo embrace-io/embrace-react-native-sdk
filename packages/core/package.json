@@ -3,7 +3,7 @@
   "version": "5.0.1",
   "description": "A React Native wrapper for the Embrace SDK",
   "dependencies": {
-    "glob": "^7.1.4",
+    "glob": "^11.0.0",
     "gzip-js": "^0.3.2",
     "inquirer": "^6.5.1",
     "promise": "^8.0.3",
