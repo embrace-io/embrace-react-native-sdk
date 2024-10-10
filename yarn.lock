@@ -2633,7 +2633,7 @@ __metadata:
     promise: "npm:^8.0.3"
     semver: "npm:^7.1.3"
     typescript: "npm:^4.7.4"
-    xcode: "npm:^2.0.0"
+    xcode: "npm:^3.0.1"
   peerDependencies:
     react-native: ">=0.56.0"
   languageName: unknown
@@ -15670,7 +15670,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-plist@npm:^1.0.0":
+"simple-plist@npm:^1.1.0":
   version: 1.4.0
   resolution: "simple-plist@npm:1.4.0"
   dependencies:
@@ -17148,6 +17148,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "uuid@npm:7.0.3"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 10c0/2eee5723b0fcce8256f5bfd3112af6c453b5471db00af9c3533e3d5a6e57de83513f9a145a570890457bd7abf2c2aa05797291d950ac666e5a074895dc63168b
+  languageName: node
+  linkType: hard
+
 "v8-to-istanbul@npm:^4.1.3":
   version: 4.1.4
   resolution: "v8-to-istanbul@npm:4.1.4"
@@ -17614,13 +17623,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xcode@npm:^2.0.0":
-  version: 2.1.0
-  resolution: "xcode@npm:2.1.0"
+"xcode@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "xcode@npm:3.0.1"
   dependencies:
-    simple-plist: "npm:^1.0.0"
-    uuid: "npm:^3.3.2"
-  checksum: 10c0/e779966f863456cee90dcd48968e4f724891c1576256e2e052acd5a9ed1622d7e57a9e1513b933ede3464bcd5818b95524de8a2db3d0d7f2897af0528bc0f91f
+    simple-plist: "npm:^1.1.0"
+    uuid: "npm:^7.0.3"
+  checksum: 10c0/51bf35cee52909aeb18f868ecf9828f93b8042fadf968159320f9f11e757a52e43f6563a53b586986cfe5a34d576f3300c4c0cf1e14300084344ae206eaa53c3
   languageName: node
   linkType: hard
 
