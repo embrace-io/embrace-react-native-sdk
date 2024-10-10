@@ -20,9 +20,13 @@ module.exports = {
       lines: 74,
     },
   },
-  globals: {
-    "ts-jest": {
-      babelConfig: true,
-    },
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        babel: true,
+        tsconfig: "tsconfig.json",
+      },
+    ],
   },
 };

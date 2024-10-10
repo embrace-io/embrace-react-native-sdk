@@ -58,9 +58,9 @@ describe("Test State Managment", () => {
 
     const response = await store(dispatch)(action);
     expect(response).toEqual(0);
-    expect(mockStartSpan).toBeCalledTimes(0);
-    expect(mockStopSpan).toBeCalledTimes(0);
-    expect(mockAddSpanAttributeToSpan).toBeCalledTimes(0);
+    expect(mockStartSpan).toHaveBeenCalledTimes(0);
+    expect(mockStopSpan).toHaveBeenCalledTimes(0);
+    expect(mockAddSpanAttributeToSpan).toHaveBeenCalledTimes(0);
   });
   test("Dispatch not provided", async () => {
     const mockStartSpan = jest.fn();
@@ -84,9 +84,9 @@ describe("Test State Managment", () => {
 
     const response = await store()(action);
     expect(response).toEqual(0);
-    expect(mockStartSpan).toBeCalledTimes(0);
-    expect(mockStopSpan).toBeCalledTimes(0);
-    expect(mockAddSpanAttributeToSpan).toBeCalledTimes(0);
+    expect(mockStartSpan).toHaveBeenCalledTimes(0);
+    expect(mockStopSpan).toHaveBeenCalledTimes(0);
+    expect(mockAddSpanAttributeToSpan).toHaveBeenCalledTimes(0);
   });
   test("Dispatch is not a function", async () => {
     const mockStartSpan = jest.fn();
@@ -138,9 +138,9 @@ describe("Test State Managment", () => {
 
     const response = await store(dispatch)();
     expect(response).toEqual(0);
-    expect(mockStartSpan).toBeCalledTimes(0);
-    expect(mockStopSpan).toBeCalledTimes(0);
-    expect(mockAddSpanAttributeToSpan).toBeCalledTimes(0);
+    expect(mockStartSpan).toHaveBeenCalledTimes(0);
+    expect(mockStopSpan).toHaveBeenCalledTimes(0);
+    expect(mockAddSpanAttributeToSpan).toHaveBeenCalledTimes(0);
   });
   test("Action provided is not a String", async () => {
     const mockStartSpan = jest.fn();
@@ -172,11 +172,17 @@ describe("Test State Managment", () => {
   });
 
   test("Error occurred", () => {
+    const mockStartSpan = jest.fn();
+    const mockStopSpan = jest.fn();
+    const mockAddSpanAttributeToSpan = jest.fn();
     const mockLogBreadcrumb = jest.fn();
 
     jest.mock("react-native", () => ({
       NativeModules: {
         EmbraceManager: {
+          startSpan: mockStartSpan,
+          stopSpan: mockStopSpan,
+          addSpanAttributeToSpan: mockAddSpanAttributeToSpan,
           logRNAction: (
             n: string,
             st: string,
