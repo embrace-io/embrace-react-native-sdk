@@ -1,17 +1,22 @@
-import {driver} from "@wdio/globals";
-
-import {getSessionPayloads} from "../helpers/embrace_server";
+import {getSpanPayloads} from "../helpers/embrace_server";
+import {endSession, backgroundSessionsEnabled} from "../helpers/session";
+import {getAttributeValue} from "../helpers/span";
 
 describe("Sessions", () => {
-  it("should be recorded as foreground", async () => {
-    const endSession = await driver.$("~END SESSION");
-    await endSession.click();
+  it("should be recorded as foreground and background", async () => {
+    await endSession();
+    const spanPayloads = await getSpanPayloads();
 
-    const sessionPayloads = await getSessionPayloads();
-
-    expect(sessionPayloads).toHaveLength(1);
-    if (sessionPayloads.length > 0) {
-      expect(sessionPayloads[0].as).toBe("foreground");
+    expect(spanPayloads).toHaveLength(backgroundSessionsEnabled() ? 2 : 1);
+    if (spanPayloads.length > 0) {
+      expect(getAttributeValue(spanPayloads[0].sessionSpan, "emb.state")).toBe(
+        "foreground",
+      );
+      if (backgroundSessionsEnabled()) {
+        expect(
+          getAttributeValue(spanPayloads[1].sessionSpan, "emb.state"),
+        ).toBe("background");
+      }
     }
   });
 });

@@ -2910,6 +2910,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@embrace-io/react-native-tracer-provider@workspace:packages/react-native-tracer-provider":
+  version: 0.0.0-use.local
+  resolution: "@embrace-io/react-native-tracer-provider@workspace:packages/react-native-tracer-provider"
+  dependencies:
+    "@opentelemetry/api": "npm:^1.9.0"
+    "@testing-library/react-native": "npm:^12.5.1"
+    typescript: "npm:^4.7.4"
+  peerDependencies:
+    react-native: ">=0.56.0"
+  languageName: unknown
+  linkType: soft
+
 "@embrace-io/react-native-webview-tracker@workspace:packages/webview-tracker":
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-webview-tracker@workspace:packages/webview-tracker"
@@ -3941,6 +3953,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opentelemetry/api@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "@opentelemetry/api@npm:1.9.0"
+  checksum: 10c0/9aae2fe6e8a3a3eeb6c1fdef78e1939cf05a0f37f8a4fae4d6bf2e09eb1e06f966ece85805626e01ba5fab48072b94f19b835449e58b6d26720ee19a58298add
+  languageName: node
+  linkType: hard
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -4071,6 +4090,25 @@ __metadata:
   dependencies:
     type-detect: "npm:4.0.8"
   checksum: 10c0/93b4d4e27e93652b83467869c2fe09cbd8f37cd5582327f0e081fbf9b93899e2d267db7b668c96810c63dc229867614ced825e5512b47db96ca6f87cb3ec0f61
+  languageName: node
+  linkType: hard
+
+"@testing-library/react-native@npm:^12.5.1":
+  version: 12.5.1
+  resolution: "@testing-library/react-native@npm:12.5.1"
+  dependencies:
+    jest-matcher-utils: "npm:^29.7.0"
+    pretty-format: "npm:^29.7.0"
+    redent: "npm:^3.0.0"
+  peerDependencies:
+    jest: ">=28.0.0"
+    react: ">=16.8.0"
+    react-native: ">=0.59"
+    react-test-renderer: ">=16.8.0"
+  peerDependenciesMeta:
+    jest:
+      optional: true
+  checksum: 10c0/e224c033ca2361992cd8eeb367074ed281099471902d18f9760257e694fada3ca64077f2a47574986180852283f46e84c38ce580c2a49d07678c0a1a5fcc3274
   languageName: node
   linkType: hard
 
@@ -11070,7 +11108,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-diff@npm:>=29.4.3 < 30, jest-diff@npm:^29.4.1":
+"jest-diff@npm:>=29.4.3 < 30, jest-diff@npm:^29.4.1, jest-diff@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest-diff@npm:29.7.0"
   dependencies:
@@ -11290,6 +11328,18 @@ __metadata:
     jest-get-type: "npm:^28.0.2"
     pretty-format: "npm:^28.1.3"
   checksum: 10c0/026fbe664cfdaed5a5c9facfc86ccc9bed3718a7d1fe061e355eb6158019a77f74e9b843bc99f9a467966cbebe60bde8b43439174cbf64997d4ad404f8f809d0
+  languageName: node
+  linkType: hard
+
+"jest-matcher-utils@npm:^29.7.0":
+  version: 29.7.0
+  resolution: "jest-matcher-utils@npm:29.7.0"
+  dependencies:
+    chalk: "npm:^4.0.0"
+    jest-diff: "npm:^29.7.0"
+    jest-get-type: "npm:^29.6.3"
+    pretty-format: "npm:^29.7.0"
+  checksum: 10c0/0d0e70b28fa5c7d4dce701dc1f46ae0922102aadc24ed45d594dd9b7ae0a8a6ef8b216718d1ab79e451291217e05d4d49a82666e1a3cc2b428b75cd9c933244e
   languageName: node
   linkType: hard
 

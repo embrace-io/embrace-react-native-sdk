@@ -52,7 +52,7 @@
     "bug tracker"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "node update_android_version.ts && tsc",
     "ios:build:clean": "xcodebuild clean -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests",
     "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -list",
     "ios:install": "cd test-project && yarn install && cd ios && pod install && rm .xcode.env.local",
@@ -60,5 +60,9 @@
   },
   "devDependencies": {
     "typescript": "^4.7.4"
+  },
+  "embrace": {
+    "iosVersion": "6.4.2",
+    "androidVersion": "6.13.0"
   }
 }
