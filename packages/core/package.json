@@ -59,6 +59,6 @@
     "ios:test": "../../run-ios-tests.sh test-project/ios/RNEmbraceTestProject.xcworkspace RNEmbraceTests"
   },
   "devDependencies": {
-    "typescript": "^4.7.4"
+    "typescript": "^5.6.3"
   }
 }
