@@ -79,9 +79,12 @@ const UNINSTALL_IOS_PODFILE: IUnlinkEmbraceCode = {
   docUrl: "",
 };
 
-type UNLINK_EMBRACE_CODE = "swazzlerImport" | "swazzlerApply" | "podFileImport";
+type UNLINK_EMBRACE_CODE_TYPE =
+  | "swazzlerImport"
+  | "swazzlerApply"
+  | "podFileImport";
 type SupportedPatches = {
-  [key in UNLINK_EMBRACE_CODE]: IUnlinkEmbraceCode;
+  [key in UNLINK_EMBRACE_CODE_TYPE]: IUnlinkEmbraceCode;
 };
 
 const UNLINK_EMBRACE_CODE: SupportedPatches = {
@@ -91,7 +94,7 @@ const UNLINK_EMBRACE_CODE: SupportedPatches = {
 };
 
 export const removeEmbraceLinkFromFile = (
-  patch: UNLINK_EMBRACE_CODE,
+  patch: UNLINK_EMBRACE_CODE_TYPE,
 ): boolean => {
   if (UNLINK_EMBRACE_CODE[patch] === undefined) {
     logger.warn("This language is not supported");
@@ -290,7 +293,7 @@ const getUnlinkFilesStep = () => {
     const run = (wizard: Wizard) =>
       new Promise((resolve, reject) => {
         try {
-          resolve(removeEmbraceLinkFromFile(key as UNLINK_EMBRACE_CODE));
+          resolve(removeEmbraceLinkFromFile(key as UNLINK_EMBRACE_CODE_TYPE));
         } catch (e) {
           reject(e);
         }

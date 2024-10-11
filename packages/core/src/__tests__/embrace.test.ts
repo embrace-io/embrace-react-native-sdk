@@ -297,7 +297,7 @@ describe("Handled JS Exceptions", () => {
 
   it("not an instance of error", async () => {
     // even when ts complains about the type, we want to test this scenario
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
     // @ts-ignore
     await logHandledError("not an error", undefined);
 
