@@ -1,8 +1,26 @@
 import React
+import JavaScriptCore
 import Foundation
 import EmbraceIO
+import EmbraceCrash
 import OpenTelemetrySdk
 import EmbraceCommonInternal
+
+class SDKConfig: NSObject {
+    public let appId: String
+    public let appGroupId: String?
+    public let disableCrashReporter: Bool
+    public let disableAutomaticViewCapture: Bool
+    public let endpointBaseUrl: String?
+
+    public init(from: NSDictionary) {
+        self.appId = from["appId"] as? String ?? ""
+        self.appGroupId = from["appGroupId"] as? String
+        self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
+        self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
+        self.endpointBaseUrl = from["endpointBaseUrl"] as? String
+    }
+}
 
 @objc class CustomExporterConfig: NSObject {
     var endpoint: String
@@ -72,23 +90,15 @@ class RNEmbraceOTLP: NSObject {
     );
   }
   
-  @objc(setHttpExporters:logConfigDict:resolver:rejecter:)
   func setHttpExporters(_ spanConfigDict: NSDictionary?,
-                          logConfigDict: NSDictionary?,
-                          resolver resolve: @escaping RCTPromiseResolveBlock,
-                          rejecter reject: @escaping RCTPromiseRejectBlock) {
-    
-    if (spanConfigDict == nil && logConfigDict == nil) {
-      reject("SET_OTLP_HTTP_CUSTOM_EXPORTER", "Error setting http custom exporter, it should receive at least one configuration", nil)
-      return
-    }
+                        logConfigDict: NSDictionary?) -> OpenTelemetryExport {
     
     var customSpanExporter: OtlpHttpTraceExporter? = nil
     var customLogExporter: OtlpHttpLogExporter? = nil
         
     // OTLP HTTP Trace Exporter
     if spanConfigDict != nil {
-      var spanConfig = CustomExporterConfig.fromDictionary(spanConfigDict!)
+      let spanConfig = CustomExporterConfig.fromDictionary(spanConfigDict!)
       customSpanExporter = self.setOtlpHttpTraceExporter(endpoint: spanConfig.endpoint,
                                                          timeout: spanConfig.timeout!,
                                                          header: spanConfig.header!);
@@ -96,17 +106,64 @@ class RNEmbraceOTLP: NSObject {
     
     // OTLP HTTP Log Exporter
     if logConfigDict != nil {
-      var logConfig = CustomExporterConfig.fromDictionary(logConfigDict!)
+      let logConfig = CustomExporterConfig.fromDictionary(logConfigDict!)
       customLogExporter = self.setOtlpHttpLogExporter(endpoint: logConfig.endpoint,
                                                       timeout: logConfig.timeout!,
                                                       header: logConfig.header!)
     }
+            
+      return OpenTelemetryExport(spanExporter: customSpanExporter, logExporter: customLogExporter);
+    }
     
-    OpenTelemetryExport(spanExporter: customSpanExporter, logExporter: customLogExporter)
+    @objc(startNativeEmbraceSDK:otlpExportConfigDict:resolver:rejecter:)
+    func startNativeEmbraceSDK(sdkConfigDict: NSDictionary, otlpExportConfigDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        let config = SDKConfig(from: sdkConfigDict)
 
-    resolve(true)
-    return
-  }
+        DispatchQueue.main.async {
+            do {
+                var embraceOptions: Embrace.Options {
+                    var crashReporter: CrashReporter?
+                    if config.disableCrashReporter {
+                        crashReporter = nil
+                    } else {
+                        crashReporter = EmbraceCrashReporter()
+                    }
+
+                    let servicesBuilder = CaptureServiceBuilder().addDefaults()
+                    if config.disableAutomaticViewCapture {
+                            servicesBuilder.remove(ofType: ViewCaptureService.self)
+                    }
+
+                    var endpoints: Embrace.Endpoints?
+                    if config.endpointBaseUrl != nil {
+                        endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!,
+                                                      developmentBaseURL: config.endpointBaseUrl!,
+                                                      configBaseURL: config.endpointBaseUrl!)
+                    }
+                    
+                    var customExporters: OpenTelemetryExport = self.setHttpExporters(otlpExportConfigDict["traceExporter"] as? NSDictionary,
+                                                                                     logConfigDict: otlpExportConfigDict["logExporter"] as? NSDictionary)
+
+                    return .init(
+                        appId: config.appId,
+                        appGroupId: config.appGroupId,
+                        platform: .reactNative,
+                        endpoints: endpoints,
+                        captureServices: servicesBuilder.build(),
+                        crashReporter: crashReporter,
+                        export: customExporters
+                    )
+                }
+
+                try Embrace.setup(options: embraceOptions)
+                    .start()
+
+                resolve(true)
+            } catch let error {
+                reject("START_EMBRACE_SDK", "Error starting Embrace SDK", error)
+            }
+        }
+    }
   // Http ends
   
 //  // Grpc starts
@@ -120,7 +177,7 @@ class RNEmbraceOTLP: NSObject {
 //                               )
 //    );
 //  }
-//  
+//
 //  private func setOtlpGrpcLogExporter(endpoint: String,
 //                                      header: [(String,String)]?,
 //                                      timeout: NSNumber?) -> OtlpLogExporter {
@@ -144,7 +201,7 @@ class RNEmbraceOTLP: NSObject {
 //
 //    let customSpanExporter: OtlpTraceExporter?
 //    let customLogExporter: OtlpLogExporter?
-//    
+//
 //    // OTLP GRPC Trace Exporter
 //    if spanConfigDict != nil {
 //      var spanConfig = CustomExporterConfig.fromDictionary(spanConfigDict!)
@@ -152,7 +209,7 @@ class RNEmbraceOTLP: NSObject {
 //                                                         header: spanConfig.header,
 //                                                         timeout: spanConfig?.timeout);
 //    }
-//    
+//
 //    // OTLP GRPC Log Exporter
 //    if logConfigDict != nil {
 //      var spanConfig = CustomExporterConfig.fromDictionary(logConfigDict!)
@@ -160,7 +217,7 @@ class RNEmbraceOTLP: NSObject {
 //                                                      header: logConfig.header,
 //                                                      timeout: logConfig.timeout)
 //    }
-//    
+//
 //    resolve(OpenTelemetryExport(spanExporter: customSpanExporter, logExporter: customLogExporter))
 //  }
 }

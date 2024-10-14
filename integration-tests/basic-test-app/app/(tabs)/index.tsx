@@ -13,7 +13,6 @@ import {
   logMessage,
   logWarning,
 } from "@embrace-io/react-native";
-import {configureCustomExporter} from "@embrace-io/react-native-otlp";
 
 const HomeScreen = () => {
   const handleEndSession = useCallback(() => {
@@ -68,20 +67,6 @@ const HomeScreen = () => {
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">End Session</ThemedText>
         <Button onPress={handleEndSession} title="END SESSION" />
-        <Button
-          onPress={() => {
-            console.log("testing custom export");
-            configureCustomExporter({
-              endpoint: "my endpoint",
-              header: {
-                key: "my header",
-                token: "my token",
-              },
-              timeout: 1000,
-            });
-          }}
-          title="CONFIG CUSTOM EXPORTER"
-        />
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>

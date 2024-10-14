@@ -1,13 +1,29 @@
 "use strict";
-import {NativeModules, Platform} from "react-native";
+import {Platform, NativeModules} from "react-native";
 
-import {createTruePromise} from "./utils";
+import {createFalsePromise} from "./utils";
 
 interface CustomExporterConfig {
   endpoint: string;
-  header: {key: string; token: string};
+  header?: {key: string; token: string};
   timeout?: number;
 }
+
+interface OTLPExporterConfig {
+  logExporter?: CustomExporterConfig;
+  traceExporter?: CustomExporterConfig;
+}
+
+interface IOSConfig {
+  appId: string;
+  appGroupId?: string;
+  disableCrashReporter?: boolean;
+  disableAutomaticViewCapture?: boolean;
+  endpointBaseUrl?: string;
+}
+
+// NOTE: as per today Android is not configurable through code, this is a placeholder for future implementations
+interface AndroidConfig {}
 
 const WARN_MESSAGES = {
   config: "[Embrace] Invalid configuration for Custom Exporter",
@@ -16,45 +32,57 @@ const WARN_MESSAGES = {
   error: "[Embrace] Failed to configure Custom Exporter",
 };
 
-const configureCustomExporter = async (config: CustomExporterConfig) => {
-  if (!config || typeof config !== "object") {
+const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
+  if (!otlpExporterConfig || typeof otlpExporterConfig !== "object") {
     console.warn(WARN_MESSAGES.config);
     return;
   }
 
-  const {endpoint, header, timeout} = config;
+  if (typeof otlpExporterConfig.logExporter === "object") {
+    const {logExporter} = otlpExporterConfig;
 
-  if (!endpoint || typeof endpoint !== "string") {
-    console.warn(WARN_MESSAGES.endpoint);
-    return;
+    if (!logExporter.endpoint) {
+      console.warn(WARN_MESSAGES.endpoint);
+      return;
+    }
+
+    if (logExporter.header && typeof logExporter.header !== "object") {
+      console.warn(WARN_MESSAGES.header);
+      return;
+    }
   }
 
-  if (!header || typeof header !== "object" || !header.key || !header.token) {
-    console.warn(WARN_MESSAGES.header);
-    return;
+  if (typeof otlpExporterConfig.traceExporter === "object") {
+    const {traceExporter} = otlpExporterConfig;
+
+    if (!traceExporter.endpoint) {
+      console.warn(WARN_MESSAGES.endpoint);
+      return;
+    }
+
+    if (traceExporter.header && typeof traceExporter.header !== "object") {
+      console.log(traceExporter);
+      console.warn(WARN_MESSAGES.header);
+      return;
+    }
   }
 
-  try {
-    const {key, token} = header;
+  return async (sdkConfig: IOSConfig | AndroidConfig) => {
+    try {
+      console.log(
+        `NativeModules.RNEmbraceOTLP.initialize working in basic-test-app for ${Platform.OS}`,
+        sdkConfig,
+      );
 
-    // Configure Custom Exporter
-    await NativeModules.RNEmbraceOTLP.setHttpExporters(
-      {
-        endpoint: "http://localhost:4317/v1/traces",
-        header: [key, token],
-        timeout,
-      },
-      null,
-    );
-
-    console.log(
-      `NativeModules.RNEmbraceOTLP.setHttpExporters working in basic-test-app for ${Platform.OS}`,
-    );
-  } catch (error) {
-    console.warn(WARN_MESSAGES.error, error);
-  }
-
-  return createTruePromise();
+      return await NativeModules.RNEmbraceOTLP.startNativeEmbraceSDK(
+        sdkConfig,
+        otlpExporterConfig,
+      );
+    } catch (error) {
+      console.warn(WARN_MESSAGES.error, error);
+      return createFalsePromise();
+    }
+  };
 };
 
-export {configureCustomExporter};
+export {initialize};

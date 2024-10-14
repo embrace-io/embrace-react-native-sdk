@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import {useEffect} from "react";
 import "react-native-reanimated";
 import {initialize as initEmbrace} from "@embrace-io/react-native";
+import {initialize as initEmbraceWithCustomExporters} from "@embrace-io/react-native-otlp";
 
 import {useColorScheme} from "@/hooks/useColorScheme";
 
@@ -12,6 +13,25 @@ import {useColorScheme} from "@/hooks/useColorScheme";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const initWithCustomExporters = initEmbraceWithCustomExporters({
+    // logExporter: {
+    //   endpoint: "http://localhost:4317/v1/logs",
+    //   header: {
+    //     key: "a-key",
+    //     token: "a-token",
+    //   },
+    //   timeout: 30000,
+    // },
+    traceExporter: {
+      endpoint: "http://localhost:8080/otlp-http/v1/traces",
+      // header: {
+      //   key: "a-key",
+      //   token: "a-token",
+      // },
+      timeout: 30000,
+    },
+  });
+
   useEffect(() => {
     const init = async () => {
       await initEmbrace({
@@ -20,6 +40,7 @@ export default function RootLayout() {
             appId: "abcdf",
             // endpointBaseUrl: "http://localhost:8877",
           },
+          replaceInit: initWithCustomExporters,
         },
       });
     };

@@ -2,10 +2,15 @@
 
 @interface RCT_EXTERN_MODULE(RNEmbraceOTLP, NSObject)
 
-RCT_EXTERN_METHOD(setHttpExporters:(NSDictionary *)spanConfigDict
-                  logConfigDict:(NSDictionary *)logConfigDict
+RCT_EXTERN_METHOD(startNativeEmbraceSDK:(NSDictionary)sdkConfig
+                  otlpExportConfigDict:(NSDictionary)otlpExportConfigDict
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
+
+//RCT_EXTERN_METHOD(setHttpExporters:(NSDictionary *)spanConfigDict
+//                  logConfigDict:(NSDictionary *)logConfigDict
+//                  resolver:(RCTPromiseResolveBlock)resolve
+//                  rejecter:(RCTPromiseRejectBlock)reject)
 
 //RCT_EXTERN_METHOD(setGrpExporters:(NSDictionary *)spanConfigDict
 //                  logConfigDict:(NSDictionary *)logConfigDict
