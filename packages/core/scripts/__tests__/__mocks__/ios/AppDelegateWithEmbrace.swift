@@ -7,7 +7,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         EmbraceInitializer.start()
         let bridge = RCTBridge(delegate: self, launchOptions: launchOptions)
         let rootView = RCTRootView(bridge: bridge!, moduleName: "test741", initialProperties: nil)
-        
+
         rootView.backgroundColor = UIColor.white
 
         self.window = UIWindow(frame: UIScreen.main.bounds)

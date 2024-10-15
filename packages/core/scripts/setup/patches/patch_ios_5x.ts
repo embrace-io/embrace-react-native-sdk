@@ -19,7 +19,7 @@ export const EMBRACE_INIT_OBJECTIVEC_5X =
 
 export const EMBRACE_IMPORT_SWIFT_5X = "import Embrace";
 export const EMBRACE_INIT_SWIFT_5X =
-  "Embrace.sharedInstance().start(launchOptions: launchOptions, framework:.reactNative)";
+  "Embrace.sharedInstance().start(launchOptions: launchOptions, framework: .reactNative)";
 
 export const PATCH_IOS_SWIFT_APPDELEGATE_5X: IPatchDefinition = {
   fileName: MAIN_CLASS_BY_LANGUAGE.swift,
