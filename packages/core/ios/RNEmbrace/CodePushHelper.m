@@ -6,8 +6,7 @@
 
 @implementation CodePushHelper
 
-+ (NSURL *)getCodePushURL
-{
++ (NSURL *)getCodePushURL {
 #if __has_include(<CodePush/CodePush.h>)
     return [CodePush bundleURL];
 #else
