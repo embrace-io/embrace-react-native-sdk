@@ -3,4 +3,16 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 50
+    groups:
+      jest:
+        patterns:
+          - '*jest*'
+      eslint:
+        patterns:
+          - '*eslint*'

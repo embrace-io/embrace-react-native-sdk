@@ -22,28 +22,30 @@ export const useEmbraceNavigationTracker = (
     const navigationHistory = findNavigationHistory(currentRoute);
     return navigationHistory.pop();
   };
-  const setLastScreenStart = (name: string) => {
-    const cS = {
+
+  const setLastScreenStart = async (name: string) => {
+    currentScreen.current = {
       name,
-      startTime: new Date().getTime(),
     };
-    currentScreen.current = cS;
     if (NativeModules.EmbraceManager.startView) {
-      NativeModules.EmbraceManager.startView(cS.name);
+      currentScreen.current.spanId =
+        await NativeModules.EmbraceManager.startView(name);
     } else {
       console.warn(
         "[Embrace] The method startView was not found, please update the native SDK",
       );
     }
   };
+
   const updateLastScreen = ({name}: IHistory) => {
     if (!currentScreen.current?.name) {
       setLastScreenStart(name);
     } else if (currentScreen.current.name !== name) {
-      const cSEnd = {...currentScreen.current};
-      cSEnd.endTime = new Date().getTime();
-      if (NativeModules.EmbraceManager.endView) {
-        NativeModules.EmbraceManager.endView(cSEnd.name);
+      if (
+        NativeModules.EmbraceManager.endView &&
+        currentScreen.current.spanId
+      ) {
+        NativeModules.EmbraceManager.endView(currentScreen.current.spanId);
         setLastScreenStart(name);
       } else {
         console.warn(

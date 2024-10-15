@@ -9,12 +9,13 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.ios.deployment_target = '9.0'
-  s.tvos.deployment_target = '10.0'
+  s.ios.deployment_target = '13.0'
+  s.tvos.deployment_target = '13.0'
+  s.swift_version = '5.0'
 
-  s.source_files = 'ios/RNEmbrace/*.{h,m}'
+  s.source_files = "ios/RNEmbrace/*.{h,m,mm,swift}"
   s.source = {:path => "ios/RNEmbrace/"}
 
   s.dependency 'React-Core'
-  s.dependency 'EmbraceIO', '5.25.2'
+  s.dependency 'EmbraceIO', '6.4.2'
 end

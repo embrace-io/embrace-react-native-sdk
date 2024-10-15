@@ -12,14 +12,15 @@ export default class NavigationTracker {
     this.initNavigator(navigation);
   }
 
-  public setLastScreenStart = (name: string) => {
+  public setLastScreenStart = async (name: string) => {
     const cS = {
       name,
-      startTime: new Date().getTime(),
     };
     this.currentScreen = cS;
     if (NativeModules.EmbraceManager.startView) {
-      NativeModules.EmbraceManager.startView(cS.name);
+      this.currentScreen.spanId = await NativeModules.EmbraceManager.startView(
+        cS.name,
+      );
     } else {
       console.warn(
         "[Embrace] The method startView was not found, please update the native SDK",
@@ -27,12 +28,10 @@ export default class NavigationTracker {
     }
   };
 
-  public updateLastScreen = (name: string) => {
+  public updateLastScreen = async (name: string) => {
     if (this.currentScreen && this.currentScreen.name !== name) {
-      const cSEnd = {...this.currentScreen};
-      cSEnd.endTime = new Date().getTime();
-      if (NativeModules.EmbraceManager.endView) {
-        NativeModules.EmbraceManager.endView(cSEnd.name);
+      if (NativeModules.EmbraceManager.endView && this.currentScreen.spanId) {
+        await NativeModules.EmbraceManager.endView(this.currentScreen.spanId);
         this.setLastScreenStart(name);
       } else {
         console.warn(
@@ -41,10 +40,11 @@ export default class NavigationTracker {
       }
     }
   };
+
   public initNavigator = (navigation: INavigation) => {
-    navigation.events().registerComponentDidAppearListener(event => {
+    navigation.events().registerComponentDidAppearListener(async event => {
       if (!this.currentScreen || !this.currentScreen.name) {
-        this.setLastScreenStart(event.componentName);
+        await this.setLastScreenStart(event.componentName);
       }
       if (
         this.currentScreen &&

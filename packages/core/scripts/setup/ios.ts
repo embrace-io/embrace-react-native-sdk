@@ -2,11 +2,11 @@ import Wizard from "../util/wizard";
 import {
   bundlePhaseRE,
   embraceNativePod,
-  embracePlistPatchable,
   embRunScript,
   exportSourcemapRNVariable,
   podfilePatchable,
   xcodePatchable,
+  findNameWithCaseSensitiveFromPath,
 } from "../util/ios";
 import EmbraceLogger from "../../src/logger";
 
@@ -25,17 +25,24 @@ export const tryToPatchAppDelegate = async ({
 }: {
   name: string;
 }): Promise<boolean> => {
-  const response = patch("objectivec", name);
-  if (!response) {
+  const project = await xcodePatchable({name});
+  const bridgingHeader = project.getBridgingHeaderName(name);
+  const response = patch("objectivec", name, {bridgingHeader});
+  if (response) {
+    return project.addBridgingHeader(name);
+  } else {
     return patch("swift", name) || false;
   }
-  return response;
 };
 
 export const iosInitializeEmbrace = {
   name: "iOS initialize Embrace",
-  run: (wizard: Wizard): Promise<any> =>
-    wizard.fieldValue(packageJSON).then(tryToPatchAppDelegate),
+  run: async (wizard: Wizard) => {
+    const pJSON = await wizard.fieldValue(packageJSON);
+    const name = (pJSON as IPackageJson).name;
+
+    return tryToPatchAppDelegate({name});
+  },
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
 };
@@ -96,7 +103,6 @@ export const patchXcodeBundlePhase = {
           /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m,
           `${exportSourcemapRNVariable}\n`,
         );
-        project.sync();
         return project.patch();
       }),
   docURL:
@@ -126,7 +132,6 @@ export const addUploadBuildPhase = {
               shellScript: `REACT_NATIVE_MAP_PATH="$CONFIGURATION_BUILD_DIR/main.jsbundle.map" EMBRACE_ID=${id} EMBRACE_TOKEN=${token} ${embRunScript}`,
             },
           );
-          project.sync();
           return project.patch();
         });
       });
@@ -135,74 +140,57 @@ export const addUploadBuildPhase = {
     "https://embrace.io/docs/react-native/integration/upload-symbol-files/#uploading-native-and-javascript-symbol-files",
 };
 
-export const findNameWithCaseSensitiveFromPath = (
-  path: string,
-  name: string,
-) => {
-  const pathSplitted = path.split("/");
-  const nameInLowerCase = name.toLocaleLowerCase();
+export const addEmbraceInitializerSwift = {
+  name: "Adding EmbraceInitializer.swift",
+  run: async (wizard: Wizard): Promise<any> => {
+    const [appId, json] = await wizard.fieldValueList([iosAppID, packageJSON]);
+    const {name} = json;
+    const project = await xcodePatchable({name});
 
-  const nameFounded = pathSplitted.find(
-    element => element.toLocaleLowerCase() === `${nameInLowerCase}.xcodeproj`,
-  );
-  if (nameFounded) {
-    return nameFounded.replace(".xcodeproj", "");
-  }
+    const filePath = path.join("ios", name, "EmbraceInitializer.swift");
+    if (fs.existsSync(filePath)) {
+      logger.warn("EmbraceInitializer.swift already exists");
+      return;
+    }
 
-  logger.warn("the xcodeproj file does not match with your project's name");
-  logger.warn(
-    `skipping adding Embrace-Info.plist to ${name}, this should be added to the project manually.
-    You can go https://embrace.io/docs/ios/integration/session-reporting/#import-embrace for more information`,
-  );
-  return name;
-};
+    fs.writeFileSync(filePath, getEmbraceInitializerContents(appId));
 
-export const createEmbracePlist = {
-  name: "Create Embrace plist file",
-  run: (wizard: Wizard): Promise<any> =>
-    wizard.fieldValue(packageJSON).then(({name}) => {
-      const p = path.join("ios", name, "Embrace-Info.plist");
-      if (fs.existsSync(p)) {
-        logger.warn("already has Embrace-Info.json file");
-        return;
-      }
-
-      fs.closeSync(fs.openSync(p, "a"));
-
-      return xcodePatchable({name})
-        .then(project => {
-          const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
-            project.path,
-            name,
-          );
-          project.addFile(
-            nameWithCaseSensitive,
-            `${nameWithCaseSensitive}/Embrace-Info.plist`,
-          );
-          project.sync();
-          project.patch();
-        })
-        .then(() => embracePlistPatchable({name}))
-        .then(file =>
-          wizard.fieldValue(iosAppID).then(iosAppIDValue => {
-            file.contents = plistContents(iosAppIDValue);
-            return file.patch();
-          }),
-        );
-    }),
+    const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
+      project.path,
+      name,
+    );
+    project.addFile(
+      nameWithCaseSensitive,
+      `${nameWithCaseSensitive}/EmbraceInitializer.swift`,
+      "source",
+    );
+    return project.patch();
+  },
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually",
 };
 
-const plistContents = (iosAppIDValue: string) => {
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-  <dict>
-    <key>API_KEY</key>
-    <string>${iosAppIDValue}</string>
-    <key>CRASH_REPORT_ENABLED</key>
-    <true/>
-  </dict>
-</plist>`;
+const getEmbraceInitializerContents = (appId: string) => {
+  return `import Foundation
+import EmbraceIO
+
+@objcMembers class EmbraceInitializer: NSObject {
+    // Start the EmbraceSDK with the minimum required settings, for more advanced configuration options see:
+    // https://embrace.io/docs/ios/open-source/embrace-options/
+    static func start() -> Void {
+        do {
+            try Embrace
+                .setup(
+                    options: Embrace.Options(
+                        appId: "${appId}",
+                        platform: .reactNative
+                    )
+                )
+                .start()
+        } catch let e {
+            print("Error starting Embrace \\(e.localizedDescription)")
+        }
+    }
+}
+`;
 };

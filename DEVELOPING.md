@@ -45,7 +45,7 @@ To get started generate a new artifact from whichever packages you modified:
 ```bash
 cd packages/<package-modified>/
 yarn build
-yarn pack
+npm pack    # yarn pack behaves differently, stick to npm pack because that's what lerna publish uses
 ```
 
 Then update the example app with that local artifact:
@@ -98,7 +98,7 @@ And then either publish a local artifact or if you need CI to pass - publish a b
 
 ### Local artifact
 
-You can test changes local changes to the iOS SDK by updating the example app's `podspec` and `Podfile` to point to the local copy.
+You can test local changes to the iOS SDK by updating the example app's `podspec` and `Podfile` to point to the local copy.
 
 1. In `examples/react-native-test-suite/node_modules/embrace-io/RNEmbrace.podspec`, change the dependency on the iOS SDK to `s.dependency 'EmbraceIO-LOCAL'`
 2. In `examples/react-native-test-suite/ios/Podfile`, add the following line `pod 'EmbraceIO-LOCAL', :path => 'path/to/ios_sdk'`
@@ -117,17 +117,19 @@ Automated integration testing is being actively developed to replace some of the
 
 ## Branching strategy
 
-Generally all proposed changes should target the `master` branch and new releases are cut from there after QA. One exception
+Generally all proposed changes should target the `main` branch and new releases are cut from there after QA. One exception
 is urgent patch fixes, in those cases a branch should be made from the latest released tag to isolate the fix from any
-unreleased changes on `master` and a patch release will be cut from that new branch.
+unreleased changes on `main` and a patch release will be cut from that new branch.
 
 ## Releasing
 
-1. Bump the Android (SDK + Swazzler)/iOS dependencies to the latest available stable versions
-   1. Update the iOS SDK version in `./packages/core/ios/RNEmbrace.podspec`
-   2. Update the Android SDK version in `./packages/core/android/gradle.properties`
-2. Bump the RN SDK version according to semver in `./lerna.json`
-3. Run the example app on Android + iOS (in release mode) and confirm that a session is captured & appears in the dashboard with useful info
-4. Release to npm with `yarn publish-modules`
-5. Create a PR with all these changes and merge to `master`
-6. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/master/docs/react-native/changelog.md) for the release
+1. Create a release branch off of main and push it to origin
+2. Make sure you are logged into the npmjs registry (`npm login`)
+3. Release to npm with `yarn publish-modules`, you will be prompted to choose the version number to update to
+4. Check https://www.npmjs.com/org/embrace-io, the latest versions should have been published
+5. Check https://github.com/embrace-io/embrace-react-native-sdk/tags, a vX.X.X tag should have been pushed
+6. Create a PR from your release branch against `main` to merge all the version updates
+7. Run an example app and point to the latest released packages to confirm basic behaviour
+8. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
+
+NOTE: If you make a mistake while publishing you can remove the specific version w/ `npm unpublish <package-name>@<version>`, see [Unpublishing a single version of a package](https://docs.npmjs.com/unpublishing-packages-from-the-registry#unpublishing-a-single-version-of-a-package)

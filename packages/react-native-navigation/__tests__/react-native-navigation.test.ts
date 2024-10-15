@@ -1,7 +1,5 @@
 import {IEvent} from "../navigation/interfaces/NavigationInterfaces";
 
-jest.useFakeTimers();
-
 beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
@@ -164,17 +162,25 @@ describe("Test React Native Navigation Tracker", () => {
     expect(EmbraceNavigationTracker.default.build(navigation)).toBe(1);
     expect(mockStartView).toHaveBeenCalledTimes(1);
   });
-  test("Navigation navigate to other screen log end view", () => {
+  test("Navigation navigate to other screen log end view", async () => {
     const mockStartView = jest.fn();
     const mockEndView = jest.fn();
+    let eventsResolve: (value: unknown) => void;
+    const eventsPromise = new Promise(resolve => (eventsResolve = resolve));
 
     jest.mock(
       "react-native",
       () => ({
         NativeModules: {
           EmbraceManager: {
-            startView: mockStartView,
-            endView: mockEndView,
+            endView: (spanId: string) => {
+              mockEndView();
+              return true;
+            },
+            startView: (spanName: string) => {
+              mockStartView();
+              return `id-${spanName}`;
+            },
           },
         },
       }),
@@ -190,17 +196,19 @@ describe("Test React Native Navigation Tracker", () => {
     const navigation = {
       events: () => {
         return {
-          registerComponentDidAppearListener: (
-            callable: (event: IEvent) => void,
+          registerComponentDidAppearListener: async (
+            callable: (event: IEvent) => Promise<void>,
           ) => {
-            callable(event);
-            callable(event2);
+            await callable(event);
+            await callable(event2);
+            eventsResolve(true);
           },
         };
       },
     };
 
     expect(EmbraceNavigationTracker.default.build(navigation)).toBe(1);
+    await eventsPromise;
     expect(mockStartView).toHaveBeenCalledTimes(2);
     expect(mockEndView).toHaveBeenCalledTimes(1);
   });

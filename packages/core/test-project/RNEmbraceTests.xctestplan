@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "2B6B2FD1-D29F-4AAA-BF5A-153E032E55C8",
+      "name" : "Test Scheme Action",
+      "options" : {
+        "diagnosticCollectionPolicy" : "Never",
+        "environmentVariableEntries" : [
+          {
+            "key" : "IOS_TEST_WAIT_TIME",
+            "value" : "$(IOS_TEST_WAIT_TIME)"
+          }
+        ],
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:RNEmbraceTestProject.xcodeproj",
+          "identifier" : "30DFDA682C486677009F2ECC",
+          "name" : "RNEmbraceTests"
+        },
+        "testExecutionOrdering" : "alphabetical"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:RNEmbraceTestProject.xcodeproj",
+        "identifier" : "30DFDA682C486677009F2ECC",
+        "name" : "RNEmbraceTests"
+      }
+    }
+  ],
+  "version" : 1
+}

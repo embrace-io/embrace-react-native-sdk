@@ -9,9 +9,10 @@ module.exports = {
   preset: "react-native",
   modulePathIgnorePatterns: [
     "<rootDir>/dist/",
-    "<rootDir>/packages/*/lib/",
+    "<rootDir>/packages/.*/lib/",
     "<rootDir>/examples/",
     "<rootDir>/integration-tests/",
+    "<rootDir>/packages/core/test-project/",
   ],
   collectCoverage: true,
   coverageThreshold: {
@@ -19,9 +20,13 @@ module.exports = {
       lines: 74,
     },
   },
-  globals: {
-    "ts-jest": {
-      babelConfig: true,
-    },
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        babel: true,
+        tsconfig: "tsconfig.json",
+      },
+    ],
   },
 };
