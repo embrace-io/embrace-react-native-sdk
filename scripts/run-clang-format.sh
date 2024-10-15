@@ -29,6 +29,7 @@ done
 EXCLUDE_DIRS=(
     "$(pwd)/node_modules"
     "$(pwd)/build"
+    "$(pwd)/packages/core/scripts/__tests__"
 )
 
 EXCLUDE_CMD=""
