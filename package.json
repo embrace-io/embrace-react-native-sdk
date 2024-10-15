@@ -14,8 +14,8 @@
     "publish-modules": "npx lerna run build && npx lerna publish",
     "build": "npx lerna run build",
     "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
-    "lint:clang": "bash ./scripts/run-clang-format.sh",
-    "lint:swift": "bash ./scripts/run-swiftlint.sh",
+    "lint:clang": "./scripts/run-clang-format.sh",
+    "lint:swift": "./scripts/run-swiftlint.sh",
     "test": "jest",
     "ios:install": "npx lerna run ios:install",
     "ios:test": "npx lerna run ios:test"
