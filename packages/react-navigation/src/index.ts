@@ -102,7 +102,6 @@ export const useEmbraceNavigationTracker = (
     }
 
     console.log("[Embrace] Navigation tracker was applied.");
-
     const unsubscribe = navigationRefC.addListener("state", e => {
       findAndSetLastScreen(e.data.state);
     });

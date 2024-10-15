@@ -27,6 +27,7 @@ jobs:
       - run: corepack enable
       - run: yarn
       - run: yarn lint:js
+      - run: yarn constraints
       - run: yarn test --watchAll=false --coverage
       - run: yarn build
       - uses: codecov/codecov-action@v4
