@@ -35,7 +35,7 @@ export const LOG_MESSAGE_ERROR = "Error log (manually triggered)";
 const HomeScreen = () => {
   const router = useRouter();
 
-  const [deviceId, setDeviceId] = useState<string>("DEVICE_ID_NOT_LOADED");
+  const [deviceId, setDeviceId] = useState<string>();
 
   useEffect(() => {
     setTimeout(() => {
@@ -108,6 +108,13 @@ const HomeScreen = () => {
   const handleCrashMe = () => {
     throw new Error("A SIMPLE CRASH");
   };
+  const crash = useCallback(()=>{
+    throw new Error("A SIMPLE CRASH");
+  },[])
+  // useEffect(()=>{
+  //   if(deviceId)
+  //   crash()
+  // },[deviceId])
 
   const handleAddPayer = () => {
     setUserAsPayer();
@@ -148,6 +155,9 @@ const HomeScreen = () => {
         </ThemedView>
         <ThemedView style={styles.stepContainer}>
           <Button onPress={handleCrashMe} title="CRASH ME" />
+        </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button onPress={handleCrashMeAnonymous} title="CRASH ME ANONYMOUS" />
         </ThemedView>
         <ThemedView style={styles.stepContainer}>
           <Button onPress={handleCallApi} title="Call API" />
