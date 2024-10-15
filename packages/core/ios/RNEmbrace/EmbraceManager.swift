@@ -146,7 +146,7 @@ class EmbraceManager: NSObject {
     }
 
     // Should match strings defined in: packages/core/src/interfaces/Types.ts
-    private func lastRunEndStateToString(endState: LastRunEndState) -> String{
+    private func lastRunEndStateToString(endState: LastRunEndState) -> String {
         switch endState {
         case .crash:
             return "CRASH"
@@ -227,7 +227,7 @@ class EmbraceManager: NSObject {
                     resolve(false)
                     return
                 }
-                
+
                 let bundleID = try computeBundleID(path: url.path)
                 try Embrace.client?.metadata.addResource(key: REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, value: bundleID.id, lifespan: .process)
                 resolve(true)
@@ -329,11 +329,11 @@ class EmbraceManager: NSObject {
             reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
             return
         }
-                
-        if (!stacktrace.isEmpty) {
+
+        if !stacktrace.isEmpty {
             attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
         }
-        
+
         Embrace.client?.log(
             message,
             severity: severityValue,
@@ -737,17 +737,17 @@ class EmbraceManager: NSObject {
             reject("LOG_HANDLED_ERROR_ERROR", "Error recording a log handled error, Embrace SDK may not be initialized", nil)
             return
         }
-        
+
         guard var attributes = properties as? [String: String] else {
             reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
             return
         }
-        
+
         // injecting stacktrace as attribute
         attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
         // not added by native sdk
         attributes.updateValue("handled", forKey: "emb.exception_handling")
-        
+
         Embrace.client?.log(
             message,
             severity: LogSeverity.error,
@@ -755,12 +755,11 @@ class EmbraceManager: NSObject {
             attributes: attributes,
             // will always include a js stacktrace as per implementation
             stackTraceBehavior: StackTraceBehavior.notIncluded
-        );
-        
+        )
+
         resolve(true)
     }
-    
-    
+
     @objc(logUnhandledJSException:message:type:stacktrace:resolver:rejecter:)
     func logUnhandledJSException(
         _ name: String,
@@ -785,7 +784,7 @@ class EmbraceManager: NSObject {
             "exception.message": message,
             "exception.type": type,
             "exception.id": jsExceptionUUID
-        ];
+        ]
 
         Embrace.client?.log(
             name,
@@ -794,7 +793,7 @@ class EmbraceManager: NSObject {
             attributes: attributes,
             // will always include a js stacktrace as per implementation
             stackTraceBehavior: StackTraceBehavior.notIncluded
-        );
+        )
 
         do {
             // adding crash metadata

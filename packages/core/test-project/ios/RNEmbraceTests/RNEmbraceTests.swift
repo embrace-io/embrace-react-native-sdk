@@ -116,7 +116,7 @@ class EmbraceManagerTests: XCTestCase {
                     // Set a fake endpoint for unit tests otherwise we'll end up sending actual payloads to Embrace
                     endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null",
                                                  developmentBaseURL: "http://localhost/dev/null",
-                                                 configBaseURL:  "http://localhost/dev/null"),
+                                                 configBaseURL: "http://localhost/dev/null"),
                     export:
                         OpenTelemetryExport(
                             spanExporter: self.spanExporter,
