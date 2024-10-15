@@ -64,7 +64,7 @@ describe("initialize", () => {
     const result = await initialize({patch: testValue});
 
     expect(result).toBe(true);
-    expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.56.1");
+    expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.75.4");
     expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith(testValue);
     expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith(
       expect.any(String),
@@ -82,7 +82,7 @@ describe("initialize", () => {
 
     expect(result).toBe(true);
     expect(mockStart).toHaveBeenCalledWith({});
-    expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.56.1");
+    expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.75.4");
     expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith(testValue);
     expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith(
       expect.any(String),
