@@ -3,16 +3,17 @@ jest.useFakeTimers();
 beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
+
 describe("Test Navigation Tracker", () => {
   jest.mock("react", () => ({
     useEffect: (w: () => void) => {
       w();
     },
     useState: () => [false, () => {}],
-    useRef: () => {
-      return {current: {}};
-    },
+    useRef: () => ({current: {}}),
+    useCallback: (callback: unknown) => callback,
   }));
+
   const mockedHistory = {
     history: [
       {key: "Home-Yii-q1BuKBL4I5_ayc5sg", type: "route"},
@@ -71,6 +72,7 @@ describe("Test Navigation Tracker", () => {
   };
   test("Navigation Ref was not Provided", () => {
     const mockStartView = jest.fn();
+
     jest.mock(
       "react-native",
       () => ({
@@ -82,14 +84,14 @@ describe("Test Navigation Tracker", () => {
       }),
       {virtual: true},
     );
+
     jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useState: () => [false, () => {}],
-      useRef: () => {
-        return {current: {}};
-      },
+      useRef: () => ({current: {}}),
+      useCallback: (callback: unknown) => callback,
     }));
     const mockCurrentRoute = jest.fn();
     const {useEmbraceNavigationTracker} = require("../src/index");
@@ -97,10 +99,12 @@ describe("Test Navigation Tracker", () => {
     useEmbraceNavigationTracker();
     expect(mockCurrentRoute).toHaveBeenCalledTimes(0);
   });
+
   test("None state was provided", () => {
     const {findNavigationHistory} = require("../navigation/Utils");
     expect(findNavigationHistory()).toEqual([]);
   });
+
   test("Init Screen", () => {
     const {findNavigationHistory} = require("../navigation/Utils");
 
@@ -108,6 +112,7 @@ describe("Test Navigation Tracker", () => {
       {name: "OtherHome"},
     ]);
   });
+
   test("Get Navigation History", () => {
     const {findNavigationHistory} = require("../navigation/Utils");
 
@@ -116,16 +121,17 @@ describe("Test Navigation Tracker", () => {
       {name: "StackHome2"},
     ]);
   });
+
   test("Add Listener was called", () => {
     jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useState: () => [false, () => {}],
-      useRef: () => {
-        return {current: {}};
-      },
+      useRef: () => ({current: {}}),
+      useCallback: (callback: unknown) => callback,
     }));
+
     const mockAddListener = jest.fn();
     const {useEmbraceNavigationTracker} = require("../src/index");
     const navigationRef = {
@@ -139,16 +145,17 @@ describe("Test Navigation Tracker", () => {
     useEmbraceNavigationTracker(navigationRef);
     expect(mockAddListener).toHaveBeenCalledTimes(1);
   });
+
   test("Track init screen", () => {
     jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useState: () => [false, () => {}],
-      useRef: () => {
-        return {current: {}};
-      },
+      useRef: () => ({current: {}}),
+      useCallback: (callback: unknown) => callback,
     }));
+
     const mockAddListener = jest.fn();
     const {useEmbraceNavigationTracker} = require("../src/index");
     const navigationRef = {
@@ -162,6 +169,7 @@ describe("Test Navigation Tracker", () => {
     useEmbraceNavigationTracker(navigationRef);
     expect(mockAddListener).toHaveBeenCalledTimes(1);
   });
+
   test("Track on nav state update", () => {
     const mockStartView = jest.fn();
     jest.mock(
@@ -175,15 +183,16 @@ describe("Test Navigation Tracker", () => {
       }),
       {virtual: true},
     );
+
     jest.mock("react", () => ({
       useEffect: (w: () => void) => {
         w();
       },
       useState: () => [false, () => {}],
-      useRef: () => {
-        return {current: {}};
-      },
+      useRef: () => ({current: {}}),
+      useCallback: (callback: unknown) => callback,
     }));
+
     const {useEmbraceNavigationTracker} = require("../src/index");
     const navigationRef = {
       current: {
@@ -198,9 +207,11 @@ describe("Test Navigation Tracker", () => {
     useEmbraceNavigationTracker(navigationRef);
     expect(mockStartView).toHaveBeenCalledTimes(1);
   });
+
   test("Track on Second Screen", () => {
     const mockStartView = jest.fn();
     const mockEndView = jest.fn();
+
     jest.mock(
       "react",
       () => ({
@@ -208,18 +219,18 @@ describe("Test Navigation Tracker", () => {
           w();
         },
         useState: () => [true, () => {}],
-        useRef: () => {
-          return {current: {name: "HomeScreen", spanId: "123123-MY-ID"}};
-        },
+        useRef: () => ({current: {name: "HomeScreen", spanId: "123123-MY-ID"}}),
+        useCallback: (callback: unknown) => callback,
       }),
       {virtual: true},
     );
+
     jest.mock(
       "react-native",
       () => ({
         NativeModules: {
           EmbraceManager: {
-            endView: (spanId: string) => {
+            endView: (_: string) => {
               mockEndView();
               return true;
             },
@@ -232,6 +243,7 @@ describe("Test Navigation Tracker", () => {
       }),
       {virtual: true},
     );
+
     const {useEmbraceNavigationTracker} = require("../src/index");
     const navigationRef = {
       current: {
@@ -243,10 +255,13 @@ describe("Test Navigation Tracker", () => {
         },
       },
     };
+
     useEmbraceNavigationTracker(navigationRef);
     expect(mockStartView).toHaveBeenCalledTimes(1);
     expect(mockEndView).toHaveBeenCalledTimes(1);
   });
+
+  // FIX: test doesn't have assertions?
   test("End View does not exist", () => {
     jest.mock(
       "react",
@@ -255,12 +270,12 @@ describe("Test Navigation Tracker", () => {
           w();
         },
         useState: () => [true, () => {}],
-        useRef: () => {
-          return {current: {name: "HomeScreen", spanId: "123123-MY-ID"}};
-        },
+        useRef: () => ({current: {name: "HomeScreen", spanId: "123123-MY-ID"}}),
+        useCallback: (callback: unknown) => callback,
       }),
       {virtual: true},
     );
+
     jest.mock(
       "react-native",
       () => ({
@@ -279,11 +294,10 @@ describe("Test Navigation Tracker", () => {
         addListener: (q: any, w: (e: any) => {}) => {
           w({data: {state: mockedHistory}});
         },
-        getCurrentRoute: () => {
-          return mockedHistory;
-        },
+        getCurrentRoute: () => mockedHistory,
       },
     };
+
     useEmbraceNavigationTracker(navigationRef);
   });
 });
