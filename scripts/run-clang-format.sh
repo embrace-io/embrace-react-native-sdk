@@ -45,9 +45,9 @@ for exc_dir in "${EXCLUDE_DIRS[@]}"; do
     ((EXCLUDE_COUNTER++))
 done
 
-# 3) Exclude file extensions. Add more file extensions if needed
+# 3) Include file extensions. Add more file extensions if needed
 FILE_EXTS=(
-    "*.m"
+    # "*.m" // disabling linting *.m files by now until we improve what this formatter produces
     "*.mm"
     "*.h"
 )
