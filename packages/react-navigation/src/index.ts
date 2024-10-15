@@ -1,5 +1,5 @@
 import {NativeModules} from "react-native";
-import {RefObject, useEffect, useRef, useState} from "react";
+import {RefObject, useCallback, useEffect, useRef, useState} from "react";
 
 import {
   ICurrentScreenInstance,
@@ -18,15 +18,16 @@ export const useEmbraceNavigationTracker = (
   const [isFirstScreen, setIsFirstScreen] = useState<boolean>(true);
   const currentScreen = useRef<ICurrentScreenInstance>();
 
-  const findLastScreen = (currentRoute: INavigationState) => {
+  const findLastScreen = useCallback((currentRoute: INavigationState) => {
     const navigationHistory = findNavigationHistory(currentRoute);
     return navigationHistory.pop();
-  };
+  }, []);
 
-  const setLastScreenStart = async (name: string) => {
+  const setLastScreenStart = useCallback(async (name: string) => {
     currentScreen.current = {
       name,
     };
+
     if (NativeModules.EmbraceManager.startView) {
       currentScreen.current.spanId =
         await NativeModules.EmbraceManager.startView(name);
@@ -35,32 +36,39 @@ export const useEmbraceNavigationTracker = (
         "[Embrace] The method startView was not found, please update the native SDK",
       );
     }
-  };
+  }, []);
 
-  const updateLastScreen = ({name}: IHistory) => {
-    if (!currentScreen.current?.name) {
-      setLastScreenStart(name);
-    } else if (currentScreen.current.name !== name) {
-      if (
-        NativeModules.EmbraceManager.endView &&
-        currentScreen.current.spanId
-      ) {
-        NativeModules.EmbraceManager.endView(currentScreen.current.spanId);
+  const updateLastScreen = useCallback(
+    ({name}: IHistory) => {
+      if (!currentScreen.current?.name) {
         setLastScreenStart(name);
-      } else {
-        console.warn(
-          "[Embrace] The method endView was not found, please update the native SDK",
-        );
+      } else if (currentScreen.current.name !== name) {
+        if (
+          NativeModules.EmbraceManager.endView &&
+          currentScreen.current.spanId
+        ) {
+          NativeModules.EmbraceManager.endView(currentScreen.current.spanId);
+          setLastScreenStart(name);
+        } else {
+          console.warn(
+            "[Embrace] The method endView was not found, please update the native SDK",
+          );
+        }
       }
-    }
-  };
+    },
+    [setLastScreenStart],
+  );
 
-  const findAndSetLastScreen = (currentRute: INavigationState) => {
-    const lastScreen = findLastScreen(currentRute);
-    if (lastScreen) {
-      updateLastScreen(lastScreen);
-    }
-  };
+  const findAndSetLastScreen = useCallback(
+    (currentRute: INavigationState) => {
+      const lastScreen = findLastScreen(currentRute);
+
+      if (lastScreen) {
+        updateLastScreen(lastScreen);
+      }
+    },
+    [findLastScreen, updateLastScreen],
+  );
 
   useEffect(() => {
     if (!NativeModules.EmbraceManager) {
@@ -69,6 +77,7 @@ export const useEmbraceNavigationTracker = (
       );
       return;
     }
+
     if (!navigationRef) {
       console.warn(
         "[Embrace] Navigation reference was not provided. Navigation tracker was not applied.",
@@ -93,9 +102,11 @@ export const useEmbraceNavigationTracker = (
     }
 
     console.log("[Embrace] Navigation tracker was applied.");
+
     const unsubscribe = navigationRefC.addListener("state", e => {
       findAndSetLastScreen(e.data.state);
     });
+
     return unsubscribe;
-  }, [navigationRef, navigationRef?.current, forceRefresh]);
+  }, [navigationRef, forceRefresh, isFirstScreen, findAndSetLastScreen]);
 };
