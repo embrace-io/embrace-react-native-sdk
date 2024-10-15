@@ -28,7 +28,7 @@ export const useEmbraceNavigationTracker = (
       name,
     };
     if (NativeModules.EmbraceManager.startView) {
-      currentScreen.current["spanId"] =
+      currentScreen.current.spanId =
         await NativeModules.EmbraceManager.startView(name);
     } else {
       console.warn(
