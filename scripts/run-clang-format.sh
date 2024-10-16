@@ -8,15 +8,15 @@ if ! command -v ${FORMATTER} &> /dev/null; then
     # Install llvm (includes clang-format)
     brew install llvm
 
-    export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+    export PATH="$(brew --prefix llvm)/bin:$PATH"
 fi
 
 # 1) Paths to formart
 SOURCE_DIRS=(
     "$(pwd)/integration-tests/basic-test-app/ios/basictestapp"
-    "$(pwd)/examples/react-native-test-suite"
     "$(pwd)/packages"
     "$(pwd)/packages/core/test-project"
+    "$(pwd)/packages/react-native-tracer-provider/native-src"
 )
 
 # find command
