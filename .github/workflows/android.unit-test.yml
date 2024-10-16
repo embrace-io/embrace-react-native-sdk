@@ -50,5 +50,5 @@ jobs:
         if: steps.changed_files.outputs.android == 'true'
 
       - name: Run Android Unit Tests
-        run: yarn run android:test $(./scopes-from-file-changes.ts ${{ steps.changed_files.outputs.android_files }})
+        run: yarn run android:test $(./scripts/scopes-from-file-changes.ts ${{ steps.changed_files.outputs.android_files }})
         if: steps.changed_files.outputs.android == 'true'
