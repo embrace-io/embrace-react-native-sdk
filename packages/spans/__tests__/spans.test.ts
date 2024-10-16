@@ -1,5 +1,3 @@
-jest.useFakeTimers();
-
 beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
@@ -343,7 +341,7 @@ describe("Test Spans - Add Attribute", () => {
 });
 
 describe("Test Spans - Record Span With Function", () => {
-  test("Record Span With Function - Without Name / does not exist", () => {
+  test("Record Span With Function - Without Name / does not exist", async () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
@@ -366,9 +364,8 @@ describe("Test Spans - Record Span With Function", () => {
     }));
 
     const {recordSpan} = require("../src/index");
-    recordSpan("Hey", mockedFunction);
-    recordSpan(undefined, mockedFunction);
-    jest.runAllTicks();
+    await recordSpan("Hey", mockedFunction);
+    await recordSpan(undefined, mockedFunction);
 
     expect(mockedFunction).toHaveBeenCalledTimes(2);
     expect(mockstopSpan).toHaveBeenCalledTimes(0);
@@ -377,7 +374,7 @@ describe("Test Spans - Record Span With Function", () => {
     expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
 
-  test("Record Span With Function - With Name", () => {
+  test("Record Span With Function - With Name", async () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
@@ -404,8 +401,7 @@ describe("Test Spans - Record Span With Function", () => {
     }));
 
     const {recordSpan} = require("../src/index");
-    recordSpan("Hey", mockCallback);
-    jest.runAllTicks();
+    await recordSpan("Hey", mockCallback);
 
     expect(mockedFunction).toHaveBeenCalledTimes(1);
     expect(mockstopSpan).toHaveBeenCalledTimes(1);
@@ -413,7 +409,7 @@ describe("Test Spans - Record Span With Function", () => {
     expect(mockaddSpanAttributeToSpan).toHaveBeenCalledTimes(0);
     expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
-  test("Record Span With Function - With Name", () => {
+  test("Record Span With Function - With Name", async () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
@@ -436,8 +432,7 @@ describe("Test Spans - Record Span With Function", () => {
     }));
 
     const {recordSpan} = require("../src/index");
-    recordSpan("Hey", mockedFunction);
-    jest.runAllTicks();
+    await recordSpan("Hey", mockedFunction);
 
     expect(mockedFunction).toHaveBeenCalledTimes(1);
     expect(mockstopSpan).toHaveBeenCalledTimes(1);
@@ -446,7 +441,7 @@ describe("Test Spans - Record Span With Function", () => {
     expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
 
-  test("Record Span With Function - With Name", () => {
+  test("Record Span With Function - With Name", async () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
@@ -474,8 +469,7 @@ describe("Test Spans - Record Span With Function", () => {
 
     const {recordSpan} = require("../src/index");
     try {
-      recordSpan("Hey", mockCallback);
-      jest.runAllTicks();
+      await recordSpan("Hey", mockCallback);
     } catch (e) {}
 
     expect(mockedFunction).toHaveBeenCalledTimes(1);
@@ -485,7 +479,7 @@ describe("Test Spans - Record Span With Function", () => {
     expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
 
-  test("Record Span With Function - With Name - Attributes", () => {
+  test("Record Span With Function - With Name - Attributes", async () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
@@ -508,10 +502,9 @@ describe("Test Spans - Record Span With Function", () => {
     }));
 
     const {recordSpan} = require("../src/index");
-    recordSpan("Hey", mockedFunction, {
+    await recordSpan("Hey", mockedFunction, {
       val1: "value",
     });
-    jest.runAllTicks();
 
     expect(mockedFunction).toHaveBeenCalledTimes(1);
     expect(mockstopSpan).toHaveBeenCalledTimes(1);
@@ -535,7 +528,7 @@ describe("Test Spans - Record Span With Function", () => {
 
     expect(result).resolves.toBe(false);
   });
-  test("Record Span With Function - With Name - Attribute Event", () => {
+  test("Record Span With Function - With Name - Attribute Event", async () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
@@ -558,7 +551,7 @@ describe("Test Spans - Record Span With Function", () => {
     }));
 
     const {recordSpan} = require("../src/index");
-    recordSpan(
+    await recordSpan(
       "Hey",
       mockedFunction,
       {
@@ -566,7 +559,6 @@ describe("Test Spans - Record Span With Function", () => {
       },
       [{name: "name", timestampNanos: 123, attributes: {val1: "val1"}}],
     );
-    jest.runAllTicks();
 
     expect(mockedFunction).toHaveBeenCalledTimes(1);
     expect(mockstopSpan).toHaveBeenCalledTimes(1);
@@ -575,7 +567,7 @@ describe("Test Spans - Record Span With Function", () => {
     expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(1);
   });
 
-  test("Record Span With Function - With Name - Attributes x 2", () => {
+  test("Record Span With Function - With Name - Attributes x 2", async () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
@@ -598,11 +590,10 @@ describe("Test Spans - Record Span With Function", () => {
     }));
 
     const {recordSpan} = require("../src/index");
-    recordSpan("Hey", mockedFunction, {
+    await recordSpan("Hey", mockedFunction, {
       val1: "value",
       val2: "value",
     });
-    jest.runAllTicks();
 
     expect(mockedFunction).toHaveBeenCalledTimes(1);
     expect(mockstopSpan).toHaveBeenCalledTimes(1);
@@ -611,7 +602,7 @@ describe("Test Spans - Record Span With Function", () => {
     expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(0);
   });
 
-  test("Record Span With Function - With Name - Attributes Events x 2", () => {
+  test("Record Span With Function - With Name - Attributes Events x 2", async () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
@@ -634,7 +625,7 @@ describe("Test Spans - Record Span With Function", () => {
     }));
 
     const {recordSpan} = require("../src/index");
-    recordSpan(
+    await recordSpan(
       "Hey",
       mockedFunction,
       {
@@ -654,7 +645,6 @@ describe("Test Spans - Record Span With Function", () => {
         },
       ],
     );
-    jest.runAllTicks();
 
     expect(mockedFunction).toHaveBeenCalledTimes(1);
     expect(mockstopSpan).toHaveBeenCalledTimes(1);
@@ -663,7 +653,7 @@ describe("Test Spans - Record Span With Function", () => {
     expect(mockaddSpanEventToSpan).toHaveBeenCalledTimes(2);
   });
 
-  test("Record Span With Function - With Name - Event", () => {
+  test("Record Span With Function - With Name - Event", async () => {
     const mockaddSpanAttributeToSpan = jest.fn();
     const mockaddSpanEventToSpan = jest.fn();
     const mockstopSpan = jest.fn();
@@ -686,10 +676,9 @@ describe("Test Spans - Record Span With Function", () => {
     }));
 
     const {recordSpan} = require("../src/index");
-    recordSpan("Hey", mockedFunction, undefined, [
+    await recordSpan("Hey", mockedFunction, undefined, [
       {name: "name", timestampNanos: 123, attributes: {val1: "val1"}},
     ]);
-    jest.runAllTicks();
 
     expect(mockedFunction).toHaveBeenCalledTimes(1);
     expect(mockstopSpan).toHaveBeenCalledTimes(1);
