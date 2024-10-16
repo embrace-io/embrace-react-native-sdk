@@ -1,44 +1,52 @@
-import {start_mockserver, stop_mockserver} from "mockserver-node";
-import {EmbraceRequestBody, SessionPayload} from "../typings/embrace";
+import {EmbraceData} from "../typings/embrace";
+import axios from "axios";
 
-import {mockServerClient} from "mockserver-client";
+// TODO Change it to dot env or some variable
+const RAW_EMB_URL = "https://mock-api.emb-eng.com/namespace/{servicename}/stored"
+const SERVICE_NAME = "SgNw5"
+const EMB_URL = RAW_EMB_URL.replace("{servicename}", SERVICE_NAME)
 
-const PORT = 8877;
-
-const startServer = (trace: boolean) => {
-  start_mockserver({
-    serverPort: PORT,
-    trace,
-  });
-};
-
-const stopServer = () => {
-  stop_mockserver({
-    serverPort: PORT,
-  });
-};
-
-const clearServer = async () => {
-  return await mockServerClient("localhost", PORT).clear({}, "LOG");
-};
-
-const getSessionPayloads = async (delay = 2000): Promise<SessionPayload[]> => {
+const getSessionPayloads = async (
+  sessionId: string | string[],
+  delay = 4000,
+): Promise<EmbraceData> => {
   if (delay) {
     await new Promise(r => setTimeout(r, delay));
   }
+  const response = await axios.get(EMB_URL);
 
-  const requests = await mockServerClient(
-    "localhost",
-    PORT,
-  ).retrieveRecordedRequests({
-    path: "/v1/log/sessions",
-    method: "POST",
+  console.log("SESSION ID: ", sessionId);
+
+  const responseData = (await response.data) as EmbraceData;
+
+  const getDataFromSessionId = (array = [], sessionId) =>
+    array.filter(r => {
+      if (typeof sessionId === "string") {
+        if (r.Body.includes(sessionId)) {
+          return true;
+        }
+      } else if (sessionId instanceof Array) {
+        return sessionId.some(sId => r.Body.includes(sId));
+      }
+    });
+
+  const dataFiltered = {
+    Spans: [],
+    Events: [],
+    Logs: [],
+    Blobs: [],
+    Crashes: [],
+    Errors: [],
+    Sessions: [],
+  };
+
+  Object.entries(responseData).forEach(([key, value]) => {
+    dataFiltered[key] = getDataFromSessionId(value, sessionId).map(item =>
+      JSON.parse(item.Body),
+    );
   });
 
-  return requests.map(r => {
-    const body = r.body as EmbraceRequestBody;
-    return body.json.s;
-  });
+  return dataFiltered;
 };
 
-export {startServer, stopServer, clearServer, getSessionPayloads};
+export {getSessionPayloads};
