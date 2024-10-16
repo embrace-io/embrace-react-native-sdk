@@ -1,6 +1,11 @@
 import {EmbraceData} from "../typings/embrace";
 import axios from "axios";
 
+// TODO Change it to dot env or some variable
+const RAW_EMB_URL = "https://mock-api.emb-eng.com/namespace/{servicename}/stored"
+const SERVICE_NAME = "SgNw5"
+const EMB_URL = RAW_EMB_URL.replace("{servicename}", SERVICE_NAME)
+
 const getSessionPayloads = async (
   sessionId: string | string[],
   delay = 4000,
@@ -8,9 +13,8 @@ const getSessionPayloads = async (
   if (delay) {
     await new Promise(r => setTimeout(r, delay));
   }
-  const response = await axios.get(
-    "https://mock-api.emb-eng.com/namespace/SgNw5/stored",
-  );
+
+  const response = await axios.get(EMB_URL);
 
   console.log("SESSION ID: ", sessionId);
 
@@ -47,3 +51,4 @@ const getSessionPayloads = async (
 };
 
 export {getSessionPayloads};
+
