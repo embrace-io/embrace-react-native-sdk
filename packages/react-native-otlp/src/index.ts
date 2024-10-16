@@ -5,7 +5,7 @@ import {createFalsePromise} from "./utils";
 
 interface CustomExporterConfig {
   endpoint: string;
-  header?: {key: string; token: string};
+  headers?: {key: string; token: string}[];
   timeout?: number;
 }
 
@@ -46,7 +46,7 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
       return;
     }
 
-    if (logExporter.header && typeof logExporter.header !== "object") {
+    if (logExporter.headers && !Array.isArray(logExporter.headers)) {
       console.warn(WARN_MESSAGES.header);
       return;
     }
@@ -60,8 +60,7 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
       return;
     }
 
-    if (traceExporter.header && typeof traceExporter.header !== "object") {
-      console.log(traceExporter);
+    if (traceExporter.headers && !Array.isArray(traceExporter.headers)) {
       console.warn(WARN_MESSAGES.header);
       return;
     }

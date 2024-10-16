@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Button} from "react-native";
-import {useCallback} from "react";
+import {useCallback, useRef} from "react";
 
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
@@ -13,8 +13,10 @@ import {
   logMessage,
   logWarning,
 } from "@embrace-io/react-native";
+import {startSpan, stopSpan} from "@embrace-io/react-native-spans";
 
 const HomeScreen = () => {
+  const spanIdRef = useRef<string | null>(null);
   const handleEndSession = useCallback(() => {
     endSession();
   }, []);
@@ -37,6 +39,28 @@ const HomeScreen = () => {
     },
     [],
   );
+
+  // start/end custom span
+  const handleStartSpan = useCallback(async () => {
+    const spanId = await startSpan(
+      "testing custom exporter - Start",
+      "ios custom exporter",
+    );
+
+    if (typeof spanId === "string" && spanId !== undefined) {
+      console.log(`storing ${spanId}`);
+
+      spanIdRef.current = spanId;
+    }
+  }, []);
+
+  const handleEndSpan = useCallback(() => {
+    console.log(`ending ${spanIdRef.current}`);
+
+    if (spanIdRef.current) {
+      stopSpan(spanIdRef.current);
+    }
+  }, []);
 
   const sendLogs = useCallback(() => {
     logWarning("Warning log (manually triggered)");
@@ -93,12 +117,9 @@ const HomeScreen = () => {
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Crashes (Unhandled Exceptions)</ThemedText>
-        <Button onPress={handleLogUnhandledError} title="CRASH" />
-        <Button
-          onPress={handleLogUnhandledErrorNotAnonymous}
-          title="CRASH (not anonymous)"
-        />
+        <ThemedText type="subtitle">Spans</ThemedText>
+        <Button onPress={handleStartSpan} title="Start span" />
+        <Button onPress={handleEndSpan} title="Stop span" />
       </ThemedView>
     </ParallaxScrollView>
   );

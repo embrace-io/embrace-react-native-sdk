@@ -23,11 +23,14 @@ export default function RootLayout() {
     //   timeout: 30000,
     // },
     traceExporter: {
-      endpoint: "http://localhost:8080/otlp-http/v1/traces",
-      // header: {
-      //   key: "a-key",
-      //   token: "a-token",
-      // },
+      endpoint:
+        "https://otlp-gateway-prod-us-east-0.grafana.net/otlp/v1/traces",
+      headers: [
+        {
+          key: "Authorization",
+          token: `Basic xxx`,
+        },
+      ],
       timeout: 30000,
     },
   });
