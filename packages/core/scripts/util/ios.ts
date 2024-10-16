@@ -280,11 +280,7 @@ export class XcodeProject implements Patchable {
   }
 
   private getBuildProperty(groupName: string, propertyName: string) {
-    return this.project.getBuildProperty(
-      propertyName,
-      undefined,
-      this.getTargetHash(groupName),
-    );
+    return this.project.getBuildProperty(propertyName, undefined, groupName);
   }
 
   private updateBuildProperty(

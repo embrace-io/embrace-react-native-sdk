@@ -1,4 +1,4 @@
-import {NativeModules, AppState, Platform} from "react-native";
+import {NativeModules} from "react-native";
 import {useEffect, useState} from "react";
 import {TracerProvider} from "@opentelemetry/api";
 
