@@ -56,6 +56,10 @@ jobs:
         run: yarn install
         if: steps.changed_files.outputs.ios == 'true'
 
+      - name: Linting
+        run: yarn run lint:swift
+        if: steps.changed_files.outputs.ios == 'true'
+
       - name: Install Node Modules + CocoaPods Dependencies
         run: yarn run ios:install
         if: steps.changed_files.outputs.ios == 'true'

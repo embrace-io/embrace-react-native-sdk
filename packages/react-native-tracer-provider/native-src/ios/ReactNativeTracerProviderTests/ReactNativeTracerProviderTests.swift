@@ -65,7 +65,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
                   // Set a fake endpoint for unit tests otherwise we'll end up sending actual payloads to Embrace
                   endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null",
                                                developmentBaseURL: "http://localhost/dev/null",
-                                               configBaseURL:  "http://localhost/dev/null"),
+                                               configBaseURL: "http://localhost/dev/null"),
                   export:
                       OpenTelemetryExport(
                           spanExporter: self.exporter
@@ -302,7 +302,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     // This is the first test case that runs in alphabetical order, add an extra sleep to
     // give the Embrace SDK a chance to startup before executing
     try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-    
+
     module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
                      spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0,
                      attributes: NSDictionary(), links: NSArray(), parentId: "",
