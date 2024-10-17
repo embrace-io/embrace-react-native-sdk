@@ -13,7 +13,11 @@ import {
   logMessage,
   logWarning,
 } from "@embrace-io/react-native";
-import {startSpan, stopSpan} from "@embrace-io/react-native-spans";
+import {
+  addSpanAttributeToSpan,
+  startSpan,
+  stopSpan,
+} from "@embrace-io/react-native-spans";
 
 const HomeScreen = () => {
   const spanIdRef = useRef<string | null>(null);
@@ -42,10 +46,7 @@ const HomeScreen = () => {
 
   // start/end custom span
   const handleStartSpan = useCallback(async () => {
-    const spanId = await startSpan(
-      "testing custom exporter - Start",
-      "ios custom exporter",
-    );
+    const spanId = await startSpan("testing custom exporter - Start");
 
     if (typeof spanId === "string" && spanId !== undefined) {
       console.log(`storing ${spanId}`);
@@ -55,9 +56,10 @@ const HomeScreen = () => {
   }, []);
 
   const handleEndSpan = useCallback(() => {
-    console.log(`ending ${spanIdRef.current}`);
-
     if (spanIdRef.current) {
+      addSpanAttributeToSpan(spanIdRef.current, "custom.ios.exporter", "test");
+
+      console.log(`ending ${spanIdRef.current}`);
       stopSpan(spanIdRef.current);
     }
   }, []);
