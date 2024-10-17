@@ -14,11 +14,11 @@ class SDKConfig: NSObject {
     public let endpointBaseUrl: String?
 
     public init(from: NSDictionary) {
-        self.appId = from["appId"] as? String ?? ""
-        self.appGroupId = from["appGroupId"] as? String
-        self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
-        self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
-        self.endpointBaseUrl = from["endpointBaseUrl"] as? String
+        self.appId = from.value(forKey: "appId") as? String ?? ""
+        self.appGroupId = from.value(forKey: "appGroupId") as? String
+        self.disableCrashReporter = from.value(forKey: "disableCrashReporter") as? Bool ?? false
+        self.disableAutomaticViewCapture = from.value(forKey: "disableAutomaticViewCapture") as? Bool ?? false
+        self.endpointBaseUrl = from.value(forKey: "endpointBaseUrl") as? String
     }
 }
 
@@ -34,8 +34,8 @@ class SDKConfig: NSObject {
   }
 
   @objc static func fromDictionary(_ dict: NSDictionary) -> CustomExporterConfig {
-    let endpoint = dict["endpoint"] as! String
-    let timeout = dict["timeout"] as? NSNumber
+      let endpoint = dict.value(forKey: "endpoint") as! String
+      let timeout = dict.value(forKey: "timeout") as? NSNumber
 
     var headers: [(String, String)] = []
     if let headerDicts = dict.value(forKey: "headers") as? [NSDictionary] {
@@ -65,7 +65,6 @@ class RNEmbraceOTLP: NSObject {
                                         timeout: NSNumber,
                                         header: [(String, String)]?) -> OtlpHttpTraceExporter {
       let urlConfig = URLSessionConfiguration.default
-      
       if let header = header {
           // Convert the array of tuples to a dictionary
           let headersDict = Dictionary(uniqueKeysWithValues: header)
@@ -73,11 +72,12 @@ class RNEmbraceOTLP: NSObject {
       }
 
   return OtlpHttpTraceExporter(endpoint: URL(string: endpoint)!, // NOTE: make sure about extra validations (format/non-empty)
-                                 config: OtlpConfiguration(
+                                config: OtlpConfiguration(
                                     timeout: convertToTimeInterval(from: timeout)!, // NOTE: make sure about extra validations (not-nil)
                                     headers: header
-                                 ),
-                                 useSession: URLSession(configuration: urlConfig)
+                                ),
+                                useSession: URLSession(configuration: urlConfig),
+                                envVarHeaders: header
     )
   }
 
@@ -143,8 +143,8 @@ class RNEmbraceOTLP: NSObject {
                                                       configBaseURL: config.endpointBaseUrl!)
                     }
 
-                    let customExporters: OpenTelemetryExport = self.setHttpExporters(otlpExportConfigDict["traceExporter"] as? NSDictionary,
-                                                                                     logConfigDict: otlpExportConfigDict["logExporter"] as? NSDictionary)
+                    let customExporters: OpenTelemetryExport = self.setHttpExporters(otlpExportConfigDict.value(forKey: "traceExporter") as? NSDictionary,
+                                                                                     logConfigDict: otlpExportConfigDict.value(forKey: "logExporter") as? NSDictionary)
 
                     return .init(
                         appId: config.appId,
