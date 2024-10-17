@@ -1,10 +1,18 @@
-import {Image, StyleSheet, Button} from "react-native";
-import {useCallback} from "react";
+import {
+  StyleSheet,
+  Button,
+  ScrollView,
+  SafeAreaView,
+  Text,
+  TextComponent,
+  Alert,
+} from "react-native";
+import {useCallback, useEffect, useState} from "react";
+import {useRouter} from "expo-router";
 
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import {
   endSession,
   logHandledError,
@@ -12,12 +20,44 @@ import {
   logInfo,
   logMessage,
   logWarning,
+  getCurrentSessionId,
+  addBreadcrumb,
+  getLastRunEndState,
+  setUserAsPayer,
+  clearUserAsPayer,
+  getDeviceId,
 } from "@embrace-io/react-native";
 
+export const LOG_MESSAGE_WARN = "Warning log (manually triggered)";
+export const LOG_MESSAGE_INFO = "Info log (manually triggered)";
+export const LOG_MESSAGE_ERROR = "Error log (manually triggered)";
+
 const HomeScreen = () => {
-  const handleEndSession = useCallback(() => {
-    endSession();
+  const router = useRouter();
+
+  const [deviceId, setDeviceId] = useState<string>();
+
+  useEffect(() => {
+    setTimeout(() => {
+      getDeviceId().then(setDeviceId);
+    }, 2000);
   }, []);
+
+  const showLastRunEndState = () => {
+    getLastRunEndState().then(state => {
+      Alert.alert(`Last Exit State: ${state}`);
+    });
+  };
+
+  const handleShowCurrentSessionId = () => {
+    getCurrentSessionId().then(sId => {
+      Alert.alert(`Session Id: ${sId}`);
+    });
+  };
+
+  const handleEndSession = () => {
+    endSession().then(r => {});
+  };
 
   const handleErrorLog = useCallback(() => {
     logHandledError(
@@ -39,11 +79,11 @@ const HomeScreen = () => {
   );
 
   const sendLogs = useCallback(() => {
-    logWarning("Warning log (manually triggered)");
+    logWarning(LOG_MESSAGE_WARN);
 
-    logInfo("Info log (manually triggered)");
+    logInfo(LOG_MESSAGE_INFO);
 
-    logError("Error log (manually triggered)");
+    logError(LOG_MESSAGE_ERROR);
   }, []);
 
   const sendMessage = useCallback(() => {
@@ -55,40 +95,105 @@ const HomeScreen = () => {
     });
   }, []);
 
+  const handleAddSimpleBreadcrumb = () => {
+    addBreadcrumb("A SIMPLE BREADCRUMB");
+  };
+  const handleAddComplexBreadcrumb = () => {
+    addBreadcrumb("A COMPLEX BREADCRUMB");
+  };
+  const handleCallApi = () => {
+    fetch("https://");
+  };
+
+  const handleCrashMe = () => {
+    throw new Error("A SIMPLE CRASH");
+  };
+  const handleCrashMeAnonymous = useCallback(() => {
+    throw new Error("A SIMPLE CRASH");
+  }, []);
+  // useEffect(()=>{
+  //   if(deviceId)
+  //   crash()
+  // },[deviceId])
+
+  const handleAddPayer = () => {
+    setUserAsPayer();
+  };
+  const handleClearPayer = () => {
+    clearUserAsPayer();
+  };
+
+  const handleNavigateToSpans = () => {
+    router.push("/spans");
+  };
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{light: "#A1CEDC", dark: "#1D3D47"}}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">End Session</ThemedText>
-        <Button onPress={handleEndSession} title="END SESSION" />
-      </ThemedView>
+    <SafeAreaView style={styles.wrapper}>
+      <ScrollView>
+        <ThemedView style={styles.stepContainer}>
+          <Button
+            onPress={handleShowCurrentSessionId}
+            title="SHOW SESSION ID"
+          />
+        </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button
+            onPress={showLastRunEndState}
+            title="SHOW LAST SESSION EXIT STATE"
+          />
+        </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button
+            onPress={handleAddSimpleBreadcrumb}
+            title="A SIMPLE BREADCRUMB"
+          />
+        </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button
+            onPress={handleAddComplexBreadcrumb}
+            title="A COMPLEX BREADCRUMB"
+          />
+        </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button onPress={handleCrashMe} title="CRASH ME" />
+        </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button onPress={handleCrashMeAnonymous} title="CRASH ME ANONYMOUS" />
+        </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button onPress={handleCallApi} title="Call API" />
+        </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button onPress={handleEndSession} title="END SESSION" />
+        </ThemedView>
 
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Logs</ThemedText>
-        <Button onPress={sendLogs} title="LOGs (war/info/error)" />
-        <Button onPress={sendMessage} title="Custom Message (also a log)" />
-        <Button onPress={handleErrorLog} title="Handled JS Exception" />
-      </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button onPress={handleAddPayer} title="ADD PAYER" />
+          <Button onPress={handleClearPayer} title="CLEAN PAYER" />
+        </ThemedView>
 
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Crashes (Unhandled Exceptions)</ThemedText>
-        <Button onPress={handleLogUnhandledError} title="CRASH" />
-        <Button
-          onPress={handleLogUnhandledErrorNotAnonymous}
-          title="CRASH (not anonymous)"
-        />
-      </ThemedView>
-    </ParallaxScrollView>
+        <ThemedView style={styles.stepContainer}>
+          <Button onPress={sendLogs} title="LOGS (WAR/INFO/ERROR)" />
+          <Button onPress={sendMessage} title="Custom Message (also a log)" />
+          <Button onPress={handleErrorLog} title="Handled JS Exception" />
+        </ThemedView>
+
+        <ThemedView style={styles.stepContainer}>
+          <Button onPress={handleLogUnhandledError} title="CRASH" />
+          <Button
+            onPress={handleLogUnhandledErrorNotAnonymous}
+            title="CRASH (not anonymous)"
+          />
+        </ThemedView>
+        <ThemedView style={styles.stepContainer}>
+          <Button onPress={handleNavigateToSpans} title="NAVIGATE TO SPANS" />
+        </ThemedView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {marginTop: 20},
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -96,7 +201,7 @@ const styles = StyleSheet.create({
   },
   stepContainer: {
     gap: 8,
-    marginBottom: 8,
+    marginBottom: 5,
   },
   reactLogo: {
     height: 178,

@@ -20,6 +20,7 @@ export default function TabLayout() {
           title: "Home",
           tabBarIcon: ({color, focused}) => (
             <TabBarIcon
+              accessibilityLabel="TAB-HOME"
               name={focused ? "home" : "home-outline"}
               color={color}
             />
@@ -27,11 +28,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="spans"
         options={{
-          title: "Explore",
+          title: "Spans",
           tabBarIcon: ({color, focused}) => (
             <TabBarIcon
+              accessibilityLabel="TAB-SPAN"
               name={focused ? "code-slash" : "code-slash-outline"}
               color={color}
             />

@@ -3,7 +3,9 @@
 // https://github.com/embrace-io/embrace-android-sdk/tree/main/embrace-android-sdk/src/main/java/io/embrace/android/embracesdk/payload
 
 interface SessionPayload {
-  as: string; // appState
+  as?: string; // appState
+  eventsFound: any[];
+  spansFound: any[];
 }
 
 interface EmbracePayload {

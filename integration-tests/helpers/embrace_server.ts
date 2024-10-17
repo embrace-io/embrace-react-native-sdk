@@ -13,6 +13,7 @@ const getSessionPayloads = async (
   if (delay) {
     await new Promise(r => setTimeout(r, delay));
   }
+
   const response = await axios.get(EMB_URL);
 
   console.log("SESSION ID: ", sessionId);
@@ -50,3 +51,4 @@ const getSessionPayloads = async (
 };
 
 export {getSessionPayloads};
+
