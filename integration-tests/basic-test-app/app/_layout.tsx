@@ -28,7 +28,7 @@ export default function RootLayout() {
       headers: [
         {
           key: "Authorization",
-          token: `Basic xxx`,
+          token: "Basic xxx",
         },
       ],
       timeout: 30000,
