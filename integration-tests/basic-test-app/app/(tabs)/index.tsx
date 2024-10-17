@@ -5,6 +5,7 @@ import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
+/*
 import {
   endSession,
   logHandledError,
@@ -14,7 +15,10 @@ import {
   logWarning,
 } from "@embrace-io/react-native";
 
+ */
+
 const HomeScreen = () => {
+  /*
   const handleEndSession = useCallback(() => {
     endSession();
   }, []);
@@ -83,6 +87,23 @@ const HomeScreen = () => {
           onPress={handleLogUnhandledErrorNotAnonymous}
           title="CRASH (not anonymous)"
         />
+      </ThemedView>
+    </ParallaxScrollView>
+  );
+
+   */
+
+  return (
+    <ParallaxScrollView
+      headerBackgroundColor={{light: "#A1CEDC", dark: "#1D3D47"}}
+      headerImage={
+        <Image
+          source={require("@/assets/images/partial-react-logo.png")}
+          style={styles.reactLogo}
+        />
+      }>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">No Embrace</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );

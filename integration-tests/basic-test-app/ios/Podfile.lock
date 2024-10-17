@@ -1495,7 +1495,7 @@ PODS:
     - React-logger (= 0.74.1)
     - React-perflogger (= 0.74.1)
     - React-utils (= 0.74.1)
-  - RNEmbrace (5.0.0):
+  - RNEmbrace (5.0.1):
     - EmbraceIO (= 6.4.2)
     - React-Core
   - RNGestureHandler (2.16.2):
@@ -1647,7 +1647,7 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - EmbraceIO
     - SocketRocket
 
@@ -1882,13 +1882,13 @@ SPEC CHECKSUMS:
   React-runtimescheduler: e2152ed146b6a35c07386fc2ac4827b27e6aad12
   React-utils: 3285151c9d1e3a28a9586571fc81d521678c196d
   ReactCommon: f42444e384d82ab89184aed5d6f3142748b54768
-  RNEmbrace: 73c04decc2c9c546269a99ce8bbf3110e2ca7d9d
+  RNEmbrace: 62fa472d78c9e0e1fcbdbb3281c85b20220cc837
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: b9a182ab00cf25926e7f79657d08c5d23c2d03b0
 
-PODFILE CHECKSUM: 1edead627dbfaafffa1f3d9403f6946f03ecf4c1
+PODFILE CHECKSUM: 3947a6dbea35dab63418d201a4fe35def464b62e
 
 COCOAPODS: 1.15.2
