@@ -65,5 +65,5 @@ jobs:
         if: steps.changed_files.outputs.ios == 'true'
 
       - name: Run iOS Unit Tests
-        run: yarn run ios:test $(./scopes-from-file-changes.ts ${{ steps.changed_files.outputs.ios_files }})
+        run: yarn run ios:test $(./scripts/scopes-from-file-changes.ts ${{ steps.changed_files.outputs.ios_files }})
         if: steps.changed_files.outputs.ios == 'true'
