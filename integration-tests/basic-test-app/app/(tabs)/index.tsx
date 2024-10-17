@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Button} from "react-native";
-import {useCallback} from "react";
+import {useCallback, useRef} from "react";
 
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
@@ -13,8 +13,14 @@ import {
   logMessage,
   logWarning,
 } from "@embrace-io/react-native";
+import {
+  addSpanAttributeToSpan,
+  startSpan,
+  stopSpan,
+} from "@embrace-io/react-native-spans";
 
 const HomeScreen = () => {
+  const spanIdRef = useRef<string | null>(null);
   const handleEndSession = useCallback(() => {
     endSession();
   }, []);
@@ -38,6 +44,26 @@ const HomeScreen = () => {
     [],
   );
 
+  // start/end custom span
+  const handleStartSpan = useCallback(async () => {
+    const spanId = await startSpan("testing custom exporter - Start");
+
+    if (typeof spanId === "string" && spanId !== undefined) {
+      console.log(`storing ${spanId}`);
+
+      spanIdRef.current = spanId;
+    }
+  }, []);
+
+  const handleEndSpan = useCallback(() => {
+    if (spanIdRef.current) {
+      addSpanAttributeToSpan(spanIdRef.current, "custom.ios.exporter", "test");
+
+      console.log(`ending ${spanIdRef.current}`);
+      stopSpan(spanIdRef.current);
+    }
+  }, []);
+
   const sendLogs = useCallback(() => {
     logWarning("Warning log (manually triggered)");
 
@@ -51,7 +77,7 @@ const HomeScreen = () => {
       "custom.property.test": "hey",
       "another.property": "ho",
       "yet.another": "hum",
-      "rn.sdk.test": 1234567,
+      "rn.sdk.test": "1234567",
     });
   }, []);
 
@@ -83,6 +109,19 @@ const HomeScreen = () => {
           onPress={handleLogUnhandledErrorNotAnonymous}
           title="CRASH (not anonymous)"
         />
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Logs</ThemedText>
+        <Button onPress={sendLogs} title="LOGs (war/info/error)" />
+        <Button onPress={sendMessage} title="Custom Message (also a log)" />
+        <Button onPress={handleErrorLog} title="Handled JS Exception" />
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Spans</ThemedText>
+        <Button onPress={handleStartSpan} title="Start span" />
+        <Button onPress={handleEndSpan} title="Stop span" />
       </ThemedView>
     </ParallaxScrollView>
   );

@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./lib/src"
+  },
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "ios",
+    "android",
+    "./dist",
+    "./src/__tests__",
+  ]
+}
