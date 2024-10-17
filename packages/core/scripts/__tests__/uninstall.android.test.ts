@@ -99,9 +99,9 @@ describe("Uninstall Script Android", () => {
     const p = path.join(
       "packages/core/scripts/__tests__/__mocks__/android/embrace-config.json",
     );
-    if (!fs.existsSync(p)) {
-      fs.closeSync(fs.openSync(p, "a"));
-    }
+    try {
+      fs.closeSync(fs.openSync(p, "ax"));
+    } catch {}
 
     expect(fs.existsSync(p)).toBe(true);
 
