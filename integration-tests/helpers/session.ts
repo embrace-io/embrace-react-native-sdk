@@ -6,16 +6,8 @@ const getCurrentSessionId = async driver => {
   const getSessionIdButton = await driver.$("~SHOW SESSION ID");
   await getSessionIdButton.click();
 
-  await driver.waitUntil(
-    async () => {
-      const alertIsPresent = await driver.getAlertText().catch(() => false);
-      return alertIsPresent !== false;
-    },
-    {timeout: 5000},
-  );
+  const sessionId = await getTextFromAlert(driver, "Session Id: ");
 
-  const alertText = await driver.getAlertText();
-  const sessionId = alertText.replace("Session Id: ", "");
   await driver.acceptAlert();
   return sessionId;
 };
@@ -29,14 +21,16 @@ const getLastSessionEndState = async driver => {
   );
   await getLastSessionEndStateButton.click();
 
-  const alertText = await getTextFromAlert(driver);
+  const lastState = await getTextFromAlert(driver, "Last Exit State: ");
 
-  const sessionId = alertText.replace("Last Exit State: ", "");
   await driver.acceptAlert();
-  return sessionId;
+  return lastState;
 };
 
-const getTextFromAlert = async (driver): Promise<string> => {
+const getTextFromAlert = async (
+  driver,
+  replaceString = "",
+): Promise<string> => {
   await driver.waitUntil(
     async () => {
       const alertIsPresent = await driver.getAlertText().catch(() => false);
@@ -45,7 +39,8 @@ const getTextFromAlert = async (driver): Promise<string> => {
     {timeout: 5000},
   );
 
-  return await driver.getAlertText();
+  const alertText = await driver.getAlertText();
+  return alertText.replace(replaceString, "");
 };
 
 export {getCurrentSessionId, getLastSessionEndState};

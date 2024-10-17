@@ -108,9 +108,9 @@ const HomeScreen = () => {
   const handleCrashMe = () => {
     throw new Error("A SIMPLE CRASH");
   };
-  const crash = useCallback(()=>{
+  const handleCrashMeAnonymous = useCallback(() => {
     throw new Error("A SIMPLE CRASH");
-  },[])
+  }, []);
   // useEffect(()=>{
   //   if(deviceId)
   //   crash()
@@ -193,7 +193,7 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  wrapper:{marginTop:20},
+  wrapper: {marginTop: 20},
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",

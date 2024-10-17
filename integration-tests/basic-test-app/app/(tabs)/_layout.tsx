@@ -20,7 +20,6 @@ export default function TabLayout() {
           title: "Home",
           tabBarIcon: ({color, focused}) => (
             <TabBarIcon
-              testID="TAB-HOME"
               accessibilityLabel="TAB-HOME"
               name={focused ? "home" : "home-outline"}
               color={color}
@@ -34,9 +33,6 @@ export default function TabLayout() {
           title: "Spans",
           tabBarIcon: ({color, focused}) => (
             <TabBarIcon
-              id="TAB-SPAN"
-              nativeID="TAB-SPAN"
-              testID="TAB-SPAN"
               accessibilityLabel="TAB-SPAN"
               name={focused ? "code-slash" : "code-slash-outline"}
               color={color}
