@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Button} from "react-native";
-import {useCallback} from "react";
+import {useCallback, useMemo} from "react";
 
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
@@ -13,11 +13,27 @@ import {
   logMessage,
   logWarning,
 } from "@embrace-io/react-native";
+import {
+  generateBasicSpan,
+  generateNestedSpans,
+  generateTestSpans,
+} from "@/helpers/generateSpans";
+import {Tracer} from "@opentelemetry/api";
+import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 
 const HomeScreen = () => {
   const handleEndSession = useCallback(() => {
     endSession();
   }, []);
+
+  const {isLoading, isError, error, tracerProvider} =
+    useEmbraceNativeTracerProvider();
+
+  const tracer = useMemo<Tracer | undefined>(() => {
+    if (tracerProvider) {
+      return tracerProvider.getTracer("span-test", "1.0");
+    }
+  }, [isLoading, isError, error, tracerProvider]);
 
   const handleErrorLog = useCallback(() => {
     logHandledError(
@@ -55,6 +71,14 @@ const HomeScreen = () => {
     });
   }, []);
 
+  if (isLoading) {
+    return <ThemedText type="subtitle">Loading Tracer Provider</ThemedText>;
+  }
+
+  if (isError) {
+    return <ThemedText type="subtitle">{error}</ThemedText>;
+  }
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{light: "#A1CEDC", dark: "#1D3D47"}}
@@ -65,8 +89,23 @@ const HomeScreen = () => {
         />
       }>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">End Session</ThemedText>
+        <ThemedText type="subtitle">Session</ThemedText>
         <Button onPress={handleEndSession} title="END SESSION" />
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Span</ThemedText>
+        <Button
+          onPress={() => generateBasicSpan(tracer!)}
+          title={"GENERATE BASIC SPAN"}
+        />
+        <Button
+          onPress={() => generateTestSpans(tracer!)}
+          title={"GENERATE TEST SPANS"}
+        />
+        <Button
+          onPress={() => generateNestedSpans(tracer!)}
+          title={"GENERATE NESTED SPANS"}
+        />
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>

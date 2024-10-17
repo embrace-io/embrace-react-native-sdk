@@ -1,8 +1,7 @@
 import {startServer} from "./embrace_server";
 
 const main = async () => {
-  startServer(true);
-  await new Promise(() => {});
+  await startServer(true);
 };
 
 main();
