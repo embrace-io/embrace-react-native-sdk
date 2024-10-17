@@ -1,4 +1,6 @@
 #import "AppDelegate.h"
+#import "ExpoModulesCore-Swift.h"
+#import "basictestapp-Swift.h"
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
@@ -7,6 +9,7 @@
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [EmbraceInitializer start];
     self.moduleName = @"main";
 
     // You can add your custom initial props in the dictionary below.
