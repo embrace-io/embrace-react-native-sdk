@@ -152,8 +152,12 @@ export const addEmbraceInitializerSwift = {
       const fd = fs.openSync(filePath, "wx");
       fs.writeFileSync(fd, getEmbraceInitializerContents(appId));
     } catch (e) {
-      logger.warn("EmbraceInitializer.swift already exists");
-      return;
+      if (e instanceof Error && e.message.includes("EEXIST")) {
+        logger.warn("EmbraceInitializer.swift already exists");
+        return;
+      } else {
+        throw e;
+      }
     }
 
     const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
