@@ -14,4 +14,17 @@ interface EmbraceRequestBody {
   json: EmbracePayload;
 }
 
-export type {EmbraceRequestBody, SessionPayload};
+interface Data {
+  Body: string;
+}
+interface EmbraceData {
+  Spans: IData[];
+  Events: IData[];
+  Logs: IData[];
+  Blobs: IData[];
+  Crashes: IData[];
+  Errors: IData[];
+  Sessions: IData[];
+}
+
+export type {EmbraceRequestBody, SessionPayload, Data, EmbraceData};
