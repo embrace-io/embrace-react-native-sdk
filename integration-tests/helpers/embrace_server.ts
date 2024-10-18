@@ -1,10 +1,8 @@
 import {EmbraceData} from "../typings/embrace";
 import axios from "axios";
+import {RAW_EMB_URL, SERVICE_NAME} from "./env";
 
-// TODO Change it to dot env or some variable
-const RAW_EMB_URL = "https://mock-api.emb-eng.com/namespace/{servicename}/stored"
-const SERVICE_NAME = "SgNw5"
-const EMB_URL = RAW_EMB_URL.replace("{servicename}", SERVICE_NAME)
+const EMB_URL = RAW_EMB_URL.replace("{servicename}", SERVICE_NAME);
 
 const getSessionPayloads = async (
   sessionId: string | string[],
