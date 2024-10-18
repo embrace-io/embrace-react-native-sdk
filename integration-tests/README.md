@@ -16,21 +16,44 @@ For any future updates the [Appium Installer](https://webdriver.io/docs/appium) 
 npx appium-installer
 ```
 
-## Run tests
+## Create test apps
 
-Make sure the test apps have the latest local @embrace-io/react-native changes:
+New test apps can be created from templates as needed. To create a new test expo app run:
 
 ```bash
-npm run update-local-embrace
+npx create-expo --template ./templates/<template-app>/<artifact>.tgz
 ```
 
-Make sure the test apps are installed on the device/emulator before running tests. Note that building the debug variant
-of the app may interfere with the tests as the debug menu gets in the way of UI elements.
+To create a new bare react native app run:
 
-Android can run in release mode:
+TODO
+
+## Prepare a test app
+
+Before running tests or manual QA make sure the test app to be used is up-to-date using the `prepare-test-app` script.
+
+To make sure it has the latest locally built @embrace-io/* packages and test harness:
+```bash
+./prepare-test-app <test-app> --update-sdk-packages --update-test-harness
+```
+
+To set it up with a particular embrace config:
+```bash
+./prepare-test-app <test-app> --embrace-config=./example-configs/<config>.json
+```
+
+To set it to a particular RN version:
+```bash
+./prepare-test-app <test-app> --rn-version=<version>
+```
+
+Make sure the app is installed on the device/emulator before running tests. Note that building the debug variant
+of an app may interfere with the tests as the debug menu gets in the way of UI elements.
+
+Android can run be built in release mode:
 
 ```bash
-cd basic-test-app
+cd <test-app>
 npx expo run:android --variant release
 ```
 
@@ -47,7 +70,7 @@ or simple run
 npx expo run:ios --configuration Release
 ```
 
-Run the test suite:
+Then run the test suite:
 
 ```bash
 npm test

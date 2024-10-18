@@ -4,8 +4,7 @@
   "description": "Integration test harness",
   "main": "index.js",
   "scripts": {
-    "test": "wdio run ./wdio.conf.ts",
-    "update-local-embrace": "./update-local-embrace.sh"
+    "test": "wdio run ./wdio.conf.ts"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +18,7 @@
     "appium": "^2.6.0",
     "appium-uiautomator2-driver": "^3.5.2",
     "appium-xcuitest-driver": "^7.17.2",
+    "create-expo": "^3.0.0",
     "mockserver-client": "^5.15.0",
     "mockserver-node": "^5.15.0",
     "ts-node": "^10.9.2",
