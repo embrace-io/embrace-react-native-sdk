@@ -1,11 +1,7 @@
-included:
-  - packages
-  - integration-tests
-  - examples
-
 excluded:
-  - Pods
-  - node_modules
+  - '**/Pods'
+  - '**/node_modules'
+  - '**/__tests__'
   
 disabled_rules: # rule identifiers turned on by default to exclude from running
   - identifier_name
