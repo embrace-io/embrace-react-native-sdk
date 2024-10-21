@@ -17,7 +17,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "HOME",
+          tabBarAccessibilityLabel: "HOME",
           tabBarIcon: ({color, focused}) => (
             <TabBarIcon
               name={focused ? "home" : "home-outline"}
@@ -27,14 +28,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="second"
         options={{
-          title: "Explore",
+          title: "SECOND SCREEN",
+          tabBarAccessibilityLabel: "SECOND SCREEN",
           tabBarIcon: ({color, focused}) => (
-            <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
-              color={color}
-            />
+            <TabBarIcon name={"radio"} color={color} />
           ),
         }}
       />

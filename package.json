@@ -17,8 +17,9 @@
     "lint:clang": "./scripts/run-clang-format.sh",
     "lint:swift": "./scripts/run-swiftlint.sh",
     "test": "jest",
+    "android:test": "npx lerna run android:test",
     "ios:install": "npx lerna run ios:install",
-    "ios:test": "npx lerna run ios:test"
+    "ios:test": "npx lerna run ios:test --concurrency=1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "yarn lint:js",
