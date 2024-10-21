@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@embrace-io/react-native": "file:../artifacts/embrace-io-react-native-local.tgz",
+    "@embrace-io/react-native-test-harness": "file:../artifacts/embrace-io-react-native-test-harness-local.tgz",
     "@embrace-io/react-native-tracer-provider": "file:../artifacts/embrace-io-react-native-tracer-provider-local.tgz",
     "@expo/vector-icons": "^14.0.0",
     "@opentelemetry/instrumentation-react-native-navigation": "file:../artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz",
