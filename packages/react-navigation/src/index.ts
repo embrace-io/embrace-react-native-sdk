@@ -97,5 +97,5 @@ export const useEmbraceNavigationTracker = (
       findAndSetLastScreen(e.data.state);
     });
     return unsubscribe;
-  }, [navigationRef, forceRefresh, isFirstScreen, findAndSetLastScreen]);
+  }, [navigationRef, navigationRef?.current, forceRefresh]);
 };

@@ -15,6 +15,7 @@
     "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx && prettier \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints",
     "lint:js:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
     "lint:clang": "./scripts/run-clang-format.sh",
+    "lint:clang:fix": "./scripts/run-clang-format.sh --fix",
     "lint:swift": "./scripts/run-swiftlint.sh",
     "lint:swift:fix": "./scripts/run-swiftlint.sh --fix",
     "test": "jest",
