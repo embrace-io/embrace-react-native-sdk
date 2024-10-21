@@ -1,13 +1,15 @@
 import {DarkTheme, DefaultTheme, ThemeProvider} from "@react-navigation/native";
 import {useFonts} from "expo-font";
-import {Stack} from "expo-router";
+import {Stack, useNavigationContainerRef} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import {useEffect} from "react";
+import {useEffect, useMemo, useState} from "react";
 import "react-native-reanimated";
 import {initialize as initEmbrace} from "@embrace-io/react-native";
 import {initialize as initEmbraceWithCustomExporters} from "@embrace-io/react-native-otlp";
 
 import {useColorScheme} from "@/hooks/useColorScheme";
+import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -16,49 +18,66 @@ const endpoint = "https://otlp-gateway-prod-us-east-0.grafana.net/otlp/v1";
 const token = ""; // base64 -> instance:token
 
 export default function RootLayout() {
-  const initWithCustomExporters = initEmbraceWithCustomExporters({
-    logExporter: {
-      endpoint: `${endpoint}/logs`,
-      headers: [
-        {
-          key: "Authorization",
-          token: `Basic ${token}`,
+  const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(false);
+  const {tracerProvider} = useEmbraceNativeTracerProvider({}, embraceSDKLoaded);
+  const navigationRef = useNavigationContainerRef();
+
+  const initWithCustomExporters = useMemo(
+    () =>
+      initEmbraceWithCustomExporters({
+        logExporter: {
+          endpoint: `${endpoint}/logs`,
+          headers: [
+            {
+              key: "Authorization",
+              token: `Basic ${token}`,
+            },
+          ],
+          timeout: 30000,
         },
-      ],
-      timeout: 30000,
-    },
-    traceExporter: {
-      endpoint: `${endpoint}/traces`,
-      headers: [
-        {
-          key: "Authorization",
-          token: `Basic ${token}`,
+        traceExporter: {
+          endpoint: `${endpoint}/traces`,
+          headers: [
+            {
+              key: "Authorization",
+              token: `Basic ${token}`,
+            },
+          ],
+          timeout: 30000,
         },
-      ],
-      timeout: 30000,
-    },
-  });
+      }),
+    [],
+  );
 
   useEffect(() => {
     const init = async () => {
-      await initEmbrace({
+      const hasStarted = await initEmbrace({
         sdkConfig: {
           ios: {
             appId: "abcdf",
-            // endpointBaseUrl: "http://localhost:8877",
+            endpointBaseUrl: "http://localhost:8877",
+            disableAutomaticViewCapture: true,
           },
           replaceInit: initWithCustomExporters, // rename arg? (`startCustomExporters`),
         },
       });
+
+      if (hasStarted) {
+        setEmbraceSDKLoaded(true);
+      }
     };
 
     init();
   }, []);
 
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
+
+  const loaded = useMemo<boolean>(() => {
+    return embraceSDKLoaded && fontsLoaded && !!tracerProvider;
+  }, [embraceSDKLoaded, fontsLoaded, tracerProvider]);
 
   useEffect(() => {
     if (loaded) {
@@ -72,10 +91,20 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{headerShown: false}} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      <NavigationTracker
+        ref={navigationRef}
+        provider={tracerProvider || undefined}
+        config={{
+          attributes: {
+            "emb.type": "ux.view",
+          },
+          debug: true,
+        }}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </NavigationTracker>
     </ThemeProvider>
   );
 }

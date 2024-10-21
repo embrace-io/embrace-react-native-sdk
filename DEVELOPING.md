@@ -149,7 +149,7 @@ yarn lint
 yarn test
 ```
 
-## Manual integration testing
+## Manual integration testing (TODO update after changes to integration testing workflow)
 
 The [example app](examples/react-native-test-suite/) allows you to test out the React Native Embrace SDK in a representative app.
 
@@ -189,7 +189,7 @@ pushd ios; pod install; popd;
 yarn ios --mode=Release
 ```
 
-## Testing against new Embrace Android SDK versions
+## Testing against new Embrace Android SDK versions (TODO update after changes to integration testing workflow)
 
 You can test Embrace Android SDK changes by altering the dependency in the core package's [build.gradle](./packages/core/android/build.gradle).
 And then either publish a local artifact or if you need CI to pass - publish a beta:
@@ -209,7 +209,7 @@ And then either publish a local artifact or if you need CI to pass - publish a b
 4. Set the correct `embrace-android-sdk` version in `examples/react-native-test-suite/node_modules/embrace-io/android/build.gradle`
 5. Run the app in the normal way
 
-## Testing against new Embrace iOS SDK versions
+## Testing against new Embrace iOS SDK versions (TODO update after changes to integration testing workflow)
 
 ### Local artifact
 
@@ -225,6 +225,12 @@ You can test local changes to the iOS SDK by updating the example app's `podspec
 2. In `examples/react-native-test-suite/node_modules/embrace-io/RNEmbrace.podspec`, change the dependency on the iOS SDK to `s.dependency 'EmbraceIO-DEV'`
 3. In `examples/react-native-test-suite/ios/Podfile`, add the following line `pod 'EmbraceIO-DEV'`
 4. In `examples/react-native-test-suite/ios`, run the `pod update` command
+
+## Updating native SDK dependencies
+
+1. Bump the Android (SDK + Swazzler)/iOS dependencies to the latest available stable versions in `./yarn.config.cjs`
+2. Run `yarn constraints --fix` to propagate this change to all package.json files
+3. Run `yarn build` to update build files to the latest versions
 
 ## Automated integration testing
 
@@ -248,3 +254,28 @@ unreleased changes on `main` and a patch release will be cut from that new branc
 8. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
 
 NOTE: If you make a mistake while publishing you can remove the specific version w/ `npm unpublish <package-name>@<version>`, see [Unpublishing a single version of a package](https://docs.npmjs.com/unpublishing-packages-from-the-registry#unpublishing-a-single-version-of-a-package)
+
+## Deprecating
+
+If we find a critical issue in particular version that requires a hotfix we should mark that version as deprecated. This
+can be done using the following:
+
+```bash
+npm deprecate @embrace-io/<package>@"<version>" "some message explaining deprecation"
+```
+
+The command will prompt you to login and/or supply 2FA for NPM. You will need to re-run it for each package.
+
+Next commit an update to the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md)
+that notifies about the deprecation like:
+
+```markdown
+## <bad version>
+*<date>*
+
+:::warning Important
+This version contained an issue where .... Please use <fixed-version> instead.
+:::
+```
+
+If you make a mistake you can undeprecate a package following [these steps](https://www.notion.so/embraceio/Mark-older-releases-as-deprecated-in-the-npmjs-registry-10d7e3c9985280cb9ea5ea1e9f054c83?pvs=4).
