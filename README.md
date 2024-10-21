@@ -25,6 +25,7 @@ Individual packages are published from this monorepo, reasoning can be found in 
 | [`@embrace-io/react-native-orientation-change-tracker`](./packages/screen-orientation) | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-orientation-change-tracker.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-orientation-change-tracker) |
 | [`@embrace-io/react-native-spans`](./packages/spans)                                   | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-spans.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-spans)                                           |
 | [`@embrace-io/react-native-webview-tracker`](./packages/webview-tracker)               | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-webview-tracker.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-webview-tracker)                       |
+| [`@embrace-io/react-native-tracer-provider`](./packages/react-native-tracer-provider)  | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-tracer-provider.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-tracer-provider)                       |
 
 ## Support & Contributions
 Embrace does not currently accept pull requests from external contributors. If you have a feature suggestion or have spotted something that doesn't look right please reach out in our [Community Slack](https://join.slack.com/t/embraceio-community/shared_invite/zt-ywr4jhzp-DLROX0ndN9a0soHMf6Ksow) for direct, faster assistance.
