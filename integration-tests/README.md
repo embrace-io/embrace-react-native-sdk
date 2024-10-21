@@ -30,21 +30,19 @@ TODO
 
 ## Prepare a test app
 
-Before running tests or manual QA make sure the test app to be used is up-to-date using the `prepare-test-app` script.
-
-To make sure it has the latest locally built @embrace-io/* packages and test harness:
+Make sure the test app has the latest locally built @embrace-io/* packages and test harness:
 ```bash
-./prepare-test-app <test-app> --update-sdk-packages --update-test-harness
+./update-local-embrace.sh <test-app>
 ```
 
-To set it up with a particular embrace config:
+Set the test app up with a particular embrace config:
 ```bash
-./prepare-test-app <test-app> --embrace-config=./example-configs/<config>.json
+TODO
 ```
 
-To set it to a particular RN version:
+Set the test app to a particular RN version:
 ```bash
-./prepare-test-app <test-app> --rn-version=<version>
+TODO
 ```
 
 Make sure the app is installed on the device/emulator before running tests. Note that building the debug variant
@@ -64,7 +62,7 @@ For ios it doesn't apply the `--variant release` mode, so we can do it through x
 - Under the Run section, change the Build Configuration from Debug to Release.
 - Press Cmd + R to build and run the app in release mode.
 
-or simple run 
+or simply run 
 
 ```bash
 npx expo run:ios --configuration Release

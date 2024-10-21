@@ -4,7 +4,8 @@
   "description": "Integration test harness",
   "main": "index.js",
   "scripts": {
-    "test": "wdio run ./wdio.conf.ts"
+    "test": "wdio run ./wdio.conf.ts",
+    "update-local-embrace": "./update-local-embrace.sh"
   },
   "author": "",
   "license": "ISC",
