@@ -23,102 +23,115 @@ class SDKConfig: NSObject {
 }
 
 @objc class CustomExporterConfig: NSObject {
-  var endpoint: String
-  var timeout: NSNumber?
-  var header: [(String, String)]?
+    var endpoint: String?
+    var timeout: TimeInterval
+    var headers: [(String, String)]?
 
-  init(endpoint: String, timeout: NSNumber?, header: [(String, String)]?) {
+  init(endpoint: String?, timeout: TimeInterval, headers: [(String, String)]?) {
     self.endpoint = endpoint
     self.timeout = timeout
-    self.header = header
+    self.headers = headers
   }
 
-  @objc static func fromDictionary(_ dict: NSDictionary) -> CustomExporterConfig {
-      let endpoint = dict.value(forKey: "endpoint") as! String
-      let timeout = dict.value(forKey: "timeout") as? NSNumber
+  @objc static func parse(_ dict: NSDictionary) -> CustomExporterConfig {
+      let endpoint = dict.value(forKey: "endpoint") as? String
+
+      var timeoutInterval: TimeInterval = OtlpConfiguration.DefaultTimeoutInterval
+      if let timeout = dict.value(forKey: "timeout") as? NSNumber {
+          timeoutInterval = timeout.doubleValue
+      }
 
     var headers: [(String, String)] = []
     if let headerDicts = dict.value(forKey: "headers") as? [NSDictionary] {
         for header in headerDicts {
-            if let keyString = header.value(forKey: "key") as? String,
-               let valueString = header.value(forKey: "token") as? String {
-                headers.append((keyString, valueString))
+            if let keyS = header.value(forKey: "key") as? String,
+               let valueS = header.value(forKey: "token") as? String {
+                headers.append((keyS, valueS))
             }
         }
     }
 
-    return CustomExporterConfig(endpoint: endpoint, timeout: timeout, header: headers)
+      return CustomExporterConfig(endpoint: endpoint, timeout: timeoutInterval, headers: headers)
   }
-}
-
-func convertToTimeInterval(from number: NSNumber?) -> TimeInterval? {
-    guard let number = number else {
-        return nil
-    }
-    return number.doubleValue
 }
 
 @objc(RNEmbraceOTLP)
 class RNEmbraceOTLP: NSObject {
   // Http starts
   private func setOtlpHttpTraceExporter(endpoint: String,
-                                        timeout: NSNumber,
-                                        header: [(String, String)]?) -> OtlpHttpTraceExporter {
+                                        timeout: TimeInterval,
+                                        headers: [(String, String)]?) -> OtlpHttpTraceExporter {
       let urlConfig = URLSessionConfiguration.default
-      if let header = header {
-          // Convert the array of tuples to a dictionary
-          let headersDict = Dictionary(uniqueKeysWithValues: header)
-          urlConfig.httpAdditionalHeaders = headersDict // Assign to httpAdditionalHeaders
+      if let headers = headers {
+          let headersDict = Dictionary(uniqueKeysWithValues: headers)
+          urlConfig.httpAdditionalHeaders = headersDict
       }
 
-  return OtlpHttpTraceExporter(endpoint: URL(string: endpoint)!, // NOTE: make sure about extra validations (format/non-empty)
+  return OtlpHttpTraceExporter(endpoint: URL(string: endpoint)!,
                                 config: OtlpConfiguration(
-                                    timeout: convertToTimeInterval(from: timeout)!, // NOTE: make sure about extra validations (not-nil)
-                                    headers: header
+                                    timeout: timeout,
+                                    headers: headers
                                 ),
                                 useSession: URLSession(configuration: urlConfig),
-                                envVarHeaders: header
+                                envVarHeaders: headers
     )
   }
 
   private func setOtlpHttpLogExporter(endpoint: String,
-                                      timeout: NSNumber?,
-                                      header: [(String, String)]?) -> OtlpHttpLogExporter {
-    return OtlpHttpLogExporter(endpoint: URL(string: endpoint)!, // NOTE: make sure about extra validations (format/non-empty)
+                                      timeout: TimeInterval,
+                                      headers: [(String, String)]?) -> OtlpHttpLogExporter {
+    let urlConfig = URLSessionConfiguration.default
+    if let headers = headers {
+        let headersDict = Dictionary(uniqueKeysWithValues: headers)
+        urlConfig.httpAdditionalHeaders = headersDict
+    }
+
+    return OtlpHttpLogExporter(endpoint: URL(string: endpoint)!,
                                config: OtlpConfiguration(
-                                  timeout: convertToTimeInterval(from: timeout)!,  // NOTE: make sure about extra validations (not-nil)
-                                  headers: header
-                               )
+                                  timeout: timeout,
+                                  headers: headers
+                               ),
+                               useSession: URLSession(configuration: urlConfig),
+                               envVarHeaders: headers
     )
   }
 
-  func setHttpExporters(_ spanConfigDict: NSDictionary?,
-                        logConfigDict: NSDictionary?) -> OpenTelemetryExport {
-
+  func setHttpExporters(_ spanConfigDict: NSDictionary?, logConfigDict: NSDictionary?) -> OpenTelemetryExport {
     var customSpanExporter: OtlpHttpTraceExporter?
     var customLogExporter: OtlpHttpLogExporter?
 
     // OTLP HTTP Trace Exporter
-    if spanConfigDict != nil {
-      let spanConfig = CustomExporterConfig.fromDictionary(spanConfigDict!)
-      customSpanExporter = self.setOtlpHttpTraceExporter(endpoint: spanConfig.endpoint,
-                                                         timeout: spanConfig.timeout!,
-                                                         header: spanConfig.header!)
+    if let spanConfigDict = spanConfigDict {
+        let config = CustomExporterConfig.parse(spanConfigDict)
+
+        if let spanEndpoint = config.endpoint {
+            let spanTimeout = config.timeout
+            let spanHeaders = config.headers
+
+            customSpanExporter = self.setOtlpHttpTraceExporter(endpoint: spanEndpoint, timeout: spanTimeout, headers: spanHeaders)
+        }
     }
 
     // OTLP HTTP Log Exporter
-    if logConfigDict != nil {
-      let logConfig = CustomExporterConfig.fromDictionary(logConfigDict!)
-      customLogExporter = self.setOtlpHttpLogExporter(endpoint: logConfig.endpoint,
-                                                      timeout: logConfig.timeout!,
-                                                      header: logConfig.header!)
+    if let logConfigDict = logConfigDict {
+        let config = CustomExporterConfig.parse(logConfigDict)
+
+        if let logEndpoint = config.endpoint {
+            let logTimeout = config.timeout
+            let logHeaders = config.headers
+
+            customLogExporter = self.setOtlpHttpLogExporter(endpoint: logEndpoint, timeout: logTimeout, headers: logHeaders)
+        }
     }
 
       return OpenTelemetryExport(spanExporter: customSpanExporter, logExporter: customLogExporter)
     }
 
     @objc(startNativeEmbraceSDK:otlpExportConfigDict:resolver:rejecter:)
-    func startNativeEmbraceSDK(sdkConfigDict: NSDictionary, otlpExportConfigDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    func startNativeEmbraceSDK(sdkConfigDict: NSDictionary,
+                               otlpExportConfigDict: NSDictionary,
+                               resolve: @escaping RCTPromiseResolveBlock,
+                               rejecter reject: @escaping RCTPromiseRejectBlock) {
         let config = SDKConfig(from: sdkConfigDict)
 
         DispatchQueue.main.async {
@@ -143,8 +156,8 @@ class RNEmbraceOTLP: NSObject {
                                                       configBaseURL: config.endpointBaseUrl!)
                     }
 
-                    let customExporters: OpenTelemetryExport = self.setHttpExporters(otlpExportConfigDict.value(forKey: "traceExporter") as? NSDictionary,
-                                                                                     logConfigDict: otlpExportConfigDict.value(forKey: "logExporter") as? NSDictionary)
+                    let traceExporter = otlpExportConfigDict.value(forKey: "traceExporter") as? NSDictionary
+                    let logExporter = otlpExportConfigDict.value(forKey: "logExporter") as? NSDictionary
 
                     return .init(
                         appId: config.appId,
@@ -153,7 +166,7 @@ class RNEmbraceOTLP: NSObject {
                         endpoints: endpoints,
                         captureServices: servicesBuilder.build(),
                         crashReporter: crashReporter,
-                        export: customExporters
+                        export: self.setHttpExporters(traceExporter, logConfigDict: logExporter)
                     )
                 }
 
@@ -166,60 +179,4 @@ class RNEmbraceOTLP: NSObject {
             }
         }
     }
-  // Http ends
-
-//  // Grpc starts
-//  private func setOtlpGrpcTraceExporter(endpoint: String,
-//                                        timeout: NSNumber,
-//                                        header: [(String,String)]?) -> OtlpTraceExporter {
-//    return OtlpTraceExporter(endpoint: endpoint,
-//                               config: OtlpConfiguration(
-//                                  timeout: timeout as TimeInterval,
-//                                  headers: header
-//                               )
-//    );
-//  }
-//
-//  private func setOtlpGrpcLogExporter(endpoint: String,
-//                                      header: [(String,String)]?,
-//                                      timeout: NSNumber?) -> OtlpLogExporter {
-//    return OtlpLogExporter(endpoint: endpoint,
-//                             config: OtlpConfiguration(
-//                                timeout: timeout as TimeInterval,
-//                                headers: header
-//                             )
-//    );
-//  }
-//
-//  @objc(setGrpcExporters:logConfig:resolver:rejecter:)
-//  func setGrpExporters(_ spanConfigDict: NSDictionary?,
-//                              logConfigDict: NSDictionary?,
-//                              resolver resolve: @escaping RCTPromiseResolveBlock,
-//                              rejecter reject: @escaping RCTPromiseRejectBlock) -> OpenTelemetryExport? {
-//    if (spanConfigDict == nil && logConfigDict == nil) {
-//      reject("SET_OTLP_GRPC_CUSTOM_EXPORTER", "Error setting grpc custom exporter, it should receive at least one configuration", nil)
-//      return nil
-//    }
-//
-//    let customSpanExporter: OtlpTraceExporter?
-//    let customLogExporter: OtlpLogExporter?
-//
-//    // OTLP GRPC Trace Exporter
-//    if spanConfigDict != nil {
-//      var spanConfig = CustomExporterConfig.fromDictionary(spanConfigDict!)
-//      customSpanExporter = this.setOtlpGrpcTraceExporter(endpoint: spanConfig.endpoint,
-//                                                         header: spanConfig.header,
-//                                                         timeout: spanConfig?.timeout);
-//    }
-//
-//    // OTLP GRPC Log Exporter
-//    if logConfigDict != nil {
-//      var spanConfig = CustomExporterConfig.fromDictionary(logConfigDict!)
-//      customLogExporter = this.setOtlpGrpcLogExporter(endpoint: logConfig.endpoint,
-//                                                      header: logConfig.header,
-//                                                      timeout: logConfig.timeout)
-//    }
-//
-//    resolve(OpenTelemetryExport(spanExporter: customSpanExporter, logExporter: customLogExporter))
-//  }
 }

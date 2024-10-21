@@ -12,23 +12,27 @@ import {useColorScheme} from "@/hooks/useColorScheme";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+const endpoint = "https://otlp-gateway-prod-us-east-0.grafana.net/otlp/v1";
+const token = ""; // base64 -> instance:token
+
 export default function RootLayout() {
   const initWithCustomExporters = initEmbraceWithCustomExporters({
-    // logExporter: {
-    //   endpoint: "http://localhost:4317/v1/logs",
-    //   header: {
-    //     key: "a-key",
-    //     token: "a-token",
-    //   },
-    //   timeout: 30000,
-    // },
-    traceExporter: {
-      endpoint:
-        "https://otlp-gateway-prod-us-east-0.grafana.net/otlp/v1/traces",
+    logExporter: {
+      endpoint: `${endpoint}/logs`,
       headers: [
         {
           key: "Authorization",
-          token: "Basic xxx",
+          token: `Basic ${token}`,
+        },
+      ],
+      timeout: 30000,
+    },
+    traceExporter: {
+      endpoint: `${endpoint}/traces`,
+      headers: [
+        {
+          key: "Authorization",
+          token: `Basic ${token}`,
         },
       ],
       timeout: 30000,
@@ -43,7 +47,7 @@ export default function RootLayout() {
             appId: "abcdf",
             // endpointBaseUrl: "http://localhost:8877",
           },
-          replaceInit: initWithCustomExporters,
+          replaceInit: initWithCustomExporters, // rename arg? (`startCustomExporters`),
         },
       });
     };
