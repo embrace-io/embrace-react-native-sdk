@@ -1,13 +1,16 @@
 import type {Options} from "@wdio/types";
-import {clearServer, startServer, stopServer} from "./helpers/embrace_server";
 
-export const config: Options.Testrunner = {
+import {RUNNER, PORT} from "./helpers/env";
+
+import capabilities from "./capabilities/capabilities";
+
+const config: Options.Testrunner = {
   //
   // ====================
   // Runner Configuration
   // ====================
   // WebdriverIO supports running e2e tests as well as unit and component tests.
-  runner: "local",
+  runner: RUNNER,
   autoCompileOpts: {
     autoCompile: true,
     tsNodeOpts: {
@@ -16,7 +19,7 @@ export const config: Options.Testrunner = {
     },
   },
 
-  port: 4723,
+  port: PORT,
   //
   // ==================
   // Specify Test Files
@@ -59,29 +62,7 @@ export const config: Options.Testrunner = {
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
   // https://saucelabs.com/platform/platform-configurator
   //
-  capabilities: [
-    {
-      // capabilities for local Appium web tests on an Android Emulator
-      platformName: "Android",
-      "appium:deviceName": "Android GoogleAPI Emulator",
-      "appium:platformVersion": "14.0",
-      "appium:automationName": "UiAutomator2",
-      "appium:appPackage": "io.embrace.basictestapp",
-      "appium:appActivity": ".MainActivity",
-
-      //  TODO: for CI/CD we probably want to point to the prebuilt release
-      //  APK rather than having to have the app running in an emulator beforehand, e.g.
-      //  "appium:app": "./basic-test-app/android/app/build/outputs/apk/debug/app-debug.apk",
-    },
-    {
-      // capabilities for local Appium web tests on an iOS Emulator
-      platformName: "iOS",
-      "appium:automationName": "XCUITest",
-      "appium:deviceName": "iPhone 15",
-      "appium:appPackage": "io.embrace.basictestapp",
-      "appium:noReset": true,
-    },
-  ],
+  capabilities: capabilities,
 
   //
   // ===================
@@ -175,9 +156,7 @@ export const config: Options.Testrunner = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  onPrepare() {
-    startServer(false);
-  },
+  onPrepare() {},
   /**
    * Gets executed before a worker process is spawned and can be used to initialize specific service
    * for that worker as well as modify runtime environments in an async fashion.
@@ -233,8 +212,15 @@ export const config: Options.Testrunner = {
   /**
    * Function to be executed before a test (in Mocha/Jasmine) starts.
    */
-  beforeTest() {
-    clearServer();
+  async beforeTest() {
+    const packageName = browser.capabilities["appium:appPackage"];
+
+    await driver.terminateApp(packageName);
+
+    await driver.execute("mobile: activateApp", {
+      appId: packageName,
+      bundleId: packageName,
+    });
   },
   /**
    * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
@@ -311,9 +297,7 @@ export const config: Options.Testrunner = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  onComplete() {
-    stopServer();
-  },
+  onComplete() {},
   /**
    * Gets executed when a refresh happens.
    * @param {string} oldSessionId session ID of the old session
@@ -334,3 +318,5 @@ export const config: Options.Testrunner = {
   // afterAssertion: function(params) {
   // }
 };
+
+export {config};
