@@ -18,12 +18,7 @@ const endSession = async (manual = false) => {
 };
 
 const backgroundSessionsEnabled = () => {
-  // iOS and Android appear to have different default behaviour for recording background sessions
-  if (driver.isIOS) {
-    return true;
-  } else if (driver.isAndroid) {
-    return false;
-  }
+  return false;
 };
 
 export {endSession, backgroundSessionsEnabled};
