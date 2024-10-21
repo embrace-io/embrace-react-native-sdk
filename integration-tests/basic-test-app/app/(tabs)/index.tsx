@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Button} from "react-native";
-import {useCallback, useMemo, useRef} from "react";
+import React, {useCallback, useMemo, useRef} from "react";
 
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
