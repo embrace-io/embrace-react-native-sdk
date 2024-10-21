@@ -14,7 +14,10 @@
   "peerDependencies": {
     "react-native": "*",
     "react": "*",
-    "@embrace-io/react-native": "*"
+    "expo-router": "*",
+    "@embrace-io/react-native": "*",
+    "@embrace-io/react-native-tracer-provider": "*",
+    "@opentelemetry/instrumentation-react-native-navigation": "*"
   },
   "devDependencies": {
     "typescript": "~5.3.3"

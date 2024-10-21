@@ -24,10 +24,12 @@ export default function RootLayout() {
 
   return (
     <EmbraceTestHarness
+      navigationStyle="expo"
       sdkConfig={{
         ios: {
           appId: "abcdf",
           endpointBaseUrl: "http://localhost:8877",
+          disableAutomaticViewCapture: true,
         },
       }}
     />

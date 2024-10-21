@@ -1,17 +1,26 @@
 import {useEffect, useState} from "react";
 import * as React from "react";
 import {initialize as initEmbrace} from "@embrace-io/react-native";
+import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
 import {Text, View} from "react-native";
 import MainTestScreen from "./MainTestScreen";
 import {styles} from "./styles";
 import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces/Config";
+import {
+  Stack,
+  useNavigationContainerRef as useExpoNavigationContainerRef,
+} from "expo-router";
 
 type Props = {
   sdkConfig: SDKConfig;
+  navigationStyle: "expo" | "TODO-react-native";
 };
 
-export const EmbraceTestHarness = ({sdkConfig}: Props) => {
+export const EmbraceTestHarness = ({sdkConfig, navigationStyle}: Props) => {
   const [embraceLoaded, setEmbraceLoaded] = useState(false);
+  const {tracerProvider} = useEmbraceNativeTracerProvider({}, embraceLoaded);
+  const expoNavigationRef = useExpoNavigationContainerRef();
   useEffect(() => {
     const init = async () => {
       await initEmbrace({
@@ -32,5 +41,25 @@ export const EmbraceTestHarness = ({sdkConfig}: Props) => {
     );
   }
 
-  return <MainTestScreen />;
+  if (navigationStyle === "expo") {
+    return (
+      <NavigationTracker
+        ref={expoNavigationRef}
+        provider={tracerProvider || undefined}
+        config={{
+          attributes: {
+            "emb.type": "ux.view",
+          },
+          debug: true,
+        }}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </NavigationTracker>
+    );
+  } else {
+    // TODO react native navigation
+    return <MainTestScreen />;
+  }
 };

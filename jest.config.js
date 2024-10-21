@@ -12,6 +12,7 @@ module.exports = {
     "<rootDir>/packages/.*/lib/",
     "<rootDir>/examples/",
     "<rootDir>/integration-tests/",
+    "<rootDir>/packages/.*/native-src/",
     "<rootDir>/packages/core/test-project/",
   ],
   collectCoverage: true,
@@ -20,9 +21,13 @@ module.exports = {
       lines: 74,
     },
   },
-  globals: {
-    "ts-jest": {
-      babelConfig: true,
-    },
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        babel: true,
+        tsconfig: "tsconfig.json",
+      },
+    ],
   },
 };

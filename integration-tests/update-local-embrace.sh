@@ -1,5 +1,6 @@
 #!/bin/bash
 
+<<<<<<< HEAD
 # Default variable values
 test_harness_only=false
 
@@ -32,10 +33,12 @@ if [ "$test_harness_only" = false ]; then
   # build required packages
   pushd ..
   npx lerna run build --scope=@embrace-io/react-native
+  npx lerna run build --scope=@embrace-io/react-native-tracer-provider
   popd
 
   # pack required packages into tarballs
   ./pack.sh ../packages/core/ artifacts/embrace-io-react-native-local.tgz
+  ./pack.sh ../packages/react-native-tracer-provider/ artifacts/embrace-io-react-native-tracer-provider-local.tgz
 fi
 
 # build and pack the test harness
@@ -44,4 +47,8 @@ npm --prefix test-harness run build
 
 # update all test apps with the sdk packages and the test harness
 # TODO EMBR-4923 put test apps within a common folder and use lerna to run this command across all of them
-npm --prefix basic-test-app add ./artifacts/embrace-io-react-native-local.tgz ./artifacts/embrace-io-react-native-test-harness-local.tgz
+npm --prefix basic-test-app add \
+  ./artifacts/embrace-io-react-native-local.tgz \
+  ./artifacts/embrace-io-react-native-tracer-provider-local.tgz \
+  ./artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz \
+  ./artifacts/embrace-io-react-native-test-harness-local.tgz

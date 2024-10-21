@@ -70,7 +70,8 @@ Use the following when creating `./ios/Embrace-Info.plist`:
 Then build:
 
    ```bash
-    npx expo run:ios
+   pushd ios; pod install; popd
+   npx expo run:ios
    ```
 
 ## Pull in local @embrace-io/react-native changes

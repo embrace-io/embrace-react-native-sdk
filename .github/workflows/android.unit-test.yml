@@ -1,0 +1,54 @@
+name: Android Unit Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+        jdk-version: ["17"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Node (${{ matrix.node-version }})
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Enables corepack
+        run: corepack enable
+
+      - uses: dorny/paths-filter@v2
+        id: changed_files
+        with:
+          list-files: shell
+          filters: |
+            android:
+            - 'packages/**/gradle.properties'
+            - 'packages/**/*.gradle'
+            - 'packages/**/*.kt'
+            - 'packages/**/*.java'
+
+      - name: Install Root Node Modules
+        run: yarn install
+        if: steps.changed_files.outputs.android == 'true'
+
+      - name: Install JDK ${{ matrix.jdk-version }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: ${{ matrix.jdk-version }}
+        if: steps.changed_files.outputs.android == 'true'
+
+      - name: Run Android Unit Tests
+        run: yarn run android:test $(./scripts/scopes-from-file-changes.ts ${{ steps.changed_files.outputs.android_files }})
+        if: steps.changed_files.outputs.android == 'true'

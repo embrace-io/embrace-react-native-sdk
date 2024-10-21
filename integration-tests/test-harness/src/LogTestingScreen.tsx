@@ -2,7 +2,6 @@ import * as React from "react";
 import {Button, View, Text} from "react-native";
 import {useCallback} from "react";
 import {styles} from "./styles";
-
 import {
   logHandledError,
   logError,

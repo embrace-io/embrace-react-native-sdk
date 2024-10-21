@@ -33,7 +33,7 @@ jobs:
       - name: Enables corepack
         run: corepack enable
 
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         id: changed_files
         with:
           list-files: shell
@@ -44,7 +44,7 @@ jobs:
             - 'packages/**/*.h'
 
       - name: Cache Derived Data
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: Derived-Data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj, Podfile.lock') }}
@@ -56,10 +56,14 @@ jobs:
         run: yarn install
         if: steps.changed_files.outputs.ios == 'true'
 
+      - name: Linting
+        run: yarn run lint:swift
+        if: steps.changed_files.outputs.ios == 'true'
+
       - name: Install Node Modules + CocoaPods Dependencies
         run: yarn run ios:install
         if: steps.changed_files.outputs.ios == 'true'
 
       - name: Run iOS Unit Tests
-        run: yarn run ios:test $(./scopes-from-file-changes.ts ${{ steps.changed_files.outputs.ios_files }})
+        run: yarn run ios:test $(./scripts/scopes-from-file-changes.ts ${{ steps.changed_files.outputs.ios_files }})
         if: steps.changed_files.outputs.ios == 'true'
