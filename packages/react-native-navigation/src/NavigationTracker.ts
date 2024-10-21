@@ -1,4 +1,5 @@
 import {NativeModules} from "react-native";
+
 import {
   ICurrentScreenInstance,
   INavigation,
@@ -17,8 +18,9 @@ export default class NavigationTracker {
     };
     this.currentScreen = cS;
     if (NativeModules.EmbraceManager.startView) {
-      this.currentScreen["spanId"] =
-        await NativeModules.EmbraceManager.startView(cS.name);
+      this.currentScreen.spanId = await NativeModules.EmbraceManager.startView(
+        cS.name,
+      );
     } else {
       console.warn(
         "[Embrace] The method startView was not found, please update the native SDK",
@@ -28,13 +30,8 @@ export default class NavigationTracker {
 
   public updateLastScreen = async (name: string) => {
     if (this.currentScreen && this.currentScreen.name !== name) {
-      if (
-        NativeModules.EmbraceManager.endView &&
-        this.currentScreen["spanId"]
-      ) {
-        await NativeModules.EmbraceManager.endView(
-          this.currentScreen["spanId"],
-        );
+      if (NativeModules.EmbraceManager.endView && this.currentScreen.spanId) {
+        await NativeModules.EmbraceManager.endView(this.currentScreen.spanId);
         this.setLastScreenStart(name);
       } else {
         console.warn(

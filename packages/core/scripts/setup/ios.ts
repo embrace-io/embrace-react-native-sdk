@@ -148,12 +148,17 @@ export const addEmbraceInitializerSwift = {
     const project = await xcodePatchable({name});
 
     const filePath = path.join("ios", name, "EmbraceInitializer.swift");
-    if (fs.existsSync(filePath)) {
-      logger.warn("EmbraceInitializer.swift already exists");
-      return;
+    try {
+      const fd = fs.openSync(filePath, "wx");
+      fs.writeFileSync(fd, getEmbraceInitializerContents(appId));
+    } catch (e) {
+      if (e instanceof Error && e.message.includes("EEXIST")) {
+        logger.warn("EmbraceInitializer.swift already exists");
+        return;
+      } else {
+        throw e;
+      }
     }
-
-    fs.writeFileSync(filePath, getEmbraceInitializerContents(appId));
 
     const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
       project.path,

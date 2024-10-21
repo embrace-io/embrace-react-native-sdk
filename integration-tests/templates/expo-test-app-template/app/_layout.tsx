@@ -23,5 +23,5 @@ export default function RootLayout() {
     return null;
   }
 
-  return <EmbraceTestHarness sdkConfig={sdkConfig} />;
+  return <EmbraceTestHarness navigationStyle="expo" sdkConfig={sdkConfig} />;
 }

@@ -74,27 +74,19 @@ function enforceNoDualTypeDependencies({Yarn} ) {
  *  Enforces each package having a peerDependency on React Native
  */
 function enforceReactNativePeerDependency({ Yarn }) {
-  for (const workspace of Yarn.workspaces()) {
-    if (workspace.manifest.private) continue;
-
-    workspace.set("peerDependencies", {
-      ...(workspace.peerDependencies || {}),
-      "react-native": ">=0.56.0",
-    });
+  for (const dependency of Yarn.dependencies({ident: 'react-native'})) {
+    if (dependency.type === "peerDependencies") {
+      dependency.update(">=0.56.0");
+    }
   }
 }
 
 /**
- *  Enforces each package having a common set of devDependencies
+ *  Enforces each package having a common typescript version
  */
-function enforceCommonDevDependencies({ Yarn }) {
-  for (const workspace of Yarn.workspaces()) {
-    if (workspace.manifest.private) continue;
-
-    workspace.set("devDependencies", {
-      "typescript": "^4.7.4",
-      ...(workspace.manifest.devDependencies || {}),
-    });
+function enforceCommonTypescript({ Yarn }) {
+  for (const dependency of Yarn.dependencies({ident: 'typescript'})) {
+    dependency.update("^5.6.3");
   }
 }
 
@@ -115,12 +107,27 @@ function enforceConsistentDependenciesAcrossTheProject({Yarn}) {
   }
 }
 
+/**
+ *  Enforces each package having the same Embrace metadata
+ */
+function enforceEmbraceMetadata({ Yarn }) {
+  for (const workspace of Yarn.workspaces()) {
+    if (workspace.manifest.private) continue;
+
+    workspace.set("embrace", {
+      iosVersion: "6.4.2",
+      androidVersion: "6.13.0",
+    });
+  }
+}
+
 module.exports = defineConfig({
   constraints: async ctx => {
     enforcePackageInfo(ctx);
     enforceNoDualTypeDependencies(ctx);
-    enforceReactNativePeerDependency(ctx);
-    enforceCommonDevDependencies(ctx);
     enforceConsistentDependenciesAcrossTheProject(ctx);
+    enforceEmbraceMetadata(ctx);
+    enforceReactNativePeerDependency(ctx);
+    enforceCommonTypescript(ctx);
   },
 });

@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-@interface CodePushHelper: NSObject
+@interface CodePushHelper : NSObject
 
 + (NSURL *)getCodePushURL;
 
