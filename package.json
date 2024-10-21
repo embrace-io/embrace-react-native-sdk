@@ -12,10 +12,11 @@
   "scripts": {
     "publish-modules": "npx lerna run build && npx lerna publish",
     "build": "npx lerna run build",
-    "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx && prettier --write \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints",
+    "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx && prettier \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints",
     "lint:js:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
     "lint:clang": "./scripts/run-clang-format.sh",
     "lint:swift": "./scripts/run-swiftlint.sh",
+    "lint:swift:fix": "./scripts/run-swiftlint.sh --fix",
     "test": "jest",
     "ios:install": "npx lerna run ios:install",
     "ios:test": "npx lerna run ios:test"
