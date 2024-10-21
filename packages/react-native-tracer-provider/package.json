@@ -9,7 +9,7 @@
     "lib",
     "android",
     "ios",
-    "ReactNativeTracerProvider.podspec"
+    "RNEmbraceTracerProvider.podspec"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
