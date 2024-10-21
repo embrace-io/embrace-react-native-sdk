@@ -5,7 +5,7 @@ import {TracerProvider} from "@opentelemetry/api";
 import {logWarning} from "./util";
 import {
   EmbraceNativeTracerProviderConfig,
-  UseEmbraceNativeTracerProviderResult,
+  EmbraceNativeTracerProviderReturn,
 } from "./types";
 import {EmbraceNativeTracerProvider} from "./EmbraceNativeTracerProvider";
 
@@ -22,7 +22,7 @@ import {EmbraceNativeTracerProvider} from "./EmbraceNativeTracerProvider";
 export const useEmbraceNativeTracerProvider = (
   config?: EmbraceNativeTracerProviderConfig,
   enabled = true,
-): UseEmbraceNativeTracerProviderResult => {
+): EmbraceNativeTracerProviderReturn => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
   const [error, setError] = useState<string>("");

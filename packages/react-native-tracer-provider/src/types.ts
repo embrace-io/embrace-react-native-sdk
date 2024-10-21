@@ -1,6 +1,6 @@
 import {TracerProvider} from "@opentelemetry/api";
 
-export interface UseEmbraceNativeTracerProviderResult {
+export interface EmbraceNativeTracerProviderReturn {
   isLoading: boolean;
   isError: boolean;
   error: string;
