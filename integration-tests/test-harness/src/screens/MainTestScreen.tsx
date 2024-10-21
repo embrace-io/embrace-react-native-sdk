@@ -1,11 +1,11 @@
 import * as React from "react";
-import LogTestingScreen from "./LogTestingScreen";
+import {LogTestingScreen} from "./LogTestingScreen";
 import {StyleSheet, Button, Dimensions, ScrollView, View} from "react-native";
 import {endSession} from "@embrace-io/react-native";
 
 type Props = {};
 
-export default function MainTestScreen({}: Props) {
+const MainTestScreen = ({}: Props) => {
   return (
     <View style={styles.mainContainer}>
       <ScrollView
@@ -17,7 +17,7 @@ export default function MainTestScreen({}: Props) {
       </ScrollView>
     </View>
   );
-}
+};
 
 // https://stackoverflow.com/a/45739033
 const styles = StyleSheet.create({
@@ -25,3 +25,5 @@ const styles = StyleSheet.create({
   scrollView: {height: Dimensions.get("window").height},
   scrollViewContainer: {},
 });
+
+export {MainTestScreen};

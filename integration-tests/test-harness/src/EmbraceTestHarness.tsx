@@ -4,8 +4,8 @@ import {initialize as initEmbrace} from "@embrace-io/react-native";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
 import {Text, View} from "react-native";
-import MainTestScreen from "./MainTestScreen";
-import {styles} from "./styles";
+import {MainTestScreen} from "./screens/MainTestScreen";
+import {styles} from "./helpers/styles";
 import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces/Config";
 import {
   Stack,
@@ -44,6 +44,7 @@ export const EmbraceTestHarness = ({sdkConfig, navigationStyle}: Props) => {
   if (navigationStyle === "expo") {
     return (
       <NavigationTracker
+        // @ts-ignore
         ref={expoNavigationRef}
         provider={tracerProvider || undefined}
         config={{

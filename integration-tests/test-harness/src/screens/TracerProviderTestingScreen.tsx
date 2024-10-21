@@ -1,15 +1,15 @@
 import * as React from "react";
 import {Button, View, Text} from "react-native";
 import {useMemo} from "react";
-import {styles} from "./styles";
-
+import {styles} from "../helpers/styles";
 import {
   generateBasicSpan,
   generateNestedSpans,
   generateTestSpans,
-} from "@/helpers/generateSpans";
+} from "../helpers/generateSpans";
 import {Tracer} from "@opentelemetry/api";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import FullScreenMessage from "../components/FullScreenMessage";
 
 const TracerProviderTestingScreen = () => {
   const {isLoading, isError, error, tracerProvider} =
@@ -22,23 +22,11 @@ const TracerProviderTestingScreen = () => {
   }, [isLoading, isError, error, tracerProvider]);
 
   if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.section}>
-          <Text style={styles.title}>Loading Tracer Provider</Text>
-        </View>
-      </View>
-    );
+    return <FullScreenMessage msg="Loading Tracer Provider" />;
   }
 
   if (isError) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.section}>
-          <Text style={styles.title}>{error}</Text>
-        </View>
-      </View>
-    );
+    return <FullScreenMessage msg={error} />;
   }
 
   return (
@@ -62,4 +50,4 @@ const TracerProviderTestingScreen = () => {
   );
 };
 
-export default TracerProviderTestingScreen;
+export {TracerProviderTestingScreen};
