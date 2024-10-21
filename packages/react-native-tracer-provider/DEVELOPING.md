@@ -18,7 +18,7 @@ a single file to be referenced by both projects:
 - iOS
     - ios/dependencies.rb
     - referenced by native-src/ios/Podfile for tests
-    - referenced by react-native-tracer-provider.podspec for the package
+    - referenced by ReactNativeTracerProvider.podspec for the package
 
 ## Testing
 
