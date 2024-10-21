@@ -87,12 +87,18 @@ export const createEmbraceJSON = {
         "main",
         "embrace-config.json",
       );
-      if (fs.existsSync(p)) {
-        logger.log("already has embrace-config.json file");
-        return resolve(NoopFile);
+
+      try {
+        fs.closeSync(fs.openSync(p, "ax"));
+        return resolve(embraceJSON());
+      } catch (e) {
+        if (e instanceof Error && e.message.includes("EEXIST")) {
+          logger.log("already has embrace-config.json file");
+          return resolve(NoopFile);
+        } else {
+          throw e;
+        }
       }
-      fs.closeSync(fs.openSync(p, "a"));
-      return resolve(embraceJSON());
     }).then((file: FileUpdatable) => {
       if (file === NoopFile) {
         return;

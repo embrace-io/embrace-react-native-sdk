@@ -139,3 +139,28 @@ unreleased changes on `main` and a patch release will be cut from that new branc
 8. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
 
 NOTE: If you make a mistake while publishing you can remove the specific version w/ `npm unpublish <package-name>@<version>`, see [Unpublishing a single version of a package](https://docs.npmjs.com/unpublishing-packages-from-the-registry#unpublishing-a-single-version-of-a-package)
+
+## Deprecating
+
+If we find a critical issue in particular version that requires a hotfix we should mark that version as deprecated. This
+can be done using the following:
+
+```bash
+npm deprecate @embrace-io/<package>@"<version>" "some message explaining deprecation"
+```
+
+The command will prompt you to login and/or supply 2FA for NPM. You will need to re-run it for each package.
+
+Next commit an update to the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md)
+that notifies about the deprecation like:
+
+```markdown
+## <bad version>
+*<date>*
+
+:::warning Important
+This version contained an issue where .... Please use <fixed-version> instead.
+:::
+```
+
+If you make a mistake you can undeprecate a package following [these steps](https://www.notion.so/embraceio/Mark-older-releases-as-deprecated-in-the-npmjs-registry-10d7e3c9985280cb9ea5ea1e9f054c83?pvs=4).
