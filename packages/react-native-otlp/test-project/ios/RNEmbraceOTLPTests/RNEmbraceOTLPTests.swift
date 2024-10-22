@@ -29,12 +29,12 @@ class Promise {
 final class RNEmbraceOTLPTests: XCTestCase {
     var module: RNEmbraceOTLP!
     var promise: Promise!
-    
+
     override func setUp() async throws {
         module = RNEmbraceOTLP()
         promise = Promise()
     }
-        
+
     // happy path
     func testStartNativeEmbraceSDK() throws {
         let expectation = self.expectation(description: "Start iOS SDK")
@@ -59,7 +59,7 @@ final class RNEmbraceOTLPTests: XCTestCase {
             "traceExporter": traceExportConfig,
             "logExporter": logExportConfig
         ]
-        
+
         module.startNativeEmbraceSDK(sdkConfigDict: sdkConfig,
                                      otlpExportConfigDict: otlpExportConfig,
                                      resolve: { result in
@@ -71,22 +71,22 @@ final class RNEmbraceOTLPTests: XCTestCase {
         waitForExpectations(timeout: 3)
         XCTAssertEqual(promise.resolveCalls.count, 1)
     }
-    
+
     func testStartWithMissingConfig() async throws {
     }
-    
+
     func testStartWithMissingExporters() async throws {
     }
-    
+
     func testStartWithTraceExporterOnly() async throws {
     }
-    
+
     func testStartWithLogExporterOnly() async throws {
     }
-    
+
     func testStartWithInvalidTraceExporterConfig() async throws {
     }
-    
+
     func testStartWithInvalidLogExporterConfig() async throws {
     }
 }
