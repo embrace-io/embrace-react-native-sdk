@@ -90,6 +90,52 @@ This is the bare minimum we need to create a new iOS Native Module.
 
 > Do not forget to properly create the .podspec file outside the ios folder listing all dependencies. Also it's a good idea to check in that this file is in place after run the build and pack the new package. Without this file the new iOS Native Module won't be recognized by the application and won't be installed.
 
+### Create Unit Test suite for the new iOS Native Module
+
+- Under `packages/my-new-package` create a `test-project` directory.
+- Make sure the following structure is created under the new `test-project` directory
+
+```
+test-project /
+└── ios
+    └── Podfile // This should contain the proper React Native install script adding all dependencies we need
+└── package.json
+└── yarn.lock
+```
+
+- Once it's done, open Xcode and create a new project.
+- Create a new workspace and link the project it was already created.
+- Create a new Target* (Framework). Make sure the Language is Swift, Testing System is XCTest and it's attached to the already created project.
+- At this point the structure should look like
+
+```
+test-project /
+└── ios
+    ├── MyNewPackage/
+    │   └── MyNewPackage.h // NOTE: `MyNewPackage` will be removed in the future, but the target will remain.
+    ├── MyNewPackageTests/
+    │   └── MyNewPackageTests.swift
+    ├── MyNewPackageTests.xcworkspace // created manually
+    ├── MyNewPackageTests.xcodeproj // created manually
+    └── Podfile
+└── package.json
+└── yarn.lock
+```
+* Notice that `MyNewPackage` and `MyNewPackageTests` are the Framework + XCTest targets created by xcode.
+
+- Due to this (CocoaPods issue)[https://github.com/CocoaPods/CocoaPods/issues/12583#issuecomment-2357470707] it's needed an extra step before `yarn run install:ios`. Follow the instructions there with both Targets (`MyNewPackage` and `MyNewPackageTests`).
+- Run `yarn install:ios`.
+- This should install all related to React Native + dependencies into `ios/Podfile`.
+- In XCode click into the new project (files navigator) and right click.
+- Click on "Add files to 'MyNewPackageTests.xcodeproj'"
+- Select the folder where the native code is for the new package, i.e `packages/ios/MyNewPackage` (where the swift solution for the component is).
+- Make sure this reference is added to the right target (`MyNewPackage`, the one created when we added the Framework + XCTest). Do not copy/move files. The reference is what we need here.
+
+FAQ:
+- https://github.com/apple/swift-log/issues/314 / swift-log + swift-protobuf -> `BUILD_LIBRARY_FOR_DISTRIBUTION` set to `No` for both targets
+- https://stackoverflow.com/questions/78303230/react-native-0-73-mysterious-build-error-error-sandbox-rsync-samba7042-deny -> Sandbox: bash(1698) deny(1) file-write-create /Users/facostaembrace/Desktop/embrace-react-native-sdk/packages/react-native-otlp/test-project/ios/Pods/resources-to-copy-RNEmbraceOTLP.txt
+- MyNewPackageTests target -> Build Settings -> User Script Sandboxing -> Switch from `Yes` to `No`
+
 ## Android Native Module
 
 Also for Android Standalone Native Modules we highly recommend to start the development process using Android Studio.

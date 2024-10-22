@@ -5,6 +5,7 @@ import EmbraceIO
 import EmbraceCrash
 import OpenTelemetrySdk
 import EmbraceCommonInternal
+import OSLog
 
 class SDKConfig: NSObject {
     public let appId: String
@@ -57,6 +58,8 @@ class SDKConfig: NSObject {
 
 @objc(RNEmbraceOTLP)
 class RNEmbraceOTLP: NSObject {
+    private var log = OSLog(subsystem: "Embrace", category: "RNEmbraceOTLP")
+
   // Http starts
   private func setOtlpHttpTraceExporter(endpoint: String,
                                         timeout: TimeInterval,
@@ -143,21 +146,25 @@ class RNEmbraceOTLP: NSObject {
                     } else {
                         crashReporter = EmbraceCrashReporter()
                     }
-
+                    
                     let servicesBuilder = CaptureServiceBuilder().addDefaults()
                     if config.disableAutomaticViewCapture {
-                            servicesBuilder.remove(ofType: ViewCaptureService.self)
+                        servicesBuilder.remove(ofType: ViewCaptureService.self)
                     }
-
+                    
                     var endpoints: Embrace.Endpoints?
                     if config.endpointBaseUrl != nil {
                         endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!,
                                                       developmentBaseURL: config.endpointBaseUrl!,
                                                       configBaseURL: config.endpointBaseUrl!)
                     }
-
+                    
                     let traceExporter = otlpExportConfigDict.value(forKey: "traceExporter") as? NSDictionary
                     let logExporter = otlpExportConfigDict.value(forKey: "logExporter") as? NSDictionary
+                    
+                    if traceExporter == nil && logExporter == nil {
+                        os_log("[Embrace] Neither Traces nor Logs configurations were found, skipping custom export.", log: self.log, type: .info)
+                    }
 
                     return .init(
                         appId: config.appId,
@@ -172,7 +179,7 @@ class RNEmbraceOTLP: NSObject {
 
                 try Embrace.setup(options: embraceOptions)
                     .start()
-
+                
                 resolve(true)
             } catch let error {
                 reject("START_EMBRACE_SDK", "Error starting Embrace SDK", error)
