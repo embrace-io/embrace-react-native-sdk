@@ -10,4 +10,8 @@ if ! command -v ${FORMATTER} &> /dev/null; then
     export PATH="/opt/homebrew/opt/swiftlint/bin:$PATH"
 fi
 
-swiftlint --fix
+if [ "$1" == "--fix" ]; then
+  swiftlint --fix
+else
+  swiftlint
+fi

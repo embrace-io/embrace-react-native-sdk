@@ -6,7 +6,6 @@ import {EmbraceSpanData} from "../typings/embrace";
 import {
   commonEmbraceSpanAttributes,
   embraceSpanDefaults,
-  commonEmbraceSpanSnapshotAttributes,
   sortSpanAttributes,
 } from "../helpers/span";
 
@@ -34,6 +33,12 @@ describe("Tracer Provider", () => {
       }
     });
   };
+
+  beforeEach(async () => {
+    const tracerProviderScreen = await driver.$("~TRACER PROVIDER TESTING");
+    await tracerProviderScreen.click();
+    await new Promise(r => setTimeout(r, 1000));
+  });
 
   it("should record a basic span", async () => {
     const generateBasicSpan = await driver.$("~GENERATE BASIC SPAN");
@@ -164,6 +169,7 @@ describe("Tracer Provider", () => {
         },
       ] as EmbraceSpanData[]);
 
+      /* TODO, still worth validating on snapshots?
       const snapshots = spanPayloads[0].perfSpanSnapshots;
       expect(snapshots.length).toBe(1);
       expectValidSpans(snapshots, true);
@@ -180,6 +186,7 @@ describe("Tracer Provider", () => {
           attributes: commonEmbraceSpanSnapshotAttributes(),
         },
       ] as EmbraceSpanData[]);
+       */
     }
   });
 

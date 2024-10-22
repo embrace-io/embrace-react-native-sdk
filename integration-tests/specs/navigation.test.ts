@@ -58,10 +58,10 @@ describe("Navigation", () => {
   });
 
   it("should record navigation between screens", async () => {
-    const secondScreen = await driver.$("~SECOND SCREEN");
+    const secondScreen = await driver.$("~TRACER PROVIDER TESTING");
     await secondScreen.click();
     await new Promise(r => setTimeout(r, 1000));
-    const homeScreen = await driver.$("~HOME");
+    const homeScreen = await driver.$("~LOG TESTING");
     await homeScreen.click();
     await endSession();
     const spanPayloads = await getSpanPayloads();
@@ -103,7 +103,7 @@ describe("Navigation", () => {
           ...embraceSpanDefaults(),
           trace_id: spans[1].trace_id,
           span_id: spans[1].span_id,
-          name: "second",
+          name: "tracer-provider",
           start_time_unix_nano: spans[1].start_time_unix_nano,
           end_time_unix_nano: spans[1].end_time_unix_nano,
           events: [],
@@ -118,7 +118,7 @@ describe("Navigation", () => {
             },
             {
               key: "view.name",
-              value: "second",
+              value: "tracer-provider",
             },
             {
               key: "view.state.end",

@@ -1,40 +1,21 @@
 import {Tabs} from "expo-router";
 import React from "react";
 
-import {TabBarIcon} from "@/components/navigation/TabBarIcon";
-import {Colors} from "@/constants/Colors";
-import {useColorScheme} from "@/hooks/useColorScheme";
-
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: false,
-      }}>
+    <Tabs>
       <Tabs.Screen
         name="index"
         options={{
-          title: "HOME",
-          tabBarAccessibilityLabel: "HOME",
-          tabBarIcon: ({color, focused}) => (
-            <TabBarIcon
-              name={focused ? "home" : "home-outline"}
-              color={color}
-            />
-          ),
+          title: "LOG TESTING",
+          tabBarAccessibilityLabel: "LOG TESTING",
         }}
       />
       <Tabs.Screen
-        name="second"
+        name="tracer-provider"
         options={{
-          title: "SECOND SCREEN",
-          tabBarAccessibilityLabel: "SECOND SCREEN",
-          tabBarIcon: ({color, focused}) => (
-            <TabBarIcon name={"radio"} color={color} />
-          ),
+          title: "TRACER PROVIDER TESTING",
+          tabBarAccessibilityLabel: "TRACER PROVIDER TESTING",
         }}
       />
     </Tabs>
