@@ -1522,10 +1522,29 @@ PODS:
     - EmbraceIO (= 6.4.2)
     - React-Core
   - RNEmbraceOTLP (5.0.1):
+    - DoubleConversion
     - EmbraceInternalSwiftLog (= 1.4.4-internal)
     - EmbraceIO (= 6.4.2)
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
     - SwiftProtobuf (= 1.20.2)
+    - Yoga
   - RNGestureHandler (2.16.2):
     - DoubleConversion
     - glog
@@ -1922,7 +1941,7 @@ SPEC CHECKSUMS:
   ReactCommon: f42444e384d82ab89184aed5d6f3142748b54768
   ReactNativeTracerProvider: a50242488470fbe0f306b38ff9556018123cd0ed
   RNEmbrace: 62fa472d78c9e0e1fcbdbb3281c85b20220cc837
-  RNEmbraceOTLP: d3a548896f79653d63474f846a3e27e3913ae142
+  RNEmbraceOTLP: bdad1ffffea67e67d765d340fc9e6fe79aa9558e
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208

@@ -49,24 +49,24 @@ const HomeScreen = () => {
 
   const handleLogUnhandledError = useCallback(() => {
     throw new ReferenceError(
-      "testing 6.4.0-rc4 / triggering a crash (unhandled js exception)",
+      "triggering a crash (unhandled js exception - anonymus)",
     );
   }, []);
 
   const handleLogUnhandledErrorNotAnonymous = useCallback(
     function myLovellyUnhandledError() {
-      throw new ReferenceError("triggering a crash (unhandled js exception)");
+      throw new ReferenceError(
+        "triggering a crash (unhandled js exception - func)",
+      );
     },
     [],
   );
 
   // start/end custom span
   const handleStartSpan = useCallback(async () => {
-    const spanId = await startSpan("testing custom exporter - Start");
+    const spanId = await startSpan("Mon21 - testing custom exporter");
 
     if (typeof spanId === "string" && spanId !== undefined) {
-      console.log(`storing ${spanId}`);
-
       spanIdRef.current = spanId;
     }
   }, []);
@@ -75,24 +75,23 @@ const HomeScreen = () => {
     if (spanIdRef.current) {
       addSpanAttributeToSpan(spanIdRef.current, "custom.ios.exporter", "test");
 
-      console.log(`ending ${spanIdRef.current}`);
       stopSpan(spanIdRef.current);
     }
   }, []);
 
   const sendLogs = useCallback(() => {
-    logWarning("Warning log (manually triggered)");
+    logWarning("Mon21 - Warning log (manually triggered)");
 
-    logInfo("Info log (manually triggered)");
+    logInfo("Mon21 - Info log (manually triggered)");
 
-    logError("Error log (manually triggered)");
+    logError("Mon21 - Error log (manually triggered)");
   }, []);
 
   const sendMessage = useCallback(() => {
     logMessage("Message log (manually triggered) with severity", "warning", {
       "custom.property.test": "hey",
-      "another.property": "ho",
-      "yet.another": "hum",
+      "test.property1": "__test_property__value__1",
+      "test.property2": "__test_property__value__2",
       "rn.sdk.test": "1234567",
     });
   }, []);
@@ -148,13 +147,6 @@ const HomeScreen = () => {
           onPress={handleLogUnhandledErrorNotAnonymous}
           title="CRASH (not anonymous)"
         />
-      </ThemedView>
-
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Logs</ThemedText>
-        <Button onPress={sendLogs} title="LOGs (war/info/error)" />
-        <Button onPress={sendMessage} title="Custom Message (also a log)" />
-        <Button onPress={handleErrorLog} title="Handled JS Exception" />
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>

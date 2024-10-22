@@ -1,5 +1,5 @@
 "use strict";
-import {Platform, NativeModules} from "react-native";
+import {NativeModules} from "react-native";
 
 import {createFalsePromise} from "./utils";
 
@@ -68,11 +68,6 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
 
   return async (sdkConfig: IOSConfig | AndroidConfig) => {
     try {
-      console.log(
-        `NativeModules.RNEmbraceOTLP.initialize working in basic-test-app for ${Platform.OS}`,
-        sdkConfig,
-      );
-
       return await NativeModules.RNEmbraceOTLP.startNativeEmbraceSDK(
         sdkConfig,
         otlpExporterConfig,

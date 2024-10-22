@@ -10,6 +10,7 @@ import {initialize as initEmbraceWithCustomExporters} from "@embrace-io/react-na
 import {useColorScheme} from "@/hooks/useColorScheme";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
+import React from "react";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -55,7 +56,7 @@ export default function RootLayout() {
         sdkConfig: {
           ios: {
             appId: "abcdf",
-            endpointBaseUrl: "http://localhost:8877",
+            // endpointBaseUrl: "http://localhost:8877",
             disableAutomaticViewCapture: true,
           },
           replaceInit: initWithCustomExporters, // rename arg? (`startCustomExporters`),
@@ -92,6 +93,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <NavigationTracker
+        // @ts-ignore
         ref={navigationRef}
         provider={tracerProvider || undefined}
         config={{

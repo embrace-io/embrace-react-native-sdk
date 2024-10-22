@@ -27,12 +27,6 @@ target 'RNEmbraceOTLP' do
   pod 'EmbraceIO', '6.4.2'
   pod 'SwiftProtobuf', '1.20.2'
   pod 'EmbraceInternalSwiftLog', '1.4.4-internal'
-  # pod 'EmbraceInternalGrpcSwift'
-
-  target 'RNEmbraceOTLPTests' do
-    inherit! :complete
-    # Pods for testing
-  end
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
