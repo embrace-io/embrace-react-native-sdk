@@ -163,7 +163,7 @@ class RNEmbraceOTLP: NSObject {
                     let logExporter = otlpExportConfigDict.value(forKey: "logExporter") as? NSDictionary
                     
                     if traceExporter == nil && logExporter == nil {
-                        os_log("[Embrace] Neither Traces nor Logs configurations were found, skipping custom export.", log: self.log, type: .info)
+                        os_log("[Embrace] Neither Traces nor Logs configuration were found, skipping custom export.", log: self.log, type: .info)
                     }
 
                     return .init(
