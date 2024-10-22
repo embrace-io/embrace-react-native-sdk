@@ -14,14 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.helloworld"
+      "bundleIdentifier": "io.embrace.helloworld"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.helloworld"
+      "package": "io.embrace.helloworld"
     },
     "web": {
       "bundler": "metro",

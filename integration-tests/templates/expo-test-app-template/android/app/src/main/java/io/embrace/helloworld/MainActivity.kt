@@ -1,4 +1,4 @@
-package com.helloworld
+package io.embrace.helloworld
 
 import android.os.Build
 import android.os.Bundle
