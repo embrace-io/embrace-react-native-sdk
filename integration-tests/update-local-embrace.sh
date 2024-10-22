@@ -66,7 +66,7 @@ fi
 
 if [ "$skip_sdk_packages" = false ] || [  "$skip_test_harness" = false ]; then
   # update the test app with the sdk packages and the test harness
-  npm --prefix basic-test-app add \
+  npm --prefix $test_app add \
     ./artifacts/embrace-io-react-native-local.tgz \
     ./artifacts/embrace-io-react-native-tracer-provider-local.tgz \
     ./artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz \
