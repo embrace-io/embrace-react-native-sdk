@@ -30,7 +30,7 @@
     }
 
     const packageJSON = require(
-      `./../${pathElements[0]}/${pathElements[1]}/package.json`,
+      `../${pathElements[0]}/${pathElements[1]}/package.json`,
     );
 
     scopes.add(`--scope=${packageJSON.name}`);
