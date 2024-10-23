@@ -27,7 +27,6 @@ export const EmbraceExpoTestHarness = () => {
             it is included in templates/expo-test-app-template/app/(tabs)/
            */}
         <Stack.Screen name="(tabs)" options={{headerShown: false}} />
-        <Stack.Screen name="+not-found" />
       </Stack>
     </NavigationTracker>
   );
