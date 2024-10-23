@@ -42,7 +42,7 @@
   "scripts": {
     "build": "tsc",
     "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceOTLPTest.xcworkspace -list",
-    "ios:install": "yarn install && cd test-project && yarn install && cd ios && pod install && rm .xcode.env.local",
+    "ios:install": "echo 'is this working?'",
     "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceOTLPTests.xcworkspace RNEmbraceOTLPTests"
   },
   "devDependencies": {
