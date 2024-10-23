@@ -3,15 +3,15 @@ import {NativeModules} from "react-native";
 
 import {createFalsePromise} from "./utils";
 
-interface CustomExporterConfig {
+interface ExporterConfig {
   endpoint: string;
   headers?: {key: string; token: string}[];
   timeout?: number;
 }
 
 interface OTLPExporterConfig {
-  logExporter?: CustomExporterConfig;
-  traceExporter?: CustomExporterConfig;
+  logExporter?: ExporterConfig;
+  traceExporter?: ExporterConfig;
 }
 
 interface IOSConfig {
@@ -25,44 +25,66 @@ interface IOSConfig {
 // NOTE: as per today Android is not configurable through code, this is a placeholder for future implementations
 interface AndroidConfig {}
 
+const noOp = async (_: IOSConfig | AndroidConfig) => {};
+
 const WARN_MESSAGES = {
   config: "[Embrace] Invalid configuration for Custom Exporter",
+  traces: "[Embrace] Invalid configuration for Trace Custom Exporter",
+  logs: "[Embrace] Invalid configuration for Log Custom Exporter",
   endpoint: "[Embrace] Invalid endpoint for Custom Exporter",
   header: "[Embrace] Invalid header for Custom Exporter",
   error: "[Embrace] Failed to configure Custom Exporter",
 };
 
 const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
-  if (!otlpExporterConfig || typeof otlpExporterConfig !== "object") {
+  if (
+    !otlpExporterConfig ||
+    typeof otlpExporterConfig !== "object" ||
+    Array.isArray(otlpExporterConfig)
+  ) {
     console.warn(WARN_MESSAGES.config);
-    return;
+    return noOp;
   }
 
-  if (typeof otlpExporterConfig.logExporter === "object") {
+  if (otlpExporterConfig.logExporter) {
     const {logExporter} = otlpExporterConfig;
 
-    if (!logExporter.endpoint) {
-      console.warn(WARN_MESSAGES.endpoint);
-      return;
+    if (typeof logExporter !== "object" && !Array.isArray(logExporter)) {
+      console.warn(WARN_MESSAGES.logs);
+      return noOp;
     }
 
-    if (logExporter.headers && !Array.isArray(logExporter.headers)) {
+    const {endpoint: logEndpoint, headers: logHeaders} = logExporter;
+
+    if (!logEndpoint || typeof logEndpoint !== "string") {
+      console.warn(WARN_MESSAGES.endpoint);
+      return noOp;
+    }
+
+    if (logHeaders && !Array.isArray(logHeaders)) {
       console.warn(WARN_MESSAGES.header);
-      return;
+      return noOp;
     }
   }
 
-  if (typeof otlpExporterConfig.traceExporter === "object") {
+  if (otlpExporterConfig.traceExporter) {
     const {traceExporter} = otlpExporterConfig;
 
-    if (!traceExporter.endpoint) {
-      console.warn(WARN_MESSAGES.endpoint);
-      return;
+    if (typeof traceExporter !== "object" && !Array.isArray(traceExporter)) {
+      console.warn(WARN_MESSAGES.traces);
+      return noOp;
     }
 
-    if (traceExporter.headers && !Array.isArray(traceExporter.headers)) {
+    const {endpoint: traceEndpoint, headers: traceHeaders} = traceExporter;
+
+    if (!traceEndpoint || typeof traceEndpoint !== "string") {
+      console.warn(WARN_MESSAGES.endpoint);
+      return noOp;
+    }
+
+    if (traceHeaders && !Array.isArray(traceHeaders)) {
       console.warn(WARN_MESSAGES.header);
-      return;
+      return noOp;
     }
   }
 
@@ -80,3 +102,4 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
 };
 
 export {initialize};
+export {type OTLPExporterConfig};
