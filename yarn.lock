@@ -2414,8 +2414,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-otlp@workspace:packages/react-native-otlp"
   dependencies:
-    react-native: "npm:0.74.1"
     typescript: "npm:^4.7.4"
+  peerDependencies:
+    react-native: ">=0.56.0"
   languageName: unknown
   linkType: soft
 
