@@ -56,19 +56,19 @@ if [ "$skip_sdk_packages" = false ]; then
   # pack required packages into tarballs
   ./pack.sh ../packages/core/ artifacts/embrace-io-react-native-local.tgz
   ./pack.sh ../packages/react-native-tracer-provider/ artifacts/embrace-io-react-native-tracer-provider-local.tgz
-fi
 
-if [ "$skip_test_harness" = false ]; then
-  # build and pack the test harness
-  npm --prefix test-harness run build
-  ./pack.sh  test-harness/ artifacts/embrace-io-react-native-test-harness-local.tgz
-fi
-
-if [ "$skip_sdk_packages" = false ] || [  "$skip_test_harness" = false ]; then
-  # update the test app with the sdk packages and the test harness
+  # update the test app with the sdk packages
+  # note: opentelemetry-instrumentation-react-native-navigation comes from outside this repo so we include it as
+  # a prebuilt artifact
   npm --prefix $test_app add \
     ./artifacts/embrace-io-react-native-local.tgz \
     ./artifacts/embrace-io-react-native-tracer-provider-local.tgz \
-    ./artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz \
-    ./artifacts/embrace-io-react-native-test-harness-local.tgz
+    ./artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz
+fi
+
+if [ "$skip_test_harness" = false ]; then
+  # build, pack, and update the test app with the test harness
+  npm --prefix test-harness run build
+  ./pack.sh  test-harness/ artifacts/embrace-io-react-native-test-harness-local.tgz
+  npm --prefix $test_app add ./artifacts/embrace-io-react-native-test-harness-local.tgz
 fi
