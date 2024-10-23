@@ -45,8 +45,10 @@
     "ios:install": "cd test-project && yarn && cd ios && pod install && rm .xcode.env.local",
     "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceOTLPTests.xcworkspace RNEmbraceOTLPTests"
   },
+  "peerDependencies": {
+    "react-native": ">=0.56.0"
+  },
   "devDependencies": {
-    "react-native": "0.74.1",
     "typescript": "^4.7.4"
   },
   "embrace": {
