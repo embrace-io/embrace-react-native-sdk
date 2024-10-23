@@ -53,8 +53,6 @@
   },
   "embrace": {
     "iosVersion": "6.4.2",
-    "swiftProtobufVersion": "1.20.2",
-    "swiftLogVersion": "1.4.4-internal",
     "androidVersion": "6.13.0"
   }
 }
