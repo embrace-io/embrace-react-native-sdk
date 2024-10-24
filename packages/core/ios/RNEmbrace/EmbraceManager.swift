@@ -94,10 +94,7 @@ class EmbraceManager: NSObject {
                         platform: .reactNative,
                         endpoints: endpoints,
                         captureServices: servicesBuilder.build(),
-                        crashReporter: crashReporter,
-                        // if config is here, add it
-                        // config.exporter
-                        export: nil
+                        crashReporter: crashReporter
                     )
                 }
 
