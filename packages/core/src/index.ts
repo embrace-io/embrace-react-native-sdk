@@ -81,7 +81,7 @@ const initialize = async ({
       return createFalsePromise();
     }
 
-    const {replaceInit: customStartEmbraceSDK, ...originalSdkConfig} =
+    const {startCustomExport: customStartEmbraceSDK, ...originalSdkConfig} =
       sdkConfig || {};
 
     const startSdkConfig =

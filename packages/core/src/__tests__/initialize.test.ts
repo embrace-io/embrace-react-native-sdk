@@ -144,17 +144,17 @@ describe("iOS: initialize", () => {
     ReactNativeMock.Platform.OS = "ios";
   });
 
-  it("should not call regular `startNativeEmbraceSDK` if `replaceInit` handler receives a proper callback", async () => {
-    const mockReplaceInit = jest.fn(() => Promise.resolve(true));
+  it("should not call regular `startNativeEmbraceSDK` if `startCustomExport` handler receives a proper callback", async () => {
+    const mockstartCustomExport = jest.fn(() => Promise.resolve(true));
     const isStarted = await initialize({
       sdkConfig: {
         ios: {appId: "abc12"},
-        replaceInit: mockReplaceInit,
+        startCustomExport: mockstartCustomExport,
       },
     });
 
-    expect(mockReplaceInit).toHaveBeenCalledTimes(1);
-    expect(mockReplaceInit).toHaveBeenCalledWith({appId: "abc12"});
+    expect(mockstartCustomExport).toHaveBeenCalledTimes(1);
+    expect(mockstartCustomExport).toHaveBeenCalledWith({appId: "abc12"});
     expect(mockStart).not.toHaveBeenCalled();
     expect(isStarted).toBe(true);
   });

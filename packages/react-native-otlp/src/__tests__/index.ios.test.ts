@@ -1,5 +1,5 @@
+import {SDKConfig} from "../interfaces/common";
 import {initialize, type OTLPExporterConfig} from "../index";
-import {SDKConfig} from "../../../core/src/interfaces/Config";
 
 const IOS_SDK_BASE_CONFIG = {
   ios: {

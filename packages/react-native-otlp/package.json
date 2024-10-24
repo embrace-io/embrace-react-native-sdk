@@ -40,6 +40,7 @@
     "otlp"
   ],
   "scripts": {
+    "prebuild": "cp -r ../../interfaces/*.ts ./src/interfaces/common",
     "build": "tsc",
     "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceOTLPTest.xcworkspace -list",
     "ios:install": "cd test-project && yarn && cd ios && pod install && rm .xcode.env.local",

@@ -39,7 +39,7 @@ export default function RootLayout() {
   return (
     <EmbraceTestHarness
       navigationStyle="expo"
-      sdkConfig={{...sdkConfig, replaceInit: initWithCustomExporters}}
+      sdkConfig={{...sdkConfig, startCustomExport: initWithCustomExporters}}
     />
   );
 }

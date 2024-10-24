@@ -2,28 +2,7 @@
 import {NativeModules} from "react-native";
 
 import {createFalsePromise} from "./utils";
-
-interface ExporterConfig {
-  endpoint: string;
-  headers?: {key: string; token: string}[];
-  timeout?: number;
-}
-
-interface OTLPExporterConfig {
-  logExporter?: ExporterConfig;
-  traceExporter?: ExporterConfig;
-}
-
-interface IOSConfig {
-  appId: string;
-  appGroupId?: string;
-  disableCrashReporter?: boolean;
-  disableAutomaticViewCapture?: boolean;
-  endpointBaseUrl?: string;
-}
-
-// NOTE: as per today Android is not configurable through code, this is a placeholder for future implementations
-interface AndroidConfig {}
+import {AndroidConfig, IOSConfig, OTLPExporterConfig} from "./interfaces";
 
 const noOp = async (_: IOSConfig | AndroidConfig) => {};
 
