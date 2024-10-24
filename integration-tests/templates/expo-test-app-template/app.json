@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "basic-test-app",
-    "slug": "basic-test-app",
+    "name": "HelloWorld",
+    "slug": "expo-test-app-template",
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "myapp",
@@ -13,10 +13,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "io.embrace.basictestapp"
+      "bundleIdentifier": "io.embrace.helloworld"
     },
     "android": {
-      "package": "io.embrace.basictestapp"
+      "package": "io.embrace.helloworld"
     },
     "web": {
       "bundler": "metro",

@@ -16,23 +16,44 @@ For any future updates the [Appium Installer](https://webdriver.io/docs/appium) 
     npx appium-installer
     ```
 
-## Run tests
+## Create test apps
 
-Make sure the test apps have the latest local @embrace-io/react-native changes:
+New test apps can be created from templates as needed. To create a new test expo app run:
 
-    ```bash
-    npm run update-local-embrace
-    ```
+```bash
+npx create-expo --template ./templates/<template-app>/<artifact>.tgz
+```
 
-Make sure the test apps are installed on the device/emulator before running tests. Note that building the debug variant
-of the app may interfere with the tests as the debug menu gets in the way of UI elements.
+To create a new bare react native app run:
 
-Android can run in release mode:
+TODO
 
-    ```bash
-    cd basic-test-app
-    npx expo run:android --variant release
-    ```
+## Prepare a test app
+
+Make sure the test app has the latest locally built @embrace-io/* packages and test harness:
+```bash
+./update-local-embrace.sh <test-app>
+```
+
+Set the test app up with a particular embrace config:
+```bash
+./set-embrace-config.js <test-app> <config.json> --namespace=<namespace>
+```
+
+Set the test app to a particular RN version:
+```bash
+TODO
+```
+
+Make sure the app is installed on the device/emulator before running tests. Note that building the debug variant
+of an app may interfere with the tests as the debug menu gets in the way of UI elements.
+
+Android can run be built in release mode:
+
+```bash
+cd <test-app>
+npx expo run:android --variant release
+```
 
 For ios it doesn't apply the `--variant release` mode, so we can do it through xcode:
 
@@ -43,15 +64,15 @@ For ios it doesn't apply the `--variant release` mode, so we can do it through x
 
 or simply run 
 
-    ```bash
-    npx expo run:ios --configuration Release
-    ```
+```bash
+npx expo run:ios --configuration Release
+```
 
-Run the test suite:
+Then run the test suite:
 
-    ```bash
-    npm test
-    ```
+```bash
+npm test
+```
 
 ## Debugging tips
 
@@ -60,11 +81,11 @@ Run the test suite:
 To help figure out the selectors to use for grabbing UI elements it can be useful to interact with Appium using
 the Appium Inspector. First install the Appium server and drivers globally:
 
-    ```bash
-    npm install -g appium
-    appium driver install uiautomator2 # android / ios
-    appium driver install xcuitest # ios
-    ```
+```bash
+npm install -g appium
+appium driver install uiautomator2 # android / ios
+appium driver install xcuitest # ios
+```
 
 Then install [Appium Inspector](https://github.com/appium/appium-inspector)
 
@@ -73,9 +94,9 @@ Then install [Appium Inspector](https://github.com/appium/appium-inspector)
 You can invoke the Mockserver and watch its output directly to get a look at the payloads it is receiving at different
 endpoints (Note this may include some binary output that doesn't play nice with your terminal):
 
-    ```bash
-    npx tsx helpers/invoke_embrace_server.ts
-    ```
+```bash
+npx tsx helpers/invoke_embrace_server.ts
+```
 
 ## CI
 
@@ -91,12 +112,13 @@ can be configured to point to a remote environment. See what capabilities are av
 "Could not proxy command to remote server. Original error: Error: socket hang up"
 
 Try:
-    ```bash
-    # Android
-    adb uninstall io.appium.uiautomator2.server
-    adb uninstall io.appium.uiautomator2.server.test
 
-    # iOS
-    xcrun simctl uninstall booted io.appium.uiautomator2.server
-    xcrun simctl uninstall booted io.appium.uiautomator2.server.test
-    ```
+```bash
+# Android
+adb uninstall io.appium.uiautomator2.server
+adb uninstall io.appium.uiautomator2.server.test
+
+# iOS
+xcrun simctl uninstall booted io.appium.uiautomator2.server
+xcrun simctl uninstall booted io.appium.uiautomator2.server.test
+```
