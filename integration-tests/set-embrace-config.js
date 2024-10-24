@@ -136,7 +136,9 @@
       };
     }
    */
-  const iOSConfigPath = `${appPath}/app/embrace-sdk-config.json`; // TODO handle non-expo app
+  const iOSConfigPath = fs.existsSync(`${appPath}/app`)
+    ? `${appPath}/app/embrace-sdk-config.json`
+    : `${appPath}/embrace-sdk-config.json`;
   const iOSConfig = {
     ios: {
       appId: config.ios_app_id,

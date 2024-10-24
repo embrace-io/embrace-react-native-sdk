@@ -6,15 +6,15 @@ verifications on the payloads that would have been sent to Embrace.
 The harness uses WebdriverIO's [Testrunner](https://webdriver.io/docs/testrunner/) to spin up a [Appium](http://appium.io/docs/en/latest/intro/) client and server to perform the device automation. [Mockserver](https://www.mock-server.com/#what-is-mockserver) is
 launched for the suite run so that requests sent from the device can be inspected.
 
-    ```bash
-    npm install
-    ```
+```bash
+npm install
+```
 
 For any future updates the [Appium Installer](https://webdriver.io/docs/appium) provides a handy setup wizard:
 
-    ```bash
-    npx appium-installer
-    ```
+```bash
+npx appium-installer
+```
 
 ## Create test apps
 
@@ -26,7 +26,9 @@ npx create-expo --template ./templates/<template-app>/<artifact>.tgz
 
 To create a new bare react native app run:
 
-TODO
+```bash
+npx @react-native-community/cli init <test-app> --package-name io.embrace.<test-app> --skip-git-init --skip-install --template $(pwd)/templates/react-native-test-app-template
+```
 
 ## Prepare a test app
 
@@ -52,7 +54,10 @@ Android can run be built in release mode:
 
 ```bash
 cd <test-app>
+# expo
 npx expo run:android --variant release
+# react native
+npx react-native run-android --mode release
 ```
 
 For ios it doesn't apply the `--variant release` mode, so we can do it through xcode:
@@ -65,7 +70,11 @@ For ios it doesn't apply the `--variant release` mode, so we can do it through x
 or simply run 
 
 ```bash
+# expo
 npx expo run:ios --configuration Release
+# react native
+pushd ios && pod install && popd
+npx react-native run-ios --mode Release
 ```
 
 Then run the test suite:
