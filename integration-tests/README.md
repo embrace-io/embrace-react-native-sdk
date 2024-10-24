@@ -67,7 +67,7 @@ For ios it doesn't apply the `--variant release` mode, so we can do it through x
 - Under the Run section, change the Build Configuration from Debug to Release.
 - Press Cmd + R to build and run the app in release mode.
 
-or simply run 
+or simply run
 
 ```bash
 # expo
