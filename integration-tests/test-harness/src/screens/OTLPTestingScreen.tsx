@@ -1,4 +1,5 @@
-import React, {useCallback, useRef} from "react";
+import * as React from "react";
+import {useRef, useCallback} from "react";
 import {Button, View, Text} from "react-native";
 import {styles} from "../helpers/styles";
 import {startSpan, stopSpan} from "@embrace-io/react-native-spans";
@@ -7,7 +8,7 @@ const OTLPTestingScreen = () => {
   const spanIdRef = useRef<string | null>(null);
 
   const startManualSpan = useCallback(async () => {
-    const spanId = await startSpan("wed23, testing span for custom exporter");
+    const spanId = await startSpan("otlp - custom export");
 
     if (typeof spanId === "string") {
       spanIdRef.current = spanId;
