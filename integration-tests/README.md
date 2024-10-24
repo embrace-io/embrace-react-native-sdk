@@ -27,7 +27,7 @@ npx create-expo --template ./templates/<template-app>/<artifact>.tgz
 To create a new bare react native app run:
 
 ```bash
-npx @react-native-community/cli init <test-app> --package-name io.embrace.<test-app> --skip-git-init --skip-install --template $(pwd)/templates/react-native-test-app-template
+npx @react-native-community/cli init <test-app> --package-name io.embrace.<test-app> --skip-git-init --skip-install --pm yarn --template $(pwd)/templates/react-native-test-app-template
 ```
 
 ## Prepare a test app
