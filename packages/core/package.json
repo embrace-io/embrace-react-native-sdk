@@ -52,6 +52,7 @@
     "bug tracker"
   ],
   "scripts": {
+    "prebuild": "cp -r ../../interfaces/*.ts ./src/interfaces/common",
     "build": "node update_android_version.ts && tsc",
     "ios:build:clean": "xcodebuild clean -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests",
     "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -list",

@@ -1,6 +1,7 @@
 PODS:
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
+  - EmbraceInternalSwiftLog (1.4.4-internal)
   - EmbraceIO (6.4.2):
     - EmbraceIO/EmbraceIO (= 6.4.2)
   - EmbraceIO/EmbraceCaptureService (6.4.2):
@@ -60,18 +61,18 @@ PODS:
   - EXJSONUtils (0.13.1)
   - EXManifests (0.14.3):
     - ExpoModulesCore
-  - Expo (51.0.9):
+  - Expo (51.0.32):
     - ExpoModulesCore
-  - expo-dev-client (4.0.15):
+  - expo-dev-client (4.0.26):
     - EXManifests
     - expo-dev-launcher
     - expo-dev-menu
     - expo-dev-menu-interface
     - EXUpdatesInterface
-  - expo-dev-launcher (4.0.16):
+  - expo-dev-launcher (4.0.27):
     - DoubleConversion
     - EXManifests
-    - expo-dev-launcher/Main (= 4.0.16)
+    - expo-dev-launcher/Main (= 4.0.27)
     - expo-dev-menu
     - expo-dev-menu-interface
     - ExpoModulesCore
@@ -97,7 +98,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Main (4.0.16):
+  - expo-dev-launcher/Main (4.0.27):
     - DoubleConversion
     - EXManifests
     - expo-dev-launcher/Unsafe
@@ -126,7 +127,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Unsafe (4.0.16):
+  - expo-dev-launcher/Unsafe (4.0.27):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu
@@ -154,10 +155,10 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu (5.0.14):
+  - expo-dev-menu (5.0.21):
     - DoubleConversion
-    - expo-dev-menu/Main (= 5.0.14)
-    - expo-dev-menu/ReactNativeCompatibles (= 5.0.14)
+    - expo-dev-menu/Main (= 5.0.21)
+    - expo-dev-menu/ReactNativeCompatibles (= 5.0.21)
     - glog
     - hermes-engine
     - RCT-Folly (= 2024.01.01.00)
@@ -178,7 +179,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - expo-dev-menu-interface (1.8.3)
-  - expo-dev-menu/Main (5.0.14):
+  - expo-dev-menu/Main (5.0.21):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu-interface
@@ -204,7 +205,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/ReactNativeCompatibles (5.0.14):
+  - expo-dev-menu/ReactNativeCompatibles (5.0.21):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -225,7 +226,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/SafeAreaView (5.0.14):
+  - expo-dev-menu/SafeAreaView (5.0.21):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -247,7 +248,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/Vendored (5.0.14):
+  - expo-dev-menu/Vendored (5.0.21):
     - DoubleConversion
     - expo-dev-menu/SafeAreaView
     - glog
@@ -269,17 +270,17 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ExpoAsset (10.0.6):
+  - ExpoAsset (10.0.10):
     - ExpoModulesCore
   - ExpoFileSystem (17.0.1):
     - ExpoModulesCore
-  - ExpoFont (12.0.6):
+  - ExpoFont (12.0.10):
     - ExpoModulesCore
-  - ExpoHead (3.5.14):
+  - ExpoHead (3.5.23):
     - ExpoModulesCore
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
-  - ExpoModulesCore (1.12.12):
+  - ExpoModulesCore (1.12.24):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -302,11 +303,11 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ExpoSystemUI (3.0.4):
+  - ExpoSystemUI (3.0.7):
     - ExpoModulesCore
   - ExpoWebBrowser (13.0.3):
     - ExpoModulesCore
-  - EXSplashScreen (0.27.4):
+  - EXSplashScreen (0.27.5):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -1498,6 +1499,30 @@ PODS:
   - RNEmbrace (5.0.1):
     - EmbraceIO (= 6.4.2)
     - React-Core
+  - RNEmbraceOTLP (5.0.1):
+    - DoubleConversion
+    - EmbraceInternalSwiftLog (= 1.4.4-internal)
+    - EmbraceIO (= 6.4.2)
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SwiftProtobuf (= 1.20.2)
+    - Yoga
   - RNEmbraceTracerProvider (5.0.1):
     - DoubleConversion
     - EmbraceIO (= 6.4.2)
@@ -1585,6 +1610,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - SocketRocket (0.7.0)
+  - SwiftProtobuf (1.20.2)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1663,6 +1689,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNEmbrace (from `../node_modules/@embrace-io/react-native`)"
+  - "RNEmbraceOTLP (from `../node_modules/@embrace-io/react-native-otlp`)"
   - "RNEmbraceTracerProvider (from `../node_modules/@embrace-io/react-native-tracer-provider`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1671,8 +1698,10 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - EmbraceInternalSwiftLog
     - EmbraceIO
     - SocketRocket
+    - SwiftProtobuf
 
 EXTERNAL SOURCES:
   boost:
@@ -1822,6 +1851,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNEmbrace:
     :path: "../node_modules/@embrace-io/react-native"
+  RNEmbraceOTLP:
+    :path: "../node_modules/@embrace-io/react-native-otlp"
   RNEmbraceTracerProvider:
     :path: "../node_modules/@embrace-io/react-native-tracer-provider"
   RNGestureHandler:
@@ -1836,24 +1867,25 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
+  EmbraceInternalSwiftLog: a7b20002f2ca34400678012c3c3e8f7d51da5c79
   EmbraceIO: ebbe930c0d46039a533979bf98f8cef1c1a347f1
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
-  Expo: 6381470c669c3f31c8ac0ebd8e88686f925146ad
-  expo-dev-client: 48494556ca0cef533fb646443bda456d0280827f
-  expo-dev-launcher: 39b26f372ede78fb636cd404e6e3ddbc59331e5a
-  expo-dev-menu: 8559d77f4037c6105b21a424dec68f235496c391
+  Expo: 33132a667698a3259a4e6c0af1b4936388e5fa33
+  expo-dev-client: 4f9100af6be210a360aa67f42649881251aa362a
+  expo-dev-launcher: c8e85bf244a2492448c88adbc3585ca13572f7b9
+  expo-dev-menu: 0db38ce92be7228dadb588f7069e037fd9d165d8
   expo-dev-menu-interface: be32c09f1e03833050f0ee290dcc86b3ad0e73e4
-  ExpoAsset: 9b7433ecc5f1b608ccbb823492e062bde944abd2
+  ExpoAsset: 323700f291684f110fb55f0d4022a3362ea9f875
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
-  ExpoFont: c84702079267ae51161c20bb8b925670907ffa2f
-  ExpoHead: 28ccee5977648d15f6a62b9a680a4bd169a1515b
+  ExpoFont: 00756e6c796d8f7ee8d211e29c8b619e75cbf238
+  ExpoHead: fcb28a68ed4ba28f177394d2dfb8a0a8824cd103
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
-  ExpoModulesCore: 828d63de45d4fbacabe2963fc406a8e9daeed992
-  ExpoSystemUI: b5ecc4b6781b6369fb8b3a0903bea36fae3dd090
+  ExpoModulesCore: f30a203ff1863bab3dd9f4421e7fc1564797f18a
+  ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
   ExpoWebBrowser: 7595ccac6938eb65b076385fd23d035db9ecdc8e
-  EXSplashScreen: d439ca817211886dc80a00f3761e3b6d861d7205
+  EXSplashScreen: fbf0ec78e9cee911df188bf17b4fe51d15a84b87
   EXUpdatesInterface: 996527fd7d1a5d271eb523258d603f8f92038f24
   FBLazyVector: 898d14d17bf19e2435cafd9ea2a1033efe445709
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
@@ -1908,13 +1940,15 @@ SPEC CHECKSUMS:
   React-utils: 3285151c9d1e3a28a9586571fc81d521678c196d
   ReactCommon: f42444e384d82ab89184aed5d6f3142748b54768
   RNEmbrace: 62fa472d78c9e0e1fcbdbb3281c85b20220cc837
+  RNEmbraceOTLP: 9dbc5d3b389b02f00355c9bdc787759b8d13313f
   RNEmbraceTracerProvider: 16a67136b737177cd574f3301884a2fa0520eda5
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  Yoga: b9a182ab00cf25926e7f79657d08c5d23c2d03b0
+  SwiftProtobuf: 9f458aaa7844a2fc0b910053e66578bc4e2da9c1
+  Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372
 
-PODFILE CHECKSUM: 1edead627dbfaafffa1f3d9403f6946f03ecf4c1
+PODFILE CHECKSUM: cdb0285a603c422871c56b4e8612b56df6bca33e
 
 COCOAPODS: 1.15.2

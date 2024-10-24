@@ -9,6 +9,7 @@ import {
 export const EmbraceExpoTestHarness = () => {
   const {tracerProvider} = useEmbraceNativeTracerProvider({});
   const expoNavigationRef = useExpoNavigationContainerRef();
+
   return (
     <NavigationTracker
       // @ts-ignore
@@ -22,10 +23,10 @@ export const EmbraceExpoTestHarness = () => {
       }}>
       <Stack>
         {/*
-            NOTE: because expo router using a file-based navigation system the
-            tabs can't be added here, if a new testing screen is added make sure
-            it is included in templates/expo-test-app-template/app/(tabs)/
-           */}
+          NOTE: because expo router using a file-based navigation system the
+          tabs can't be added here, if a new testing screen is added make sure
+          it is included in templates/expo-test-app-template/app/(tabs)/
+        */}
         <Stack.Screen name="(tabs)" options={{headerShown: false}} />
       </Stack>
     </NavigationTracker>
