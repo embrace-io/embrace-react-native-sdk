@@ -21,6 +21,7 @@ export const EmbraceTestHarness = ({sdkConfig, navigationStyle}: Props) => {
   const [embraceLoaded, setEmbraceLoaded] = useState(false);
   const {tracerProvider} = useEmbraceNativeTracerProvider({}, embraceLoaded);
   const expoNavigationRef = useExpoNavigationContainerRef();
+
   useEffect(() => {
     const init = async () => {
       await initEmbrace({
@@ -59,8 +60,8 @@ export const EmbraceTestHarness = ({sdkConfig, navigationStyle}: Props) => {
         </Stack>
       </NavigationTracker>
     );
-  } else {
-    // TODO react native navigation
-    return <MainTestScreen />;
   }
+
+  // TODO react native navigation
+  return <MainTestScreen />;
 };
