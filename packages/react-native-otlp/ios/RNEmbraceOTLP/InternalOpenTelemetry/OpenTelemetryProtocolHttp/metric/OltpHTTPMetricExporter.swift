@@ -1,10 +1,12 @@
 //
 // Copyright The OpenTelemetry Authors
 // SPDX-License-Identifier: Apache-2.0
+// https://github.com/open-telemetry/opentelemetry-swift/blob/1.10.1/Sources/Exporters/OpenTelemetryProtocolHttp/metric/OltpHTTPMetricExporter.swift
 //
 
 import OpenTelemetrySdk
-//import OpenTelemetryProtocolExporterCommon
+// NOTE: not need the import when using this public class into this target
+// import OpenTelemetryProtocolExporterCommon
 import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
