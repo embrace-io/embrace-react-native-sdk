@@ -39,28 +39,6 @@
 		6D2524132CC80696000ECCEA /* OtlpSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523E32CC80696000ECCEA /* OtlpSpan.swift */; };
 		6D2524142CC80696000ECCEA /* RNEmbraceOTLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523F52CC80696000ECCEA /* RNEmbraceOTLP.swift */; };
 		6D2524152CC80696000ECCEA /* RNEmbraceOTLP-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D2523F62CC80696000ECCEA /* RNEmbraceOTLP-Bridging-Header.h */; };
-		6D363F7F2CC98CDE0002DE89 /* common.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523D82CC80696000ECCEA /* common.pb.swift */; };
-		6D363F802CC98CDE0002DE89 /* logs_service.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523D92CC80696000ECCEA /* logs_service.pb.swift */; };
-		6D363F812CC98CDE0002DE89 /* logs.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523DA2CC80696000ECCEA /* logs.pb.swift */; };
-		6D363F822CC98CDE0002DE89 /* metrics_service.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523DB2CC80696000ECCEA /* metrics_service.pb.swift */; };
-		6D363F832CC98CDE0002DE89 /* metrics.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523DC2CC80696000ECCEA /* metrics.pb.swift */; };
-		6D363F842CC98CDE0002DE89 /* resource.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523DD2CC80696000ECCEA /* resource.pb.swift */; };
-		6D363F852CC98CDE0002DE89 /* trace_service.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523DE2CC80696000ECCEA /* trace_service.pb.swift */; };
-		6D363F862CC98CDE0002DE89 /* trace.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523DF2CC80696000ECCEA /* trace.pb.swift */; };
-		6D363F872CC98CDE0002DE89 /* TraceProtoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523E12CC80696000ECCEA /* TraceProtoUtils.swift */; };
-		6D363F882CC98CDE0002DE89 /* OtlpSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523E32CC80696000ECCEA /* OtlpSpan.swift */; };
-		6D363F892CC98CDE0002DE89 /* SpanAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523E42CC80696000ECCEA /* SpanAdapter.swift */; };
-		6D363F8A2CC98CDE0002DE89 /* OtlpHttpLogExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523E72CC80696000ECCEA /* OtlpHttpLogExporter.swift */; };
-		6D363F8B2CC98CDE0002DE89 /* OltpHTTPMetricExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523E92CC80696000ECCEA /* OltpHTTPMetricExporter.swift */; };
-		6D363F8C2CC98CDE0002DE89 /* StableOtlpHTTPMetricExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523EA2CC80696000ECCEA /* StableOtlpHTTPMetricExporter.swift */; };
-		6D363F8D2CC98CDE0002DE89 /* OtlpHttpTraceExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523EC2CC80696000ECCEA /* OtlpHttpTraceExporter.swift */; };
-		6D363F8E2CC98CDE0002DE89 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523EE2CC80696000ECCEA /* HTTPClient.swift */; };
-		6D363F8F2CC98CDE0002DE89 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523EF2CC80696000ECCEA /* Lock.swift */; };
-		6D363F902CC98CDE0002DE89 /* OtlpHttpExporterBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523F02CC80696000ECCEA /* OtlpHttpExporterBase.swift */; };
-		6D363F912CC98CDE0002DE89 /* StableOtlpHTTPExporterBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523F12CC80696000ECCEA /* StableOtlpHTTPExporterBase.swift */; };
-		6D363F922CC98CDE0002DE89 /* RNEmbraceOTLP.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523F42CC80696000ECCEA /* RNEmbraceOTLP.m */; };
-		6D363F932CC98CDE0002DE89 /* RNEmbraceOTLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523F52CC80696000ECCEA /* RNEmbraceOTLP.swift */; };
-		6D363F942CC98CDE0002DE89 /* RNEmbraceOTLP-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523F62CC80696000ECCEA /* RNEmbraceOTLP-Bridging-Header.h */; };
 		A4774FAE780E32959119985A /* libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D49B3AC602D913C528C06B2E /* libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a */; };
 		E27D958679004B10033C7388 /* libPods-RNEmbraceOTLP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C09D7B2A96FD8F8B47F4A1C /* libPods-RNEmbraceOTLP.a */; };
 /* End PBXBuildFile section */
@@ -308,8 +286,8 @@
 				6D2523F62CC80696000ECCEA /* RNEmbraceOTLP-Bridging-Header.h */,
 			);
 			name = RNEmbraceOTLP;
-			path = "/Users/facostaembrace/Desktop/embrace-react-native-sdk/packages/react-native-otlp/ios/RNEmbraceOTLP";
-			sourceTree = "<absolute>";
+			path = ../../ios/RNEmbraceOTLP;
+			sourceTree = SOURCE_ROOT;
 		};
 		B77C89AB32CDBA253F8E4683 /* Frameworks */ = {
 			isa = PBXGroup;
@@ -568,28 +546,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D363F7F2CC98CDE0002DE89 /* common.pb.swift in Sources */,
-				6D363F802CC98CDE0002DE89 /* logs_service.pb.swift in Sources */,
-				6D363F812CC98CDE0002DE89 /* logs.pb.swift in Sources */,
-				6D363F822CC98CDE0002DE89 /* metrics_service.pb.swift in Sources */,
-				6D363F832CC98CDE0002DE89 /* metrics.pb.swift in Sources */,
-				6D363F842CC98CDE0002DE89 /* resource.pb.swift in Sources */,
-				6D363F852CC98CDE0002DE89 /* trace_service.pb.swift in Sources */,
-				6D363F862CC98CDE0002DE89 /* trace.pb.swift in Sources */,
-				6D363F872CC98CDE0002DE89 /* TraceProtoUtils.swift in Sources */,
-				6D363F882CC98CDE0002DE89 /* OtlpSpan.swift in Sources */,
-				6D363F892CC98CDE0002DE89 /* SpanAdapter.swift in Sources */,
-				6D363F8A2CC98CDE0002DE89 /* OtlpHttpLogExporter.swift in Sources */,
-				6D363F8B2CC98CDE0002DE89 /* OltpHTTPMetricExporter.swift in Sources */,
-				6D363F8C2CC98CDE0002DE89 /* StableOtlpHTTPMetricExporter.swift in Sources */,
-				6D363F8D2CC98CDE0002DE89 /* OtlpHttpTraceExporter.swift in Sources */,
-				6D363F8E2CC98CDE0002DE89 /* HTTPClient.swift in Sources */,
-				6D363F8F2CC98CDE0002DE89 /* Lock.swift in Sources */,
-				6D363F902CC98CDE0002DE89 /* OtlpHttpExporterBase.swift in Sources */,
-				6D363F912CC98CDE0002DE89 /* StableOtlpHTTPExporterBase.swift in Sources */,
-				6D363F922CC98CDE0002DE89 /* RNEmbraceOTLP.m in Sources */,
-				6D363F932CC98CDE0002DE89 /* RNEmbraceOTLP.swift in Sources */,
-				6D363F942CC98CDE0002DE89 /* RNEmbraceOTLP-Bridging-Header.h in Sources */,
 				6D2523C92CC800ED000ECCEA /* RNEmbraceOTLPTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
