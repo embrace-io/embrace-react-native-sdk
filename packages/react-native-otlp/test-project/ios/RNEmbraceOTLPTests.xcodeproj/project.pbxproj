@@ -287,7 +287,7 @@
 			);
 			name = RNEmbraceOTLP;
 			path = ../../ios/RNEmbraceOTLP;
-			sourceTree = SOURCE_ROOT;
+			sourceTree = "<group>";
 		};
 		B77C89AB32CDBA253F8E4683 /* Frameworks */ = {
 			isa = PBXGroup;
