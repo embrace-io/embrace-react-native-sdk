@@ -1,7 +1,6 @@
 "use strict";
 import {NativeModules} from "react-native";
 
-import {createFalsePromise} from "./utils";
 import {AndroidConfig, IOSConfig, OTLPExporterConfig} from "./interfaces";
 
 const noOp = async (_: IOSConfig | AndroidConfig) => {};
@@ -75,7 +74,7 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
       );
     } catch (error) {
       console.warn(WARN_MESSAGES.error, error);
-      return createFalsePromise();
+      return Promise.reject(false);
     }
   };
 };

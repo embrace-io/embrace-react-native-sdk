@@ -14,7 +14,6 @@ type Props = {
 
 export const EmbraceTestHarness = ({sdkConfig, navigationStyle}: Props) => {
   const [embraceLoaded, setEmbraceLoaded] = useState(false);
-
   useEffect(() => {
     const init = async () => {
       await initEmbrace({
