@@ -9,7 +9,7 @@ out_dir=$(dirname "$2")
 out_filename=$(basename "$2")
 tmp_dir="$out_dir/pack_tmp"
 
-mkdir "$tmp_dir"
+mkdir -p "$tmp_dir"
 npm pack "$package_dir" --pack-destination "$tmp_dir"
 cp "$tmp_dir/"*.tgz "$out_dir/$out_filename"
 rm -r "$tmp_dir"

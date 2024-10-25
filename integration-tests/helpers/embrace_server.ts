@@ -1,50 +1,67 @@
-import {EmbraceData} from "../typings/embrace";
-import axios from "axios";
-import {RAW_EMB_URL, SERVICE_NAME} from "./env";
+import {start_mockserver, stop_mockserver} from "mockserver-node";
+import {EmbracePayload, ParsedSpanPayload} from "../typings/embrace";
+import {parseSpanPayload} from "./span";
 
-const EMB_URL = RAW_EMB_URL.replace("{servicename}", SERVICE_NAME);
+import {mockServerClient} from "mockserver-client";
 
-const getSessionPayloads = async (
-  sessionId: string | string[],
-  delay = 4000,
-): Promise<EmbraceData> => {
-  if (delay) {
-    await new Promise(r => setTimeout(r, delay));
-  }
-  const response = await axios.get(EMB_URL);
+const PORT = 8877;
 
-  console.log("SESSION ID: ", sessionId);
-
-  const responseData = (await response.data) as EmbraceData;
-
-  const getDataFromSessionId = (array = [], sessionId) =>
-    array.filter(r => {
-      if (typeof sessionId === "string") {
-        if (r.Body.includes(sessionId)) {
-          return true;
-        }
-      } else if (sessionId instanceof Array) {
-        return sessionId.some(sId => r.Body.includes(sId));
-      }
-    });
-
-  const dataFiltered = {
-    Spans: [],
-    Events: [],
-    Logs: [],
-    Blobs: [],
-    Crashes: [],
-    Errors: [],
-    Sessions: [],
-  };
-
-  Object.entries(responseData).forEach(([key, value]) => {
-    dataFiltered[key] = getDataFromSessionId(value, sessionId).map(item =>
-      JSON.parse(item.Body),
-    );
+const startServer = async (trace: boolean) => {
+  start_mockserver({
+    serverPort: PORT,
+    trace,
   });
 
-  return dataFiltered;
+  // Give the mock server a few seconds to spin up
+  await new Promise(r => setTimeout(r, 5000));
+
+  try {
+    const client = mockServerClient("localhost", PORT);
+    await client.mockAnyResponse({
+      httpResponse: {
+        body: "{}",
+        statusCode: 200,
+      },
+      times: {
+        unlimited: true,
+      },
+    });
+    console.log("setup mock response");
+  } catch (error) {
+    console.log(error);
+  }
+
+  return await new Promise(() => {});
 };
 
-export {getSessionPayloads};
+const stopServer = () => {
+  stop_mockserver({
+    serverPort: PORT,
+  });
+};
+
+const clearServer = async () => {
+  return await mockServerClient("localhost", PORT).clear({}, "LOG");
+};
+
+const getSpanPayloads = async (delay = 5000): Promise<ParsedSpanPayload[]> => {
+  if (delay) {
+    console.log(`waiting ${delay}ms before checking for span payloads`);
+    await new Promise(r => setTimeout(r, delay));
+  }
+
+  const requests = await mockServerClient(
+    "localhost",
+    PORT,
+  ).retrieveRecordedRequests({
+    path: "/v2/spans",
+    method: "POST",
+  });
+
+  return requests.map(r => {
+    const body = r.body as EmbracePayload;
+    return parseSpanPayload(body.json.data);
+  });
+};
+
+export {startServer, stopServer, clearServer, getSpanPayloads};

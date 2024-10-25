@@ -5,18 +5,17 @@ FORMATTER="clang-format"
 if ! command -v ${FORMATTER} &> /dev/null; then
     echo "${FORMATTER} not found. Proceeding to install."  
 
-    # Install llvm (includes clang-format)
     brew install llvm
 
-    export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+    export PATH="$(brew --prefix llvm)/bin:$PATH"
 fi
 
 # 1) Paths to formart
 SOURCE_DIRS=(
     "$(pwd)/integration-tests/basic-test-app/ios/basictestapp"
-    "$(pwd)/examples/react-native-test-suite"
     "$(pwd)/packages"
     "$(pwd)/packages/core/test-project"
+    "$(pwd)/packages/react-native-tracer-provider/native-src"
 )
 
 # find command
@@ -47,8 +46,7 @@ done
 
 # 3) Include file extensions. Add more file extensions if needed
 FILE_EXTS=(
-    # "*.m" // disabling linting *.m files by now until we improve what this formatter produces
-    "*.mm"
+    "*.java"
     "*.h"
 )
 
@@ -68,5 +66,8 @@ done
 # 4) final eval
 FIND_CMD+=" -type d \( ${EXCLUDE_CMD} \) -prune -o -type f \( ${FILE_CMD} \) -print"
 
-# 5) Execute the find command and run `clang-format` on each file
-eval "$FIND_CMD" | xargs -r clang-format -i
+if [ "$1" == "--fix" ]; then
+  eval "$FIND_CMD" | xargs -r clang-format -i
+else
+  eval "$FIND_CMD" | xargs -r clang-format -i --dry-run
+fi

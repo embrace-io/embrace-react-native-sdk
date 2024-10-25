@@ -1,4 +1,6 @@
 import type {Options} from "@wdio/types";
+import {clearServer, startServer, stopServer} from "./helpers/embrace_server";
+import {firstAvailableDevice} from "./helpers/ios";
 
 import {RUNNER, PORT} from "./helpers/env";
 
@@ -56,7 +58,8 @@ const config: Options.Testrunner = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  maxInstances: 10,
+  // TODO increase this when hooking up to CI/CD
+  maxInstances: 1,
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:

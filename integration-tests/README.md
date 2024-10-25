@@ -16,22 +16,51 @@ For any future updates the [Appium Installer](https://webdriver.io/docs/appium) 
 npx appium-installer
 ```
 
-## Run tests
+## Create test apps
 
-Make sure the test apps have the latest local @embrace-io/react-native changes:
+New test apps can be created from templates as needed. To create a new test expo app run:
 
 ```bash
-npm run update-local-embrace
+npx create-expo --template ./templates/<template-app>/<artifact>.tgz
 ```
 
-Make sure the test apps are installed on the device/emulator before running tests. Note that building the debug variant
-of the app may interfere with the tests as the debug menu gets in the way of UI elements.
-
-Android can run in release mode:
+To create a new bare react native app run:
 
 ```bash
-cd basic-test-app
+npx @react-native-community/cli init <test-app> --package-name io.embrace.<test-app> --skip-git-init --skip-install --template $(pwd)/templates/react-native-test-app-template
+```
+
+## Prepare a test app
+
+Make sure the test app has the latest locally built @embrace-io/\* packages and test harness:
+
+```bash
+./update-local-embrace.sh <test-app>
+```
+
+Set the test app up with a particular embrace config:
+
+```bash
+./set-embrace-config.js <test-app> <config.json> --namespace=<namespace>
+```
+
+Set the test app to a particular RN version:
+
+```bash
+TODO
+```
+
+Make sure the app is installed on the device/emulator before running tests. Note that building the debug variant
+of an app may interfere with the tests as the debug menu gets in the way of UI elements.
+
+Android can run be built in release mode:
+
+```bash
+cd <test-app>
+# expo
 npx expo run:android --variant release
+# react native
+npx react-native run-android --mode release
 ```
 
 For ios it doesn't apply the `--variant release` mode, so we can do it through xcode:
@@ -41,13 +70,17 @@ For ios it doesn't apply the `--variant release` mode, so we can do it through x
 - Under the Run section, change the Build Configuration from Debug to Release.
 - Press Cmd + R to build and run the app in release mode.
 
-or simple run
+or simply run
 
 ```bash
+# expo
 npx expo run:ios --configuration Release
+# react native
+pushd ios && pod install && popd
+npx react-native run-ios --mode Release
 ```
 
-Run the test suite:
+Then run the test suite:
 
 ```bash
 npm test
@@ -91,3 +124,21 @@ PORT: This is the port where Appium will run, typically 4723.
 RUNNER: This is the WDIO/Appium runner mode. It can be either local or browser.
 ##Local means that the runner will run in your local environment using the emulators/simulators you have installed or the smartphone connected to your PC.
 ##Browser means that it will run in the cloud, using services like BrowserStack, Sauce Labs, etc.
+
+## Troubleshooting
+
+### Appium gives 500 during test run
+
+"Could not proxy command to remote server. Original error: Error: socket hang up"
+
+Try:
+
+```bash
+# Android
+adb uninstall io.appium.uiautomator2.server
+adb uninstall io.appium.uiautomator2.server.test
+
+# iOS
+xcrun simctl uninstall booted io.appium.uiautomator2.server
+xcrun simctl uninstall booted io.appium.uiautomator2.server.test
+```
