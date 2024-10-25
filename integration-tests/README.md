@@ -41,7 +41,7 @@ For ios it doesn't apply the `--variant release` mode, so we can do it through x
 - Under the Run section, change the Build Configuration from Debug to Release.
 - Press Cmd + R to build and run the app in release mode.
 
-or simple run 
+or simple run
 
 ```bash
 npx expo run:ios --configuration Release
@@ -82,3 +82,12 @@ npx tsx helpers/invoke_embrace_server.ts
 TODO for the moment the utility here is to be able to run tests locally during development, as a next task need to hook this up to
 CI tools to verify a passing suite for new releases. Likely this means updating or creating a new `wdio.conf.ts` that
 can be configured to point to a remote environment. See what capabilities are available for that [here](https://appium.io/docs/en/2.1/guides/caps/)
+
+### Enviroments
+
+RAW_EMB_URL: This is the mock API URL. Keep in mind that the service name should be in {servicename}, as it will be replaced by the environment constructor. For example: https://mock-api.emb-eng.com/namespace/{servicename}/stored.
+SERVICE_NAME: This can be any string; it will identify the partition where the logs will be stored (if it doesn't exist, the API will create it).
+PORT: This is the port where Appium will run, typically 4723.
+RUNNER: This is the WDIO/Appium runner mode. It can be either local or browser.
+##Local means that the runner will run in your local environment using the emulators/simulators you have installed or the smartphone connected to your PC.
+##Browser means that it will run in the cloud, using services like BrowserStack, Sauce Labs, etc.
