@@ -43,8 +43,9 @@ const token = "base64:instance:token";
 function RootLayout() {
   const [embraceLoaded, setEmbraceLoaded] = useState(false);
 
-  const onStartCustomExporters = useMemo(
+  const handleStartCustomExporters = useMemo(
     () =>
+      // returns a callback that need to be passed to the Embrace React Native SDK configuration
       initEmbraceWithCustomExporters({
         logExporter: {
           endpoint:
@@ -81,7 +82,7 @@ function RootLayout() {
             appId: "abcde",
           },
           // inject here the new method for initialize the Embrace React Native SDK using custom export
-          startCustomExport: onStartCustomExporters,
+          startCustomExport: handleStartCustomExporters,
         },
       });
 
@@ -89,7 +90,7 @@ function RootLayout() {
     };
 
     init();
-  }, []);
+  }, [onStartCustomExporters]);
 
   if (!embraceLoaded) {
     return (

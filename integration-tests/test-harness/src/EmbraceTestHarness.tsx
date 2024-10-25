@@ -37,7 +37,7 @@ export const EmbraceTestHarness = ({sdkConfig, navigationStyle}: Props) => {
 
   if (navigationStyle === "expo") {
     return <EmbraceExpoTestHarness />;
+  } else {
+    return <EmbraceReactNativeTestHarness />;
   }
-
-  return <EmbraceReactNativeTestHarness />;
 };
