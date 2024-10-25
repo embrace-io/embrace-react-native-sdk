@@ -68,8 +68,8 @@ interface Data {
   Body: string;
 }
 interface EmbraceData {
-  Spans: IData[];
-  Logs: IData[];
+  Spans: Data[];
+  Logs: Data[];
 }
 
 export type {

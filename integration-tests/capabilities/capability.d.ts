@@ -11,10 +11,12 @@ interface CapabilitiyBase {
 interface AndroidCapability extends CapabilitiyBase {
   "appium:appPackage": string;
   "appium:appActivity": string;
+  "appium:uiautomator2ServerLaunchTimeout": number;
 }
 
 interface IOSCapability extends CapabilitiyBase {
   "appium:bundleId": string;
+  "appium:udid": string;
 }
 
 export {CapabilitiyBase, AndroidCapability, IOSCapability};
