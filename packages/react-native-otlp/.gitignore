@@ -74,4 +74,4 @@ yarn-error.log
 !.yarn/versions
 
 # Custom
-./src/interfaces/common
+src/interfaces/common
