@@ -1,6 +1,58 @@
 import type {Options} from "@wdio/types";
 import {clearServer, startServer, stopServer} from "./helpers/embrace_server";
 import {firstAvailableDevice} from "./helpers/ios";
+import {Command} from "commander";
+
+interface CLIOptions {
+  package: string;
+  platform: "ios" | "android" | "both";
+}
+
+const parseCLIOptions = (): CLIOptions => {
+  const program = new Command();
+
+  // `wdio run <configPath>` does not explicitly support passing custom command line options but since it ignores them
+  // and we have access to process.argv here we can process them ourselves
+  program
+    .name("wdio-extra-options")
+    .option("--package <package>", "", "io.embrace.basictestapp")
+    .option("--platform <platform>", "", "both")
+    .parse(process.argv);
+
+  return program.opts<CLIOptions>();
+};
+
+const options = parseCLIOptions();
+
+const capabilities = [];
+
+if (options.platform === "android" || options.platform === "both") {
+  capabilities.push({
+    // capabilities for local Appium web tests on an Android Emulator
+    platformName: "Android",
+    "appium:deviceName": "Android GoogleAPI Emulator",
+    "appium:platformVersion": "14.0",
+    "appium:automationName": "UiAutomator2",
+    "appium:appPackage": options.package,
+    "appium:appActivity": ".MainActivity",
+    "appium:uiautomator2ServerLaunchTimeout": 60_000,
+    "appium:noReset": true,
+
+    //  TODO: for CI/CD we probably want to point to the prebuilt release
+    //  APK rather than having to have the app running in an emulator beforehand, e.g.
+    //  "appium:app": "./basic-test-app/android/app/build/outputs/apk/debug/app-debug.apk",
+  });
+}
+
+if (options.platform === "ios" || options.platform === "both") {
+  capabilities.push({
+    // capabilities for local Appium web tests on an iOS Emulator
+    platformName: "iOS",
+    "appium:automationName": "XCUITest",
+    "appium:udid": firstAvailableDevice(), // TODO will need to change for CI/CD
+    "appium:appPackage": options.package,
+  });
+}
 
 export const config: Options.Testrunner = {
   //
@@ -61,30 +113,7 @@ export const config: Options.Testrunner = {
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
   // https://saucelabs.com/platform/platform-configurator
   //
-  capabilities: [
-    {
-      // capabilities for local Appium web tests on an Android Emulator
-      platformName: "Android",
-      "appium:deviceName": "Android GoogleAPI Emulator",
-      "appium:platformVersion": "14.0",
-      "appium:automationName": "UiAutomator2",
-      "appium:appPackage": "io.embrace.basictestapp",
-      "appium:appActivity": ".MainActivity",
-      "appium:uiautomator2ServerLaunchTimeout": 60_000,
-      "appium:noReset": true,
-
-      //  TODO: for CI/CD we probably want to point to the prebuilt release
-      //  APK rather than having to have the app running in an emulator beforehand, e.g.
-      //  "appium:app": "./basic-test-app/android/app/build/outputs/apk/debug/app-debug.apk",
-    },
-    {
-      // capabilities for local Appium web tests on an iOS Emulator
-      platformName: "iOS",
-      "appium:automationName": "XCUITest",
-      "appium:udid": firstAvailableDevice(), // TODO will need to change for CI/CD
-      "appium:appPackage": "io.embrace.basictestapp",
-    },
-  ],
+  capabilities,
 
   //
   // ===================

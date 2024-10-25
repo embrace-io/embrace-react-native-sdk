@@ -122,10 +122,10 @@ launched for the suite run so that requests sent from the device can be inspecte
 Follow the steps from "Build and install on device" above to have an app running on an emulator with the Embrace test
 harness and pointing to the local node mock server.
 
-TODO
+Run the integration tests specifying the package name of app being tested
 
 ```bash
-npm test
+npm test -- --package=foobar --platform=android # ios, both
 ```
 
 ### CI
