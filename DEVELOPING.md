@@ -34,9 +34,9 @@ The folder structure should be something like the following:
 
 ```
 packages/
-└── my-new-package/
-    ├── ios/                 # containing an Xcode workspace/project
-    ├── android/             # containing an Android workspace/project
+└── <package-name>/
+    ├── ios/                          # containing an Xcode workspace/project
+    ├── android/                      # containing an Android workspace/project
     ├── src/
     │   ├── __tests__/
     │   └── index.ts
@@ -44,7 +44,7 @@ packages/
     ├── package.json
     ├── .eslintrc.js
     ├── README.md
-    └── MyNewPackage.podspec
+    └── RNEmbrace<PackageName>.podspec    # `RNEmbrace` is the prefix as per convention
 ```
 
 > Make sure the new `package.json` file list all files/folders we want to get packed during the build and pack process. Example:
@@ -55,12 +55,12 @@ packages/
     "lib",
     "android",
     "ios",
-    "NewPackageModule.podspec"
+    "RNEmbrace<PackageName>.podspec"
   ],
 }
 ```
 
-This example is configured to pack lib/, android/, ios/ and NewPackageModule.podspec into the package we will publish in the future. All folders/files that should be packed and published should be listed here. If they are not there, the pack/publish process will ignore them.
+This example is configured to pack lib/, android/, ios/ and RNEmbraceNewPackage.podspec into the package we will publish in the future. All folders/files that should be packed and published should be listed here. If they are not there, the pack/publish process will ignore them.
 
 ## iOS Native Module
 
@@ -78,12 +78,12 @@ At the end of this process the ios folder structure should contain something lik
 
 ```
 ios/
-└── MyNewModule.xcworkspace
-└── MyNewModule/
-    ├── MyNewModule.xcodeproj
-    ├── MyNewModule-Bridging-Header.h
-    ├── MyNewModule.m
-    └── MyNewModule.swift
+└── RNEmbrace<PackageName>.xcworkspace
+└── RNEmbrace<PackageName>/
+    ├── RNEmbrace<PackageName>.xcodeproj
+    ├── RNEmbrace<PackageName>-Bridging-Header.h
+    ├── RNEmbrace<PackageName>.m
+    └── RNEmbrace<PackageName>.swift
 ```
 
 This is the bare minimum we need to create a new iOS Native Module.
@@ -92,7 +92,7 @@ This is the bare minimum we need to create a new iOS Native Module.
 
 ### Create Unit Test suite for the new iOS Native Module
 
-- Under `packages/my-new-package` create a `test-project` directory.
+- Under `packages/new-package` create a `test-project` directory.
 - Make sure the following structure is created under the new `test-project` directory
 
 ```
@@ -109,82 +109,30 @@ test-project /
 - At this point the structure should look like
 
 ```
-test-project /
+test-project/
 └── ios
-    ├── MyNewPackage/
-    │   └── MyNewPackage.h // NOTE: `MyNewPackage` will be removed in the future, but the target will remain.
-    ├── MyNewPackageTests/
-    │   └── MyNewPackageTests.swift
-    ├── MyNewPackageTests.xcworkspace // created manually
-    ├── MyNewPackageTests.xcodeproj // created manually
+    ├── RNEmbrace<PackageName>/
+    │   └── RNEmbrace<PackageName>.h // NOTE: The `RNEmbrace<PackageName>.h` file is created automatically by XCode but it will be removed in the future, the target will remain here to link the source code of the component.
+    ├── RNEmbrace<PackageName>Tests/
+    │   └── RNEmbrace<PackageName>Tests.swift
+    ├── RNEmbrace<PackageName>Tests.xcworkspace // created manually
+    ├── RNEmbrace<PackageName>Tests.xcodeproj // created manually
     └── Podfile
 └── package.json
 └── yarn.lock
 ```
-* Notice that `MyNewPackage` and `MyNewPackageTests` are the Framework + XCTest targets created by xcode.
+* Notice that `RNEmbrace<PackageName>` and `RNEmbrace<PackageName>Tests` are the Framework + XCTest targets created by xcode.
 
-- Due to this (CocoaPods issue)[https://github.com/CocoaPods/CocoaPods/issues/12583#issuecomment-2357470707] it's needed an extra step before `yarn run install:ios`. Follow the instructions there with both Targets (`MyNewPackage` and `MyNewPackageTests`).
+- Due to this (CocoaPods issue)[https://github.com/CocoaPods/CocoaPods/issues/12583#issuecomment-2357470707] it's needed an extra step before `yarn run install:ios`. Follow the instructions there with both Targets (`RNEmbrace<PackageName>` and `RNEmbrace<PackageName>Tests`).
 - Run `yarn install:ios`.
-- This should install all related to React Native + dependencies into `ios/Podfile`.
+- This should install all dependencies related to React Native and those coming from Embrace (listed in `ios/Podfile`). 
 - In XCode click into the new project (files navigator) and right click.
-- Click on "Add files to 'MyNewPackageTests.xcodeproj'"
-- Select the folder where the native code is for the new package, i.e `packages/ios/MyNewPackage` (where the swift solution for the component is).
-- Make sure this reference is added to the right target (`MyNewPackage`, the one created when we added the Framework + XCTest). Do not copy/move files. The reference is what we need here.
-
-FAQ:
-- https://github.com/apple/swift-log/issues/314 / swift-log + swift-protobuf -> `BUILD_LIBRARY_FOR_DISTRIBUTION` set to `No` for both targets
-- https://stackoverflow.com/questions/78303230/react-native-0-73-mysterious-build-error-error-sandbox-rsync-samba7042-deny -> Sandbox: bash(1698) deny(1) file-write-create /Users/facostaembrace/Desktop/embrace-react-native-sdk/packages/react-native-otlp/test-project/ios/Pods/resources-to-copy-RNEmbraceOTLP.txt
-- MyNewPackageTests target -> Build Settings -> User Script Sandboxing -> Switch from `Yes` to `No`
+- Click on `Add files to 'RNEmbrace<PackageName>Tests.xcodeproj'`
+- Select the folder where the native code is for the new package, i.e `packages/ios/RNEmbrace<PackageName>` (where the swift solution for the component is).
+- Make sure this reference is added to the right target (`RNEmbrace<PackageName>`, the one created when we added the Framework + XCTest). Do not copy/move files. The reference is what we need here (Location: `Relative to a Group`)
 
 ## Android Native Module
-
-Also for Android Standalone Native Modules we highly recommend to start the development process using Android Studio.
-
-### Recommended steps
-
-- Open Android Studio and create a new project using Empty Activity template.
-- Provide a proper Project and Package Name (i.e MyNewPiece and io.embrace.mynewpiece respectively)
-- Choose a location to save the new project (under android/ folder), select the languaje for the project and the build configuration and finish the process.
-
-This process is going to create several folders/files with an structure like
-
-```
-android/
-├── src/
-│   └── main/
-│       ├── java/
-│       │   └── io/
-│       │       └── embrace/
-│       │           └── mynewpiece/
-│       │               └── MyNewPiece.java  # we will tweak this file name in following steps
-│       ├── res/
-│       └── AndroidManifest.xml
-├── gradlew.bat
-├── gradlew
-├── gradle/
-│   └── wrapper/
-│       ├── gradle-wrapper.properties
-│       └── gradle-wrapper.jar
-├── local.properties
-├── gradle.properties
-├── settings.gradle (or settings.gradle.kts)
-└── build.gradle (or build.gradle.kts)
-```
-
-In order to create an (Android React Native Module)[https://reactnative.dev/docs/native-modules-android] it's also recommended to follow the official documentation
-
-Once this is done files should be the following inside `io.embrace.mynewpiece`:
-
-```
-src/
-└── main/
-    └── java/
-       └── io/
-           └── embrace/
-               └── myapplication/
-                   ├── MyNewPieceModule.java
-                   └── MyNewPiecePackage.java
-```
+- TBD
 
 ## Testing changes during development
 
