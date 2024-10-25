@@ -1,6 +1,7 @@
 {
-  "name": "ProjectName",
-  "version": "0.0.1",
+  "name": "rn75-template",
+  "description": "React Native test app template integrating the Embrace test harness",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
