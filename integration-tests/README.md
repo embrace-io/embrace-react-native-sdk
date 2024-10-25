@@ -1,36 +1,67 @@
-An integration test harness that runs RN apps integrated with the Embrace SDK and sets up a mock server to allow
-verifications on the payloads that would have been sent to Embrace.
+The tooling in this directory is intended to facilitate both manual QA and integration testing of React Native apps
+integrated with the Embrace SDK.
 
 ## Setup
-
-The harness uses WebdriverIO's [Testrunner](https://webdriver.io/docs/testrunner/) to spin up a [Appium](http://appium.io/docs/en/latest/intro/) client and server to perform the device automation. [Mockserver](https://www.mock-server.com/#what-is-mockserver) is
-launched for the suite run so that requests sent from the device can be inspected.
 
 ```bash
 npm install
 ```
 
-For any future updates the [Appium Installer](https://webdriver.io/docs/appium) provides a handy setup wizard:
+## Test Applications
+
+Because React Native has not yet reached 1.0.0 each minor version release has the potential to introduce breaking
+changes, so we aim to test the Embrace SDK across a range of current and past minor versions
+([see here](https://reactnative.dev/versions) for a current list).
+
+To help spin up these apps we leverage react native templates and include one per minor version / framework we want to
+do testing on.
+
+### Creating new application templates
+
+A simple way to create a new template is to start by creating an app using `@react-native-community/cli init` at the
+desired RN version:
 
 ```bash
-npx appium-installer
+npx @react-native-community/cli init ProjectName --skip-git-init --skip-install --pm yarn --version 0.x.y
 ```
 
-## Create test apps
+Then moving over the created app into the templates folder (`mv ProjectName templates/my-new-template`), removing any
+unneeded files, and adding Embrace specific setup.
 
-New test apps can be created from templates as needed. To create a new test expo app run:
+The ["Current Tags"](https://www.npmjs.com/package/react-native?activeTab=versions) section of the react-native package
+in NPM can help decide which specific patch version to pin the template to for a given minor version, there will generally
+be one that has been tagged with `0.minor-stable`.
+
+A similar approach can be done using Expo's cli for creating new apps:
 
 ```bash
-npx create-expo --template ./templates/<template-app>/<artifact>.tgz
+npx create-expo
 ```
 
-To create a new bare react native app run:
+Though note that in this case a version can't be passed as different releases of expo are tied to particular RN versions,
+instead you can run a different version of the `create-expo` package.
+
+### Creating new apps from templates
+
+New test apps can be created from templates as needed. To create a new bare react native app run:
 
 ```bash
 npx @react-native-community/cli init <test-app> --package-name io.embrace.<test-app> --skip-git-init --skip-install --pm yarn --template $(pwd)/templates/react-native-test-app-template
 ```
 
-## Prepare a test app
+To create a new test expo app run:
+
+```bash
+npx create-expo --template ./templates/<template-app>/<artifact>.tgz
+```
+
+For one-off testing the created app can just be removed afterward. If the app represents a particular setup that we
+will need to test in the future it can be committed to the repo. For example the `basic-test-app` is useful to keep in
+the repo for quickly testing a basic app setup from React Native's [getting started guide](https://reactnative.dev/docs/environment-setup#start-a-new-react-native-project-with-expo).
+
+## Running Applications
+
+### Embrace setup
 
 Make sure the test app has the latest locally built @embrace-io/* packages and test harness:
 ```bash
@@ -42,15 +73,18 @@ Set the test app up with a particular embrace config:
 ./set-embrace-config.js <test-app> <config.json> --namespace=<namespace>
 ```
 
-Set the test app to a particular RN version:
-```bash
-TODO
-```
+Depending on the testing being done `embrace-configs/` has a few different configuration options: 
+* using real app_ids without setting `endpoint` -> Sends actual data to Embrace allowing verifications to be done on
+the Embrace dashboard
+* pointing to either a local or remote mock-api -> Data is captured by the mock-api tool allowing the payloads that
+would have been sent to Embrace to be verified
 
-Make sure the app is installed on the device/emulator before running tests. Note that building the debug variant
-of an app may interfere with the tests as the debug menu gets in the way of UI elements.
+### Build and install on device
 
-Android can run be built in release mode:
+NOTE: when building for manual QA the default debug variant is usually fine, however this version interferes with
+automated testing as the debug menu gets in the way of UI elements.
+
+Android can be built and run in release mode by doing:
 
 ```bash
 cd <test-app>
@@ -60,14 +94,7 @@ npx expo run:android --variant release
 npx react-native run-android --mode release
 ```
 
-For ios it doesn't apply the `--variant release` mode, so we can do it through xcode:
-
-- Open your project in Xcode.
-- Select your target and go to Product > Scheme > Edit Scheme.
-- Under the Run section, change the Build Configuration from Debug to Release.
-- Press Cmd + R to build and run the app in release mode.
-
-or simply run
+iOS can be built and run in release mode by doing:
 
 ```bash
 # expo
@@ -77,15 +104,57 @@ pushd ios && pod install && popd
 npx react-native run-ios --mode Release
 ```
 
-Then run the test suite:
+or through xCode:
+
+- Open the test app project in Xcode.
+- Select your target and go to Product > Scheme > Edit Scheme.
+- Under the Run section, change the Build Configuration from Debug to Release.
+- Press Cmd + R to build and run the app in release mode.
+
+## Integration Testing
+
+For automated testing WebdriverIO's [Testrunner](https://webdriver.io/docs/testrunner/) is used to spin up an [Appium](http://appium.io/docs/en/latest/intro/)
+client and server to perform the device automation. [Mockserver](https://www.mock-server.com/#what-is-mockserver) is
+launched for the suite run so that requests sent from the device can be inspected.
+
+### Running locally
+
+Follow the steps from "Build and install on device" above to have an app running on an emulator with the Embrace test
+harness and pointing to the local node mock server.
+
+TODO
 
 ```bash
 npm test
 ```
 
-## Debugging tips
+### CI
 
-### Appium Inspector
+TODO for the moment the utility here is to be able to run tests locally during development, as a next task need to hook this up to
+CI tools to verify a passing suite for new releases. Likely this means updating or creating a new `wdio.conf.ts` that
+can be configured to point to a remote environment. See what capabilities are available for that [here](https://appium.io/docs/en/2.1/guides/caps/)
+
+### Adding new specs
+
+Each test app should render the `EmbraceTestHarness` component which includes UI elements for interacting with the Embrace
+SDK. Likely any new specs should start with adding a new UI element in `test-harness` that can be interacted with
+for the test. Every React Native test app should then get this new functionality automatically, the Expo apps use file-based
+navigation so if a new testing screen is added those apps and templates will have to be updated with a new tab for it.
+
+The verification of the payload sent as a result of that interaction should then be added under `specs/`.
+
+## Troubleshooting
+
+### Appium updates
+
+If needing to do any future updates to Appium the [Appium Installer](https://webdriver.io/docs/appium) provides a handy
+setup wizard:
+
+```bash
+npx appium-installer
+```
+
+### UI element not found during testing
 
 To help figure out the selectors to use for grabbing UI elements it can be useful to interact with Appium using
 the Appium Inspector. First install the Appium server and drivers globally:
@@ -106,15 +175,6 @@ endpoints (Note this may include some binary output that doesn't play nice with 
 ```bash
 npx tsx helpers/invoke_embrace_server.ts
 ```
-
-## CI
-
-TODO for the moment the utility here is to be able to run tests locally during development, as a next task need to hook this up to
-CI tools to verify a passing suite for new releases. Likely this means updating or creating a new `wdio.conf.ts` that
-can be configured to point to a remote environment. See what capabilities are available for that [here](https://appium.io/docs/en/2.1/guides/caps/)
-
-## Troubleshooting
-
 
 ### Appium gives 500 during test run
 
