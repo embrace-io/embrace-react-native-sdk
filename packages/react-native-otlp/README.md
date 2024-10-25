@@ -77,7 +77,7 @@ function RootLayout() {
         sdkConfig: {
           // this is the minimum of configuration needed at this point,
           // for more information please refer to docs under @embrace-io/react-native.
-          // iOS is configurable through code, Android is not yet suported
+          // iOS is configurable through code, Android configuration happens at build time
           ios: {
             appId: "abcde",
           },

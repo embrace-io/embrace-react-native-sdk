@@ -26,8 +26,8 @@ const OTLPTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Create Span</Text>
-        <Button onPress={startManualSpan} title="Start Span" />
-        <Button onPress={stopManualSpan} title="Stop Span" />
+        <Button onPress={startManualSpan} title="START SPAN" />
+        <Button onPress={stopManualSpan} title="STOP SPAN" />
       </View>
     </View>
   );

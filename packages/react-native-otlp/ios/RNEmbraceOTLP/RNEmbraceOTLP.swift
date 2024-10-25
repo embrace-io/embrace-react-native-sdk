@@ -161,9 +161,12 @@ class RNEmbraceOTLP: NSObject {
 
                     let traceExporter = otlpExportConfigDict.value(forKey: "traceExporter") as? NSDictionary
                     let logExporter = otlpExportConfigDict.value(forKey: "logExporter") as? NSDictionary
-
+                    
+                    var exportConfig: OpenTelemetryExport? = nil
                     if traceExporter == nil && logExporter == nil {
                         os_log("[Embrace] Neither Traces nor Logs configuration were found, skipping custom export.", log: self.log, type: .info)
+                    } else {
+                        exportConfig = self.setHttpExporters(traceExporter, logConfigDict: logExporter)
                     }
 
                     return .init(
@@ -173,7 +176,7 @@ class RNEmbraceOTLP: NSObject {
                         endpoints: endpoints,
                         captureServices: servicesBuilder.build(),
                         crashReporter: crashReporter,
-                        export: self.setHttpExporters(traceExporter, logConfigDict: logExporter)
+                        export: exportConfig
                     )
                 }
 

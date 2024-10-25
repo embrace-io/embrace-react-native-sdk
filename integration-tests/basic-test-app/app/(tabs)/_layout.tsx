@@ -21,8 +21,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="react-native-otlp"
         options={{
-          title: "Embrace OTLP",
-          tabBarAccessibilityLabel: "Embrace OTLP",
+          title: "EMBRACE OTLP",
+          tabBarAccessibilityLabel: "EMBRACE OTLP",
         }}
       />
     </Tabs>
