@@ -27,8 +27,9 @@ jobs:
       - run: corepack enable
       - run: yarn
       - run: yarn lint:js
-      - run: yarn test --watchAll=false --coverage
+      - run: yarn prebuild
       - run: yarn build
+      - run: yarn test --watchAll=false --coverage
       - uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

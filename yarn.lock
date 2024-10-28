@@ -818,6 +818,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-syntax-flow@npm:^7.24.7":
+  version: 7.24.7
+  resolution: "@babel/plugin-syntax-flow@npm:7.24.7"
+  dependencies:
+    "@babel/helper-plugin-utils": "npm:^7.24.7"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 10c0/2f0cb7a78379029707e61f6665634a5b758c8b4ccb602a72d798e41d36b0647c2f2de59f90e0c1d522b026962918e54d82f3aee0c194dc87cd340455aa58562a
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-syntax-import-assertions@npm:^7.24.7":
   version: 7.25.6
   resolution: "@babel/plugin-syntax-import-assertions@npm:7.25.6"
@@ -1300,7 +1311,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-flow-strip-types@npm:^7.20.0, @babel/plugin-transform-flow-strip-types@npm:^7.25.7":
+"@babel/plugin-transform-flow-strip-types@npm:^7.20.0":
   version: 7.25.7
   resolution: "@babel/plugin-transform-flow-strip-types@npm:7.25.7"
   dependencies:
@@ -1309,6 +1320,18 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 10c0/01afd2196c99ace415d58d939cc568a17e9925fcc4cbf8ff16a659053be3f7ce2b1fa254b5662aa36e6a3300620bcc81d9399d849288a012fe2dc337e4efa49e
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-transform-flow-strip-types@npm:^7.24.7":
+  version: 7.25.2
+  resolution: "@babel/plugin-transform-flow-strip-types@npm:7.25.2"
+  dependencies:
+    "@babel/helper-plugin-utils": "npm:^7.24.8"
+    "@babel/plugin-syntax-flow": "npm:^7.24.7"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 10c0/821f5ccdb8104e09764d8a24d4c0dd4fe9e264d95e6477269c911e15240a63343d3fe71b6cf9382273766a0e86a015c2867d26fd75e5827134d990c93fa9e605
   languageName: node
   linkType: hard
 
@@ -1455,7 +1478,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-modules-commonjs@npm:^7.13.8, @babel/plugin-transform-modules-commonjs@npm:^7.25.7":
+"@babel/plugin-transform-modules-commonjs@npm:^7.13.8":
   version: 7.25.7
   resolution: "@babel/plugin-transform-modules-commonjs@npm:7.25.7"
   dependencies:
@@ -1999,7 +2022,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-typescript@npm:^7.25.7, @babel/plugin-transform-typescript@npm:^7.5.0":
+"@babel/plugin-transform-typescript@npm:^7.5.0":
   version: 7.25.7
   resolution: "@babel/plugin-transform-typescript@npm:7.25.7"
   dependencies:
@@ -2167,15 +2190,15 @@ __metadata:
   linkType: hard
 
 "@babel/preset-flow@npm:^7.13.13":
-  version: 7.25.7
-  resolution: "@babel/preset-flow@npm:7.25.7"
+  version: 7.24.7
+  resolution: "@babel/preset-flow@npm:7.24.7"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.25.7"
-    "@babel/helper-validator-option": "npm:^7.25.7"
-    "@babel/plugin-transform-flow-strip-types": "npm:^7.25.7"
+    "@babel/helper-plugin-utils": "npm:^7.24.7"
+    "@babel/helper-validator-option": "npm:^7.24.7"
+    "@babel/plugin-transform-flow-strip-types": "npm:^7.24.7"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/c0d533628ea9e92558d705e1ecfec51e465e9f251b9dcbd2b4b8ec5007b3238feb1a5cd3e14739f12984a35ccd71a422c92696010b71e69216dfd9389c3cf51c
+  checksum: 10c0/2a99333b9aac17033cefe17fb9d8c41b20c4f2cd3eab34f56c20d7c1c528cc1cca7e6d909de92fc700739a505b43166c9de62423f8a30b484161ebdf9474e217
   languageName: node
   linkType: hard
 
@@ -2208,22 +2231,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-typescript@npm:^7.13.0":
-  version: 7.25.7
-  resolution: "@babel/preset-typescript@npm:7.25.7"
-  dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.25.7"
-    "@babel/helper-validator-option": "npm:^7.25.7"
-    "@babel/plugin-syntax-jsx": "npm:^7.25.7"
-    "@babel/plugin-transform-modules-commonjs": "npm:^7.25.7"
-    "@babel/plugin-transform-typescript": "npm:^7.25.7"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 10c0/8dc1258e3c5230bbe42ff9811f08924509238e6bd32fa0b7b0c0a6c5e1419512a8e1f733e1b114454d367b7c164beca2cf33acf2ed9e0d99be010c1c5cdbef0c
-  languageName: node
-  linkType: hard
-
-"@babel/preset-typescript@npm:^7.24.7":
+"@babel/preset-typescript@npm:^7.13.0, @babel/preset-typescript@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/preset-typescript@npm:7.24.7"
   dependencies:
@@ -2239,8 +2247,8 @@ __metadata:
   linkType: hard
 
 "@babel/register@npm:^7.13.16":
-  version: 7.25.7
-  resolution: "@babel/register@npm:7.25.7"
+  version: 7.24.6
+  resolution: "@babel/register@npm:7.24.6"
   dependencies:
     clone-deep: "npm:^4.0.1"
     find-cache-dir: "npm:^2.0.0"
@@ -2249,7 +2257,7 @@ __metadata:
     source-map-support: "npm:^0.5.16"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/af32db39edb2ed0c46d05bcb09cb2c14f8ee452d112f08a96a2e2daeaddc127d4f2269354aa968d0c01cd286523ad7e865b0abed1da9229833fd440ee6831199
+  checksum: 10c0/e0c6d6c8945dd792f83dc7bd6be468246b3aedd62b32620e56a3f3328389b577a6261d4338a9de9519f4eadddfef5aa0fdc1f92082c778dedddcc5854e357f09
   languageName: node
   linkType: hard
 
@@ -2260,16 +2268,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.25.0":
-  version: 7.25.7
-  resolution: "@babel/runtime@npm:7.25.7"
-  dependencies:
-    regenerator-runtime: "npm:^0.14.0"
-  checksum: 10c0/86b7829d2fc9343714a9afe92757cf96c4dc799006ca61d73cda62f4b9e29bfa1ce36794955bc6cb4c188f5b10db832c949339895e1bbe81a69022d9d578ce29
-  languageName: node
-  linkType: hard
-
-"@babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.8.4":
   version: 7.25.6
   resolution: "@babel/runtime@npm:7.25.6"
   dependencies:
@@ -2392,6 +2391,16 @@ __metadata:
 "@embrace-io/react-native-orientation-change-tracker@workspace:packages/screen-orientation":
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-orientation-change-tracker@workspace:packages/screen-orientation"
+  dependencies:
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    react-native: ">=0.56.0"
+  languageName: unknown
+  linkType: soft
+
+"@embrace-io/react-native-otlp@workspace:packages/react-native-otlp":
+  version: 0.0.0-use.local
+  resolution: "@embrace-io/react-native-otlp@workspace:packages/react-native-otlp"
   dependencies:
     typescript: "npm:^5.6.3"
   peerDependencies:
@@ -7711,9 +7720,9 @@ __metadata:
   linkType: hard
 
 "flow-parser@npm:0.*":
-  version: 0.248.1
-  resolution: "flow-parser@npm:0.248.1"
-  checksum: 10c0/f8f2dfbc06235527267fe6064c07014e9ba6dd44d6e5e89b2f82091b14c14c13523fd5d8bd6b1ca736bd3403773e9c2b8b95dc58703334dfe72a4bba722c95ad
+  version: 0.246.0
+  resolution: "flow-parser@npm:0.246.0"
+  checksum: 10c0/cdecd7434a9b8c2f59ed7f8233c0f10026c4d6d5619d47060403e723d78d3ebce2e6e3c7cf89f7b693ff0412c28c05fa0760997c0134edf1e78a4c90381dbc9d
   languageName: node
   linkType: hard
 
@@ -13667,8 +13676,8 @@ __metadata:
   linkType: hard
 
 "terser@npm:^5.15.0":
-  version: 5.34.1
-  resolution: "terser@npm:5.34.1"
+  version: 5.34.0
+  resolution: "terser@npm:5.34.0"
   dependencies:
     "@jridgewell/source-map": "npm:^0.3.3"
     acorn: "npm:^8.8.2"
@@ -13676,7 +13685,7 @@ __metadata:
     source-map-support: "npm:~0.5.20"
   bin:
     terser: bin/terser
-  checksum: 10c0/51c7d704c5c4ae88bf937124112c9972aed4e1fd29d805cc2d86e0f54cd631ecd4e69db5bb3c1e3b450c741c86e2313328bea0fde925329e8a31a07a7941723c
+  checksum: 10c0/74e8ef4e565e5600415cd9377a90eed419b8076465d453c0c76aef4053c45371512d2de76c34d01e004cdd49ea5a749d77eeb343f7e665b2d172158ca08ba23e
   languageName: node
   linkType: hard
 

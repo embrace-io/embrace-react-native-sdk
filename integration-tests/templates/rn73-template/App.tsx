@@ -4,7 +4,11 @@ import sdkConfig from './embrace-sdk-config.json';
 
 function App(): React.JSX.Element {
   return (
-    <EmbraceTestHarness navigationStyle="react-native" sdkConfig={sdkConfig} />
+    <EmbraceTestHarness
+      navigationStyle="react-native"
+      sdkConfig={sdkConfig}
+      allowCustomExport={true}
+    />
   );
 }
 

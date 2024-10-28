@@ -1,5 +1,6 @@
 import {MethodType} from "./HTTP";
-import {LiteralMap} from "./Common";
+
+export type LiteralMap = Record<string, string | number | boolean>;
 
 /**
  * This interface defines the internal Axios's interceptor structure
