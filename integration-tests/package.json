@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "wdio run ./wdio.conf.ts",
-    "update-local-embrace": "./update-local-embrace.sh"
+    "update-local-embrace": "./update-local-embrace.sh",
+    "set-embrace-config": "./set-embrace-config.js"
   },
   "author": "",
   "license": "ISC",

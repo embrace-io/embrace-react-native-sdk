@@ -70,7 +70,7 @@ Make sure the test app has the latest locally built @embrace-io/* packages and t
 
 Set the test app up with a particular embrace config:
 ```bash
-./set-embrace-config.js <test-app> <config.json> --namespace=<namespace>
+npm run set-embrace-config <test-app> <dir/config.json> --namespace=<namespace>
 ```
 
 Depending on the testing being done `embrace-configs/` has a few different configuration options: 
@@ -94,9 +94,17 @@ npx expo run:android --variant release
 npx react-native run-android --mode release
 ```
 
-iOS can be built and run in release mode by doing:
+For iOS, before running it
 
 ```bash
+cd <test-app>/ios
+pod install
+```
+
+And then it can be built and run in release mode by doing:
+
+```bash
+cd ..
 # expo
 npx expo run:ios --configuration Release
 # react native
