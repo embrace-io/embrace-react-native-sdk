@@ -125,7 +125,7 @@ harness and pointing to the local node mock server.
 Run the integration tests specifying the package name of app being tested
 
 ```bash
-npm test -- --package=foobar --platform=android # ios, both
+npm run test-local -- --package=foobar --platform=android # ios, both
 ```
 
 ### CI
