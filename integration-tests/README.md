@@ -46,13 +46,13 @@ instead you can run a different version of the `create-expo` package.
 New test apps can be created from templates as needed. To create a new bare react native app run:
 
 ```bash
-npx @react-native-community/cli init <test-app> --package-name io.embrace.<test-app> --skip-git-init --skip-install --pm yarn --template $(pwd)/templates/react-native-test-app-template
+npx @react-native-community/cli init <testApp> --package-name io.embrace.<test-app> --skip-git-init --skip-install --pm yarn --template $(pwd)/templates/<template-name>
 ```
 
 To create a new test expo app run:
 
 ```bash
-npx create-expo --template ./templates/<template-app>/<artifact>.tgz
+npx create-expo
 ```
 
 For one-off testing the created app can just be removed afterward. If the app represents a particular setup that we
@@ -94,7 +94,7 @@ npx expo run:android --variant release
 npx react-native run-android --mode release
 ```
 
-For iOS, before running it
+iOS can be built and run in release mode by doing:
 
 ```bash
 cd <test-app>/ios

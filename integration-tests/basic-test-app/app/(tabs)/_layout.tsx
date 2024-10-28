@@ -18,6 +18,13 @@ export default function TabLayout() {
           tabBarAccessibilityLabel: "TRACER PROVIDER TESTING",
         }}
       />
+      <Tabs.Screen
+        name="react-native-otlp"
+        options={{
+          title: "EMBRACE OTLP",
+          tabBarAccessibilityLabel: "EMBRACE OTLP",
+        }}
+      />
     </Tabs>
   );
 }

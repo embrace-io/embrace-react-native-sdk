@@ -17,6 +17,8 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
+**/Pods
+**/ios/build
 
 # Gradle
 /build/
@@ -44,6 +46,7 @@ local.properties
 android/.classpath
 android/.settings
 android/.project
+
 # Node
 node_modules
 *.log
@@ -87,3 +90,10 @@ RNTester/build
 
 # VS Code
 .vscode/
+
+# Lerna
+.nx/
+nx.json
+
+# Yarn
+.yarn

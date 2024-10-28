@@ -13,7 +13,9 @@ Any new package under ./packages/ will get automatically picked up as a new Yarn
 - `package.json` with name, description, main, typings (other fields will be filled by yarn constraints, version is supplied by Lerna)
 - `tsconfig.json` that extends from the one at the root
 - `README.md`
-- `src/` and `__tests__/` folders to contain the code for the package
+- `src/` and `__tests__/` folders to contain the code for the package.
+
+If an item from the previous list is missing, the package won't compile.
 
 ## Adding dependencies
 
@@ -24,6 +26,10 @@ if they are only needed at the top-level, otherwise add them to just the individ
 are shared between multiple packages then they should be added to the Yarn constraints file to enforce a common version.
 This is also where we define common peerDependencies and enforce a common version. These are packages such as React Native
 that our packages require but that we leave to the customer to have defined as explicit dependencies.
+
+## Adding new Native Modules
+
+For adding new Native Modules please refer to our [Native Developing docs](./NATIVE_MODULE_DEVELOPING.md)
 
 ## Testing changes during development
 

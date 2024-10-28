@@ -51,7 +51,7 @@ jest.mock("promise/setimmediate/rejection-tracking", () => ({
   },
 }));
 
-describe("initialize", () => {
+describe("Android: initialize", () => {
   beforeEach(() => {
     jest.resetAllMocks();
 
@@ -133,5 +133,29 @@ describe("initialize", () => {
     );
     generatedGlobalErrorFunc(Error("Test"));
     expect(previousHandler).toHaveBeenCalled();
+  });
+});
+
+describe("iOS: initialize", () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+
+    mockStart.mockReturnValue(true);
+    ReactNativeMock.Platform.OS = "ios";
+  });
+
+  it("should not call regular `startNativeEmbraceSDK` if `startCustomExport` handler receives a proper callback", async () => {
+    const mockstartCustomExport = jest.fn(() => Promise.resolve(true));
+    const isStarted = await initialize({
+      sdkConfig: {
+        ios: {appId: "abc12"},
+        startCustomExport: mockstartCustomExport,
+      },
+    });
+
+    expect(mockstartCustomExport).toHaveBeenCalledTimes(1);
+    expect(mockstartCustomExport).toHaveBeenCalledWith({appId: "abc12"});
+    expect(mockStart).not.toHaveBeenCalled();
+    expect(isStarted).toBe(true);
   });
 });

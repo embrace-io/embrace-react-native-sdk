@@ -14,6 +14,8 @@ install! 'cocoapods',
   :deterministic_uuids => false
 
 prepare_react_native_project!
+# include the following when using 'EmbraceInternalGrpcSwift'
+# use_modular_headers!
 
 target 'basictestapp' do
   use_expo_modules!
