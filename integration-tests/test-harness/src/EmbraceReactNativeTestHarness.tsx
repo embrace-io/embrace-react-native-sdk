@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useRef} from "react";
 import {LogTestingScreen} from "./screens/LogTestingScreen";
 import {TracerProviderTestingScreen} from "./screens/TracerProviderTestingScreen";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
@@ -12,7 +13,8 @@ import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-nav
 const Tab = createBottomTabNavigator();
 
 export const EmbraceReactNativeTestHarness = () => {
-  const navigationContainerRef = useNavigationContainerRef();
+  const navigationContainer = useNavigationContainerRef();
+  const navigationContainerRef = useRef(navigationContainer);
   const {tracerProvider} = useEmbraceNativeTracerProvider({});
 
   return (
