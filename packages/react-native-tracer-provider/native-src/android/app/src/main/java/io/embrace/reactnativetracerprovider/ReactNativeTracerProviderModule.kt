@@ -66,8 +66,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
 
     private fun stringListFromReadableArray(array: ReadableArray): List<String> {
         val list: MutableList<String> = mutableListOf()
-
-        for (i in 0..<array.size()) {
+        for (i in 0..array.size() - 1) {
             list.add(array.getString(i))
         }
         return list
@@ -75,8 +74,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
 
     private fun doubleListFromReadableArray(array: ReadableArray): List<Double> {
         val list: MutableList<Double> = mutableListOf()
-
-        for (i in 0..<array.size()) {
+        for (i in 0..array.size() - 1) {
             list.add(array.getDouble(i))
         }
         return list
@@ -84,8 +82,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
 
     private fun booleanListFromReadableArray(array: ReadableArray): List<Boolean> {
         val list: MutableList<Boolean> = mutableListOf()
-
-        for (i in 0..<array.size()) {
+        for (i in 0..array.size() - 1) {
             list.add(array.getBoolean(i))
         }
         return list
@@ -266,7 +263,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         spanBuilder.setAllAttributes(attributesFromReadableMap(attributes))
 
         // Set links
-        for (i in 0..<links.size()) {
+        for (i in 0..links.size() - 1) {
             val link = links.getMap(i)
             val linkSpanContext = link.getMap(LINK_SPAN_CONTEXT_KEY) ?: continue
             val linkAttributes = link.getMap(LINK_ATTRIBUTES_KEY)
@@ -320,7 +317,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
     @ReactMethod
     fun addLinks(spanBridgeId: String, links: ReadableArray) {
         val span = getSpan(spanBridgeId) ?: return
-        for (i in 0..<links.size()) {
+        for (i in 0..links.size() - 1) {
             val link = links.getMap(i)
             val linkSpanContext = link.getMap(LINK_SPAN_CONTEXT_KEY) ?: continue
             val linkAttributes = link.getMap(LINK_ATTRIBUTES_KEY)
