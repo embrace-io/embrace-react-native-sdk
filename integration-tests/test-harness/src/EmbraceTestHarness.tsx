@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useMemo} from "react";
 import * as React from "react";
 import {initialize as initEmbrace} from "@embrace-io/react-native";
 import {Text, View} from "react-native";
@@ -6,25 +6,68 @@ import {styles} from "./helpers/styles";
 import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces/Config";
 import {EmbraceExpoTestHarness} from "./EmbraceExpoTestHarness";
 import {EmbraceReactNativeTestHarness} from "./EmbraceReactNativeTestHarness";
+import {initialize as initEmbraceWithCustomExporters} from "@embrace-io/react-native-otlp";
 
 type Props = {
   sdkConfig: SDKConfig;
   navigationStyle: "expo" | "react-native";
+  allowCustomExport?: boolean;
 };
 
-export const EmbraceTestHarness = ({sdkConfig, navigationStyle}: Props) => {
+const endpoint = "https://otlp-gateway-prod-us-east-0.grafana.net/otlp/v1";
+const token = "base64:instance:token";
+
+export const EmbraceTestHarness = ({
+  sdkConfig,
+  navigationStyle,
+  allowCustomExport = false,
+}: Props) => {
   const [embraceLoaded, setEmbraceLoaded] = useState(false);
+
+  const initWithCustomExporters = useMemo(
+    () =>
+      initEmbraceWithCustomExporters({
+        logExporter: {
+          endpoint: `${endpoint}/logs`,
+          headers: [
+            {
+              key: "Authorization",
+              token: `Basic ${token}`,
+            },
+          ],
+          timeout: 30000,
+        },
+        traceExporter: {
+          endpoint: `${endpoint}/traces`,
+          headers: [
+            {
+              key: "Authorization",
+              token: `Basic ${token}`,
+            },
+          ],
+          timeout: 30000,
+        },
+      }),
+    [],
+  );
+
   useEffect(() => {
     const init = async () => {
-      await initEmbrace({
+      const config = {
         sdkConfig,
-      });
+      };
+
+      if (allowCustomExport) {
+        config.sdkConfig.startCustomExport = initWithCustomExporters;
+      }
+
+      await initEmbrace(config);
 
       setEmbraceLoaded(true);
     };
 
     init();
-  }, []);
+  }, [allowCustomExport]);
 
   if (!embraceLoaded) {
     return (
