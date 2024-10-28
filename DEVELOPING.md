@@ -29,7 +29,7 @@ that our packages require but that we leave to the customer to have defined as e
 
 ## Adding new Native Modules
 
-For adding new Native Modules please refer to our (Native Developing docs)[NATIVE_MODULE_DEVELOPING.md]
+For adding new Native Modules please refer to our [Native Developing docs](./NATIVE_MODULE_DEVELOPING.md)
 
 ## Testing changes during development
 
