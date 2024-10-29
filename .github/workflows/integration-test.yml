@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
+        jdk-version: ["17"]
         # TODO add full set back after testing
         # test-app: [expo-rn74, rn75, rn74, rn73, rn72, rn71]
         test-app: [rn74]
@@ -37,6 +38,13 @@ jobs:
 
       - name: Install Root Node Modules
         run: yarn install
+
+      - name: Install JDK ${{ matrix.jdk-version }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: ${{ matrix.jdk-version }}
+        if: matrix.platform == 'android'
 
       - name: Build Test App
         working-directory: ./integration-tests
