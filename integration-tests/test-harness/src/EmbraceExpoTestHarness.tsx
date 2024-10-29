@@ -12,7 +12,6 @@ export const EmbraceExpoTestHarness = () => {
 
   return (
     <NavigationTracker
-      // @ts-ignore
       ref={expoNavigationRef}
       provider={tracerProvider || undefined}
       config={{
