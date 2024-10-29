@@ -11,7 +11,8 @@ jobs:
       matrix:
         node-version: [18.x]
         test-app: [expo-rn74, rn75, rn74, rn73, rn72, rn71]
-        platform: [android, ios]
+        # TODO add ios back after signing is figured out
+        platform: [android]
 
     runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
 
@@ -32,12 +33,10 @@ jobs:
         run: yarn install
 
       - name: Build Test App
-        run: ./build-test-app.sh ${{ matrix.test-app }} ${{ matrix.platform }} $namespace-uuid
+        run: ./build-test-app.sh ${{ matrix.test-app }} ${{ matrix.platform }} namespace-${{ matrix.test-app }}-${{ matrix.platform }}-${{ github.run_id }}
 
       - name: Run Integration Tests
         run:  npm run test-remote
         env:
-          BROWSERSTACK_USERNAME: TODO
-          BROWSERSTACK_ACCESS_KEY: TODO
           BROWSERSTACK_APP_NAME: ${{ matrix.test-app }}
           BROWSERSTACK_PLATFORM: ${{ matrix.platform }}
