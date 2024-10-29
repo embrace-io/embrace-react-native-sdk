@@ -1,17 +1,24 @@
 import * as React from "react";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
-import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
+import {NavigationTracker as NavigationOpenTelemetryTracker} from "@opentelemetry/instrumentation-react-native-navigation";
 import {
   Stack,
   useNavigationContainerRef as useExpoNavigationContainerRef,
 } from "expo-router";
+import EmbraceExpoNavigation from "./components/EmbraceExpoNavigation";
 
-export const EmbraceExpoTestHarness = () => {
+const EmbraceExpoTestHarness = ({
+  allowExternalTelemetryInstrumentation = true,
+}) => {
   const {tracerProvider} = useEmbraceNativeTracerProvider({});
   const expoNavigationRef = useExpoNavigationContainerRef();
 
+  if (!allowExternalTelemetryInstrumentation) {
+    return <EmbraceExpoNavigation />;
+  }
+
   return (
-    <NavigationTracker
+    <NavigationOpenTelemetryTracker
       // @ts-ignore
       ref={expoNavigationRef}
       provider={tracerProvider || undefined}
@@ -29,6 +36,8 @@ export const EmbraceExpoTestHarness = () => {
         */}
         <Stack.Screen name="(tabs)" options={{headerShown: false}} />
       </Stack>
-    </NavigationTracker>
+    </NavigationOpenTelemetryTracker>
   );
 };
+
+export {EmbraceExpoTestHarness};

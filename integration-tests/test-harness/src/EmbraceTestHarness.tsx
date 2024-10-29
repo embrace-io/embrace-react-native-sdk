@@ -12,62 +12,67 @@ type Props = {
   sdkConfig: SDKConfig;
   navigationStyle: "expo" | "react-native";
   allowCustomExport?: boolean;
+  allowExternalTelemetryInstrumentation?: boolean;
 };
 
-const endpoint = "https://otlp-gateway-prod-us-east-0.grafana.net/otlp/v1";
-const token = "base64:instance:token";
+const ENDPOINT = "https://otlp-gateway-prod-us-east-0.grafana.net/otlp/v1";
+const GRAFANA_TOKEN = "base64:instance:token";
+
+const OTLP_CUSTOM_CONFIG = {
+  logExporter: {
+    endpoint: `${ENDPOINT}/logs`,
+    headers: [
+      {
+        key: "Authorization",
+        token: `Basic ${GRAFANA_TOKEN}`,
+      },
+    ],
+    timeout: 30000,
+  },
+  traceExporter: {
+    endpoint: `${ENDPOINT}/traces`,
+    headers: [
+      {
+        key: "Authorization",
+        token: `Basic ${GRAFANA_TOKEN}`,
+      },
+    ],
+  },
+};
 
 export const EmbraceTestHarness = ({
   sdkConfig,
   navigationStyle,
   allowCustomExport = false,
+  allowExternalTelemetryInstrumentation = true,
 }: Props) => {
   const [embraceLoaded, setEmbraceLoaded] = useState(false);
 
-  const initWithCustomExporters = useMemo(
-    () =>
-      initEmbraceWithCustomExporters({
-        logExporter: {
-          endpoint: `${endpoint}/logs`,
-          headers: [
-            {
-              key: "Authorization",
-              token: `Basic ${token}`,
-            },
-          ],
-          timeout: 30000,
-        },
-        traceExporter: {
-          endpoint: `${endpoint}/traces`,
-          headers: [
-            {
-              key: "Authorization",
-              token: `Basic ${token}`,
-            },
-          ],
-          timeout: 30000,
-        },
-      }),
+  const startWithCustomExporters = useMemo(
+    // returns a callback function that initializes Embrace with custom exporters
+    () => initEmbraceWithCustomExporters(OTLP_CUSTOM_CONFIG),
     [],
   );
 
   useEffect(() => {
-    const init = async () => {
-      const config = {
-        sdkConfig,
+    if (!embraceLoaded) {
+      const init = async () => {
+        const config = {
+          sdkConfig,
+        };
+
+        if (allowCustomExport) {
+          config.sdkConfig.startCustomExport = startWithCustomExporters;
+        }
+
+        await initEmbrace(config);
+
+        setEmbraceLoaded(true);
       };
 
-      if (allowCustomExport) {
-        config.sdkConfig.startCustomExport = initWithCustomExporters;
-      }
-
-      await initEmbrace(config);
-
-      setEmbraceLoaded(true);
-    };
-
-    init();
-  }, [allowCustomExport]);
+      init();
+    }
+  }, [allowCustomExport, embraceLoaded]);
 
   if (!embraceLoaded) {
     return (
@@ -78,8 +83,20 @@ export const EmbraceTestHarness = ({
   }
 
   if (navigationStyle === "expo") {
-    return <EmbraceExpoTestHarness />;
+    return (
+      <EmbraceExpoTestHarness
+        allowExternalTelemetryInstrumentation={
+          allowExternalTelemetryInstrumentation
+        }
+      />
+    );
   } else {
-    return <EmbraceReactNativeTestHarness />;
+    return (
+      <EmbraceReactNativeTestHarness
+        allowExternalTelemetryInstrumentation={
+          allowExternalTelemetryInstrumentation
+        }
+      />
+    );
   }
 };

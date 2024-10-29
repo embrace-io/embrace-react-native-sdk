@@ -2,6 +2,7 @@ PODS:
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
+  - EmbraceInternalSwiftLog (1.4.4-internal)
   - EmbraceIO (6.4.2):
     - EmbraceIO/EmbraceIO (= 6.4.2)
   - EmbraceIO/EmbraceCaptureService (6.4.2):
@@ -472,6 +473,12 @@ PODS:
   - RNEmbrace (5.0.1):
     - EmbraceIO (= 6.4.2)
     - React-Core
+  - RNEmbraceOTLP (5.0.1):
+    - EmbraceInternalSwiftLog (= 1.4.4-internal)
+    - EmbraceIO (= 6.4.2)
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
+    - SwiftProtobuf (= 1.20.2)
   - RNEmbraceTracerProvider (5.0.1):
     - EmbraceIO (= 6.4.2)
     - RCT-Folly (= 2021.07.22.00)
@@ -481,6 +488,7 @@ PODS:
     - React-Core
     - React-RCTImage
   - SocketRocket (0.6.1)
+  - SwiftProtobuf (1.20.2)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -546,6 +554,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNEmbrace (from `../node_modules/@embrace-io/react-native`)"
+  - "RNEmbraceOTLP (from `../node_modules/@embrace-io/react-native-otlp`)"
   - "RNEmbraceTracerProvider (from `../node_modules/@embrace-io/react-native-tracer-provider`)"
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -553,6 +562,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - CocoaAsyncSocket
+    - EmbraceInternalSwiftLog
     - EmbraceIO
     - Flipper
     - Flipper-Boost-iOSX
@@ -567,6 +577,7 @@ SPEC REPOS:
     - libevent
     - OpenSSL-Universal
     - SocketRocket
+    - SwiftProtobuf
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -640,6 +651,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNEmbrace:
     :path: "../node_modules/@embrace-io/react-native"
+  RNEmbraceOTLP:
+    :path: "../node_modules/@embrace-io/react-native-otlp"
   RNEmbraceTracerProvider:
     :path: "../node_modules/@embrace-io/react-native-tracer-provider"
   RNScreens:
@@ -651,6 +664,7 @@ SPEC CHECKSUMS:
   boost: 7dcd2de282d72e344012f7d6564d024930a6a440
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  EmbraceInternalSwiftLog: a7b20002f2ca34400678012c3c3e8f7d51da5c79
   EmbraceIO: ebbe930c0d46039a533979bf98f8cef1c1a347f1
   FBLazyVector: 038aa5ab388c9eec7a6a65b71596afd9ff99c949
   FBReactNativeSpec: 25c3e937fdcfe4d7c898449051e1f30b93cc99ce
@@ -697,9 +711,11 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: b9be1f58ce9a8b849cb8a37dd998f04ca97e3619
   ReactCommon: bb3d7051c9b8c58ee34f9af76f883bd0fd7c9c31
   RNEmbrace: 62fa472d78c9e0e1fcbdbb3281c85b20220cc837
+  RNEmbraceOTLP: 2795225e48b37940d209f4100013c507faaf6655
   RNEmbraceTracerProvider: daef501fea4427045466ba5673f7b146700fd411
   RNScreens: 50ad6e3dbea9023272b3aa753e3ee2720b0c9b8f
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  SwiftProtobuf: 9f458aaa7844a2fc0b910053e66578bc4e2da9c1
   Yoga: d4f5b037672e6b68ba484c7cf7fe6790122df792
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

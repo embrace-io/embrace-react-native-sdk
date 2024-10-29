@@ -1,6 +1,7 @@
 package io.embrace.ensemble.navigation;
 
 import android.app.Application;
+import io.embrace.android.embracesdk.Embrace;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -52,6 +53,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE);
     SoLoader.init(this, /* native exopackage */ false);
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.

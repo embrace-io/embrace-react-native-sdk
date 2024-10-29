@@ -16,6 +16,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.4.2")
+        classpath "io.embrace:embrace-swazzler:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}"
         classpath("com.facebook.react:react-native-gradle-plugin")
     }
 }

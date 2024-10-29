@@ -12,8 +12,11 @@
   },
   "dependencies": {
     "@embrace-io/react-native": "file:../artifacts/embrace-io-react-native-local.tgz",
+    "@embrace-io/react-native-otlp": "file:../artifacts/embrace-io-react-native-otlp-local.tgz",
+    "@embrace-io/react-native-spans": "file:../artifacts/embrace-io-react-native-spans-local.tgz",
     "@embrace-io/react-native-test-harness": "file:../artifacts/embrace-io-react-native-test-harness-local.tgz",
     "@embrace-io/react-native-tracer-provider": "file:../artifacts/embrace-io-react-native-tracer-provider-local.tgz",
+    "@embrace-io/react-navigation": "file:../artifacts/embrace-io-react-navigation-local.tgz",
     "@opentelemetry/instrumentation-react-native-navigation": "file:../artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",

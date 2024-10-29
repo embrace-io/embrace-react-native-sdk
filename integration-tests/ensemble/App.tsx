@@ -4,7 +4,11 @@ import sdkConfig from './embrace-sdk-config.json';
 
 const App = () => {
   return (
-    <EmbraceTestHarness navigationStyle="react-native" sdkConfig={sdkConfig} />
+    <EmbraceTestHarness
+      navigationStyle="react-native"
+      sdkConfig={sdkConfig}
+      allowExternalTelemetryInstrumentation={false}
+    />
   );
 };
 

@@ -9,13 +9,21 @@ import {
 } from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
+import EmbraceNavigation from "./components/EmbraceNavigation";
 
 const Tab = createBottomTabNavigator();
 
-export const EmbraceReactNativeTestHarness = () => {
+const EmbraceReactNativeTestHarness = ({
+  // @ts-ignore
+  allowExternalTelemetryInstrumentation,
+}) => {
   const navigationContainer = useNavigationContainerRef();
   const navigationContainerRef = useRef(navigationContainer);
   const {tracerProvider} = useEmbraceNativeTracerProvider({});
+
+  if (!allowExternalTelemetryInstrumentation) {
+    return <EmbraceNavigation />;
+  }
 
   return (
     <NavigationContainer ref={navigationContainerRef}>
@@ -53,3 +61,5 @@ export const EmbraceReactNativeTestHarness = () => {
     </NavigationContainer>
   );
 };
+
+export {EmbraceReactNativeTestHarness};

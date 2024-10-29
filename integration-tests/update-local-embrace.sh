@@ -51,9 +51,9 @@ if [ "$skip_sdk_packages" = false ]; then
   pushd ..
   npx lerna run build --scope=@embrace-io/react-native
   npx lerna run build --scope=@embrace-io/react-native-tracer-provider
-
   npx lerna run build --scope=@embrace-io/react-native-otlp
   npx lerna run build --scope=@embrace-io/react-native-spans
+  npx lerna run build --scope=@embrace-io/react-navigation
   popd
 
 
@@ -62,6 +62,7 @@ if [ "$skip_sdk_packages" = false ]; then
   ./pack.sh ../packages/react-native-tracer-provider/ artifacts/embrace-io-react-native-tracer-provider-local.tgz
   ./pack.sh ../packages/react-native-otlp/ artifacts/embrace-io-react-native-otlp-local.tgz
   ./pack.sh ../packages/spans/ artifacts/embrace-io-react-native-spans-local.tgz
+  ./pack.sh ../packages/react-navigation/ artifacts/embrace-io-react-navigation-local.tgz
 
   # update the test app with the sdk packages
   # NOTE: opentelemetry-instrumentation-react-native-navigation comes from outside this repo so we include it as
@@ -71,6 +72,7 @@ if [ "$skip_sdk_packages" = false ]; then
     ./artifacts/embrace-io-react-native-tracer-provider-local.tgz \
     ./artifacts/embrace-io-react-native-otlp-local.tgz  \
     ./artifacts/embrace-io-react-native-spans-local.tgz \
+    ./artifacts/embrace-io-react-navigation-local.tgz \
     ./artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz
 fi
 
