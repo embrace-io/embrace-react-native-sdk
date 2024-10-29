@@ -1,0 +1,42 @@
+name: Integration Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: ['release/**']
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        test-app: [expo-rn74, rn75, rn74, rn73, rn72, rn71]
+        platform: [android, ios]
+
+    runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Node (${{ matrix.node-version }})
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Enables corepack
+        run: corepack enable
+
+      - name: Install Root Node Modules
+        run: yarn install
+
+      - name: Build Test App
+        run: ./build-test-app.sh ${{ matrix.test-app }} ${{ matrix.platform }} $namespace-uuid
+
+      - name: Run Integration Tests
+        run:  npm run test-remote
+        env:
+          BROWSERSTACK_USERNAME: TODO
+          BROWSERSTACK_ACCESS_KEY: TODO
+          BROWSERSTACK_APP_NAME: ${{ matrix.test-app }}
+          BROWSERSTACK_PLATFORM: ${{ matrix.platform }}

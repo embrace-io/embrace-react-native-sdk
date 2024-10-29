@@ -37,10 +37,6 @@ if (options.platform === "android" || options.platform === "both") {
     "appium:appActivity": ".MainActivity",
     "appium:uiautomator2ServerLaunchTimeout": 60_000,
     "appium:noReset": true,
-
-    //  TODO: for CI/CD we probably want to point to the prebuilt release
-    //  APK rather than having to have the app running in an emulator beforehand, e.g.
-    //  "appium:app": "./basic-test-app/android/app/build/outputs/apk/debug/app-debug.apk",
   });
 }
 
@@ -49,7 +45,7 @@ if (options.platform === "ios" || options.platform === "both") {
     // capabilities for local Appium web tests on an iOS Emulator
     platformName: "iOS",
     "appium:automationName": "XCUITest",
-    "appium:udid": firstAvailableDevice(), // TODO will need to change for CI/CD
+    "appium:udid": firstAvailableDevice(),
     "appium:appPackage": options.package,
   });
 }
@@ -106,7 +102,6 @@ export const config: Options.Testrunner = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  // TODO increase this when hooking up to CI/CD
   maxInstances: 1,
   //
   // If you have trouble getting all important capabilities together, check out the

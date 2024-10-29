@@ -25,12 +25,39 @@ const iosCapabilities = [
   },
   {
     "bstack:options": {
+      deviceName: "iPhone 14",
+      platformVersion: "16",
+      platformName: "ios",
+    },
+  },
+  {
+    "bstack:options": {
+      deviceName: "iPhone 13",
+      platformVersion: "15",
+      platformName: "ios",
+    },
+  },
+  {
+    "bstack:options": {
       deviceName: "iPhone 11",
-      platformVersion: "13.0",
+      platformVersion: "14",
       platformName: "ios",
     },
   },
 ];
+
+const appName = process.env.BROWSERSTACK_APP_NAME;
+const platform = process.env.BROWSERSTACK_PLATFORM;
+let appPath = process.env.BROWSERSTACK_APP_PATH;
+if (!appPath) {
+  // Default to what is produced when running `./build-test-app.sh`
+  if (platform === "android") {
+    appPath = `${appName}.apk`;
+  } else if (platform === "ios") {
+    const iosName = appName.replace("-", "");
+    appPath = `${appName}-ios-export/${iosName}.ipa`;
+  }
+}
 
 exports.config = {
   user: process.env.BROWSERSTACK_USERNAME,
@@ -43,32 +70,26 @@ exports.config = {
       "browserstack",
       {
         buildIdentifier: "${DATE_TIME}",
-        app: process.env.BROWSERSTACK_APP_PATH,
+        app: appPath,
       },
     ],
   ],
 
-  capabilities:
-    process.env.BROWSERSTACK_PLATFORM === "ios"
-      ? iosCapabilities
-      : androidCapabilities,
+  capabilities: platform === "ios" ? iosCapabilities : androidCapabilities,
 
   commonCapabilities: {
     "bstack:options": {
       projectName: "Embrace React Native SDK",
-      buildName: `embrace-rn-sdk-${process.env.BROWSERSTACK_APP_NAME}-${process.env.BROWSERSTACK_PLATFORM}`,
-      testObservability: true,
+      buildName: `embrace-rn-sdk-${appName}-${platform}`,
       debug: true,
       networkLogs: true,
-      percy: false,
-      percyCaptureMode: "auto",
     },
   },
 
   maxInstances: 10,
 
   updateJob: false,
-  specs: ["./specs/simple.test.ts"],
+  specs: ["./specs/simple.test.ts"], // TODO EMBR-4922 point to full test suite
   exclude: [],
 
   logLevel: "info",

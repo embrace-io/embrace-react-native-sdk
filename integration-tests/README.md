@@ -128,11 +128,28 @@ Run the integration tests specifying the package name of app being tested
 npm run test-local -- --package=foobar --platform=android # ios, both
 ```
 
-### CI
+### Running in CI
 
-TODO for the moment the utility here is to be able to run tests locally during development, as a next task need to hook this up to
-CI tools to verify a passing suite for new releases. Likely this means updating or creating a new `wdio.conf.ts` that
-can be configured to point to a remote environment. See what capabilities are available for that [here](https://appium.io/docs/en/2.1/guides/caps/)
+The [integration testing workflow](../.github/workflows/integration-test.yml) will trigger automatically on any PRs
+opened for `release/**` branches. The workflow will build .apk and .ipa packages for apps created from a set of the
+test app templates and then upload them to Browserstack to run the suite of test specs on across a range of devices
+for both iOS and Android. The workflow can also be triggered manually from (TODO). 
+
+You can run the same commands the workflow uses from your machine to debug issues with Browserstack. First build an
+app bundle to use for the test:
+
+```bash
+./build-test-app.sh expo-rn74 android some-namespace
+```
+
+Then run the tests setting the required environment variables:
+
+```bash
+BROWSERSTACK_USERNAME=user BROWSERSTACK_ACCESS_KEY=key BROWSERSTACK_APP_NAME=expo-rn74 BROWSERSTACK_PLATFORM=android npm run test-remote
+```
+
+The values for `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` can be found for your own user on this
+[BrowserStack settings page](https://www.browserstack.com/accounts/settings/product) under "Local Testing".
 
 ### Adding new specs
 

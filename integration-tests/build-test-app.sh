@@ -33,20 +33,20 @@ fi
 
 template_path="templates/$name-template"
 echo "Creating a test app from $template_path"
-#if [ "$is_expo" = true ]; then
-#  artifact=$(ls $template_path/*.tgz)
-#  echo "Running: npx create-expo -y --no-install --template ./$artifact $name"
-#  npx create-expo -y --no-install --template ./$artifact $name
-#  # For react native templates this step is handled by the template post-init script
-#  ./update-local-embrace.sh $name
-#else
-#  echo "Running: npx @react-native-community/cli init $name --package-name io.embrace.$name --skip-git-init --skip-install --pm yarn --template $(pwd)/$template_path"
-#  npx @react-native-community/cli init $name --package-name io.embrace.$name --skip-git-init --skip-install --pm yarn \
-#    --template $(pwd)/$template_path
-#fi
+if [ "$is_expo" = true ]; then
+  artifact=$(ls $template_path/*.tgz)
+  echo "Running: npx create-expo -y --no-install --template ./$artifact $name"
+  npx create-expo -y --no-install --template ./$artifact $name
+  # For react native templates this step is handled by the template post-init script
+  ./update-local-embrace.sh $name
+else
+  echo "Running: npx @react-native-community/cli init $name --package-name io.embrace.$name --skip-git-init --skip-install --pm yarn --template $(pwd)/$template_path"
+  npx @react-native-community/cli init $name --package-name io.embrace.$name --skip-git-init --skip-install --pm yarn \
+    --template $(pwd)/$template_path
+fi
 
-#echo "Updating the Embrace config for $name"
-#./set-embrace-config.js $name embrace-configs/remote-mock-api.json --namespace=$namespace
+echo "Updating the Embrace config for $name"
+./set-embrace-config.js $name embrace-configs/remote-mock-api.json --namespace=$namespace
 
 if [ "$platform" == "android" ]; then
   echo "Building $name.apk"
@@ -56,15 +56,21 @@ if [ "$platform" == "android" ]; then
 
   mv $name/android/app/build/outputs/apk/release/app-release.apk $name.apk
 else
-  echo "Install pods for $name"
+  echo "Installing pods for $name"
   pushd $name/ios
   pod install
   popd
 
-  echo "Building the .ipa for $name"
-  if [ "$is_expo" = true ]; then
-    echo "build expo ios"
-  else
-    echo "build react native ios"
-  fi
+  ios_name="${name/-/}"
+
+  # TODO, need to set development team and support signing before running this command
+  echo "Building $name.xcarchive"
+  xcodebuild archive -workspace $name/ios/$ios_name.xcworkspace \
+  -scheme $ios_name -configuration Release \
+  -sdk iphoneos -archivePath $name.xcarchive
+
+  echo "Building $name.ipa"
+  xcodebuild -exportArchive -archivePath $name.xcarchive \
+  -exportOptionsPlist ExportOptions.plist \
+  -exportPath $name-ios-export
 fi
