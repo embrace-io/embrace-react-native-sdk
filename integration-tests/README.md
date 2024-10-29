@@ -52,7 +52,13 @@ npx @react-native-community/cli init <testApp> --package-name io.embrace.<test-a
 To create a new test expo app run:
 
 ```bash
-npx create-expo --template ./templates/<template-app>/<artifact>.tgz
+npx create-expo <testApp> --no-install  --template ./templates/<template-app>/<artifact>.tgz
+```
+
+Complete the installation of npm packages in the app with:
+
+```bash
+./update-local-embrace.sh <test-app>
 ```
 
 For one-off testing the created app can just be removed afterward. If the app represents a particular setup that we

@@ -35,15 +35,16 @@ template_path="templates/$name-template"
 echo "Creating a test app from $template_path"
 if [ "$is_expo" = true ]; then
   artifact=$(ls $template_path/*.tgz)
-  echo "Running: npx create-expo -y --no-install --template ./$artifact $name"
-  npx create-expo -y --no-install --template ./$artifact $name
-  # For react native templates this step is handled by the template post-init script
-  ./update-local-embrace.sh $name
+  echo "Running: npx create-expo $name -y --no-install --template ./$artifact"
+  npx create-expo $name -y --no-install --template ./$artifact
 else
   echo "Running: npx @react-native-community/cli init $name --package-name io.embrace.$name --skip-git-init --skip-install --pm yarn --template $(pwd)/$template_path"
   npx @react-native-community/cli init $name --package-name io.embrace.$name --skip-git-init --skip-install --pm yarn \
     --template $(pwd)/$template_path
 fi
+
+echo "Build and install local Embrace packages in $name"
+./update-local-embrace.sh $name
 
 echo "Updating the Embrace config for $name"
 ./set-embrace-config.js $name embrace-configs/remote-mock-api.json --namespace=$namespace
