@@ -131,18 +131,18 @@ npm run test-local -- --package=foobar --platform=android # ios, both
 ### Running in CI
 
 The [integration testing workflow](../.github/workflows/integration-test.yml) will trigger automatically on any PRs
-opened for `release/**` branches. The workflow will build .apk and .ipa packages for apps created from a set of the
-test app templates and then upload them to Browserstack to run the suite of test specs on across a range of devices
-for both iOS and Android. The workflow can also be triggered manually from (TODO). 
+opened for `release/**` branches. The workflow will build .apk and .ipa bundles for apps created from a set of the
+test app templates and then upload them to Browserstack to run the suite of test specs across a range of devices for
+both iOS and Android. The workflow can also be triggered manually from (TODO). 
 
 You can run the same commands the workflow uses from your machine to debug issues with Browserstack. First build an
 app bundle to use for the test:
 
 ```bash
-./build-test-app.sh expo-rn74 android some-namespace
+./build-test-app.sh expo-rn74 android some-namespace-id
 ```
 
-Then run the tests setting the required environment variables:
+Then run the tests, make sure to set the required environment variables:
 
 ```bash
 BROWSERSTACK_USERNAME=user BROWSERSTACK_ACCESS_KEY=key BROWSERSTACK_APP_NAME=expo-rn74 BROWSERSTACK_PLATFORM=android npm run test-remote

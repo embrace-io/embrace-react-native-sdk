@@ -9,6 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
+        node-version: [18.x]
         test-app: [expo-rn74, rn75, rn74, rn73, rn72, rn71]
         platform: [android, ios]
 

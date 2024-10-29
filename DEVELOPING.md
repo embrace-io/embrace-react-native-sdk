@@ -59,7 +59,7 @@ unreleased changes on `main` and a patch release will be cut from that new branc
 ## Releasing
 
 1. Create a `release/` branch off of main and push it to origin
-2. Verify that the integration test run on Browserstack succeeded for the release branch
+2. Verify that the integration test run on [BrowserStack](https://app-automate.browserstack.com/dashboard/v2/builds) succeeded for the release branch
 3. Make sure you are logged into the npmjs registry (`npm login`)
 4. Release to npm with `yarn publish-modules`, you will be prompted to choose the version number to update to
 5. Check https://www.npmjs.com/org/embrace-io, the latest versions should have been published

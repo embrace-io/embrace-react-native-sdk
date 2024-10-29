@@ -1,3 +1,6 @@
+// For capabilities choose a device that is close to the minimum required OS we support on both Android and iOS
+// as well as one that represents the latest supported OS
+
 const androidCapabilities = [
   {
     "bstack:options": {
@@ -30,27 +33,13 @@ const iosCapabilities = [
       platformName: "ios",
     },
   },
-  {
-    "bstack:options": {
-      deviceName: "iPhone 13",
-      platformVersion: "15",
-      platformName: "ios",
-    },
-  },
-  {
-    "bstack:options": {
-      deviceName: "iPhone 11",
-      platformVersion: "14",
-      platformName: "ios",
-    },
-  },
 ];
 
 const appName = process.env.BROWSERSTACK_APP_NAME;
 const platform = process.env.BROWSERSTACK_PLATFORM;
 let appPath = process.env.BROWSERSTACK_APP_PATH;
 if (!appPath) {
-  // Default to what is produced when running `./build-test-app.sh`
+  // Default to the path that is written to when running `./build-test-app.sh`
   if (platform === "android") {
     appPath = `${appName}.apk`;
   } else if (platform === "ios") {
