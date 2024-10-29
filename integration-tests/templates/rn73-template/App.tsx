@@ -7,7 +7,7 @@ function App(): React.JSX.Element {
     <EmbraceTestHarness
       navigationStyle="react-native"
       sdkConfig={sdkConfig}
-      allowCustomExport={true}
+      allowCustomExport={false}
     />
   );
 }

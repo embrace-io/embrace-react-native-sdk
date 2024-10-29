@@ -8,7 +8,7 @@ export default function RootLayout() {
     <EmbraceTestHarness
       navigationStyle="expo"
       sdkConfig={sdkConfig}
-      allowCustomExport={true}
+      allowCustomExport={false}
     />
   );
 }
