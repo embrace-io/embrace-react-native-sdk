@@ -1,3 +1,5 @@
+// npx @react-native-community/cli init RNEmbraceOTLP --pm yarn --version 0.75.4 --package-name io.embrace.rnembraceotlp
+
 ## React Native OTLP
 
 - Brief explanation TBD
