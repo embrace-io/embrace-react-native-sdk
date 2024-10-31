@@ -13,23 +13,26 @@
   "typings": "lib/index.d.ts",
   "peerDependencies": {
     "@embrace-io/react-native": "*",
+    "@embrace-io/react-native-otlp": "*",
     "@embrace-io/react-native-spans": "*",
     "@embrace-io/react-native-tracer-provider": "*",
-    "@embrace-io/react-native-otlp": "*",
     "@opentelemetry/instrumentation-react-native-navigation": "*",
     "expo-router": "*",
     "react": "*",
     "react-native": "*"
   },
   "devDependencies": {
-    "@embrace-io/react-native": "file:../artifacts/embrace-io-react-native-local.tgz",
-    "@embrace-io/react-native-spans": "file:../artifacts/embrace-io-react-native-spans-local.tgz",
+    "@embrace-io/react-native": "5.0.2",
     "@embrace-io/react-native-otlp": "file:../artifacts/embrace-io-react-native-otlp-local.tgz",
-    "@embrace-io/react-native-tracer-provider": "file:../artifacts/embrace-io-react-native-tracer-provider-local.tgz",
+    "@embrace-io/react-native-spans": "5.0.2",
+    "@embrace-io/react-native-tracer-provider": "5.0.2",
     "@opentelemetry/instrumentation-react-native-navigation": "file:../artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz",
     "expo-router": "~3.5.14",
     "react": "18.2.0",
     "react-native": "0.74.1",
     "typescript": "~5.3.3"
+  },
+  "dependencies": {
+    "@embrace-io/react-native-test-harness": "file:../artifacts/embrace-io-react-native-test-harness-local.tgz"
   }
 }

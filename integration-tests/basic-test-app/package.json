@@ -1,6 +1,7 @@
 {
   "name": "basic-test-app",
   "main": "expo-router/entry",
+  "version": "0.0.1",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -14,11 +15,11 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@embrace-io/react-native": "file:../artifacts/embrace-io-react-native-local.tgz",
+    "@embrace-io/react-native": "5.0.2",
     "@embrace-io/react-native-otlp": "file:../artifacts/embrace-io-react-native-otlp-local.tgz",
-    "@embrace-io/react-native-spans": "file:../artifacts/embrace-io-react-native-spans-local.tgz",
+    "@embrace-io/react-native-spans": "5.0.2",
     "@embrace-io/react-native-test-harness": "file:../artifacts/embrace-io-react-native-test-harness-local.tgz",
-    "@embrace-io/react-native-tracer-provider": "file:../artifacts/embrace-io-react-native-tracer-provider-local.tgz",
+    "@embrace-io/react-native-tracer-provider": "5.0.2",
     "@expo/vector-icons": "^14.0.0",
     "@opentelemetry/instrumentation-react-native-navigation": "file:../artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz",
     "@react-navigation/native": "^6.0.2",
