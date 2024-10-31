@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native-orientation-change-tracker",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Allows tracking the App orientation using the Embrace SDK",
   "peerDependencies": {
     "react-native": ">=0.56.0"
