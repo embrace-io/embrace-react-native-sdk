@@ -66,7 +66,7 @@ const handleError = async (error: Error, callback: () => void) => {
 const isObjectNonEmpty = (obj?: object): boolean =>
   Object.keys(obj || {}).length > 0;
 
-const initialize = async ({
+export const initialize = async ({
   patch,
   sdkConfig,
 }: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
@@ -81,19 +81,11 @@ const initialize = async ({
       return createFalsePromise();
     }
 
-    const {startCustomExport: customStartEmbraceSDK, ...originalSdkConfig} =
-      sdkConfig || {};
+    const result = await NativeModules.EmbraceManager.startNativeEmbraceSDK(
+      (Platform.OS === "ios" && sdkConfig?.ios) || {},
+    );
 
-    const startSdkConfig =
-      (Platform.OS === "ios" && originalSdkConfig?.ios) || {};
-
-    const isStarted = customStartEmbraceSDK
-      ? await customStartEmbraceSDK(startSdkConfig)
-      : await NativeModules.EmbraceManager.startNativeEmbraceSDK(
-          startSdkConfig,
-        );
-
-    if (!isStarted) {
+    if (!result) {
       console.warn(
         "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
@@ -398,5 +390,5 @@ const createTruePromise = (): Promise<boolean> => {
   });
 };
 
-export {initialize, WARNING, ERROR, INFO};
+export {WARNING, ERROR, INFO};
 export {type Properties};

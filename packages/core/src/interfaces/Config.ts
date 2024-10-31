@@ -1,7 +1,12 @@
 /**
  * Defines the SDK configuration that can be passed into `initialize`
  */
-
-import {SDKConfig, IOSConfig} from "./common/index";
-
-export {SDKConfig, IOSConfig};
+export interface SDKConfig {
+  ios?: {
+    appId: string;
+    appGroupId?: string;
+    disableCrashReporter?: boolean;
+    disableAutomaticViewCapture?: boolean;
+    endpointBaseUrl?: string;
+  };
+}
