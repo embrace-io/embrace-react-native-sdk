@@ -1,7 +1,5 @@
 package io.embrace.rnembraceotlp
 
-import android.util.Log
-
 import io.embrace.android.embracesdk.Embrace
 
 import com.facebook.react.bridge.NativeModule
@@ -15,6 +13,6 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
     override fun getName() = "RNEmbraceOTLP"
 
     @ReactMethod fun startNativeEmbraceSDK() {
-        Log.d("RNEmbraceOTLP -> startNativeEmbraceSDK method")
+        // ey
     }
 }
