@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-navigation",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "This is used to track React Native screens with the Embrace SDK",
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
@@ -45,7 +45,7 @@
     "typescript": "^5.6.3"
   },
   "embrace": {
-    "iosVersion": "6.4.2",
+    "iosVersion": "6.5.1",
     "androidVersion": "6.13.0"
   }
 }
