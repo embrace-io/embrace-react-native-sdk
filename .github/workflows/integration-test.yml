@@ -17,9 +17,9 @@ jobs:
         # TODO add full set back after testing
         # test-app: [expo-rn74, rn75, rn74, rn73, rn72, rn71]
         test-app: [rn74]
-        # TODO add ios back after signing is figured out
+        # TODO
         # platform: [android, ios]
-        platform: [android]
+        platform: [ios]
 
     runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
 
@@ -50,10 +50,9 @@ jobs:
         working-directory: ./integration-tests
         run: npm install
 
-# TODO
-#      - name: Build Test App
-#        working-directory: ./integration-tests
-#        run: ./build-test-app.sh ${{ matrix.test-app }} ${{ matrix.platform }} namespace-${{ matrix.test-app }}-${{ matrix.platform }}-${{ github.run_id }}
+      - name: Build Test App
+        working-directory: ./integration-tests
+        run: ./build-test-app.sh ${{ matrix.test-app }} ${{ matrix.platform }} namespace-${{ matrix.test-app }}-${{ matrix.platform }}-${{ github.run_id }}
 
       - name: Run Integration Tests
         working-directory: ./integration-tests

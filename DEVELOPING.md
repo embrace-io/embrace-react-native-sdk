@@ -65,7 +65,7 @@ unreleased changes on `main` and a patch release will be cut from that new branc
 5. Check https://www.npmjs.com/org/embrace-io, the latest versions should have been published
 6. Check https://github.com/embrace-io/embrace-react-native-sdk/tags, a vX.X.X tag should have been pushed
 7. Create a PR from your release branch against `main` to merge all the version updates
-8. Run an example app and point to the latest released packages to confirm basic behaviour
+8. Use `integration-tests/update-embrace-package.sh <testApp> --version=<version>` to point a test app to the latest released packages to confirm basic behaviour
 9. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
 
 NOTE: If you make a mistake while publishing you can remove the specific version w/ `npm unpublish <package-name>@<version>`, see [Unpublishing a single version of a package](https://docs.npmjs.com/unpublishing-packages-from-the-registry#unpublishing-a-single-version-of-a-package)
