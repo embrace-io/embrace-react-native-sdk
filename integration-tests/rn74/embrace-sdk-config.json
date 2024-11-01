@@ -1,0 +1,7 @@
+{
+  "ios": {
+    "appId": "abcdf",
+    "endpointBaseUrl": "https://mock-api.emb-eng.com/namespace/<namespace>/api/",
+    "disableAutomaticViewCapture": true
+  }
+}

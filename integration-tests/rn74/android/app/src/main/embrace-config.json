@@ -1,0 +1,15 @@
+{
+  "app_id": "abcdf",
+  "api_token": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "sdk_config": {
+    "base_urls": {
+      "config": "https://mock-api.emb-eng.com/namespace/<namespace>/api/",
+      "data": "https://mock-api.emb-eng.com/namespace/<namespace>/api/",
+      "data_dev": "https://mock-api.emb-eng.com/namespace/<namespace>/api/",
+      "images": "https://mock-api.emb-eng.com/namespace/<namespace>/api/"
+    },
+    "view_config": {
+      "enable_automatic_activity_capture": false
+    }
+  }
+}

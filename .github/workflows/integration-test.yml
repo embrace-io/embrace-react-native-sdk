@@ -62,3 +62,4 @@ jobs:
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           BROWSERSTACK_APP_NAME: ${{ matrix.test-app }}
           BROWSERSTACK_PLATFORM: ${{ matrix.platform }}
+          CI_RUN_ID: ${{ github.run_id }}

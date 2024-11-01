@@ -28,6 +28,7 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.11.2",
     "typescript": "^5.4.5",
-    "webdriverio": "^8.38.0"
+    "webdriverio": "^8.38.0",
+    "xcode": "^3.0.1"
   }
 }
