@@ -30,10 +30,15 @@ const LogTestingScreen = () => {
     [],
   );
 
-  const sendLogs = useCallback(() => {
-    logWarning("Warning log (manually triggered)");
+  const sendLogInfo = useCallback(() => {
     logInfo("Info log (manually triggered)");
+  }, []);
+
+  const sendLogError = useCallback(() => {
     logError("Error log (manually triggered)");
+  }, []);
+  const sendLogWarn = useCallback(() => {
+    logWarning("Warning log (manually triggered)");
   }, []);
 
   const sendMessage = useCallback(() => {
@@ -49,7 +54,9 @@ const LogTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Logs</Text>
-        <Button onPress={sendLogs} title="LOGs (war/info/error)" />
+        <Button onPress={sendLogInfo} title="LOG info" />
+        <Button onPress={sendLogError} title="LOG error" />
+        <Button onPress={sendLogWarn} title="LOG warn" />
         <Button onPress={sendMessage} title="Custom Message (also a log)" />
         <Button onPress={handleErrorLog} title="Handled JS Exception" />
       </View>

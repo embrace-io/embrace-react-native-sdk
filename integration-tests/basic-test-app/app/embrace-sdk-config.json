@@ -1,7 +1,7 @@
 {
   "ios": {
     "appId": "abcdf",
-    "endpointBaseUrl": "http://localhost:8877",
+    "endpointBaseUrl": "https://mock-api.emb-eng.com/namespace/SgNw5/api/",
     "disableAutomaticViewCapture": true
   }
 }

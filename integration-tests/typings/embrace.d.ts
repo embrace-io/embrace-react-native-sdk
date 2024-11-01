@@ -27,17 +27,64 @@ interface EmbraceSpanData {
   attributes: EmbraceSpanAttribute[];
 }
 
+interface EmbraceLogData {
+  trace_id: string;
+  severity_number: number;
+  severity_text: string;
+  body: string;
+  time_unix_nano: number;
+  status: "Unset" | "Ok" | "Error";
+  events: EmbraceSpanEvent[];
+  attributes: EmbraceSpanAttribute[];
+}
+
+interface ParsedLogPayload {
+  resource?: EmbracePayloadResource;
+  metadata?: EmbracePayloadMetadata;
+  info: EmbraceLogData[];
+  warn: EmbraceLogData[];
+  error: EmbraceLogData[];
+}
+interface EmbracePayloadLogs {
+  data: {logs: EmbraceLogData[]};
+  metadata: EmbracePayloadMetadata;
+  resource: EmbracePayloadResource;
+}
+
 interface EmbracePayloadSpans {
   spans: EmbraceSpanData[];
   span_snapshots: EmbraceSpanData[];
 }
 
 interface EmbracePayloadResource {
-  // TODO
+  app_version: string;
+  environment_detail: string;
+  environment: string;
+  environment: string;
+  device_architecture: string;
+  os_build: string;
+  disk_total_capacity: string;
+  device_model: string;
+  app_bundle_id: string;
+  bundle_version: string;
+  build_id: string;
+  process_start_time: number;
+  jailbroken: boolean;
+  os_version: string;
+  sdk_version: string;
+  process_identifier: string;
+  os_name: string;
+  hosted_sdk_version: string;
+  app_framework: number;
+  device_manufacturer: string;
+  os_alternate_type: string;
+  hosted_platform_version: string;
+  type: string;
+  version: string;
 }
 
 interface EmbracePayloadMetadata {
-  // TODO
+  personas: string[];
 }
 
 interface ParsedSpanPayload {
@@ -67,4 +114,7 @@ export type {
   EmbraceSpanAttribute,
   EmbraceSpanEvent,
   ParsedSpanPayload,
+  EmbracePayloadLogs,
+  EmbraceLogData,
+  ParsedLogPayload,
 };

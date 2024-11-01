@@ -1,7 +1,7 @@
 import {driver} from "@wdio/globals";
 
 import {backgroundSessionsEnabled, endSession} from "../helpers/session";
-import {getSpanPayloads} from "../helpers/embrace_server";
+import {getSpanPayloads} from "../helpers/embrace_mock_api";
 import {EmbraceSpanData} from "../typings/embrace";
 import {
   commonEmbraceSpanAttributes,
