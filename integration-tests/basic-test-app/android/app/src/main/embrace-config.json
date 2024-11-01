@@ -3,10 +3,10 @@
   "api_token": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "sdk_config": {
     "base_urls": {
-      "config": "https://mock-api.emb-eng.com/namespace/SgNw5/api/",
-      "data": "https://mock-api.emb-eng.com/namespace/SgNw5/api/",
-      "data_dev": "https://mock-api.emb-eng.com/namespace/SgNw5/api/",
-      "images": "https://mock-api.emb-eng.com/namespace/SgNw5/api/"
+      "config": "http://10.0.2.2:8877",
+      "data": "http://10.0.2.2:8877",
+      "data_dev": "http://10.0.2.2:8877",
+      "images": "http://10.0.2.2:8877"
     },
     "view_config": {
       "enable_automatic_activity_capture": false
