@@ -57,9 +57,9 @@ console.log(
   " appPath: ",
   appPath,
   "username.length: ",
-  process.env.BROWSERSTACK_USERNAME.length,
+  (process.env.BROWSERSTACK_USERNAME || "").length,
   "access_key.length: ",
-  process.env.BROWSERSTACK_ACCESS_KEY.length,
+  (process.env.BROWSERSTACK_ACCESS_KEY || "").length,
 );
 
 exports.config = {
