@@ -26,7 +26,8 @@ npx @react-native-community/cli init ProjectName --skip-git-init --skip-install 
 ```
 
 Then moving over the created app into the templates folder (`mv ProjectName templates/my-new-template`), removing any
-unneeded files, and adding Embrace specific setup.
+unneeded files, and adding Embrace specific setup. Look at previous templates for examples, in particular make sure to:
+* Set DEVELOPMENT_TEAM = L5RVT7J8CV; in `<app>/ios/<app>.xcodeproj/project.pbxproj`
 
 The ["Current Tags"](https://www.npmjs.com/package/react-native?activeTab=versions) section of the react-native package
 in NPM can help decide which specific patch version to pin the template to for a given minor version, there will generally
