@@ -59,5 +59,7 @@ jobs:
         working-directory: ./integration-tests
         run:  npm run test-remote
         env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           BROWSERSTACK_APP_NAME: ${{ matrix.test-app }}
           BROWSERSTACK_PLATFORM: ${{ matrix.platform }}
