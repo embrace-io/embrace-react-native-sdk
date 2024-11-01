@@ -13,8 +13,26 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
     override fun getName() = "RNEmbraceOTLP"
     private val context: ReactApplicationContext = reactContext
 
-    @ReactMethod fun startNativeEmbraceSDK(config: ReadableMap, promise: Promise) {
+    @ReactMethod fun setOtlpHttpTraceExporter() {
+        // placeholder
+    }
+
+    @ReactMethod fun setOtlpHttpLogExporter() {
+        // placeholder
+    }
+
+    @ReactMethod fun setHttpExporters() {
+        // placeholder
+    }
+
+    // _sdkConfig is meant to not be used
+    @ReactMethod fun startNativeEmbraceSDK(_sdkConfig: ReadableMap, otlpExporterConfig: ReadableMap, promise: Promise) {
         try {
+            // 1) Initialize custom export
+            // TBD
+
+            // 2)
+            // Embrace Start
             Embrace.getInstance().start(
                 this.context.getApplicationContext(),
                 false,
@@ -25,6 +43,7 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
 
             promise.resolve(true)
         } catch (e: Exception) {
+            // TBD improve or remove
             Log.i("Embrace", "Issues with Initialization")
             promise.resolve(false)
         }

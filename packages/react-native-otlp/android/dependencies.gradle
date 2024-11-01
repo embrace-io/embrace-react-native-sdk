@@ -1,4 +1,6 @@
 dependencies {
   api "io.embrace:embrace-android-sdk:6.13.0"
-  implementation("io.opentelemetry:opentelemetry-api")
+
+  implementation(platform("io.opentelemetry:opentelemetry-bom:1.43.0"))
+  implementation("io.opentelemetry:opentelemetry-exporter-otlp-http-trace:1.14.0")
 }
