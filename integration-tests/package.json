@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test-local": "wdio run ./wdio.conf.ts",
-    "test-remote": "wdio run ./browserstack.conf.ts",
-    "update-local-embrace": "./update-local-embrace.sh"
+    "test-remote": "wdio run ./browserstack.conf.ts"
   },
   "author": "",
   "license": "ISC",

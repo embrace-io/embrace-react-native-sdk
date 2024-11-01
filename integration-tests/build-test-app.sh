@@ -49,7 +49,7 @@ else
 fi
 
 echo "Build and install local Embrace packages in $name"
-./update-local-embrace.sh $name
+./update-embrace-packages.sh $name
 
 echo "Updating the Embrace config for $name"
 ./set-embrace-config.js $name embrace-configs/remote-mock-api.json --namespace=$namespace

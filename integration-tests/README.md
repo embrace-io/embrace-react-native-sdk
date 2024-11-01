@@ -58,7 +58,7 @@ npx create-expo <testApp> --no-install  --template ./templates/<template-app>/<a
 Complete the installation of npm packages in the app with:
 
 ```bash
-./update-local-embrace.sh <test-app>
+./update-embrace-packages.sh <test-app>
 ```
 
 For one-off testing the created app can just be removed afterward. If the app represents a particular setup that we
@@ -71,7 +71,12 @@ the repo for quickly testing a basic app setup from React Native's [getting star
 
 Make sure the test app has the latest locally built @embrace-io/* packages and test harness:
 ```bash
-./update-local-embrace.sh <test-app>
+./update-embrace-packages.sh <test-app>
+```
+
+Optionally you can also point the test-app to a published version of the embrace packages with:
+```bash
+./update-embrace-packages.sh <test-app> --version=5.0.2
 ```
 
 Set the test app up with a particular embrace config:
