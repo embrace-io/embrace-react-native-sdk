@@ -48,6 +48,20 @@ if (!appPath) {
   }
 }
 
+// TODO
+console.log(
+  "appName: ",
+  appName,
+  " platform: ",
+  platform,
+  " appPath: ",
+  appPath,
+  "username.length: ",
+  process.env.BROWSERSTACK_USERNAME.length,
+  "access_key.length: ",
+  process.env.BROWSERSTACK_ACCESS_KEY.length,
+);
+
 exports.config = {
   user: process.env.BROWSERSTACK_USERNAME,
   key: process.env.BROWSERSTACK_ACCESS_KEY,

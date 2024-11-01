@@ -50,9 +50,10 @@ jobs:
         working-directory: ./integration-tests
         run: npm install
 
-      - name: Build Test App
-        working-directory: ./integration-tests
-        run: ./build-test-app.sh ${{ matrix.test-app }} ${{ matrix.platform }} namespace-${{ matrix.test-app }}-${{ matrix.platform }}-${{ github.run_id }}
+# TODO
+#      - name: Build Test App
+#        working-directory: ./integration-tests
+#        run: ./build-test-app.sh ${{ matrix.test-app }} ${{ matrix.platform }} namespace-${{ matrix.test-app }}-${{ matrix.platform }}-${{ github.run_id }}
 
       - name: Run Integration Tests
         working-directory: ./integration-tests
