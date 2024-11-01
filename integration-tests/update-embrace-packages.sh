@@ -67,28 +67,32 @@ test_app=$1
 shift
 handle_options "$@"
 
-if [ "version" = "local"]; then
-  embrace_dependencies=
-    ./artifacts/embrace-io-react-native-local.tgz \
-    ./artifacts/embrace-io-react-native-tracer-provider-local.tgz \
-    ./artifacts/embrace-io-react-native-otlp-local.tgz  \
-    ./artifacts/embrace-io-react-native-spans-local.tgz
-else
-   embrace_dependencies=
-    @embrace-io/react-native@$version \
-    @embrace-io/react-native-tracer-provider@$version \
-    @embrace-io/react-native-otlp@$version \
-    @embrace-io/react-native-spans@$version
-fi
-
 # NOTE: opentelemetry-instrumentation-react-native-navigation comes from outside this repo so we include it as
 # a prebuilt artifact
-embrace_dependencies = $embrace_dependencies \
+third_party_dependencies="
   ./artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz
+"
+
+embrace_local_dependencies="
+  ./artifacts/embrace-io-react-native-local.tgz
+  ./artifacts/embrace-io-react-native-tracer-provider-local.tgz
+  ./artifacts/embrace-io-react-native-otlp-local.tgz
+  ./artifacts/embrace-io-react-native-spans-local.tgz
+  $third_party_dependencies
+"
+if [ "$version" = "local" ]; then
+  embrace_dependencies="$embrace_local_dependencies"
+else
+  embrace_dependencies="
+    @embrace-io/react-native@$version
+    @embrace-io/react-native-tracer-provider@$version
+    @embrace-io/react-native-spans@$version
+    $third_party_dependencies
+  "
+fi
 
 if [ "$skip_sdk_packages" = false ]; then
-
-  if [ "version" = "local"]; then
+  if [ "$version" = "local" ]; then
     # build required packages
     pushd ..
     npx lerna run prebuild --scope=@embrace-io/react-native
@@ -107,13 +111,13 @@ if [ "$skip_sdk_packages" = false ]; then
   fi
 
   # update the test app with the sdk packages
-  npm --prefix $test_app add $embrace_dependencies
+  npm --prefix $test_app add --save-exact $embrace_dependencies
 fi
 
 if [ "$skip_test_harness" = false ]; then
   # update sdk packages as dev dependencies on the test harness
-  if [ "$skip_sdk_packages" = false ]; then
-    npm --prefix test-harness add --save-dev $embrace_dependencies
+  if [ "$skip_sdk_packages" = false ] && [ "$version" = "local" ]; then
+    npm --prefix test-harness add --save-dev $embrace_local_dependencies
   fi
 
   # build, pack, and update the test app with the test harness
