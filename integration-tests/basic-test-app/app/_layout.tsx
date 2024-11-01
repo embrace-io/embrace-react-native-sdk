@@ -1,14 +1,8 @@
 import React from "react";
 import "react-native-reanimated";
-import {EmbraceTestHarness} from "@embrace-io/react-native-test-harness";
 import sdkConfig from "./embrace-sdk-config.json";
+import {View} from "react-native";
 
 export default function RootLayout() {
-  return (
-    <EmbraceTestHarness
-      navigationStyle="expo"
-      sdkConfig={sdkConfig}
-      allowCustomExport={true}
-    />
-  );
+  return <View>hey</View>;
 }
