@@ -63,11 +63,10 @@ if [ "$platform" == "android" ]; then
 
   mv $name/android/app/build/outputs/apk/release/app-release.apk $name.apk
 else
-# TODO
-#  echo "Installing pods for $name"
-#  pushd $name/ios
-#  pod install
-#  popd
+  echo "Installing pods for $name"
+  pushd $name/ios
+  pod install
+  popd
 
   ios_name="${name/-/}"
 
