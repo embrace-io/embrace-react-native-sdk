@@ -115,6 +115,15 @@ If the issue is related to pods try forcing a clean install with:
   pod install --repo-update --verbose
 ```
 
+### Local Android development issues
+
+Try to stopping and cleaning local services (in case there are unknown issues related to the start of the app):
+
+```bash
+  cd <app>/android
+  ./gradlew --stop  // stop daemons
+  rm -rf ~/.gradle/caches/
+  ./gradlew build --stacktrace
 ### Local JS development issues
 
 Try removing any `node_modules/` in the directory hierarchy and re-run `yarn install` from the root
