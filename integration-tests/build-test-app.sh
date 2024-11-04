@@ -73,6 +73,7 @@ else
   echo "Building $name.xcarchive"
   xcodebuild archive -workspace $name/ios/$ios_name.xcworkspace \
   -scheme $ios_name -configuration Release \
+  -allowProvisioningUpdates \
   -sdk iphoneos -archivePath $name.xcarchive
 
   echo "Building $name.ipa"
