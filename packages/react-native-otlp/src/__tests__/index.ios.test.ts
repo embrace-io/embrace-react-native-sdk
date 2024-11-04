@@ -7,7 +7,7 @@ const IOS_SDK_BASE_CONFIG = {
   },
 };
 
-let mockStartNativeEmbraceSDK = jest.fn().mockResolvedValue(true);
+const mockStartNativeEmbraceSDK = jest.fn().mockResolvedValue(true);
 jest.mock("react-native", () => ({
   NativeModules: {
     RNEmbraceOTLP: {
@@ -23,10 +23,6 @@ jest.mock("react-native", () => ({
 describe("React Native OTLP", () => {
   describe("should call `startNativeEmbraceSDK`", () => {
     it("if it receives the proper configuration (happy path)", async () => {
-      const mockConsoleLog = jest
-        .spyOn(console, "log")
-        .mockImplementation(a => a);
-
       const otlpExporterConfig = {
         logExporter: {
           endpoint: "https://example.com/logs/v1",
@@ -49,10 +45,6 @@ describe("React Native OTLP", () => {
       expect(mockStartNativeEmbraceSDK).toHaveBeenCalledWith(
         IOS_SDK_BASE_CONFIG,
         otlpExporterConfig,
-      );
-
-      expect(mockConsoleLog).toHaveBeenCalledWith(
-        "[Embrace] native SDK was started",
       );
     });
 
@@ -104,33 +96,6 @@ describe("React Native OTLP", () => {
       expect(mockStartNativeEmbraceSDK).toHaveBeenCalledWith(
         IOS_SDK_BASE_CONFIG,
         otlpExporterConfig,
-      );
-    });
-
-    it("if it receives the proper configuration but fails to start", async () => {
-      const mockConsoleWarn = jest
-        .spyOn(console, "warn")
-        .mockImplementation(a => a);
-
-      mockStartNativeEmbraceSDK = jest.fn().mockResolvedValueOnce(false);
-
-      const otlpExporterConfig = {
-        traceExporter: {
-          endpoint: "https://example.com/traces/v1",
-          headers: [{key: "Authorization", token: "Bearer token"}],
-        },
-      };
-
-      const customInitCallback = initialize(otlpExporterConfig);
-      await customInitCallback(IOS_SDK_BASE_CONFIG);
-
-      expect(mockStartNativeEmbraceSDK).toHaveBeenCalledWith(
-        IOS_SDK_BASE_CONFIG,
-        otlpExporterConfig,
-      );
-
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
-        "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
     });
   });

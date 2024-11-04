@@ -1,5 +1,13 @@
+// custom dependencies specific to Embrace and OpenTelemetry
+import groovy.json.JsonSlurper
+
+def packageJsonFile = file("../package.json")
+
+def jsonSlurper = new JsonSlurper()
+def packageJson = jsonSlurper.parse(packageJsonFile)
+
 dependencies {
-  api "io.embrace:embrace-android-sdk:6.13.0"
+  api "io.embrace:embrace-android-sdk:$packageJson.embrace.androidVersion"
 
   implementation(platform("io.opentelemetry:opentelemetry-bom:1.43.0"))
   implementation("io.opentelemetry:opentelemetry-exporter-otlp-http-trace:1.14.0")

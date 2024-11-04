@@ -1,6 +1,7 @@
 buildscript {
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
   def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["RNEmbraceOTLP_kotlinVersion"]
+  def gradle_version = project.properties["RNEmbraceOTLP_gradleVersion"]
 
   repositories {
     google()
@@ -8,8 +9,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:8.6.0"
-    // noinspection DifferentKotlinGradleVersion
+    classpath "com.android.tools.build:gradle:$gradle_version"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
 }
@@ -92,10 +92,9 @@ def kotlin_version = getExtOrDefault("kotlinVersion")
 
 dependencies {
   // For < 0.71, this will be from the local maven repo
-
-  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
- // using currently 0.75.1
- // https://central.sonatype.com/artifact/com.facebook.react/react-android
+  // For > 0.71, this will be replaced by
+  // `com.facebook.react:react-android:$version` (https://central.sonatype.com/artifact/com.facebook.react/react-android)
+  // by react gradle plugin (using currently 0.75.1)
   implementation "com.facebook.react:react-android:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
