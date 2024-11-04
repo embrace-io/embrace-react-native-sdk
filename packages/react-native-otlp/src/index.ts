@@ -12,6 +12,12 @@ const WARN_MESSAGES = {
   endpoint: "[Embrace] Invalid endpoint for Custom Exporter",
   header: "[Embrace] Invalid header for Custom Exporter",
   error: "[Embrace] Failed to configure Custom Exporter",
+  start:
+    "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+};
+
+const SUCCESS_MESSAGES = {
+  start: "[Embrace] native SDK was started",
 };
 
 const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
@@ -68,10 +74,18 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
 
   return async (sdkConfig: IOSConfig | AndroidConfig) => {
     try {
-      return await NativeModules.RNEmbraceOTLP.startNativeEmbraceSDK(
+      const isStarted = await NativeModules.RNEmbraceOTLP.startNativeEmbraceSDK(
         sdkConfig,
         otlpExporterConfig,
       );
+
+      if (!isStarted) {
+        console.warn(WARN_MESSAGES.start);
+        return Promise.reject(false);
+      }
+
+      console.log(SUCCESS_MESSAGES.start);
+      return Promise.resolve(true);
     } catch (error) {
       console.warn(WARN_MESSAGES.error, error);
       return Promise.reject(false);
