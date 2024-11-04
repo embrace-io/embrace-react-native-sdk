@@ -81,7 +81,7 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
 
       if (!isStarted) {
         console.warn(WARN_MESSAGES.start);
-        return Promise.reject(false);
+        return Promise.resolve(false);
       }
 
       console.log(SUCCESS_MESSAGES.start);
