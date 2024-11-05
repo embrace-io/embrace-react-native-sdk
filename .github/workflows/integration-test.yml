@@ -72,8 +72,8 @@ jobs:
           security set-keychain-settings "$CI_KEYCHAIN"
           security unlock-keychain -p "$CI_KEYCHAIN_PASSWORD" "$CI_KEYCHAIN"
 
-          # Add certificate to keychain and allow xcodebuild to use it
-          security import "$CERT_PATH" -t cert -f pkcs12 -k "$CI_KEYCHAIN" -P "$CERT_PASS" -A -T "/usr/bin/xcodebuild"
+          # Add certificate to keychain and allow codesign to use it
+          security import "$CERT_PATH" -t cert -f pkcs12 -k "$CI_KEYCHAIN" -P "$CERT_PASS" -A -T "/usr/bin/codesign"
           security set-key-partition-list -S apple-tool:,apple:, -s -k $CI_KEYCHAIN_PASSWORD -D "${CERT_IDENTITY}" -t private $CI_KEYCHAIN
         if: matrix.platform == 'ios'
 
