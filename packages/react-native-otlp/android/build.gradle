@@ -75,10 +75,6 @@ android {
     disable "GradleCompatible"
   }
 
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_17
-    targetCompatibility JavaVersion.VERSION_17
-  }
   ndkVersion '20.1.5948944'
   buildToolsVersion '33.0.0'
 }

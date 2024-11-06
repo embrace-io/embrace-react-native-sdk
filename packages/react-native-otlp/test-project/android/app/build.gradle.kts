@@ -29,15 +29,7 @@ android {
         }
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
     useLibrary("android.test.mock")
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
 
     buildToolsVersion = "33.0.0"
     ndkVersion = "20.1.5948944"
