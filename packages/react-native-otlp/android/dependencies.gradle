@@ -1,13 +1,21 @@
 import groovy.json.JsonSlurper
 
-def packageJsonFile = file("../package.json")
+def packageJsonPath = project.properties["RNEmbraceOTLP_packageJsonPath"]
+def packageJsonFile = file("$packageJsonPath/package.json")
 def json = new JsonSlurper()
 def packageJson = json.parse(packageJsonFile)
 
 // covering custom dependencies specific to Embrace and OpenTelemetry
 dependencies {
-  api "io.embrace:embrace-android-sdk:$packageJson.embrace.androidVersion"
+  def embrace = "io.embrace:embrace-android-sdk:$packageJson.embrace.androidVersion"
+  def opentelemetry = "io.opentelemetry:opentelemetry-exporter-otlp:1.43.0"
 
-  // https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-exporter-otlp
-  implementation("io.opentelemetry:opentelemetry-exporter-otlp:1.43.0")
+  // if it is an app use `implementation` otherwise use the `api` annotation
+  if (plugins.hasPlugin('com.android.application')) {
+    implementation "$embrace"
+    implementation "$opentelemetry"
+  } else if (plugins.hasPlugin('com.android.library')) {
+    api "$embrace"
+    api "$opentelemetry"
+  }
 }
