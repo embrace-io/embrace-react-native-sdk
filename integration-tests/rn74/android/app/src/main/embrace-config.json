@@ -1,12 +1,12 @@
 {
-  "app_id": "abcdf",
+  "app_id": "jon22",
   "api_token": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "sdk_config": {
     "base_urls": {
-      "config": "https://mock-api.emb-eng.com/namespace/<namespace>/api/",
-      "data": "https://mock-api.emb-eng.com/namespace/<namespace>/api/",
-      "data_dev": "https://mock-api.emb-eng.com/namespace/<namespace>/api/",
-      "images": "https://mock-api.emb-eng.com/namespace/<namespace>/api/"
+      "config": "https://mock-api.emb-eng.com/namespace/jon/api",
+      "data": "https://mock-api.emb-eng.com/namespace/jon/api",
+      "data_dev": "https://mock-api.emb-eng.com/namespace/jon/api",
+      "images": "https://mock-api.emb-eng.com/namespace/jon/api"
     },
     "view_config": {
       "enable_automatic_activity_capture": false
