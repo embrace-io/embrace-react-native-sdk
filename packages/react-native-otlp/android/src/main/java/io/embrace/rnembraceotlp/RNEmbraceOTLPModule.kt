@@ -15,7 +15,7 @@ import com.facebook.react.bridge.ReadableMap
 
 import io.embrace.android.embracesdk.Embrace
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
-import io.opentelemetry.sdk.trace.export.SpanExporter
+import io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter
 
 data class HeaderConfig (
     val key: String,
@@ -83,7 +83,7 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
     private val log = Logger.getLogger("[Embrace]")
 
     @ReactMethod
-    fun setOtlpHttpTraceExporter(endpoint: String, headers: List<HeaderConfig>? = emptyList(), timeout: Duration?): SpanExporter {
+    fun setOtlpHttpTraceExporter(endpoint: String, headers: List<HeaderConfig>? = emptyList(), timeout: Duration?): OtlpHttpSpanExporter {
         val otlpHttpSpanExporter = OtlpHttpSpanExporter.builder()
             .setEndpoint(endpoint)
 
@@ -101,8 +101,21 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
     }
 
     @ReactMethod
-    fun setOtlpHttpLogExporter() {
-        // placeholder
+    fun setOtlpHttpLogExporter(endpoint: String, headers: List<HeaderConfig>? = emptyList(), timeout: Duration?): OtlpHttpLogRecordExporter {
+        val otlpHttpLogExporter = OtlpHttpLogRecordExporter.builder()
+            .setEndpoint(endpoint)
+
+        if (!headers.isNullOrEmpty()) {
+            for (header in headers) {
+                otlpHttpLogExporter.addHeader(header.key, header.token)
+            }
+        }
+
+        if (timeout != null) {
+            otlpHttpLogExporter.setTimeout(timeout)
+        }
+
+        return otlpHttpLogExporter.build()
     }
 
     @ReactMethod
@@ -112,13 +125,14 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
             Embrace.getInstance().addSpanExporter(spanCustomExporter)
         }
 
-        if (logConfig != null) {
-            // setOtlpHttpLogExporter()
-            // tbd logs
+        if (logConfig != null && logConfig.endpoint.isNotBlank()) {
+            val logCustomExporter = setOtlpHttpLogExporter(logConfig.endpoint, logConfig.headers, logConfig.timeout)
+            Embrace.getInstance().addLogRecordExporter(logCustomExporter)
         }
     }
 
-    // _sdkConfig is meant to not be used
+    // _sdkConfig is meant to not be used in Android, but the config is needed in iOS.
+    // adding the param as placeholder.
     @ReactMethod fun startNativeEmbraceSDK(sdkConfig: ReadableMap, otlpExporterConfig: ReadableMap? = null, promise: Promise) {
         try {
             // 1) Initialize custom export if there is config
