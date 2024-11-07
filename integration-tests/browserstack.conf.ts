@@ -45,7 +45,7 @@ if (!appPath) {
     appPath = `${appName}.apk`;
   } else if (platform === "ios") {
     const iosName = appName.replace("-", "");
-    appPath = `${appName}-ios-export/${iosName}.ipa`;
+    appPath = `${appName}/ios/${iosName}.ipa`;
   }
 }
 

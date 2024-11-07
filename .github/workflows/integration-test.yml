@@ -46,6 +46,10 @@ jobs:
           java-version: ${{ matrix.jdk-version }}
         if: matrix.platform == 'android'
 
+      - name: Install Fastlane
+        run: brew install fastlane
+        if: matrix.platform == 'ios'
+
       - name: Install Integration Tests Node Modules
         working-directory: ./integration-tests
         run: npm install

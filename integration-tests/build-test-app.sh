@@ -63,20 +63,24 @@ if [ "$platform" == "android" ]; then
 
   mv $name/android/app/build/outputs/apk/release/app-release.apk $name.apk
 else
-  echo "Installing pods for $name"
-  pushd $name/ios
-  pod install
-  popd
-
   ios_name="${name/-/}"
 
-  echo "Building $name.xcarchive"
-  xcodebuild archive -workspace $name/ios/$ios_name.xcworkspace \
-  -scheme $ios_name -configuration Release \
-  -sdk iphoneos -archivePath $name.xcarchive
+  pushd $name/ios
+
+  echo "Installing pods for $name"
+  pod install
 
   echo "Building $name.ipa"
-  xcodebuild -exportArchive -archivePath $name.xcarchive \
-  -exportOptionsPlist ExportOptions.plist \
-  -exportPath $name-ios-export
+  fastlane gym --export_method development
+
+#  echo "Building $name.xcarchive"
+#  xcodebuild archive -workspace $name/ios/$ios_name.xcworkspace \
+#  -scheme $ios_name -configuration Release \
+#  -sdk iphoneos -archivePath $name.xcarchive
+#  echo "Building $name.ipa"
+#  xcodebuild -exportArchive -archivePath $name.xcarchive \
+#  -exportOptionsPlist ExportOptions.plist \
+#  -exportPath $name-ios-export
+
+  popd
 fi
