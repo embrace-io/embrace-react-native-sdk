@@ -11,6 +11,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         node-version: [18.x]
         jdk-version: ["17"]
