@@ -49,8 +49,8 @@ echo "Creating a test app from $template_path"
 #  git restore ../package.json
 #fi
 
-#echo "Build and install local Embrace packages in $name"
-#./update-embrace-packages.sh $name
+echo "Build and install local Embrace packages in $name"
+./update-embrace-packages.sh $name
 
 #echo "Updating the Embrace config for $name"
 #./set-embrace-config.js $name embrace-configs/remote-mock-api.json --namespace=$namespace
@@ -68,11 +68,6 @@ else
   echo "Installing pods for $name"
   pushd $name/ios
   pod install
-  popd
-
-  ## TODO
-  pushd $name
-  npm install
   popd
 
   echo "Building $name.xcarchive"
