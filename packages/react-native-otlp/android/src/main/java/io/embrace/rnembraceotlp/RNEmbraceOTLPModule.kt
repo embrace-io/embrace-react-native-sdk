@@ -33,68 +33,69 @@ data class OtlpExporterConfig (
     val logExporter: ExporterConfig? = null
 )
 
-// parsing Readable Map into the real OTLP Exporter Config shape
-fun parseExportConfig(spanExportConfig: ReadableMap, logExportConfig: ReadableMap): OtlpExporterConfig {
-    var spanExportConfigParsed: ExporterConfig? = null
-    val spanExportEndpoint = spanExportConfig.getString("endpoint")
-
-    var logExportConfigParsed: ExporterConfig? = null
-    val logExportEndpoint = logExportConfig.getString("endpoint")
-
-    if (!spanExportEndpoint.isNullOrBlank()) {
-        spanExportConfigParsed = ExporterConfig(
-            endpoint = spanExportEndpoint,
-            headers = spanExportConfig.getArray("headers")?.let {
-                parseHeaders(it)
-            } ?: emptyList(),
-            timeout = parseTimeout(spanExportConfig.getDouble("timeout")),
-        )
-    }
-
-    if (!logExportEndpoint.isNullOrBlank()) {
-        logExportConfigParsed = ExporterConfig(
-            endpoint = logExportEndpoint,
-            headers = logExportConfig.getArray("headers")?.let {
-                parseHeaders(it)
-            } ?: emptyList(),
-            timeout = parseTimeout(logExportConfig.getDouble("timeout")),
-        )
-    }
-
-    return OtlpExporterConfig(traceExporter = spanExportConfigParsed, logExporter = logExportConfigParsed)
-}
-
-fun parseHeaders(headers: ReadableArray): List<HeaderConfig> {
-    val log = Logger.getLogger("[Embrace]")
-    val headerList: MutableList<HeaderConfig> = arrayListOf()
-
-    for (i in 0 until headers.size()) {
-        val header = headers.getMap(i)
-        val keyVal = header.getString("key")
-        val tokenVal = header.getString("token")
-
-        if (!keyVal.isNullOrBlank() && !tokenVal.isNullOrBlank()) {
-            headerList.add(HeaderConfig(key = keyVal, token = tokenVal))
-        } else {
-            log.warning("Skipping invalid header. `key` and/or `token` are null or blank.")
-        }
-    }
-
-    return headerList
-}
-
-fun parseTimeout(number: Double): Duration {
-    return number.toLong().toDuration(DurationUnit.SECONDS).toJavaDuration()
-}
-
 class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     override fun getName() = "RNEmbraceOTLP"
 
     private val context: ReactApplicationContext = reactContext
     private val log = Logger.getLogger("[Embrace]")
 
-    @ReactMethod
-    fun setOtlpHttpTraceExporter(endpoint: String, headers: List<HeaderConfig>? = emptyList(), timeout: Duration?): OtlpHttpSpanExporter {
+    // parsing Headers
+    private fun parseHeaders(headers: ReadableArray): List<HeaderConfig> {
+        val headerList: MutableList<HeaderConfig> = arrayListOf()
+
+        for (i in 0 until headers.size()) {
+            val header = headers.getMap(i)
+            val keyVal = header.getString("key")
+            val tokenVal = header.getString("token")
+
+            if (!keyVal.isNullOrBlank() && !tokenVal.isNullOrBlank()) {
+                headerList.add(HeaderConfig(key = keyVal, token = tokenVal))
+            } else {
+                log.warning("Skipping invalid header. `key` and/or `token` are null or blank.")
+            }
+        }
+
+        return headerList
+    }
+
+    // parsing Number
+    private fun parseTimeout(number: Double): Duration {
+        return number.toLong().toDuration(DurationUnit.SECONDS).toJavaDuration()
+    }
+
+    // parsing Readable Map into the real OTLP Exporter Config shape
+    private fun parseExportConfig(spanExportConfig: ReadableMap, logExportConfig: ReadableMap): OtlpExporterConfig {
+        var spanExportConfigParsed: ExporterConfig? = null
+        val spanExportEndpoint = spanExportConfig.getString("endpoint")
+
+        var logExportConfigParsed: ExporterConfig? = null
+        val logExportEndpoint = logExportConfig.getString("endpoint")
+
+        if (!spanExportEndpoint.isNullOrBlank()) {
+            spanExportConfigParsed = ExporterConfig(
+                endpoint = spanExportEndpoint,
+                headers = spanExportConfig.getArray("headers")?.let {
+                    parseHeaders(it)
+                } ?: emptyList(),
+                timeout = parseTimeout(spanExportConfig.getDouble("timeout")),
+            )
+        }
+
+        if (!logExportEndpoint.isNullOrBlank()) {
+            logExportConfigParsed = ExporterConfig(
+                endpoint = logExportEndpoint,
+                headers = logExportConfig.getArray("headers")?.let {
+                    parseHeaders(it)
+                } ?: emptyList(),
+                timeout = parseTimeout(logExportConfig.getDouble("timeout")),
+            )
+        }
+
+        return OtlpExporterConfig(traceExporter = spanExportConfigParsed, logExporter = logExportConfigParsed)
+    }
+
+    // Traces
+    private fun setOtlpHttpTraceExporter(endpoint: String, headers: List<HeaderConfig>? = emptyList(), timeout: Duration?): OtlpHttpSpanExporter {
         val otlpHttpSpanExporter = OtlpHttpSpanExporter.builder()
             .setEndpoint(endpoint)
 
@@ -111,8 +112,8 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
         return otlpHttpSpanExporter.build()
     }
 
-    @ReactMethod
-    fun setOtlpHttpLogExporter(endpoint: String, headers: List<HeaderConfig>? = emptyList(), timeout: Duration?): OtlpHttpLogRecordExporter {
+    // Logs
+    private fun setOtlpHttpLogExporter(endpoint: String, headers: List<HeaderConfig>? = emptyList(), timeout: Duration?): OtlpHttpLogRecordExporter {
         val otlpHttpLogExporter = OtlpHttpLogRecordExporter.builder()
             .setEndpoint(endpoint)
 
@@ -129,8 +130,7 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
         return otlpHttpLogExporter.build()
     }
 
-    @ReactMethod
-    fun setHttpExporters(httpConfig: OtlpExporterConfig) {
+    private fun setHttpExporters(httpConfig: OtlpExporterConfig) {
         val spanConfig = httpConfig.traceExporter
         val logConfig = httpConfig.logExporter
 
