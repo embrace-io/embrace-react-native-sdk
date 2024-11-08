@@ -1,5 +1,6 @@
 // For capabilities choose a device that is close to the minimum required OS we support on both Android and iOS
-// as well as one that represents the latest supported OS
+// as well as one that represents the latest supported OS.
+// See https://www.browserstack.com/list-of-browsers-and-platforms-page/app_automate
 
 const androidCapabilities = [
   {
@@ -38,15 +39,9 @@ const iosCapabilities = [
 const runID = process.env.CI_RUN_ID || "local";
 const appName = process.env.BROWSERSTACK_APP_NAME;
 const platform = process.env.BROWSERSTACK_PLATFORM;
-let appPath = process.env.BROWSERSTACK_APP_PATH;
-if (!appPath) {
-  // Default to the path that is written to when running `./build-test-app.sh`
-  if (platform === "android") {
-    appPath = `${appName}.apk`;
-  } else if (platform === "ios") {
-    appPath = `${appName}.ipa`;
-  }
-}
+const appPath =
+  process.env.BROWSERSTACK_APP_PATH ||
+  `${appName}.${platform === "ios" ? ".ipa" : ".apk"}`;
 
 exports.config = {
   user: process.env.BROWSERSTACK_USERNAME,

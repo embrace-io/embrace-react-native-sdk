@@ -14,12 +14,8 @@ jobs:
       matrix:
         node-version: [18.x]
         jdk-version: ["17"]
-        # TODO add full set back after testing
-        # test-app: [expo-rn74, rn75, rn74, rn73, rn72, rn71]
-        test-app: [rn74]
-        # TODO
-        # platform: [android, ios]
-        platform: [ios]
+        test-app: [expo-rn74, rn75, rn74, rn73, rn72, rn71]
+        platform: [android, ios]
 
     runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
 
