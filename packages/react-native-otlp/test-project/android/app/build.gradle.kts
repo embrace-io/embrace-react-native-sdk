@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 
-//    id("io.gitlab.arturbosch.detekt") version("1.23.6")
+    id("io.gitlab.arturbosch.detekt") version("1.23.6")
 }
 
 android {
@@ -65,13 +65,13 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-//    add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
+    add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
 }
 
-//detekt {
-//    buildUponDefaultConfig = true
-//    autoCorrect = true
-//    config.from(project.files("${project.rootDir}/config/detekt/detekt.yml"))
-//}
+detekt {
+    buildUponDefaultConfig = true
+    autoCorrect = true
+    config.from(project.files("${project.rootDir}/config/detekt/detekt.yml"))
+}
 
 apply("../../../android/dependencies.gradle")
