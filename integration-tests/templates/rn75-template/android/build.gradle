@@ -1,3 +1,7 @@
+// NOTE
+// Embrace won't be able to build/initialize with default values provided by the RN 0.75.x template.
+// This template was manually modified to get the SDK up and running without issues.
+
 buildscript {
     ext {
         buildToolsVersion = "34.0.0"
