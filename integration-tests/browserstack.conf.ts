@@ -41,7 +41,7 @@ const appName = process.env.BROWSERSTACK_APP_NAME;
 const platform = process.env.BROWSERSTACK_PLATFORM;
 const appPath =
   process.env.BROWSERSTACK_APP_PATH ||
-  `${appName}.${platform === "ios" ? ".ipa" : ".apk"}`;
+  `${appName}.${platform === "ios" ? "ipa" : "apk"}`;
 
 exports.config = {
   user: process.env.BROWSERSTACK_USERNAME,
