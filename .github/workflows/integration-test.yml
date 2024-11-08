@@ -11,14 +11,12 @@ on:
 jobs:
   build:
     strategy:
-      #fail-fast: false
+      fail-fast: false
       matrix:
         node-version: [18.x]
         jdk-version: ["17"]
-        #test-app: [expo-rn74, rn75, rn74, rn73, rn72, rn71]
-        #platform: [android, ios]
-        test-app: [expo-rn74]
-        platform: [android]
+        test-app: [expo-rn74, rn75, rn74, rn73, rn72, rn71]
+        platform: [android, ios]
 
     runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
 
