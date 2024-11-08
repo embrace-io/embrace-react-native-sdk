@@ -93,6 +93,10 @@ fi
 
 if [ "$skip_sdk_packages" = false ]; then
   if [ "$version" = "local" ]; then
+    echo "==========================================="
+    echo "Building and packing Embrace local packages"
+    echo "==========================================="
+
     # build required packages
     pushd ..
     npx lerna run prebuild --scope=@embrace-io/react-native
@@ -110,18 +114,28 @@ if [ "$skip_sdk_packages" = false ]; then
     ./pack.sh ../packages/spans/ artifacts/embrace-io-react-native-spans-local.tgz
   fi
 
-  # update the test app with the sdk packages
+  echo "========================================"
+  echo "Updating app with Embrace local packages"
+  echo "========================================"
   npm --prefix $test_app add --save-exact $embrace_dependencies
 fi
 
 if [ "$skip_test_harness" = false ]; then
-  # update sdk packages as dev dependencies on the test harness
   if [ "$skip_sdk_packages" = false ] && [ "$version" = "local" ]; then
+    echo "============================================================"
+    echo "Updating Test Harness dev dependencies with Embrace packages"
+    echo "============================================================"
     npm --prefix test-harness add --save-dev $embrace_local_dependencies
   fi
 
-  # build, pack, and update the test app with the test harness
+  echo "================================="
+  echo "Building and packing Test Harness"
+  echo "================================="
   npm --prefix test-harness run build
   ./pack.sh  test-harness/ artifacts/embrace-io-react-native-test-harness-local.tgz
+
+  echo "===================================="
+  echo "Updating app with local Test Harness"
+  echo "===================================="
   npm --prefix $test_app add ./artifacts/embrace-io-react-native-test-harness-local.tgz
 fi
