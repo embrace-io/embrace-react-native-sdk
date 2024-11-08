@@ -53,30 +53,35 @@ To run these steps manually refer to [this section of our guide](https://embrace
 Initialize method applies the necessary listener to your application. This allow Embrace to track javascript errors, check js bundle changes (if you use OTA), track js patch and react native versions.
 
 ```javascript
-import React, {useEffect, useState} from 'react'
-import {initialize} from '@embrace-io/react-native';
+import {View} from "react-native";
+import React, {useEffect} from "react";
+import {initialize} from "@embrace-io/react-native";
 
-const App = ()=> {
+const App = () => {
+  useEffect(() => {
+    // `initialize` is a Promise, so if you want to perform an action and it must be tracked, it is recommended to await for the method to finish
+    const handleInit = async () => {
+      const hasStarted = await initialize({
+        sdkConfig: {
+          ios: {
+            appId: "abcdf",
+          },
+        },
+      });
 
-  useEffect(()=>{
-    // Note: Initialize is a promise, so if you want to perform an action and it must be tracked, it is recommended to use await to wait for the method to finish
-
-    initialize({
-      sdkConfig: {
-        ios: {
-          appId: "abcdf",
-        }
+      if (hasStarted) {
+        // do something
       }
-    }).then(hasStarted=>{
-      if(hasStarted){
-         //doSomething
-      }
-    });
-  },[])
+    };
 
- return ...
-}
-export default App
+    handleInit();
+  }, []);
+
+  // rest of the app
+  return <View>...</View>;
+};
+
+export default App;
 ```
 
 ## Uploading source maps

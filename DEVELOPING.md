@@ -29,7 +29,7 @@ that our packages require but that we leave to the customer to have defined as e
 
 ## Adding new Native Modules
 
-For adding new Native Modules please refer to our (Native Developing docs)[NATIVE_MODULE_DEVELOPING.md]
+For adding new Native Modules please refer to our [Native Developing docs](./NATIVE_MODULE_DEVELOPING.md)
 
 ## Testing changes during development
 
@@ -94,3 +94,37 @@ This version contained an issue where .... Please use <fixed-version> instead.
 ```
 
 If you make a mistake you can undeprecate a package following [these steps](https://www.notion.so/embraceio/Mark-older-releases-as-deprecated-in-the-npmjs-registry-10d7e3c9985280cb9ea5ea1e9f054c83?pvs=4).
+
+## Troubleshooting
+
+### Local iOS development issues
+
+Try closing any open simulators and clearing all derived data:
+
+```bash
+rm -rf ~/Library/Developer/Xcode/DerivedData
+```
+
+If the issue is related to pods try forcing a clean install with:
+
+```bash
+  cd <app>/ios
+  rm Podfile.lock
+  pod cache clean --all
+  pod repo update --verbose
+  pod deintegrate
+  pod install --repo-update --verbose
+```
+
+### Local Android development issues
+
+Try to stopping and cleaning local services (in case there are unknown issues related to the start of the app):
+
+```bash
+  cd <app>/android
+  ./gradlew --stop  // stop daemons
+  rm -rf ~/.gradle/caches/
+  ./gradlew build --stacktrace
+### Local JS development issues
+
+Try removing any `node_modules/` in the directory hierarchy and re-run `yarn install` from the root

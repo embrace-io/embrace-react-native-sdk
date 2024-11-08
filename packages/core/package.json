@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "A React Native wrapper for the Embrace SDK",
   "dependencies": {
     "glob": "^11.0.0",
@@ -63,7 +63,7 @@
     "typescript": "^5.6.3"
   },
   "embrace": {
-    "iosVersion": "6.4.2",
+    "iosVersion": "6.5.1",
     "androidVersion": "6.13.0"
   }
 }

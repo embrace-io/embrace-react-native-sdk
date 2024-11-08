@@ -21,7 +21,6 @@ export const EmbraceReactNativeTestHarness = () => {
   return (
     <NavigationContainer ref={navigationContainerRef}>
       <NavigationTracker
-        // @ts-ignore
         ref={navigationContainerRef}
         provider={tracerProvider || undefined}
         config={{

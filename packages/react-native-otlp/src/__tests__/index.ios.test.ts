@@ -7,7 +7,7 @@ const IOS_SDK_BASE_CONFIG = {
   },
 };
 
-const mockStartNativeEmbraceSDK = jest.fn();
+const mockStartNativeEmbraceSDK = jest.fn().mockResolvedValue(true);
 jest.mock("react-native", () => ({
   NativeModules: {
     RNEmbraceOTLP: {
