@@ -164,13 +164,6 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
     @ReactMethod
     fun startNativeEmbraceSDK(sdkConfig: ReadableMap, otlpExporterConfig: ReadableMap? = null, promise: Promise) {
         try {
-            // 2) Embrace Start
-            Embrace.getInstance().start(
-                this.context.getApplicationContext(),
-                false,
-                Embrace.AppFramework.REACT_NATIVE
-            )
-
             // 1) Initialize custom export if there is config
             if (otlpExporterConfig != null) {
                 val spanExportConfig = otlpExporterConfig.getMap("traceExporter")
@@ -184,6 +177,13 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
                     log.info("Neither Traces nor Logs configuration were found, skipping custom export.")
                 }
             }
+
+            // 2) Embrace Start
+            Embrace.getInstance().start(
+                this.context.getApplicationContext(),
+                false,
+                Embrace.AppFramework.REACT_NATIVE
+            )
 
             promise.resolve(true)
         } catch (e: Exception) {
