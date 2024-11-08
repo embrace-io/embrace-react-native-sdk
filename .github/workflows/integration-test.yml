@@ -46,40 +46,9 @@ jobs:
           java-version: ${{ matrix.jdk-version }}
         if: matrix.platform == 'android'
 
-      - name: Install Fastlane
-        run: brew install fastlane
-        if: matrix.platform == 'ios'
-
       - name: Install Integration Tests Node Modules
         working-directory: ./integration-tests
         run: npm install
-
-      - name: Setup Keychain for XCode Signing
-        env:
-          CI_KEYCHAIN: ${{ secrets.CI_KEYCHAIN }}
-          CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
-          CERT: ${{ secrets.CERT }}
-          CERT_PASS: ${{ secrets.CERT_PASS}}
-          CERT_IDENTITY: ${{ secrets.CERT_IDENTITY }}
-        run: |
-          # Importing certificate from environment
-          CERT_PATH=$RUNNER_TEMP/distribution_certificate.p12
-          echo -n "$CERT" | base64 --decode -o $CERT_PATH
-
-          # Preparation steps
-          security list-keychains -d user -s login.keychain
-          security delete-keychain "$CI_KEYCHAIN" || true
-
-          # Create temporary keychain
-          security create-keychain -p "$CI_KEYCHAIN_PASSWORD" "$CI_KEYCHAIN"
-          security list-keychains -d user -s "$CI_KEYCHAIN" $(security list-keychains -d user | sed s/\"//g)
-          security set-keychain-settings "$CI_KEYCHAIN"
-          security unlock-keychain -p "$CI_KEYCHAIN_PASSWORD" "$CI_KEYCHAIN"
-
-          # Add certificate to keychain and allow codesign to use it
-          security import "$CERT_PATH" -t cert -f pkcs12 -k "$CI_KEYCHAIN" -P "$CERT_PASS" -A -T "/usr/bin/codesign"
-          security set-key-partition-list -S apple-tool:,apple:, -s -k $CI_KEYCHAIN_PASSWORD -D "${CERT_IDENTITY}" -t private $CI_KEYCHAIN
-        if: matrix.platform == 'ios'
 
       - name: Build Test App
         working-directory: ./integration-tests
