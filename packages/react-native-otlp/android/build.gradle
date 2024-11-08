@@ -92,8 +92,6 @@ repositories {
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
 dependencies {
-  implementation("org.webkit:android-jsc:+")
-
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by
   // `com.facebook.react:react-android:$version` (https://central.sonatype.com/artifact/com.facebook.react/react-android)
