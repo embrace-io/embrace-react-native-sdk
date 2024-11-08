@@ -70,6 +70,9 @@ else
   pod install
   popd
 
+  # Browserstack will resign the .ipa before running it on their test devices so produce an unsigned one
+  # here to avoid having to deal with managing our certificates
+  # https://medium.com/@suyesh.kandpal28/how-to-create-an-unsigned-ipa-resign-it-with-a-new-certificate-and-upload-it-to-the-app-store-63c8dc119d20
   echo "Building $name.xcarchive"
   xcodebuild archive -workspace $name/ios/$ios_name.xcworkspace \
   -scheme $ios_name -configuration Release \
@@ -78,7 +81,6 @@ else
   CODE_SIGNING_ALLOWED=NO
 
   echo "Building $name.ipa"
-  xcodebuild -exportArchive -archivePath $name.xcarchive \
-  -exportOptionsPlist ExportOptions.plist \
-  -exportPath $name-ios-export
+  mv $name.xcarchive/Products/Applications Payload
+  zip -r $name.ipa Payload
 fi
