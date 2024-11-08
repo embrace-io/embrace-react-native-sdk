@@ -171,7 +171,6 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
 
                 if (spanExportConfig != null || logExportConfig != null) {
                     val config = parseExportConfig(spanExportConfig, logExportConfig)
-                    print(config)
                     setHttpExporters(config)
                 } else {
                     log.info("Neither Traces nor Logs configuration were found, skipping custom export.")
@@ -187,7 +186,6 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
 
             promise.resolve(true)
         } catch (e: Exception) {
-            print(e)
             log.warning("Error starting Embrace SDK")
             promise.resolve(false)
         }
