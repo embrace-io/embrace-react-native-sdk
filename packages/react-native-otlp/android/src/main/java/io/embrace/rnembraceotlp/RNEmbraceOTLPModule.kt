@@ -155,8 +155,7 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
                 val logExportConfig = otlpExporterConfig.getMap("logExporter")
 
                 if (spanExportConfig != null && logExportConfig != null) {
-                    val config = parseExportConfig(spanExportConfig, logExportConfig)
-                    setHttpExporters(config)
+                    setHttpExporters(parseExportConfig(spanExportConfig, logExportConfig))
                 } else {
                     log.info("Neither Traces nor Logs configuration were found, skipping custom export.")
                 }
