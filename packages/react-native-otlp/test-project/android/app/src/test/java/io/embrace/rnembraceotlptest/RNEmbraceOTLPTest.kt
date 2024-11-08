@@ -12,14 +12,21 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.WritableMap
+import org.junit.runner.RunWith
+import org.mockito.Mockito.mockStatic
+import org.mockito.Mockito.`when`
 import org.mockito.kotlin.verify
+import org.robolectric.RobolectricTestRunner
 
+@RunWith(RobolectricTestRunner::class)
 class RNEmbraceOTLPTest {
     private val promise: Promise = mock()
 
     @Before
     fun setUp() {
-        Mockito.`when`(SystemClock.uptimeMillis()).thenReturn(123456789L)
+        mockStatic(SystemClock::class.java).use {
+            `when`(SystemClock.uptimeMillis()).thenReturn(1000L)
+        }
     }
 
     @Test
