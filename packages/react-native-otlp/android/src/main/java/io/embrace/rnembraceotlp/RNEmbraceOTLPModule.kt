@@ -64,30 +64,44 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
     }
 
     // parsing Readable Map into the real OTLP Exporter Config shape
-    private fun parseExportConfig(spanExportConfig: ReadableMap, logExportConfig: ReadableMap): OtlpExporterConfig {
+    private fun parseExportConfig(spanExportConfig: ReadableMap?, logExportConfig: ReadableMap?): OtlpExporterConfig {
         var spanExportConfigParsed: ExporterConfig? = null
-        val spanExportEndpoint = spanExportConfig.getString("endpoint")
+        val spanExportEndpoint = spanExportConfig?.getString("endpoint")
 
         var logExportConfigParsed: ExporterConfig? = null
-        val logExportEndpoint = logExportConfig.getString("endpoint")
+        val logExportEndpoint = logExportConfig?.getString("endpoint")
 
         if (!spanExportEndpoint.isNullOrBlank()) {
+            val headers = spanExportConfig.getArray("headers")?.let {
+                parseHeaders(it)
+            } ?: emptyList()
+
+            var timeout: Duration? = null
+            if (spanExportConfig.hasKey("timeout")) {
+                timeout = parseTimeout(spanExportConfig.getDouble("timeout"))
+            }
+
             spanExportConfigParsed = ExporterConfig(
                 endpoint = spanExportEndpoint,
-                headers = spanExportConfig.getArray("headers")?.let {
-                    parseHeaders(it)
-                } ?: emptyList(),
-                timeout = parseTimeout(spanExportConfig.getDouble("timeout")),
+                headers = headers,
+                timeout = timeout,
             )
         }
 
         if (!logExportEndpoint.isNullOrBlank()) {
+            val headers = logExportConfig.getArray("headers")?.let {
+                parseHeaders(it)
+            } ?: emptyList()
+
+            var timeout: Duration? = null
+            if (logExportConfig.hasKey("timeout")) {
+                timeout = parseTimeout(logExportConfig.getDouble("timeout"))
+            }
+
             logExportConfigParsed = ExporterConfig(
                 endpoint = logExportEndpoint,
-                headers = logExportConfig.getArray("headers")?.let {
-                    parseHeaders(it)
-                } ?: emptyList(),
-                timeout = parseTimeout(logExportConfig.getDouble("timeout")),
+                headers = headers,
+                timeout = timeout,
             )
         }
 
@@ -147,20 +161,9 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
 
     // _sdkConfig is meant to not be used in Android, but the config is needed in iOS.
     // adding the param as placeholder.
-    @ReactMethod fun startNativeEmbraceSDK(sdkConfig: ReadableMap, otlpExporterConfig: ReadableMap? = null, promise: Promise) {
+    @ReactMethod
+    fun startNativeEmbraceSDK(sdkConfig: ReadableMap, otlpExporterConfig: ReadableMap? = null, promise: Promise) {
         try {
-            // 1) Initialize custom export if there is config
-            if (otlpExporterConfig != null) {
-                val spanExportConfig = otlpExporterConfig.getMap("traceExporter")
-                val logExportConfig = otlpExporterConfig.getMap("logExporter")
-
-                if (spanExportConfig != null && logExportConfig != null) {
-                    setHttpExporters(parseExportConfig(spanExportConfig, logExportConfig))
-                } else {
-                    log.info("Neither Traces nor Logs configuration were found, skipping custom export.")
-                }
-            }
-
             // 2) Embrace Start
             Embrace.getInstance().start(
                 this.context.getApplicationContext(),
@@ -168,8 +171,23 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
                 Embrace.AppFramework.REACT_NATIVE
             )
 
+            // 1) Initialize custom export if there is config
+            if (otlpExporterConfig != null) {
+                val spanExportConfig = otlpExporterConfig.getMap("traceExporter")
+                val logExportConfig = otlpExporterConfig.getMap("logExporter")
+
+                if (spanExportConfig != null || logExportConfig != null) {
+                    val config = parseExportConfig(spanExportConfig, logExportConfig)
+                    print(config)
+                    setHttpExporters(config)
+                } else {
+                    log.info("Neither Traces nor Logs configuration were found, skipping custom export.")
+                }
+            }
+
             promise.resolve(true)
         } catch (e: Exception) {
+            print(e)
             log.warning("Error starting Embrace SDK")
             promise.resolve(false)
         }

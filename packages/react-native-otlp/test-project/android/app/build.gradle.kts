@@ -41,12 +41,6 @@ android {
 
     buildToolsVersion = "33.0.0"
     ndkVersion = "26.1.10909125"
-
-    defaultConfig {
-        ndk {
-            abiFilters += listOf("armeabi-v7a", "x86", "x86_64")
-        }
-    }
 }
 
 dependencies {
@@ -54,15 +48,11 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    // fixing java.lang.UnsatisfiedLinkError during tests
-    implementation("com.facebook.fresco:fresco:2.0.0")
-    // react native 0.75.x
-    implementation("com.facebook.react:react-android:+")
+    // react native 0.75.1
+    implementation("com.facebook.react:react-android:0.75.1")
 
     // using package locally
     implementation(project(":react-native-otlp"))
-
-    implementation("org.webkit:android-jsc:+")
 
     testImplementation(libs.junit)
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
