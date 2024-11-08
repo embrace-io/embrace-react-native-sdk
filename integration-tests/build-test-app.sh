@@ -33,27 +33,26 @@ fi
 
 template_path="templates/$name-template"
 echo "Creating a test app from $template_path"
-# TODO
-#if [ "$is_expo" = true ]; then
-#  artifact=$(ls $template_path/*.tgz)
-#  echo "Running: npx create-expo $name -y --no-install --template ./$artifact"
-#  npx create-expo $name -y --no-install --template ./$artifact
-#else
-#  echo "Running: npx @react-native-community/cli init $name --package-name io.embrace.$name --skip-git-init --skip-install --pm yarn --template $(pwd)/$template_path"
-#  npx @react-native-community/cli init $name --package-name io.embrace.$name --skip-git-init --skip-install --pm yarn \
-#    --template $(pwd)/$template_path
+if [ "$is_expo" = true ]; then
+  artifact=$(ls $template_path/*.tgz)
+  echo "Running: npx create-expo $name -y --no-install --template ./$artifact"
+  npx create-expo $name -y --no-install --template ./$artifact
+else
+  echo "Running: npx @react-native-community/cli init $name --package-name io.embrace.$name --skip-git-init --skip-install --pm yarn --template $(pwd)/$template_path"
+  npx @react-native-community/cli init $name --package-name io.embrace.$name --skip-git-init --skip-install --pm yarn \
+    --template $(pwd)/$template_path
 
   # Hack that works around current issues with the @react-native-community/cli. Even though we are passing --skip-install
   # a package manager is still used to setup the template. If we choose 'npm' the CLI fails with "EISDIR: illegal operation on a directory",
   # if we choose 'yarn' we get past the error but the packageManager version we set in ../package.json is modified so reverting that here
-#  git restore ../package.json
-#fi
+  git restore ../package.json
+fi
 
 echo "Build and install local Embrace packages in $name"
 ./update-embrace-packages.sh $name
 
-#echo "Updating the Embrace config for $name"
-#./set-embrace-config.js $name embrace-configs/remote-mock-api.json --namespace=$namespace
+echo "Updating the Embrace config for $name"
+./set-embrace-config.js $name embrace-configs/remote-mock-api.json --namespace=$namespace
 
 if [ "$platform" == "android" ]; then
   echo "Building $name.apk"

@@ -1,7 +1,0 @@
-{
-  "ios": {
-    "appId": "jon22",
-    "endpointBaseUrl": "https://mock-api.emb-eng.com/namespace/jon/api",
-    "disableAutomaticViewCapture": true
-  }
-}
