@@ -35,8 +35,9 @@ dependencyResolutionManagement {
     }
 }
 
-// TBD: use local package
+// using local package
 include ':react-native-otlp'
+// linking local package to the right place
 project(':react-native-otlp').projectDir = file('../../android')
 
 include(":app")
