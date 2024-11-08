@@ -15,11 +15,10 @@ import com.facebook.react.bridge.WritableMap
 import org.mockito.kotlin.verify
 
 class RNEmbraceOTLPTest {
-    val promise: Promise = mock()
+    private val promise: Promise = mock()
 
     @Before
     fun setUp() {
-        Mockito.mockStatic(SystemClock::class.java)
         Mockito.`when`(SystemClock.uptimeMillis()).thenReturn(123456789L)
     }
 
