@@ -74,7 +74,8 @@ else
   xcodebuild archive -workspace $name/ios/$ios_name.xcworkspace \
   -scheme $ios_name -configuration Release \
   -sdk iphoneos -archivePath $name.xcarchive \
-  CODE_SIGNING_REQUIRED=NO
+  CODE_SIGNING_REQUIRED=NO \
+  CODE_SIGNING_ALLOWED=NO
 
   echo "Building $name.ipa"
   xcodebuild -exportArchive -archivePath $name.xcarchive \
