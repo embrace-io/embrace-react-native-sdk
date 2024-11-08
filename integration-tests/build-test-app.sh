@@ -65,10 +65,10 @@ if [ "$platform" == "android" ]; then
 else
   ios_name="${name/-/}"
 
-  pushd $name/ios
-
   echo "Installing pods for $name"
+  pushd $name/ios
   pod install
+  popd
 
   echo "Building $name.xcarchive"
   xcodebuild archive -workspace $name/ios/$ios_name.xcworkspace \
@@ -80,6 +80,4 @@ else
   xcodebuild -exportArchive -archivePath $name.xcarchive \
   -exportOptionsPlist ExportOptions.plist \
   -exportPath $name-ios-export
-
-  popd
 fi
