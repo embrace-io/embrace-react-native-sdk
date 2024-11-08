@@ -70,6 +70,11 @@ else
   pod install
   popd
 
+  ## TODO
+  pushd $name
+  npm install
+  popd
+
   echo "Building $name.xcarchive"
   xcodebuild archive -workspace $name/ios/$ios_name.xcworkspace \
   -scheme $ios_name -configuration Release \
