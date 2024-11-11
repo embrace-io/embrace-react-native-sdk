@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
   pull_request:
     branches: ['release/**']
-  # TODO remove after testing
-  push:
-    branches: ['jpmunz/EMBR-4920-browserstack-local']
 
 jobs:
   build:

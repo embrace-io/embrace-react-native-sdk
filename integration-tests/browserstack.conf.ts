@@ -69,7 +69,6 @@ exports.config = {
       projectName: "Embrace React Native SDK",
       buildIdentifier: gitRef,
       buildName: runID,
-      buildTag: `${appName}-${platform}`,
       debug: true,
       networkLogs: true,
     },
