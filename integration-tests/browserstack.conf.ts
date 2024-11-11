@@ -39,6 +39,7 @@ const iosCapabilities = [
 ];
 
 const runID = process.env.CI_RUN_ID || "local";
+const gitRef = process.env.CI_GIT_REF || "local";
 const appName = process.env.BROWSERSTACK_APP_NAME;
 const platform = process.env.BROWSERSTACK_PLATFORM;
 const appPath =
@@ -66,8 +67,9 @@ exports.config = {
   commonCapabilities: {
     "bstack:options": {
       projectName: "Embrace React Native SDK",
-      buildIdentifier: `${appName}-${platform}`,
+      buildIdentifier: gitRef,
       buildName: runID,
+      buildTag: `${appName}-${platform}`,
       debug: true,
       networkLogs: true,
     },
