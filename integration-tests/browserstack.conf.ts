@@ -66,9 +66,8 @@ exports.config = {
   commonCapabilities: {
     "bstack:options": {
       projectName: "Embrace React Native SDK",
-      buildIdentifier: runID,
-      buildName: `embrace-rn-sdk-${appName}-${platform}`,
-      buildTag: `${appName}-tag`,
+      buildIdentifier: `${appName}-${platform}`,
+      buildName: runID,
       debug: true,
       networkLogs: true,
     },
