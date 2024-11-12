@@ -45,7 +45,7 @@
   ],
   "scripts": {
     "build": "node update_android_version.ts && ./copy-native-src.sh && tsc",
-    "android:test": "node update_android_version.ts && cd native-src && yarn install && cd android && ./gradlew :app:detekt && ./gradlew :app:testDebugUnitTest && cd ../../",
+    "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detekt && :app:testDebugUnitTest && cd ../../",
     "ios:install": "cd native-src && yarn install && cd ios && pod install && rm .xcode.env.local",
     "ios:test": "../../scripts/run-ios-tests.sh native-src/ios/ReactNativeTracerProvider.xcworkspace ReactNativeTracerProvider"
   },
