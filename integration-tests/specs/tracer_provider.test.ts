@@ -1,13 +1,14 @@
 import {driver} from "@wdio/globals";
 
 import {backgroundSessionsEnabled, endSession} from "../helpers/session";
-import {getSpanPayloads} from "../helpers/embrace_server";
+import {getSpanPayloads} from "../helpers/embrace_mock_api";
 import {EmbraceSpanData} from "../typings/embrace";
 import {
   commonEmbraceSpanAttributes,
   embraceSpanDefaults,
   sortSpanAttributes,
 } from "../helpers/span";
+import {ACTION_BUTTONS} from "../helpers/action";
 
 const msToNano = (ms: number) => ms * 1000000;
 
@@ -35,14 +36,12 @@ describe("Tracer Provider", () => {
   };
 
   beforeEach(async () => {
-    const tracerProviderScreen = await driver.$("~TRACER PROVIDER TESTING");
-    await tracerProviderScreen.click();
+    await ACTION_BUTTONS.NAVIGATE.TRACER();
     await new Promise(r => setTimeout(r, 1000));
   });
 
   it("should record a basic span", async () => {
-    const generateBasicSpan = await driver.$("~GENERATE BASIC SPAN");
-    await generateBasicSpan.click();
+    await ACTION_BUTTONS.SPAN.BASIC();
     await endSession();
     const spanPayloads = await getSpanPayloads();
 
@@ -65,8 +64,7 @@ describe("Tracer Provider", () => {
   });
 
   it("should record test spans", async () => {
-    const generateTestSpans = await driver.$("~GENERATE TEST SPANS");
-    await generateTestSpans.click();
+    await ACTION_BUTTONS.SPAN.TEST();
     await endSession();
     const spanPayloads = await getSpanPayloads();
 
@@ -191,8 +189,7 @@ describe("Tracer Provider", () => {
   });
 
   it("should record nested spans", async () => {
-    const generateTestSpans = await driver.$("~GENERATE NESTED SPANS");
-    await generateTestSpans.click();
+    await ACTION_BUTTONS.SPAN.NESTED();
     await endSession();
     const spanPayloads = await getSpanPayloads();
 

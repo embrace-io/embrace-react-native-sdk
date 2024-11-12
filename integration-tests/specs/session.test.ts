@@ -1,4 +1,4 @@
-import {getSpanPayloads} from "../helpers/embrace_server";
+import {getSpanPayloads} from "../helpers/embrace_mock_api";
 import {endSession, backgroundSessionsEnabled} from "../helpers/session";
 import {getAttributeValue} from "../helpers/span";
 

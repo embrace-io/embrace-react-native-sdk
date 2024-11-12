@@ -1,14 +1,15 @@
 import type {Options} from "@wdio/types";
-import {clearServer, startServer, stopServer} from "./helpers/embrace_server";
-import {firstAvailableDevice} from "./helpers/ios";
-import {Command} from "commander";
 
-interface CLIOptions {
+import {Command} from "commander";
+import {clearApiData} from "./helpers/embrace_mock_api";
+import {getCapabilities} from "./helpers/capability";
+
+export interface CLIOptions {
   package: string;
   platform: "ios" | "android" | "both";
 }
 
-const parseCLIOptions = (): CLIOptions => {
+export const parseCLIOptions = (): CLIOptions => {
   const program = new Command();
 
   // `wdio run <configPath>` does not explicitly support passing custom command line options but since it ignores them
@@ -24,35 +25,7 @@ const parseCLIOptions = (): CLIOptions => {
 
 const options = parseCLIOptions();
 
-const capabilities = [];
-
-if (options.platform === "android" || options.platform === "both") {
-  capabilities.push({
-    // capabilities for local Appium web tests on an Android Emulator
-    platformName: "Android",
-    "appium:deviceName": "Android GoogleAPI Emulator",
-    "appium:platformVersion": "14.0",
-    "appium:automationName": "UiAutomator2",
-    "appium:appPackage": options.package,
-    "appium:appActivity": ".MainActivity",
-    "appium:uiautomator2ServerLaunchTimeout": 60_000,
-    "appium:noReset": true,
-
-    //  TODO: for CI/CD we probably want to point to the prebuilt release
-    //  APK rather than having to have the app running in an emulator beforehand, e.g.
-    //  "appium:app": "./basic-test-app/android/app/build/outputs/apk/debug/app-debug.apk",
-  });
-}
-
-if (options.platform === "ios" || options.platform === "both") {
-  capabilities.push({
-    // capabilities for local Appium web tests on an iOS Emulator
-    platformName: "iOS",
-    "appium:automationName": "XCUITest",
-    "appium:udid": firstAvailableDevice(), // TODO will need to change for CI/CD
-    "appium:appPackage": options.package,
-  });
-}
+const capabilities = getCapabilities(options);
 
 export const config: Options.Testrunner = {
   //
@@ -207,9 +180,7 @@ export const config: Options.Testrunner = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  onPrepare() {
-    startServer(false);
-  },
+  onPrepare() {},
   /**
    * Gets executed before a worker process is spawned and can be used to initialize specific service
    * for that worker as well as modify runtime environments in an async fashion.
@@ -265,8 +236,8 @@ export const config: Options.Testrunner = {
   /**
    * Function to be executed before a test (in Mocha/Jasmine) starts.
    */
-  beforeTest() {
-    clearServer();
+  async beforeTest() {
+    await clearApiData();
   },
   /**
    * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
@@ -302,7 +273,17 @@ export const config: Options.Testrunner = {
   //  }
   // ) {
   // },
-
+  async afterTest() {
+    /* Each test should start from a cold start. Other scenarios should be part of the spec;
+      otherwise, the test will be stateful, causing unexpected behavior depending on which test
+      was executed first.
+    */
+    await driver.terminateApp(options.package);
+    await driver.execute("mobile: activateApp", {
+      appId: options.package,
+      bundleId: options.package,
+    });
+  },
   /**
    * Hook that gets executed after the suite has ended
    * @param {object} suite suite details
@@ -343,9 +324,8 @@ export const config: Options.Testrunner = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  onComplete() {
-    stopServer();
-  },
+  async onComplete() {},
+
   /**
    * Gets executed when a refresh happens.
    * @param {string} oldSessionId session ID of the old session
