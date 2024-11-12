@@ -2,19 +2,18 @@ package io.embrace.rnembraceotlptest
 
 import android.os.SystemClock
 import com.facebook.react.bridge.JavaOnlyArray
+import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.WritableMap
 import io.embrace.rnembraceotlp.RNEmbraceOTLPModule
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
-import com.facebook.react.bridge.JavaOnlyMap
-import com.facebook.react.bridge.WritableMap
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mockStatic
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
@@ -37,23 +36,33 @@ class RNEmbraceOTLPTest {
 
         val traceExporter: WritableMap = JavaOnlyMap().apply {
             putString("endpoint", "https://test-trace-endpoint/v1")
-            putArray("headers", JavaOnlyArray().apply {
-                pushMap(JavaOnlyMap().apply {
-                    putString("key", "key_for_header")
-                    putString("token", "token_for_header")
-                })
-            })
+            putArray(
+                "headers",
+                JavaOnlyArray().apply {
+                    pushMap(
+                        JavaOnlyMap().apply {
+                            putString("key", "key_for_header")
+                            putString("token", "token_for_header")
+                        }
+                    )
+                }
+            )
             putDouble("timeout", 3000.0)
         }
 
         val logExporter: WritableMap = JavaOnlyMap().apply {
             putString("endpoint", "https://test-log-endpoint/v1")
-            putArray("headers", JavaOnlyArray().apply {
-                pushMap(JavaOnlyMap().apply {
-                    putString("key", "key_for_header")
-                    putString("token", "token_for_header")
-                })
-            })
+            putArray(
+                "headers",
+                JavaOnlyArray().apply {
+                    pushMap(
+                        JavaOnlyMap().apply {
+                            putString("key", "key_for_header")
+                            putString("token", "token_for_header")
+                        }
+                    )
+                }
+            )
             putDouble("timeout", 1000.0)
         }
 
@@ -85,15 +94,20 @@ class RNEmbraceOTLPTest {
 
         val traceExporter: WritableMap = JavaOnlyMap().apply {
             putString("endpoint", "https://test-trace-endpoint/v1")
-            putArray("headers", JavaOnlyArray().apply {
-                pushMap(JavaOnlyMap().apply {
-                    putString("key", "key_for_header")
-                    putString("token", "token_for_header")
+            putArray(
+                "headers",
+                JavaOnlyArray().apply {
+                    pushMap(
+                        JavaOnlyMap().apply {
+                            putString("key", "key_for_header")
+                            putString("token", "token_for_header")
 
-                    putString("key2", "key_for_header")
-                    putString("token2", "token_for_header")
-                })
-            })
+                            putString("key2", "key_for_header")
+                            putString("token2", "token_for_header")
+                        }
+                    )
+                }
+            )
             putDouble("timeout", 4000.0)
         }
 
@@ -113,15 +127,20 @@ class RNEmbraceOTLPTest {
 
         val logExporter: WritableMap = JavaOnlyMap().apply {
             putString("endpoint", "https://test-log-endpoint/v1")
-            putArray("headers", JavaOnlyArray().apply {
-                pushMap(JavaOnlyMap().apply {
-                    putString("key", "key_for_header")
-                    putString("token", "token_for_header")
+            putArray(
+                "headers",
+                JavaOnlyArray().apply {
+                    pushMap(
+                        JavaOnlyMap().apply {
+                            putString("key", "key_for_header")
+                            putString("token", "token_for_header")
 
-                    putString("key2", "key_for_header")
-                    putString("token2", "token_for_header")
-                })
-            })
+                            putString("key2", "key_for_header")
+                            putString("token2", "token_for_header")
+                        }
+                    )
+                }
+            )
             putDouble("timeout", 5000.0)
         }
 

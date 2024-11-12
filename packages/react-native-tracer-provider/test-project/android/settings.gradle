@@ -1,0 +1,50 @@
+pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
+    // including external React Native plugin
+    includeBuild("../node_modules/@react-native/gradle-plugin")
+}
+
+// React configuration (needs 0.75.x version)
+plugins {
+    id 'com.facebook.react.settings'
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// React configuration (needs 0.75.x version)
+extensions.configure(com.facebook.react.ReactSettingsExtension) {
+        ex -> ex.autolinkLibrariesFromCommand()
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// using local package
+include ':react-native-tracer-provider'
+// linking local package to the right place
+project(':react-native-tracer-provider').projectDir = file('../../android')
+
+rootProject.name = "RNEmbraceTracerProviderTest"
+include(":app")
