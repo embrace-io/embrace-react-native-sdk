@@ -1,4 +1,7 @@
+import com.android.Version
+
 apply plugin: 'com.android.library'
+
 buildscript {
     repositories {
         mavenCentral()
@@ -8,19 +11,39 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:8.6.0'
         classpath "io.embrace:embrace-swazzler:$emb_android_sdk"
     }
 }
+
+static def supportsNamespace() {
+    def parsed = Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
+    def major = parsed[0].toInteger()
+    def minor = parsed[1].toInteger()
+
+    // Namespace support was added in 7.3.0
+    return (major == 7 && minor >= 3) || major >= 8
+}
+
 android {
-    compileSdkVersion 31
-    buildToolsVersion "28.0.3"
+    if (supportsNamespace()) {
+        namespace "io.embrace.embracewrapper"
+
+        sourceSets {
+            main {
+                manifest.srcFile "src/main/AndroidManifestNew.xml"
+            }
+        }
+    }
+
+    compileSdkVersion 34
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion 24
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
+
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -33,13 +56,12 @@ android {
 }
 
 dependencies {
-    api 'com.facebook.react:react-native:+'
-    api "io.embrace:embrace-android-sdk:$emb_android_sdk"
+    implementation "com.facebook.react:react-android:+"
 }
 
 repositories {
-    maven {
-        url 'https://maven.google.com/'
-        name 'Google'
-    }
+    mavenCentral()
+    google()
 }
+
+apply from: 'dependencies.gradle'
