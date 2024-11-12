@@ -60,7 +60,6 @@ interface EmbracePayloadResource {
   app_version: string;
   environment_detail: string;
   environment: string;
-  environment: string;
   device_architecture: string;
   os_build: string;
   disk_total_capacity: string;
