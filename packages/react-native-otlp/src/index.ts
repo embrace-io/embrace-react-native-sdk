@@ -68,6 +68,8 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
 
   return async (sdkConfig: IOSConfig | AndroidConfig) => {
     try {
+      // @embrace-io/react-native (core) is still handling the start
+      // if an error occurs, the main package will print the proper errors
       return await NativeModules.RNEmbraceOTLP.startNativeEmbraceSDK(
         sdkConfig,
         otlpExporterConfig,
