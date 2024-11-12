@@ -1,0 +1,44 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        gradlePluginPortal()
+    }
+
+    // including external React Native plugin
+    includeBuild("../node_modules/@react-native/gradle-plugin")
+}
+
+// React configuration (needs 0.75.x version)
+plugins {
+    id 'com.facebook.react.settings'
+}
+
+// React configuration (needs 0.75.x version)
+extensions.configure(com.facebook.react.ReactSettingsExtension) {
+    ex -> ex.autolinkLibrariesFromCommand()
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// using local package
+include ':react-native-otlp'
+// linking local package to the right place
+project(':react-native-otlp').projectDir = file('../../android')
+
+include(":app")
+
+rootProject.name = "RNEmbraceOTLPTest"

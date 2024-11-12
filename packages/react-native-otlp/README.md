@@ -1,8 +1,11 @@
-## React Native OTLP
+# React Native Embrace - OTLP
 
-- Brief explanation TBD
+The [OpenTelemetry Protocol](https://opentelemetry.io/docs/specs/otel/protocol/) (OTLP) is an open standard that enables the transfer of observability data—such as traces and logs—from applications to various monitoring and analytics backends. By adopting OTLP, developers can send telemetry data in a consistent format, making integration with multiple backends straightforward. 
+
+This component provides an easy way to export trace and log data to any OTLP-compatible backend over HTTP. The component also keeps sending telemetry data to Embrace, ensuring continuous observability with Embrace’s platform while allowing users to export data to other observability backends.
 
 # Requirements
+
 It's mandatory for the use of this package to have previously installed `@embrace-io/react-native` and integrated. For more information visit our [docs](https://embrace.io/docs/react-native/integration/).
 
 # Integration

@@ -1,7 +1,6 @@
 {
   "name": "@embrace-io/react-native-otlp",
   "version": "5.0.2",
-  "private": true,
   "description": "A React Native wrapper for the Embrace SDK that allows to connect to OTLP endpoints",
   "files": [
     "lib",
@@ -19,8 +18,9 @@
     "prebuild": "cp -r ../../interfaces/ ./src/interfaces/common",
     "build": "tsc",
     "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceOTLPTest.xcworkspace -list",
-    "ios:install": "cd test-project && yarn && cd ios && pod install && rm .xcode.env.local",
-    "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceOTLPTests.xcworkspace RNEmbraceOTLPTests"
+    "android:test": "cd test-project && yarn && cd android && ./gradlew :app:testDebugUnitTest && cd ../../",
+    "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceOTLPTests.xcworkspace RNEmbraceOTLPTests",
+    "ios:install": "cd test-project && yarn && cd ios && pod install && rm .xcode.env.local"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"
@@ -31,5 +31,29 @@
   "embrace": {
     "iosVersion": "6.5.1",
     "androidVersion": "6.13.0"
-  }
+  },
+  "author": "Embrace <support@embrace.io> (https://embrace.io/)",
+  "bugs": {
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk/issues",
+    "email": "support@embrace.io"
+  },
+  "homepage": "https://github.com/embrace-io/embrace-react-native-sdk",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk",
+    "directory": "packages/react-native-otlp"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "embrace",
+    "react-native",
+    "tracking",
+    "observability",
+    "instrumentation",
+    "telemetry",
+    "bug tracker"
+  ]
 }
