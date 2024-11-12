@@ -1,3 +1,5 @@
+import {Platform, NativeModules} from "react-native";
+
 import {SDKConfig} from "../interfaces/common";
 import {initialize, type OTLPExporterConfig} from "../index";
 
@@ -17,10 +19,13 @@ jest.mock("react-native", () => ({
       ) => mockStartNativeEmbraceSDK(sdkConfig, otlpConfig),
     },
   },
-  Platform: {OS: "ios"},
+  Platform: {
+    OS: "ios",
+  },
 }));
 
 describe("React Native OTLP", () => {
+  // should call
   describe("should call `startNativeEmbraceSDK`", () => {
     it("if it receives the proper configuration (happy path)", async () => {
       const otlpExporterConfig = {
@@ -100,6 +105,40 @@ describe("React Native OTLP", () => {
     });
   });
 
+  describe("should call `startNativeEmbraceSDK` (Android specific)", () => {
+    beforeAll(() => {
+      Platform.OS = "android";
+    });
+
+    it("if it receives the proper configuration (happy path)", async () => {
+      const otlpExporterConfig = {
+        logExporter: {
+          endpoint: "https://example.com/logs/v1",
+          headers: [
+            {key: "Authorization", token: "Bearer token"},
+            {key: "Authorization", token: "Bearer token:v2"},
+          ],
+          timeout: 10000,
+        },
+        traceExporter: {
+          endpoint: "https://example.com/traces/v1",
+          headers: [{key: "Authorization", token: "Bearer token"}],
+          timeout: 10000,
+        },
+      };
+
+      const customInitCallback = initialize(otlpExporterConfig);
+      // it doesn't matter for in this case since the configuration (through code) is not used in the Android layer
+      await customInitCallback({});
+
+      expect(mockStartNativeEmbraceSDK).toHaveBeenCalledWith(
+        {},
+        otlpExporterConfig,
+      );
+    });
+  });
+
+  // should NOT call
   describe("should not call `startNativeEmbraceSDK`", () => {
     const mockConsoleWarn = jest
       .spyOn(console, "warn")
@@ -308,6 +347,42 @@ describe("React Native OTLP", () => {
       expect(mockConsoleWarn).toHaveBeenCalledWith(
         "[Embrace] Invalid header for Custom Exporter",
       );
+    });
+  });
+
+  describe("should not call `startNativeEmbraceSDK` (Android specific)", () => {
+    beforeAll(() => {
+      Platform.OS = "android";
+    });
+
+    const mockConsoleWarn = jest
+      .spyOn(console, "warn")
+      .mockImplementation(a => a);
+
+    it("if configuration is missing", async () => {
+      // @ts-expect-error (testing invalid configuration)
+      const customInitCallback = initialize(undefined);
+      await customInitCallback(IOS_SDK_BASE_CONFIG);
+
+      expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
+      expect(mockConsoleWarn).toHaveBeenCalledWith(
+        "[Embrace] Invalid configuration for Custom Exporter",
+      );
+    });
+  });
+
+  describe("should throw and reject", () => {
+    beforeAll(() => {
+      NativeModules.RNEmbraceOTLP.startNativeEmbraceSDK = jest
+        .fn()
+        .mockImplementation(jest.fn().mockResolvedValue(false));
+    });
+
+    it("if something goes wrong in the Native layer", async () => {
+      const customInitCallback = initialize({});
+      const isStarted = await customInitCallback(IOS_SDK_BASE_CONFIG);
+
+      expect(isStarted).toBe(false);
     });
   });
 });
