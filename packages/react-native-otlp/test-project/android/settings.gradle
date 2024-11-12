@@ -12,8 +12,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 
-    // including external React Native plugin (from root of monorepo)
-    // TBD if the absolute path could be calculated dynamically
+    // including external React Native plugin
     includeBuild("../node_modules/@react-native/gradle-plugin")
 }
 
