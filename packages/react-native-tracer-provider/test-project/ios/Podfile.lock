@@ -1,7 +1,6 @@
 PODS:
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
-  - EmbraceInternalSwiftLog (1.4.4-internal)
   - EmbraceIO (6.5.1):
     - EmbraceIO/EmbraceIO (= 6.5.1)
   - EmbraceIO/EmbraceCaptureService (6.5.1):
@@ -1557,13 +1556,11 @@ PODS:
     - React-perflogger (= 0.75.4)
     - React-utils (= 0.75.4)
   - SocketRocket (0.7.0)
-  - SwiftProtobuf (1.20.2)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - EmbraceInternalSwiftLog (= 1.4.4-internal)
   - EmbraceIO (= 6.5.1)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
@@ -1626,15 +1623,12 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - SwiftProtobuf (= 1.20.2)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
-    - EmbraceInternalSwiftLog
     - EmbraceIO
     - SocketRocket
-    - SwiftProtobuf
 
 EXTERNAL SOURCES:
   boost:
@@ -1766,7 +1760,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  EmbraceInternalSwiftLog: a7b20002f2ca34400678012c3c3e8f7d51da5c79
   EmbraceIO: 3c7715c08592d75a534bddfcf5cdd3486d4c8e38
   FBLazyVector: 430e10366de01d1e3d57374500b1b150fe482e6d
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
@@ -1828,9 +1821,8 @@ SPEC CHECKSUMS:
   ReactCodegen: 4bcb34e6b5ebf6eef5cee34f55aa39991ea1c1f1
   ReactCommon: 6a952e50c2a4b694731d7682aaa6c79bc156e4ad
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  SwiftProtobuf: 9f458aaa7844a2fc0b910053e66578bc4e2da9c1
   Yoga: 055f92ad73f8c8600a93f0e25ac0b2344c3b07e6
 
-PODFILE CHECKSUM: 5e0942405860aa4e5ef0ae66ae76a96cff6db219
+PODFILE CHECKSUM: 8a42854bb512b05ba8e76a5c1b6d099f48aca459
 
 COCOAPODS: 1.15.2

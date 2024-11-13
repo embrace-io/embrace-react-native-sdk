@@ -1,3 +1,5 @@
+
+# React Native
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
@@ -14,7 +16,8 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'RNEmbraceOTLP' do
+target 'RNEmbraceTracerProvider' do
+  # Pods for RNEmbraceTracerProvider
   config = use_native_modules!
 
   use_react_native!(
@@ -26,10 +29,10 @@ target 'RNEmbraceOTLP' do
   # Custom
   # loading `dependencies` file
   load '../../ios/dependencies.rb'
-  # installing custom dependencies from the original RNEmbraceOTLP
+  # installing custom dependencies from the original RNEmbraceTracerProvider
   load_dependencies()
-
-  target 'RNEmbraceOTLPTests' do
+  
+  target 'RNEmbraceTracerProviderTests' do
     # Pods for testing
     inherit! :complete
   end

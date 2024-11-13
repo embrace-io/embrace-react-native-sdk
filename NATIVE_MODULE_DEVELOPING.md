@@ -20,13 +20,19 @@ packages/
     └── RNEmbrace<PackageName>.podspec    # `RNEmbrace` is the prefix as per convention
 ```
 
-> Make sure the new `package.json` file list all files/folders we want to get packed during the build and pack process. Example:
+> Make sure the new `package.json` file list all files/folders we want to get packed. Notice that in the following example android has a very detailed list. That's the minimum the Android Native module needs for building/running into a React Native application.
 
 ```json
 {
   "files": [
     "lib",
-    "android",
+    "android/gradle",
+    "android/src",
+    "android/build.gradle",
+    "android/dependencies.gradle",
+    "android/gradle.properties",
+    "android/gradlew",
+    "android/gradlew.bat",
     "ios",
     "RNEmbrace<PackageName>.podspec"
   ],
@@ -45,7 +51,7 @@ References are very important when developing a new iOS Standalone Native Module
 - Create a new target with the same name
 - Create the proper files following the [iOS Native Modules for React Native](https://reactnative.dev/docs/native-modules-ios) official documentation.
 
-This repository already contains classes using Swift. We highly recommend to keep this approach. More information about how to do it can be found in the (official documentation)[https://reactnative.dev/docs/native-modules-ios#exporting-swift].
+This repository already contains classes using Swift. We highly recommend to keep this approach. More information about how to do it can be found in the [official documentation](https://reactnative.dev/docs/native-modules-ios#exporting-swift).
 
 At the end of this process the ios folder structure should contain something like the following:
 

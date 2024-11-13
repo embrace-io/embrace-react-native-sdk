@@ -41,5 +41,4 @@ Pod::Spec.new do |s|
 
   load 'ios/dependencies.rb'
   load_dependencies(s)
-
 end
