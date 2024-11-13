@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6DD302962CE647E800D064C4 /* ReactNativeTracerProviderModule-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6B1E12CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule-Bridging-Header.h */; };
 		6DD6B1E52CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DD6B1E12CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule-Bridging-Header.h */; };
 		6DD6B1E62CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6B1DF2CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.mm */; };
 		6DD6B1E72CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6B1E02CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.swift */; };
@@ -333,6 +334,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DD302962CE647E800D064C4 /* ReactNativeTracerProviderModule-Bridging-Header.h in Sources */,
 				6DD6B1E62CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.mm in Sources */,
 				6DD6B1E72CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.swift in Sources */,
 			);
@@ -576,12 +578,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3E77F947636C8C9199BE515E /* Pods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbraceTracerProviderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -592,12 +597,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9E6B4218B8EB0494019BEEA3 /* Pods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbraceTracerProviderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
