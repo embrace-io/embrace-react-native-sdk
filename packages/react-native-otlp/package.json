@@ -25,7 +25,7 @@
     "build": "tsc",
     "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
     "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceOTLPTests.xcworkspace RNEmbraceOTLPTests",
-    "ios:install": "cd test-project && yarn && cd ios && pod install && rm .xcode.env.local"
+    "ios:install": "cd test-project && yarn && cd ios && pod install"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"

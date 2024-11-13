@@ -11,7 +11,13 @@
 # create RNEmbrace__NAME__.podspec file
 
 ## iOS
-# create workspace -> File -> New -> Workspace (into test-project/ios/ dir) -> RNEmbrace__NAME__Tests.xcworkspace
+# create a project -> File -> New -> Project -> Static Library (for src files) into packages/__PACKAGE_NAME__/ios
+#       it will create the RNEmbrace__NAME__.xcodeproj file + structure
+# move the content of the extra RNEmbrace__NAME__ dir outside, making it direct child of ios/RNEmbrace__NAME__ folder (before it was ios/RNEmbrace__NAME__/RNEmbrace__NAME__/**) using XCode for keeping the right reference
+# now it's created RNEmbrace__NAME_.swift
+# create RNEmbrace__NAME__.mm using the template
+# by doing the previous step, the RNEmbrace__NAME__-Bridging-Header.h file will be created automatically
+# close *.xcodeproj session and remove everything related to it
 # create project -> File -> New -> Project -> Framework (iOS)
 #     Product Name -> RNEmbrace__NAME__ (no sufix Test here, should be the same name as the ios source package)
 #     Language -> Swift
