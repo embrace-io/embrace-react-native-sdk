@@ -44,6 +44,7 @@
 # make sure swift classes add the `React` import at the top of the file
 # make sure `BUILD_LIBRARY_FOR_DISTRIBUTION / Build Libraries for Distribution` is set to `No` for regular target (not the test one)
 # make sure `ENABLE_USER_SCRIPT_SANDBOXING / User Script Sandboxing` is set to `NO` for regular target (not the test one)
+# make sure `rm .xcode.env.local` is part of the ios:install script on each package: https://github.com/facebook/react-native/issues/36762#issuecomment-2245907571 
 
 ## Android
 # Create the project: File -> New -> New Project -> Empty Activity + kotlin (into test-project dir)
