@@ -1,5 +1,0 @@
-// specific to React Native > 0.71.x
-// monorepo is using 0.75.4 and will install locally the right dependency
-dependencies {
-    implementation "com.facebook.react:react-android:+"
-}

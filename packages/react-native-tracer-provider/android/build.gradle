@@ -16,6 +16,17 @@ buildscript {
   }
 }
 
+def isDev() {
+  def localProps = new Properties()
+  def localPropertiesFile = rootProject.file("local.properties")
+
+  if (localPropertiesFile.exists()) {
+    localProps.load(new FileInputStream(localPropertiesFile))
+  }
+
+  return localProps.getProperty('isDev', 'false').toBoolean()
+}
+
 def reactNativeArchitectures() {
   def value = rootProject.getProperties().get("reactNativeArchitectures")
   return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
@@ -95,20 +106,17 @@ repositories {
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
 dependencies {
-  // For < 0.71, this will be from the local maven repo
-  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
-  // noinspection GradleDynamicVersion
-  // implementation "com.facebook.react:react-native:+"
+  if (isDev()) {
+    implementation "com.facebook.react:react-android:+"
+  } else {
+    // For < 0.71, this will be from the local maven repo
+    // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
+    // noinspection GradleDynamicVersion
+    implementation "com.facebook.react:react-native:+"
+  }
+
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 // adding Embrace + OpenTelemetry dependencies
 apply from: 'dependencies.gradle'
-
-// TODO: discuss if we want to remove this block in a pre-release step
-// adding local dependencies
-if (file("$projectDir/local.gradle").exists()) {
-  apply from: 'local.gradle'
-} else {
-  implementation "com.facebook.react:react-native:+"
-}

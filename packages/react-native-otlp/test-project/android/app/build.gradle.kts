@@ -67,7 +67,6 @@ dependencies {
 
     add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
 
-    // NOTE: To confirm this
     implementation(kotlin("script-runtime"))
 }
 
