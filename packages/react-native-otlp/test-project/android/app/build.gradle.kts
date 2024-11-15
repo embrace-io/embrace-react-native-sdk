@@ -66,7 +66,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
-
     implementation(kotlin("script-runtime"))
 }
 

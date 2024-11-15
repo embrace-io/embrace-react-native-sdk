@@ -4,13 +4,10 @@
   "description": "A React Native wrapper for the Embrace SDK that allows to connect to OTLP endpoints",
   "files": [
     "lib",
-    "android/gradle",
     "android/src",
     "android/build.gradle",
-    "android/dependencies.gradle",
     "android/gradle.properties",
-    "android/gradlew",
-    "android/gradlew.bat",
+    "android/dependencies.gradle",
     "ios",
     "RNEmbraceOTLP.podspec"
   ],
