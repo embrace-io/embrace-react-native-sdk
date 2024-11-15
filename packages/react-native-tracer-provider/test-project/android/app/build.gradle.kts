@@ -47,11 +47,11 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    // react native 0.75.1
-    implementation("com.facebook.react:react-android:0.75.1")
-
     // using package locally
     implementation(project(":react-native-tracer-provider"))
+
+    // react native 0.75.1
+    testImplementation("com.facebook.react:react-android:0.75.1")
 
     testImplementation(libs.junit)
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
@@ -73,6 +73,7 @@ dependencies {
 
 
     add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
+    implementation(kotlin("script-runtime"))
 }
 
 detekt {

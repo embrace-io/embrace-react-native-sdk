@@ -29,14 +29,14 @@ android {
         }
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
     useLibrary("android.test.mock")
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     buildToolsVersion = "33.0.0"
@@ -48,13 +48,13 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    // react native 0.75.1
-    implementation("com.facebook.react:react-android:0.75.1")
-
     // using package locally
     implementation(project(":react-native-otlp"))
 
     testImplementation(libs.junit)
+
+    testImplementation("com.facebook.react:react-android:0.75.1")
+
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation("junit:junit:4.12")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
@@ -66,6 +66,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
+
+    // NOTE: To confirm this
+    implementation(kotlin("script-runtime"))
 }
 
 detekt {
