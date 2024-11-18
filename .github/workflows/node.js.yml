@@ -30,7 +30,7 @@ jobs:
       - run: yarn prebuild
       - run: yarn build
       - run: yarn test --watchAll=false --coverage
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
