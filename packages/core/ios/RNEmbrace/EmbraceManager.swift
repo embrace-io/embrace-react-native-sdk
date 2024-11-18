@@ -53,7 +53,14 @@ class EmbraceManager: NSObject {
         }
     }
   }
-
+    @objc
+    func getDefaultJavaScriptBundlePath(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        if  let filePath = Bundle.main.path(forResource: "main", ofType: "jsbundle"){
+            resolve(filePath)
+        } else {
+            reject("error", "Unable to retrieve JS bundle path", nil)
+        }
+    }
     @objc
     func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         if let embraceStarted = Embrace.client?.started {
