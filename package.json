@@ -10,7 +10,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "publish-modules": "npx lerna run build && npx lerna publish",
+    "publish-modules": "npx lerna version && npx lerna run build && npx lerna publish from-git",
     "prebuild": "npx lerna run prebuild",
     "build": "npx lerna run build",
     "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx && prettier \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints",
