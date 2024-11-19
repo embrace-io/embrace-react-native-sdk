@@ -92,7 +92,7 @@ test-project /
 ### Create Unit Test suite for the new iOS Native Module
 
 - Using XCode create a new Framework: Project -> File -> New -> Project -> Framework (iOS).
-a. Product Name -> RNEmbrace__NAME__ (no sufix Test here, should be the same name as the ios source package)
+a. Product Name -> RNEmbrace__NAME__ (no suffix Test here, should be the same name as the ios source package)
 b. Language -> Swift
 c. Team -> None
 d. Organization Identifier -> io.embrace.rnembrace__NAME__
@@ -150,7 +150,7 @@ Tests can be run from XCode by opening test-project/ios/RNEmbrace<PackageName>Te
 - Link the local package into test (`project(':react-native-tracer-provider').projectDir = file('../../android')`)
 - Update rootProject.name (`rootProject.name = "io.embrace.rnembrace<packagename>test"`)
 - Into the `gradle.properties` -> Add custom properties (particularly `RNEmbrace<PackageName>_packageJsonPath` following other packages as example)
-- Add `android/config` folder with respective content (`detekt` plugin for linting, in the future this is going to be moved at the root of the repo avoinding config duplication)
+- Add `android/config` folder with respective content (`detekt` plugin for linting, in the future this is going to be moved at the root of the repo avoiding config duplication)
 
 ## Some reminders
 
