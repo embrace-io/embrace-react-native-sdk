@@ -25,8 +25,13 @@ desired RN version:
 npx @react-native-community/cli init ProjectName --skip-git-init --skip-install --pm yarn --version 0.x.y
 ```
 
-Then moving over the created app into the templates folder (`mv ProjectName templates/my-new-template`), removing any
-unneeded files, and adding Embrace specific setup.
+NOTE: `--pm yarn` is set to workaround an issue with the @react-native-community/cli where even though we are passing
+`--skip-install` a package manager is still used to setup the template. If we choose 'npm' the CLI fails with
+"EISDIR: illegal operation on a directory", if we choose 'yarn' we get past the error but the packageManager version we
+set in ../package.json is modified so make sure to revert afterwards.
+
+After initializing, move over the created app into the templates folder (`mv ProjectName templates/my-new-template`) and
+remove any unneeded files then add Embrace specific setup.
 
 The ["Current Tags"](https://www.npmjs.com/package/react-native?activeTab=versions) section of the react-native package
 in NPM can help decide which specific patch version to pin the template to for a given minor version, there will generally
@@ -52,7 +57,13 @@ npx @react-native-community/cli init <testApp> --package-name io.embrace.<test-a
 To create a new test expo app run:
 
 ```bash
-npx create-expo --template ./templates/<template-app>/<artifact>.tgz
+npx create-expo <testApp> --no-install  --template ./templates/<template-app>/<artifact>.tgz
+```
+
+Complete the installation of npm packages in the app with:
+
+```bash
+./update-embrace-packages.sh <test-app>
 ```
 
 For one-off testing the created app can just be removed afterward. If the app represents a particular setup that we
@@ -65,7 +76,12 @@ the repo for quickly testing a basic app setup from React Native's [getting star
 
 Make sure the test app has the latest locally built @embrace-io/* packages and test harness:
 ```bash
-./update-local-embrace.sh <test-app>
+./update-embrace-packages.sh <test-app>
+```
+
+Optionally you can also point the test-app to a published version of the embrace packages with:
+```bash
+./update-embrace-packages.sh <test-app> --version=5.0.2
 ```
 
 Set the test app up with a particular embrace config:
@@ -125,14 +141,31 @@ harness and pointing to the local node mock server.
 Run the integration tests specifying the package name of app being tested
 
 ```bash
-npm test -- --package=foobar --platform=android # ios, both
+npm run test-local -- --package=foobar --platform=android # ios, both
 ```
 
-### CI
+### Running in CI
 
-TODO for the moment the utility here is to be able to run tests locally during development, as a next task need to hook this up to
-CI tools to verify a passing suite for new releases. Likely this means updating or creating a new `wdio.conf.ts` that
-can be configured to point to a remote environment. See what capabilities are available for that [here](https://appium.io/docs/en/2.1/guides/caps/)
+The [integration testing workflow](../.github/workflows/integration-test.yml) will trigger automatically on any PRs
+opened for `release/**` branches. The workflow will build .apk and .ipa bundles for apps created from a set of the
+test app templates and then upload them to Browserstack to run the suite of test specs across a range of devices for
+both iOS and Android. The workflow can also be triggered manually from (TODO). 
+
+You can run the same commands the workflow uses from your machine to debug issues with Browserstack. First build an
+app bundle to use for the test:
+
+```bash
+./build-test-app.sh expo-rn74 android some-namespace-id
+```
+
+Then run the tests, make sure to set the required environment variables:
+
+```bash
+BROWSERSTACK_USERNAME=user BROWSERSTACK_ACCESS_KEY=key BROWSERSTACK_APP_NAME=expo-rn74 BROWSERSTACK_PLATFORM=android npm run test-remote
+```
+
+The values for `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` can be found for your own user on this
+[BrowserStack settings page](https://www.browserstack.com/accounts/settings/product) under "Local Testing".
 
 ### Adding new specs
 

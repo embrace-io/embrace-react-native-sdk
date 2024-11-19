@@ -58,14 +58,16 @@ unreleased changes on `main` and a patch release will be cut from that new branc
 
 ## Releasing
 
-1. Create a release branch off of main and push it to origin
-2. Make sure you are logged into the npmjs registry (`npm login`)
-3. Release to npm with `yarn publish-modules`, you will be prompted to choose the version number to update to
-4. Check https://www.npmjs.com/org/embrace-io, the latest versions should have been published
-5. Check https://github.com/embrace-io/embrace-react-native-sdk/tags, a vX.X.X tag should have been pushed
-6. Create a PR from your release branch against `main` to merge all the version updates
-7. Run an example app and point to the latest released packages to confirm basic behaviour
-8. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
+1. Create a `release/` branch off of main with an empty commit: `git commit --allow-empty -m "starting the release process for vX.X.X"`.
+    Push it to origin and create a PR from it to kick-off the integration test workflow
+2. Verify that the integration test runs on [BrowserStack](https://app-automate.browserstack.com/dashboard/v2/builds) succeed for the release branch
+3. Make sure you are logged into the npmjs registry (`npm login`)
+4. Release to npm with `yarn publish-modules`, you will be prompted to choose the version number to update to
+5. Check https://www.npmjs.com/org/embrace-io, the latest versions should have been published
+6. Check https://github.com/embrace-io/embrace-react-native-sdk/tags, a vX.X.X tag should have been pushed
+7. The release branch PR should now include all the version updates, merge it back to `main`
+8. Use `integration-tests/update-embrace-package.sh <testApp> --version=<version>` to point a test app to the latest released packages to confirm basic behaviour
+9. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
 
 NOTE: If you make a mistake while publishing you can remove the specific version w/ `npm unpublish <package-name>@<version>`, see [Unpublishing a single version of a package](https://docs.npmjs.com/unpublishing-packages-from-the-registry#unpublishing-a-single-version-of-a-package)
 

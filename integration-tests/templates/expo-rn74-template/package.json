@@ -1,5 +1,5 @@
 {
-  "name": "expo-rn75-template",
+  "name": "expo-rn74-template",
   "description": "Expo test app template integrating the Embrace test harness",
   "version": "1.0.0",
   "main": "expo-router/entry",
@@ -16,11 +16,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@embrace-io/react-native": "file:../artifacts/embrace-io-react-native-local.tgz",
-    "@embrace-io/react-native-tracer-provider": "file:../artifacts/embrace-io-react-native-tracer-provider-local.tgz",
-    "@embrace-io/react-native-test-harness": "file:../artifacts/embrace-io-react-native-test-harness-local.tgz",
     "@expo/vector-icons": "^14.0.0",
-    "@opentelemetry/instrumentation-react-native-navigation": "file:../artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz",
     "@react-navigation/native": "^6.0.2",
     "expo": "~51.0.9",
     "expo-constants": "~16.0.2",

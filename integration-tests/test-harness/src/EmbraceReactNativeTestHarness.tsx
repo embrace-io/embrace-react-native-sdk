@@ -1,6 +1,7 @@
 import * as React from "react";
 import {useRef} from "react";
 import {LogTestingScreen} from "./screens/LogTestingScreen";
+import {OTLPTestingScreen} from "./screens/OTLPTestingScreen";
 import {TracerProviderTestingScreen} from "./screens/TracerProviderTestingScreen";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {
@@ -46,6 +47,13 @@ export const EmbraceReactNativeTestHarness = () => {
               tabBarAccessibilityLabel: "TRACER PROVIDER TESTING",
             }}
             component={TracerProviderTestingScreen}
+          />
+          <Tab.Screen
+            name="EMBRACE OTLP"
+            options={{
+              tabBarAccessibilityLabel: "EMBRACE OTLP",
+            }}
+            component={OTLPTestingScreen}
           />
         </Tab.Navigator>
       </NavigationTracker>

@@ -3,5 +3,5 @@
   "android_app_id": "abcdf",
   "ios_app_id": "abcdf",
   "disable_view_capture": true,
-  "endpoint": "http://localhost:8989/namespace/<namespace>/api/"
+  "endpoint": "http://localhost:8989/namespace/<namespace>/api"
 }

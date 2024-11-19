@@ -3,5 +3,5 @@
   "android_app_id": "abcdf",
   "ios_app_id": "abcdf",
   "disable_view_capture": true,
-  "endpoint": "https://mock-api.emb-eng.com/namespace/<namespace>/api/"
+  "endpoint": "https://mock-api.emb-eng.com/namespace/<namespace>/api"
 }
