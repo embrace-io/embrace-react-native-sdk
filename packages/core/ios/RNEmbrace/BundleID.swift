@@ -32,6 +32,7 @@ private struct LastBundleComputation: Codable {
 
 enum ComputeBundleIDErrors: Error {
     case emptyPath
+    case parseError
 }
 
 struct BundleID {
