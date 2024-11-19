@@ -2,7 +2,7 @@ import groovy.json.JsonSlurper
 
 def json = new JsonSlurper()
 
-def packageJsonPath = project.properties["TracerProvider_packageJsonPath"]
+def packageJsonPath = project.properties["RNEmbraceTracerProvider_packageJsonPath"]
 def packageJsonFile = file("$packageJsonPath/package.json")
 def packageJson = json.parse(packageJsonFile)
 
