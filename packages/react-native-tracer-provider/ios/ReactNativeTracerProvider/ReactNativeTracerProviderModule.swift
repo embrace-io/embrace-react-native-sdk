@@ -140,7 +140,7 @@ class ReactNativeTracerProviderModule: NSObject {
   @objc(setupTracer:version:schemaUrl:)
   func setupTracer(name: String, version: String, schemaUrl: String) {
     if tracerProvider == nil {
-        if (Embrace.client?.started) != nil {
+      if (Embrace.client?.started) != nil {
         tracerProvider = OpenTelemetry.instance.tracerProvider
       } else {
         os_log("cannot access tracer provider, Embrace SDK has not been started", log: log, type: .error)
