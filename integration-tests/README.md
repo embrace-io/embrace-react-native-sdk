@@ -149,7 +149,8 @@ npm run test-local -- --package=foobar --platform=android # ios, both
 The [integration testing workflow](../.github/workflows/integration-test.yml) will trigger automatically on any PRs
 opened for `release/**` branches. The workflow will build .apk and .ipa bundles for apps created from a set of the
 test app templates and then upload them to Browserstack to run the suite of test specs across a range of devices for
-both iOS and Android. The workflow can also be triggered manually from (TODO). 
+both iOS and Android. The workflow can also be triggered manually from the [Actions page in Github](https://github.com/embrace-io/embrace-react-native-sdk/actions/workflows/integration-test.yml)
+by clicking "Run Workflow" and choosing the branch to execute it on.
 
 You can run the same commands the workflow uses from your machine to debug issues with Browserstack. First build an
 app bundle to use for the test:
