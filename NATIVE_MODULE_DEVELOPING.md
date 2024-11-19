@@ -31,8 +31,6 @@ packages/
     "android/build.gradle",
     "android/dependencies.gradle",
     "android/gradle.properties",
-    "android/gradlew",
-    "android/gradlew.bat",
     "ios",
     "RNEmbrace<PackageName>.podspec"
   ],
