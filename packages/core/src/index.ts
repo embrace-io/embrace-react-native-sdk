@@ -129,6 +129,9 @@ const initialize = async ({
       const isCodePushPresent =
         await NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
 
+      // On Android the Swazzler stores the computed bundle ID as part of the build process and the SDK is able to
+      // read it at run time. On iOS however we don't retain this value so we either need to get it from the Code Push
+      // bundle or, if that isn't enabled, try and get it from the default bundle path
       if (!isCodePushPresent && Platform.OS === "ios") {
         const bundleJs =
           await NativeModules.EmbraceManager.getDefaultJavaScriptBundlePath();
