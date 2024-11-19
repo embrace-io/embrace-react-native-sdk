@@ -74,9 +74,8 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
         sdkConfig,
         otlpExporterConfig,
       );
-    } catch (error) {
-      console.warn(WARN_MESSAGES.error, error);
-      return Promise.reject(false);
+    } catch (_) {
+      return Promise.reject(WARN_MESSAGES.error);
     }
   };
 };

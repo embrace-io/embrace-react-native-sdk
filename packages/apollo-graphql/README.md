@@ -11,13 +11,13 @@ Here's how you add the Apollo GraphQL tracker to the session.
 ### Install the component
 
 ```sh
-yarn add @embrace-io/apollo-graphql
+yarn add @embrace-io/react-native-apollo-graphql
 ```
 
 Or
 
 ```sh
-npm install @embrace-io/apollo-graphql
+npm install @embrace-io/react-native-apollo-graphql
 ```
 
 ### Adding the component to your code
@@ -25,7 +25,7 @@ npm install @embrace-io/apollo-graphql
 Apply the Apollo GraphQL tracker to your Apollo provider instance.
 
 ```javascript
-import EmbraceApolloLink from "@embrace-io/apollo-graphql";
+import EmbraceApolloLink from "@embrace-io/react-native-apollo-graphql";
 import {
   ApolloClient,
   InMemoryCache,
