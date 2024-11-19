@@ -125,14 +125,17 @@ const initialize = async ({
   // Only attempt to check for CodePush bundle URL in release mode. Otherwise CodePush will throw an exception.
   // https://docs.microsoft.com/en-us/appcenter/distribution/codepush/react-native#plugin-configuration-ios
   if (!__DEV__) {
-    const bundleJs =
-      await NativeModules.EmbraceManager.getDefaultJavaScriptBundlePath();
+    const isCodePushPresent =
+      await NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
 
-    if (bundleJs) {
-      await NativeModules.EmbraceManager.setJavaScriptBundlePath(bundleJs);
+    if (!isCodePushPresent && Platform.OS === "ios") {
+      const bundleJs =
+        await NativeModules.EmbraceManager.getDefaultJavaScriptBundlePath();
+
+      if (bundleJs) {
+        await NativeModules.EmbraceManager.setJavaScriptBundlePath(bundleJs);
+      }
     }
-
-    NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
   }
 
   if (!ErrorUtils) {
