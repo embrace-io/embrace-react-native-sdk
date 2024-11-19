@@ -7,7 +7,6 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
-        mavenCentral()
         gradlePluginPortal()
     }
 
@@ -15,36 +14,19 @@ pluginManagement {
     includeBuild("../node_modules/@react-native/gradle-plugin")
 }
 
-// React configuration (needs 0.75.x version)
 plugins {
-    id 'com.facebook.react.settings'
+    id("com.facebook.react.settings")
 }
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
 
-// React configuration (needs 0.75.x version)
-extensions.configure(com.facebook.react.ReactSettingsExtension) {
-        ex -> ex.autolinkLibrariesFromCommand()
-}
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+rootProject.name = "io.embrace.reactnativetracerprovidertest"
 
 // using local package
 include ':react-native-tracer-provider'
 // linking local package to the right place
 project(':react-native-tracer-provider').projectDir = file('../../android')
 
-rootProject.name = "RNEmbraceTracerProviderTest"
-include(":app")
+include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')
+

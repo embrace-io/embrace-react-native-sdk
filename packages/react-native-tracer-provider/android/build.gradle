@@ -1,5 +1,3 @@
-import com.android.Version
-
 buildscript {
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
   def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["TracerProvider_kotlinVersion"]
@@ -14,17 +12,6 @@ buildscript {
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
-}
-
-def isDev() {
-  def localProps = new Properties()
-  def localPropertiesFile = rootProject.file("local.properties")
-
-  if (localPropertiesFile.exists()) {
-    localProps.load(new FileInputStream(localPropertiesFile))
-  }
-
-  return localProps.getProperty('isDev', 'false').toBoolean()
 }
 
 def reactNativeArchitectures() {
@@ -51,8 +38,8 @@ def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["TracerProvider_" + name]).toInteger()
 }
 
-static def supportsNamespace() {
-  def parsed = Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
+def supportsNamespace() {
+  def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
   def major = parsed[0].toInteger()
   def minor = parsed[1].toInteger()
 
@@ -92,12 +79,6 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
-
-  if (isDev()) {
-    kotlinOptions {
-      jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-  }
 }
 
 repositories {
@@ -108,15 +89,10 @@ repositories {
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
 dependencies {
-  if (isDev()) {
-    implementation "com.facebook.react:react-android:+"
-  } else {
-    // For < 0.71, this will be from the local maven repo
-    // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
-    // noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"
-  }
-
+  // For < 0.71, this will be from the local maven repo
+  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
+  //noinspection GradleDynamicVersion
+  implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
