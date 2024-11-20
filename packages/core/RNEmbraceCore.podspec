@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => min_ios_version_supported }
   s.source       = { :git => ".git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/RNEmbraceCore/*.{h,m,mm,swift}"
+  s.source_files = "ios/*.{h,m,mm,swift}"
   s.ios.deployment_target = '13.0'
   s.tvos.deployment_target = '13.0'
   s.swift_version = '5.0'

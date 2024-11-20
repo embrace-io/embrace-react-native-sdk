@@ -19,8 +19,7 @@
     "android/build.gradle",
     "android/gradle.properties",
     "android/dependencies.gradle",
-    "ios/RNEmbraceCore",
-    "ios/dependencies.rb",
+    "ios",
     "RNEmbraceCore.podspec"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",

@@ -121,7 +121,7 @@
 				30FA20DA2C6FC44200340B1E /* BundleID.swift */,
 			);
 			name = RNEmbraceCore;
-			path = ../../ios/RNEmbraceCore;
+			path = ../../ios;
 			sourceTree = "<group>";
 		};
 		30DFDA6D2C486677009F2ECC /* RNEmbraceCoreTests */ = {
