@@ -3,7 +3,11 @@ import {NativeModules, Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
+import {
+  generateStackTrace,
+  handleGlobalError,
+  isJSXError,
+} from "./utils/ErrorUtil";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import {SessionStatus} from "./interfaces/Types";
 import {
@@ -16,17 +20,8 @@ import {SDKConfig} from "./interfaces/Config";
 interface Properties {
   [key: string]: string;
 }
-
-class UIError extends Error {
+interface UIError extends Error {
   componentStack: string;
-
-  constructor(message: string, componentStack: string) {
-    super(message);
-    this.name = "UIError";
-    this.componentStack = componentStack;
-
-    Object.setPrototypeOf(this, UIError.prototype);
-  }
 }
 
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
@@ -41,7 +36,7 @@ const ERROR = "error";
 const noOp = () => {};
 
 // will cover unhandled errors, js crashes
-const handleError = async (error: Error, callback: () => void) => {
+const handleError = async (error: Error | UIError, callback: () => void) => {
   if (!(error instanceof Error)) {
     console.warn("[Embrace] error must be of type Error");
     return;
@@ -49,13 +44,8 @@ const handleError = async (error: Error, callback: () => void) => {
 
   const {name, message, stack = ""} = error;
 
-  if (
-    "componentStack" in error &&
-    error.componentStack &&
-    typeof error.componentStack === "string" &&
-    error.componentStack !== ""
-  ) {
-    logHandledError(error);
+  if (isJSXError(error)) {
+    logComponentError(error);
   }
 
   // same as error.name? why is it pulled differently?
@@ -293,20 +283,38 @@ export const logError = (message: string): Promise<boolean> => {
 };
 
 export const logHandledError = (
-  error: Error,
+  error: Error | UIError,
   properties?: Properties,
 ): Promise<boolean> => {
   if (error instanceof Error) {
     const {stack, message} = error;
-    let finalStack = stack;
-    if ("componentStack" in error) {
-      const uiError = error as UIError;
-      finalStack = uiError.componentStack;
+    let stackTrace = stack;
+    const hasComponentStack = isJSXError(error);
+    if (hasComponentStack) {
+      const {componentStack} = error as UIError;
+      stackTrace = componentStack;
     }
 
     return NativeModules.EmbraceManager.logHandledError(
       message,
-      finalStack,
+      stackTrace,
+      properties || {},
+    );
+  }
+
+  return createFalsePromise();
+};
+
+export const logComponentError = (
+  error: UIError,
+  properties?: Properties,
+): Promise<boolean> => {
+  if (error.componentStack !== "") {
+    const {message, componentStack} = error;
+
+    return NativeModules.EmbraceManager.logHandledError(
+      message,
+      componentStack,
       properties || {},
     );
   }
@@ -444,4 +452,4 @@ const createTruePromise = (): Promise<boolean> => {
 };
 
 export {initialize, WARNING, ERROR, INFO};
-export {type Properties};
+export {type Properties, UIError};

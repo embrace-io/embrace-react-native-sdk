@@ -1,3 +1,5 @@
+import {UIError} from "..";
+
 type ErrorHandler = (error: Error, callback: () => void) => void;
 
 type GlobalErrorHandler = (
@@ -22,4 +24,8 @@ const generateStackTrace = (): string => {
   return err.stack || "";
 };
 
-export {handleGlobalError, generateStackTrace};
+const isJSXError = (error: Error | UIError): error is UIError => {
+  return "componentStack" in error;
+};
+
+export {handleGlobalError, generateStackTrace, isJSXError};
