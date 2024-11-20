@@ -5,7 +5,7 @@ import OpenTelemetryApi
 import OpenTelemetrySdk
 import EmbraceCommonInternal
 
-@testable import RNEmbrace
+@testable import RNEmbraceCore
 
 class TestSpanExporter: SpanExporter {
     var exportedSpans: [SpanData] = []

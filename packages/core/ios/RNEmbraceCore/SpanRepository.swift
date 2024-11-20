@@ -6,9 +6,9 @@ import OpenTelemetryApi
 private let MAX_STORED_SPANS = 10000
 
 class SpanRepository {
-    private let activeSpansQueue = DispatchQueue(label: "io.embrace.RNEmbrace.activeSpans",
+    private let activeSpansQueue = DispatchQueue(label: "io.embrace.RNEmbraceCore.activeSpans",
                                                  attributes: .concurrent)
-    private let completedSpansQueue = DispatchQueue(label: "io.embrace.RNEmbrace.completedSpans",
+    private let completedSpansQueue = DispatchQueue(label: "io.embrace.RNEmbraceCore.completedSpans",
                                                     attributes: .concurrent)
     private var activeSpans = [String: Span]()
     private var completedSpans = [String: Span]()

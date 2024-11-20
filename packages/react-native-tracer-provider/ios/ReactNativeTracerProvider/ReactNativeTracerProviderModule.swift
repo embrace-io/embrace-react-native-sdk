@@ -6,7 +6,7 @@ import EmbraceIO
 import os
 
 /*
- NOTE: There's currently a bit of duplication between this and code in packages/core, particularly https://github.com/embrace-io/embrace-react-native-sdk/blob/7c54b59362adfc93f7f997db89db179950a50e8b/packages/core/ios/RNEmbrace/SpanRepository.swift
+ NOTE: There's currently a bit of duplication between this and code in packages/core, particularly https://github.com/embrace-io/embrace-react-native-sdk/blob/7c54b59362adfc93f7f997db89db179950a50e8b/packages/core/ios/RNEmbraceCore/SpanRepository.swift
  
  The idea will be to have this package power all span features in 6.0 and remove that code from
  the core package so living with the duplication for now

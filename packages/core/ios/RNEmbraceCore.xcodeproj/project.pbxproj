@@ -8,15 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		4B36F47D2C470CD400C5F034 /* EmbraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B36F47C2C470CD400C5F034 /* EmbraceManager.swift */; };
-		4B36F4822C488A4400C5F034 /* RNEmbrace-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B36F4812C488A4400C5F034 /* RNEmbrace-Bridging-Header.h */; };
+		4B36F4822C488A4400C5F034 /* RNEmbraceCore-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B36F4812C488A4400C5F034 /* RNEmbraceCore-Bridging-Header.h */; };
 		4B36F4842C488AD300C5F034 /* EmbraceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B36F4832C488AD300C5F034 /* EmbraceManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4B36F47C2C470CD400C5F034 /* EmbraceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbraceManager.swift; sourceTree = "<group>"; };
-		4B36F4812C488A4400C5F034 /* RNEmbrace-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNEmbrace-Bridging-Header.h"; sourceTree = "<group>"; };
+		4B36F4812C488A4400C5F034 /* RNEmbraceCore-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNEmbraceCore-Bridging-Header.h"; sourceTree = "<group>"; };
 		4B36F4832C488AD300C5F034 /* EmbraceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbraceManager.m; sourceTree = "<group>"; };
-		8401BD4721C8519000560DBD /* RNEmbrace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbrace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8401BD4721C8519000560DBD /* RNEmbraceCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbraceCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8401BD4B21C8519000560DBD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -34,7 +34,7 @@
 		8401BD3D21C8519000560DBD = {
 			isa = PBXGroup;
 			children = (
-				8401BD4921C8519000560DBD /* RNEmbrace */,
+				8401BD4921C8519000560DBD /* RNEmbraceCore */,
 				8401BD4821C8519000560DBD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -42,20 +42,20 @@
 		8401BD4821C8519000560DBD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8401BD4721C8519000560DBD /* RNEmbrace.framework */,
+				8401BD4721C8519000560DBD /* RNEmbraceCore.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8401BD4921C8519000560DBD /* RNEmbrace */ = {
+		8401BD4921C8519000560DBD /* RNEmbraceCore */ = {
 			isa = PBXGroup;
 			children = (
 				4B36F4832C488AD300C5F034 /* EmbraceManager.m */,
 				4B36F47C2C470CD400C5F034 /* EmbraceManager.swift */,
 				8401BD4B21C8519000560DBD /* Info.plist */,
-				4B36F4812C488A4400C5F034 /* RNEmbrace-Bridging-Header.h */,
+				4B36F4812C488A4400C5F034 /* RNEmbraceCore-Bridging-Header.h */,
 			);
-			path = RNEmbrace;
+			path = RNEmbraceCore;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -65,16 +65,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B36F4822C488A4400C5F034 /* RNEmbrace-Bridging-Header.h in Headers */,
+				4B36F4822C488A4400C5F034 /* RNEmbraceCore-Bridging-Header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8401BD4621C8519000560DBD /* RNEmbrace */ = {
+		8401BD4621C8519000560DBD /* RNEmbraceCore */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8401BD4F21C8519000560DBD /* Build configuration list for PBXNativeTarget "RNEmbrace" */;
+			buildConfigurationList = 8401BD4F21C8519000560DBD /* Build configuration list for PBXNativeTarget "RNEmbraceCore" */;
 			buildPhases = (
 				8401BD4221C8519000560DBD /* Headers */,
 				8401BD4321C8519000560DBD /* Sources */,
@@ -85,9 +85,9 @@
 			);
 			dependencies = (
 			);
-			name = RNEmbrace;
-			productName = RNEmbrace;
-			productReference = 8401BD4721C8519000560DBD /* RNEmbrace.framework */;
+			name = RNEmbraceCore;
+			productName = RNEmbraceCore;
+			productReference = 8401BD4721C8519000560DBD /* RNEmbraceCore.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -105,7 +105,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 8401BD4121C8519000560DBD /* Build configuration list for PBXProject "RNEmbrace" */;
+			buildConfigurationList = 8401BD4121C8519000560DBD /* Build configuration list for PBXProject "RNEmbraceCore" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -117,7 +117,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8401BD4621C8519000560DBD /* RNEmbrace */,
+				8401BD4621C8519000560DBD /* RNEmbraceCore */,
 			);
 		};
 /* End PBXProject section */
@@ -278,14 +278,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = RNEmbrace/Info.plist;
+				INFOPLIST_FILE = RNEmbraceCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbrace;
+				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbraceCore;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -305,14 +305,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = RNEmbrace/Info.plist;
+				INFOPLIST_FILE = RNEmbraceCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbrace;
+				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbraceCore;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -323,7 +323,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8401BD4121C8519000560DBD /* Build configuration list for PBXProject "RNEmbrace" */ = {
+		8401BD4121C8519000560DBD /* Build configuration list for PBXProject "RNEmbraceCore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8401BD4D21C8519000560DBD /* Debug */,
@@ -332,7 +332,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8401BD4F21C8519000560DBD /* Build configuration list for PBXNativeTarget "RNEmbrace" */ = {
+		8401BD4F21C8519000560DBD /* Build configuration list for PBXNativeTarget "RNEmbraceCore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8401BD5021C8519000560DBD /* Debug */,
