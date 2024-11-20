@@ -1,4 +1,4 @@
-package io.embrace.embracewrapper;
+package io.embrace.rnembracecore;
 
 import android.util.Log;
 

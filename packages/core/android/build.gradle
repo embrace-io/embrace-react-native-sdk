@@ -8,7 +8,8 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:8.6.0"
+    classpath "com.android.tools.build:gradle:7.2.1"
+    // NOTE: to pull `emb_android_sdk` version from package.json instead in a future iteration
     classpath "io.embrace:embrace-swazzler:$emb_android_sdk"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -50,7 +51,7 @@ def supportsNamespace() {
 
 android {
   if (supportsNamespace()) {
-    namespace "io.embrace.embracewrapper"
+    namespace "io.embrace.rnembracecore"
 
     sourceSets {
       main {

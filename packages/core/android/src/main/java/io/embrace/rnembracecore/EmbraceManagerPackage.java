@@ -1,5 +1,5 @@
 
-package io.embrace.embracewrapper;
+package io.embrace.rnembracecore;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;

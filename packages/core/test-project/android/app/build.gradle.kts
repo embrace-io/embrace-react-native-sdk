@@ -79,9 +79,9 @@ android {
         }
     }
 
-    namespace = "io.embrace.embracewrappertest"
+    namespace = "io.embrace.rnembracecoretest"
     defaultConfig {
-        applicationId = "io.embrace.embracewrappertest"
+        applicationId = "io.embrace.rnembracecoretest"
         minSdk = rootProject.ext["minSdkVersion"] as Int
         targetSdk = rootProject.ext["targetSdkVersion"] as Int
         versionCode = 1

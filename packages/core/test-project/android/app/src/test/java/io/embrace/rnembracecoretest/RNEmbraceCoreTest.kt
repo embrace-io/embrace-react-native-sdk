@@ -1,10 +1,10 @@
-package io.embrace.embracewrappertest
+package io.embrace.rnembracecoretest
 
 import android.os.SystemClock
 import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
-import io.embrace.embracewrapper.EmbraceManagerModule
+import io.embrace.rnembracecore.EmbraceManagerModule
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
