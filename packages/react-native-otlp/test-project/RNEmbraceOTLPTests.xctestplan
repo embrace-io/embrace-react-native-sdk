@@ -4,16 +4,28 @@
       "id" : "9B0AA712-2F71-4A99-B59D-3D89D375DC8C",
       "name" : "Test Scheme Action",
       "options" : {
-
+        "diagnosticCollectionPolicy" : "Never",
+        "environmentVariableEntries" : [
+          {
+            "key" : "IOS_TEST_WAIT_TIME",
+            "value" : "$(IOS_TEST_WAIT_TIME)"
+          }
+        ],
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:RNEmbraceOTLPTests.xcodeproj",
+          "identifier" : "6D2523202CC7F351000ECCEA",
+          "name" : "RNEmbraceOTLPTests"
+        },
+        "testExecutionOrdering" : "alphabetical"
       }
     }
   ],
   "defaultOptions" : {
-
+    "codeCoverage" : false
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:RNEmbraceOTLPTests.xcodeproj",
         "identifier" : "6D2523202CC7F351000ECCEA",
