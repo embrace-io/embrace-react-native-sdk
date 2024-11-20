@@ -17,6 +17,18 @@ interface Properties {
   [key: string]: string;
 }
 
+class UIError extends Error {
+  componentStack: string;
+
+  constructor(message: string, componentStack: string) {
+    super(message);
+    this.name = "UIError";
+    this.componentStack = componentStack;
+
+    Object.setPrototypeOf(this, UIError.prototype);
+  }
+}
+
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
 const tracking = require("promise/setimmediate/rejection-tracking");
 
@@ -36,6 +48,15 @@ const handleError = async (error: Error, callback: () => void) => {
   }
 
   const {name, message, stack = ""} = error;
+
+  if (
+    "componentStack" in error &&
+    error.componentStack &&
+    typeof error.componentStack === "string" &&
+    error.componentStack !== ""
+  ) {
+    logHandledError(error);
+  }
 
   // same as error.name? why is it pulled differently?
   const errorType = error.constructor.name;
@@ -277,10 +298,15 @@ export const logHandledError = (
 ): Promise<boolean> => {
   if (error instanceof Error) {
     const {stack, message} = error;
+    let finalStack = stack;
+    if ("componentStack" in error) {
+      const uiError = error as UIError;
+      finalStack = uiError.componentStack;
+    }
 
     return NativeModules.EmbraceManager.logHandledError(
       message,
-      stack,
+      finalStack,
       properties || {},
     );
   }
