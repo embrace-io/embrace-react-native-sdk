@@ -57,10 +57,8 @@
     "prebuild": "cp -r ../../interfaces/ ./src/interfaces/common",
     "build": "tsc",
     "android:test": "cd test-project && yarn install && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
-    "ios:build:clean": "xcodebuild clean -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -scheme RNEmbraceTests",
-    "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceTestProject.xcworkspace -list",
     "ios:install": "cd test-project && yarn install && cd ios && pod install && rm .xcode.env.local",
-    "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceTestProject.xcworkspace RNEmbraceTests"
+    "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceCoreTests.xcworkspace RNEmbraceCoreTests"
   },
   "devDependencies": {
     "typescript": "^5.6.3"
