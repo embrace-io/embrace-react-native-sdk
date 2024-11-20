@@ -7,7 +7,10 @@ import {
   generateStackTrace,
   handleGlobalError,
   isJSXError,
+  logComponentError,
+  UIError,
 } from "./utils/ErrorUtil";
+import {createFalsePromise, createTruePromise} from "./utils/DefaultPromises";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import {SessionStatus} from "./interfaces/Types";
 import {
@@ -19,9 +22,6 @@ import {SDKConfig} from "./interfaces/Config";
 
 interface Properties {
   [key: string]: string;
-}
-interface UIError extends Error {
-  componentStack: string;
 }
 
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
@@ -44,9 +44,7 @@ const handleError = async (error: Error | UIError, callback: () => void) => {
 
   const {name, message, stack = ""} = error;
 
-  if (isJSXError(error)) {
-    logComponentError(error);
-  }
+  logIfComponentError(error);
 
   // same as error.name? why is it pulled differently?
   const errorType = error.constructor.name;
@@ -288,33 +286,10 @@ export const logHandledError = (
 ): Promise<boolean> => {
   if (error instanceof Error) {
     const {stack, message} = error;
-    let stackTrace = stack;
-    const hasComponentStack = isJSXError(error);
-    if (hasComponentStack) {
-      const {componentStack} = error as UIError;
-      stackTrace = componentStack;
-    }
 
     return NativeModules.EmbraceManager.logHandledError(
       message,
-      stackTrace,
-      properties || {},
-    );
-  }
-
-  return createFalsePromise();
-};
-
-export const logComponentError = (
-  error: UIError,
-  properties?: Properties,
-): Promise<boolean> => {
-  if (error.componentStack !== "") {
-    const {message, componentStack} = error;
-
-    return NativeModules.EmbraceManager.logHandledError(
-      message,
-      componentStack,
+      stack,
       properties || {},
     );
   }
@@ -435,21 +410,5 @@ export const applyNetworkInterceptors = (
   return createTruePromise();
 };
 
-const createFalsePromise = (): Promise<boolean> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(false);
-    }, 0);
-  });
-};
-
-const createTruePromise = (): Promise<boolean> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(true);
-    }, 0);
-  });
-};
-
 export {initialize, WARNING, ERROR, INFO};
-export {type Properties, UIError};
+export {type Properties};

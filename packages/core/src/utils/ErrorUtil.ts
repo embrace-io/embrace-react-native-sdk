@@ -1,4 +1,12 @@
-import {UIError} from "..";
+import {NativeModules} from "react-native";
+
+import {Properties} from "..";
+
+import {createFalsePromise} from "./DefaultPromises";
+
+interface UIError extends Error {
+  componentStack: string;
+}
 
 type ErrorHandler = (error: Error, callback: () => void) => void;
 
@@ -28,4 +36,20 @@ const isJSXError = (error: Error | UIError): error is UIError => {
   return "componentStack" in error;
 };
 
-export {handleGlobalError, generateStackTrace, isJSXError};
+export const logIfComponentError = (
+  error: Error | UIError,
+  properties?: Properties,
+): Promise<boolean> => {
+  if (!isJSXError(error) || error.componentStack !== "") {
+    return createFalsePromise();
+  }
+  const {message, componentStack} = error;
+
+  return NativeModules.EmbraceManager.logHandledError(
+    message,
+    componentStack,
+    properties || {},
+  );
+};
+
+export {handleGlobalError, generateStackTrace, isJSXError, UIError};
