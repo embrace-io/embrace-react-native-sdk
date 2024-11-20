@@ -4,7 +4,10 @@
   "description": "A React Native wrapper for the Embrace SDK that allows to connect to OTLP endpoints",
   "files": [
     "lib",
-    "android",
+    "android/src",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/dependencies.gradle",
     "ios",
     "RNEmbraceOTLP.podspec"
   ],
@@ -17,10 +20,9 @@
   "scripts": {
     "prebuild": "cp -r ../../interfaces/ ./src/interfaces/common",
     "build": "tsc",
-    "ios:schemes": "xcodebuild -workspace test-project/ios/RNEmbraceOTLPTest.xcworkspace -list",
-    "android:test": "cd test-project && yarn && cd android && ./gradlew :app:testDebugUnitTest && cd ../../",
+    "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
     "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceOTLPTests.xcworkspace RNEmbraceOTLPTests",
-    "ios:install": "cd test-project && yarn && cd ios && pod install && rm .xcode.env.local"
+    "ios:install": "cd test-project && yarn install && cd ios && pod install && rm .xcode.env.local"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"

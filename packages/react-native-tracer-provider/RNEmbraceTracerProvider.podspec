@@ -14,7 +14,8 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => min_ios_version_supported }
   s.source       = { :git => "https://github.com/embrace-io/embrace-react-native-sdk.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,mm,swift}"
+  s.source_files = "ios/ReactNativeTracerProvider/**/*.{h,m,mm,swift}"
+  s.ios.deployment_target = '13.0'
 
   # Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.
   # See https://github.com/facebook/react-native/blob/febf6b7f33fdb4904669f99d795eba4c0f95d7bf/scripts/cocoapods/new_architecture.rb#L79.
@@ -41,5 +42,4 @@ Pod::Spec.new do |s|
 
   load 'ios/dependencies.rb'
   load_dependencies(s)
-
 end

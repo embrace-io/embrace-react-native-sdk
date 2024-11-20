@@ -126,6 +126,8 @@ Try to stopping and cleaning local services (in case there are unknown issues re
   ./gradlew --stop  // stop daemons
   rm -rf ~/.gradle/caches/
   ./gradlew build --stacktrace
+```
+
 ### Local JS development issues
 
 Try removing any `node_modules/` in the directory hierarchy and re-run `yarn install` from the root

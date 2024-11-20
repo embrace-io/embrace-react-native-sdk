@@ -1,7 +1,6 @@
 buildscript {
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
   def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["RNEmbraceOTLP_kotlinVersion"]
-  def gradle_version = project.properties["RNEmbraceOTLP_gradleVersion"]
 
   repositories {
     google()
@@ -9,7 +8,8 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:$gradle_version"
+    classpath "com.android.tools.build:gradle:7.2.1"
+    // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
 }
@@ -48,7 +48,6 @@ def supportsNamespace() {
 }
 
 android {
-  compileSdk 33
   if (supportsNamespace()) {
     namespace "io.embrace.rnembraceotlp"
 
@@ -59,10 +58,11 @@ android {
     }
   }
 
+  compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
 
   defaultConfig {
     minSdkVersion getExtOrIntegerDefault("minSdkVersion")
-    targetSdk 33
+    targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
   }
 
   buildTypes {
@@ -76,12 +76,9 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_17
-    targetCompatibility JavaVersion.VERSION_17
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
   }
-
-  ndkVersion '26.1.10909125'
-  buildToolsVersion '33.0.0'
 }
 
 repositories {
@@ -93,11 +90,11 @@ def kotlin_version = getExtOrDefault("kotlinVersion")
 
 dependencies {
   // For < 0.71, this will be from the local maven repo
-  // For > 0.71, this will be replaced by
-  // `com.facebook.react:react-android:$version` (https://central.sonatype.com/artifact/com.facebook.react/react-android)
-  // by react gradle plugin (using currently 0.75.1)
-  implementation "com.facebook.react:react-android:+"
+  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
+  //noinspection GradleDynamicVersion
+  implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
+// adding Embrace + OpenTelemetry dependencies
 apply from: 'dependencies.gradle'

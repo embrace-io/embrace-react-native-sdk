@@ -1,4 +1,0 @@
-dependencies {
-  api "io.embrace:embrace-android-sdk:6.13.0"
-  implementation("io.opentelemetry:opentelemetry-api")
-}
