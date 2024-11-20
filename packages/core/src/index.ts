@@ -125,7 +125,26 @@ const initialize = async ({
   // Only attempt to check for CodePush bundle URL in release mode. Otherwise CodePush will throw an exception.
   // https://docs.microsoft.com/en-us/appcenter/distribution/codepush/react-native#plugin-configuration-ios
   if (!__DEV__) {
-    NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
+    try {
+      const isCodePushPresent =
+        await NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
+
+      // On Android the Swazzler stores the computed bundle ID as part of the build process and the SDK is able to
+      // read it at run time. On iOS however we don't retain this value so we either need to get it from the Code Push
+      // bundle or, if that isn't enabled, try and get it from the default bundle path
+      if (!isCodePushPresent && Platform.OS === "ios") {
+        const bundleJs =
+          await NativeModules.EmbraceManager.getDefaultJavaScriptBundlePath();
+
+        if (bundleJs) {
+          NativeModules.EmbraceManager.setJavaScriptBundlePath(bundleJs);
+        }
+      }
+    } catch (e) {
+      console.warn(
+        "[Embrace] We were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle.",
+      );
+    }
   }
 
   if (!ErrorUtils) {

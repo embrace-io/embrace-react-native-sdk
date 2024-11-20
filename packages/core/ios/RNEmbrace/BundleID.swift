@@ -32,6 +32,7 @@ private struct LastBundleComputation: Codable {
 
 enum ComputeBundleIDErrors: Error {
     case emptyPath
+    case parseError
 }
 
 struct BundleID {
@@ -55,18 +56,23 @@ func computeBundleID(path: String) throws -> BundleID {
             return BundleID(id: last.id, cached: true)
         }
     }
+    
+    do {
+        let fileData = try Data(contentsOf: URL(fileURLWithPath: path))
 
-    let fileContents = try String(contentsOf: URL(fileURLWithPath: path))
+        // https://stackoverflow.com/a/56578995
+        let bundleID = Insecure.MD5.hash(data: fileData).map {
+            String(format: "%02hhx", $0)
+        }.joined()
+        
+        last.computedAt = Date()
+        last.path = path
+        last.id = bundleID
+        last.store()
 
-    // https://stackoverflow.com/a/56578995
-    let bundleID = Insecure.MD5.hash(data: Data(fileContents.utf8)).map {
-        String(format: "%02hhx", $0)
-    }.joined()
-
-    last.computedAt = Date()
-    last.path = path
-    last.id = bundleID
-    last.store()
-
+    } catch {
+        throw ComputeBundleIDErrors.parseError
+    }
+    
     return BundleID(id: last.id, cached: false)
 }
