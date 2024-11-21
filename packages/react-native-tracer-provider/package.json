@@ -48,7 +48,9 @@
   ],
   "scripts": {
     "build": "tsc",
-    "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detekt && ./gradlew :app:testDebugUnitTest && cd ../../"
+    "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detekt && ./gradlew :app:testDebugUnitTest && cd ../../",
+    "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceTracerProvider.xcworkspace RNEmbraceTracerProviderTests",
+    "ios:install": "cd test-project && yarn && cd ios && pod install && rm .xcode.env.local"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"
