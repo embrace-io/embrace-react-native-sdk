@@ -108,7 +108,6 @@ class RNEmbraceOTLPTest {
 
         val logs = logHandler.records.map { it.message }
         assertEquals(listOf("Neither Traces nor Logs configuration were found, skipping custom export."), logs)
-        println(logs)
 
         // embrace starts without issues if empty object is passed down to the export configuration
         verify(promise, times(1)).resolve(true)
