@@ -206,8 +206,8 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "stacktrace as string")
         // should not be present since the js one is added
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
-
-        XCTAssertNotNil(exportedLogs[0].attributes["emb.session_id"]!.description)
+        
+        XCTAssertNotNil(exportedLogs[0].attributes["session.id"]!.description)
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
         XCTAssertEqual(exportedLogs[0].attributes["emb.exception_handling"]!.description, "handled")
@@ -223,7 +223,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my unhandled exception")
 
-        XCTAssertNotNil(exportedLogs[0].attributes["emb.session_id"]!.description)
+        XCTAssertNotNil(exportedLogs[0].attributes["session.id"]!.description)
 
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.ios.react_native_crash")
 
