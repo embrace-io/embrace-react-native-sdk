@@ -1,4 +1,5 @@
 import {handleGlobalError} from "../utils/ErrorUtil";
+import {ComponentError, logIfComponentError} from "../utils/ComponentError";
 import {initialize} from "../index";
 
 const testValue = "Value";
@@ -9,6 +10,7 @@ const mockIsStarted = jest.fn();
 const mockStart = jest.fn();
 const mockSetReactNativeSDKVersion = jest.fn();
 const mockLogMessageWithSeverityAndProperties = jest.fn();
+const mockLogHandledError = jest.fn();
 
 const ReactNativeMock = jest.requireMock("react-native");
 
@@ -35,6 +37,14 @@ jest.mock("react-native", () => ({
         ),
       isStarted: () => mockIsStarted(),
       startNativeEmbraceSDK: (appId?: string) => mockStart(appId),
+      logHandledError: (
+        message: string,
+        componentStack: string,
+        params: object,
+      ) => {
+        mockLogHandledError(message, componentStack, params);
+        return true;
+      },
     },
   },
   Platform: {OS: "android"},
@@ -133,6 +143,27 @@ describe("Android: initialize", () => {
     );
     generatedGlobalErrorFunc(Error("Test"));
     expect(previousHandler).toHaveBeenCalled();
+  });
+
+  test("applying previousHandler and throwing a component error", async () => {
+    const previousHandler = jest.fn();
+    ErrorUtils.getGlobalHandler = previousHandler;
+    const result = await initialize({patch: testValue});
+    expect(result).toBe(true);
+
+    const generatedGlobalErrorFunc = handleGlobalError(
+      previousHandler,
+      logIfComponentError,
+    );
+    const componentError = new Error("Test") as ComponentError;
+    componentError.componentStack = "in SomeScreen/n in SomeOtherScreen";
+    generatedGlobalErrorFunc(componentError);
+    expect(previousHandler).toHaveBeenCalled();
+    expect(mockLogHandledError).toHaveBeenCalledWith(
+      componentError.message,
+      componentError.componentStack,
+      {},
+    );
   });
 });
 

@@ -21,4 +21,4 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
   );
 };
 
-export {logIfComponentError};
+export {logIfComponentError, ComponentError};
