@@ -3,13 +3,7 @@ import {NativeModules, Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {
-  generateStackTrace,
-  handleGlobalError,
-  isJSXError,
-  logComponentError,
-  UIError,
-} from "./utils/ErrorUtil";
+import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {createFalsePromise, createTruePromise} from "./utils/DefaultPromises";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import {SessionStatus} from "./interfaces/Types";
@@ -19,6 +13,7 @@ import {
 } from "./interfaces/NetworkMonitoring";
 import {MethodType} from "./interfaces/HTTP";
 import {SDKConfig} from "./interfaces/Config";
+import {logIfComponentError} from "./utils/ComponentError";
 
 interface Properties {
   [key: string]: string;
@@ -36,7 +31,7 @@ const ERROR = "error";
 const noOp = () => {};
 
 // will cover unhandled errors, js crashes
-const handleError = async (error: Error | UIError, callback: () => void) => {
+const handleError = async (error: Error, callback: () => void) => {
   if (!(error instanceof Error)) {
     console.warn("[Embrace] error must be of type Error");
     return;
@@ -281,7 +276,7 @@ export const logError = (message: string): Promise<boolean> => {
 };
 
 export const logHandledError = (
-  error: Error | UIError,
+  error: Error,
   properties?: Properties,
 ): Promise<boolean> => {
   if (error instanceof Error) {
