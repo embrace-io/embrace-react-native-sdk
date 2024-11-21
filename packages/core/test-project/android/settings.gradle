@@ -1,0 +1,31 @@
+pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        gradlePluginPortal()
+    }
+
+    // including external React Native plugin
+    includeBuild("../node_modules/@react-native/gradle-plugin")
+}
+
+plugins {
+    id("com.facebook.react.settings")
+}
+
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+
+rootProject.name = "io.embrace.rnembracecoretest"
+
+// using local package
+include ':core'
+// linking local package to the right place
+project(':core').projectDir = file('../../android')
+
+include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')
