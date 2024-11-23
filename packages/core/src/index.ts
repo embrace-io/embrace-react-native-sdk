@@ -4,7 +4,7 @@ import {NativeModules, Platform} from "react-native";
 import * as embracePackage from "../package.json";
 
 import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
-import {createFalsePromise, createTruePromise} from "./utils/DefaultPromises";
+import {logIfComponentError} from "./utils/ComponentError";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import {SessionStatus} from "./interfaces/Types";
 import {
@@ -13,7 +13,6 @@ import {
 } from "./interfaces/NetworkMonitoring";
 import {MethodType} from "./interfaces/HTTP";
 import {SDKConfig} from "./interfaces/Config";
-import {logIfComponentError} from "./utils/ComponentError";
 
 interface Properties {
   [key: string]: string;
