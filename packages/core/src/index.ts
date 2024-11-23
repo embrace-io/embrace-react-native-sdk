@@ -405,5 +405,21 @@ export const applyNetworkInterceptors = (
   return createTruePromise();
 };
 
+const createFalsePromise = (): Promise<boolean> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(false);
+    }, 0);
+  });
+};
+
+const createTruePromise = (): Promise<boolean> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(true);
+    }, 0);
+  });
+};
+
 export {initialize, WARNING, ERROR, INFO};
 export {type Properties};
