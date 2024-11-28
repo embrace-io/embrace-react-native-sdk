@@ -10,6 +10,7 @@ import {
 } from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
+import {NSFTestingScreen} from "./screens/NSFTestingScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -54,6 +55,13 @@ export const EmbraceReactNativeTestHarness = () => {
               tabBarAccessibilityLabel: "EMBRACE OTLP",
             }}
             component={OTLPTestingScreen}
+          />
+          <Tab.Screen
+            name="NSF TESTING"
+            options={{
+              tabBarAccessibilityLabel: "NSF TESTING",
+            }}
+            component={NSFTestingScreen}
           />
         </Tab.Navigator>
       </NavigationTracker>
