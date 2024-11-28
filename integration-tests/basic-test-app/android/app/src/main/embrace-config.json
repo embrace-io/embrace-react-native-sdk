@@ -10,6 +10,10 @@
     },
     "view_config": {
       "enable_automatic_activity_capture": false
+    },
+    "networking": {
+      "disabled_url_patterns": ["otlp-gateway-prod-us-central-0"],
+      "enable_network_span_forwarding": true
     }
   }
 }
