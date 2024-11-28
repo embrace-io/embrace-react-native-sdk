@@ -395,13 +395,15 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
         Integer method = parseMethodFromString(httpMethod);
 
-        if(method == null) {
+        if (method == null) {
             Log.e("Embrace", "Failed to log network requests. Unexpected or null http method.");
             promise.resolve(false);
             return;
         }
 
-        try{
+        String w3cTraceparent = Embrace.getInstance().generateW3cTraceparent();
+
+        try {
             Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromCompletedRequest(
                     url,
                     HttpMethod.fromInt(method),
@@ -409,7 +411,10 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                     et,
                     bytesSent.intValue(),
                     bytesReceived.intValue(),
-                    statusCode.intValue()
+                    statusCode.intValue(),
+                    null,
+                    w3cTraceparent,
+                    null
             ));
 
             promise.resolve(true);
@@ -429,11 +434,15 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         long et = endInMillis.longValue();
 
         boolean isHTTPMethodValid = validateHTTPMethod(httpMethod);
+
         if (!isHTTPMethodValid) {
             Log.e("Embrace", "Failed to log network requests. Unexpected or null http method.");
             promise.resolve(false);
             return;
         }
+
+        String w3cTraceparent = Embrace.getInstance().generateW3cTraceparent();
+
         try{
             Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromIncompleteRequest(
                     url,
@@ -441,7 +450,10 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                     st,
                     et,
                     errorType,
-                    errorMessage
+                    errorMessage,
+                    null,
+                    w3cTraceparent,
+                    null
             ));
             promise.resolve(true);
         }catch(Exception e){
