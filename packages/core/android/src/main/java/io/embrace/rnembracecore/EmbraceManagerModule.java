@@ -9,14 +9,11 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableArray;
 
 import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.WritableNativeMap;
-import com.facebook.react.bridge.WritableMap;
-
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
 
+import io.embrace.android.embracesdk.internal.network.http.InternalNetworkApiImpl;
 import io.embrace.android.embracesdk.spans.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +24,7 @@ import io.embrace.android.embracesdk.Embrace;
 import io.embrace.android.embracesdk.Severity;
 import io.embrace.android.embracesdk.network.EmbraceNetworkRequest;
 import io.embrace.android.embracesdk.network.http.HttpMethod;
+import io.embrace.android.embracesdk.internal.EmbraceInternalInterface;
 
 public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     private ReactApplicationContext context;
@@ -401,8 +399,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        String w3cTraceparent = Embrace.getInstance().generateW3cTraceparent();
-
         try {
             Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromCompletedRequest(
                     url,
@@ -413,7 +409,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                     bytesReceived.intValue(),
                     statusCode.intValue(),
                     null,
-                    w3cTraceparent,
+                    isNetworkSpanForwardingEnabled() ? generateW3cTraceparent() : null,
                     null
             ));
 
@@ -452,7 +448,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                     errorType,
                     errorMessage,
                     null,
-                    w3cTraceparent,
+                    isNetworkSpanForwardingEnabled() ? generateW3cTraceparent() : null,
                     null
             ));
             promise.resolve(true);
@@ -581,6 +577,15 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         }catch(Exception e){
             promise.resolve(false);
         }
+    }
+
+    public boolean isNetworkSpanForwardingEnabled() {
+        InternalNetworkApiImpl networkApi = new InternalNetworkApiImpl();
+        return networkApi.isNetworkSpanForwardingEnabled();
+    }
+
+    public String generateW3cTraceparent() {
+        return Embrace.getInstance().generateW3cTraceparent();
     }
 
     private boolean validateHTTPMethod(String httpMethod) {
