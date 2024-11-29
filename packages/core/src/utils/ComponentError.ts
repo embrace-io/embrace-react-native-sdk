@@ -28,10 +28,10 @@ const isJSXError = (error: Error): error is ComponentError => {
  *
  * Example `componentStack` trace:
  * ```
- * at undefined (in App)
- * at undefined (in RCTView)
- * at undefined (in Unknown)
- * at undefined (in AppContainer)
+ * in App
+ * in RCTView
+ * in Unknown
+ * in AppContainer
  * ```
  *
  * @param error - The error object to be checked and logged.
@@ -44,9 +44,13 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
   }
   const {message, componentStack} = error;
 
+  const componentStackShrinked = componentStack
+    .replace(/at UNdefined|\(|\)/g, "")
+    .trim();
+
   return NativeModules.EmbraceManager.logHandledError(
     message,
-    componentStack,
+    componentStackShrinked,
     {},
   );
 };
