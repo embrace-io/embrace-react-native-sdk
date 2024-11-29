@@ -2,6 +2,7 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
+import EmbraceCore
 import EmbraceCrash
 import EmbraceCommonInternal
 import EmbraceOTelInternal
@@ -64,9 +65,9 @@ class EmbraceManager: NSObject {
     @objc
     func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         if let embraceStarted = Embrace.client?.started {
-        resolve(embraceStarted)
+            resolve(embraceStarted)
         } else {
-        resolve(false)
+            resolve(false)
         }
     }
 
@@ -421,7 +422,7 @@ class EmbraceManager: NSObject {
             reject("RECORD_LOG_NETWORK_REQUEST_ERROR", "Error recording a network request, Embrace SDK may not be initialized", nil)
             return
         }
-
+        
         var attributes = [
             "http.request.method": httpMethod.uppercased(),
             "url.full": url
@@ -438,15 +439,18 @@ class EmbraceManager: NSObject {
         if bytesReceived >= 0 {
             attributes["http.response.body.size"] = String(Int(bytesReceived))
         }
+        
+        let embraceOtel = EmbraceOTel()
+        let spanBuilder = embraceOtel
+            .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod), type: SpanType.networkRequest, attributes: attributes)
+            .setStartTime(time: dateFrom(ms: startInMillis))
 
-        Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
-                                            type: SpanType.networkRequest, parent: nil,
-                                            startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
-                                            attributes: attributeStringsFrom(dict: attributes as NSDictionary),
-                                            events: eventsFrom(array: []),
-                                            errorCode: nil
-        )
+        let span = spanBuilder.startSpan()
 
+        // injecting w3c traceparent only if NSF is enabled
+        generateW3cTraceparent(span: span)
+
+        span.end(errorCode: nil, time: dateFrom(ms: endInMillis))
         resolve(true)
     }
 
@@ -465,25 +469,30 @@ class EmbraceManager: NSObject {
             reject("RECORD_LOG_NETWORK_CLIENT_ERROR_ERROR", "Error recording a network client error, Embrace SDK may not be initialized", nil)
             return
         }
+        
+        let attributes = attributeStringsFrom(dict: [
+            "http.request.method": httpMethod.uppercased(),
+            "url.full": url,
+            "error.message": errorMessage,
+            "error.type": errorType,
 
-        Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
-                                            type: SpanType.networkRequest,
-                                            parent: nil,
-                                            startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
-                                            attributes: attributeStringsFrom(dict: [
-                                                "http.request.method": httpMethod.uppercased(),
-                                                "url.full": url,
-                                                "error.message": errorMessage,
-                                                "error.type": errorType,
+            // NOTE: this should be handled by iOS native sdk using `errorCode` value
+            // To remove from here when it's done.
+            "emb.error_code": "failure"
+        ]);
+        
+        let embraceOtel = EmbraceOTel()
+        let spanBuilder = embraceOtel
+            .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod), type: SpanType.networkRequest, attributes: attributes)
+            .setStartTime(time: dateFrom(ms: startInMillis))
 
-                                                // NOTE: this should be handled by iOS native sdk using `errorCode` value
-                                                // To remove from here when it's done.
-                                                "emb.error_code": "failure"
-                                            ]),
-                                            events: eventsFrom(array: []),
-                                            // `errorCode` should be used to calc `emb.error_code` attr in native sdk
-                                            errorCode: ErrorCode.failure
-        )
+        let span = spanBuilder.startSpan()
+
+        // injecting w3c traceparent only if NSF is enabled
+        generateW3cTraceparent(span: span)
+
+        // `errorCode` should be used to calc `emb.error_code` attr in native sdk
+        span.end(errorCode: ErrorCode.failure, time: dateFrom(ms: endInMillis))
 
         resolve(true)
     }
@@ -807,5 +816,9 @@ class EmbraceManager: NSObject {
         }
 
         resolve(true)
+    }
+    
+    func generateW3cTraceparent(span: OpenTelemetryApi.Span) -> String {
+        return EmbraceCore.W3C.traceparent(from: span)
     }
 }
