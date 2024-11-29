@@ -3,8 +3,11 @@ import {NativeModules, Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
-import {logIfComponentError} from "./utils/ComponentError";
+import {
+  generateStackTrace,
+  handleError,
+  handleGlobalError,
+} from "./utils/ErrorUtil";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import {SessionStatus} from "./interfaces/Types";
 import {
@@ -21,50 +24,12 @@ interface Properties {
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
 const tracking = require("promise/setimmediate/rejection-tracking");
 
-const STACK_LIMIT = 200;
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
 const WARNING = "warning";
 const INFO = "info";
 const ERROR = "error";
 
 const noOp = () => {};
-
-// will cover unhandled errors, js crashes
-const handleError = async (error: Error, callback: () => void) => {
-  if (!(error instanceof Error)) {
-    console.warn("[Embrace] error must be of type Error");
-    return;
-  }
-
-  const {name, message, stack = ""} = error;
-
-  logIfComponentError(error);
-
-  // same as error.name? why is it pulled differently?
-  const errorType = error.constructor.name;
-
-  // truncating stacktrace to 200 lines
-  const stTruncated = stack.split("\n").slice(0, STACK_LIMIT);
-
-  // specifically for iOS for now, the same formatting is done in the Android layer
-  // in the future Android will get rid of all related to js and use this format as well
-  const iosStackTrace = JSON.stringify({
-    n: name,
-    m: message,
-    t: errorType,
-    // removing the Type from the first part of the stacktrace.
-    st: stTruncated.slice(1, stTruncated.length).join("\n"),
-  });
-
-  await NativeModules.EmbraceManager.logUnhandledJSException(
-    name,
-    message,
-    errorType,
-    Platform.OS === "android" ? stTruncated.join("\n") : iosStackTrace,
-  );
-
-  callback();
-};
 
 const isObjectNonEmpty = (obj?: object): boolean =>
   Object.keys(obj || {}).length > 0;
