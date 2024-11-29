@@ -24,7 +24,6 @@ import io.embrace.android.embracesdk.Embrace;
 import io.embrace.android.embracesdk.Severity;
 import io.embrace.android.embracesdk.network.EmbraceNetworkRequest;
 import io.embrace.android.embracesdk.network.http.HttpMethod;
-import io.embrace.android.embracesdk.internal.EmbraceInternalInterface;
 
 public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     private ReactApplicationContext context;
