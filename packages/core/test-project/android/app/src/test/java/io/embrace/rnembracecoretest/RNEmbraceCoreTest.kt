@@ -15,7 +15,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.runner.RunWith
 import org.mockito.MockedStatic
 import org.mockito.Mockito
-import org.mockito.Mockito.spy
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -59,7 +58,7 @@ class RNEmbraceCoreTest {
     @Test
     fun testLogNetworkRequest() {
         val context: ReactApplicationContext = mock()
-        val embraceModuleSpy = spy(EmbraceManagerModule(context))
+        val embraceModuleSpy = Mockito.spy(EmbraceManagerModule(context))
 
         val mockTraceparent = "traceparent-123"
         whenever(embraceModuleSpy.generateW3cTraceparent()).thenReturn(mockTraceparent)
@@ -136,7 +135,7 @@ class RNEmbraceCoreTest {
     @Test
     fun testLogNetworkClientError() {
         val context: ReactApplicationContext = mock()
-        val embraceModuleSpy = spy(EmbraceManagerModule(context))
+        val embraceModuleSpy = Mockito.spy(EmbraceManagerModule(context))
 
         val mockTraceparent = "traceparent-123"
         whenever(embraceModuleSpy.generateW3cTraceparent()).thenReturn(mockTraceparent)
