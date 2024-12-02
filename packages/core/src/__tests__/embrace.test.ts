@@ -59,90 +59,88 @@ const mockGetLastRunEndState = jest.fn();
 const mockGetDeviceId = jest.fn();
 const mockGetCurrentSessionId = jest.fn();
 
-jest.mock("react-native", () => ({
-  NativeModules: {
-    EmbraceManager: {
-      setUserIdentifier: (userIdentifier: string) =>
-        mockSetUserIdentifier(userIdentifier),
-      clearUserIdentifier: () => mockClearUserIdentifier(),
-      setUsername: (username: string) => mockSetUsername(username),
-      clearUsername: () => mockClearUsername(),
-      setUserEmail: (userEmail: string) => mockSetUserEmail(userEmail),
-      clearUserEmail: () => mockClearUserEmail(),
-      addBreadcrumb: (message: string) => mockAddBreadcrumb(message),
-      logMessageWithSeverityAndProperties: (
-        message: string,
-        severity: string,
-        properties: Properties,
-        stacktrace: string,
-      ) =>
-        mockLogMessageWithSeverityAndProperties(
-          message,
-          severity,
-          properties,
-          stacktrace,
-        ),
-      logHandledError: (
-        message: string,
-        stackTrace: string,
-        properties?: Properties,
-      ) => mockLogHandledError(message, stackTrace, properties),
-      addUserPersona: (persona: string) => mockAddUserPersona(persona),
-      clearUserPersona: (persona: string) => mockClearUserPersona(persona),
-      clearAllUserPersonas: () => mockClearAllUserPersonas(),
-      startView: (view: string) => mockStartView(view),
-      endView: (view: string) => mockEndView(view),
-      addSessionProperty: (key: string, value: string, permanent: boolean) =>
-        mockAddSessionProperty(key, value, permanent),
-      removeSessionProperty: (key: string) => mockRemoveSessionProperty(key),
-      setUserAsPayer: () => {
-        mockSetUserAsPayer();
-        return false;
-      },
-      clearUserAsPayer: () => {
-        mockClearUserAsPayer();
-        return false;
-      },
-      setJavaScriptBundlePath: (path: string) =>
-        mockSetJavaScriptBundlePath(path),
-      logNetworkRequest: (
-        url: string,
-        httpMethod: MethodType,
-        startInMillis: number,
-        endInMillis: number,
-        bytesSent: number,
-        bytesReceived: number,
-        statusCode: number,
-      ) =>
-        mockLogNetworkRequest(
-          url,
-          httpMethod,
-          startInMillis,
-          endInMillis,
-          bytesSent,
-          bytesReceived,
-          statusCode,
-        ),
-      logNetworkClientError: (
-        url: string,
-        httpMethod: MethodType,
-        startInMillis: number,
-        endInMillis: number,
-        errorType: string,
-        errorMessage: string,
-      ) =>
-        mockLogNetworkClientError(
-          url,
-          httpMethod,
-          startInMillis,
-          endInMillis,
-          errorType,
-          errorMessage,
-        ),
-      getLastRunEndState: () => mockGetLastRunEndState(),
-      getDeviceId: () => mockGetDeviceId(),
-      getCurrentSessionId: () => mockGetCurrentSessionId(),
+jest.mock("../EmbraceManagerModule", () => ({
+  EmbraceManagerModule: {
+    setUserIdentifier: (userIdentifier: string) =>
+      mockSetUserIdentifier(userIdentifier),
+    clearUserIdentifier: () => mockClearUserIdentifier(),
+    setUsername: (username: string) => mockSetUsername(username),
+    clearUsername: () => mockClearUsername(),
+    setUserEmail: (userEmail: string) => mockSetUserEmail(userEmail),
+    clearUserEmail: () => mockClearUserEmail(),
+    addBreadcrumb: (message: string) => mockAddBreadcrumb(message),
+    logMessageWithSeverityAndProperties: (
+      message: string,
+      severity: string,
+      properties: Properties,
+      stacktrace: string,
+    ) =>
+      mockLogMessageWithSeverityAndProperties(
+        message,
+        severity,
+        properties,
+        stacktrace,
+      ),
+    logHandledError: (
+      message: string,
+      stackTrace: string,
+      properties?: Properties,
+    ) => mockLogHandledError(message, stackTrace, properties),
+    addUserPersona: (persona: string) => mockAddUserPersona(persona),
+    clearUserPersona: (persona: string) => mockClearUserPersona(persona),
+    clearAllUserPersonas: () => mockClearAllUserPersonas(),
+    startView: (view: string) => mockStartView(view),
+    endView: (view: string) => mockEndView(view),
+    addSessionProperty: (key: string, value: string, permanent: boolean) =>
+      mockAddSessionProperty(key, value, permanent),
+    removeSessionProperty: (key: string) => mockRemoveSessionProperty(key),
+    setUserAsPayer: () => {
+      mockSetUserAsPayer();
+      return false;
     },
+    clearUserAsPayer: () => {
+      mockClearUserAsPayer();
+      return false;
+    },
+    setJavaScriptBundlePath: (path: string) =>
+      mockSetJavaScriptBundlePath(path),
+    logNetworkRequest: (
+      url: string,
+      httpMethod: MethodType,
+      startInMillis: number,
+      endInMillis: number,
+      bytesSent: number,
+      bytesReceived: number,
+      statusCode: number,
+    ) =>
+      mockLogNetworkRequest(
+        url,
+        httpMethod,
+        startInMillis,
+        endInMillis,
+        bytesSent,
+        bytesReceived,
+        statusCode,
+      ),
+    logNetworkClientError: (
+      url: string,
+      httpMethod: MethodType,
+      startInMillis: number,
+      endInMillis: number,
+      errorType: string,
+      errorMessage: string,
+    ) =>
+      mockLogNetworkClientError(
+        url,
+        httpMethod,
+        startInMillis,
+        endInMillis,
+        errorType,
+        errorMessage,
+      ),
+    getLastRunEndState: () => mockGetLastRunEndState(),
+    getDeviceId: () => mockGetDeviceId(),
+    getCurrentSessionId: () => mockGetCurrentSessionId(),
   },
 }));
 

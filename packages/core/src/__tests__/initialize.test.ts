@@ -12,31 +12,32 @@ const mockLogMessageWithSeverityAndProperties = jest.fn();
 
 const ReactNativeMock = jest.requireMock("react-native");
 
-jest.mock("react-native", () => ({
-  NativeModules: {
-    EmbraceManager: {
-      setReactNativeVersion: (version: string) =>
-        mockSetReactNativeVersion(version),
-      setJavaScriptPatchNumber: (patch: string) =>
-        mockSetJavaScriptPatchNumber(patch),
-      setReactNativeSDKVersion: (version: string) =>
-        mockSetReactNativeSDKVersion(version),
-      logMessageWithSeverityAndProperties: (
-        message: string,
-        severity: string,
-        properties: object,
-        stacktrace: string,
-      ) =>
-        mockLogMessageWithSeverityAndProperties(
-          message,
-          severity,
-          properties,
-          stacktrace,
-        ),
-      isStarted: () => mockIsStarted(),
-      startNativeEmbraceSDK: (appId?: string) => mockStart(appId),
-    },
+jest.mock("../EmbraceManagerModule", () => ({
+  EmbraceManagerModule: {
+    setReactNativeVersion: (version: string) =>
+      mockSetReactNativeVersion(version),
+    setJavaScriptPatchNumber: (patch: string) =>
+      mockSetJavaScriptPatchNumber(patch),
+    setReactNativeSDKVersion: (version: string) =>
+      mockSetReactNativeSDKVersion(version),
+    logMessageWithSeverityAndProperties: (
+      message: string,
+      severity: string,
+      properties: object,
+      stacktrace: string,
+    ) =>
+      mockLogMessageWithSeverityAndProperties(
+        message,
+        severity,
+        properties,
+        stacktrace,
+      ),
+    isStarted: () => mockIsStarted(),
+    startNativeEmbraceSDK: (appId?: string) => mockStart(appId),
   },
+}));
+
+jest.mock("react-native", () => ({
   Platform: {OS: "android"},
 }));
 

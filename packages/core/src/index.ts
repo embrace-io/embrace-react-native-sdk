@@ -1,5 +1,5 @@
 "use strict";
-import {NativeModules, Platform} from "react-native";
+import {Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
@@ -12,6 +12,7 @@ import {
 } from "./interfaces/NetworkMonitoring";
 import {MethodType} from "./interfaces/HTTP";
 import {SDKConfig} from "./interfaces/Config";
+import {EmbraceManagerModule} from "./EmbraceManagerModule";
 
 interface Properties {
   [key: string]: string;
@@ -53,7 +54,7 @@ const handleError = async (error: Error, callback: () => void) => {
     st: stTruncated.slice(1, stTruncated.length).join("\n"),
   });
 
-  await NativeModules.EmbraceManager.logUnhandledJSException(
+  await EmbraceManagerModule.logUnhandledJSException(
     name,
     message,
     errorType,
@@ -70,7 +71,7 @@ const initialize = async ({
   patch,
   sdkConfig,
 }: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
-  const hasNativeSDKStarted = await NativeModules.EmbraceManager.isStarted();
+  const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
 
   if (!hasNativeSDKStarted) {
     if (Platform.OS === "ios" && !sdkConfig?.ios?.appId) {
@@ -89,9 +90,7 @@ const initialize = async ({
 
     const isStarted = customStartEmbraceSDK
       ? await customStartEmbraceSDK(startSdkConfig)
-      : await NativeModules.EmbraceManager.startNativeEmbraceSDK(
-          startSdkConfig,
-        );
+      : await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
 
     if (!isStarted) {
       console.warn(
@@ -106,7 +105,7 @@ const initialize = async ({
 
   if (embracePackage) {
     const {version} = embracePackage;
-    NativeModules.EmbraceManager.setReactNativeSDKVersion(version);
+    EmbraceManagerModule.setReactNativeSDKVersion(version);
   }
 
   if (patch) {
@@ -117,7 +116,7 @@ const initialize = async ({
     isObjectNonEmpty(reactNativeVersion) &&
     isObjectNonEmpty(reactNativeVersion.version)
   ) {
-    NativeModules.EmbraceManager.setReactNativeVersion(
+    EmbraceManagerModule.setReactNativeVersion(
       buildVersionStr(reactNativeVersion.version),
     );
   }
@@ -127,17 +126,17 @@ const initialize = async ({
   if (!__DEV__) {
     try {
       const isCodePushPresent =
-        await NativeModules.EmbraceManager.checkAndSetCodePushBundleURL();
+        await EmbraceManagerModule.checkAndSetCodePushBundleURL();
 
       // On Android the Swazzler stores the computed bundle ID as part of the build process and the SDK is able to
       // read it at run time. On iOS however we don't retain this value so we either need to get it from the Code Push
       // bundle or, if that isn't enabled, try and get it from the default bundle path
       if (!isCodePushPresent && Platform.OS === "ios") {
         const bundleJs =
-          await NativeModules.EmbraceManager.getDefaultJavaScriptBundlePath();
+          await EmbraceManagerModule.getDefaultJavaScriptBundlePath();
 
         if (bundleJs) {
-          NativeModules.EmbraceManager.setJavaScriptBundlePath(bundleJs);
+          EmbraceManagerModule.setJavaScriptBundlePath(bundleJs);
         }
       }
     } catch (e) {
@@ -171,7 +170,7 @@ const initialize = async ({
         stackTrace = error.stack || "";
       }
 
-      return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
+      return EmbraceManagerModule.logMessageWithSeverityAndProperties(
         message,
         ERROR,
         {},
@@ -201,49 +200,47 @@ const buildVersionStr = ({
 };
 
 export const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.setUserIdentifier(userIdentifier);
+  return EmbraceManagerModule.setUserIdentifier(userIdentifier);
 };
 
 export const clearUserIdentifier = (): Promise<boolean> => {
-  return NativeModules.EmbraceManager.clearUserIdentifier();
+  return EmbraceManagerModule.clearUserIdentifier();
 };
 
 export const setUsername = (username: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.setUsername(username);
+  return EmbraceManagerModule.setUsername(username);
 };
 
 export const clearUsername = (): Promise<boolean> => {
-  return NativeModules.EmbraceManager.clearUsername();
+  return EmbraceManagerModule.clearUsername();
 };
 
 export const setUserEmail = (userEmail: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.setUserEmail(userEmail);
+  return EmbraceManagerModule.setUserEmail(userEmail);
 };
 
 export const clearUserEmail = (): Promise<boolean> => {
-  return NativeModules.EmbraceManager.clearUserEmail();
+  return EmbraceManagerModule.clearUserEmail();
 };
 
 export const addBreadcrumb = (message: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.addBreadcrumb(message);
+  return EmbraceManagerModule.addBreadcrumb(message);
 };
 
 export const logScreen = (screenName: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.addBreadcrumb(
-    `Opening screen [${screenName}]`,
-  );
+  return EmbraceManagerModule.addBreadcrumb(`Opening screen [${screenName}]`);
 };
 
 export const addUserPersona = (persona: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.addUserPersona(persona);
+  return EmbraceManagerModule.addUserPersona(persona);
 };
 
 export const clearUserPersona = (persona: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.clearUserPersona(persona);
+  return EmbraceManagerModule.clearUserPersona(persona);
 };
 
 export const clearAllUserPersonas = (): Promise<boolean> => {
-  return NativeModules.EmbraceManager.clearAllUserPersonas();
+  return EmbraceManagerModule.clearAllUserPersonas();
 };
 
 export const logMessage = (
@@ -253,7 +250,7 @@ export const logMessage = (
 ): Promise<boolean> => {
   const stacktrace = severity === INFO ? "" : generateStackTrace();
 
-  return NativeModules.EmbraceManager.logMessageWithSeverityAndProperties(
+  return EmbraceManagerModule.logMessageWithSeverityAndProperties(
     message,
     severity,
     properties,
@@ -278,7 +275,7 @@ export const logHandledError = (
   if (error instanceof Error) {
     const {stack, message} = error;
 
-    return NativeModules.EmbraceManager.logHandledError(
+    return EmbraceManagerModule.logHandledError(
       message,
       stack,
       properties || {},
@@ -289,19 +286,19 @@ export const logHandledError = (
 };
 
 export const startView = (view: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.startView(view);
+  return EmbraceManagerModule.startView(view);
 };
 
 export const endView = (spanId: string): Promise<boolean> => {
-  return NativeModules.EmbraceManager.endView(spanId);
+  return EmbraceManagerModule.endView(spanId);
 };
 
 export const setJavaScriptPatch = (patch: string) => {
-  return NativeModules.EmbraceManager.setJavaScriptPatchNumber(patch);
+  return EmbraceManagerModule.setJavaScriptPatchNumber(patch);
 };
 
 export const setJavaScriptBundlePath = (path: string) => {
-  return NativeModules.EmbraceManager.setJavaScriptBundlePath(path);
+  return EmbraceManagerModule.setJavaScriptBundlePath(path);
 };
 
 export const addSessionProperty = (
@@ -309,23 +306,23 @@ export const addSessionProperty = (
   value: string,
   permanent: boolean,
 ): Promise<boolean> => {
-  return NativeModules.EmbraceManager.addSessionProperty(key, value, permanent);
+  return EmbraceManagerModule.addSessionProperty(key, value, permanent);
 };
 
 export const removeSessionProperty = (key: string) => {
-  return NativeModules.EmbraceManager.removeSessionProperty(key);
+  return EmbraceManagerModule.removeSessionProperty(key);
 };
 
 export const endSession = () => {
-  return NativeModules.EmbraceManager.endSession();
+  return EmbraceManagerModule.endSession();
 };
 
 export const setUserAsPayer = (): Promise<boolean> => {
-  return NativeModules.EmbraceManager.setUserAsPayer();
+  return EmbraceManagerModule.setUserAsPayer();
 };
 
 export const clearUserAsPayer = (): Promise<boolean> => {
-  return NativeModules.EmbraceManager.clearUserAsPayer();
+  return EmbraceManagerModule.clearUserAsPayer();
 };
 
 export const recordNetworkRequest = (
@@ -337,7 +334,7 @@ export const recordNetworkRequest = (
   bytesReceived?: number,
   statusCode?: number,
 ): Promise<boolean> => {
-  return NativeModules.EmbraceManager.logNetworkRequest(
+  return EmbraceManagerModule.logNetworkRequest(
     url,
     httpMethod,
     startInMillis,
@@ -356,7 +353,7 @@ export const logNetworkClientError = (
   errorType: string,
   errorMessage: string,
 ): Promise<boolean> => {
-  return NativeModules.EmbraceManager.logNetworkClientError(
+  return EmbraceManagerModule.logNetworkClientError(
     url,
     httpMethod,
     startInMillis,
@@ -367,13 +364,13 @@ export const logNetworkClientError = (
 };
 
 export const getLastRunEndState = (): Promise<SessionStatus> =>
-  NativeModules.EmbraceManager.getLastRunEndState();
+  EmbraceManagerModule.getLastRunEndState();
 
 export const getDeviceId = (): Promise<string> =>
-  NativeModules.EmbraceManager.getDeviceId();
+  EmbraceManagerModule.getDeviceId();
 
 export const getCurrentSessionId = (): Promise<string> =>
-  NativeModules.EmbraceManager.getCurrentSessionId();
+  EmbraceManagerModule.getCurrentSessionId();
 
 export const applyNetworkInterceptors = (
   networkSDKInstance: NETWORK_INTERCEPTOR_TYPES,
