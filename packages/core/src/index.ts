@@ -54,12 +54,20 @@ const handleError = async (error: Error, callback: () => void) => {
     st: stTruncated.slice(1, stTruncated.length).join("\n"),
   });
 
-  await EmbraceManagerModule.logUnhandledJSException(
-    name,
-    message,
-    errorType,
-    Platform.OS === "android" ? stTruncated.join("\n") : iosStackTrace,
-  );
+  let logException;
+  try {
+    logException = await EmbraceManagerModule.logUnhandledJSException(
+      name,
+      message,
+      errorType,
+      Platform.OS === "android" ? stTruncated.join("\n") : iosStackTrace,
+    );
+  } catch {
+    logException = false;
+  }
+  if (!logException) {
+    console.warn("[Embrace] Failed to log exception");
+  }
 
   callback();
 };
@@ -88,9 +96,14 @@ const initialize = async ({
     const startSdkConfig =
       (Platform.OS === "ios" && originalSdkConfig?.ios) || {};
 
-    const isStarted = customStartEmbraceSDK
-      ? await customStartEmbraceSDK(startSdkConfig)
-      : await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
+    let isStarted;
+    try {
+      isStarted = customStartEmbraceSDK
+        ? await customStartEmbraceSDK(startSdkConfig)
+        : await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
+    } catch {
+      isStarted = false;
+    }
 
     if (!isStarted) {
       console.warn(
