@@ -33,7 +33,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="react-native-otlp"
+        name="otlp"
         options={{
           title: "otlp",
           tabBarAccessibilityLabel: "EMBRACE OTLP",
@@ -44,6 +44,13 @@ export default function TabLayout() {
         options={{
           title: "misc",
           tabBarAccessibilityLabel: "MISC TESTING",
+        }}
+      />
+      <Tabs.Screen
+        name="nsf"
+        options={{
+          title: "nsf",
+          tabBarAccessibilityLabel: "NSF TESTING",
         }}
       />
     </Tabs>
