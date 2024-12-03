@@ -111,7 +111,7 @@ exports.config.capabilities.forEach(function (caps) {
  */
 
 // The number of times to retry the entire specfile when it fails as a whole
-exports.config.specFileRetries = 1;
+exports.config.specFileRetries = 2;
 
 // Delay in seconds between the spec file retry attempts
 exports.config.specFileRetriesDelay = 60;
@@ -126,9 +126,9 @@ const browserStackBasicAuth = Buffer.from(
   `${process.env.BROWSERSTACK_USERNAME}:${process.env.BROWSERSTACK_ACCESS_KEY}`,
 ).toString("base64");
 
-const QUEUE_FULL_DELAY_SECONDS = 120;
-const QUEUE_FULL_RETRIES = 3;
-const QUEUE_JITTER_SECONDS = 5;
+const QUEUE_FULL_DELAY_SECONDS = 180;
+const QUEUE_FULL_RETRIES = 5;
+const QUEUE_JITTER_SECONDS = 10;
 
 /**
  * Gets executed before a worker process is spawned and can be used to initialize specific service
