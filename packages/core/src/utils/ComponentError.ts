@@ -51,8 +51,6 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
     "",
   );
 
-  console.log("AAAAA", componentStack);
-
   return NativeModules.EmbraceManager.logHandledError(
     message,
     componentStackShrinked,

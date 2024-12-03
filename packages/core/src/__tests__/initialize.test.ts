@@ -133,7 +133,7 @@ describe("Android: initialize", () => {
     const result = await initialize({patch: testValue});
     expect(result).toBe(true);
 
-    const handleError = () => {};
+    const handleError = () => Promise.resolve(true);
     const generatedGlobalErrorFunc = handleGlobalError(
       previousHandler,
       handleError,
