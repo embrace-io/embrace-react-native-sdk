@@ -12,7 +12,9 @@
       "android_app_id": "abcdf",
       "ios_app_id": "abcdf",
       "disable_view_capture": true,
-      "endpoint": "http://localhost:8989"
+      "endpoint": "http://localhost:8989",
+      "enable_network_span_forwarding": true,
+      "disabled_url_patterns": ["*.api.com"]
     }
 
   Would produce `basic-test-app/android/app/src/main/embrace-config.json`:
@@ -29,6 +31,10 @@
         },
         "view_config": {
           "enable_automatic_activity_capture": false
+        },
+        "networking": {
+          "disabled_url_patterns": ["*.api.com"],
+          "enable_network_span_forwarding": true
         }
       }
     }
@@ -38,7 +44,8 @@
       "ios": {
         "appId": "abcdf",
         "endpointBaseUrl": "http://localhost:8877",
-        "disableAutomaticViewCapture": true
+        "disableAutomaticViewCapture": true,
+        "disableNetworkSpanForwarding": false
       }
     }
    */
@@ -69,6 +76,8 @@
       android_app_id: string;
       ios_app_id: string;
       disable_view_capture: boolean;
+      enable_network_span_forwarding: boolean;
+      disabled_url_patterns: string[];
       endpoint: string;
     }
   */
@@ -91,6 +100,10 @@
         view_config?: {
           enable_automatic_activity_capture: boolean;
         };
+        networking?: {
+          disabled_url_patterns: string[],
+          enable_network_span_forwarding: boolean;
+        }
       };
     }
    */
@@ -119,6 +132,13 @@
         enable_automatic_activity_capture: false,
       };
     }
+
+    if (config.enable_network_span_forwarding || config.disabled_url_patterns) {
+      androidConfig.sdk_config.networking = {
+        enable_network_span_forwarding: true,
+        disabled_url_patterns: config.disabled_url_patterns,
+      };
+    }
   }
 
   fs.writeFileSync(
@@ -133,6 +153,7 @@
         appId: string;
         endpointBaseUrl: string;
         disableAutomaticViewCapture: boolean;
+        disableNetworkSpanForwarding: boolean;
       };
     }
    */
@@ -144,6 +165,7 @@
       appId: config.ios_app_id,
       endpointBaseUrl: config.endpoint,
       disableAutomaticViewCapture: config.disable_view_capture,
+      disableNetworkSpanForwarding: !config.enable_network_span_forwarding,
     },
   };
 
