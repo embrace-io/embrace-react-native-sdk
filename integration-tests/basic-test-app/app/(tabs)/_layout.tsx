@@ -21,8 +21,15 @@ export default function TabLayout() {
       <Tabs.Screen
         name="react-native-otlp"
         options={{
-          title: "EMBRACE OTLP",
-          tabBarAccessibilityLabel: "EMBRACE OTLP",
+          title: "EMBRACE OTLP TESTING",
+          tabBarAccessibilityLabel: "EMBRACE OTLP TESTING",
+        }}
+      />
+      <Tabs.Screen
+        name="network-span-forwarding"
+        options={{
+          title: "EMBRACE NSF TESTING",
+          tabBarAccessibilityLabel: "EMBRACE NSF TESTING",
         }}
       />
     </Tabs>
