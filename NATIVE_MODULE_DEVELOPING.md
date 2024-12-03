@@ -76,7 +76,7 @@ This is the bare minimum we need to create a new iOS Native Module.
 
 > The proper `.podspec` file outside the ios folder listing all dependencies should be already created previously by running the command from `create-react-native-library`. It's a good idea to check that this file is in place after running the build and pack the new package (without this file the new iOS Native Module won't be recognized by the application and won't be installed).
 
-## Testing
+### Testing
 
 - Under `packages/new-package` create a `test-project` directory.
 
@@ -113,7 +113,7 @@ c. Targets -> both (regular and test targets)
 - Run `yarn install:ios` after creating the proper script in packages/<package-name>/package.json (take a look at other packages as references).
 - This should install all dependencies related to React Native and those coming from Embrace (listed in `ios/Podfile`). 
 
-## Some reminders
+### Some reminders
 
 - Make sure it is created the `RNEmbrace__NAME__Tests.xctestplan` into `test-project/ios` by opening Edit Scheme (top center of xcode) -> look for Tests Plan -> Click on the arrow at the right of the name. If it is the first time you click on it and the `RNEmbrace__NAME__Tests.xctestplan` file was not saved yet, it will ask for it. Save it, so the changes will persist. Otherwise the configurations will be lost.
 - Make sure swift classes add the `React` import at the top of the file.
@@ -152,7 +152,7 @@ Tests can be run from XCode by opening test-project/ios/RNEmbrace<PackageName>Te
 - Into the `gradle.properties` -> Add custom properties (particularly `RNEmbrace<PackageName>_packageJsonPath` following other packages as example)
 - Add `android/config` folder with respective content (`detekt` plugin for linting, in the future this is going to be moved at the root of the repo avoiding config duplication)
 
-## Some reminders
+### Some reminders
 
 - Remove app/src/androidTest
 - Remove app/src/main/java
@@ -163,3 +163,32 @@ Tests can be run from XCode by opening test-project/ios/RNEmbrace<PackageName>Te
 - Make sure `apply("../../../android/dependencies.gradle")` is added into `app/build.gradle.kts`
 
 Tests can be run from Android Studio by adding test-project/android as a Project or from the CLI with `yarn android:test`.
+
+## JS interface
+
+If there are calls to `NativeModules.<YourModule>.<method>` that aren't explicitly covered by error handling then a
+wrapper module should be defined to give a better error message in the case that the package hasn't been installed
+correctly on the native side:
+
+```typescript
+// packages/your-package/src/YourModule.ts
+
+import {NativeModules, Platform} from "react-native";
+
+const LINKING_ERROR =
+  `The package '@embrace-io/your-package' doesn't seem to be linked. Make sure: \n\n` +
+  Platform.select({ios: "- You have run 'pod install'\n", default: ""}) +
+  "- You rebuilt the app after installing the package\n" +
+  "- You are not using Expo Go\n";
+
+export const YourModule = NativeModules.NativeModuleName
+  ? NativeModules.NativeModuleName
+  : new Proxy(
+      {},
+      {
+        get() {
+          throw new Error(LINKING_ERROR);
+        },
+      },
+    );
+```
