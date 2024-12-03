@@ -9,15 +9,16 @@ import {
 } from "@embrace-io/react-native";
 
 const NSFTestingScreen = () => {
-  const [catFact, setCatFact] = useState<string>("Discover a cat fact");
+  const [isDone, setIsDone] = useState<boolean | null>(null);
 
-  const handleGetCatFacts = useCallback(async () => {
+  const handleAutoNetworkCall = useCallback(async () => {
     try {
-      const res = await fetch("https://catfact.ninja/fact");
-      const data = await res.json();
+      setIsDone(false);
+      await fetch("https://webhook.site/ca294063-8b5f-4e3f-85f2-22900ad8e732");
 
-      setCatFact(data.fact);
+      setIsDone(true);
     } catch (error) {
+      setIsDone(false);
       console.log("Error fetching cat facts", error);
     }
   }, []);
@@ -53,8 +54,12 @@ const NSFTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Regular Network Call</Text>
-        <Button onPress={handleGetCatFacts} title="Cat lovers" />
-        <Text>{catFact}</Text>
+        <Button onPress={handleAutoNetworkCall} title="webhook.site" />
+        {isDone === null && (
+          <Text style={styles.text}>No network call made yet</Text>
+        )}
+        {isDone === false && <Text style={styles.text}>Fetching...</Text>}
+        {isDone === true && <Text style={styles.text}>Done!</Text>}
       </View>
 
       <View style={styles.section}>

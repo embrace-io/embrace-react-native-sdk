@@ -27,6 +27,7 @@ class SDKConfig: NSObject {
   public let disableCrashReporter: Bool
   public let disableAutomaticViewCapture: Bool
   public let endpointBaseUrl: String?
+  public let disableNetworkSpanForwarding: Bool
 
   public init(from: NSDictionary) {
     self.appId = from["appId"] as? String ?? ""
@@ -34,6 +35,7 @@ class SDKConfig: NSObject {
     self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
     self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
     self.endpointBaseUrl = from["endpointBaseUrl"] as? String
+    self.disableNetworkSpanForwarding = from["disableNetworkSpanForwarding"] as? Bool ?? false
   }
 }
 
@@ -54,9 +56,10 @@ class EmbraceManager: NSObject {
         }
     }
   }
+
     @objc
     func getDefaultJavaScriptBundlePath(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        if  let filePath = Bundle.main.path(forResource: "main", ofType: "jsbundle"){
+        if  let filePath = Bundle.main.path(forResource: "main", ofType: "jsbundle") {
             resolve(filePath)
         } else {
             reject("error", "Unable to retrieve JS bundle path", nil)
@@ -87,6 +90,11 @@ class EmbraceManager: NSObject {
                     let servicesBuilder = CaptureServiceBuilder().addDefaults()
                     if config.disableAutomaticViewCapture {
                             servicesBuilder.remove(ofType: ViewCaptureService.self)
+                    }
+
+                    if config.disableNetworkSpanForwarding {
+                        servicesBuilder.add(.urlSession(options:
+                                                            URLSessionCaptureService.Options(injectTracingHeader: false, requestsDataSource: nil)))
                     }
 
                     var endpoints: Embrace.Endpoints?
@@ -422,7 +430,7 @@ class EmbraceManager: NSObject {
             reject("RECORD_LOG_NETWORK_REQUEST_ERROR", "Error recording a network request, Embrace SDK may not be initialized", nil)
             return
         }
-        
+
         var attributes = [
             "http.request.method": httpMethod.uppercased(),
             "url.full": url
@@ -439,15 +447,16 @@ class EmbraceManager: NSObject {
         if bytesReceived >= 0 {
             attributes["http.response.body.size"] = String(Int(bytesReceived))
         }
-        
-        let embraceOtel = EmbraceOTel()
-        let spanBuilder = embraceOtel
+
+        var embraceOtel = EmbraceOTel()
+        var spanBuilder = embraceOtel
             .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod), type: SpanType.networkRequest, attributes: attributes)
             .setStartTime(time: dateFrom(ms: startInMillis))
 
         let span = spanBuilder.startSpan()
 
-        // injecting w3c traceparent only if NSF is enabled
+        // Native SDK will inject the w3c traceparent only if NSF is enabled
+        // Hosted SDK always passing the param
         generateW3cTraceparent(span: span)
 
         span.end(errorCode: nil, time: dateFrom(ms: endInMillis))
@@ -469,7 +478,7 @@ class EmbraceManager: NSObject {
             reject("RECORD_LOG_NETWORK_CLIENT_ERROR_ERROR", "Error recording a network client error, Embrace SDK may not be initialized", nil)
             return
         }
-        
+
         let attributes = attributeStringsFrom(dict: [
             "http.request.method": httpMethod.uppercased(),
             "url.full": url,
@@ -479,8 +488,8 @@ class EmbraceManager: NSObject {
             // NOTE: this should be handled by iOS native sdk using `errorCode` value
             // To remove from here when it's done.
             "emb.error_code": "failure"
-        ]);
-        
+        ])
+
         let embraceOtel = EmbraceOTel()
         let spanBuilder = embraceOtel
             .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod), type: SpanType.networkRequest, attributes: attributes)
@@ -488,7 +497,8 @@ class EmbraceManager: NSObject {
 
         let span = spanBuilder.startSpan()
 
-        // injecting w3c traceparent only if NSF is enabled
+        // Native SDK will inject the w3c traceparent only if NSF is enabled
+        // Hosted SDK always passing the param
         generateW3cTraceparent(span: span)
 
         // `errorCode` should be used to calc `emb.error_code` attr in native sdk
@@ -817,8 +827,8 @@ class EmbraceManager: NSObject {
 
         resolve(true)
     }
-    
+
     func generateW3cTraceparent(span: OpenTelemetryApi.Span) -> String {
-        return EmbraceCore.W3C.traceparent(from: span)
+        return EmbraceCore.W3C.traceparent(from: span.context)
     }
 }
