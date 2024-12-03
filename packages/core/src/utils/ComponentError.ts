@@ -8,6 +8,8 @@ const isJSXError = (error: Error): error is ComponentError => {
   return "componentStack" in error;
 };
 
+const undefinedInComponentStackRegex = /at undefined |\(|\)/g;
+
 /**
  * Logs errors with additional React component stack information if available.
  *
@@ -44,9 +46,12 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
   }
   const {message, componentStack} = error;
 
-  const componentStackShrinked = componentStack
-    .replace(/at UNdefined|\(|\)/g, "")
-    .trim();
+  const componentStackShrinked = componentStack.replace(
+    undefinedInComponentStackRegex,
+    "",
+  );
+
+  console.log("AAAAA", componentStack);
 
   return NativeModules.EmbraceManager.logHandledError(
     message,
