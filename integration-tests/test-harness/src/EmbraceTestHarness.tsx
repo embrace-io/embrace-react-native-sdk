@@ -6,7 +6,6 @@ import {styles} from "./helpers/styles";
 import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces/Config";
 import {EmbraceExpoTestHarness} from "./EmbraceExpoTestHarness";
 import {EmbraceReactNativeTestHarness} from "./EmbraceReactNativeTestHarness";
-import {initialize as initEmbraceWithCustomExporters} from "@embrace-io/react-native-otlp";
 
 type Props = {
   sdkConfig: SDKConfig;
@@ -24,6 +23,8 @@ export const EmbraceTestHarness = ({
 }: Props) => {
   const [embraceLoaded, setEmbraceLoaded] = useState(false);
 
+  /*
+  TODO EMBR-5735, restore this when ready to release the otlp package
   const initWithCustomExporters = useMemo(
     () =>
       initEmbraceWithCustomExporters({
@@ -50,6 +51,7 @@ export const EmbraceTestHarness = ({
       }),
     [],
   );
+   */
 
   useEffect(() => {
     const init = async () => {
@@ -58,7 +60,13 @@ export const EmbraceTestHarness = ({
       };
 
       if (allowCustomExport) {
-        config.sdkConfig.startCustomExport = initWithCustomExporters;
+        // config.sdkConfig.startCustomExport = initWithCustomExporters;
+        console.log(
+          "not allowing custom export yet, would have setup with: ",
+          endpoint,
+          ", ",
+          token,
+        );
       }
 
       await initEmbrace(config);
