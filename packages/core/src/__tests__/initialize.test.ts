@@ -10,7 +10,7 @@ const mockIsStarted = jest.fn();
 const mockStart = jest.fn();
 const mockSetReactNativeSDKVersion = jest.fn();
 const mockLogMessageWithSeverityAndProperties = jest.fn();
-const mockLogHandledError = jest.fn();
+const mockLogHandledError = jest.fn().mockReturnValue(true);
 
 const ReactNativeMock = jest.requireMock("react-native");
 
@@ -41,10 +41,7 @@ jest.mock("react-native", () => ({
         message: string,
         componentStack: string,
         params: object,
-      ) => {
-        mockLogHandledError(message, componentStack, params);
-        return true;
-      },
+      ) => mockLogHandledError(message, componentStack, params),
     },
   },
   Platform: {OS: "android"},

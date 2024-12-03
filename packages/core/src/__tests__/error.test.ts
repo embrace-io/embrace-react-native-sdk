@@ -89,6 +89,21 @@ describe("Component Error", () => {
       {},
     );
   });
+
+  test("Error is a component error and the component stack is not empty", async () => {
+    const componentError = new Error("Ups!") as ComponentError;
+
+    componentError.componentStack = "at undefined (in App)";
+    const textShrinked = "in App";
+
+    const result = await logIfComponentError(componentError);
+    expect(result).toBe(true);
+    expect(mockLogHandledError).toHaveBeenCalledWith(
+      componentError.message,
+      textShrinked,
+      {},
+    );
+  });
 });
 
 describe("Error Handler", () => {
