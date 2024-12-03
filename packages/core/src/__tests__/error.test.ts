@@ -7,7 +7,9 @@ import {
 import {ComponentError, logIfComponentError} from "../utils/ComponentError";
 
 const mockErrorCallback = jest.fn();
-const mockLogUnhandledJSException = jest.fn();
+const mockLogUnhandledJSException = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
 const mockLogHandledError = jest.fn();
 const mockPreviousHandler = jest.fn();
 
@@ -32,10 +34,7 @@ jest.mock("react-native", () => ({
         message: string,
         errorType: string,
         stack: string,
-      ) => {
-        mockLogUnhandledJSException(name, message, errorType, stack);
-        return Promise.resolve(true);
-      },
+      ) => mockLogUnhandledJSException(name, message, errorType, stack),
     },
   },
 }));
@@ -82,6 +81,7 @@ describe("Component Error", () => {
     customError.componentStack = "in SomeScreen/n in SomeOtherScreen";
     const result = await handleError(customError, mockErrorCallback);
     expect(result).toBe(true);
+    expect(mockErrorCallback).toHaveBeenCalled();
 
     expect(mockLogHandledError).toHaveBeenCalledWith(
       customError.message,
@@ -106,7 +106,7 @@ describe("Error Handler", () => {
     if (stack) {
       stTruncated = stack.split("\n").slice(0, STACK_LIMIT).join("\n");
     }
-
+    expect(mockErrorCallback).toHaveBeenCalled();
     expect(mockLogUnhandledJSException).toHaveBeenCalledWith(
       name,
       message,
@@ -123,7 +123,7 @@ describe("Error Handler", () => {
 
     const result = await handleError(customError, mockErrorCallback);
     expect(result).toBe(false);
-
+    expect(mockErrorCallback).not.toHaveBeenCalled();
     expect(mockLogUnhandledJSException).not.toHaveBeenCalled();
   });
   test("Error handler should call callback - iOS", async () => {
@@ -147,7 +147,7 @@ describe("Error Handler", () => {
       t: errorType,
       st: stTruncated.slice(1, stTruncated.length).join("\n"),
     });
-
+    expect(mockErrorCallback).toHaveBeenCalled();
     expect(mockLogUnhandledJSException).toHaveBeenCalledWith(
       name,
       message,
