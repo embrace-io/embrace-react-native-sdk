@@ -131,7 +131,7 @@ describe("Error Handler", () => {
   });
   test("Error handler should not call callback", async () => {
     const customError = {
-      name: "Not Eror",
+      name: "Not an Error",
       message: "Custom Message",
       stack: "in SomeScreen/n in SomeOtherScreen",
     };
@@ -185,12 +185,12 @@ describe("Error Utils functions", () => {
     jest.useFakeTimers();
 
     const customError = new Error("Ups!");
-    const customHandleError = (_: Error, callback: () => void) => {
+    const handleCustomError = (_: Error, callback: () => void) => {
       callback();
 
       return Promise.resolve(true);
     };
-    handleGlobalError(mockPreviousHandler, customHandleError)(
+    handleGlobalError(mockPreviousHandler, handleCustomError)(
       customError,
       true,
     );
@@ -201,12 +201,12 @@ describe("Error Utils functions", () => {
     jest.useFakeTimers();
 
     const customError = new Error("Ups!");
-    const customHandleError = (_: Error, callback: () => void) => {
+    const handleCustomError = (_: Error, callback: () => void) => {
       callback();
 
       return Promise.resolve(true);
     };
-    handleGlobalError(mockPreviousHandler, customHandleError)(
+    handleGlobalError(mockPreviousHandler, handleCustomError)(
       customError,
       true,
     );
