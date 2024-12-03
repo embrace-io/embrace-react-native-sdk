@@ -771,7 +771,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["http.request.method"]!.description, "GET")
         XCTAssertEqual(exportedSpans[0].attributes["error.message"]!.description, "this is my error")
         XCTAssertEqual(exportedSpans[0].attributes["error.type"]!.description, "custom error")
-        XCTAssertNotNil(exportedSpans[1].attributes["emb.w3c_traceparent"])
+        XCTAssertNotNil(exportedSpans[0].attributes["emb.w3c_traceparent"])
     }
 
     func testStartEndView() async throws {
