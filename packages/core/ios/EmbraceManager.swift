@@ -835,6 +835,6 @@ class EmbraceManager: NSObject {
 
     func injectW3cTraceparent(span: OpenTelemetryApi.Span) {
         var traceparent = EmbraceCore.W3C.traceparent(from: span.context)
-        span.setAttribute(key: EmbraceCore.W3C.traceparentHeaderName, value: traceparent)
+        span.setAttribute(key: "emb.w3c_traceparent", value: traceparent)
     }
 }
