@@ -161,6 +161,8 @@ Tests can be run from XCode by opening test-project/ios/RNEmbrace<PackageName>Te
 - Replace content of app/build.gradle.kts with proper configuration (using as example what other packages)
 - Make sure `app/build.gradle.kts` includes the right local package (implemented in `settings.gradle`)
 - Make sure `apply("../../../android/dependencies.gradle")` is added into `app/build.gradle.kts`
+- Make sure `android/gradle/wrapper/gradle-wrapper.properties` points to a gradle version we support (7.5.1 atm)
+- Make sure `android/build.gradle` includes an AGP we support (com.android.tools.build:gradle:7.4.2 atm)
 
 Tests can be run from Android Studio by adding test-project/android as a Project or from the CLI with `yarn android:test`.
 
