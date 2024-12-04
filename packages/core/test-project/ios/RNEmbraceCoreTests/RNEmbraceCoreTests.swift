@@ -210,7 +210,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "stacktrace as string")
         // should not be present since the js one is added
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
-        
+
         XCTAssertNotNil(exportedLogs[0].attributes["session.id"]!.description)
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")

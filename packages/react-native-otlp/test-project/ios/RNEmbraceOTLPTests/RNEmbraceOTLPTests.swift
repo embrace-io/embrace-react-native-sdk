@@ -73,7 +73,7 @@ final class RNEmbraceOTLPTests: XCTestCase {
 
     func testStartWithMissingExporters() throws {
         let expectation = self.expectation(description: "testStartWithMissingExporters")
-        
+
         module.startNativeEmbraceSDK(sdkConfigDict: SDK_BASE_CONFIG,
                                      otlpExportConfigDict: [:], // empty config
                                      resolve: { result in
@@ -83,7 +83,7 @@ final class RNEmbraceOTLPTests: XCTestCase {
                                      rejecter: promise.reject)
 
         waitForExpectations(timeout: 3)
-        
+
         // TODO: Test that log is printed
         // [Embrace] Neither Traces nor Logs configuration were found, skipping custom export.
         XCTAssertEqual(promise.resolveCalls.count, 1)
@@ -92,7 +92,7 @@ final class RNEmbraceOTLPTests: XCTestCase {
     func testStartWithTraceExporterOnly() throws {
         let expectation = self.expectation(description: "testStartWithTraceExporterOnly")
         expectation.expectedFulfillmentCount = 4
-        
+
         // happy path only with Trace config
         module.startNativeEmbraceSDK(sdkConfigDict: SDK_BASE_CONFIG,
                                      otlpExportConfigDict: ["traceExporter": [
@@ -116,7 +116,7 @@ final class RNEmbraceOTLPTests: XCTestCase {
                                         expectation.fulfill()
                                     },
                                      rejecter: promise.reject)
-        
+
         // with endpoint + empty headers (no timeout)
         module.startNativeEmbraceSDK(sdkConfigDict: SDK_BASE_CONFIG,
                                      otlpExportConfigDict: [
@@ -150,7 +150,7 @@ final class RNEmbraceOTLPTests: XCTestCase {
     func testStartWithLogExporterOnly() throws {
         let expectation = self.expectation(description: "testStartWithLogExporterOnly")
         expectation.expectedFulfillmentCount = 4
-        
+
         // happy path only with Trace config
         module.startNativeEmbraceSDK(sdkConfigDict: SDK_BASE_CONFIG,
                                      otlpExportConfigDict: ["logExporter": [
@@ -174,7 +174,7 @@ final class RNEmbraceOTLPTests: XCTestCase {
                                         expectation.fulfill()
                                     },
                                      rejecter: promise.reject)
-        
+
         // with endpoint + empty headers (no timeout)
         module.startNativeEmbraceSDK(sdkConfigDict: SDK_BASE_CONFIG,
                                      otlpExportConfigDict: [

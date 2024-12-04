@@ -79,25 +79,28 @@ class EmbraceManager: NSObject {
     @objc(startNativeEmbraceSDK:resolver:rejecter:)
     func startNativeEmbraceSDK(configDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         config = SDKConfig(from: configDict)
-        
+
         DispatchQueue.main.async {
             do {
                 var embraceOptions: Embrace.Options {
                     var crashReporter: CrashReporter?
-                    if self.config.disableCrashReporter {
-                        crashReporter = nil
-                    } else {
-                        crashReporter = EmbraceCrashReporter()
-                    }
+                    crashReporter = self.config.disableCrashReporter ? nil : EmbraceCrashReporter()
 
-                    let servicesBuilder = CaptureServiceBuilder().addDefaults()
+                    let servicesBuilder = CaptureServiceBuilder()
+
+                    // allowing to enable/disable NSF by code
+                    let urlSessionServiceOptions = URLSessionCaptureService
+                        .Options(injectTracingHeader: !self.config.disableNetworkSpanForwarding, requestsDataSource: nil)
+
+                    // manually adding the URLSessionCaptureService
+                    servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
+
+                    // adding defaults
+                    servicesBuilder.addDefaults()
+
                     if self.config.disableAutomaticViewCapture {
-                            servicesBuilder.remove(ofType: ViewCaptureService.self)
-                    }
-
-                    if self.config.disableNetworkSpanForwarding {
-                        servicesBuilder.add(.urlSession(options:
-                                                            URLSessionCaptureService.Options(injectTracingHeader: false, requestsDataSource: nil)))
+                        // removing service depending on code configuration
+                        servicesBuilder.remove(ofType: ViewCaptureService.self)
                     }
 
                     var endpoints: Embrace.Endpoints?
@@ -450,7 +453,7 @@ class EmbraceManager: NSObject {
         if bytesReceived >= 0 {
             attributes["http.response.body.size"] = String(Int(bytesReceived))
         }
-        
+
         let span = Embrace.client?
             .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
                        type: SpanType.networkRequest,
