@@ -450,21 +450,25 @@ class EmbraceManager: NSObject {
         if bytesReceived >= 0 {
             attributes["http.response.body.size"] = String(Int(bytesReceived))
         }
-
-        var embraceOtel = EmbraceOTel()
-        var spanBuilder = embraceOtel
-            .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod), type: SpanType.networkRequest, attributes: attributes)
-            .setStartTime(time: dateFrom(ms: startInMillis))
-
-        let span = spanBuilder.startSpan()
         
-        // injecting the w3c traceparent only if NSF is enabled
-        if !self.config.disableNetworkSpanForwarding {
-            injectW3cTraceparent(span: span)
-        }
+        let span = Embrace.client?
+            .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
+                       type: SpanType.networkRequest,
+                       attributes: attributes)
+            .setStartTime(time: dateFrom(ms: startInMillis))
+            .startSpan()
 
-        span.end(errorCode: nil, time: dateFrom(ms: endInMillis))
-        resolve(true)
+        if span != nil {
+            // injecting the w3c traceparent only if NSF is enabled
+            if !self.config.disableNetworkSpanForwarding {
+                injectW3cTraceparent(span: span!)
+            }
+
+            span!.end(errorCode: nil, time: dateFrom(ms: endInMillis))
+            resolve(true)
+        } else {
+            resolve(false)
+        }
     }
 
     @objc(logNetworkClientError:httpMethod:startInMillis:endInMillis:errorType:errorMessage:resolver:rejecter:)
@@ -494,22 +498,25 @@ class EmbraceManager: NSObject {
             "emb.error_code": "failure"
         ])
 
-        let embraceOtel = EmbraceOTel()
-        let spanBuilder = embraceOtel
-            .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod), type: SpanType.networkRequest, attributes: attributes)
+        let span = Embrace.client?
+            .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
+                       type: SpanType.networkRequest,
+                       attributes: attributes)
             .setStartTime(time: dateFrom(ms: startInMillis))
+            .startSpan()
 
-        let span = spanBuilder.startSpan()
-        
-        // injecting the w3c traceparent only if NSF is enabled
-        if !config.disableNetworkSpanForwarding {
-            injectW3cTraceparent(span: span)
+        if span != nil {
+            // injecting the w3c traceparent only if NSF is enabled
+            if !config.disableNetworkSpanForwarding {
+                injectW3cTraceparent(span: span!)
+            }
+
+            // `errorCode` should be used to calc `emb.error_code` attr in native sdk
+            span!.end(errorCode: ErrorCode.failure, time: dateFrom(ms: endInMillis))
+            resolve(true)
+        } else {
+            resolve(false)
         }
-
-        // `errorCode` should be used to calc `emb.error_code` attr in native sdk
-        span.end(errorCode: ErrorCode.failure, time: dateFrom(ms: endInMillis))
-
-        resolve(true)
     }
 
     /*
@@ -833,8 +840,7 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
 
-    func injectW3cTraceparent(span: OpenTelemetryApi.Span) {
-        var traceparent = EmbraceCore.W3C.traceparent(from: span.context)
-        span.setAttribute(key: "emb.w3c_traceparent", value: traceparent)
+    func injectW3cTraceparent(span: any Span) {
+        span.setAttribute(key: "emb.w3c_traceparent", value: EmbraceCore.W3C.traceparent(from: span.context))
     }
 }
