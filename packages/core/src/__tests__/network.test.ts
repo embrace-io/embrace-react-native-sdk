@@ -6,47 +6,48 @@ const mockLogNetworkClientError = jest.fn();
 
 const ReactNativeMock = jest.requireMock("react-native");
 
-jest.mock("react-native", () => ({
-  NativeModules: {
-    EmbraceManager: {
-      logNetworkRequest: (
-        url: string,
-        httpMethod: MethodType,
-        startInMillis: number,
-        endInMillis: number,
-        bytesSent: number,
-        bytesReceived: number,
-        statusCode: number,
-        error: string,
-      ) =>
-        mockLogNetworkRequest(
-          url,
-          httpMethod,
-          startInMillis,
-          endInMillis,
-          bytesSent,
-          bytesReceived,
-          statusCode,
-          error,
-        ),
-      logNetworkClientError: (
-        url: string,
-        httpMethod: MethodType,
-        startInMillis: number,
-        endInMillis: number,
-        errorType: string,
-        errorMessage: string,
-      ) =>
-        mockLogNetworkClientError(
-          url,
-          httpMethod,
-          startInMillis,
-          endInMillis,
-          errorType,
-          errorMessage,
-        ),
-    },
+jest.mock("../EmbraceManagerModule", () => ({
+  EmbraceManagerModule: {
+    logNetworkRequest: (
+      url: string,
+      httpMethod: MethodType,
+      startInMillis: number,
+      endInMillis: number,
+      bytesSent: number,
+      bytesReceived: number,
+      statusCode: number,
+      error: string,
+    ) =>
+      mockLogNetworkRequest(
+        url,
+        httpMethod,
+        startInMillis,
+        endInMillis,
+        bytesSent,
+        bytesReceived,
+        statusCode,
+        error,
+      ),
+    logNetworkClientError: (
+      url: string,
+      httpMethod: MethodType,
+      startInMillis: number,
+      endInMillis: number,
+      errorType: string,
+      errorMessage: string,
+    ) =>
+      mockLogNetworkClientError(
+        url,
+        httpMethod,
+        startInMillis,
+        endInMillis,
+        errorType,
+        errorMessage,
+      ),
   },
+}));
+
+jest.mock("react-native", () => ({
   Platform: {OS: "android"},
 }));
 
