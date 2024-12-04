@@ -48,7 +48,7 @@ class RNEmbraceCoreTest {
 
             embraceModule.startNativeEmbraceSDK(JavaOnlyMap(), promise)
 
-            verify(mockEmbrace).start(context.getApplicationContext(), false, Embrace.AppFramework.REACT_NATIVE)
+            verify(mockEmbrace).start(context.applicationContext, false, Embrace.AppFramework.REACT_NATIVE)
 
             // embrace starts without issues
             verify(promise, times(1)).resolve(true)
@@ -72,7 +72,7 @@ class RNEmbraceCoreTest {
             val bytesReceived = 199
             val statusCode = 200
 
-            whenever(embraceModuleSpy.isNetworkSpanForwardingEnabled()).thenReturn(true)
+            whenever(embraceModuleSpy.isNetworkSpanForwardingEnabled).thenReturn(true)
             embraceModuleSpy.logNetworkRequest(
                 url,
                 httpMethod,
@@ -101,7 +101,7 @@ class RNEmbraceCoreTest {
 
             verify(promise, times(1)).resolve(true)
 
-            whenever(embraceModuleSpy.isNetworkSpanForwardingEnabled()).thenReturn(false)
+            whenever(embraceModuleSpy.isNetworkSpanForwardingEnabled).thenReturn(false)
             embraceModuleSpy.logNetworkRequest(
                 url,
                 httpMethod,
@@ -148,7 +148,7 @@ class RNEmbraceCoreTest {
             val errorType = "Bad Request"
             val errorMessage = "Error message"
 
-            whenever(embraceModuleSpy.isNetworkSpanForwardingEnabled()).thenReturn(true)
+            whenever(embraceModuleSpy.isNetworkSpanForwardingEnabled).thenReturn(true)
             embraceModuleSpy.logNetworkClientError(
                 url,
                 httpMethod,
@@ -175,7 +175,7 @@ class RNEmbraceCoreTest {
 
             verify(promise, times(1)).resolve(true)
 
-            whenever(embraceModuleSpy.isNetworkSpanForwardingEnabled()).thenReturn(false)
+            whenever(embraceModuleSpy.isNetworkSpanForwardingEnabled).thenReturn(false)
             embraceModuleSpy.logNetworkClientError(
                 url,
                 httpMethod,
