@@ -113,8 +113,30 @@
     api_token: config.api_token,
   };
 
-  if (config.endpoint || config.disable_view_capture) {
+  if (
+    config.endpoint ||
+    config.disable_view_capture ||
+    config.enable_network_span_forwarding ||
+    config.disabled_url_patterns
+  ) {
     androidConfig.sdk_config = {};
+
+    if (config.enable_network_span_forwarding || config.disabled_url_patterns) {
+      androidConfig.sdk_config.networking = {};
+
+      if (config.enable_network_span_forwarding) {
+        androidConfig.sdk_config.networking = {
+          enable_network_span_forwarding: true,
+        };
+      }
+
+      if (config.disabled_url_patterns) {
+        androidConfig.sdk_config.networking = {
+          ...androidConfig.sdk_config.networking,
+          disabled_url_patterns: config.disabled_url_patterns,
+        };
+      }
+    }
 
     if (config.endpoint) {
       // https://developer.android.com/studio/run/emulator-networking#networkaddresses
@@ -132,19 +154,13 @@
         enable_automatic_activity_capture: false,
       };
     }
-
-    if (config.enable_network_span_forwarding || config.disabled_url_patterns) {
-      androidConfig.sdk_config.networking = {
-        enable_network_span_forwarding: true,
-        disabled_url_patterns: config.disabled_url_patterns,
-      };
-    }
   }
 
   fs.writeFileSync(
     androidConfigPath,
     JSON.stringify(androidConfig, undefined, 2),
   );
+
   console.log(`Wrote ${androidConfigPath}`);
 
   /*
@@ -160,12 +176,14 @@
   const iOSConfigPath = fs.existsSync(`${appPath}/app`)
     ? `${appPath}/app/embrace-sdk-config.json`
     : `${appPath}/embrace-sdk-config.json`;
+
   const iOSConfig = {
     ios: {
       appId: config.ios_app_id,
       endpointBaseUrl: config.endpoint,
       disableAutomaticViewCapture: config.disable_view_capture,
       disableNetworkSpanForwarding: !config.enable_network_span_forwarding,
+      // TBD: disabled_url_patterns since ios doesn't support it yet
     },
   };
 

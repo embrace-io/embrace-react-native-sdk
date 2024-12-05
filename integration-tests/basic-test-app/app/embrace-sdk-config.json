@@ -2,6 +2,7 @@
   "ios": {
     "appId": "abcdf",
     "endpointBaseUrl": "http://localhost:8877",
-    "disableAutomaticViewCapture": true
+    "disableAutomaticViewCapture": true,
+    "disableNetworkSpanForwarding": false
   }
 }
