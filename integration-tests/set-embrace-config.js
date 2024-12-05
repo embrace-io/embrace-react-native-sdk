@@ -12,7 +12,9 @@
       "android_app_id": "abcdf",
       "ios_app_id": "abcdf",
       "disable_view_capture": true,
-      "endpoint": "http://localhost:8989"
+      "endpoint": "http://localhost:8989",
+      "enable_network_span_forwarding": true,
+      "disabled_url_patterns": ["*.api.com"]
     }
 
   Would produce `basic-test-app/android/app/src/main/embrace-config.json`:
@@ -29,6 +31,10 @@
         },
         "view_config": {
           "enable_automatic_activity_capture": false
+        },
+        "networking": {
+          "disabled_url_patterns": ["*.api.com"],
+          "enable_network_span_forwarding": true
         }
       }
     }
@@ -38,7 +44,8 @@
       "ios": {
         "appId": "abcdf",
         "endpointBaseUrl": "http://localhost:8877",
-        "disableAutomaticViewCapture": true
+        "disableAutomaticViewCapture": true,
+        "disableNetworkSpanForwarding": false
       }
     }
    */
@@ -69,6 +76,8 @@
       android_app_id: string;
       ios_app_id: string;
       disable_view_capture: boolean;
+      enable_network_span_forwarding: boolean;
+      disabled_url_patterns: string[];
       endpoint: string;
     }
   */
@@ -91,6 +100,10 @@
         view_config?: {
           enable_automatic_activity_capture: boolean;
         };
+        networking?: {
+          disabled_url_patterns: string[],
+          enable_network_span_forwarding: boolean;
+        }
       };
     }
    */
@@ -100,8 +113,30 @@
     api_token: config.api_token,
   };
 
-  if (config.endpoint || config.disable_view_capture) {
+  if (
+    config.endpoint ||
+    config.disable_view_capture ||
+    config.enable_network_span_forwarding ||
+    config.disabled_url_patterns
+  ) {
     androidConfig.sdk_config = {};
+
+    if (config.enable_network_span_forwarding || config.disabled_url_patterns) {
+      androidConfig.sdk_config.networking = {};
+
+      if (config.enable_network_span_forwarding) {
+        androidConfig.sdk_config.networking = {
+          enable_network_span_forwarding: true,
+        };
+      }
+
+      if (config.disabled_url_patterns) {
+        androidConfig.sdk_config.networking = {
+          ...androidConfig.sdk_config.networking,
+          disabled_url_patterns: config.disabled_url_patterns,
+        };
+      }
+    }
 
     if (config.endpoint) {
       // https://developer.android.com/studio/run/emulator-networking#networkaddresses
@@ -125,6 +160,7 @@
     androidConfigPath,
     JSON.stringify(androidConfig, undefined, 2),
   );
+
   console.log(`Wrote ${androidConfigPath}`);
 
   /*
@@ -133,17 +169,21 @@
         appId: string;
         endpointBaseUrl: string;
         disableAutomaticViewCapture: boolean;
+        disableNetworkSpanForwarding: boolean;
       };
     }
    */
   const iOSConfigPath = fs.existsSync(`${appPath}/app`)
     ? `${appPath}/app/embrace-sdk-config.json`
     : `${appPath}/embrace-sdk-config.json`;
+
   const iOSConfig = {
     ios: {
       appId: config.ios_app_id,
       endpointBaseUrl: config.endpoint,
       disableAutomaticViewCapture: config.disable_view_capture,
+      disableNetworkSpanForwarding: !config.enable_network_span_forwarding,
+      // TBD: disabled_url_patterns since ios doesn't support it yet
     },
   };
 
