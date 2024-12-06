@@ -88,13 +88,10 @@ class EmbraceManager: NSObject {
 
                     let servicesBuilder = CaptureServiceBuilder()
 
-                    if self.config.disableNetworkSpanForwarding {
-                        // allowing to disable NSF by code
-                        let urlSessionServiceOptions = URLSessionCaptureService.Options(injectTracingHeader: false, requestsDataSource: nil)
-
-                        // manually adding the URLSessionCaptureService
-                        servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
-                    }
+                    // allowing to enable/disable NSF by code
+                    let urlSessionServiceOptions = URLSessionCaptureService.Options(injectTracingHeader: !self.config.disableNetworkSpanForwarding, requestsDataSource: nil)
+                    // manually adding the URLSessionCaptureService
+                    servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
 
                     // adding defaults
                     servicesBuilder.addDefaults()
