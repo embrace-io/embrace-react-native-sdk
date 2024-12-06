@@ -26,7 +26,7 @@ import io.embrace.android.embracesdk.network.EmbraceNetworkRequest;
 import io.embrace.android.embracesdk.network.http.HttpMethod;
 
 public class EmbraceManagerModule extends ReactContextBaseJavaModule {
-    private ReactApplicationContext context;
+    private final ReactApplicationContext context;
     private final InternalNetworkApiImpl embraceNetworkApi = new InternalNetworkApiImpl();
 
     public EmbraceManagerModule(ReactApplicationContext reactContext) {
@@ -198,9 +198,9 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void endView(String screen, Promise promise) {
+        // This method is only for compatibility, Android does not need an end event to end the view, but iOS does
+        // TODO this should be changed to span in the future
         promise.resolve(true);
-        //This method is only for compatibility, Android does not need an end event to end the view, but iOS does
-        //TODO this should be changed to span in the future
     }
 
     @ReactMethod
