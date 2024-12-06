@@ -1,5 +1,4 @@
 import * as React from "react";
-import {useState} from "react";
 import {Button, View, Text} from "react-native";
 import {useCallback} from "react";
 import {styles} from "../helpers/styles";
@@ -9,17 +8,11 @@ import {
 } from "@embrace-io/react-native";
 
 const NSFTestingScreen = () => {
-  const [isDone, setIsDone] = useState<boolean | null>(null);
-
   const handleAutoNetworkCall = useCallback(async () => {
     try {
-      setIsDone(false);
-      await fetch("https://webhook.site/ca294063-8b5f-4e3f-85f2-22900ad8e732");
-
-      setIsDone(true);
+      await fetch("https://request.fake/sdk/auto/interception");
     } catch (error) {
-      setIsDone(false);
-      console.log("Error fetching cat facts", error);
+      console.log("Error fetching...", error);
     }
   }, []);
 
@@ -27,10 +20,10 @@ const NSFTestingScreen = () => {
     const now = new Date();
 
     logNetworkClientError(
-      "https://request.fake/log/network/client/error",
+      "https://request.fake/manual/method/log/network/client/error",
       "POST",
       now.getTime().valueOf(),
-      now.getTime().valueOf() + 400000,
+      now.getTime().valueOf() + 3000,
       "Bad Request",
       "an error message",
     );
@@ -40,7 +33,7 @@ const NSFTestingScreen = () => {
     const now = new Date();
 
     recordNetworkRequest(
-      "https://request.fake/record/network/request",
+      "https://request.fake/manual/method/record/network/request",
       "GET",
       now.getTime().valueOf(),
       now.getTime().valueOf() + 400000,
@@ -54,12 +47,7 @@ const NSFTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Regular Network Call</Text>
-        <Button onPress={handleAutoNetworkCall} title="webhook.site" />
-        {isDone === null && (
-          <Text style={styles.text}>No network call made yet</Text>
-        )}
-        {isDone === false && <Text style={styles.text}>Fetching...</Text>}
-        {isDone === true && <Text style={styles.text}>Done!</Text>}
+        <Button onPress={handleAutoNetworkCall} title="Discover!" />
       </View>
 
       <View style={styles.section}>
