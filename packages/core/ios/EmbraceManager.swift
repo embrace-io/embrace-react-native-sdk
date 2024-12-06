@@ -2,6 +2,7 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
+import EmbraceCore
 import EmbraceCrash
 import EmbraceCommonInternal
 import EmbraceOTelInternal
@@ -21,83 +22,95 @@ private let EVENT_ATTRIBUTES_KEY = "attributes"
 private let EMB_EXC = "emb-js"
 
 class SDKConfig: NSObject {
-  public let appId: String
-  public let appGroupId: String?
-  public let disableCrashReporter: Bool
-  public let disableAutomaticViewCapture: Bool
-  public let endpointBaseUrl: String?
+    public let appId: String
+    public let appGroupId: String?
+    public let disableCrashReporter: Bool
+    public let disableAutomaticViewCapture: Bool
+    public let endpointBaseUrl: String?
+    public let disableNetworkSpanForwarding: Bool
 
-  public init(from: NSDictionary) {
-    self.appId = from["appId"] as? String ?? ""
-    self.appGroupId = from["appGroupId"] as? String
-    self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
-    self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
-    self.endpointBaseUrl = from["endpointBaseUrl"] as? String
-  }
+    public init(from: NSDictionary) {
+        self.appId = from["appId"] as? String ?? ""
+        self.appGroupId = from["appGroupId"] as? String
+        self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
+        self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
+        self.endpointBaseUrl = from["endpointBaseUrl"] as? String
+        self.disableNetworkSpanForwarding = from["disableNetworkSpanForwarding"] as? Bool ?? false
+    }
 }
 
 @objc(EmbraceManager)
 class EmbraceManager: NSObject {
-  private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
-  private var spanRepository = SpanRepository()
+    private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
+    private var spanRepository = SpanRepository()
+    private var config: SDKConfig = SDKConfig(from: NSDictionary())
 
-  @objc(setJavaScriptBundlePath:resolver:rejecter:)
-  func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    DispatchQueue.global(qos: .background).async {
-        do {
-            let bundleID = try computeBundleID(path: path)
-            try Embrace.client?.metadata.addResource(key: REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, value: bundleID.id, lifespan: .process)
-            resolve(true)
-        } catch let error {
-          reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", error)
+    @objc(setJavaScriptBundlePath:resolver:rejecter:)
+    func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let bundleID = try computeBundleID(path: path)
+                try Embrace.client?.metadata.addResource(key: REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, value: bundleID.id, lifespan: .process)
+                resolve(true)
+            } catch let error {
+                reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", error)
+            }
         }
     }
-  }
+
     @objc
     func getDefaultJavaScriptBundlePath(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        if  let filePath = Bundle.main.path(forResource: "main", ofType: "jsbundle"){
+        if  let filePath = Bundle.main.path(forResource: "main", ofType: "jsbundle") {
             resolve(filePath)
         } else {
             reject("error", "Unable to retrieve JS bundle path", nil)
         }
     }
+
     @objc
     func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         if let embraceStarted = Embrace.client?.started {
-        resolve(embraceStarted)
+            resolve(embraceStarted)
         } else {
-        resolve(false)
+            resolve(false)
         }
     }
 
     @objc(startNativeEmbraceSDK:resolver:rejecter:)
     func startNativeEmbraceSDK(configDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        let config = SDKConfig(from: configDict)
+        config = SDKConfig(from: configDict)
+
         DispatchQueue.main.async {
             do {
                 var embraceOptions: Embrace.Options {
                     var crashReporter: CrashReporter?
-                    if config.disableCrashReporter {
-                        crashReporter = nil
-                    } else {
-                        crashReporter = EmbraceCrashReporter()
-                    }
+                    crashReporter = self.config.disableCrashReporter ? nil : EmbraceCrashReporter()
 
-                    let servicesBuilder = CaptureServiceBuilder().addDefaults()
-                    if config.disableAutomaticViewCapture {
-                            servicesBuilder.remove(ofType: ViewCaptureService.self)
+                    let servicesBuilder = CaptureServiceBuilder()
+
+                    // allowing to enable/disable NSF by code
+                    let urlSessionServiceOptions = URLSessionCaptureService.Options(injectTracingHeader: !self.config.disableNetworkSpanForwarding, requestsDataSource: nil)
+                    // manually adding the URLSessionCaptureService
+                    servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
+
+                    // adding defaults
+                    servicesBuilder.addDefaults()
+
+                    if self.config.disableAutomaticViewCapture {
+                        // removing service depending on code configuration
+                        servicesBuilder.remove(ofType: ViewCaptureService.self)
                     }
 
                     var endpoints: Embrace.Endpoints?
-                    if config.endpointBaseUrl != nil {
-                        endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!,
-                                                      developmentBaseURL: config.endpointBaseUrl!,
-                                                      configBaseURL: config.endpointBaseUrl!)
+                    if self.config.endpointBaseUrl != nil {
+                        endpoints = Embrace.Endpoints(baseURL: self.config.endpointBaseUrl!,
+                                                      developmentBaseURL: self.config.endpointBaseUrl!,
+                                                      configBaseURL: self.config.endpointBaseUrl!)
                     }
 
                     return .init(
-                        appId: config.appId,
-                        appGroupId: config.appGroupId,
+                        appId: self.config.appId,
+                        appGroupId: self.config.appGroupId,
                         platform: .reactNative,
                         endpoints: endpoints,
                         captureServices: servicesBuilder.build(),
@@ -439,15 +452,24 @@ class EmbraceManager: NSObject {
             attributes["http.response.body.size"] = String(Int(bytesReceived))
         }
 
-        Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
-                                            type: SpanType.networkRequest, parent: nil,
-                                            startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
-                                            attributes: attributeStringsFrom(dict: attributes as NSDictionary),
-                                            events: eventsFrom(array: []),
-                                            errorCode: nil
-        )
+        let span = Embrace.client?
+            .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
+                       type: SpanType.networkRequest,
+                       attributes: attributes)
+            .setStartTime(time: dateFrom(ms: startInMillis))
+            .startSpan()
 
-        resolve(true)
+        if span != nil {
+            // injecting the w3c traceparent only if NSF is enabled
+            if !self.config.disableNetworkSpanForwarding {
+                injectW3cTraceparent(span: span!)
+            }
+
+            span!.end(errorCode: nil, time: dateFrom(ms: endInMillis))
+            resolve(true)
+        } else {
+            resolve(false)
+        }
     }
 
     @objc(logNetworkClientError:httpMethod:startInMillis:endInMillis:errorType:errorMessage:resolver:rejecter:)
@@ -466,26 +488,36 @@ class EmbraceManager: NSObject {
             return
         }
 
-        Embrace.client?.recordCompletedSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
-                                            type: SpanType.networkRequest,
-                                            parent: nil,
-                                            startTime: dateFrom(ms: startInMillis), endTime: dateFrom(ms: endInMillis),
-                                            attributes: attributeStringsFrom(dict: [
-                                                "http.request.method": httpMethod.uppercased(),
-                                                "url.full": url,
-                                                "error.message": errorMessage,
-                                                "error.type": errorType,
+        let attributes = attributeStringsFrom(dict: [
+            "http.request.method": httpMethod.uppercased(),
+            "url.full": url,
+            "error.message": errorMessage,
+            "error.type": errorType,
 
-                                                // NOTE: this should be handled by iOS native sdk using `errorCode` value
-                                                // To remove from here when it's done.
-                                                "emb.error_code": "failure"
-                                            ]),
-                                            events: eventsFrom(array: []),
-                                            // `errorCode` should be used to calc `emb.error_code` attr in native sdk
-                                            errorCode: ErrorCode.failure
-        )
+            // NOTE: this should be handled by iOS native sdk using `errorCode` value
+            // To remove from here when it's done.
+            "emb.error_code": "failure"
+        ])
 
-        resolve(true)
+        let span = Embrace.client?
+            .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
+                       type: SpanType.networkRequest,
+                       attributes: attributes)
+            .setStartTime(time: dateFrom(ms: startInMillis))
+            .startSpan()
+
+        if span != nil {
+            // injecting the w3c traceparent only if NSF is enabled
+            if !config.disableNetworkSpanForwarding {
+                injectW3cTraceparent(span: span!)
+            }
+
+            // `errorCode` should be used to calc `emb.error_code` attr in native sdk
+            span!.end(errorCode: ErrorCode.failure, time: dateFrom(ms: endInMillis))
+            resolve(true)
+        } else {
+            resolve(false)
+        }
     }
 
     /*
@@ -807,5 +839,9 @@ class EmbraceManager: NSObject {
         }
 
         resolve(true)
+    }
+
+    func injectW3cTraceparent(span: any Span) {
+        span.setAttribute(key: "emb.w3c_traceparent", value: EmbraceCore.W3C.traceparent(from: span.context))
     }
 }

@@ -56,7 +56,7 @@ func computeBundleID(path: String) throws -> BundleID {
             return BundleID(id: last.id, cached: true)
         }
     }
-    
+
     do {
         let fileData = try Data(contentsOf: URL(fileURLWithPath: path))
 
@@ -64,7 +64,7 @@ func computeBundleID(path: String) throws -> BundleID {
         let bundleID = Insecure.MD5.hash(data: fileData).map {
             String(format: "%02hhx", $0)
         }.joined()
-        
+
         last.computedAt = Date()
         last.path = path
         last.id = bundleID
@@ -73,6 +73,6 @@ func computeBundleID(path: String) throws -> BundleID {
     } catch {
         throw ComputeBundleIDErrors.parseError
     }
-    
+
     return BundleID(id: last.id, cached: false)
 }

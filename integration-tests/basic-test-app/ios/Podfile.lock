@@ -1962,7 +1962,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: e2152ed146b6a35c07386fc2ac4827b27e6aad12
   React-utils: 3285151c9d1e3a28a9586571fc81d521678c196d
   ReactCommon: f42444e384d82ab89184aed5d6f3142748b54768
-  RNEmbraceCore: 3792e65b8360ba6bdb6dcd69dbf357f5105fd2cb
+  RNEmbraceCore: 769ddc2493199f69abf5ef87e148c07040118e63
   RNEmbraceOTLP: 10130e1af22341540575d2736d29042e74441ed8
   RNEmbraceTracerProvider: 8f065d2fb1af4aa42ad0109514f654ce1354fb0b
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
