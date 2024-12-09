@@ -68,6 +68,12 @@ android {
     buildToolsVersion = rootProject.ext["buildToolsVersion"] as String
     compileSdk = rootProject.ext["compileSdkVersion"] as Int
 
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+
     buildTypes {
         getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
@@ -113,6 +119,7 @@ dependencies {
     // using package locally
     implementation(project(":core"))
     implementation("com.facebook.react:react-android")
+    testImplementation("io.opentelemetry:opentelemetry-sdk")
 
     testImplementation(libs.junit)
 
@@ -133,6 +140,14 @@ dependencies {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation(jscFlavor)
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+
+    filter {
+        includeTestsMatching("*Test")
     }
 }
 
