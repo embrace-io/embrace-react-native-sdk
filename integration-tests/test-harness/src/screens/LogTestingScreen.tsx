@@ -11,37 +11,26 @@ import {
 } from "@embrace-io/react-native";
 
 const LogTestingScreen = () => {
-  const handleErrorLog = useCallback(() => {
-    logHandledError(
-      new TypeError("triggering handled error (will show js stacktrace)"),
-    );
+  const triggerErrorLog = useCallback(() => {
+    logHandledError(new TypeError("This is an Error Log (with JS Stacktrace)"));
   }, []);
 
-  const handleLogUnhandledError = useCallback(() => {
-    throw new ReferenceError(
-      "testing 6.4.0-rc4 / triggering a crash (unhandled js exception)",
-    );
+  const triggerAnonymousCrash = useCallback(() => {
+    throw new ReferenceError("Anonymous Crash (Unhandled JS Exception)");
   }, []);
 
-  const handleLogUnhandledErrorNotAnonymous = useCallback(
-    function myLovellyUnhandledError() {
-      throw new ReferenceError("triggering a crash (unhandled js exception)");
-    },
-    [],
-  );
-
-  const sendLogs = useCallback(() => {
-    logWarning("Warning log (manually triggered)");
-    logInfo("Info log (manually triggered)");
-    logError("Error log (manually triggered)");
+  const triggerCrash = useCallback(function myLovellyUnhandledError() {
+    throw new ReferenceError("Crash (Unhandled JS Exception)");
   }, []);
 
-  const sendMessage = useCallback(() => {
-    logMessage("Message log (manually triggered) with severity", "warning", {
-      "custom.property.test": "hey",
-      "another.property": "ho",
-      "yet.another": "hum",
-      "rn.sdk.test": "1234567",
+  const triggerLogs = useCallback(() => {
+    logWarning("This is a Warning log");
+    logInfo("This is a Info log");
+    logError("This is a Error log");
+
+    logMessage("This is a Message (log)", "warning", {
+      "property.test": "abcd",
+      "another.property": "efghy-jklmn-opqrs-tuvwx-yz",
     });
   }, []);
 
@@ -49,18 +38,17 @@ const LogTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Logs</Text>
-        <Button onPress={sendLogs} title="LOGs (war/info/error)" />
-        <Button onPress={sendMessage} title="Custom Message (also a log)" />
-        <Button onPress={handleErrorLog} title="Handled JS Exception" />
+        <Button
+          onPress={triggerLogs}
+          title="Warning / Info / Error / Message"
+        />
+        <Button onPress={triggerErrorLog} title="Handled Exception" />
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.title}>Crashes (Unhandled Exceptions)</Text>
-        <Button onPress={handleLogUnhandledError} title="CRASH" />
-        <Button
-          onPress={handleLogUnhandledErrorNotAnonymous}
-          title="CRASH (not anonymous)"
-        />
+        <Text style={styles.title}>Unhandled Exceptions</Text>
+        <Button onPress={triggerAnonymousCrash} title="Anonymous Crash" />
+        <Button onPress={triggerCrash} title="Crash" />
       </View>
     </View>
   );
