@@ -11,6 +11,10 @@ const {defineConfig} = require("@yarnpkg/types");
  */
 function enforcePackageInfo({Yarn}) {
   for (const workspace of Yarn.workspaces()) {
+    if (workspace.manifest.private) {
+      continue;
+    }
+
     const info = {
       author: "Embrace <support@embrace.io> (https://embrace.io/)",
       bugs: {
