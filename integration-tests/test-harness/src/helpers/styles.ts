@@ -15,4 +15,8 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
   },
+  text: {
+    textAlign: "center",
+    gap: 16,
+  },
 });

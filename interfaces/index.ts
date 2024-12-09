@@ -1,5 +1,5 @@
 /**
- * Common interfaces shared by packages
+ * Common interfaces shared by Embrace Packages
  */
 
 interface IOSConfig {
@@ -10,8 +10,9 @@ interface IOSConfig {
   endpointBaseUrl?: string;
 }
 
-// NOTE: as per today Android is not configurable through code, this is a placeholder for future implementations.
-// Not even sure if it will ever happen
+// NOTE
+// Today Android is not configurable through code,
+// this is a placeholder for future implementations.
 interface AndroidConfig {}
 
 interface IOSConfig {

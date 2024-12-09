@@ -122,7 +122,8 @@ class EmbraceManagerTests: XCTestCase {
                             spanExporter: self.spanExporter,
                             logExporter: self.logExporter
                         )
-                ) )
+                    )
+                )
                 .start()
         } catch let error as EmbraceCore.Embrace {
             print(error)
@@ -165,7 +166,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(promise.resolveCalls.count, 2)
         XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
     }
-     */
+    */
 
     func testParseSDKConfig() {
         let config = SDKConfig(from: NSDictionary(dictionary: [
@@ -173,6 +174,7 @@ class EmbraceManagerTests: XCTestCase {
             "appGroupId": "myAppGroup",
             "disableCrashReporter": true,
             "disableAutomaticViewCapture": true,
+            "disableNetworkSpanForwarding": true,
             "endpointBaseUrl": "http://example.com"
         ]))
 
@@ -180,6 +182,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(config.appGroupId, "myAppGroup")
         XCTAssertTrue(config.disableCrashReporter)
         XCTAssertTrue(config.disableAutomaticViewCapture)
+        XCTAssertTrue(config.disableNetworkSpanForwarding)
         XCTAssertEqual(config.endpointBaseUrl, "http://example.com")
     }
 
@@ -190,6 +193,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertNil(config.appGroupId)
         XCTAssertFalse(config.disableCrashReporter)
         XCTAssertFalse(config.disableAutomaticViewCapture)
+        XCTAssertFalse(config.disableNetworkSpanForwarding)
         XCTAssertNil(config.endpointBaseUrl)
     }
 
@@ -206,7 +210,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "stacktrace as string")
         // should not be present since the js one is added
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
-        
+
         XCTAssertNotNil(exportedLogs[0].attributes["session.id"]!.description)
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
@@ -731,11 +735,13 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["http.response.body.size"]!.description, "2000")
         XCTAssertEqual(exportedSpans[0].attributes["http.request.body.size"]!.description, "1000")
         XCTAssertEqual(exportedSpans[0].attributes["http.response.status_code"]!.description, "200")
+        XCTAssertNotNil(exportedSpans[0].attributes["emb.w3c_traceparent"])
 
         XCTAssertEqual(exportedSpans[1].name, "emb-POST")
         XCTAssertEqual(exportedSpans[1].startTime, Date(timeIntervalSince1970: 1723221815.889))
         XCTAssertEqual(exportedSpans[1].endTime, Date(timeIntervalSince1970: 1723221815.891))
         XCTAssertEqual(exportedSpans[1].attributes["url.full"]!.description, "https://otest.com/")
+        XCTAssertNotNil(exportedSpans[1].attributes["emb.w3c_traceparent"])
 
         // negative values should not be added
         XCTAssertNil(exportedSpans[1].attributes["http.response.body.size"])
@@ -748,6 +754,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedSpans[2].attributes["url.full"]!.description, "https://otest.com/v2/error")
         XCTAssertEqual(exportedSpans[2].attributes["http.response.status_code"]!.description, "500")
         XCTAssertEqual(exportedSpans[2].status, Status.ok)
+        XCTAssertNotNil(exportedSpans[2].attributes["emb.w3c_traceparent"])
     }
 
     func testLogNetworkClientError() async throws {
@@ -764,6 +771,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["http.request.method"]!.description, "GET")
         XCTAssertEqual(exportedSpans[0].attributes["error.message"]!.description, "this is my error")
         XCTAssertEqual(exportedSpans[0].attributes["error.type"]!.description, "custom error")
+        XCTAssertNotNil(exportedSpans[0].attributes["emb.w3c_traceparent"])
     }
 
     func testStartEndView() async throws {
