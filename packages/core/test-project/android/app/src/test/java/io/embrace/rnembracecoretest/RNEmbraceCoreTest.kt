@@ -145,7 +145,10 @@ class RNEmbraceCoreTest {
                 "traceparent-log-network-request",
                 spanWithTraceparent.attributes.get(AttributeKey.stringKey("emb.w3c_traceparent"))
             )
-            assertEquals("http://request.com/v1/log/network/request", spanWithTraceparent.attributes.get(AttributeKey.stringKey("url.full")))
+            assertEquals(
+                "http://request.com/v1/log/network/request",
+                spanWithTraceparent.attributes.get(AttributeKey.stringKey("url.full"))
+            )
             assertEquals("200", spanWithTraceparent.attributes.get(AttributeKey.stringKey("http.response.status_code")))
             assertEquals("perf.network_request", spanWithTraceparent.attributes.get(AttributeKey.stringKey("emb.type")))
             assertEquals("12938", spanWithTraceparent.attributes.get(AttributeKey.stringKey("http.request.body.size")))
@@ -223,7 +226,10 @@ class RNEmbraceCoreTest {
             assertEquals("POST", spanWithTraceparent.attributes.get(AttributeKey.stringKey("http.request.method")))
             assertEquals("Error message", spanWithTraceparent.attributes.get(AttributeKey.stringKey("exception.message")))
             assertEquals("Bad Request", spanWithTraceparent.attributes.get(AttributeKey.stringKey("error.type")))
-            assertEquals("http://request.com/v1/log/network/client/error", spanWithTraceparent.attributes.get(AttributeKey.stringKey("url.full")))
+            assertEquals(
+                "http://request.com/v1/log/network/client/error",
+                spanWithTraceparent.attributes.get(AttributeKey.stringKey("url.full"))
+            )
         }
 
         verify(promise, times(1)).resolve(true)
