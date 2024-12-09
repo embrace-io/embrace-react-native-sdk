@@ -1,4 +1,4 @@
-import {NativeModules, Platform} from "react-native";
+import {Platform} from "react-native";
 import {zip} from "gzip-js";
 
 import {
@@ -9,6 +9,7 @@ import {
   IAxiosResponse,
   IEmbraceAxiosTrackerMetadata,
 } from "../../interfaces/IAxios";
+import {EmbraceManagerModule} from "../../EmbraceManagerModule";
 
 const UNKNONW_ERROR_MESSAGE =
   "[Embrace] Embrace was unable to capture the errored request due to limitations in the Axios API. Please raise a bug on the Axios repo if this affects you.";
@@ -34,7 +35,7 @@ const logErrorWithResponse = (
   const {startInMillis} = embraceMetadata;
 
   const logIOS = () =>
-    NativeModules.EmbraceManager.logNetworkRequest(
+    EmbraceManagerModule.logNetworkRequest(
       url,
       method,
       startInMillis,
@@ -46,7 +47,7 @@ const logErrorWithResponse = (
     );
 
   const logAndroid = () =>
-    NativeModules.EmbraceManager.logNetworkClientError(
+    EmbraceManagerModule.logNetworkClientError(
       url,
       method,
       startInMillis,
@@ -97,7 +98,7 @@ const applyResponseInterceptors = (
     const {startInMillis} = embraceMetadata;
 
     try {
-      NativeModules.EmbraceManager.logNetworkRequest(
+      EmbraceManagerModule.logNetworkRequest(
         url,
         method,
         startInMillis,

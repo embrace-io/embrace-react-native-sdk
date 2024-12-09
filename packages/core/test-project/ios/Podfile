@@ -14,7 +14,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'RNEmbrace' do
+target 'RNEmbraceCore' do
   config = use_native_modules!
 
   use_react_native!(
@@ -23,9 +23,12 @@ target 'RNEmbrace' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod 'EmbraceIO', '6.4.2'
+  # loading `dependencies` file
+  load '../../ios/dependencies.rb'
+  # installing custom dependencies from the original RNEmbraceCore
+  load_dependencies()
 
-  target 'RNEmbraceTests' do
+  target 'RNEmbraceCoreTests' do
     inherit! :complete
     # Pods for testing
   end

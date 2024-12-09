@@ -286,7 +286,7 @@
 				6D2523F62CC80696000ECCEA /* RNEmbraceOTLP-Bridging-Header.h */,
 			);
 			name = RNEmbraceOTLP;
-			path = ../../ios/RNEmbraceOTLP;
+			path = ../../ios;
 			sourceTree = "<group>";
 		};
 		B77C89AB32CDBA253F8E4683 /* Frameworks */ = {

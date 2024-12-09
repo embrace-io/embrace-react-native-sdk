@@ -71,7 +71,7 @@
 				6DD6B1E12CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule-Bridging-Header.h */,
 			);
 			name = ReactNativeTracerProvider;
-			path = ../../ios/ReactNativeTracerProvider;
+			path = ../../ios;
 			sourceTree = SOURCE_ROOT;
 		};
 		6DED2F422CE514B200A9735A = {
