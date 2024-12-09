@@ -1,4 +1,4 @@
-import {useEffect, useState, useMemo} from "react";
+import {useEffect, useState} from "react";
 import * as React from "react";
 import {initialize as initEmbrace} from "@embrace-io/react-native";
 import {Text, View} from "react-native";
@@ -6,16 +6,13 @@ import {styles} from "./helpers/styles";
 import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces/Config";
 import {EmbraceExpoTestHarness} from "./EmbraceExpoTestHarness";
 import {EmbraceReactNativeTestHarness} from "./EmbraceReactNativeTestHarness";
-import {initialize as initEmbraceWithCustomExporters} from "@embrace-io/react-native-otlp";
+import {initWithCustomExporters as initEmbraceWithCustomExporters} from "./helpers/otlp";
 
 type Props = {
   sdkConfig: SDKConfig;
   navigationStyle: "expo" | "react-native";
   allowCustomExport?: boolean;
 };
-
-const endpoint = "https://otlp-gateway-prod-us-east-0.grafana.net/otlp/v1";
-const token = "base64:instance:token";
 
 export const EmbraceTestHarness = ({
   sdkConfig,
@@ -24,33 +21,6 @@ export const EmbraceTestHarness = ({
 }: Props) => {
   const [embraceLoaded, setEmbraceLoaded] = useState(false);
 
-  const initWithCustomExporters = useMemo(
-    () =>
-      initEmbraceWithCustomExporters({
-        logExporter: {
-          endpoint: `${endpoint}/logs`,
-          headers: [
-            {
-              key: "Authorization",
-              token: `Basic ${token}`,
-            },
-          ],
-          timeout: 30000,
-        },
-        traceExporter: {
-          endpoint: `${endpoint}/traces`,
-          headers: [
-            {
-              key: "Authorization",
-              token: `Basic ${token}`,
-            },
-          ],
-          timeout: 30000,
-        },
-      }),
-    [],
-  );
-
   useEffect(() => {
     const init = async () => {
       const config = {
@@ -58,7 +28,7 @@ export const EmbraceTestHarness = ({
       };
 
       if (allowCustomExport) {
-        config.sdkConfig.startCustomExport = initWithCustomExporters;
+        config.sdkConfig.startCustomExport = initEmbraceWithCustomExporters();
       }
 
       await initEmbrace(config);

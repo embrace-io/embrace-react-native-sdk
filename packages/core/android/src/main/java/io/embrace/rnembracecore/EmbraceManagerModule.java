@@ -9,14 +9,11 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableArray;
 
 import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.WritableNativeMap;
-import com.facebook.react.bridge.WritableMap;
-
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
 
+import io.embrace.android.embracesdk.internal.network.http.InternalNetworkApiImpl;
 import io.embrace.android.embracesdk.spans.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +26,8 @@ import io.embrace.android.embracesdk.network.EmbraceNetworkRequest;
 import io.embrace.android.embracesdk.network.http.HttpMethod;
 
 public class EmbraceManagerModule extends ReactContextBaseJavaModule {
-    private ReactApplicationContext context;
+    private final ReactApplicationContext context;
+    private final InternalNetworkApiImpl embraceNetworkApi = new InternalNetworkApiImpl();
 
     public EmbraceManagerModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -44,10 +42,10 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void isStarted(Promise promise) {
-        try{
+        try {
             Boolean success = Embrace.getInstance().isStarted();
             promise.resolve(success);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
@@ -55,110 +53,110 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void startNativeEmbraceSDK(ReadableMap config, Promise promise) {
         // config for now is only used to setup the iOS SDK, the Android SDK reads its config from a file
-        try{
+        try {
             Embrace.getInstance().start(this.context.getApplicationContext(), false, Embrace.AppFramework.REACT_NATIVE);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void setUserIdentifier(String userIdentifier, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().setUserIdentifier(userIdentifier);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void setUsername(String username, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().setUsername(username);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void setUserEmail(String userEmail, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().setUserEmail(userEmail);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void clearUserEmail(Promise promise) {
-        try{
+        try {
             Embrace.getInstance().clearUserEmail();
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void clearUserIdentifier(Promise promise) {
-        try{
+        try {
             Embrace.getInstance().clearUserIdentifier();
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void clearUsername(Promise promise) {
-        try{
+        try {
             Embrace.getInstance().clearUsername();
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void addBreadcrumb(String message, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().addBreadcrumb(message);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void addUserPersona(String persona, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().addUserPersona(persona);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void clearUserPersona(String persona, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().clearUserPersona(persona);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void clearAllUserPersonas(Promise promise) {
-        try{
+        try {
             Embrace.getInstance().clearAllUserPersonas();
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
@@ -190,24 +188,24 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void startView(String screen, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().getReactNativeInternalInterface().logRnView(screen);
             promise.resolve(screen);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void endView(String screen, Promise promise) {
+        // This method is only for compatibility, Android does not need an end event to end the view, but iOS does
+        // TODO this should be changed to span in the future
         promise.resolve(true);
-        //This method is only for compatibility, Android does not need an end event to end the view, but iOS does
-        //TODO this should be changed to span in the future
     }
 
     @ReactMethod
     public void logHandledError(String message, String javascriptStackTrace, ReadableMap properties, Promise promise) {
-        try{
+        try {
             final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<>();
 
             props.put("emb.exception_handling", "handled");
@@ -218,27 +216,27 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
             Embrace.getInstance().logMessage(message, Severity.ERROR, props);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void logUnhandledJSException(String name, String message, String type, String stacktrace, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().getReactNativeInternalInterface().logUnhandledJsException(name, message, type, stacktrace);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void setJavaScriptPatchNumber(String number, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().getReactNativeInternalInterface().setJavaScriptPatchNumber(number);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
@@ -255,24 +253,24 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setReactNativeVersion(String version, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().getReactNativeInternalInterface().setReactNativeVersionNumber(version);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void logRNAction(String name, Double startTime, Double endTime, ReadableMap properties, Integer payloadSize, String output, Promise promise) {
-        try{
+        try {
             long st = startTime.longValue();
             long et = endTime.longValue();
 
             final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<String, Object>();
             Embrace.getInstance().getReactNativeInternalInterface().logRnAction(name, st, et, props, payloadSize, output);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
 
@@ -295,78 +293,78 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setJavaScriptBundlePath(String path, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,path);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void addSessionProperty(String key, String value, boolean permanent, Promise promise) {
-        try{
+        try {
             Boolean success = Embrace.getInstance().addSessionProperty(key, value, permanent);
             promise.resolve(success);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void removeSessionProperty(String key, Promise promise) {
-        try{
+        try {
             Embrace.getInstance().removeSessionProperty(key);
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void endSession(Promise promise) {
-        try{
+        try {
             Embrace.getInstance().endSession();
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void setUserAsPayer(Promise promise) {
-        try{
+        try {
             Embrace.getInstance().setUserAsPayer();
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod
     public void clearUserAsPayer(Promise promise) {
-        try{
+        try {
             Embrace.getInstance().clearUserAsPayer();
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod()
     public void getDeviceId(Promise promise) {
-        try{
+        try {
             promise.resolve(Embrace.getInstance().getDeviceId());
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod()
     public void getLastRunEndState(Promise promise) {
-        try{
+        try {
             promise.resolve(Embrace.getInstance().getLastRunEndState().name());
-        }catch(Exception e){
+        } catch(Exception e) {
             Log.e("Embrace", "Error getting the last run end state", e);
             promise.resolve(false);
         }
@@ -374,9 +372,9 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod()
     public void getCurrentSessionId(Promise promise) {
-        try{
+        try {
             promise.resolve(Embrace.getInstance().getCurrentSessionId());
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
@@ -395,13 +393,13 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
         Integer method = parseMethodFromString(httpMethod);
 
-        if(method == null) {
+        if (method == null) {
             Log.e("Embrace", "Failed to log network requests. Unexpected or null http method.");
             promise.resolve(false);
             return;
         }
 
-        try{
+        try {
             Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromCompletedRequest(
                     url,
                     HttpMethod.fromInt(method),
@@ -409,11 +407,14 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                     et,
                     bytesSent.intValue(),
                     bytesReceived.intValue(),
-                    statusCode.intValue()
+                    statusCode.intValue(),
+                    null,
+                    isNetworkSpanForwardingEnabled() ? generateW3cTraceparent() : null,
+                    null
             ));
 
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
@@ -429,22 +430,27 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         long et = endInMillis.longValue();
 
         boolean isHTTPMethodValid = validateHTTPMethod(httpMethod);
+
         if (!isHTTPMethodValid) {
             Log.e("Embrace", "Failed to log network requests. Unexpected or null http method.");
             promise.resolve(false);
             return;
         }
-        try{
+
+        try {
             Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromIncompleteRequest(
                     url,
                     HttpMethod.fromString(httpMethod.toUpperCase()),
                     st,
                     et,
                     errorType,
-                    errorMessage
+                    errorMessage,
+                    null,
+                    isNetworkSpanForwardingEnabled() ? generateW3cTraceparent() : null,
+                    null
             ));
             promise.resolve(true);
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
 
@@ -452,13 +458,13 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod()
     public void startSpan(String name, String parentSpanId, Double startTimeMs, Promise promise) {
-        try{
+        try {
             Long startTime = null;
-            if(startTimeMs != null && startTimeMs > 0){
+            if (startTimeMs != null && startTimeMs > 0) {
                 startTime = startTimeMs.longValue();
             }
             promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().startSpan(name, parentSpanId, startTime));
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(null);
         }
     }
@@ -477,7 +483,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         return stringMap;
     }
 
-    private ErrorCode getSpanErrorCodebyString(String errorCode){
+    private ErrorCode getSpanErrorCodebyString(String errorCode) {
         switch (errorCode) {
             case "Failure":
                 return ErrorCode.FAILURE;
@@ -496,7 +502,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     private List<Map<String, Object>> transformListReadableMapToListMap(ReadableArray items) {
         List<Map<String, Object>> objectMapList = new ArrayList<>();
 
-        try{
+        try {
             for (int i = 0; i < items.size(); i++) {
                 ReadableMap readableMap = items.getMap(i);
 
@@ -509,7 +515,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                     objectMapList.add(map);
                 }
             }
-        }catch(Exception e){
+        } catch(Exception e) {
             Log.e("Embrace", "There was an error in parsing the span event data", e);
         }
 
@@ -518,57 +524,65 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod()
     public void stopSpan(String spanId, String errorCodeString, Double endTimeMs, Promise promise) {
-        try{
+        try {
             Long endTime = null;
-            if(endTimeMs != null && endTimeMs > 0){
+            if (endTimeMs != null && endTimeMs > 0) {
                 endTime = endTimeMs.longValue();
             }
 
             ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
             promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().stopSpan(spanId, errorCodeInstance, endTime));
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod()
     public void addSpanAttributeToSpan(String spanId, String key, String value, Promise promise) {
-        try{
+        try {
             promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().addSpanAttribute(spanId, key, value));
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod()
     public void addSpanEventToSpan(String spanId, String name, Double time, ReadableMap attributes, Promise promise) {
-        try{
+        try {
 
             promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().addSpanEvent(spanId, name, time.longValue(), this.convertToReadableMap(attributes)));
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
     }
 
     @ReactMethod()
     public void recordCompletedSpan(String name, Double startTimeMs, Double endTimeMs, String errorCodeString, String parentSpanId, ReadableMap attributes, ReadableArray events, Promise promise) {
-        try{
+        try {
             ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
 
             Long startTime = null;
-            if(startTimeMs != null && startTimeMs > 0){
+            if (startTimeMs != null && startTimeMs > 0) {
                 startTime = startTimeMs.longValue();
             }
 
             Long endTime = null;
-            if(endTimeMs != null && endTimeMs > 0){
+            if (endTimeMs != null && endTimeMs > 0) {
                 endTime = endTimeMs.longValue();
             }
 
             promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().recordCompletedSpan(name, startTime, endTime, errorCodeInstance, parentSpanId, this.convertToReadableMap(attributes), this.transformListReadableMapToListMap(events)));
-        }catch(Exception e){
+        } catch(Exception e) {
             promise.resolve(false);
         }
+    }
+
+    public boolean isNetworkSpanForwardingEnabled() {
+        return embraceNetworkApi.isNetworkSpanForwardingEnabled();
+    }
+
+    public String generateW3cTraceparent() {
+        return Embrace.getInstance().generateW3cTraceparent();
     }
 
     private boolean validateHTTPMethod(String httpMethod) {
