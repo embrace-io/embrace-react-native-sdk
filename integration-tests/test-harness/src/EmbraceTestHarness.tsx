@@ -1,4 +1,4 @@
-import {useEffect, useState, useMemo} from "react";
+import {useEffect, useState} from "react";
 import * as React from "react";
 import {initialize as initEmbrace} from "@embrace-io/react-native";
 import {Text, View} from "react-native";
