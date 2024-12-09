@@ -7,22 +7,43 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "LOG TESTING",
+          title: "log",
           tabBarAccessibilityLabel: "LOG TESTING",
+        }}
+      />
+      <Tabs.Screen
+        name="span"
+        options={{
+          title: "span",
+          tabBarAccessibilityLabel: "SPAN TESTING",
+        }}
+      />
+      <Tabs.Screen
+        name="prop"
+        options={{
+          title: "prop",
+          tabBarAccessibilityLabel: "PROPERTY TESTING",
         }}
       />
       <Tabs.Screen
         name="tracer-provider"
         options={{
-          title: "TRACER PROVIDER TESTING",
+          title: "tracer",
           tabBarAccessibilityLabel: "TRACER PROVIDER TESTING",
         }}
       />
       <Tabs.Screen
         name="react-native-otlp"
         options={{
-          title: "EMBRACE OTLP",
+          title: "otlp",
           tabBarAccessibilityLabel: "EMBRACE OTLP",
+        }}
+      />
+      <Tabs.Screen
+        name="misc"
+        options={{
+          title: "misc",
+          tabBarAccessibilityLabel: "MISC TESTING",
         }}
       />
     </Tabs>

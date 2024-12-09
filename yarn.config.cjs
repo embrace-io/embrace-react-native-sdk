@@ -11,6 +11,10 @@ const {defineConfig} = require("@yarnpkg/types");
  */
 function enforcePackageInfo({Yarn}) {
   for (const workspace of Yarn.workspaces()) {
+    if (workspace.manifest.private) {
+      continue;
+    }
+
     const info = {
       author: "Embrace <support@embrace.io> (https://embrace.io/)",
       bugs: {
@@ -124,7 +128,7 @@ function enforceEmbraceMetadata({Yarn}) {
 
     workspace.set("embrace", {
       iosVersion: "6.5.1",
-      androidVersion: "6.13.0",
+      androidVersion: "6.14.0",
     });
   }
 }
