@@ -1,4 +1,4 @@
-import {MethodType} from "./HTTP";
+import {MethodType} from "./common";
 
 export type LiteralMap = Record<string, string | number | boolean>;
 
