@@ -1,4 +1,4 @@
-import {MethodType} from "../interfaces/HTTP";
+import {MethodType} from "../interfaces/common";
 import {applyNetworkInterceptors} from "../index";
 
 const mockLogNetworkRequest = jest.fn();

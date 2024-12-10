@@ -297,6 +297,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "my stack trace")
+        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
     }
 
     func testStartSpan() async throws {

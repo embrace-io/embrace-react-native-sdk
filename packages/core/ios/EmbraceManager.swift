@@ -355,8 +355,12 @@ class EmbraceManager: NSObject {
             return
         }
 
-        if !stacktrace.isEmpty {
-            attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
+        if !stacktrace.isEmpty  {
+            // we don't want to send info stacktraces to sdk for 'info' logs,
+            // this is already prevented in the js layer as well
+            if severityValue != .info {
+                attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
+            }
         }
 
         Embrace.client?.log(
