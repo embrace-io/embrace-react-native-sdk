@@ -187,11 +187,14 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     private Severity getSeverityByString(String severity) {
-        return switch (severity) {
-            case "info" -> Severity.INFO;
-            case "warning" -> Severity.WARNING;
-            default -> Severity.ERROR;
-        };
+        switch (severity) {
+            case "info":
+                return Severity.INFO;
+            case "warning":
+                return Severity.WARNING;
+            default:
+                return Severity.ERROR;
+        }
     }
 
     @ReactMethod
