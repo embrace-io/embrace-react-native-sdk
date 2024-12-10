@@ -168,7 +168,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                                                     String stacktrace, Promise promise) {
         try {
             final Map<String, Object> propValue = properties == null ? new HashMap<>() : properties.toHashMap();
-            final Severity severityValue = getSeverityByString(severity) ;
+            final Severity severityValue = getSeverityByString(severity);
             
             if (!stacktrace.isEmpty()) {
                 if (!severity.equals("info")) {
@@ -178,7 +178,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                 }
             }
 
-            Embrace.getInstance().logMessage(message, severityValue ? severityValue : Severity.ERROR, propValue);
+            Embrace.getInstance().logMessage(message, severityValue == null ? Severity.ERROR : severityValue, propValue);
             promise.resolve(true);
         } catch (Exception e) {
             Log.e("Embrace", "Error logging message", e);
@@ -187,16 +187,12 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     private Severity getSeverityByString(String severity) {
-        switch (severity) {
-            case "info":
-                return Severity.INFO;
-            case "warning":
-                return Severity.WARNING;
-            case "error":
-                return Severity.ERROR;
-            default:
-                return null;
-        }
+        return switch (severity) {
+            case "info" -> Severity.INFO;
+            case "warning" -> Severity.WARNING;
+            case "error" -> Severity.ERROR;
+            default -> null;
+        };
     }
 
     @ReactMethod
