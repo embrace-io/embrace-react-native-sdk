@@ -178,7 +178,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                 }
             }
 
-            Embrace.getInstance().logMessage(message, severityValue == null ? Severity.ERROR : severityValue, propValue);
+            Embrace.getInstance().logMessage(message, severityValue, propValue);
             promise.resolve(true);
         } catch (Exception e) {
             Log.e("Embrace", "Error logging message", e);
@@ -190,8 +190,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         return switch (severity) {
             case "info" -> Severity.INFO;
             case "warning" -> Severity.WARNING;
-            case "error" -> Severity.ERROR;
-            default -> null;
+            default -> Severity.ERROR;
         };
     }
 

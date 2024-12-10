@@ -13,7 +13,6 @@ import android.preference.PreferenceManager
 import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
 import io.embrace.android.embracesdk.Embrace
-import io.embrace.android.embracesdk.Severity
 import io.embrace.rnembracecore.EmbraceManagerModule
 import io.mockk.every
 import io.mockk.mockk
@@ -39,7 +38,6 @@ import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.timeout
-import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 
 class RNEmbraceCoreTest {
