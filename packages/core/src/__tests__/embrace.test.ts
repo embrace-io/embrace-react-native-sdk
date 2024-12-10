@@ -1,4 +1,4 @@
-import {MethodType} from "../interfaces/HTTP";
+import {LogSeverity, MethodType, LogProperties} from "../interfaces/common";
 import {
   addBreadcrumb,
   addSessionProperty,
@@ -28,11 +28,7 @@ import {
   setUserIdentifier,
   setUsername,
   startView,
-  ERROR,
-  INFO,
-  WARNING,
 } from "../index";
-import type {Properties} from "../index";
 
 const mockSetUserIdentifier = jest.fn();
 const mockClearUserIdentifier = jest.fn();
@@ -71,8 +67,8 @@ jest.mock("../EmbraceManagerModule", () => ({
     addBreadcrumb: (message: string) => mockAddBreadcrumb(message),
     logMessageWithSeverityAndProperties: (
       message: string,
-      severity: string,
-      properties: Properties,
+      severity: LogSeverity,
+      properties: LogProperties,
       stacktrace: string,
     ) =>
       mockLogMessageWithSeverityAndProperties(
@@ -84,7 +80,7 @@ jest.mock("../EmbraceManagerModule", () => ({
     logHandledError: (
       message: string,
       stackTrace: string,
-      properties?: Properties,
+      properties: LogProperties,
     ) => mockLogHandledError(message, stackTrace, properties),
     addUserPersona: (persona: string) => mockAddUserPersona(persona),
     clearUserPersona: (persona: string) => mockClearUserPersona(persona),
@@ -213,57 +209,125 @@ describe("Info/Warning/Error Logs", () => {
   });
 
   describe("logMessage", () => {
-    const testMessage = "message";
+    const testMessage = "a message";
     const testProps = {foo: "bar"};
 
-    test.each`
-      message        | severity   | properties   | stackTrace
-      ${testMessage} | ${INFO}    | ${testProps} | ${""}
-      ${testMessage} | ${INFO}    | ${testProps} | ${""}
-      ${testMessage} | ${WARNING} | ${testProps} | ${MOCK_STACKTRACE}
-      ${testMessage} | ${WARNING} | ${testProps} | ${MOCK_STACKTRACE}
-      ${testMessage} | ${ERROR}   | ${testProps} | ${MOCK_STACKTRACE}
-      ${testMessage} | ${ERROR}   | ${testProps} | ${MOCK_STACKTRACE}
-    `(
-      "should run $severity log",
-      async ({message, severity, properties, stackTrace}) => {
-        await logMessage(message, severity, properties);
-        expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-          message,
-          severity,
-          properties,
-          stackTrace,
-        );
-      },
-    );
+    it("should log an `info` message", async () => {
+      await logMessage(testMessage, LogSeverity.INFO, testProps, false);
+      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+        testMessage,
+        LogSeverity.INFO,
+        testProps,
+        "",
+      );
+
+      // even forcing to include stacktrace it shouldn't pass to the native layer
+      await logMessage(testMessage, LogSeverity.INFO, testProps, true);
+      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+        testMessage,
+        LogSeverity.INFO,
+        testProps,
+        "",
+      );
+    });
+
+    it("should log an `warning` message", async () => {
+      await logMessage(testMessage, LogSeverity.WARNING, testProps, false);
+      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+        testMessage,
+        LogSeverity.WARNING,
+        testProps,
+        "",
+      );
+
+      await logMessage(testMessage, LogSeverity.WARNING, testProps, true);
+      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+        testMessage,
+        LogSeverity.WARNING,
+        testProps,
+        MOCK_STACKTRACE,
+      );
+    });
+
+    it("should log an `error` message", async () => {
+      await logMessage(testMessage, LogSeverity.ERROR, testProps, false);
+      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+        testMessage,
+        LogSeverity.ERROR,
+        testProps,
+        "",
+      );
+
+      await logMessage(testMessage, LogSeverity.ERROR, testProps, true);
+      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+        testMessage,
+        LogSeverity.ERROR,
+        testProps,
+        MOCK_STACKTRACE,
+      );
+    });
   });
 
   test("logInfo", async () => {
-    await logInfo("test message");
+    await logInfo("pushed an `info` log");
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-      "test message",
-      INFO,
-      undefined,
+      "pushed an `info` log",
+      LogSeverity.INFO,
+      {},
       "",
     );
   });
 
   test("logWarning", async () => {
-    await logWarning("test message");
+    await logWarning("pushed a `warning` log", false);
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-      "test message",
-      WARNING,
-      undefined,
+      "pushed a `warning` log",
+      LogSeverity.WARNING,
+      {},
+      "",
+    );
+
+    await logWarning("pushed a `warning` log", true);
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+      "pushed a `warning` log",
+      LogSeverity.WARNING,
+      {},
+      MOCK_STACKTRACE,
+    );
+
+    // by default it should add the stacktrace
+    await logWarning("pushed a `warning` log");
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+      "pushed a `warning` log",
+      LogSeverity.WARNING,
+      {},
       MOCK_STACKTRACE,
     );
   });
 
   test("logError", async () => {
-    await logError("test message");
+    await logError("pushed an `error` log", false);
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-      "test message",
-      ERROR,
-      undefined,
+      "pushed an `error` log",
+      LogSeverity.ERROR,
+      {},
+      "",
+    );
+
+    await logError("pushed an `error` log", true);
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+      "pushed an `error` log",
+      LogSeverity.ERROR,
+      {},
+      MOCK_STACKTRACE,
+    );
+
+    // by default it should add the stacktrace
+    await logError("pushed an `error` log");
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+      "pushed an `error` log",
+      LogSeverity.ERROR,
+      {},
       MOCK_STACKTRACE,
     );
   });
