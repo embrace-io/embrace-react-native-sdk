@@ -19,8 +19,7 @@
     "test": "__tests__"
   },
   "scripts": {
-    "prebuild": "cp -r ../../interfaces/ ./src/interfaces/common",
-    "build": "tsc",
+    "build": "cp -r ../../interfaces/ ./src/interfaces/common && tsc",
     "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
     "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceOTLPTests.xcworkspace RNEmbraceOTLPTests",
     "ios:install": "cd test-project && yarn install && cd ios && pod install && rm .xcode.env.local"
