@@ -10,7 +10,7 @@ const mockIsStarted = jest.fn();
 const mockStart = jest.fn();
 const mockSetReactNativeSDKVersion = jest.fn();
 const mockLogMessageWithSeverityAndProperties = jest.fn();
-const mockLogHandledError = jest.fn().mockReturnValue(true);
+const mockLogHandledError = jest.fn().mockReturnValue(Promise.resolve(true));
 
 const ReactNativeMock = jest.requireMock("react-native");
 
@@ -153,12 +153,13 @@ describe("Android: initialize", () => {
       logIfComponentError,
     );
     const componentError = new Error("Test") as ComponentError;
-    componentError.componentStack = "in SomeScreen/n in SomeOtherScreen";
+    componentError.componentStack =
+      "at undefined(in SomeScreen)\nat undefined(in SomeOtherScreen)";
     generatedGlobalErrorFunc(componentError);
     expect(previousHandler).toHaveBeenCalled();
     expect(mockLogHandledError).toHaveBeenCalledWith(
       componentError.message,
-      componentError.componentStack,
+      "in SomeScreen\nin SomeOtherScreen",
       {},
     );
   });
