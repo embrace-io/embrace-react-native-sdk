@@ -139,7 +139,7 @@ dependencies {
 detekt {
     buildUponDefaultConfig = true
     autoCorrect = true
-    config.from(project.files("${project.rootDir}/config/detekt/detekt.yml"))
+    config.from(project.files("../../../../../detekt/detekt.yml"))
 }
 
 apply("../../../android/dependencies.gradle")

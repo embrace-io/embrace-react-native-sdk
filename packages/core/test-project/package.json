@@ -1,8 +1,8 @@
 {
-  "name": "test-project",
+  "name": "core-test-project",
   "private": true,
   "dependencies": {
-    "react-native": "0.74.2"
+    "react-native": "^0.75.4"
   },
   "engines": {
     "node": ">=18"
