@@ -1,18 +1,17 @@
 import {ComponentError, logIfComponentError} from "../utils/ComponentError";
 
-const mockLogHandledError = jest.fn();
+const mockLogHandledError = jest.fn().mockReturnValue(true);
 
-jest.mock("react-native", () => ({
-  NativeModules: {
-    EmbraceManager: {
-      logHandledError: (
-        message: string,
-        componentStack: string,
-        params: object,
-      ) => {
-        mockLogHandledError(message, componentStack, params);
-        return true;
-      },
+jest.mock("../EmbraceManagerModule", () => ({
+  EmbraceManagerModule: {
+    logHandledError: (
+      message: string,
+      componentStack: string,
+      params: object,
+    ) => {
+      mockLogHandledError(message, componentStack, params);
+      // The return value from the mock is not working in this case
+      return true;
     },
   },
 }));
@@ -57,8 +56,9 @@ describe("Component Error", () => {
   test("Error is a component error and the component stack is not empty", async () => {
     const componentError = new Error("Ups!") as ComponentError;
 
-    componentError.componentStack = "at undefined (in App)";
-    const textShrinked = "in App";
+    componentError.componentStack =
+      "at undefined (in Home), at undefined (in App)";
+    const textShrinked = "in Home, in App";
 
     const result = await logIfComponentError(componentError);
     expect(result).toBe(true);

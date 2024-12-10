@@ -1,4 +1,4 @@
-import {NativeModules} from "react-native";
+import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 interface ComponentError extends Error {
   componentStack: string;
@@ -40,7 +40,7 @@ const undefinedInComponentStackRegex = /at undefined |\(|\)/g;
  * @returns A promise that resolves to `true` if the error was logged, or `false`
  * if the error was not a React Native rendering error or the `componentStack` was empty.
  */
-const logIfComponentError = (error: Error): Promise<boolean> => {
+const logIfComponentError = async (error: Error): Promise<boolean> => {
   if (!isJSXError(error) || error.componentStack === "") {
     return Promise.resolve(false);
   }
@@ -50,10 +50,7 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
     undefinedInComponentStackRegex,
     "",
   );
-
-  console.log("AAAAA", componentStack);
-
-  return NativeModules.EmbraceManager.logHandledError(
+  return await EmbraceManagerModule.logHandledError(
     message,
     componentStackShrinked,
     {},

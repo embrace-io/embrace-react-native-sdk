@@ -39,7 +39,7 @@ const handleError = async (error: Error, callback: () => void) => {
 
   const {name, message, stack = ""} = error;
 
-  logIfComponentError(error);
+  await logIfComponentError(error);
 
   // same as error.name? why is it pulled differently?
   const errorType = error.constructor.name;
