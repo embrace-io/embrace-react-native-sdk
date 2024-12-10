@@ -3,5 +3,7 @@
   "android_app_id": "abcdf",
   "ios_app_id": "abcdf",
   "disable_view_capture": true,
-  "endpoint": "http://localhost:8877"
+  "endpoint": "http://localhost:8877",
+  "enable_network_span_forwarding": true,
+  "disabled_url_patterns": []
 }

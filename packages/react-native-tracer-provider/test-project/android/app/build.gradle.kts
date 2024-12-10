@@ -68,6 +68,12 @@ android {
     buildToolsVersion = rootProject.ext["buildToolsVersion"] as String
     compileSdk = rootProject.ext["compileSdkVersion"] as Int
 
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+
     buildTypes {
         getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
@@ -138,6 +144,14 @@ dependencies {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation(jscFlavor)
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+
+    filter {
+        includeTestsMatching("*Test")
     }
 }
 
