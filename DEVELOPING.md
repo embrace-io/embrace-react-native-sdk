@@ -119,7 +119,7 @@ If the issue is related to pods try forcing a clean install with:
 
 ### Local Android development issues
 
-Try to stopping and cleaning local services (in case there are unknown issues related to the start of the app):
+Try stopping and cleaning local services (in case there are unknown issues related to the start of the app):
 
 ```bash
   cd <app>/android

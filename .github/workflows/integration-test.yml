@@ -3,10 +3,10 @@ name: Integration Tests
 on:
   workflow_dispatch:
   pull_request:
-    branches: ['release/**']
 
 jobs:
   build:
+    if: startsWith(github.head_ref, 'release/')
     strategy:
       fail-fast: false
       matrix:
