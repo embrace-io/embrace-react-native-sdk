@@ -133,7 +133,13 @@ class RNEmbraceCoreTest {
         embraceModule.logMessageWithSeverityAndProperties("a nice info message without properties", "info", JavaOnlyMap(), "", promise)
 
         // receiving severity as a non-expected value
-        embraceModule.logMessageWithSeverityAndProperties("a message without severity", "non-expected-value", JavaOnlyMap(), "stacktrace as string", promise)
+        embraceModule.logMessageWithSeverityAndProperties(
+            "a message without severity",
+            "non-expected-value",
+            JavaOnlyMap(),
+            "stacktrace as string",
+            promise
+        )
 
         argumentCaptor<Collection<LogRecordData>>().apply {
             verify(logExporter, timeout(200).times(7)).export(capture())
