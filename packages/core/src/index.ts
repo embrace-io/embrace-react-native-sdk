@@ -4,6 +4,7 @@ import {Platform} from "react-native";
 import * as embracePackage from "../package.json";
 
 import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
+import {logIfComponentError} from "./utils/ComponentError";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import {SessionStatus} from "./interfaces/Types";
 import {
@@ -37,6 +38,8 @@ const handleError = async (error: Error, callback: () => void) => {
   }
 
   const {name, message, stack = ""} = error;
+
+  logIfComponentError(error);
 
   // same as error.name? why is it pulled differently?
   const errorType = error.constructor.name;

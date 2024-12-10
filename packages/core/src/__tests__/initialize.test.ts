@@ -1,5 +1,7 @@
 import {waitFor} from "@testing-library/react-native";
 
+import {handleGlobalError} from "../utils/ErrorUtil";
+import {ComponentError, logIfComponentError} from "../utils/ComponentError";
 import {initialize} from "../index";
 
 const testValue = "Value";
@@ -10,6 +12,7 @@ const mockIsStarted = jest.fn();
 const mockStart = jest.fn();
 const mockSetReactNativeSDKVersion = jest.fn();
 const mockLogMessageWithSeverityAndProperties = jest.fn();
+const mockLogHandledError = jest.fn();
 const mockLogUnhandledJSException = jest.fn();
 
 const ReactNativeMock = jest.requireMock("react-native");
@@ -42,6 +45,14 @@ jest.mock("../EmbraceManagerModule", () => ({
     ) => mockLogUnhandledJSException(name, message, errorType, stacktrace),
     isStarted: () => mockIsStarted(),
     startNativeEmbraceSDK: (appId?: string) => mockStart(appId),
+    logHandledError: (
+      message: string,
+      componentStack: string,
+      params: object,
+    ) => {
+      mockLogHandledError(message, componentStack, params);
+      return Promise.resolve(true);
+    },
   },
 }));
 
@@ -136,6 +147,28 @@ describe("Android: initialize", () => {
       expect(previousHandler).toHaveBeenCalledWith(err, true);
       expect(mockLogUnhandledJSException).toHaveBeenCalled();
     });
+  });
+
+  test("applying previousHandler and throwing a component error", async () => {
+    const previousHandler = jest.fn();
+    ErrorUtils.getGlobalHandler = previousHandler;
+    const result = await initialize({patch: testValue});
+    expect(result).toBe(true);
+
+    const generatedGlobalErrorFunc = handleGlobalError(
+      previousHandler,
+      logIfComponentError,
+    );
+    const componentError = new Error("Test") as ComponentError;
+    componentError.componentStack =
+      "at undefined (in SomeScreen)\nat undefined (in SomeOtherScreen)";
+    generatedGlobalErrorFunc(componentError);
+    expect(previousHandler).toHaveBeenCalled();
+    expect(mockLogHandledError).toHaveBeenCalledWith(
+      componentError.message,
+      "in SomeScreen\nin SomeOtherScreen",
+      {},
+    );
   });
 });
 
