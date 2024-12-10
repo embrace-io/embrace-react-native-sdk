@@ -8,7 +8,7 @@ const isJSXError = (error: Error): error is ComponentError => {
   return "componentStack" in error;
 };
 
-const undefinedInComponentStackRegex = /at undefined |\(|\)/g;
+const undefinedInComponentStackRegex = /at undefined \((.*)\)/g;
 
 /**
  * Logs errors with additional React component stack information if available.
@@ -40,7 +40,7 @@ const undefinedInComponentStackRegex = /at undefined |\(|\)/g;
  * @returns A promise that resolves to `true` if the error was logged, or `false`
  * if the error was not a React Native rendering error or the `componentStack` was empty.
  */
-const logIfComponentError = async (error: Error): Promise<boolean> => {
+const logIfComponentError = (error: Error): Promise<boolean> => {
   if (!isJSXError(error) || error.componentStack === "") {
     return Promise.resolve(false);
   }
@@ -48,9 +48,10 @@ const logIfComponentError = async (error: Error): Promise<boolean> => {
 
   const componentStackShrinked = componentStack.replace(
     undefinedInComponentStackRegex,
-    "",
+    "$1",
   );
-  return await EmbraceManagerModule.logHandledError(
+
+  return EmbraceManagerModule.logHandledError(
     message,
     componentStackShrinked,
     {},

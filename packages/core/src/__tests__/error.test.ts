@@ -1,6 +1,6 @@
 import {ComponentError, logIfComponentError} from "../utils/ComponentError";
 
-const mockLogHandledError = jest.fn().mockReturnValue(true);
+const mockLogHandledError = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
@@ -57,8 +57,8 @@ describe("Component Error", () => {
     const componentError = new Error("Ups!") as ComponentError;
 
     componentError.componentStack =
-      "at undefined (in Home), at undefined (in App)";
-    const textShrinked = "in Home, in App";
+      "at undefined (in App)\nat undefined (in SomeView)";
+    const textShrinked = "in App\nin SomeView";
 
     const result = await logIfComponentError(componentError);
     expect(result).toBe(true);

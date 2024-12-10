@@ -46,7 +46,6 @@ jest.mock("../EmbraceManagerModule", () => ({
     ) => mockLogUnhandledJSException(name, message, errorType, stacktrace),
     isStarted: () => mockIsStarted(),
     startNativeEmbraceSDK: (appId?: string) => mockStart(appId),
-
     logHandledError: (
       message: string,
       componentStack: string,
@@ -159,12 +158,13 @@ describe("Android: initialize", () => {
       logIfComponentError,
     );
     const componentError = new Error("Test") as ComponentError;
-    componentError.componentStack = "in SomeScreen/n in SomeOtherScreen";
+    componentError.componentStack =
+      "at undefined (in SomeScreen)\nat undefined (in SomeOtherScreen)";
     generatedGlobalErrorFunc(componentError);
     expect(previousHandler).toHaveBeenCalled();
     expect(mockLogHandledError).toHaveBeenCalledWith(
       componentError.message,
-      componentError.componentStack,
+      "in SomeScreen\nin SomeOtherScreen",
       {},
     );
   });
