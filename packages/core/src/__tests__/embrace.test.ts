@@ -80,7 +80,7 @@ jest.mock("../EmbraceManagerModule", () => ({
     logHandledError: (
       message: string,
       stackTrace: string,
-      properties?: LogProperties,
+      properties: LogProperties,
     ) => mockLogHandledError(message, stackTrace, properties),
     addUserPersona: (persona: string) => mockAddUserPersona(persona),
     clearUserPersona: (persona: string) => mockClearUserPersona(persona),
