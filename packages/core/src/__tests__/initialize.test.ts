@@ -12,7 +12,7 @@ const mockIsStarted = jest.fn();
 const mockStart = jest.fn();
 const mockSetReactNativeSDKVersion = jest.fn();
 const mockLogMessageWithSeverityAndProperties = jest.fn();
-const mockLogHandledError = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockLogHandledError = jest.fn();
 const mockLogUnhandledJSException = jest.fn();
 
 const ReactNativeMock = jest.requireMock("react-native");
@@ -49,7 +49,10 @@ jest.mock("../EmbraceManagerModule", () => ({
       message: string,
       componentStack: string,
       params: object,
-    ) => mockLogHandledError(message, componentStack, params),
+    ) => {
+      mockLogHandledError(message, componentStack, params);
+      return Promise.resolve(true);
+    },
   },
 }));
 
@@ -158,7 +161,7 @@ describe("Android: initialize", () => {
     );
     const componentError = new Error("Test") as ComponentError;
     componentError.componentStack =
-      "at undefined(in SomeScreen)\nat undefined(in SomeOtherScreen)";
+      "at undefined (in SomeScreen)\nat undefined (in SomeOtherScreen)";
     generatedGlobalErrorFunc(componentError);
     expect(previousHandler).toHaveBeenCalled();
     expect(mockLogHandledError).toHaveBeenCalledWith(

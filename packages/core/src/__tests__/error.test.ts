@@ -1,15 +1,16 @@
 import {ComponentError, logIfComponentError} from "../utils/ComponentError";
 
-const mockLogHandledError = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockLogHandledError = jest.fn();
 
-jest.mock("react-native", () => ({
-  NativeModules: {
-    EmbraceManager: {
-      logHandledError: (
-        message: string,
-        componentStack: string,
-        params: object,
-      ) => mockLogHandledError(message, componentStack, params),
+jest.mock("../EmbraceManagerModule", () => ({
+  EmbraceManagerModule: {
+    logHandledError: (
+      message: string,
+      componentStack: string,
+      params: object,
+    ) => {
+      mockLogHandledError(message, componentStack, params);
+      return Promise.resolve(true);
     },
   },
 }));

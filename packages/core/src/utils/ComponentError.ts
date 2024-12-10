@@ -1,4 +1,4 @@
-import {NativeModules} from "react-native";
+import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 interface ComponentError extends Error {
   componentStack: string;
@@ -8,7 +8,7 @@ const isJSXError = (error: Error): error is ComponentError => {
   return "componentStack" in error;
 };
 
-const undefinedInComponentStackRegex = /at undefined |\(|\)/g;
+const undefinedInComponentStackRegex = /at undefined \((.*)\)/g;
 
 /**
  * Logs errors with additional React component stack information if available.
@@ -48,12 +48,10 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
 
   const componentStackShrinked = componentStack.replace(
     undefinedInComponentStackRegex,
-    "",
+    "$1",
   );
 
-  console.log("AAAAA", componentStack);
-
-  return NativeModules.EmbraceManager.logHandledError(
+  return EmbraceManagerModule.logHandledError(
     message,
     componentStackShrinked,
     {},
