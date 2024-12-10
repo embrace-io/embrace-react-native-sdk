@@ -213,55 +213,55 @@ describe("Info/Warning/Error Logs", () => {
     const testProps = {foo: "bar"};
 
     it("should log an `info` message", async () => {
-      await logMessage(testMessage, LogSeverity.INFO, testProps, false);
+      await logMessage(testMessage, "info", testProps, false);
       expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
         testMessage,
-        LogSeverity.INFO,
+        "info",
         testProps,
         "",
       );
 
       // even forcing to include stacktrace it shouldn't pass to the native layer
-      await logMessage(testMessage, LogSeverity.INFO, testProps, true);
+      await logMessage(testMessage, "info", testProps, true);
       expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
         testMessage,
-        LogSeverity.INFO,
+        "info",
         testProps,
         "",
       );
     });
 
     it("should log an `warning` message", async () => {
-      await logMessage(testMessage, LogSeverity.WARNING, testProps, false);
+      await logMessage(testMessage, "warning", testProps, false);
       expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
         testMessage,
-        LogSeverity.WARNING,
+        "warning",
         testProps,
         "",
       );
 
-      await logMessage(testMessage, LogSeverity.WARNING, testProps, true);
+      await logMessage(testMessage, "warning", testProps, true);
       expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
         testMessage,
-        LogSeverity.WARNING,
+        "warning",
         testProps,
         MOCK_STACKTRACE,
       );
     });
 
     it("should log an `error` message", async () => {
-      await logMessage(testMessage, LogSeverity.ERROR, testProps, false);
+      await logMessage(testMessage, "error", testProps, false);
       expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
         testMessage,
-        LogSeverity.ERROR,
+        "error",
         testProps,
         "",
       );
 
-      await logMessage(testMessage, LogSeverity.ERROR, testProps, true);
+      await logMessage(testMessage, "error", testProps, true);
       expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
         testMessage,
-        LogSeverity.ERROR,
+        "error",
         testProps,
         MOCK_STACKTRACE,
       );
@@ -272,7 +272,7 @@ describe("Info/Warning/Error Logs", () => {
     await logInfo("pushed an `info` log");
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       "pushed an `info` log",
-      LogSeverity.INFO,
+      "info",
       {},
       "",
     );
@@ -282,7 +282,7 @@ describe("Info/Warning/Error Logs", () => {
     await logWarning("pushed a `warning` log", false);
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       "pushed a `warning` log",
-      LogSeverity.WARNING,
+      "warning",
       {},
       "",
     );
@@ -290,7 +290,7 @@ describe("Info/Warning/Error Logs", () => {
     await logWarning("pushed a `warning` log", true);
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       "pushed a `warning` log",
-      LogSeverity.WARNING,
+      "warning",
       {},
       MOCK_STACKTRACE,
     );
@@ -299,7 +299,7 @@ describe("Info/Warning/Error Logs", () => {
     await logWarning("pushed a `warning` log");
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       "pushed a `warning` log",
-      LogSeverity.WARNING,
+      "warning",
       {},
       MOCK_STACKTRACE,
     );
@@ -309,7 +309,7 @@ describe("Info/Warning/Error Logs", () => {
     await logError("pushed an `error` log", false);
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       "pushed an `error` log",
-      LogSeverity.ERROR,
+      "error",
       {},
       "",
     );
@@ -317,7 +317,7 @@ describe("Info/Warning/Error Logs", () => {
     await logError("pushed an `error` log", true);
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       "pushed an `error` log",
-      LogSeverity.ERROR,
+      "error",
       {},
       MOCK_STACKTRACE,
     );
@@ -326,7 +326,7 @@ describe("Info/Warning/Error Logs", () => {
     await logError("pushed an `error` log");
     expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
       "pushed an `error` log",
-      LogSeverity.ERROR,
+      "error",
       {},
       MOCK_STACKTRACE,
     );
