@@ -16,7 +16,7 @@ const undefinedInComponentStackRegex = /at undefined \((.*)\)/g;
  * This function checks if the provided error is a React Native rendering error
  * (i.e., it includes a `componentStack` property). If the `componentStack` is
  * present and non-empty, the error details, including the message and the component
- * stack trace, are logged using `EmbraceManager.logHandledError`.
+ * stack trace, are logged using `EmbraceManagerModule.logHandledError`.
  *
  * **Important Notes:**
  * - The `componentStack` provides a trace of the React component tree at the time
