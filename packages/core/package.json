@@ -53,8 +53,7 @@
     "bug tracker"
   ],
   "scripts": {
-    "prebuild": "cp -r ../../interfaces/ ./src/interfaces/common",
-    "build": "node update_android_version.ts && tsc",
+    "build": "cp -r ../../interfaces/ ./src/interfaces/common && node update_android_version.ts && tsc",
     "android:test": "cd test-project && yarn install && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
     "ios:install": "cd test-project && yarn install && cd ios && pod install && rm .xcode.env.local",
     "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceCoreTests.xcworkspace RNEmbraceCoreTests"

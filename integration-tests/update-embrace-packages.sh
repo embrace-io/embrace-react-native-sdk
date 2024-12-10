@@ -99,10 +99,8 @@ if [ "$skip_sdk_packages" = false ]; then
 
     # build required packages
     pushd ..
-    npx lerna run prebuild --scope=@embrace-io/react-native
     npx lerna run build --scope=@embrace-io/react-native
     # TODO EMBR-5735
-    # npx lerna run prebuild --scope=@embrace-io/react-native-otlp
     # npx lerna run build --scope=@embrace-io/react-native-otlp
     npx lerna run build --scope=@embrace-io/react-native-tracer-provider
     npx lerna run build --scope=@embrace-io/react-native-spans
