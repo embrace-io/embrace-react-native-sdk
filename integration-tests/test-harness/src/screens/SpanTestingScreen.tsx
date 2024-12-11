@@ -28,9 +28,13 @@ const SpanTestingScreen = () => {
 
   const recordView = useCallback(async () => {
     try {
-      await startView("my-view");
+      const spanId = await startView("my-view");
       await new Promise(r => setTimeout(r, 2000));
-      await endView("my-view");
+      if (typeof spanId === "string") {
+        await endView(spanId);
+      } else {
+        console.log("failed to record view");
+      }
     } catch (e) {
       console.log("failed to record view");
     }

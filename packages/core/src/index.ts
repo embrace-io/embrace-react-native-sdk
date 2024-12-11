@@ -301,7 +301,7 @@ export const logHandledError = (
   return createFalsePromise();
 };
 
-export const startView = (view: string): Promise<boolean> => {
+export const startView = (view: string): Promise<string | boolean> => {
   return EmbraceManagerModule.startView(view);
 };
 
