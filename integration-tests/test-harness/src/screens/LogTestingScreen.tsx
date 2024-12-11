@@ -34,15 +34,35 @@ const LogTestingScreen = () => {
     });
   }, []);
 
+  const triggerNoStacktraceLogs = useCallback(() => {
+    logWarning("This is a Warning log without stacktrace", false);
+    logError("This is a Error log without stacktrace", false);
+
+    logMessage(
+      "This is a Message (log without stacktrace)",
+      "warning",
+      {
+        "property.test": "abcd",
+        "another.property": "efghy-jklmn-opqrs-tuvwx-yz",
+      },
+      false,
+    );
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Logs</Text>
-        <Button
-          onPress={triggerLogs}
-          title="Warning / Info / Error / Message"
-        />
+        <Button onPress={triggerLogs} title="Warning / Error / Message" />
         <Button onPress={triggerErrorLog} title="Handled Exception" />
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.title}>Logs (no Stack Traces)</Text>
+        <Button
+          onPress={triggerNoStacktraceLogs}
+          title="Warning / Error / Message"
+        />
       </View>
 
       <View style={styles.section}>
