@@ -307,16 +307,10 @@ const logError = (
 const logHandledError = (
   error: Error,
   properties: LogProperties = {},
-  includeStacktrace: boolean = true,
 ): Promise<boolean> => {
   if (error instanceof Error) {
     const {stack, message} = error;
-    return EmbraceManagerModule.logHandledError(
-      message,
-      stack,
-      properties,
-      includeStacktrace,
-    );
+    return EmbraceManagerModule.logHandledError(message, stack, properties);
   }
 
   return Promise.resolve(false);
