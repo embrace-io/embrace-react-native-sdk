@@ -243,83 +243,202 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func testLogMessageWithSeverity() async throws {
+        // 1) should include Native stacktrace
         module.logMessageWithSeverityAndProperties("my log message", severity: "warning", properties: NSDictionary(),
                                                    stacktrace: "",
-                                                   includeStackTrace: true,
+                                                   includeStacktrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
-
-        let exportedLogs = try await getExportedLogs()
-
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertEqual(exportedLogs.count, 1)
-        XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
-        XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
-
-        // empty js stacktrace
-        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
-        // if the js stacktrace is empty, will add the native one
-        XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
         
-        // should not include any stacktrace (neither Native nor JS)
+        // 2) should not include any stacktrace (neither Native nor JS)
         module.logMessageWithSeverityAndProperties("my log message without stacktrace", severity: "warning", properties: NSDictionary(),
                                                    stacktrace: "",
-                                                   includeStackTrace: false,
+                                                   includeStacktrace: false,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()
+        XCTAssertEqual(promise.resolveCalls.count, 2)
+        XCTAssertEqual(exportedLogs.count, 2)
 
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertEqual(exportedLogs.count, 1)
+        // 1) just one stacktrace
         XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
-
-        // empty js stacktrace
-        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
-        // if the js stacktrace is empty, will add the native one
-        XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
+        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"]) // empty js stacktrace
+        XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"]) // since the JS stacktrace is empty and `includeStacktrace` is `true` it will add the Native one
+            
+        // 2) no stacktrace at all
+        XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
+        XCTAssertEqual(exportedLogs[1].body?.description, "my log message without stacktrace")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.ios"]) // even when the JS is empty since `includeStacktrace` is `false` it won't include stacktraces
     }
 
     func testLogMessageWithSeverityAndProperties() async throws {
-        module.logMessageWithSeverityAndProperties("my log message", severity: "error", properties: NSDictionary(dictionary: [
+        module.logMessageWithSeverityAndProperties("my error log", severity: "error", properties: NSDictionary(dictionary: [
                                                     "prop1": "foo",
                                                     "prop2": "bar"
                                                   ]),
                                                    stacktrace: "",
-                                                   includeStackTrace: true,
+                                                   includeStacktrace: true,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        module.logMessageWithSeverityAndProperties("my warning log", severity: "warning", properties: NSDictionary(dictionary: [
+                                                    "prop1": "foo",
+                                                    "prop2": "bar"
+                                                  ]),
+                                                   stacktrace: "",
+                                                   includeStacktrace: true,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        module.logMessageWithSeverityAndProperties("my info log", severity: "info", properties: NSDictionary(dictionary: [
+                                                    "prop1": "foo",
+                                                    "prop2": "bar"
+                                                  ]),
+                                                   stacktrace: "",
+                                                   includeStacktrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()
-
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertEqual(exportedLogs.count, 1)
+        XCTAssertEqual(promise.resolveCalls.count, 3)
+        XCTAssertEqual(exportedLogs.count, 3)
+        
+        // error log
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
-        XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
+        XCTAssertEqual(exportedLogs[0].body?.description, "my error log")
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["prop1"]!.description, "foo")
         XCTAssertEqual(exportedLogs[0].attributes["prop2"]!.description, "bar")
-
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
-        // if the js stacktrace is empty, will add the native one
         XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
+        
+        // warning log
+        XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
+        XCTAssertEqual(exportedLogs[1].body?.description, "my warning log")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[1].attributes["prop1"]!.description, "foo")
+        XCTAssertEqual(exportedLogs[1].attributes["prop2"]!.description, "bar")
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.rn"])
+        XCTAssertNotNil(exportedLogs[1].attributes["emb.stacktrace.ios"])
+        
+        // info log
+        XCTAssertEqual(exportedLogs[2].severity?.description, "INFO")
+        XCTAssertEqual(exportedLogs[2].body?.description, "my info log")
+        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[2].attributes["prop1"]!.description, "foo")
+        XCTAssertEqual(exportedLogs[2].attributes["prop2"]!.description, "bar")
+        // `info` logs should not add stacktrace even when the `includeStacktrace` boolean is passed as true
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.ios"])
     }
 
-    func testLogMessageWithStackTrace() async throws {
-        module.logMessageWithSeverityAndProperties("my log message", severity: "warning", properties: NSDictionary(),
-                                                   stacktrace: "my stack trace",
-                                                   includeStackTrace: true,
+    func testLogMessageWithJSStackTrace() async throws {
+        module.logMessageWithSeverityAndProperties("my error message", severity: "error", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: true,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        module.logMessageWithSeverityAndProperties("my warning message", severity: "warning", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: true,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        module.logMessageWithSeverityAndProperties("my info message", severity: "info", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()
-
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertEqual(exportedLogs.count, 1)
-        XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
-        XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
+        XCTAssertEqual(promise.resolveCalls.count, 3)
+        XCTAssertEqual(exportedLogs.count, 3)
+        
+        // error
+        XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
+        XCTAssertEqual(exportedLogs[0].body?.description, "my error message")
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "my stack trace")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "my JS stack trace")
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
+        
+        // warning
+        XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
+        XCTAssertEqual(exportedLogs[1].body?.description, "my warning message")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.stacktrace.rn"]!.description, "my JS stack trace")
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.ios"])
+        
+        // info
+        XCTAssertEqual(exportedLogs[2].severity?.description, "INFO")
+        XCTAssertEqual(exportedLogs[2].body?.description, "my info message")
+        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]!.description, "sys.log")
+        // `info` logs should not add stacktrace even when the `includeStacktrace` boolean is passed as true
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.ios"])
+    }
+    
+    func testLogMessageWithNoStackTrace() async throws {
+        // error
+        module.logMessageWithSeverityAndProperties("my error message", severity: "error", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+        module.logMessageWithSeverityAndProperties("my error message", severity: "error", properties: NSDictionary(),
+                                                   stacktrace: "",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+        
+        // warning
+        module.logMessageWithSeverityAndProperties("my warning message", severity: "warning", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+        module.logMessageWithSeverityAndProperties("my warning message", severity: "warning", properties: NSDictionary(),
+                                                   stacktrace: "",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+        
+        // info
+        module.logMessageWithSeverityAndProperties("my info message", severity: "info", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+        module.logMessageWithSeverityAndProperties("my info message", severity: "info", properties: NSDictionary(),
+                                                   stacktrace: "",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        let exportedLogs = try await getExportedLogs()
+        XCTAssertEqual(promise.resolveCalls.count, 6)
+        XCTAssertEqual(exportedLogs.count, 6)
+        
+        // error log passing js stacktrace
+        XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
+        XCTAssertEqual(exportedLogs[0].body?.description, "my error message")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
+        // error log passing empty stacktrace
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.ios"])
+
+        // warning log passing js stacktrace
+        XCTAssertEqual(exportedLogs[2].severity?.description, "WARN")
+        XCTAssertEqual(exportedLogs[2].body?.description, "my warning message")
+        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.ios"])
+        // warning log passing empty stacktrace
+        XCTAssertNil(exportedLogs[3].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[3].attributes["emb.stacktrace.ios"])
+
+        // info log passing js stacktrace
+        XCTAssertEqual(exportedLogs[4].severity?.description, "INFO")
+        XCTAssertEqual(exportedLogs[4].body?.description, "my info message")
+        XCTAssertEqual(exportedLogs[4].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertNil(exportedLogs[4].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[4].attributes["emb.stacktrace.ios"])
+        // info log  passing empty stacktrace
+        XCTAssertNil(exportedLogs[5].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[5].attributes["emb.stacktrace.ios"])
     }
 
     func testStartSpan() async throws {

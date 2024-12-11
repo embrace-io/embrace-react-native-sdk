@@ -167,11 +167,11 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         try {
             final Map<String, Object> propValue = properties == null ? new HashMap<>() : properties.toHashMap();
             final Severity severityValue = getSeverityByString(severity);
-            
-            if (!stacktrace.isEmpty() && includeStacktrace == true) {
+
+            if (includeStacktrace && !stacktrace.isEmpty()) {
+                // we don't want to send info stacktraces to sdk for 'info' logs,
+                // this is already prevented in the js layer as well
                 if (!severity.equals("info")) {
-                    // we don't want to send info stacktraces to sdk for 'info' logs,
-                    // this is already prevented in the js layer as well
                     propValue.put("emb.stacktrace.rn", stacktrace);
                 }
             }
