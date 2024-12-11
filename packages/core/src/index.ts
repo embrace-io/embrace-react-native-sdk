@@ -186,7 +186,7 @@ const initialize = async ({
 
       return EmbraceManagerModule.logMessageWithSeverityAndProperties(
         message,
-        LogSeverity.ERROR,
+        "error",
         {},
         stackTrace,
       );
@@ -259,21 +259,16 @@ export const clearAllUserPersonas = (): Promise<boolean> => {
 
 const logMessage = (
   message: string,
-  severity:
-    | LogSeverity.INFO
-    | LogSeverity.WARNING
-    | LogSeverity.ERROR = LogSeverity.ERROR,
+  severity: LogSeverity = "error",
   // Android Native method is handling the null case
   // iOS Native method is waiting for a non-nullable object
   properties: LogProperties = {},
   includeStacktrace = true,
 ): Promise<boolean> => {
   const stackTrace =
-    // `LogSeverity.INFO` are not supposed to send stack traces
+    // `"info"` are not supposed to send stack traces
     // this is also restricted in the Native layers
-    includeStacktrace && severity !== LogSeverity.INFO
-      ? generateStackTrace()
-      : "";
+    includeStacktrace && severity !== "info" ? generateStackTrace() : "";
 
   if (properties === null) {
     console.warn(
@@ -291,23 +286,23 @@ const logMessage = (
 };
 
 const logInfo = (message: string): Promise<boolean> => {
-  // `LogSeverity.INFO` logs are not supposed to send stack traces as per Product decision
+  // `"info"` logs are not supposed to send stack traces as per Product decision
   // this is also restricted in the Native layers
-  return logMessage(message, LogSeverity.INFO, undefined, false);
+  return logMessage(message, "info", undefined, false);
 };
 
 const logWarning = (
   message: string,
   includeStacktrace = true,
 ): Promise<boolean> => {
-  return logMessage(message, LogSeverity.WARNING, undefined, includeStacktrace);
+  return logMessage(message, "warning", undefined, includeStacktrace);
 };
 
 const logError = (
   message: string,
   includeStacktrace = true,
 ): Promise<boolean> => {
-  return logMessage(message, LogSeverity.ERROR, undefined, includeStacktrace);
+  return logMessage(message, "error", undefined, includeStacktrace);
 };
 
 const logHandledError = (
