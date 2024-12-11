@@ -245,6 +245,26 @@ class EmbraceManagerTests: XCTestCase {
     func testLogMessageWithSeverity() async throws {
         module.logMessageWithSeverityAndProperties("my log message", severity: "warning", properties: NSDictionary(),
                                                    stacktrace: "",
+                                                   includeStackTrace: true,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        let exportedLogs = try await getExportedLogs()
+
+        XCTAssertEqual(promise.resolveCalls.count, 1)
+        XCTAssertEqual(exportedLogs.count, 1)
+        XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
+        XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
+
+        // empty js stacktrace
+        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
+        // if the js stacktrace is empty, will add the native one
+        XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
+        
+        // should not include any stacktrace (neither Native nor JS)
+        module.logMessageWithSeverityAndProperties("my log message without stacktrace", severity: "warning", properties: NSDictionary(),
+                                                   stacktrace: "",
+                                                   includeStackTrace: false,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()
@@ -267,6 +287,7 @@ class EmbraceManagerTests: XCTestCase {
                                                     "prop2": "bar"
                                                   ]),
                                                    stacktrace: "",
+                                                   includeStackTrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()
@@ -287,6 +308,7 @@ class EmbraceManagerTests: XCTestCase {
     func testLogMessageWithStackTrace() async throws {
         module.logMessageWithSeverityAndProperties("my log message", severity: "warning", properties: NSDictionary(),
                                                    stacktrace: "my stack trace",
+                                                   includeStackTrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()

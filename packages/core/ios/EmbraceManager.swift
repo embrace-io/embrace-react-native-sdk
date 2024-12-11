@@ -339,12 +339,13 @@ class EmbraceManager: NSObject {
         }
     }
 
-    @objc(logMessageWithSeverityAndProperties:severity:properties:stacktrace:resolver:rejecter:)
+    @objc(logMessageWithSeverityAndProperties:severity:properties:stacktrace:includeStacktrace:resolver:rejecter:)
     func logMessageWithSeverityAndProperties(
         _ message: String,
         severity: String,
         properties: NSDictionary,
         stacktrace: String,
+        includeStackTrace: Bool,
         resolver resolve: @escaping RCTPromiseResolveBlock,
         rejecter reject: @escaping RCTPromiseRejectBlock
     ) {
@@ -363,11 +364,16 @@ class EmbraceManager: NSObject {
             }
         }
 
+        var stackTraceBehavior: StackTraceBehavior = StackTraceBehavior.notIncluded
+        if (includeStackTrace == true) {
+            stackTraceBehavior = stacktrace.isEmpty ? StackTraceBehavior.default : StackTraceBehavior.notIncluded
+        }
+        
         Embrace.client?.log(
             message,
             severity: severityValue,
             attributes: attributes,
-            stackTraceBehavior: stacktrace.isEmpty ? StackTraceBehavior.default : StackTraceBehavior.notIncluded
+            stackTraceBehavior: stackTraceBehavior
         )
         resolve(true)
 

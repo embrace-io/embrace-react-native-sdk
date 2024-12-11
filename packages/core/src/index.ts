@@ -266,7 +266,7 @@ const logMessage = (
   // Android Native method is handling the null case
   // iOS Native method is waiting for a non-nullable object
   properties: LogProperties = {},
-  includeStacktrace?: boolean,
+  includeStacktrace = true,
 ): Promise<boolean> => {
   const stackTrace =
     // `LogSeverity.INFO` are not supposed to send stack traces
@@ -286,6 +286,7 @@ const logMessage = (
     severity,
     properties,
     stackTrace,
+    includeStacktrace,
   );
 };
 
@@ -312,16 +313,10 @@ const logError = (
 const logHandledError = (
   error: Error,
   properties: LogProperties = {},
-  includeStacktrace: boolean = true,
 ): Promise<boolean> => {
   if (error instanceof Error) {
     const {stack, message} = error;
-    return EmbraceManagerModule.logHandledError(
-      message,
-      stack,
-      properties,
-      includeStacktrace,
-    );
+    return EmbraceManagerModule.logHandledError(message, stack, properties);
   }
 
   return Promise.resolve(false);

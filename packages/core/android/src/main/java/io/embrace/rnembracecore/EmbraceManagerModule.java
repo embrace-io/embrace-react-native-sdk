@@ -163,12 +163,12 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void logMessageWithSeverityAndProperties(String message, String severity, ReadableMap properties,
-                                                    String stacktrace, Promise promise) {
+                                                    String stacktrace, Boolean includeStacktrace, Promise promise) {
         try {
             final Map<String, Object> propValue = properties == null ? new HashMap<>() : properties.toHashMap();
             final Severity severityValue = getSeverityByString(severity);
             
-            if (!stacktrace.isEmpty()) {
+            if (!stacktrace.isEmpty() && includeStacktrace == true) {
                 if (!severity.equals("info")) {
                     // we don't want to send info stacktraces to sdk for 'info' logs,
                     // this is already prevented in the js layer as well
