@@ -29,11 +29,7 @@ interface SDKConfig {
   ) => Promise<boolean>;
 }
 
-enum LogSeverity {
-  WARNING = "warning",
-  INFO = "info",
-  ERROR = "error",
-}
+type LogSeverity = "warning" | "info" | "error";
 
 interface LogProperties {
   [key: string]: string;
