@@ -70,12 +70,14 @@ jest.mock("../EmbraceManagerModule", () => ({
       severity: LogSeverity,
       properties: LogProperties,
       stacktrace: string,
+      includeStacktrace: boolean,
     ) =>
       mockLogMessageWithSeverityAndProperties(
         message,
         severity,
         properties,
         stacktrace,
+        includeStacktrace,
       ),
     logHandledError: (
       message: string,
@@ -219,6 +221,7 @@ describe("Info/Warning/Error Logs", () => {
         "info",
         testProps,
         "",
+        false,
       );
 
       // even forcing to include stacktrace it shouldn't pass to the native layer
@@ -228,6 +231,7 @@ describe("Info/Warning/Error Logs", () => {
         "info",
         testProps,
         "",
+        true,
       );
     });
 
@@ -238,6 +242,7 @@ describe("Info/Warning/Error Logs", () => {
         "warning",
         testProps,
         "",
+        false,
       );
 
       await logMessage(testMessage, "warning", testProps, true);
@@ -246,6 +251,7 @@ describe("Info/Warning/Error Logs", () => {
         "warning",
         testProps,
         MOCK_STACKTRACE,
+        true,
       );
     });
 
@@ -256,6 +262,7 @@ describe("Info/Warning/Error Logs", () => {
         "error",
         testProps,
         "",
+        false,
       );
 
       await logMessage(testMessage, "error", testProps, true);
@@ -264,6 +271,7 @@ describe("Info/Warning/Error Logs", () => {
         "error",
         testProps,
         MOCK_STACKTRACE,
+        true,
       );
     });
   });
@@ -275,6 +283,7 @@ describe("Info/Warning/Error Logs", () => {
       "info",
       {},
       "",
+      false,
     );
   });
 
@@ -285,6 +294,7 @@ describe("Info/Warning/Error Logs", () => {
       "warning",
       {},
       "",
+      false,
     );
 
     await logWarning("pushed a `warning` log", true);
@@ -293,6 +303,7 @@ describe("Info/Warning/Error Logs", () => {
       "warning",
       {},
       MOCK_STACKTRACE,
+      true,
     );
 
     // by default it should add the stacktrace
@@ -302,6 +313,7 @@ describe("Info/Warning/Error Logs", () => {
       "warning",
       {},
       MOCK_STACKTRACE,
+      true,
     );
   });
 
@@ -312,6 +324,7 @@ describe("Info/Warning/Error Logs", () => {
       "error",
       {},
       "",
+      false,
     );
 
     await logError("pushed an `error` log", true);
@@ -320,6 +333,7 @@ describe("Info/Warning/Error Logs", () => {
       "error",
       {},
       MOCK_STACKTRACE,
+      true,
     );
 
     // by default it should add the stacktrace
@@ -329,6 +343,7 @@ describe("Info/Warning/Error Logs", () => {
       "error",
       {},
       MOCK_STACKTRACE,
+      true,
     );
   });
 });
