@@ -274,13 +274,48 @@ class RNEmbraceCoreTest {
             putString("custom.property2", "value.for-custom-property2")
         }
 
-        embraceModule.logMessageWithSeverityAndProperties("a nice warning message", "warning", properties, "stacktrace as string", true, promise)
-        embraceModule.logMessageWithSeverityAndProperties("a nice warning message, empty stacktrace", "warning", properties, "", true, promise)
-        embraceModule.logMessageWithSeverityAndProperties("a nice warning message, no stacktrace", "warning", properties, "stacktrace as string", false, promise)
+        embraceModule.logMessageWithSeverityAndProperties(
+            "a nice warning message",
+            "warning",
+            properties,
+            "stacktrace as string",
+            true,
+            promise
+        )
+        embraceModule.logMessageWithSeverityAndProperties(
+            "a nice warning message, empty stacktrace",
+            "warning",
+            properties,
+            "",
+            true,
+            promise
+        )
+        embraceModule.logMessageWithSeverityAndProperties(
+            "a nice warning message, no stacktrace",
+            "warning",
+            properties,
+            "stacktrace as string",
+            false,
+            promise
+        )
 
-        embraceModule.logMessageWithSeverityAndProperties("a nice error message", "error", properties, "stacktrace as string", true, promise)
+        embraceModule.logMessageWithSeverityAndProperties(
+            "a nice error message",
+            "error",
+            properties,
+            "stacktrace as string",
+            true,
+            promise
+        )
         embraceModule.logMessageWithSeverityAndProperties("a nice error message, empty stacktrace", "error", properties, "", true, promise)
-        embraceModule.logMessageWithSeverityAndProperties("a nice error message, no stacktrace", "error", properties, "stacktrace as string", false, promise)
+        embraceModule.logMessageWithSeverityAndProperties(
+            "a nice error message, no stacktrace",
+            "error",
+            properties,
+            "stacktrace as string",
+            false,
+            promise
+        )
 
         // won't add the stacktrace as per product's decision
         embraceModule.logMessageWithSeverityAndProperties("a nice info message", "info", properties, "stacktrace as string", true, promise)
