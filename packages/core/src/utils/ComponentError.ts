@@ -22,10 +22,6 @@ const isJSXError = (error: Error): error is ComponentError => {
  *   of the error but does not include line or column numbers.
  * - This function is complementary to other logging mechanisms that capture more
  *   detailed stack traces, including line and column numbers.
- * - By default, in release builds, the screen names in the `componentStack` appear as
- *   `Unknown`. To retain meaningful screen names in release builds, you must configure
- *   Metro to preserve the names of React components during minification. For detailed
- *   instructions, refer to https://docs.embrace.io/docs/react-native/features/tracking-error-component/.
  *
  * Example `componentStack` trace:
  * ```

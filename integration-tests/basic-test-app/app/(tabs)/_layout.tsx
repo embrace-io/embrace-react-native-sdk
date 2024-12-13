@@ -46,13 +46,6 @@ export default function TabLayout() {
           tabBarAccessibilityLabel: "MISC TESTING",
         }}
       />
-      <Tabs.Screen
-        name="render"
-        options={{
-          title: "render",
-          tabBarAccessibilityLabel: "RENDER TESTING",
-        }}
-      />
     </Tabs>
   );
 }

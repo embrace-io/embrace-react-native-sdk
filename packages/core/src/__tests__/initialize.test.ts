@@ -152,6 +152,7 @@ describe("Android: initialize", () => {
   test("applying previousHandler and throwing a component error", async () => {
     const previousHandler = jest.fn();
     ErrorUtils.getGlobalHandler = previousHandler;
+
     const result = await initialize({patch: testValue});
     expect(result).toBe(true);
 
@@ -159,16 +160,20 @@ describe("Android: initialize", () => {
       previousHandler,
       logIfComponentError,
     );
+
     const componentError = new Error("Test") as ComponentError;
-    componentError.componentStack =
-      "at undefined (in SomeScreen)\nat undefined (in SomeOtherScreen)";
+    componentError.componentStack = "in SomeScreen\n in SomeOtherScreen";
+
     generatedGlobalErrorFunc(componentError);
     expect(previousHandler).toHaveBeenCalled();
-    expect(mockLogHandledError).toHaveBeenCalledWith(
-      componentError.message,
-      "in SomeScreen\nin SomeOtherScreen",
-      {},
-    );
+    waitFor(() => {
+      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+        "Test",
+        "error",
+        {},
+        "in SomeScreen\nin SomeOtherScreen",
+      );
+    });
   });
 });
 
