@@ -45,7 +45,8 @@
         "appId": "abcdf",
         "endpointBaseUrl": "http://localhost:8877",
         "disableAutomaticViewCapture": true,
-        "disableNetworkSpanForwarding": false
+        "disableNetworkSpanForwarding": false,
+        "disabledUrlPatterns": ["*.api.com"]
       }
     }
    */
@@ -170,6 +171,7 @@
         endpointBaseUrl: string;
         disableAutomaticViewCapture: boolean;
         disableNetworkSpanForwarding: boolean;
+        disabledUrlPatterns: string[];
       };
     }
    */
@@ -183,7 +185,7 @@
       endpointBaseUrl: config.endpoint,
       disableAutomaticViewCapture: config.disable_view_capture,
       disableNetworkSpanForwarding: !config.enable_network_span_forwarding,
-      // TBD: disabled_url_patterns since ios doesn't support it yet
+      disabledUrlPatterns: config.disabled_url_patterns,
     },
   };
 

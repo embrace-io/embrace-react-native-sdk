@@ -13,6 +13,8 @@ class SDKConfig: NSObject {
     public let disableCrashReporter: Bool
     public let disableAutomaticViewCapture: Bool
     public let endpointBaseUrl: String?
+    public let disableNetworkSpanForwarding: Bool
+    public let ignoredURLs: [String]?
 
     public init(from: NSDictionary) {
         self.appId = from.value(forKey: "appId") as? String ?? ""
@@ -20,6 +22,8 @@ class SDKConfig: NSObject {
         self.disableCrashReporter = from.value(forKey: "disableCrashReporter") as? Bool ?? false
         self.disableAutomaticViewCapture = from.value(forKey: "disableAutomaticViewCapture") as? Bool ?? false
         self.endpointBaseUrl = from.value(forKey: "endpointBaseUrl") as? String
+        self.disableNetworkSpanForwarding = from["disableNetworkSpanForwarding"] as? Bool ?? false
+        self.ignoredURLs = from.value(forKey: "disabledUrlPatterns") as? [String] ?? []
     }
 }
 
@@ -70,14 +74,14 @@ class RNEmbraceOTLP: NSObject {
           urlConfig.httpAdditionalHeaders = headersDict
       }
 
-  return OtlpHttpTraceExporter(endpoint: URL(string: endpoint)!,
+      return OtlpHttpTraceExporter(endpoint: URL(string: endpoint)!,
                                 config: OtlpConfiguration(
                                     timeout: timeout,
                                     headers: headers
                                 ),
                                 useSession: URLSession(configuration: urlConfig),
                                 envVarHeaders: headers
-    )
+      )
   }
 
   private func setOtlpHttpLogExporter(endpoint: String,
@@ -147,7 +151,21 @@ class RNEmbraceOTLP: NSObject {
                         crashReporter = EmbraceCrashReporter()
                     }
 
-                    let servicesBuilder = CaptureServiceBuilder().addDefaults()
+                    let servicesBuilder = CaptureServiceBuilder()
+                    
+                    let urlSessionServiceOptions = URLSessionCaptureService.Options(
+                        // allowing to enable/disable NSF by code
+                        injectTracingHeader: !config.disableNetworkSpanForwarding,
+                        requestsDataSource: nil,
+                        // disabling tracking for ignored urls
+                        ignoredURLs: config.ignoredURLs ?? []
+                    )
+
+                    // manually adding the URLSessionCaptureService
+                    servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
+                    // adding defaults
+                    servicesBuilder.addDefaults()
+
                     if config.disableAutomaticViewCapture {
                         servicesBuilder.remove(ofType: ViewCaptureService.self)
                     }

@@ -7,6 +7,7 @@ interface IOSConfig {
   appGroupId?: string;
   disableCrashReporter?: boolean;
   disableAutomaticViewCapture?: boolean;
+  disableNetworkSpanForwarding?: boolean;
   endpointBaseUrl?: string;
 }
 
@@ -22,6 +23,7 @@ interface IOSConfig {
   disableAutomaticViewCapture?: boolean;
   disableNetworkSpanForwarding?: boolean;
   endpointBaseUrl?: string;
+  disabledUrlPatterns?: string[];
 }
 
 interface SDKConfig {

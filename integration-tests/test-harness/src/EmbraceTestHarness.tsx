@@ -6,6 +6,7 @@ import {styles} from "./helpers/styles";
 import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces/Config";
 import {EmbraceExpoTestHarness} from "./EmbraceExpoTestHarness";
 import {EmbraceReactNativeTestHarness} from "./EmbraceReactNativeTestHarness";
+import {initWithCustomExporters} from "./helpers/otlp";
 
 type Props = {
   sdkConfig: SDKConfig;
@@ -27,10 +28,7 @@ export const EmbraceTestHarness = ({
       };
 
       if (allowCustomExport) {
-        console.log(
-          "not allowing custom export yet, would have setup with `initEmbraceWithCustomExporters` ",
-        );
-        // config.sdkConfig.startCustomExport = initEmbraceWithCustomExporters();
+        config.sdkConfig.startCustomExport = initWithCustomExporters();
       }
 
       await initEmbrace(config);

@@ -28,7 +28,8 @@ class Promise {
 
 let SDK_BASE_CONFIG: NSDictionary = [
     "appId": "abcde",
-    "endpointBaseUrl": "http://localhost/dev/null"
+    "endpointBaseUrl": "http://localhost/dev/null",
+    "disabledUrlPatterns": ["test-*-endpoint/"]
 ]
 
 final class RNEmbraceOTLPTests: XCTestCase {
