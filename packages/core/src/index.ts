@@ -11,6 +11,7 @@ import * as embracePackage from '../package.json';
 import { MethodType } from './interfaces/HTTP';
 import { SessionStatus } from './interfaces/Types';
 import { ApplyInterceptorStrategy } from './networkInterceptors/ApplyInterceptor';
+import { logIfComponentError } from './utils/ComponentError';
 import { handleGlobalError } from './utils/ErrorUtil';
 
 interface Properties {
@@ -31,6 +32,9 @@ const handleError = async (error: Error, callback: () => void) => {
     return;
   }
   const { name, message, stack = '' } = error;
+
+  logIfComponentError(error);
+
   const truncated = stack.split('\n').slice(0, stackLimit).join('\n');
 
   await NativeModules.EmbraceManager.logUnhandledJSException(
