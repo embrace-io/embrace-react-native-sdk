@@ -10,7 +10,32 @@ import {
   logNetworkClientError,
 } from "@embrace-io/react-native";
 
+const SubErrorComponent2 = () => {
+  throw new TypeError("Upssssssss");
+};
+
+const SubErrorComponent1 = () => {
+  return (
+    <View>
+      <SubErrorComponent2 />
+    </View>
+  );
+};
+
+const ErrorComponent = () => {
+  return (
+    <View>
+      <SubErrorComponent1 />
+    </View>
+  );
+};
+
 const MiscTestingScreen = () => {
+  const [isError, setIsError] = React.useState(false);
+  const handleRenderError = useCallback(() => {
+    setIsError(true);
+  }, []);
+
   const getInfo = useCallback(async () => {
     try {
       const deviceId = await getDeviceId();
@@ -56,6 +81,11 @@ const MiscTestingScreen = () => {
           onPress={networkRequestsHandler}
           title="Record Network Requests"
         />
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.title}>Render</Text>
+        <Button onPress={handleRenderError} title="Trigger a Render error" />
+        {isError && <ErrorComponent />}
       </View>
     </View>
   );
