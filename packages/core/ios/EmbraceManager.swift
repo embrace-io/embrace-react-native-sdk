@@ -29,6 +29,7 @@ class SDKConfig: NSObject {
     public let disableAutomaticViewCapture: Bool
     public let endpointBaseUrl: String?
     public let disableNetworkSpanForwarding: Bool
+    public let ignoredURLs: [String]?
 
     public init(from: NSDictionary) {
         self.appId = from["appId"] as? String ?? ""
@@ -37,6 +38,7 @@ class SDKConfig: NSObject {
         self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
         self.endpointBaseUrl = from["endpointBaseUrl"] as? String
         self.disableNetworkSpanForwarding = from["disableNetworkSpanForwarding"] as? Bool ?? false
+        self.ignoredURLs = from.value(forKey: "disabledUrlPatterns") as? [String] ?? []
     }
 }
 
@@ -89,8 +91,13 @@ class EmbraceManager: NSObject {
 
                     let servicesBuilder = CaptureServiceBuilder()
 
-                    // allowing to enable/disable NSF by code
-                    let urlSessionServiceOptions = URLSessionCaptureService.Options(injectTracingHeader: !self.config.disableNetworkSpanForwarding, requestsDataSource: nil)
+                    let urlSessionServiceOptions = URLSessionCaptureService.Options(
+                        // allowing to enable/disable NSF by code
+                        injectTracingHeader: !self.config.disableNetworkSpanForwarding,
+                        requestsDataSource: nil,
+                        // disabling tracking for ignored urls
+                        ignoredURLs: self.config.ignoredURLs ?? []
+                    )
                     // manually adding the URLSessionCaptureService
                     servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
 
@@ -631,8 +638,6 @@ class EmbraceManager: NSObject {
 
         if !parentSpanId.isEmpty, let parent = spanRepository.get(spanId: parentSpanId) {
             spanBuilder?.setParent(parent)
-        } else {
-            spanBuilder?.markAsKeySpan()
         }
 
         if !startTimeMs.doubleValue.isZero {

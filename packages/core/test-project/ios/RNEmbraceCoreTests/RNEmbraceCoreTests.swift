@@ -315,11 +315,13 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedSpans.count, 1)
         XCTAssertEqual(exportedSpans[0].name, "my-span")
         XCTAssertNil(exportedSpans[0].parentSpanId)
-        XCTAssertEqual(exportedSpans[0].attributes.count, 2)
+        XCTAssertEqual(exportedSpans[0].attributes.count, 1)
         XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[0].attributes["emb.key"]!.description, "true")
         XCTAssertEqual(exportedSpans[0].status, Status.ok)
         XCTAssertTrue(exportedSpans[0].hasEnded)
+
+        // the concept of 'key spans' is no longer supported, it was deprecated
+        XCTAssertNil(exportedSpans[0].attributes["emb.key"])
     }
 
     func testStartSpanWithParent() async throws {
@@ -517,11 +519,13 @@ class EmbraceManagerTests: XCTestCase {
         let exportedSpans = try await getExportedSpans()
         XCTAssertEqual(exportedSpans.count, 1)
         XCTAssertEqual(exportedSpans[0].name, "my-span")
-        XCTAssertEqual(exportedSpans[0].attributes.count, 4)
+        XCTAssertEqual(exportedSpans[0].attributes.count, 3)
         XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[0].attributes["emb.key"]!.description, "true")
         XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]!.description, "foo")
         XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]!.description, "bar")
+
+        // the concept of 'key spans' is no longer supported, it was deprecated
+        XCTAssertNil(exportedSpans[0].attributes["emb.key"])
     }
 
     func testAddSpanAttributeDuplicate() async throws {
@@ -547,10 +551,12 @@ class EmbraceManagerTests: XCTestCase {
         let exportedSpans = try await getExportedSpans()
         XCTAssertEqual(exportedSpans.count, 1)
         XCTAssertEqual(exportedSpans[0].name, "my-span")
-        XCTAssertEqual(exportedSpans[0].attributes.count, 3)
+        XCTAssertEqual(exportedSpans[0].attributes.count, 2)
         XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[0].attributes["emb.key"]!.description, "true")
         XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]!.description, "bar")
+
+        // 'markAsKeySpan()' was deprecated. the concept of 'key spans' is no longer supported
+        XCTAssertNil(exportedSpans[0].attributes["emb.key"])
     }
 
     func testAddSpanAttributeInvalidId() async throws {
@@ -593,7 +599,6 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertNil(exportedSpans[0].parentSpanId)
         XCTAssertEqual(exportedSpans[0].attributes.count, 4)
         XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[0].attributes["emb.key"]!.description, "true")
         XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]!.description, "foo")
         XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]!.description, "bar")
         XCTAssertEqual(exportedSpans[0].startTime, Date(timeIntervalSince1970: 1721765404.001))
@@ -640,14 +645,13 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedSpans[1].parentSpanId?.hexString, exportedSpans[0].spanId.hexString)
         XCTAssertEqual(exportedSpans[1].attributes.count, 2)
         XCTAssertEqual(exportedSpans[1].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[0].attributes["emb.key"]!.description, "true")
+        XCTAssertNil(exportedSpans[0].attributes["emb.key"])
         XCTAssertEqual(exportedSpans[1].events.count, 0)
         XCTAssertTrue(exportedSpans[1].hasEnded)
         XCTAssertEqual(exportedSpans[2].name, "my-span-invalid-parent")
         XCTAssertNil(exportedSpans[2].parentSpanId)
         XCTAssertEqual(exportedSpans[2].attributes.count, 2)
         XCTAssertEqual(exportedSpans[2].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[0].attributes["emb.key"]!.description, "true")
         XCTAssertEqual(exportedSpans[2].events.count, 0)
         XCTAssertTrue(exportedSpans[2].hasEnded)
     }
