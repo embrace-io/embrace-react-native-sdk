@@ -22,7 +22,8 @@ export const EmbraceReactNativeTestHarness = () => {
   const {tracerProvider} = useEmbraceNativeTracerProvider({});
 
   return (
-    <NavigationContainer ref={navigationContainerRef}>
+    // `NavigationContainer` is waiting for what `useNavigationContainerRef` is returning (both exported from `@react-navigation/native`)
+    <NavigationContainer ref={navigationContainer}>
       <NavigationTracker
         ref={navigationContainerRef}
         provider={tracerProvider || undefined}
