@@ -22,7 +22,7 @@ class SDKConfig: NSObject {
         self.disableCrashReporter = from.value(forKey: "disableCrashReporter") as? Bool ?? false
         self.disableAutomaticViewCapture = from.value(forKey: "disableAutomaticViewCapture") as? Bool ?? false
         self.endpointBaseUrl = from.value(forKey: "endpointBaseUrl") as? String
-        self.disableNetworkSpanForwarding = from["disableNetworkSpanForwarding"] as? Bool ?? false
+        self.disableNetworkSpanForwarding = from.value(forKey: "disableNetworkSpanForwarding") as? Bool ?? false
         self.ignoredURLs = from.value(forKey: "disabledUrlPatterns") as? [String] ?? []
     }
 }

@@ -38,7 +38,7 @@ class SDKConfig: NSObject {
         self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
         self.endpointBaseUrl = from["endpointBaseUrl"] as? String
         self.disableNetworkSpanForwarding = from["disableNetworkSpanForwarding"] as? Bool ?? false
-        self.ignoredURLs = from.value(forKey: "disabledUrlPatterns") as? [String] ?? []
+        self.ignoredURLs = from["disabledUrlPatterns"] as? [String] ?? []
     }
 }
 
@@ -757,7 +757,6 @@ class EmbraceManager: NSObject {
         }
 
         var attributeStrings = attributeStringsFrom(dict: attributes)
-        attributeStrings.updateValue("true", forKey: "emb.key")
         Embrace.client?.recordCompletedSpan(name: name, type: SpanType.performance, parent: parent,
                                             startTime: dateFrom(ms: startTimeMs), endTime: dateFrom(ms: endTimeMs),
                                             attributes: attributeStrings,
