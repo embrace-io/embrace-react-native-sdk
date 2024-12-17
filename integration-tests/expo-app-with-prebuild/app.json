@@ -27,7 +27,9 @@
       [
         "@embrace-io/expo-config-plugin",
         {
-          "someConfig": "foo"
+          "androidAppId": "android123",
+          "apiToken": "apiToken456",
+          "iOSAppId": "ios789"
         }
       ]
     ],

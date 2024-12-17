@@ -4,7 +4,6 @@
   "description": "",
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "license": "Apache-2.0",
-
   "devDependencies": {
     "expo": "^51.0.9",
     "typescript": "^5.6.3"
