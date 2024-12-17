@@ -11,7 +11,13 @@
     "xcode": "^3.0.1"
   },
   "peerDependencies": {
+    "expo": ">=47.0.0",
     "react-native": ">=0.56.0"
+  },
+  "peerDependenciesMeta": {
+    "expo": {
+      "optional": true
+    }
   },
   "files": [
     "lib",
@@ -53,12 +59,13 @@
     "bug tracker"
   ],
   "scripts": {
-    "build": "cp -r ../../interfaces/ ./src/interfaces/common && node update_android_version.ts && tsc",
+    "build": "cp -r ../../interfaces/ ./src/interfaces/common && node update_android_version.ts && tsc && cp app.plugin.js lib/",
     "android:test": "cd test-project && yarn install && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
     "ios:install": "cd test-project && yarn install && cd ios && pod install && rm .xcode.env.local",
     "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceCoreTests.xcworkspace RNEmbraceCoreTests"
   },
   "devDependencies": {
+    "expo": "^51.0.9",
     "typescript": "^5.6.3"
   },
   "embrace": {

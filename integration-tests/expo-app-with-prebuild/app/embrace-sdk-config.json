@@ -1,0 +1,9 @@
+{
+  "ios": {
+    "appId": "abcdf",
+    "endpointBaseUrl": "http://localhost:8877",
+    "disableAutomaticViewCapture": true,
+    "disableNetworkSpanForwarding": false,
+    "disabledUrlPatterns": ["otlp-gateway-.*.grafana."]
+  }
+}
