@@ -39,6 +39,7 @@
 		6D2524132CC80696000ECCEA /* OtlpSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523E32CC80696000ECCEA /* OtlpSpan.swift */; };
 		6D2524142CC80696000ECCEA /* RNEmbraceOTLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523F52CC80696000ECCEA /* RNEmbraceOTLP.swift */; };
 		6D2524152CC80696000ECCEA /* RNEmbraceOTLP-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D2523F62CC80696000ECCEA /* RNEmbraceOTLP-Bridging-Header.h */; };
+		6DE04D3A2D1221E00049A0DD /* EmbraceCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE04D382D1221E00049A0DD /* EmbraceCommon.swift */; };
 		A4774FAE780E32959119985A /* libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D49B3AC602D913C528C06B2E /* libPods-RNEmbraceOTLP-RNEmbraceOTLPTests.a */; };
 		E27D958679004B10033C7388 /* libPods-RNEmbraceOTLP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C09D7B2A96FD8F8B47F4A1C /* libPods-RNEmbraceOTLP.a */; };
 /* End PBXBuildFile section */
@@ -87,6 +88,7 @@
 		6D2523F42CC80696000ECCEA /* RNEmbraceOTLP.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNEmbraceOTLP.m; sourceTree = "<group>"; };
 		6D2523F52CC80696000ECCEA /* RNEmbraceOTLP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNEmbraceOTLP.swift; sourceTree = "<group>"; };
 		6D2523F62CC80696000ECCEA /* RNEmbraceOTLP-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNEmbraceOTLP-Bridging-Header.h"; sourceTree = "<group>"; };
+		6DE04D382D1221E00049A0DD /* EmbraceCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbraceCommon.swift; sourceTree = "<group>"; };
 		6DFA1FF3C2E0E87FF34A4183 /* Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests/Pods-RNEmbraceOTLP-RNEmbraceOTLPTests.debug.xcconfig"; sourceTree = "<group>"; };
 		83AA55FCBBCB1A863178CFC7 /* Pods-RNEmbraceOTLP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceOTLP.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceOTLP/Pods-RNEmbraceOTLP.debug.xcconfig"; sourceTree = "<group>"; };
 		8C09D7B2A96FD8F8B47F4A1C /* libPods-RNEmbraceOTLP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNEmbraceOTLP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -280,6 +282,7 @@
 		6D2523F72CC80696000ECCEA /* RNEmbraceOTLP */ = {
 			isa = PBXGroup;
 			children = (
+				6DE04D392D1221E00049A0DD /* common */,
 				6D2523F32CC80696000ECCEA /* InternalOpenTelemetry */,
 				6D2523F42CC80696000ECCEA /* RNEmbraceOTLP.m */,
 				6D2523F52CC80696000ECCEA /* RNEmbraceOTLP.swift */,
@@ -287,6 +290,14 @@
 			);
 			name = RNEmbraceOTLP;
 			path = ../../ios;
+			sourceTree = "<group>";
+		};
+		6DE04D392D1221E00049A0DD /* common */ = {
+			isa = PBXGroup;
+			children = (
+				6DE04D382D1221E00049A0DD /* EmbraceCommon.swift */,
+			);
+			path = common;
 			sourceTree = "<group>";
 		};
 		B77C89AB32CDBA253F8E4683 /* Frameworks */ = {
@@ -520,6 +531,7 @@
 				6D2523FF2CC80696000ECCEA /* OtlpConfiguration.swift in Sources */,
 				6D2524002CC80696000ECCEA /* Lock.swift in Sources */,
 				6D2524012CC80696000ECCEA /* OtlpHttpTraceExporter.swift in Sources */,
+				6DE04D3A2D1221E00049A0DD /* EmbraceCommon.swift in Sources */,
 				6D2524022CC80696000ECCEA /* StableOtlpHTTPExporterBase.swift in Sources */,
 				6D2524032CC80696000ECCEA /* LogRecordAdapter.swift in Sources */,
 				6D2524042CC80696000ECCEA /* trace.pb.swift in Sources */,
@@ -623,10 +635,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -692,10 +701,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
