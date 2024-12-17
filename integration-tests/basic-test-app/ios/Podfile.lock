@@ -1500,7 +1500,7 @@ PODS:
     - React-logger (= 0.74.1)
     - React-perflogger (= 0.74.1)
     - React-utils (= 0.74.1)
-  - RNEmbraceCore (5.0.2):
+  - RNEmbraceCore (5.1.0):
     - DoubleConversion
     - EmbraceIO (= 6.6.0)
     - glog
@@ -1522,7 +1522,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNEmbraceOTLP (5.0.2):
+  - RNEmbraceOTLP (5.1.0):
     - DoubleConversion
     - EmbraceInternalSwiftLog (= 1.4.4-internal)
     - EmbraceIO (= 6.6.0)
@@ -1546,7 +1546,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SwiftProtobuf (= 1.20.2)
     - Yoga
-  - RNEmbraceTracerProvider (5.0.2):
+  - RNEmbraceTracerProvider (5.1.0):
     - DoubleConversion
     - EmbraceIO (= 6.6.0)
     - glog
@@ -1962,9 +1962,9 @@ SPEC CHECKSUMS:
   React-runtimescheduler: e2152ed146b6a35c07386fc2ac4827b27e6aad12
   React-utils: 3285151c9d1e3a28a9586571fc81d521678c196d
   ReactCommon: f42444e384d82ab89184aed5d6f3142748b54768
-  RNEmbraceCore: 6476a2ae97fe3a977be94b63919d4138751caf9d
-  RNEmbraceOTLP: 370d7a4f283eb9bc79ee17dab75d6a7c0200304a
-  RNEmbraceTracerProvider: 0cee4c3603a45b3605862d7abe646b240dbe7c3a
+  RNEmbraceCore: fea90de44cea987e98b93b086435acbb2c8d6ff2
+  RNEmbraceOTLP: 021e6e169753366bd0043a5352749756e90ddf32
+  RNEmbraceTracerProvider: 0cba98e49f1e3f62ad75da2e5c7d028e443568a4
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
