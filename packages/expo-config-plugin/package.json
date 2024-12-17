@@ -2,18 +2,57 @@
   "name": "@embrace-io/expo-config-plugin",
   "version": "5.1.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "expo-module build",
-    "clean": "expo-module clean",
-    "test": "expo-module test",
-    "prepare": "expo-module prepare",
-    "prepublishOnly": "expo-module prepublishOnly",
-    "expo-module": "expo-module"
-  },
-  "author": "",
-  "license": "ISC",
+  "author": "Embrace <support@embrace.io> (https://embrace.io/)",
+  "license": "Apache-2.0",
+
   "devDependencies": {
-    "expo-module-scripts": "^4.0.2"
+    "expo": "^51.0.9",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "expo": ">=47.0.0"
+  },
+  "peerDependenciesMeta": {
+    "expo": {
+      "optional": true
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk/issues",
+    "email": "support@embrace.io"
+  },
+  "homepage": "https://github.com/embrace-io/embrace-react-native-sdk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk",
+    "directory": "packages/expo-config-plugin"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "keywords": [
+    "embrace",
+    "react-native",
+    "tracking",
+    "observability",
+    "instrumentation",
+    "telemetry",
+    "bug tracker"
+  ],
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "embrace": {
+    "iosVersion": "6.6.0",
+    "androidVersion": "6.14.0"
   }
 }

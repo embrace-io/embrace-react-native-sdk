@@ -22,9 +22,18 @@
       "bundler": "metro",
       "output": "static"
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router",
+      [
+        "@embrace-io/expo-config-plugin",
+        {
+          "someConfig": "foo"
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }
+
   }
 }
