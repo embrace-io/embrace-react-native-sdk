@@ -1,17 +1,17 @@
 PODS:
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
-  - EmbraceIO (6.5.1):
-    - EmbraceIO/EmbraceIO (= 6.5.1)
-  - EmbraceIO/EmbraceCaptureService (6.5.1):
+  - EmbraceIO (6.6.0):
+    - EmbraceIO/EmbraceIO (= 6.6.0)
+  - EmbraceIO/EmbraceCaptureService (6.6.0):
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceCommonInternal (6.5.1)
-  - EmbraceIO/EmbraceConfigInternal (6.5.1):
+  - EmbraceIO/EmbraceCommonInternal (6.6.0)
+  - EmbraceIO/EmbraceConfigInternal (6.6.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfiguration
-  - EmbraceIO/EmbraceConfiguration (6.5.1)
-  - EmbraceIO/EmbraceCore (6.5.1):
+  - EmbraceIO/EmbraceConfiguration (6.6.0)
+  - EmbraceIO/EmbraceCore (6.6.0):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfigInternal
@@ -21,43 +21,43 @@ PODS:
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/EmbraceUploadInternal
-  - EmbraceIO/EmbraceCrash (6.5.1):
+  - EmbraceIO/EmbraceCrash (6.6.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/KSCrash
-  - EmbraceIO/EmbraceIO (6.5.1):
+  - EmbraceIO/EmbraceIO (6.6.0):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCore
     - EmbraceIO/EmbraceCrash
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceObjCUtilsInternal (6.5.1)
-  - EmbraceIO/EmbraceOTelInternal (6.5.1):
+  - EmbraceIO/EmbraceObjCUtilsInternal (6.6.0)
+  - EmbraceIO/EmbraceOTelInternal (6.6.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceSemantics (6.5.1):
+  - EmbraceIO/EmbraceSemantics (6.6.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceStorageInternal (6.5.1):
+  - EmbraceIO/EmbraceStorageInternal (6.6.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/GRDB
-  - EmbraceIO/EmbraceUploadInternal (6.5.1):
+  - EmbraceIO/EmbraceUploadInternal (6.6.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/GRDB
-  - EmbraceIO/GRDB (6.5.1)
-  - EmbraceIO/KSCrash (6.5.1):
+  - EmbraceIO/GRDB (6.6.0)
+  - EmbraceIO/KSCrash (6.6.0):
     - EmbraceIO/KSCrashCore
     - EmbraceIO/KSCrashRecording
     - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashCore (6.5.1)
-  - EmbraceIO/KSCrashRecording (6.5.1):
+  - EmbraceIO/KSCrashCore (6.6.0)
+  - EmbraceIO/KSCrashRecording (6.6.0):
     - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashRecordingCore (6.5.1):
+  - EmbraceIO/KSCrashRecordingCore (6.6.0):
     - EmbraceIO/KSCrashCore
-  - EmbraceIO/OpenTelemetryApi (6.5.1)
-  - EmbraceIO/OpenTelemetrySdk (6.5.1):
+  - EmbraceIO/OpenTelemetryApi (6.6.0)
+  - EmbraceIO/OpenTelemetrySdk (6.6.0):
     - EmbraceIO/OpenTelemetryApi
   - FBLazyVector (0.75.4)
   - fmt (9.1.0)
@@ -1561,7 +1561,7 @@ PODS:
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - EmbraceIO (= 6.5.1)
+  - EmbraceIO (= 6.6.0)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
@@ -1760,7 +1760,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  EmbraceIO: 3c7715c08592d75a534bddfcf5cdd3486d4c8e38
+  EmbraceIO: 30e4a0326fc212a735bf594d7460e30c385d34ee
   FBLazyVector: 430e10366de01d1e3d57374500b1b150fe482e6d
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb

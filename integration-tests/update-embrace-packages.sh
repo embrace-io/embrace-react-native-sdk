@@ -73,9 +73,9 @@ third_party_dependencies="
   ./artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz
 "
 
-# TODO EMBR-5735, add ./artifacts/embrace-io-react-native-otlp-local.tgz
 embrace_local_dependencies="
   ./artifacts/embrace-io-react-native-local.tgz
+  ./artifacts/embrace-io-react-native-otlp-local.tgz
   ./artifacts/embrace-io-react-native-tracer-provider-local.tgz
   ./artifacts/embrace-io-react-native-spans-local.tgz
   $third_party_dependencies
@@ -100,17 +100,15 @@ if [ "$skip_sdk_packages" = false ]; then
     # build required packages
     pushd ..
     npx lerna run build --scope=@embrace-io/react-native
-    # TODO EMBR-5735
-    # npx lerna run build --scope=@embrace-io/react-native-otlp
+    npx lerna run build --scope=@embrace-io/react-native-otlp
     npx lerna run build --scope=@embrace-io/react-native-tracer-provider
     npx lerna run build --scope=@embrace-io/react-native-spans
     popd
 
     # pack required packages into tarballs
     ./pack.sh ../packages/core/ artifacts/embrace-io-react-native-local.tgz
+    ./pack.sh ../packages/react-native-otlp/ artifacts/embrace-io-react-native-otlp-local.tgz
     ./pack.sh ../packages/react-native-tracer-provider/ artifacts/embrace-io-react-native-tracer-provider-local.tgz
-    # TODO EMBR-5735
-    # ./pack.sh ../packages/react-native-otlp/ artifacts/embrace-io-react-native-otlp-local.tgz
     ./pack.sh ../packages/spans/ artifacts/embrace-io-react-native-spans-local.tgz
   fi
 

@@ -124,10 +124,6 @@ const commonEmbraceSpanAttributes = (
           attr => attr.key === "emb.process_identifier",
         )?.value,
       },
-      {
-        key: "emb.key",
-        value: "true",
-      },
       ...(perfSpan
         ? [
             {
@@ -147,10 +143,6 @@ const commonEmbraceSpanSnapshotAttributes = (): EmbraceSpanAttribute[] => {
 
   if (driver.isAndroid) {
     return sortSpanAttributes([
-      {
-        key: "emb.key",
-        value: "true",
-      },
       {
         key: "emb.type",
         value: "perf",

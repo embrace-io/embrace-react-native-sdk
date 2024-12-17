@@ -7,6 +7,7 @@ import EmbraceCrash
 import EmbraceCommonInternal
 import EmbraceOTelInternal
 import OpenTelemetryApi
+import EmbraceSemantics
 
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"
 private let HOSTED_PLATFORM_VERSION_RESOURCE_KEY = "hosted_platform_version"
@@ -28,6 +29,7 @@ class SDKConfig: NSObject {
     public let disableAutomaticViewCapture: Bool
     public let endpointBaseUrl: String?
     public let disableNetworkSpanForwarding: Bool
+    public let ignoredURLs: [String]?
 
     public init(from: NSDictionary) {
         self.appId = from["appId"] as? String ?? ""
@@ -36,6 +38,7 @@ class SDKConfig: NSObject {
         self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
         self.endpointBaseUrl = from["endpointBaseUrl"] as? String
         self.disableNetworkSpanForwarding = from["disableNetworkSpanForwarding"] as? Bool ?? false
+        self.ignoredURLs = from["disabledUrlPatterns"] as? [String] ?? []
     }
 }
 
@@ -88,8 +91,13 @@ class EmbraceManager: NSObject {
 
                     let servicesBuilder = CaptureServiceBuilder()
 
-                    // allowing to enable/disable NSF by code
-                    let urlSessionServiceOptions = URLSessionCaptureService.Options(injectTracingHeader: !self.config.disableNetworkSpanForwarding, requestsDataSource: nil)
+                    let urlSessionServiceOptions = URLSessionCaptureService.Options(
+                        // allowing to enable/disable NSF by code
+                        injectTracingHeader: !self.config.disableNetworkSpanForwarding,
+                        requestsDataSource: nil,
+                        // disabling tracking for ignored urls
+                        ignoredURLs: self.config.ignoredURLs ?? []
+                    )
                     // manually adding the URLSessionCaptureService
                     servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
 
@@ -513,7 +521,7 @@ class EmbraceManager: NSObject {
             }
 
             // `errorCode` should be used to calc `emb.error_code` attr in native sdk
-            span!.end(errorCode: ErrorCode.failure, time: dateFrom(ms: endInMillis))
+            span!.end(errorCode: SpanErrorCode.failure, time: dateFrom(ms: endInMillis))
             resolve(true)
         } else {
             resolve(false)
@@ -556,7 +564,7 @@ class EmbraceManager: NSObject {
         return attributes
     }
 
-    private func errorCodeFrom(str: String) -> ErrorCode? {
+    private func errorCodeFrom(str: String) -> SpanErrorCode? {
         switch str {
             case "Failure":
                 return .failure
@@ -630,8 +638,6 @@ class EmbraceManager: NSObject {
 
         if !parentSpanId.isEmpty, let parent = spanRepository.get(spanId: parentSpanId) {
             spanBuilder?.setParent(parent)
-        } else {
-            spanBuilder?.markAsKeySpan()
         }
 
         if !startTimeMs.doubleValue.isZero {
@@ -751,7 +757,6 @@ class EmbraceManager: NSObject {
         }
 
         var attributeStrings = attributeStringsFrom(dict: attributes)
-        attributeStrings.updateValue("true", forKey: "emb.key")
         Embrace.client?.recordCompletedSpan(name: name, type: SpanType.performance, parent: parent,
                                             startTime: dateFrom(ms: startTimeMs), endTime: dateFrom(ms: endTimeMs),
                                             attributes: attributeStrings,
