@@ -53,12 +53,12 @@
     "bug tracker"
   ],
   "scripts": {
-    "ios:shared": "mkdir -p ./ios/common && cp -r ../common/ios/* ./ios/common/",
     "js:shared": "mkdir -p ./src/interfaces/common && cp -r ../common/interfaces/* ./src/interfaces/common",
-    "build": "yarn run js:shared && yarn run ios:shared && node update_android_version.ts && tsc",
+    "ios:shared": "mkdir -p ./ios/common && cp -r ../common/ios/* ./ios/common/",
     "android:test": "cd test-project && yarn install && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
+    "build": "yarn run js:shared && yarn run ios:shared && node update_android_version.ts && tsc",
     "ios:install": "cd test-project && yarn install && cd ios && pod install && rm .xcode.env.local",
-    "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceCoreTests.xcworkspace RNEmbraceCoreTests"
+    "ios:test": "yarn run ios:shared && ../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceCoreTests.xcworkspace RNEmbraceCoreTests"
   },
   "devDependencies": {
     "typescript": "^5.6.3"
