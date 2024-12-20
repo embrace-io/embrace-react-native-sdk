@@ -355,12 +355,12 @@ class EmbraceManager: NSObject {
             reject("LOG_MESSAGE_INVALID_PROPERTIES", "Properties should be [String: String]", nil)
             return
         }
-        
+
         let isInfoLog = severityValue == .info
-        
+
         var stackTraceBehavior: StackTraceBehavior = StackTraceBehavior.notIncluded
-        if (includeStacktrace == true) {
-            if (stacktrace.isEmpty) {
+        if includeStacktrace == true {
+            if stacktrace.isEmpty {
                 stackTraceBehavior = StackTraceBehavior.default // will include the iOS Stacktrace if no JS is passed
             } else {
                 // we don't want to send info stacktraces to sdk for 'info' logs, this is already prevented in the js layer as well
@@ -369,7 +369,7 @@ class EmbraceManager: NSObject {
                 }
             }
         }
-        
+
         Embrace.client?.log(
             message,
             severity: severityValue,

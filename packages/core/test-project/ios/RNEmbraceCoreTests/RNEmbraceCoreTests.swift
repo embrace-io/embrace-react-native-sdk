@@ -248,7 +248,7 @@ class EmbraceManagerTests: XCTestCase {
                                                    stacktrace: "",
                                                    includeStacktrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
-        
+
         // 2) should not include any stacktrace (neither Native nor JS)
         module.logMessageWithSeverityAndProperties("my log message without stacktrace", severity: "warning", properties: NSDictionary(),
                                                    stacktrace: "",
@@ -265,7 +265,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"]) // empty js stacktrace
         XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"]) // since the JS stacktrace is empty and `includeStacktrace` is `true` it will add the Native one
-            
+
         // 2) no stacktrace at all
         XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[1].body?.description, "my log message without stacktrace")
@@ -302,7 +302,7 @@ class EmbraceManagerTests: XCTestCase {
         let exportedLogs = try await getExportedLogs()
         XCTAssertEqual(promise.resolveCalls.count, 3)
         XCTAssertEqual(exportedLogs.count, 3)
-        
+
         // error log
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my error log")
@@ -311,7 +311,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedLogs[0].attributes["prop2"]!.description, "bar")
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
         XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
-        
+
         // warning log
         XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[1].body?.description, "my warning log")
@@ -320,7 +320,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedLogs[1].attributes["prop2"]!.description, "bar")
         XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.rn"])
         XCTAssertNotNil(exportedLogs[1].attributes["emb.stacktrace.ios"])
-        
+
         // info log
         XCTAssertEqual(exportedLogs[2].severity?.description, "INFO")
         XCTAssertEqual(exportedLogs[2].body?.description, "my info log")
@@ -351,21 +351,21 @@ class EmbraceManagerTests: XCTestCase {
         let exportedLogs = try await getExportedLogs()
         XCTAssertEqual(promise.resolveCalls.count, 3)
         XCTAssertEqual(exportedLogs.count, 3)
-        
+
         // error
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my error message")
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "my JS stack trace")
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
-        
+
         // warning
         XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[1].body?.description, "my warning message")
         XCTAssertEqual(exportedLogs[1].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[1].attributes["emb.stacktrace.rn"]!.description, "my JS stack trace")
         XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.ios"])
-        
+
         // info
         XCTAssertEqual(exportedLogs[2].severity?.description, "INFO")
         XCTAssertEqual(exportedLogs[2].body?.description, "my info message")
@@ -374,7 +374,7 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.rn"])
         XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.ios"])
     }
-    
+
     func testLogMessageWithNoStackTrace() async throws {
         // error
         module.logMessageWithSeverityAndProperties("my error message", severity: "error", properties: NSDictionary(),
@@ -385,7 +385,7 @@ class EmbraceManagerTests: XCTestCase {
                                                    stacktrace: "",
                                                    includeStacktrace: false,
                                                    resolver: promise.resolve, rejecter: promise.reject)
-        
+
         // warning
         module.logMessageWithSeverityAndProperties("my warning message", severity: "warning", properties: NSDictionary(),
                                                    stacktrace: "my JS stack trace",
@@ -395,7 +395,7 @@ class EmbraceManagerTests: XCTestCase {
                                                    stacktrace: "",
                                                    includeStacktrace: false,
                                                    resolver: promise.resolve, rejecter: promise.reject)
-        
+
         // info
         module.logMessageWithSeverityAndProperties("my info message", severity: "info", properties: NSDictionary(),
                                                    stacktrace: "my JS stack trace",
@@ -409,7 +409,7 @@ class EmbraceManagerTests: XCTestCase {
         let exportedLogs = try await getExportedLogs()
         XCTAssertEqual(promise.resolveCalls.count, 6)
         XCTAssertEqual(exportedLogs.count, 6)
-        
+
         // error log passing js stacktrace
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my error message")
