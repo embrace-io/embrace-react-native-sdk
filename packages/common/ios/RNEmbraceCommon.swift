@@ -16,7 +16,7 @@ class SDKConfig: NSObject {
     public let endpointBaseUrl: String?
     public let disableNetworkSpanForwarding: Bool
     public let ignoredURLs: [String]?
-
+    
     public init(from: NSDictionary) {
         self.appId = from["appId"] as? String ?? ""
         self.appGroupId = from["appGroupId"] as? String
