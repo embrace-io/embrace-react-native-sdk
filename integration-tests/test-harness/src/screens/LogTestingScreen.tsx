@@ -53,7 +53,7 @@ const LogTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Logs</Text>
-        <Button onPress={triggerLogs} title="Warning / Error / Message" />
+        <Button onPress={triggerLogs} title="Info / Warning / Error / Message" />
         <Button onPress={triggerErrorLog} title="Handled Exception" />
       </View>
 
