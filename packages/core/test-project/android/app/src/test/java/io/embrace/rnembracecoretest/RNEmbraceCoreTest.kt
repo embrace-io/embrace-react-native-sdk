@@ -12,7 +12,9 @@ import android.os.Looper
 import android.preference.PreferenceManager
 import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
+import com.facebook.react.common.SystemClock.currentTimeMillis
 import io.embrace.android.embracesdk.Embrace
+import io.embrace.android.embracesdk.network.http.HttpMethod
 import io.embrace.rnembracecore.EmbraceManagerModule
 import io.mockk.every
 import io.mockk.mockk
@@ -21,6 +23,7 @@ import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.sdk.common.CompletableResultCode
 import io.opentelemetry.sdk.logs.data.LogRecordData
 import io.opentelemetry.sdk.logs.export.LogRecordExporter
+import io.opentelemetry.sdk.trace.data.SpanData
 import io.opentelemetry.sdk.trace.export.SpanExporter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -38,11 +41,13 @@ import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.timeout
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class RNEmbraceCoreTest {
     companion object {
-        private val embraceModule = Mockito.spy(EmbraceManagerModule(mock()))
+        private val embraceModuleSpy = Mockito.spy(EmbraceManagerModule(mock()))
 
         private lateinit var spanExporter: SpanExporter
         private lateinit var logExporter: LogRecordExporter
@@ -141,7 +146,7 @@ class RNEmbraceCoreTest {
 
         // verify span created with emb.w3c_traceparent in place
         argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
+            verify(spanExporter, times(1)).export(capture())
             assertEquals(1, allValues.size)
 
             val spans = allValues[0].asSequence().withIndex()
@@ -179,7 +184,7 @@ class RNEmbraceCoreTest {
 
         // `emb.w3c_traceparent` shouldn't be there
         argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(2)).export(capture())
+            verify(spanExporter, times(2)).export(capture())
             assertEquals(2, allValues.size)
 
             val spans = allValues[1].asSequence().withIndex()
@@ -216,7 +221,7 @@ class RNEmbraceCoreTest {
 
         // verify span created with `emb.w3c_traceparent` in place
         argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
+            verify(spanExporter, times(1)).export(capture())
             assertEquals(1, allValues.size)
 
             val spans = allValues[0].asSequence().withIndex()
@@ -254,7 +259,7 @@ class RNEmbraceCoreTest {
 
         // `emb.w3c_traceparent` shouldn't be there
         argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(2)).export(capture())
+            verify(spanExporter, times(2)).export(capture())
             assertEquals(2, allValues.size)
 
             val spans = allValues[1].asSequence().withIndex()
@@ -274,7 +279,7 @@ class RNEmbraceCoreTest {
             putString("custom.property2", "value.for-custom-property2")
         }
 
-        embraceModule.logMessageWithSeverityAndProperties(
+        embraceModuleSpy.logMessageWithSeverityAndProperties(
             "a nice warning message",
             "warning",
             properties,
@@ -282,24 +287,16 @@ class RNEmbraceCoreTest {
             true,
             promise
         )
-        embraceModule.logMessageWithSeverityAndProperties(
-            "a nice warning message, empty stacktrace",
+        embraceModuleSpy.logMessageWithSeverityAndProperties(
+            "a nice warning message without stacktrace",
             "warning",
             properties,
             "",
-            true,
-            promise
-        )
-        embraceModule.logMessageWithSeverityAndProperties(
-            "a nice warning message, no stacktrace",
-            "warning",
-            properties,
-            "stacktrace as string",
             false,
             promise
         )
 
-        embraceModule.logMessageWithSeverityAndProperties(
+        embraceModuleSpy.logMessageWithSeverityAndProperties(
             "a nice error message",
             "error",
             properties,
@@ -307,22 +304,35 @@ class RNEmbraceCoreTest {
             true,
             promise
         )
-        embraceModule.logMessageWithSeverityAndProperties("a nice error message, empty stacktrace", "error", properties, "", true, promise)
-        embraceModule.logMessageWithSeverityAndProperties(
-            "a nice error message, no stacktrace",
+        embraceModuleSpy.logMessageWithSeverityAndProperties(
+            "a nice error message without stacktrace",
             "error",
             properties,
-            "stacktrace as string",
+            "",
             false,
             promise
         )
 
         // won't add the stacktrace as per product's decision
-        embraceModule.logMessageWithSeverityAndProperties("a nice info message", "info", properties, "stacktrace as string", true, promise)
-        embraceModule.logMessageWithSeverityAndProperties("a nice info message, no properties", "info", JavaOnlyMap(), "", true, promise)
+        embraceModuleSpy.logMessageWithSeverityAndProperties(
+            "a nice info message",
+            "info",
+            properties,
+            "stacktrace as string",
+            true,
+            promise
+        )
+        embraceModuleSpy.logMessageWithSeverityAndProperties(
+            "a nice info message without properties",
+            "info",
+            JavaOnlyMap(),
+            "",
+            false,
+            promise
+        )
 
         // receiving severity as a non-expected value
-        embraceModule.logMessageWithSeverityAndProperties(
+        embraceModuleSpy.logMessageWithSeverityAndProperties(
             "a message without severity",
             "non-expected-value",
             JavaOnlyMap(),
@@ -332,8 +342,8 @@ class RNEmbraceCoreTest {
         )
 
         argumentCaptor<Collection<LogRecordData>>().apply {
-            verify(logExporter, timeout(200).times(9)).export(capture())
-            assertEquals(9, allValues.size)
+            verify(logExporter, timeout(200).times(7)).export(capture())
+            assertEquals(7, allValues.size)
 
             val warningLog = allValues[0].asSequence().withIndex().elementAt(0).value
             assertEquals("WARNING", warningLog.severityText)
@@ -345,29 +355,18 @@ class RNEmbraceCoreTest {
             assertEquals(6, warningLog.attributes.size())
             assertNotNull(warningLog.attributes.get(AttributeKey.stringKey("log.record.uid")))
 
-            val warningLogEmptyStacktrace = allValues[1].asSequence().withIndex().elementAt(0).value
-            assertEquals("WARNING", warningLogEmptyStacktrace.severityText)
-            assertEquals("a nice warning message, empty stacktrace", warningLogEmptyStacktrace.body.asString())
-            assertEquals("value.for-custom-property1", warningLogEmptyStacktrace.attributes.get(AttributeKey.stringKey("custom.property1")))
-            assertEquals("value.for-custom-property2", warningLogEmptyStacktrace.attributes.get(AttributeKey.stringKey("custom.property2")))
-            assertEquals("sys.log", warningLogEmptyStacktrace.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals(5, warningLogEmptyStacktrace.attributes.size())
-            assertNotNull(warningLogEmptyStacktrace.attributes.get(AttributeKey.stringKey("log.record.uid")))
-            // no stacktrace if passing empty string
-            assertNull(warningLogEmptyStacktrace.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
-
-            val warningLogNoStacktrace = allValues[2].asSequence().withIndex().elementAt(0).value
+            val warningLogNoStacktrace = allValues[1].asSequence().withIndex().elementAt(0).value
             assertEquals("WARNING", warningLogNoStacktrace.severityText)
-            assertEquals("a nice warning message, no stacktrace", warningLogNoStacktrace.body.asString())
+            assertEquals("a nice warning message without stacktrace", warningLogNoStacktrace.body.asString())
             assertEquals("value.for-custom-property1", warningLogNoStacktrace.attributes.get(AttributeKey.stringKey("custom.property1")))
             assertEquals("value.for-custom-property2", warningLogNoStacktrace.attributes.get(AttributeKey.stringKey("custom.property2")))
             assertEquals("sys.log", warningLogNoStacktrace.attributes.get(AttributeKey.stringKey("emb.type")))
             assertEquals(5, warningLogNoStacktrace.attributes.size())
             assertNotNull(warningLogNoStacktrace.attributes.get(AttributeKey.stringKey("log.record.uid")))
-            // no stacktrace if passing `includeStacktrace` as false even when `stacktrace` is passed
+            // no stacktrace if passing empty string
             assertNull(warningLogNoStacktrace.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
 
-            val errorLog = allValues[3].asSequence().withIndex().elementAt(0).value
+            val errorLog = allValues[2].asSequence().withIndex().elementAt(0).value
             assertEquals("ERROR", errorLog.severityText)
             assertEquals("a nice error message", errorLog.body.asString())
             assertEquals("value.for-custom-property1", errorLog.attributes.get(AttributeKey.stringKey("custom.property1")))
@@ -377,29 +376,18 @@ class RNEmbraceCoreTest {
             assertEquals(6, errorLog.attributes.size())
             assertNotNull(errorLog.attributes.get(AttributeKey.stringKey("log.record.uid")))
 
-            val errorLogEmptyStacktrace = allValues[4].asSequence().withIndex().elementAt(0).value
-            assertEquals("ERROR", errorLogEmptyStacktrace.severityText)
-            assertEquals("a nice error message, empty stacktrace", errorLogEmptyStacktrace.body.asString())
-            assertEquals("value.for-custom-property1", errorLogEmptyStacktrace.attributes.get(AttributeKey.stringKey("custom.property1")))
-            assertEquals("value.for-custom-property2", errorLogEmptyStacktrace.attributes.get(AttributeKey.stringKey("custom.property2")))
-            assertEquals("sys.log", errorLogEmptyStacktrace.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals(5, errorLogEmptyStacktrace.attributes.size())
-            assertNotNull(errorLogEmptyStacktrace.attributes.get(AttributeKey.stringKey("log.record.uid")))
-            // no stacktrace if passing empty string
-            assertNull(errorLogEmptyStacktrace.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
-
-            val errorLogNoStacktrace = allValues[5].asSequence().withIndex().elementAt(0).value
+            val errorLogNoStacktrace = allValues[3].asSequence().withIndex().elementAt(0).value
             assertEquals("ERROR", errorLogNoStacktrace.severityText)
-            assertEquals("a nice error message, no stacktrace", errorLogNoStacktrace.body.asString())
+            assertEquals("a nice error message without stacktrace", errorLogNoStacktrace.body.asString())
             assertEquals("value.for-custom-property1", errorLogNoStacktrace.attributes.get(AttributeKey.stringKey("custom.property1")))
             assertEquals("value.for-custom-property2", errorLogNoStacktrace.attributes.get(AttributeKey.stringKey("custom.property2")))
             assertEquals("sys.log", errorLogNoStacktrace.attributes.get(AttributeKey.stringKey("emb.type")))
             assertEquals(5, errorLogNoStacktrace.attributes.size())
             assertNotNull(errorLogNoStacktrace.attributes.get(AttributeKey.stringKey("log.record.uid")))
-            // no stacktrace if passing `includeStacktrace` as false even when `stacktrace` is passed
+            // no stacktrace if passing empty string
             assertNull(errorLogNoStacktrace.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
 
-            val infoLog = allValues[6].asSequence().withIndex().elementAt(0).value
+            val infoLog = allValues[4].asSequence().withIndex().elementAt(0).value
             assertEquals("INFO", infoLog.severityText)
             assertEquals("a nice info message", infoLog.body.asString())
             assertEquals("value.for-custom-property1", infoLog.attributes.get(AttributeKey.stringKey("custom.property1")))
@@ -410,16 +398,15 @@ class RNEmbraceCoreTest {
             // no stacktrace if passing an stacktrace as product's decision
             assertNull(infoLog.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
 
-            val infoLogNoProperties = allValues[7].asSequence().withIndex().elementAt(0).value
+            val infoLogNoProperties = allValues[5].asSequence().withIndex().elementAt(0).value
             assertEquals("INFO", infoLogNoProperties.severityText)
-            assertEquals("a nice info message, no properties", infoLogNoProperties.body.asString())
+            assertEquals("a nice info message without properties", infoLogNoProperties.body.asString())
             assertEquals("sys.log", infoLogNoProperties.attributes.get(AttributeKey.stringKey("emb.type")))
             assertEquals(3, infoLogNoProperties.attributes.size())
             assertNotNull(infoLogNoProperties.attributes.get(AttributeKey.stringKey("log.record.uid")))
             assertNull(infoLogNoProperties.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
 
-            // error log by default
-            val logWithNoSeverity = allValues[8].asSequence().withIndex().elementAt(0).value
+            val logWithNoSeverity = allValues[6].asSequence().withIndex().elementAt(0).value
             assertEquals("ERROR", logWithNoSeverity.severityText)
             assertEquals("a message without severity", logWithNoSeverity.body.asString())
             assertEquals("sys.log", logWithNoSeverity.attributes.get(AttributeKey.stringKey("emb.type")))
