@@ -88,6 +88,7 @@ RCT_EXTERN_METHOD(logMessageWithSeverityAndProperties:(NSString *)message
                   severity:(NSString *)severity
                   properties:(NSDictionary)properties
                   stacktrace:(NSString *)stacktrace
+                  includeStacktrace:(BOOL)includeStacktrace
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 

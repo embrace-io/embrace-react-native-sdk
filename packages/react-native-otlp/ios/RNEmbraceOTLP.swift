@@ -152,7 +152,7 @@ class RNEmbraceOTLP: NSObject {
                     }
 
                     let servicesBuilder = CaptureServiceBuilder()
-                    
+
                     let urlSessionServiceOptions = URLSessionCaptureService.Options(
                         // allowing to enable/disable NSF by code
                         injectTracingHeader: !config.disableNetworkSpanForwarding,

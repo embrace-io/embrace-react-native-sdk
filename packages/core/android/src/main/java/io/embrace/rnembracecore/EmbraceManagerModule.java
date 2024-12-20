@@ -163,26 +163,35 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void logMessageWithSeverityAndProperties(String message, String severity, ReadableMap properties,
-                                                    String stacktrace, Promise promise) {
+                                                    String stacktrace, Boolean includeStacktrace, Promise promise) {
         try {
-            final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<>();
-            
-            // we don't want to send info stacktraces to sdk, this is already prevented in the js layer as well
-            if (!stacktrace.isEmpty() && !severity.equals("info")) {
-                props.put("emb.stacktrace.rn", stacktrace);
+            final Map<String, Object> propValue = properties == null ? new HashMap<>() : properties.toHashMap();
+            final Severity severityValue = getSeverityByString(severity);
+
+            if (includeStacktrace && !stacktrace.isEmpty()) {
+                // we don't want to send info stacktraces to sdk for 'info' logs,
+                // this is already prevented in the js layer as well
+                if (!severity.equals("info")) {
+                    propValue.put("emb.stacktrace.rn", stacktrace);
+                }
             }
 
-            if (severity.equals("info")) {
-                Embrace.getInstance().logMessage(message, Severity.INFO, props);
-            } else if (severity.equals("warning")) {
-                Embrace.getInstance().logMessage(message, Severity.WARNING, props);
-            } else {
-                Embrace.getInstance().logMessage(message, Severity.ERROR, props);
-            }
+            Embrace.getInstance().logMessage(message, severityValue, propValue);
             promise.resolve(true);
         } catch (Exception e) {
             Log.e("Embrace", "Error logging message", e);
             promise.resolve(false);
+        }
+    }
+
+    private Severity getSeverityByString(String severity) {
+        switch (severity) {
+            case "info":
+                return Severity.INFO;
+            case "warning":
+                return Severity.WARNING;
+            default:
+                return Severity.ERROR;
         }
     }
 

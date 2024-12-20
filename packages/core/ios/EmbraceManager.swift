@@ -339,12 +339,13 @@ class EmbraceManager: NSObject {
         }
     }
 
-    @objc(logMessageWithSeverityAndProperties:severity:properties:stacktrace:resolver:rejecter:)
+    @objc(logMessageWithSeverityAndProperties:severity:properties:stacktrace:includeStacktrace:resolver:rejecter:)
     func logMessageWithSeverityAndProperties(
         _ message: String,
         severity: String,
         properties: NSDictionary,
         stacktrace: String,
+        includeStacktrace: Bool,
         resolver resolve: @escaping RCTPromiseResolveBlock,
         rejecter reject: @escaping RCTPromiseRejectBlock
     ) {
@@ -355,15 +356,25 @@ class EmbraceManager: NSObject {
             return
         }
 
-        if !stacktrace.isEmpty {
-            attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
+        let isInfoLog = severityValue == .info
+
+        var stackTraceBehavior: StackTraceBehavior = StackTraceBehavior.notIncluded
+        if includeStacktrace == true {
+            if stacktrace.isEmpty {
+                stackTraceBehavior = StackTraceBehavior.default // will include the iOS Stacktrace if no JS is passed
+            } else {
+                // we don't want to send info stacktraces to sdk for 'info' logs, this is already prevented in the js layer as well
+                if !isInfoLog {
+                    attributes.updateValue(stacktrace, forKey: "emb.stacktrace.rn")
+                }
+            }
         }
 
         Embrace.client?.log(
             message,
             severity: severityValue,
             attributes: attributes,
-            stackTraceBehavior: stacktrace.isEmpty ? StackTraceBehavior.default : StackTraceBehavior.notIncluded
+            stackTraceBehavior: stackTraceBehavior
         )
         resolve(true)
 
@@ -566,14 +577,14 @@ class EmbraceManager: NSObject {
 
     private func errorCodeFrom(str: String) -> SpanErrorCode? {
         switch str {
-            case "Failure":
-                return .failure
-            case "UserAbandon":
-                return .userAbandon
-            case "Unknown":
-                return .unknown
-            default:
-                return nil
+        case "Failure":
+            return .failure
+        case "UserAbandon":
+            return .userAbandon
+        case "Unknown":
+            return .unknown
+        default:
+            return nil
         }
     }
 

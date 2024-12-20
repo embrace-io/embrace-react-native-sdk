@@ -10,23 +10,27 @@ disabled_rules: # rule identifiers turned on by default to exclude from running
   - function_parameter_count
   - notification_center_detachment
   - compiler_protocol_init
+  - type_body_length # it doesn't support auto-correction, disabling now
+  - todo # it doesn't support auto-correction, disabling now
+  - file_length # it doesn't support auto-correction, disabling now
 
 opt_in_rules:
   - conditional_returns_on_newline
 
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, codeclimate, junit, html, emoji, sonarqube, markdown, github-actions-logging, summary)
 
-file_length:
-  warning: 800
-  error: 1000
-
 line_length:
   ignores_comments: true
   ignores_interpolated_strings: true
+  ignores_function_declarations: true
+  ignores_urls: true
+  warning: 230
+  error: 250
 
-type_body_length:
-  warning: 600
-  error: 800
+# TODO: need to discuss about this rule
+# file_length:
+#   warning: 800
+#   error: 1000
 
 type_name:
   max_length:

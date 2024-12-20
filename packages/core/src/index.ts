@@ -6,27 +6,24 @@ import * as embracePackage from "../package.json";
 import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {logIfComponentError} from "./utils/ComponentError";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
-import {SessionStatus} from "./interfaces/Types";
+import {
+  LogSeverity,
+  SessionStatus,
+  SDKConfig,
+  MethodType,
+  LogProperties,
+} from "./interfaces/common";
 import {
   getNetworkSDKInterceptorProvider,
   NETWORK_INTERCEPTOR_TYPES,
 } from "./interfaces/NetworkMonitoring";
-import {MethodType} from "./interfaces/HTTP";
-import {SDKConfig} from "./interfaces/Config";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
-
-interface Properties {
-  [key: string]: string;
-}
 
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
 const tracking = require("promise/setimmediate/rejection-tracking");
 
 const STACK_LIMIT = 200;
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
-const WARNING = "warning";
-const INFO = "info";
-const ERROR = "error";
 
 const noOp = () => {};
 
@@ -68,6 +65,7 @@ const handleError = async (error: Error, callback: () => void) => {
   } catch {
     logException = false;
   }
+
   if (!logException) {
     console.warn("[Embrace] Failed to log exception");
   }
@@ -90,7 +88,7 @@ const initialize = async ({
         "[Embrace] sdkConfig.ios.appId is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
-      return createFalsePromise();
+      return Promise.resolve(false);
     }
 
     const {startCustomExport: customStartEmbraceSDK, ...originalSdkConfig} =
@@ -113,7 +111,7 @@ const initialize = async ({
         "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
-      return createFalsePromise();
+      return Promise.resolve(false);
     } else {
       console.log("[Embrace] native SDK was started");
     }
@@ -167,7 +165,7 @@ const initialize = async ({
       "[Embrace] ErrorUtils is not defined. Not setting exception handler.",
     );
 
-    return createFalsePromise();
+    return Promise.resolve(false);
   }
 
   // setting the global error handler. this is available through React Native's ErrorUtils
@@ -188,7 +186,7 @@ const initialize = async ({
 
       return EmbraceManagerModule.logMessageWithSeverityAndProperties(
         message,
-        ERROR,
+        "error",
         {},
         stackTrace,
       );
@@ -197,7 +195,7 @@ const initialize = async ({
   });
 
   // If there are no errors, it will return true
-  return createTruePromise();
+  return Promise.resolve(true);
 };
 
 const buildVersionStr = ({
@@ -259,46 +257,64 @@ export const clearAllUserPersonas = (): Promise<boolean> => {
   return EmbraceManagerModule.clearAllUserPersonas();
 };
 
-export const logMessage = (
+const logMessage = (
   message: string,
-  severity: "info" | "warning" | "error" = "error",
-  properties?: Properties,
+  severity: LogSeverity = "error",
+  // Android Native method is handling the null case
+  // iOS Native method is waiting for a non-nullable object
+  properties: LogProperties = {},
+  includeStacktrace = true,
 ): Promise<boolean> => {
-  const stacktrace = severity === INFO ? "" : generateStackTrace();
+  const stackTrace =
+    // `"info"` are not supposed to send stack traces
+    // this is also restricted in the Native layers
+    includeStacktrace && severity !== "info" ? generateStackTrace() : "";
+
+  if (properties === null) {
+    console.warn(
+      "[Embrace] `properties` is null. It should be an object of type `Properties`. Native layer will ignore this value.",
+    );
+  }
 
   return EmbraceManagerModule.logMessageWithSeverityAndProperties(
     message,
     severity,
     properties,
-    stacktrace,
+    stackTrace,
+    includeStacktrace,
   );
 };
 
-export const logInfo = (message: string): Promise<boolean> => {
-  return logMessage(message, INFO);
-};
-export const logWarning = (message: string): Promise<boolean> => {
-  return logMessage(message, WARNING);
-};
-export const logError = (message: string): Promise<boolean> => {
-  return logMessage(message, ERROR);
+const logInfo = (message: string): Promise<boolean> => {
+  // `"info"` logs are not supposed to send stack traces as per Product decision
+  // this is also restricted in the Native layers
+  return logMessage(message, "info", undefined, false);
 };
 
-export const logHandledError = (
+const logWarning = (
+  message: string,
+  includeStacktrace = true,
+): Promise<boolean> => {
+  return logMessage(message, "warning", undefined, includeStacktrace);
+};
+
+const logError = (
+  message: string,
+  includeStacktrace = true,
+): Promise<boolean> => {
+  return logMessage(message, "error", undefined, includeStacktrace);
+};
+
+const logHandledError = (
   error: Error,
-  properties?: Properties,
+  properties: LogProperties = {},
 ): Promise<boolean> => {
   if (error instanceof Error) {
     const {stack, message} = error;
-
-    return EmbraceManagerModule.logHandledError(
-      message,
-      stack,
-      properties || {},
-    );
+    return EmbraceManagerModule.logHandledError(message, stack, properties);
   }
 
-  return createFalsePromise();
+  return Promise.resolve(false);
 };
 
 export const startView = (view: string): Promise<string | boolean> => {
@@ -430,5 +446,4 @@ const createTruePromise = (): Promise<boolean> => {
   });
 };
 
-export {initialize, WARNING, ERROR, INFO};
-export {type Properties};
+export {initialize, logError, logHandledError, logInfo, logWarning, logMessage};

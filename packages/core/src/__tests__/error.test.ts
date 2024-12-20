@@ -1,6 +1,5 @@
 import {ComponentError, logIfComponentError} from "../utils/ComponentError";
-
-import {Properties} from "./../index";
+import {LogProperties} from "../../src/interfaces/common";
 
 const mockLogMessageWithSeverityAndProperties = jest.fn();
 
@@ -9,7 +8,7 @@ jest.mock("../EmbraceManagerModule", () => ({
     logMessageWithSeverityAndProperties: (
       message: string,
       errorType: string,
-      properties: Properties,
+      properties: LogProperties,
       componentStack: string,
     ) => {
       mockLogMessageWithSeverityAndProperties(
