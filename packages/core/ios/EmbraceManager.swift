@@ -577,14 +577,14 @@ class EmbraceManager: NSObject {
 
     private func errorCodeFrom(str: String) -> SpanErrorCode? {
         switch str {
-            case "Failure":
-                return .failure
-            case "UserAbandon":
-                return .userAbandon
-            case "Unknown":
-                return .unknown
-            default:
-                return nil
+        case "Failure":
+            return .failure
+        case "UserAbandon":
+            return .userAbandon
+        case "Unknown":
+            return .unknown
+        default:
+            return nil
         }
     }
 
