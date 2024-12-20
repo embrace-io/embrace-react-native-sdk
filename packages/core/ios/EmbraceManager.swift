@@ -22,26 +22,6 @@ private let EVENT_ATTRIBUTES_KEY = "attributes"
 // Crash metadata
 private let EMB_EXC = "emb-js"
 
-class SDKConfig: NSObject {
-    public let appId: String
-    public let appGroupId: String?
-    public let disableCrashReporter: Bool
-    public let disableAutomaticViewCapture: Bool
-    public let endpointBaseUrl: String?
-    public let disableNetworkSpanForwarding: Bool
-    public let ignoredURLs: [String]?
-
-    public init(from: NSDictionary) {
-        self.appId = from["appId"] as? String ?? ""
-        self.appGroupId = from["appGroupId"] as? String
-        self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
-        self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
-        self.endpointBaseUrl = from["endpointBaseUrl"] as? String
-        self.disableNetworkSpanForwarding = from["disableNetworkSpanForwarding"] as? Bool ?? false
-        self.ignoredURLs = from["disabledUrlPatterns"] as? [String] ?? []
-    }
-}
-
 @objc(EmbraceManager)
 class EmbraceManager: NSObject {
     private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
@@ -85,50 +65,7 @@ class EmbraceManager: NSObject {
 
         DispatchQueue.main.async {
             do {
-                var embraceOptions: Embrace.Options {
-                    var crashReporter: CrashReporter?
-                    crashReporter = self.config.disableCrashReporter ? nil : EmbraceCrashReporter()
-
-                    let servicesBuilder = CaptureServiceBuilder()
-
-                    let urlSessionServiceOptions = URLSessionCaptureService.Options(
-                        // allowing to enable/disable NSF by code
-                        injectTracingHeader: !self.config.disableNetworkSpanForwarding,
-                        requestsDataSource: nil,
-                        // disabling tracking for ignored urls
-                        ignoredURLs: self.config.ignoredURLs ?? []
-                    )
-                    // manually adding the URLSessionCaptureService
-                    servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
-
-                    // adding defaults
-                    servicesBuilder.addDefaults()
-
-                    if self.config.disableAutomaticViewCapture {
-                        // removing service depending on code configuration
-                        servicesBuilder.remove(ofType: ViewCaptureService.self)
-                    }
-
-                    var endpoints: Embrace.Endpoints?
-                    if self.config.endpointBaseUrl != nil {
-                        endpoints = Embrace.Endpoints(baseURL: self.config.endpointBaseUrl!,
-                                                      developmentBaseURL: self.config.endpointBaseUrl!,
-                                                      configBaseURL: self.config.endpointBaseUrl!)
-                    }
-
-                    return .init(
-                        appId: self.config.appId,
-                        appGroupId: self.config.appGroupId,
-                        platform: .reactNative,
-                        endpoints: endpoints,
-                        captureServices: servicesBuilder.build(),
-                        crashReporter: crashReporter
-                    )
-                }
-
-                try Embrace.setup(options: embraceOptions)
-                    .start()
-
+                try Embrace.setup(options: initEmbraceOptions(config: self.config, exporters: nil)).start()
                 resolve(true)
             } catch let error {
                 reject("START_EMBRACE_SDK", "Error starting Embrace SDK", error)
