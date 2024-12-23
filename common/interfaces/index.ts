@@ -11,7 +11,6 @@ interface IOSConfig {
   endpointBaseUrl?: string;
 }
 
-// NOTE
 // Today Android is not configurable through code,
 // this is a placeholder for future implementations.
 interface AndroidConfig {}

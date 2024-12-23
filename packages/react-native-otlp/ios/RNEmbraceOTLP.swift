@@ -7,27 +7,7 @@ import OpenTelemetrySdk
 import EmbraceCommonInternal
 import OSLog
 
-class SDKConfig: NSObject {
-    public let appId: String
-    public let appGroupId: String?
-    public let disableCrashReporter: Bool
-    public let disableAutomaticViewCapture: Bool
-    public let endpointBaseUrl: String?
-    public let disableNetworkSpanForwarding: Bool
-    public let ignoredURLs: [String]?
-
-    public init(from: NSDictionary) {
-        self.appId = from.value(forKey: "appId") as? String ?? ""
-        self.appGroupId = from.value(forKey: "appGroupId") as? String
-        self.disableCrashReporter = from.value(forKey: "disableCrashReporter") as? Bool ?? false
-        self.disableAutomaticViewCapture = from.value(forKey: "disableAutomaticViewCapture") as? Bool ?? false
-        self.endpointBaseUrl = from.value(forKey: "endpointBaseUrl") as? String
-        self.disableNetworkSpanForwarding = from.value(forKey: "disableNetworkSpanForwarding") as? Bool ?? false
-        self.ignoredURLs = from.value(forKey: "disabledUrlPatterns") as? [String] ?? []
-    }
-}
-
-@objc class CustomExporterConfig: NSObject {
+@objc class RNExporterConfig: NSObject {
     var endpoint: String?
     var timeout: TimeInterval
     var headers: [(String, String)]?
@@ -38,7 +18,7 @@ class SDKConfig: NSObject {
     self.headers = headers
   }
 
-  @objc static func parse(_ dict: NSDictionary) -> CustomExporterConfig {
+  @objc static func parse(_ dict: NSDictionary) -> RNExporterConfig {
       let endpoint = dict.value(forKey: "endpoint") as? String
 
       var timeoutInterval: TimeInterval = OtlpConfiguration.DefaultTimeoutInterval
@@ -56,7 +36,7 @@ class SDKConfig: NSObject {
         }
     }
 
-      return CustomExporterConfig(endpoint: endpoint, timeout: timeoutInterval, headers: headers)
+      return RNExporterConfig(endpoint: endpoint, timeout: timeoutInterval, headers: headers)
   }
 }
 
@@ -109,7 +89,7 @@ class RNEmbraceOTLP: NSObject {
 
     // OTLP HTTP Trace Exporter
     if let spanConfigDict = spanConfigDict {
-        let config = CustomExporterConfig.parse(spanConfigDict)
+        let config = RNExporterConfig.parse(spanConfigDict)
 
         if let spanEndpoint = config.endpoint {
             let spanTimeout = config.timeout
@@ -121,7 +101,7 @@ class RNEmbraceOTLP: NSObject {
 
     // OTLP HTTP Log Exporter
     if let logConfigDict = logConfigDict {
-        let config = CustomExporterConfig.parse(logConfigDict)
+        let config = RNExporterConfig.parse(logConfigDict)
 
         if let logEndpoint = config.endpoint {
             let logTimeout = config.timeout
@@ -141,64 +121,20 @@ class RNEmbraceOTLP: NSObject {
                                rejecter reject: @escaping RCTPromiseRejectBlock) {
         let config = SDKConfig(from: sdkConfigDict)
 
+        let traceExporter = otlpExportConfigDict.value(forKey: "traceExporter") as? NSDictionary
+        let logExporter = otlpExportConfigDict.value(forKey: "logExporter") as? NSDictionary
+
         DispatchQueue.main.async {
             do {
-                var embraceOptions: Embrace.Options {
-                    var crashReporter: CrashReporter?
-                    if config.disableCrashReporter {
-                        crashReporter = nil
-                    } else {
-                        crashReporter = EmbraceCrashReporter()
-                    }
-
-                    let servicesBuilder = CaptureServiceBuilder()
-
-                    let urlSessionServiceOptions = URLSessionCaptureService.Options(
-                        // allowing to enable/disable NSF by code
-                        injectTracingHeader: !config.disableNetworkSpanForwarding,
-                        requestsDataSource: nil,
-                        // disabling tracking for ignored urls
-                        ignoredURLs: config.ignoredURLs ?? []
-                    )
-
-                    // manually adding the URLSessionCaptureService
-                    servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
-                    // adding defaults
-                    servicesBuilder.addDefaults()
-
-                    if config.disableAutomaticViewCapture {
-                        servicesBuilder.remove(ofType: ViewCaptureService.self)
-                    }
-
-                    var endpoints: Embrace.Endpoints?
-                    if config.endpointBaseUrl != nil {
-                        endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!,
-                                                      developmentBaseURL: config.endpointBaseUrl!,
-                                                      configBaseURL: config.endpointBaseUrl!)
-                    }
-
-                    let traceExporter = otlpExportConfigDict.value(forKey: "traceExporter") as? NSDictionary
-                    let logExporter = otlpExportConfigDict.value(forKey: "logExporter") as? NSDictionary
-
-                    var exportConfig: OpenTelemetryExport?
-                    if traceExporter == nil && logExporter == nil {
-                        os_log("[Embrace] Neither Traces nor Logs configuration were found, skipping custom export.", log: self.log, type: .info)
-                    } else {
-                        exportConfig = self.setHttpExporters(traceExporter, logConfigDict: logExporter)
-                    }
-
-                    return .init(
-                        appId: config.appId,
-                        appGroupId: config.appGroupId,
-                        platform: .reactNative,
-                        endpoints: endpoints,
-                        captureServices: servicesBuilder.build(),
-                        crashReporter: crashReporter,
-                        export: exportConfig
-                    )
+                var exportConfig: OpenTelemetryExport?
+                if traceExporter == nil && logExporter == nil {
+                    os_log("[Embrace] Neither Traces nor Logs configuration were found, skipping custom export.", log: self.log, type: .info)
+                } else {
+                    exportConfig = self.setHttpExporters(traceExporter, logConfigDict: logExporter)
                 }
-
-                try Embrace.setup(options: embraceOptions)
+                
+                // injecting exporters to helper
+                try Embrace.setup(options: initEmbraceOptions(config: config, exporters: exportConfig))
                     .start()
 
                 resolve(true)
