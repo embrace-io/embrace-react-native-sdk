@@ -21,7 +21,8 @@ const initialize = async ({
 }: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
   const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
 
-  // if the sdk started in the native side the follow condition doesn't take any effect
+  // if the sdk started in the native side the follow condition doesn't take any effect.
+  // neither iOS setup() nor start() will be overridden
   if (!hasNativeSDKStarted) {
     if (
       Platform.OS === "ios" &&
@@ -29,30 +30,38 @@ const initialize = async ({
       !sdkConfig?.startCustomExport
     ) {
       console.warn(
-        "[Embrace] `sdkConfig.ios.appId` is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+        "[Embrace] 'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);
     }
 
-    const {startCustomExport: customStartEmbraceSDK, ...originalSdkConfig} =
-      sdkConfig || {};
+    const {startCustomExport, ...originalSdkConfig} = sdkConfig || {};
 
     const startSdkConfig =
       (Platform.OS === "ios" && originalSdkConfig?.ios) || {};
 
     let isStarted;
     try {
-      isStarted = customStartEmbraceSDK
-        ? await customStartEmbraceSDK(startSdkConfig)
-        : await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
+      if (startCustomExport) {
+        if (!startSdkConfig.appId) {
+          console.log(
+            "[Embrace] 'sdkConfig.ios.appId' not found, custom exporters will be used",
+          );
+        }
+
+        isStarted = await startCustomExport(startSdkConfig);
+      } else {
+        isStarted =
+          await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
+      }
     } catch {
       isStarted = false;
     }
 
     if (!isStarted) {
       console.warn(
-        "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+        "[Embrace] we could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);

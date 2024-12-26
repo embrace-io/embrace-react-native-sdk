@@ -9,7 +9,7 @@ import EmbraceOTelInternal
 import OpenTelemetryApi
 
 class SDKConfig: NSObject {
-    public let appId: String
+    public let appId: String?
     public let appGroupId: String?
     public let disableCrashReporter: Bool
     public let disableAutomaticViewCapture: Bool
@@ -18,7 +18,7 @@ class SDKConfig: NSObject {
     public let ignoredURLs: [String]?
     
     public init(from: NSDictionary) {
-        self.appId = from["appId"] as? String ?? ""
+        self.appId = from["appId"] as? String ?? nil
         self.appGroupId = from["appGroupId"] as? String
         self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
         self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
@@ -59,9 +59,18 @@ func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> E
                                           developmentBaseURL: config.endpointBaseUrl!,
                                           configBaseURL: config.endpointBaseUrl!)
         }
-        
+                
+        if (config.appId == nil && exporters != nil) {
+            return .init(
+                export: exporters!,
+                captureServices: servicesBuilder.build(),
+                crashReporter: crashReporter,
+                logLevel: .default
+            )
+        }
+
         return .init(
-            appId: config.appId,
+            appId: config.appId ?? "",
             appGroupId: config.appGroupId,
             platform: .reactNative,
             endpoints: endpoints,
