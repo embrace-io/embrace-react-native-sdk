@@ -3,20 +3,7 @@
  */
 
 interface IOSConfig {
-  appId: string;
-  appGroupId?: string;
-  disableCrashReporter?: boolean;
-  disableAutomaticViewCapture?: boolean;
-  disableNetworkSpanForwarding?: boolean;
-  endpointBaseUrl?: string;
-}
-
-// Today Android is not configurable through code,
-// this is a placeholder for future implementations.
-interface AndroidConfig {}
-
-interface IOSConfig {
-  appId: string;
+  appId?: string;
   appGroupId?: string;
   disableCrashReporter?: boolean;
   disableAutomaticViewCapture?: boolean;
@@ -24,6 +11,10 @@ interface IOSConfig {
   endpointBaseUrl?: string;
   disabledUrlPatterns?: string[];
 }
+
+// Today Android is not configurable through code,
+// this is a placeholder for future implementations.
+interface AndroidConfig {}
 
 interface SDKConfig {
   ios?: IOSConfig;
