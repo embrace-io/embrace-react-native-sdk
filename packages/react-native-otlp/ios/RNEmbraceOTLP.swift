@@ -42,7 +42,7 @@ import OSLog
 
 @objc(RNEmbraceOTLP)
 class RNEmbraceOTLP: NSObject {
-    private var log = OSLog(subsystem: "Embrace", category: "RNEmbraceOTLP")
+  private var log = OSLog(subsystem: "Embrace", category: "RNEmbraceOTLP")
 
   // Http starts
   private func setOtlpHttpTraceExporter(endpoint: String,
@@ -119,7 +119,7 @@ class RNEmbraceOTLP: NSObject {
                                otlpExportConfigDict: NSDictionary,
                                resolve: @escaping RCTPromiseResolveBlock,
                                rejecter reject: @escaping RCTPromiseRejectBlock) {
-        let config = SDKConfig(from: sdkConfigDict)
+        let sdkConfig = SDKConfig(from: sdkConfigDict)
 
         let traceExporter = otlpExportConfigDict.value(forKey: "traceExporter") as? NSDictionary
         let logExporter = otlpExportConfigDict.value(forKey: "logExporter") as? NSDictionary
@@ -127,14 +127,19 @@ class RNEmbraceOTLP: NSObject {
         DispatchQueue.main.async {
             do {
                 var exportConfig: OpenTelemetryExport?
+
                 if traceExporter == nil && logExporter == nil {
-                    os_log("[Embrace] Neither Traces nor Logs configuration were found, skipping custom export.", log: self.log, type: .info)
+                    os_log("no log or trace export configuration found, skipping", log: self.log, type: .info)
                 } else {
                     exportConfig = self.setHttpExporters(traceExporter, logConfigDict: logExporter)
+
+                    if sdkConfig.appId == nil {
+                        os_log("no 'appId' found, using custom export only", log: self.log, type: .info)
+                    }
                 }
-                
+
                 // injecting exporters to helper
-                try Embrace.setup(options: initEmbraceOptions(config: config, exporters: exportConfig))
+                try Embrace.setup(options: initEmbraceOptions(config: sdkConfig, exporters: exportConfig))
                     .start()
 
                 resolve(true)
