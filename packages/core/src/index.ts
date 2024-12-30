@@ -17,6 +17,7 @@ import {
   getNetworkSDKInterceptorProvider,
   NETWORK_INTERCEPTOR_TYPES,
 } from "./interfaces/NetworkMonitoring";
+import useEmbrace from "./hooks/useEmbrace";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
 
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
@@ -460,4 +461,12 @@ const createTruePromise = (): Promise<boolean> => {
   });
 };
 
-export {initialize, logError, logHandledError, logInfo, logWarning, logMessage};
+export {
+  initialize,
+  logError,
+  logHandledError,
+  logInfo,
+  logWarning,
+  logMessage,
+  useEmbrace,
+};
