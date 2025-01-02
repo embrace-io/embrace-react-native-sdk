@@ -1,7 +1,7 @@
 import {waitFor} from "@testing-library/react-native";
 
-import {handleGlobalError} from "../utils/ErrorUtil";
-import {ComponentError, logIfComponentError} from "../utils/ComponentError";
+import {handleGlobalError} from "../utils/error";
+import {ComponentError, logIfComponentError} from "../utils/component";
 import {initialize} from "../index";
 
 const testValue = "Value";
