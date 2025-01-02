@@ -3,6 +3,7 @@ import {Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
+import {useOrientationListener} from "./utils/screenOrientation";
 import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {logIfComponentError} from "./utils/ComponentError";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
@@ -446,4 +447,12 @@ const createTruePromise = (): Promise<boolean> => {
   });
 };
 
-export {initialize, logError, logHandledError, logInfo, logWarning, logMessage};
+export {
+  initialize,
+  logError,
+  logHandledError,
+  logInfo,
+  logWarning,
+  logMessage,
+  useOrientationListener,
+};

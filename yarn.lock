@@ -2512,16 +2512,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@embrace-io/react-native-orientation-change-tracker@workspace:packages/screen-orientation":
-  version: 0.0.0-use.local
-  resolution: "@embrace-io/react-native-orientation-change-tracker@workspace:packages/screen-orientation"
-  dependencies:
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    react-native: ">=0.56.0"
-  languageName: unknown
-  linkType: soft
-
 "@embrace-io/react-native-otlp@workspace:packages/react-native-otlp":
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-otlp@workspace:packages/react-native-otlp"
