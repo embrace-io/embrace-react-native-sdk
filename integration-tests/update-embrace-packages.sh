@@ -78,6 +78,7 @@ embrace_local_dependencies="
   ./artifacts/embrace-io-react-native-otlp-local.tgz
   ./artifacts/embrace-io-react-native-tracer-provider-local.tgz
   ./artifacts/embrace-io-react-native-spans-local.tgz
+  ./artifacts/embrace-io-react-native-apollo-graphql-local.tgz
   $third_party_dependencies
 "
 if [ "$version" = "local" ]; then
@@ -87,6 +88,7 @@ else
     @embrace-io/react-native@$version
     @embrace-io/react-native-tracer-provider@$version
     @embrace-io/react-native-spans@$version
+    @embrace-io/react-native-apollo-graphql@$version
     $third_party_dependencies
   "
 fi
@@ -110,6 +112,7 @@ if [ "$skip_sdk_packages" = false ]; then
     ./pack.sh ../packages/react-native-otlp/ artifacts/embrace-io-react-native-otlp-local.tgz
     ./pack.sh ../packages/react-native-tracer-provider/ artifacts/embrace-io-react-native-tracer-provider-local.tgz
     ./pack.sh ../packages/spans/ artifacts/embrace-io-react-native-spans-local.tgz
+    ./pack.sh ../packages/apollo-graphql/ artifacts/embrace-io-react-native-apollo-graphql-local.tgz
   fi
 
   echo "========================================"

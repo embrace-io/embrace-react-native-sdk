@@ -53,6 +53,13 @@ export default function TabLayout() {
           tabBarAccessibilityLabel: "NSF TESTING",
         }}
       />
+      <Tabs.Screen
+        name="apollo"
+        options={{
+          title: "apollo",
+          tabBarAccessibilityLabel: "APOLLO GRAPHQL TESTING",
+        }}
+      />
     </Tabs>
   );
 }
