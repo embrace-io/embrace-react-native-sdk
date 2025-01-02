@@ -2544,16 +2544,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@embrace-io/react-native-webview-tracker@workspace:packages/webview-tracker":
-  version: 0.0.0-use.local
-  resolution: "@embrace-io/react-native-webview-tracker@workspace:packages/webview-tracker"
-  dependencies:
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    react-native: ">=0.56.0"
-  languageName: unknown
-  linkType: soft
-
 "@embrace-io/react-native@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native@workspace:packages/core"
