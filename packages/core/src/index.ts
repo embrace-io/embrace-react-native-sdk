@@ -3,7 +3,7 @@ import {Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {getEmbraceOTLP, setEmbraceOTLP} from "./utils/otlp";
+import {EmbraceOTLP} from "./utils/otlp";
 import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {logIfComponentError} from "./utils/ComponentError";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
@@ -96,9 +96,10 @@ const initialize = async ({
     }
 
     const {exporters: otlpExporters, ...originalSdkConfig} = sdkConfig || {};
+    const embraceOTLP = new EmbraceOTLP(logger);
 
     try {
-      getEmbraceOTLP();
+      embraceOTLP.get();
     } catch {
       if (otlpExporters) {
         logger.error(
@@ -115,7 +116,7 @@ const initialize = async ({
       let startNativeEmbraceSDKWithOTLP = null;
       // if package is installed/available and exporters are provided get the start method
       if (otlpExporters) {
-        startNativeEmbraceSDKWithOTLP = setEmbraceOTLP(logger, otlpExporters);
+        startNativeEmbraceSDKWithOTLP = embraceOTLP.set(otlpExporters);
       }
 
       isStarted = startNativeEmbraceSDKWithOTLP
