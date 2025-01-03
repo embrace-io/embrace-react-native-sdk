@@ -176,23 +176,21 @@ Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE)
 Tweak the `onCreate` method following this snippet to initialize the exporters with the minimum configuration needed. Notice that you already have all of what you need, so no extra imports are required into this file.
 
 ```kotlin
-    ...
-    // Preparing Span Exporter config with the minimum required
-    val spanExporter = OtlpHttpSpanExporter.builder()
-                                    .setEndpoint("https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/traces")
-                                    .addHeader("Authorization", "Basic __YOUR TOKEN__")
+// Preparing Span Exporter config with the minimum required
+val spanExporter = OtlpHttpSpanExporter.builder()
+                                .setEndpoint("https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/traces")
+                                .addHeader("Authorization", "Basic __YOUR TOKEN__")
 
-    // Preparing Log Exporter config with the minimum required
-    val logExporter = OtlpHttpLogRecordExporter.builder()
-                                    .setEndpoint("https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/logs")
-                                    .addHeader("Authorization", "Basic __YOUR TOKEN__")
+// Preparing Log Exporter config with the minimum required
+val logExporter = OtlpHttpLogRecordExporter.builder()
+                                .setEndpoint("https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/logs")
+                                .addHeader("Authorization", "Basic __YOUR TOKEN__")
 
-    Embrace.getInstance().addSpanExporter(spanExporter.build())
-    Embrace.getInstance().addLogRecordExporter(logExporter.build())
+Embrace.getInstance().addSpanExporter(spanExporter.build())
+Embrace.getInstance().addLogRecordExporter(logExporter.build())
 
-    // This is the line already added by the install script
-    Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE)
-    ...
+// This is the line already added by the install script
+Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE)
 ```
 
 
