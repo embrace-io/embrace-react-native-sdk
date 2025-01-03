@@ -6,12 +6,16 @@ import * as embracePackage from "../package.json";
 import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {logIfComponentError} from "./utils/ComponentError";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
+import EmbraceLogger from "./logger";
 import {
   LogSeverity,
   SessionStatus,
   SDKConfig,
   MethodType,
   LogProperties,
+  OTLPExporterConfig,
+  IOSConfig,
+  AndroidConfig,
 } from "./interfaces/common";
 import {
   getNetworkSDKInterceptorProvider,
@@ -25,6 +29,8 @@ const tracking = require("promise/setimmediate/rejection-tracking");
 
 const STACK_LIMIT = 200;
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
+const RN_EMBRACE_OTLP_PATH =
+  "../../../../@embrace-io/react-native-otlp/lib/src";
 
 const noOp = () => {};
 
@@ -77,44 +83,97 @@ const handleError = async (error: Error, callback: () => void) => {
 const isObjectNonEmpty = (obj?: object): boolean =>
   Object.keys(obj || {}).length > 0;
 
+// Placeholder for `@embrace-io/react-native-otlp`
+let RNEmbraceOTLP: {
+  initialize: (
+    otlpExporterConfig: OTLPExporterConfig,
+  ) => (sdkConfig: IOSConfig | AndroidConfig) => Promise<boolean>;
+} | null = null;
+
 const initialize = async ({
-  patch,
   sdkConfig,
+  patch,
 }: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
+  const logger = new EmbraceLogger(console, sdkConfig?.debug ?? true);
   const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
 
   if (!hasNativeSDKStarted) {
     if (Platform.OS === "ios" && !sdkConfig?.ios?.appId) {
-      console.warn(
-        "[Embrace] sdkConfig.ios.appId is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+      logger.warn(
+        "sdkConfig.ios.appId is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);
     }
 
-    const {startCustomExport: customStartEmbraceSDK, ...originalSdkConfig} =
-      sdkConfig || {};
+    const {exporters: otlpExporters, ...originalSdkConfig} = sdkConfig || {};
+
+    try {
+      // TBD: Still an issue with Metro bundler
+      // https://github.com/facebook/metro/issues/666, will use require.context for now
+      // RNEmbraceOTLP = require("@embrace-io/react-native-otlp");
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const context = require.context(
+        RN_EMBRACE_OTLP_PATH,
+        false,
+        /index\.js$/,
+      );
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      context.keys().forEach(filename => {
+        // Init OTLP (if available)
+        RNEmbraceOTLP = context(filename);
+      });
+    } catch {
+      if (otlpExporters) {
+        logger.error(
+          "an error ocurred when checking if `@embrace-io/react-native-otlp` was installed",
+        );
+      }
+    }
 
     const startSdkConfig =
       (Platform.OS === "ios" && originalSdkConfig?.ios) || {};
 
     let isStarted;
     try {
-      isStarted = customStartEmbraceSDK
-        ? await customStartEmbraceSDK(startSdkConfig)
-        : await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
+      let startNativeEmbraceSDKWithOTLP = null;
+      // if package is installed/available and exporters are provided get the start method
+      if (otlpExporters) {
+        if (RNEmbraceOTLP?.initialize) {
+          startNativeEmbraceSDKWithOTLP =
+            RNEmbraceOTLP?.initialize(otlpExporters);
+
+          logger.log(
+            "@embrace-io/react-native-otlp` is installed and will be used",
+          );
+        } else {
+          logger.log(
+            "`@embrace-io/react-native-otlp` is not installed and it's required. OTLP exporters will not be used",
+          );
+        }
+      }
+
+      isStarted = startNativeEmbraceSDKWithOTLP
+        ? // If OTLP exporter package is available, use it
+          await startNativeEmbraceSDKWithOTLP(startSdkConfig)
+        : // Otherwise, uses the core package
+          await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
     } catch {
       isStarted = false;
     }
 
     if (!isStarted) {
-      console.warn(
-        "[Embrace] We could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+      logger.warn(
+        "we could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);
     } else {
-      console.log("[Embrace] native SDK was started");
+      logger.log("native SDK was started");
     }
   }
 
@@ -155,17 +214,14 @@ const initialize = async ({
         }
       }
     } catch (e) {
-      console.warn(
-        "[Embrace] We were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle.",
+      logger.warn(
+        "we were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle.",
       );
     }
   }
 
   if (!ErrorUtils) {
-    console.warn(
-      "[Embrace] ErrorUtils is not defined. Not setting exception handler.",
-    );
-
+    logger.warn("ErrorUtils is not defined. Not setting exception handler.");
     return Promise.resolve(false);
   }
 
