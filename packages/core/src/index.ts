@@ -3,6 +3,7 @@ import {Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
+import {getEmbraceOTLP, setEmbraceOTLP} from "./utils/otlp";
 import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {logIfComponentError} from "./utils/ComponentError";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
@@ -13,9 +14,6 @@ import {
   SDKConfig,
   MethodType,
   LogProperties,
-  OTLPExporterConfig,
-  IOSConfig,
-  AndroidConfig,
 } from "./interfaces/common";
 import {
   getNetworkSDKInterceptorProvider,
@@ -29,8 +27,6 @@ const tracking = require("promise/setimmediate/rejection-tracking");
 
 const STACK_LIMIT = 200;
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
-const RN_EMBRACE_OTLP_PATH =
-  "../../../../@embrace-io/react-native-otlp/lib/src";
 
 const noOp = () => {};
 
@@ -83,13 +79,6 @@ const handleError = async (error: Error, callback: () => void) => {
 const isObjectNonEmpty = (obj?: object): boolean =>
   Object.keys(obj || {}).length > 0;
 
-// Placeholder for `@embrace-io/react-native-otlp`
-let RNEmbraceOTLP: {
-  initialize: (
-    otlpExporterConfig: OTLPExporterConfig,
-  ) => (sdkConfig: IOSConfig | AndroidConfig) => Promise<boolean>;
-} | null = null;
-
 const initialize = async ({
   sdkConfig,
   patch,
@@ -109,24 +98,7 @@ const initialize = async ({
     const {exporters: otlpExporters, ...originalSdkConfig} = sdkConfig || {};
 
     try {
-      // TBD: Still an issue with Metro bundler
-      // https://github.com/facebook/metro/issues/666, will use require.context for now
-      // RNEmbraceOTLP = require("@embrace-io/react-native-otlp");
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const context = require.context(
-        RN_EMBRACE_OTLP_PATH,
-        false,
-        /index\.js$/,
-      );
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      context.keys().forEach(filename => {
-        // Init OTLP (if available)
-        RNEmbraceOTLP = context(filename);
-      });
+      getEmbraceOTLP();
     } catch {
       if (otlpExporters) {
         logger.error(
@@ -143,18 +115,7 @@ const initialize = async ({
       let startNativeEmbraceSDKWithOTLP = null;
       // if package is installed/available and exporters are provided get the start method
       if (otlpExporters) {
-        if (RNEmbraceOTLP?.initialize) {
-          startNativeEmbraceSDKWithOTLP =
-            RNEmbraceOTLP?.initialize(otlpExporters);
-
-          logger.log(
-            "@embrace-io/react-native-otlp` is installed and will be used",
-          );
-        } else {
-          logger.log(
-            "`@embrace-io/react-native-otlp` is not installed and it's required. OTLP exporters will not be used",
-          );
-        }
+        startNativeEmbraceSDKWithOTLP = setEmbraceOTLP(logger, otlpExporters);
       }
 
       isStarted = startNativeEmbraceSDKWithOTLP
