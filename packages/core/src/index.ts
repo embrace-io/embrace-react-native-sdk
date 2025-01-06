@@ -3,10 +3,10 @@ import {Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
+import {useOrientationListener} from "./utils/screenOrientation";
 import {EmbraceOTLP} from "./utils/otlp";
 import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {logIfComponentError} from "./utils/ComponentError";
-import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
 import EmbraceLogger from "./logger";
 import {
   LogSeverity,
@@ -15,10 +15,6 @@ import {
   MethodType,
   LogProperties,
 } from "./interfaces/common";
-import {
-  getNetworkSDKInterceptorProvider,
-  NETWORK_INTERCEPTOR_TYPES,
-} from "./interfaces/NetworkMonitoring";
 import useEmbrace from "./hooks/useEmbrace";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
 
@@ -425,48 +421,6 @@ export const getDeviceId = (): Promise<string> =>
 export const getCurrentSessionId = (): Promise<string> =>
   EmbraceManagerModule.getCurrentSessionId();
 
-export const applyNetworkInterceptors = (
-  networkSDKInstance: NETWORK_INTERCEPTOR_TYPES,
-): Promise<boolean> => {
-  if (!networkSDKInstance) {
-    console.warn(
-      `[Embrace] The Axios instance was not provided. Interceptor was not applied.`,
-    );
-    return createFalsePromise();
-  }
-
-  const networkProviderSDK =
-    getNetworkSDKInterceptorProvider(networkSDKInstance);
-
-  if (!networkProviderSDK) {
-    console.warn(
-      `[Embrace] The provider is not supported. Interceptor was not applied.`,
-    );
-    return createFalsePromise();
-  }
-
-  const {applyInterceptor} = ApplyInterceptorStrategy[networkProviderSDK];
-
-  applyInterceptor(networkSDKInstance);
-  return createTruePromise();
-};
-
-const createFalsePromise = (): Promise<boolean> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(false);
-    }, 0);
-  });
-};
-
-const createTruePromise = (): Promise<boolean> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(true);
-    }, 0);
-  });
-};
-
 export {
   initialize,
   logError,
@@ -475,4 +429,5 @@ export {
   logWarning,
   logMessage,
   useEmbrace,
+  useOrientationListener,
 };
