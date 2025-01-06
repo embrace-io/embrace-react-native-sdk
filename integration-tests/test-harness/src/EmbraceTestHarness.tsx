@@ -5,7 +5,6 @@ import {styles} from "./helpers/styles";
 import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces/Config";
 import {EmbraceExpoTestHarness} from "./EmbraceExpoTestHarness";
 import {EmbraceReactNativeTestHarness} from "./EmbraceReactNativeTestHarness";
-import {CONFIG} from "./helpers/otlp";
 
 type Props = {
   sdkConfig: SDKConfig;
@@ -18,10 +17,11 @@ const EmbraceTestHarness = ({
   navigationStyle,
   allowCustomExport = false,
 }: Props) => {
-  const {isPending} = useEmbrace(
-    sdkConfig,
-    allowCustomExport ? CONFIG : undefined,
-  );
+  if (!allowCustomExport) {
+    sdkConfig.exporters = undefined;
+  }
+
+  const {isPending} = useEmbrace(sdkConfig);
 
   if (isPending) {
     return (

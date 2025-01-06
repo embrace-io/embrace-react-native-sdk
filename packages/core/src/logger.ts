@@ -10,9 +10,11 @@ interface MessageFormatter {
 
 class EmbraceLogger implements Logger, MessageFormatter {
   public out: Logger;
+  public enabled: boolean;
 
-  constructor(out: Logger) {
+  constructor(out: Logger, enabled = true) {
     this.out = out;
+    this.enabled = enabled;
   }
 
   public format(message: string): string {
@@ -20,15 +22,21 @@ class EmbraceLogger implements Logger, MessageFormatter {
   }
 
   public log(message: string) {
-    this.out.log(this.format(message));
+    if (this.enabled) {
+      this.out.log(this.format(message));
+    }
   }
 
   public warn(message: string) {
-    this.out.warn(this.format(message));
+    if (this.enabled) {
+      this.out.warn(this.format(message));
+    }
   }
 
   public error(message: string) {
-    this.out.error(this.format(message));
+    if (this.enabled) {
+      this.out.error(this.format(message));
+    }
   }
 }
 

@@ -2,6 +2,16 @@
  * Common interfaces shared by Embrace Packages
  */
 
+interface SDKConfig {
+  ios?: IOSConfig;
+  exporters?: OTLPExporterConfig;
+  debug?: boolean;
+}
+
+// Today Android is not configurable through code,
+// this is a placeholder for future implementations.
+interface AndroidConfig {}
+
 interface IOSConfig {
   appId?: string;
   appGroupId?: string;
@@ -12,15 +22,16 @@ interface IOSConfig {
   disabledUrlPatterns?: string[];
 }
 
-// Today Android is not configurable through code,
-// this is a placeholder for future implementations.
-interface AndroidConfig {}
+interface ExporterConfig {
+  endpoint: string;
+  headers?: {key: string; token: string}[];
+  timeout?: number;
+}
 
-interface SDKConfig {
-  ios?: IOSConfig;
-  startCustomExport?: (
-    config: IOSConfig | NonNullable<object>,
-  ) => Promise<boolean>;
+interface OTLPExporterConfig {
+  logExporter?: ExporterConfig;
+  traceExporter?: ExporterConfig;
+  otlpPackagePath?: string;
 }
 
 type LogSeverity = "warning" | "info" | "error";
@@ -65,4 +76,6 @@ export {
   LogProperties,
   SessionStatus,
   MethodType,
+  OTLPExporterConfig,
+  ExporterConfig,
 };
