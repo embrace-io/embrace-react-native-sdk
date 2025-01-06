@@ -3,7 +3,6 @@ import {Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {useOrientationListener} from "./utils/screenOrientation";
 import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
 import {logIfComponentError} from "./utils/ComponentError";
 import {
@@ -400,12 +399,6 @@ export const getDeviceId = (): Promise<string> =>
 export const getCurrentSessionId = (): Promise<string> =>
   EmbraceManagerModule.getCurrentSessionId();
 
-export {
-  initialize,
-  logError,
-  logHandledError,
-  logInfo,
-  logWarning,
-  logMessage,
-  useOrientationListener,
-};
+export {initialize, logError, logHandledError, logInfo, logWarning, logMessage};
+
+export * from "./hooks/useOrientationListener";

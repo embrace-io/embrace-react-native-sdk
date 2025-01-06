@@ -1,6 +1,7 @@
 import {Dimensions, ScaledSize} from "react-native";
 import {useCallback, useEffect, useRef} from "react";
 
+import EmbraceLogger from "../logger";
 import {addBreadcrumb} from "..";
 
 type ScreenOrientation = "portrait" | "landscape";
@@ -49,6 +50,7 @@ const logOrientationChange = (
   addBreadcrumb(`The App started in ${orientation} mode`);
 };
 
+const logger = new EmbraceLogger(console);
 const useOrientationListener = () => {
   const initRef = useRef(false);
   const orientationRef = useRef<Orientation>();
@@ -58,8 +60,8 @@ const useOrientationListener = () => {
       const newOrientation = getOrientation(screen);
 
       if (!newOrientation) {
-        console.warn(
-          "[Embrace] We could not determine the screen measurements. Orientation log skipped.",
+        logger.warn(
+          "we could not determine the screen measurements. Orientation log skipped.",
         );
 
         return;
