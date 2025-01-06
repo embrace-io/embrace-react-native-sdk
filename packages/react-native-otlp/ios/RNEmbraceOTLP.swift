@@ -129,12 +129,12 @@ class RNEmbraceOTLP: NSObject {
                 var exportConfig: OpenTelemetryExport?
 
                 if traceExporter == nil && logExporter == nil {
-                    os_log("no log or trace export configuration found, skipping", log: self.log, type: .info)
+                    os_log("[Embrace] no log or trace export configuration found, skipping", log: self.log, type: .info)
                 } else {
                     exportConfig = self.setHttpExporters(traceExporter, logConfigDict: logExporter)
 
                     if sdkConfig.appId == nil {
-                        os_log("no 'appId' found, using custom export only", log: self.log, type: .info)
+                        os_log("[Embrace] no 'appId' found, using custom export only", log: self.log, type: .info)
                     }
                 }
 
