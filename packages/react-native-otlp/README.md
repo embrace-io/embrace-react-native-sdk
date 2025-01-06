@@ -173,7 +173,7 @@ Similar to iOS, if you already ran the install script you will see the following
 Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE)
 ```
 
-Tweak the `onCreate` method following this snippet to initialize the exporters with the minimum configuration needed. Notice that you already have all of what you need, so no extra imports are required into this file.
+Tweak the `onCreate` method using this following this snippet to initialize the exporters with the minimum configuration needed. Notice that you already have all of what you need, so no extra imports are required into this file.
 
 ```kotlin
 // Preparing Span Exporter config with the minimum required
