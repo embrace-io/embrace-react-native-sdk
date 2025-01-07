@@ -10,7 +10,7 @@ import {
   setUserEmail,
   setUserIdentifier,
   setUsername,
-} from "../utils/user";
+} from "../api/user";
 
 jest.useFakeTimers();
 

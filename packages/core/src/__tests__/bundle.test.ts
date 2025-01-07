@@ -1,4 +1,4 @@
-import {setJavaScriptBundlePath} from "../utils/javascript";
+import {setJavaScriptBundlePath} from "../api/bundle";
 
 const mockSetJavaScriptBundlePath = jest.fn();
 

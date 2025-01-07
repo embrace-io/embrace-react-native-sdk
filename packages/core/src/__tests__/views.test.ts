@@ -1,4 +1,4 @@
-import {endView, startView} from "../utils/views";
+import {endView, startView} from "../api/views";
 
 const mockStartView = jest.fn();
 const mockEndView = jest.fn();

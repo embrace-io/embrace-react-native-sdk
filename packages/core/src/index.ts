@@ -4,9 +4,9 @@ import {Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {setJavaScriptPatch} from "./utils/javascript";
-import {buildPackageVersion, isObjectNonEmpty} from "./utils/global";
-import {handleError, handleGlobalError} from "./utils/error";
+import {setJavaScriptPatch} from "./api/bundle";
+import {buildPackageVersion} from "./utils";
+import {handleError, handleGlobalError} from "./api/error";
 import {SDKConfig} from "./interfaces";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
 
@@ -65,13 +65,9 @@ const initialize = async ({
     setJavaScriptPatch(patch);
   }
 
-  if (
-    isObjectNonEmpty(reactNativeVersion) &&
-    isObjectNonEmpty(reactNativeVersion.version)
-  ) {
-    EmbraceManagerModule.setReactNativeVersion(
-      buildPackageVersion(reactNativeVersion.version),
-    );
+  const packageVersion = buildPackageVersion(reactNativeVersion);
+  if (packageVersion) {
+    EmbraceManagerModule.setReactNativeVersion(packageVersion);
   }
 
   // Only attempt to check for CodePush bundle URL in release mode. Otherwise CodePush will throw an exception.
@@ -137,13 +133,14 @@ const initialize = async ({
   return Promise.resolve(true);
 };
 
-export * from "./utils/log";
-export * from "./utils/session";
-export * from "./utils/breadcrumb";
-export * from "./utils/views";
-export * from "./utils/network";
-export * from "./utils/user";
-export * from "./utils/error";
-export * from "./utils/component";
+export * from "./api/breadcrumb";
+export * from "./api/bundle";
+export * from "./api/component";
+export * from "./api/error";
+export * from "./api/log";
+export * from "./api/session";
+export * from "./api/views";
+export * from "./api/network";
+export * from "./api/user";
 
 export {initialize};

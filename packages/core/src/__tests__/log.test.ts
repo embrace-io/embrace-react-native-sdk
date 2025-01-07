@@ -1,4 +1,4 @@
-import {logError, logInfo, logMessage, logWarning} from "../utils/log";
+import {logError, logInfo, logMessage, logWarning} from "../api/log";
 import {LogSeverity, LogProperties} from "../interfaces";
 
 const MOCK_STACKTRACE = "this is a fake stack trace";
@@ -35,8 +35,8 @@ jest.mock("../EmbraceManagerModule", () => ({
 }));
 
 const mockGenerateStackTrace = jest.fn();
-jest.mock("../utils/global", () => ({
-  ...jest.requireActual("../utils/global"),
+jest.mock("../utils", () => ({
+  ...jest.requireActual("../utils"),
   generateStackTrace: () => mockGenerateStackTrace(),
 }));
 

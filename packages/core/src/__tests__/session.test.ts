@@ -4,7 +4,7 @@ import {
   getDeviceId,
   getLastRunEndState,
   removeSessionProperty,
-} from "../utils/session";
+} from "../api/session";
 
 const mockAddSessionProperty = jest.fn();
 const mockRemoveSessionProperty = jest.fn();

@@ -1,7 +1,7 @@
 import {LogSeverity, LogProperties} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
-import {generateStackTrace} from "./global";
+import {generateStackTrace} from "../utils";
 
 const logMessage = (
   message: string,

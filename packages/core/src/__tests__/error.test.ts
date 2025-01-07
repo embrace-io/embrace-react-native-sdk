@@ -1,5 +1,5 @@
-import {logHandledError} from "../utils/log";
-import {ComponentError, logIfComponentError} from "../utils/component";
+import {logHandledError} from "../api/log";
+import {ComponentError, logIfComponentError} from "../api/component";
 import {LogProperties} from "../../src/interfaces";
 
 const mockLogHandledError = jest.fn();
@@ -29,10 +29,9 @@ jest.mock("../EmbraceManagerModule", () => ({
   },
 }));
 
-const mockGenerateStackTrace = jest.fn();
-jest.mock("../utils/error", () => ({
-  ...jest.requireActual("../utils/error"),
-  generateStackTrace: () => mockGenerateStackTrace(),
+jest.mock("../utils", () => ({
+  ...jest.requireActual("../utils"),
+  generateStackTrace: () => jest.fn(),
 }));
 
 beforeEach(() => {

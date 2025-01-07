@@ -1,4 +1,4 @@
-import {addBreadcrumb, logScreen} from "../utils/breadcrumb";
+import {addBreadcrumb, logScreen} from "../api/breadcrumb";
 
 const mockAddBreadcrumb = jest.fn();
 
