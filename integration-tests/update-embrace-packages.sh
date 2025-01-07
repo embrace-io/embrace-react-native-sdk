@@ -85,6 +85,7 @@ if [ "$version" = "local" ]; then
 else
   embrace_dependencies="
     @embrace-io/react-native@$version
+    @embrace-io/react-native-otlp@$version
     @embrace-io/react-native-tracer-provider@$version
     @embrace-io/react-native-spans@$version
     $third_party_dependencies

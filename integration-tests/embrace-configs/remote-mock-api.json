@@ -5,5 +5,5 @@
   "disable_view_capture": true,
   "endpoint": "https://mock-api.emb-eng.com/namespace/<namespace>/api",
   "enable_network_span_forwarding": true,
-  "disabled_url_patterns": ["otlp-gateway-.*.grafana."]
+  "disabled_url_patterns": ["grafana.net"]
 }
