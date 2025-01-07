@@ -5,7 +5,9 @@ import {
 } from "@expo/config-plugins";
 
 import {
+  withAndroidEmbraceApplySwazzlerPlugin,
   withAndroidEmbraceJSONConfig,
+  withAndroidEmbraceOnCreate,
   withAndroidEmbraceSwazzlerDependency,
 } from "../plugin/withAndroidEmbrace";
 
@@ -15,7 +17,9 @@ const os = require("os");
 const fs = require("fs");
 
 const mockWithProjectBuildGradle = jest.fn();
+const mockWithAppBuildGradle = jest.fn();
 const mockWithDangerousMod = jest.fn();
+const mockWithMainApplication = jest.fn();
 
 const getMockExpoConfig = (): ExpoConfig => ({name: "", slug: ""});
 const getMockModConfig = (props: {
@@ -56,6 +60,14 @@ jest.mock("@expo/config-plugins", () => {
       config: ExpoConfig,
       modFunc: (cfg: ExportedConfigWithProps) => ExportedConfigWithProps,
     ) => mockWithProjectBuildGradle(modFunc),
+    withAppBuildGradle: (
+      config: ExpoConfig,
+      modFunc: (cfg: ExportedConfigWithProps) => ExportedConfigWithProps,
+    ) => mockWithAppBuildGradle(modFunc),
+    withMainApplication: (
+      config: ExpoConfig,
+      modFunc: (cfg: ExportedConfigWithProps) => ExportedConfigWithProps,
+    ) => mockWithMainApplication(modFunc),
     withDangerousMod: (
       config: ExpoConfig,
       props: [
@@ -110,7 +122,7 @@ describe("Expo Config Plugin", () => {
   });
 
   describe("withAndroidEmbraceSwazzlerDependency", () => {
-    it("inserts the Swazzler dependency in a groovy gradle file", async () => {
+    it("inserts the Swazzler dependency in a groovy project gradle file", async () => {
       const beforeSwazzler = readMockFile("projectBuildWithoutSwazzler.gradle");
       const afterSwazzler = readMockFile("projectBuildWithSwazzler.gradle");
       const mockConfig = getMockModConfig({
@@ -140,7 +152,8 @@ describe("Expo Config Plugin", () => {
       )) as ExportedConfigWithProps;
       expect(updatedAgainConfig.modResults.contents).toEqual(afterSwazzler);
     });
-    it("inserts the Swazzler dependency in a kotlin gradle file", async () => {
+
+    it("inserts the Swazzler dependency in a kotlin project gradle file", async () => {
       const beforeSwazzler = readMockFile(
         "projectBuildWithoutSwazzler.gradle.kts",
       );
@@ -171,6 +184,134 @@ describe("Expo Config Plugin", () => {
         updatedConfig,
       )) as ExportedConfigWithProps;
       expect(updatedAgainConfig.modResults.contents).toEqual(afterSwazzler);
+    });
+  });
+
+  describe("withAndroidEmbraceApplySwazzlerPlugin", () => {
+    it("applies the Swazzler plugin in a groovy app gradle file", async () => {
+      const beforeSwazzler = readMockFile("appBuildWithoutSwazzler.gradle");
+      const afterSwazzler = readMockFile("appBuildWithSwazzler.gradle");
+      const mockConfig = getMockModConfig({
+        platform: "android",
+        language: "groovy",
+        contents: beforeSwazzler,
+      });
+
+      withAndroidEmbraceApplySwazzlerPlugin(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "",
+      });
+
+      expect(mockWithAppBuildGradle).toHaveBeenCalled();
+
+      const modFunc = mockWithAppBuildGradle.mock.lastCall[0];
+      const updatedConfig = (await modFunc(
+        mockConfig,
+      )) as ExportedConfigWithProps;
+
+      expect(updatedConfig.modResults.contents).toEqual(afterSwazzler);
+
+      // Running again should not do any more modification
+      const updatedAgainConfig = (await modFunc(
+        updatedConfig,
+      )) as ExportedConfigWithProps;
+      expect(updatedAgainConfig.modResults.contents).toEqual(afterSwazzler);
+    });
+
+    it("applies the Swazzler plugin in a kotlin app gradle file", async () => {
+      const beforeSwazzler = readMockFile("appBuildWithoutSwazzler.gradle.kts");
+      const afterSwazzler = readMockFile("appBuildWithSwazzler.gradle.kts");
+      const mockConfig = getMockModConfig({
+        platform: "android",
+        language: "kt",
+        contents: beforeSwazzler,
+      });
+
+      withAndroidEmbraceApplySwazzlerPlugin(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "",
+      });
+
+      expect(mockWithAppBuildGradle).toHaveBeenCalled();
+
+      const modFunc = mockWithAppBuildGradle.mock.lastCall[0];
+      const updatedConfig = (await modFunc(
+        mockConfig,
+      )) as ExportedConfigWithProps;
+
+      expect(updatedConfig.modResults.contents).toEqual(afterSwazzler);
+
+      // Running again should not do any more modification
+      const updatedAgainConfig = (await modFunc(
+        updatedConfig,
+      )) as ExportedConfigWithProps;
+      expect(updatedAgainConfig.modResults.contents).toEqual(afterSwazzler);
+    });
+  });
+
+  describe("withAndroidEmbraceOnCreate", () => {
+    it("adds the Embrace initialization call to MainApplication.java", async () => {
+      const beforeEmbrace = readMockFile("MainApplicationWithoutEmbrace.java");
+      const afterEmbrace = readMockFile("MainApplicationWithEmbrace.java");
+      const mockConfig = getMockModConfig({
+        platform: "android",
+        language: "java",
+        contents: beforeEmbrace,
+      });
+
+      withAndroidEmbraceOnCreate(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "",
+      });
+
+      expect(mockWithMainApplication).toHaveBeenCalled();
+
+      const modFunc = mockWithMainApplication.mock.lastCall[0];
+      const updatedConfig = (await modFunc(
+        mockConfig,
+      )) as ExportedConfigWithProps;
+
+      expect(updatedConfig.modResults.contents).toEqual(afterEmbrace);
+
+      // Running again should not do any more modification
+      const updatedAgainConfig = (await modFunc(
+        updatedConfig,
+      )) as ExportedConfigWithProps;
+      expect(updatedAgainConfig.modResults.contents).toEqual(afterEmbrace);
+    });
+
+    it("adds the Embrace initialization call to MainApplication.kt", async () => {
+      const beforeEmbrace = readMockFile("MainApplicationWithoutEmbrace.kt");
+      const afterEmbrace = readMockFile("MainApplicationWithEmbrace.kt");
+      const mockConfig = getMockModConfig({
+        platform: "android",
+        language: "kotlin",
+        contents: beforeEmbrace,
+      });
+
+      withAndroidEmbraceOnCreate(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "",
+      });
+
+      expect(mockWithMainApplication).toHaveBeenCalled();
+
+      const modFunc = mockWithMainApplication.mock.lastCall[0];
+      const updatedConfig = (await modFunc(
+        mockConfig,
+      )) as ExportedConfigWithProps;
+
+      expect(updatedConfig.modResults.contents).toEqual(afterEmbrace);
+
+      // Running again should not do any more modification
+      const updatedAgainConfig = (await modFunc(
+        updatedConfig,
+      )) as ExportedConfigWithProps;
+      expect(updatedAgainConfig.modResults.contents).toEqual(afterEmbrace);
     });
   });
 });

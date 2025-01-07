@@ -14,7 +14,8 @@ const path = require("path");
 const fs = require("fs");
 
 const androidBuildToolsRE = /(\s*)classpath.*com\.android\.tools\.build:gradle/;
-const androidPluginRE = /(\s*)apply plugin.*com\.android\.application/;
+const androidLegacyPluginRE = /(\s*)apply plugin.*com\.android\.application/;
+const androidPluginRE = /(\s*)id.*\(.*com\.android\.application.*\)\.*/;
 const importAndroidAppRE = /(\s*)import android\.app\.Application/;
 const onCreateRE = /(\s*)super\.onCreate\(\)/;
 
@@ -125,16 +126,28 @@ const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
       return config;
     }
 
-    const success = addAfter(
+    // Look for the 'com.android.application' plugin being applied, which all projects should do, so that we can
+    // apply our plugin underneath. Check for both the legacy and plugins block method of adding plugins:
+    // https://developer.android.com/build/migrate-to-kotlin-dsl#migrate-buildscript
+
+    const addLegacyPlugin = addAfter(
       lines,
-      // Look for the 'com.android.application' plugin being applied, which all projects should do, so that we can
-      // apply our plugin underneath
-      androidPluginRE,
-      // TODO, is there different syntax here if it's a kts file?
+      androidLegacyPluginRE,
       'apply plugin: "embrace-swazzler"',
     );
 
-    if (!success) {
+    if (addLegacyPlugin) {
+      config.modResults.contents = lines.join("\n");
+      return config;
+    }
+
+    const addPlugin = addAfter(
+      lines,
+      androidPluginRE,
+      'id("embrace-swazzler")',
+    );
+
+    if (!addPlugin) {
       throw new Error(
         "failed to apply the Embrace Swazzler plugin in the project's app gradle file",
       );
