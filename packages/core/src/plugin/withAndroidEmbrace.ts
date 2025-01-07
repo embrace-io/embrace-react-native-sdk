@@ -3,6 +3,7 @@ import {
   withDangerousMod,
   withProjectBuildGradle,
   withAppBuildGradle,
+  withMainApplication,
   WarningAggregator,
 } from "@expo/config-plugins";
 
@@ -14,6 +15,8 @@ const fs = require("fs");
 
 const androidBuildToolsRE = /(\s*)classpath.*com\.android\.tools\.build:gradle/;
 const androidPluginRE = /(\s*)apply plugin.*com\.android\.application/;
+const importAndroidAppRE = /(\s*)import android\.app\.Application/;
+const onCreateRE = /(\s*)super\.onCreate\(\)/;
 
 const hasMatch = (lines: string[], matcher: string) =>
   lines.find(line => line.match(matcher));
@@ -88,13 +91,16 @@ const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
       return config;
     }
 
+    // Kotlin and Groovy DSLs require different quote characters:
+    // https://developer.android.com/build/migrate-to-kotlin-dsl#convert-strings
+    const quote = config.modResults.language === "groovy" ? `'` : `"`;
+
     const success = addAfter(
       lines,
       // Look for a dependency on 'com.android.tools.build:gradle', which all projects should have, so that we can
       // add our own dependency underneath
       androidBuildToolsRE,
-      // TODO, is there different syntax here if it's a kts file?
-      `classpath 'io.embrace:embrace-swazzler:\${findProject(":embrace-io_react-native").properties["emb_android_sdk"]}'`,
+      `classpath(${quote}io.embrace:embrace-swazzler:\${findProject(":embrace-io_react-native").properties["emb_android_sdk"]}${quote})`,
     );
 
     if (!success) {
@@ -139,16 +145,55 @@ const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
   });
 };
 
-const withAndroidEmbrace: ConfigPlugin<EmbraceProps> = (config, props) => {
-  /*
-  TODO
-  - invoke Embrace SDK in MainApplication OnCreate
-   */
+const withAndroidEmbraceOnCreate: ConfigPlugin<EmbraceProps> = config => {
+  return withMainApplication(config, config => {
+    const lines = config.modResults.contents.split("\n");
+    const language = config.modResults.language;
 
+    // Don't add the Embrace initialize line again if it's already there
+    if (hasMatch(lines, "Embrace")) {
+      return config;
+    }
+
+    const addedImport = addAfter(
+      lines,
+      // Look for the import of android.app.Application which should happen in the MainApplication file
+      // and add our import underneath
+      importAndroidAppRE,
+      `import io.embrace.android.embracesdk.Embrace${language === "java" ? ";" : ""}`,
+    );
+
+    if (!addedImport) {
+      throw new Error(
+        "failed to add the Embrace import to the MainApplication file",
+      );
+    }
+
+    const addedInit = addAfter(
+      lines,
+      // Want the Embrace SDK initialization to happen right after the super.OnCreate() call in the
+      // Application.onCreate() method
+      onCreateRE,
+      `Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE)${language === "java" ? ";" : ""}`,
+    );
+
+    if (!addedInit) {
+      throw new Error(
+        "failed to add the Embrace initialization to the MainApplication onCreate method",
+      );
+    }
+
+    config.modResults.contents = lines.join("\n");
+    return config;
+  });
+};
+
+const withAndroidEmbrace: ConfigPlugin<EmbraceProps> = (config, props) => {
   try {
     config = withAndroidEmbraceJSONConfig(config, props);
     config = withAndroidEmbraceSwazzlerDependency(config, props);
     config = withAndroidEmbraceApplySwazzlerPlugin(config, props);
+    config = withAndroidEmbraceOnCreate(config, props);
   } catch (e) {
     WarningAggregator.addWarningAndroid(
       "@embrace-io/expo-config-plugin",
@@ -165,4 +210,5 @@ export {
   withAndroidEmbraceJSONConfig,
   withAndroidEmbraceSwazzlerDependency,
   withAndroidEmbraceApplySwazzlerPlugin,
+  withAndroidEmbraceOnCreate,
 };
