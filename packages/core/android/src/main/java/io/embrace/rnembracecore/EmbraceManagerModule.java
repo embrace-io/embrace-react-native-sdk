@@ -196,23 +196,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startView(String screen, Promise promise) {
-        try {
-            Embrace.getInstance().getReactNativeInternalInterface().logRnView(screen);
-            promise.resolve(screen);
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void endView(String screen, Promise promise) {
-        // This method is only for compatibility, Android does not need an end event to end the view, but iOS does
-        // TODO this should be changed to span in the future
-        promise.resolve(true);
-    }
-
-    @ReactMethod
     public void logHandledError(String message, String javascriptStackTrace, ReadableMap properties, Promise promise) {
         try {
             final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<>();

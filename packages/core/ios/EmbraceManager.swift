@@ -25,7 +25,6 @@ private let EMB_EXC = "emb-js"
 @objc(EmbraceManager)
 class EmbraceManager: NSObject {
     private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
-    private var spanRepository = SpanRepository()
     private var config: SDKConfig = SDKConfig(from: NSDictionary())
 
     @objc(setJavaScriptBundlePath:resolver:rejecter:)
@@ -336,32 +335,6 @@ class EmbraceManager: NSObject {
             reject("CLEAR_USER_PAYER", "Error removing User Payer", error)
         }
     }
-
-    @objc(startView:resolver:rejecter:)
-    func startView(_ viewName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-
-        let span = Embrace.client?.buildSpan(name: "emb-screen-view")
-        .setAttribute(key: "view.name", value: viewName)
-        .setAttribute(key: "emb.type", value: "ux.view")
-        .startSpan()
-
-        var spanId = ""
-        if span != nil {
-        spanId = spanRepository.spanStarted(span: span!)
-        }
-
-        if spanId.isEmpty {
-        reject("START_SPAN_ERROR", "Failed to start span", nil)
-        } else {
-        resolve(spanId)
-        }
-    }
-
-  @objc(endView:resolver:rejecter:)
-  func endView(_ spanId: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-
-    stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0, resolver: resolve, rejecter: reject)
-  }
 
     private func severityFromString(from inputString: String) -> LogSeverity {
         switch inputString {

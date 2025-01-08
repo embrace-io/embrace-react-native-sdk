@@ -9,7 +9,6 @@ import {
   clearUserIdentifier,
   clearUsername,
   clearUserPersona,
-  endView,
   getCurrentSessionId,
   getDeviceId,
   getLastRunEndState,
@@ -27,7 +26,6 @@ import {
   setUserEmail,
   setUserIdentifier,
   setUsername,
-  startView,
 } from "../index";
 
 const mockSetUserIdentifier = jest.fn();
@@ -87,8 +85,6 @@ jest.mock("../EmbraceManagerModule", () => ({
     addUserPersona: (persona: string) => mockAddUserPersona(persona),
     clearUserPersona: (persona: string) => mockClearUserPersona(persona),
     clearAllUserPersonas: () => mockClearAllUserPersonas(),
-    startView: (view: string) => mockStartView(view),
-    endView: (view: string) => mockEndView(view),
     addSessionProperty: (key: string, value: string, permanent: boolean) =>
       mockAddSessionProperty(key, value, permanent),
     removeSessionProperty: (key: string) => mockRemoveSessionProperty(key),
@@ -398,24 +394,6 @@ describe("Personas Tests", () => {
   test("clearAllUserPersonas", async () => {
     await clearAllUserPersonas();
     expect(mockClearAllUserPersonas).toHaveBeenCalled();
-  });
-});
-
-describe("Custom Views Tests", () => {
-  test("startView", async () => {
-    const promiseToResolve = startView(MOCK_VIEW);
-
-    await promiseToResolve;
-    expect(mockStartView).toHaveBeenCalledWith(MOCK_VIEW);
-  });
-
-  test("endView", async () => {
-    jest.useFakeTimers();
-
-    const promiseToResolve = endView(MOCK_VIEW);
-    jest.runAllTimers();
-    await promiseToResolve;
-    expect(mockEndView).toHaveBeenCalledWith(MOCK_VIEW);
   });
 });
 

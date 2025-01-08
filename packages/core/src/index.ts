@@ -317,14 +317,6 @@ const logHandledError = (
   return Promise.resolve(false);
 };
 
-export const startView = (view: string): Promise<string | boolean> => {
-  return EmbraceManagerModule.startView(view);
-};
-
-export const endView = (spanId: string): Promise<boolean> => {
-  return EmbraceManagerModule.endView(spanId);
-};
-
 export const setJavaScriptPatch = (patch: string) => {
   return EmbraceManagerModule.setJavaScriptPatchNumber(patch);
 };

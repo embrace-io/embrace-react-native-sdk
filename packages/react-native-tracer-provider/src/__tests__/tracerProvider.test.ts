@@ -13,6 +13,7 @@ import {
   EmbraceNativeTracerProviderConfig,
   EmbraceNativeSpan,
   useEmbraceNativeTracerProvider,
+  startView,
 } from "../index";
 
 const mockSetupTracer = jest.fn();
@@ -796,5 +797,27 @@ describe("Embrace Native Tracer Provider", () => {
     expect(mockClearCompletedSpans).not.toHaveBeenCalled();
     mockAppStateListener.mock.calls[0][1]();
     expect(mockClearCompletedSpans).toHaveBeenCalled();
+  });
+
+  it("should provide a convenience function for starting a span representing a view", async () => {
+    const tracer = await getTestTracer({});
+
+    startView(tracer, "my-view");
+
+    expect(mockStartSpan).toHaveBeenCalledWith(
+      "test",
+      "v1",
+      "",
+      "test_v1__1",
+      "emb-screen-view",
+      "",
+      0,
+      {
+        "view.name": "my-view",
+        "emb.type": "ux.view",
+      },
+      [],
+      "",
+    );
   });
 });
