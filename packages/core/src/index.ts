@@ -5,7 +5,7 @@ import {Platform} from "react-native";
 import * as embracePackage from "../package.json";
 
 import {setJavaScriptPatch} from "./api/bundle";
-import {buildPackageVersion} from "./utils";
+import {buildPackageVersion} from "./utils/bundle";
 import {handleError, handleGlobalError} from "./api/error";
 import {SDKConfig} from "./interfaces";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";

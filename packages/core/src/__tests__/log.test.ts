@@ -35,8 +35,8 @@ jest.mock("../EmbraceManagerModule", () => ({
 }));
 
 const mockGenerateStackTrace = jest.fn();
-jest.mock("../utils", () => ({
-  ...jest.requireActual("../utils"),
+jest.mock("../utils/log", () => ({
+  ...jest.requireActual("../utils/log"),
   generateStackTrace: () => mockGenerateStackTrace(),
 }));
 

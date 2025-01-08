@@ -29,8 +29,8 @@ jest.mock("../EmbraceManagerModule", () => ({
   },
 }));
 
-jest.mock("../utils", () => ({
-  ...jest.requireActual("../utils"),
+jest.mock("../utils/log", () => ({
+  ...jest.requireActual("../utils/log"),
   generateStackTrace: () => jest.fn(),
 }));
 

@@ -1,8 +1,3 @@
-const generateStackTrace = (): string => {
-  const err = new Error();
-  return err.stack || "";
-};
-
 const buildPackageVersion = (reactNativeVersion: {
   version: {
     major: string;
@@ -25,4 +20,4 @@ const buildPackageVersion = (reactNativeVersion: {
   }
 };
 
-export {generateStackTrace, buildPackageVersion};
+export {buildPackageVersion};
