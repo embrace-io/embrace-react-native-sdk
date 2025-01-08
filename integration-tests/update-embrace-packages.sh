@@ -77,7 +77,6 @@ embrace_local_dependencies="
   ./artifacts/embrace-io-react-native-local.tgz
   ./artifacts/embrace-io-react-native-otlp-local.tgz
   ./artifacts/embrace-io-react-native-tracer-provider-local.tgz
-  ./artifacts/embrace-io-react-native-spans-local.tgz
   $third_party_dependencies
 "
 if [ "$version" = "local" ]; then
@@ -87,7 +86,6 @@ else
     @embrace-io/react-native@$version
     @embrace-io/react-native-otlp@$version
     @embrace-io/react-native-tracer-provider@$version
-    @embrace-io/react-native-spans@$version
     $third_party_dependencies
   "
 fi
@@ -103,14 +101,12 @@ if [ "$skip_sdk_packages" = false ]; then
     npx lerna run build --scope=@embrace-io/react-native
     npx lerna run build --scope=@embrace-io/react-native-otlp
     npx lerna run build --scope=@embrace-io/react-native-tracer-provider
-    npx lerna run build --scope=@embrace-io/react-native-spans
     popd
 
     # pack required packages into tarballs
     ./pack.sh ../packages/core/ artifacts/embrace-io-react-native-local.tgz
     ./pack.sh ../packages/react-native-otlp/ artifacts/embrace-io-react-native-otlp-local.tgz
     ./pack.sh ../packages/react-native-tracer-provider/ artifacts/embrace-io-react-native-tracer-provider-local.tgz
-    ./pack.sh ../packages/spans/ artifacts/embrace-io-react-native-spans-local.tgz
   fi
 
   echo "========================================"

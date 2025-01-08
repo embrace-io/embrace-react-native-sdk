@@ -1,26 +1,30 @@
 import * as React from "react";
-import {useRef, useCallback} from "react";
+import {useCallback, useState} from "react";
 import {Button, View, Text} from "react-native";
 import {styles} from "../helpers/styles";
-import {startSpan, stopSpan} from "@embrace-io/react-native-spans";
+import {
+  EmbraceNativeSpan,
+  useEmbraceNativeTracerProvider,
+} from "@embrace-io/react-native-tracer-provider";
+import FullScreenMessage from "../components/FullScreenMessage";
 
 const OTLPTestingScreen = () => {
-  const spanIdRef = useRef<string | null>(null);
+  const {tracer} = useEmbraceNativeTracerProvider();
+  const [span, setSpan] = useState<EmbraceNativeSpan>();
+
+  if (!tracer) {
+    return <FullScreenMessage msg="Loading Tracer" />;
+  }
 
   const startManualSpan = useCallback(async () => {
-    const spanId = await startSpan("otlp - custom export");
-
-    if (typeof spanId === "string") {
-      spanIdRef.current = spanId;
-    }
+    setSpan(tracer.startSpan("otlp - custom export"));
   }, []);
 
   const stopManualSpan = useCallback(() => {
-    if (spanIdRef.current) {
-      stopSpan(spanIdRef.current);
-      spanIdRef.current = null;
+    if (span) {
+      span.end();
     }
-  }, []);
+  }, [span]);
 
   return (
     <View style={styles.container}>
