@@ -4,10 +4,10 @@ import {Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {setJavaScriptPatch} from "./api/bundle";
 import {buildPackageVersion} from "./utils/bundle";
-import {handleError, handleGlobalError} from "./api/error";
 import {SDKConfig} from "./interfaces";
+import {handleError, handleGlobalError} from "./api/error";
+import {setJavaScriptPatch} from "./api/bundle";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
 
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");

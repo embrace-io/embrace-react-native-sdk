@@ -1,5 +1,5 @@
-import {logError, logInfo, logMessage, logWarning} from "../api/log";
 import {LogSeverity, LogProperties} from "../interfaces";
+import {logError, logInfo, logMessage, logWarning} from "../api/log";
 
 const MOCK_STACKTRACE = "this is a fake stack trace";
 
