@@ -10,8 +10,6 @@
 		3005423F2C7F669F0006D505 /* RNEmbraceCore-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 3005423E2C7F669E0006D505 /* RNEmbraceCore-Bridging-Header.h */; };
 		308F09292C4EED4200C1EB4C /* EmbraceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 308F09282C4EED4200C1EB4C /* EmbraceManager.m */; };
 		308F092B2C4EF1FE00C1EB4C /* SpanRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 308F092A2C4EF1FE00C1EB4C /* SpanRepository.swift */; };
-		30D432282C7FB6B2005D5D30 /* CodePushHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 30D432272C7FB6B2005D5D30 /* CodePushHelper.m */; };
-		30D4322A2C7FB9A1005D5D30 /* CodePushHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 30D432292C7FB9A1005D5D30 /* CodePushHelper.h */; };
 		30DFDA6A2C486677009F2ECC /* RNEmbraceCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30DFDA622C486677009F2ECC /* RNEmbraceCore.framework */; };
 		30DFDA6F2C486677009F2ECC /* RNEmbraceCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFDA6E2C486677009F2ECC /* RNEmbraceCoreTests.swift */; };
 		30DFDA7A2C4866AA009F2ECC /* EmbraceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFDA782C4866AA009F2ECC /* EmbraceManager.swift */; };
@@ -36,8 +34,6 @@
 		3005423E2C7F669E0006D505 /* RNEmbraceCore-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNEmbraceCore-Bridging-Header.h"; sourceTree = "<group>"; };
 		308F09282C4EED4200C1EB4C /* EmbraceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbraceManager.m; sourceTree = "<group>"; };
 		308F092A2C4EF1FE00C1EB4C /* SpanRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpanRepository.swift; sourceTree = "<group>"; };
-		30D432272C7FB6B2005D5D30 /* CodePushHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CodePushHelper.m; sourceTree = "<group>"; };
-		30D432292C7FB9A1005D5D30 /* CodePushHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CodePushHelper.h; sourceTree = "<group>"; };
 		30DFDA622C486677009F2ECC /* RNEmbraceCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbraceCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		30DFDA692C486677009F2ECC /* RNEmbraceCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNEmbraceCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		30DFDA6E2C486677009F2ECC /* RNEmbraceCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNEmbraceCoreTests.swift; sourceTree = "<group>"; };
@@ -108,9 +104,7 @@
 			children = (
 				6DE04D3C2D1222050049A0DD /* common */,
 				308F092A2C4EF1FE00C1EB4C /* SpanRepository.swift */,
-				30D432292C7FB9A1005D5D30 /* CodePushHelper.h */,
 				3005423E2C7F669E0006D505 /* RNEmbraceCore-Bridging-Header.h */,
-				30D432272C7FB6B2005D5D30 /* CodePushHelper.m */,
 				308F09282C4EED4200C1EB4C /* EmbraceManager.m */,
 				30DFDA782C4866AA009F2ECC /* EmbraceManager.swift */,
 				30FA20DA2C6FC44200340B1E /* BundleID.swift */,
@@ -152,7 +146,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3005423F2C7F669F0006D505 /* RNEmbraceCore-Bridging-Header.h in Headers */,
-				30D4322A2C7FB9A1005D5D30 /* CodePushHelper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,7 +351,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30D432282C7FB6B2005D5D30 /* CodePushHelper.m in Sources */,
 				30FA20DB2C6FC44200340B1E /* BundleID.swift in Sources */,
 				30DFDA7A2C4866AA009F2ECC /* EmbraceManager.swift in Sources */,
 				308F092B2C4EF1FE00C1EB4C /* SpanRepository.swift in Sources */,

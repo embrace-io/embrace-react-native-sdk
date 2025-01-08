@@ -178,27 +178,6 @@ class EmbraceManager: NSObject {
         resolve(true)
     }
 
-    @objc
-    func checkAndSetCodePushBundleURL(
-        _ resolve: @escaping RCTPromiseResolveBlock,
-        rejecter reject: @escaping RCTPromiseRejectBlock
-    ) {
-        DispatchQueue.global(qos: .background).async {
-            do {
-                guard let url = CodePushHelper.getCodePushURL() else {
-                    resolve(false)
-                    return
-                }
-
-                let bundleID = try computeBundleID(path: url.path)
-                try Embrace.client?.metadata.addResource(key: REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, value: bundleID.id, lifespan: .process)
-                resolve(true)
-            } catch let error {
-                reject("CHECK_AND_SET_CODEPUSH_BUNDLE_URL", "Error setting Codepush Bundle URL", error)
-            }
-        }
-    }
-
     @objc(addUserPersona:resolver:rejecter:)
     func addUserPersona(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
