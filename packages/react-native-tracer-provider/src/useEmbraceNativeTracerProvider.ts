@@ -1,6 +1,6 @@
 import {NativeModules} from "react-native";
 import {useEffect, useState} from "react";
-import {TracerProvider} from "@opentelemetry/api";
+import {Tracer, TracerProvider} from "@opentelemetry/api";
 
 import {logWarning} from "./util";
 import {
@@ -29,6 +29,7 @@ export const useEmbraceNativeTracerProvider = (
   const [tracerProvider, setTracerProvider] = useState<TracerProvider | null>(
     null,
   );
+  const [tracer, setTracer] = useState<Tracer | null>(null);
 
   useEffect(() => {
     if (error) {
@@ -59,7 +60,9 @@ export const useEmbraceNativeTracerProvider = (
             );
             setIsError(true);
           } else if (!tracerProvider) {
-            setTracerProvider(new EmbraceNativeTracerProvider(config));
+            const provider = new EmbraceNativeTracerProvider(config);
+            setTracerProvider(provider);
+            setTracer(provider.getTracer("embrace-default-tracer"));
           }
         })
         .catch(() => {
@@ -75,5 +78,6 @@ export const useEmbraceNativeTracerProvider = (
     isError,
     error,
     tracerProvider,
+    tracer,
   };
 };

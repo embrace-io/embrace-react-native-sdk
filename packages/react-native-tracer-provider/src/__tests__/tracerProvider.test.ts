@@ -129,6 +129,33 @@ describe("Embrace Native Tracer Provider", () => {
     expect(mockSetupTracer).toHaveBeenCalledWith("some-tracer", "v17", "");
   });
 
+  it("should provide a tracer by default", async () => {
+    const {result} = renderHook(() => useEmbraceNativeTracerProvider());
+
+    await waitFor(() => expect(result.current.tracer).toBeTruthy());
+
+    expect(mockSetupTracer).toHaveBeenCalledWith(
+      "embrace-default-tracer",
+      "",
+      "",
+    );
+
+    result.current.tracer!.startSpan("my-span");
+
+    expect(mockStartSpan).toHaveBeenCalledWith(
+      "embrace-default-tracer",
+      "",
+      "",
+      "embrace-default-tracer___1",
+      "my-span",
+      "",
+      0,
+      {},
+      [],
+      "",
+    );
+  });
+
   it("should error if getting a tracer provider before the Embrace SDK has started", async () => {
     mockIsStarted.mockReturnValue(Promise.resolve(false));
 
@@ -141,6 +168,7 @@ describe("Embrace Native Tracer Provider", () => {
         error:
           "The Embrace SDK must be started to use the TracerProvider, please invoke `initialize` from `@embrace-io/react-native`.",
         tracerProvider: null,
+        tracer: null,
       });
     });
   });
@@ -156,6 +184,7 @@ describe("Embrace Native Tracer Provider", () => {
         isError: true,
         error: "Failed to setup EmbraceNativeTracerProvider",
         tracerProvider: null,
+        tracer: null,
       });
     });
   });
