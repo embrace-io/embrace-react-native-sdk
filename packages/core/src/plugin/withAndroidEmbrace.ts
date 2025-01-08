@@ -43,10 +43,10 @@ const addAfter = (lines: string[], matcher: RegExp, toAdd: string) => {
 };
 
 const withAndroidEmbraceJSONConfig: ConfigPlugin<EmbraceProps> = (
-  config,
+  expoConfig,
   props,
 ) => {
-  return withDangerousMod(config, [
+  return withDangerousMod(expoConfig, [
     "android",
     async config => {
       const filePath = path.join(
@@ -58,8 +58,9 @@ const withAndroidEmbraceJSONConfig: ConfigPlugin<EmbraceProps> = (
       );
 
       try {
+        const fd = fs.openSync(filePath, "wx");
         fs.writeFileSync(
-          filePath,
+          fd,
           JSON.stringify(
             {
               app_id: props.androidAppId,
@@ -71,9 +72,13 @@ const withAndroidEmbraceJSONConfig: ConfigPlugin<EmbraceProps> = (
           ),
         );
       } catch (e) {
-        console.error(
-          `withAndroidEmbraceJSONConfig failed to write ${filePath}: ${e}`,
-        );
+        if (e instanceof Error && e.message.includes("EEXIST")) {
+          // Don't try and overwrite the file if it already exists
+        } else {
+          console.error(
+            `withAndroidEmbraceJSONConfig failed to write ${filePath}: ${e}`,
+          );
+        }
       }
 
       return config;
@@ -83,8 +88,8 @@ const withAndroidEmbraceJSONConfig: ConfigPlugin<EmbraceProps> = (
 
 const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
   EmbraceProps
-> = config => {
-  return withProjectBuildGradle(config, async config => {
+> = expoConfig => {
+  return withProjectBuildGradle(expoConfig, async config => {
     const lines = config.modResults.contents.split("\n");
 
     // Don't insert the dependency again if it already has it
@@ -117,8 +122,8 @@ const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
 
 const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
   EmbraceProps
-> = config => {
-  return withAppBuildGradle(config, async config => {
+> = expoConfig => {
+  return withAppBuildGradle(expoConfig, async config => {
     const lines = config.modResults.contents.split("\n");
 
     // Don't add the apply plugin line again if it's already there
@@ -158,8 +163,8 @@ const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
   });
 };
 
-const withAndroidEmbraceOnCreate: ConfigPlugin<EmbraceProps> = config => {
-  return withMainApplication(config, config => {
+const withAndroidEmbraceOnCreate: ConfigPlugin<EmbraceProps> = expoConfig => {
+  return withMainApplication(expoConfig, config => {
     const lines = config.modResults.contents.split("\n");
     const language = config.modResults.language;
 
