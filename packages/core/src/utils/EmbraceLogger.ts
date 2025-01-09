@@ -4,17 +4,19 @@ interface Logger {
   error: (message: string) => void;
 }
 
-interface MessageFormatter {
+interface Formatter {
   format: (message: string) => string;
 }
 
-class EmbraceLogger implements Logger, MessageFormatter {
-  public out: Logger;
-  public enabled: boolean;
+type Level = "info" | "warn" | "error";
 
-  constructor(out: Logger, enabled = true) {
+class EmbraceLogger implements Logger, Formatter {
+  public out: Logger;
+  public level: Level[];
+
+  constructor(out: Logger, level: Level[] = ["info", "warn", "error"]) {
     this.out = out;
-    this.enabled = enabled;
+    this.level = level;
   }
 
   public format(message: string): string {
@@ -22,19 +24,19 @@ class EmbraceLogger implements Logger, MessageFormatter {
   }
 
   public log(message: string) {
-    if (this.enabled) {
+    if (this.level.includes("info")) {
       this.out.log(this.format(message));
     }
   }
 
   public warn(message: string) {
-    if (this.enabled) {
+    if (this.level.includes("warn")) {
       this.out.warn(this.format(message));
     }
   }
 
   public error(message: string) {
-    if (this.enabled) {
+    if (this.level.includes("error")) {
       this.out.error(this.format(message));
     }
   }

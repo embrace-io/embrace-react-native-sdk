@@ -1,6 +1,7 @@
 import {waitFor} from "@testing-library/react-native";
 
 import {handleGlobalError} from "../utils/ErrorUtil";
+import EmbraceOTLP from "../utils/EmbraceOTLP";
 import {ComponentError, logIfComponentError} from "../utils/ComponentError";
 import {initialize} from "../index";
 
@@ -16,6 +17,8 @@ const mockLogHandledError = jest.fn();
 const mockLogUnhandledJSException = jest.fn();
 
 const ReactNativeMock = jest.requireMock("react-native");
+
+jest.mock("../utils/EmbraceOTLP");
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
@@ -185,19 +188,37 @@ describe("iOS: initialize", () => {
     ReactNativeMock.Platform.OS = "ios";
   });
 
-  it("should not call regular `startNativeEmbraceSDK` if `startCustomExport` handler receives a proper callback", async () => {
-    const mockstartCustomExport = jest.fn(() => Promise.resolve(true));
+  it("should not call regular `startNativeEmbraceSDK` if `exporters` are available", async () => {
+    const mockRNEmbraceOTLPInit = jest.fn().mockResolvedValue(true);
+    const mockEmbraceOTLPGet = jest.fn().mockReturnValue({
+      initialize: mockRNEmbraceOTLPInit,
+    });
+    const mockEmbraceOTLPSet = jest.fn().mockResolvedValue(true);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    jest.mocked(EmbraceOTLP).mockImplementation(() => ({
+      set: mockEmbraceOTLPSet,
+      get: mockEmbraceOTLPGet,
+    }));
+
     const isStarted = await initialize({
       sdkConfig: {
         ios: {appId: "abc12"},
-        startCustomExport: mockstartCustomExport,
+        exporters: {
+          logExporter: {endpoint: "http://localhost:8081"},
+        },
       },
     });
 
-    expect(mockstartCustomExport).toHaveBeenCalledTimes(1);
-    expect(mockstartCustomExport).toHaveBeenCalledWith({appId: "abc12"});
-    expect(mockStart).not.toHaveBeenCalled();
-    expect(isStarted).toBe(true);
+    waitFor(() => {
+      expect(mockEmbraceOTLPSet).toHaveBeenCalledTimes(1);
+      expect(mockEmbraceOTLPSet).toHaveBeenCalledWith({
+        logExporter: {endpoint: "http://localhost:8081"},
+      });
+      expect(mockStart).not.toHaveBeenCalled();
+      expect(isStarted).toBe(true);
+    });
   });
 
   test("sdk not already started, missing app id", async () => {

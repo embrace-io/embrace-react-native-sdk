@@ -7,7 +7,7 @@ import {
   embraceJSON,
   embraceJSONContents,
 } from "../util/android";
-import EmbraceLogger from "../../src/logger";
+import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 import patch from "./patches/patch";
 import {androidAppID, apiToken, packageJSON} from "./common";

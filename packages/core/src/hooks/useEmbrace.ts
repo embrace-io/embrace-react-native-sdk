@@ -4,7 +4,11 @@ import {SDKConfig} from "../interfaces/common";
 
 import {initialize} from "./../index";
 
-const useEmbrace = (sdkConfig: SDKConfig, debug: boolean = true) => {
+const useEmbrace = (
+  sdkConfig: SDKConfig,
+  patch?: string,
+  debug: boolean = true,
+) => {
   // States
   const [isPending, setIsPending] = useState(true);
   const [isStarted, setIsStarted] = useState(false);
@@ -15,16 +19,15 @@ const useEmbrace = (sdkConfig: SDKConfig, debug: boolean = true) => {
   useEffect(() => {
     const initSDK = async () => {
       const config = {
+        patch,
         sdkConfig,
         debug,
       };
 
       try {
         const isEmbraceStarted = await initialize(config);
-
-        setIsPending(false);
         setIsStarted(isEmbraceStarted);
-      } catch (error) {
+      } finally {
         setIsPending(false);
       }
     };
@@ -32,7 +35,7 @@ const useEmbrace = (sdkConfig: SDKConfig, debug: boolean = true) => {
     if (!isStarted) {
       initSDK();
     }
-  }, [sdkConfig, isStarted, debug]);
+  }, [sdkConfig, isStarted, debug, patch]);
 
   return {
     isPending,

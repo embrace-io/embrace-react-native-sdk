@@ -1,11 +1,12 @@
-import EmbraceLogger from "../logger";
 import {
   AndroidConfig,
   IOSConfig,
   OTLPExporterConfig,
 } from "../interfaces/common";
 
-interface OTLPModule {
+import EmbraceLogger from "./EmbraceLogger";
+
+interface Package {
   initialize: (
     otlpExporterConfig: OTLPExporterConfig,
   ) => (sdkConfig: IOSConfig | AndroidConfig) => Promise<boolean>;
@@ -15,7 +16,7 @@ const RN_EMBRACE_OTLP_PATH =
   "../../../../../@embrace-io/react-native-otlp/lib/src";
 
 class EmbraceOTLP {
-  public module: OTLPModule | null = null;
+  public package: Package | null = null;
   private logger: EmbraceLogger;
 
   constructor(logger: EmbraceLogger) {
@@ -25,7 +26,7 @@ class EmbraceOTLP {
   public get = () => {
     // TBD: Still an issue with Metro bundler
     // https://github.com/facebook/metro/issues/666, will use require.context for now
-    // this.module = require("@embrace-io/react-native-otlp");
+    // this.package = require("@embrace-io/react-native-otlp");
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
@@ -35,19 +36,19 @@ class EmbraceOTLP {
     // @ts-expect-error
     context.keys().forEach(filename => {
       // Init RNEmbraceOTLP (if available)
-      this.module = context(filename);
+      this.package = context(filename);
     });
 
-    return module;
+    return this.package;
   };
 
   public set = (exporters: OTLPExporterConfig) => {
-    if (this.module?.initialize) {
+    if (this.package?.initialize) {
       this.logger.log(
         "@embrace-io/react-native-otlp` is installed and will be used",
       );
 
-      return this.module?.initialize(exporters);
+      return this.package?.initialize(exporters);
     } else {
       this.logger.log(
         "`@embrace-io/react-native-otlp` is not installed and it's required. OTLP exporters will not be used",
@@ -56,4 +57,4 @@ class EmbraceOTLP {
   };
 }
 
-export {EmbraceOTLP};
+export default EmbraceOTLP;

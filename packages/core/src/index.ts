@@ -3,11 +3,11 @@ import {Platform} from "react-native";
 
 import * as embracePackage from "../package.json";
 
-import {EmbraceOTLP} from "./utils/otlp";
 import {generateStackTrace, handleGlobalError} from "./utils/ErrorUtil";
+import EmbraceOTLP from "./utils/EmbraceOTLP";
+import EmbraceLogger from "./utils/EmbraceLogger";
 import {logIfComponentError} from "./utils/ComponentError";
 import {ApplyInterceptorStrategy} from "./networkInterceptors/ApplyInterceptor";
-import EmbraceLogger from "./logger";
 import {
   LogSeverity,
   SessionStatus,
@@ -79,13 +79,19 @@ const handleError = async (error: Error, callback: () => void) => {
 const isObjectNonEmpty = (obj?: object): boolean =>
   Object.keys(obj || {}).length > 0;
 
-const initialize = async ({
-  sdkConfig,
-  patch,
-}: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
-  const logger = new EmbraceLogger(console, sdkConfig?.debug ?? true);
-  const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
+const initialize = async (
+  {
+    sdkConfig,
+    patch,
+    debug,
+  }: {patch?: string; sdkConfig?: SDKConfig; debug?: boolean} = {debug: true},
+): Promise<boolean> => {
+  const logger = new EmbraceLogger(
+    console,
+    debug ? ["info", "warn", "error"] : ["warn", "error"],
+  );
 
+  const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
   if (!hasNativeSDKStarted) {
     if (Platform.OS === "ios" && !sdkConfig?.ios?.appId) {
       logger.warn(
