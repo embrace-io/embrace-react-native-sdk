@@ -1,7 +1,7 @@
 import {renderHook, waitFor} from "@testing-library/react-native";
 
 import EmbraceOTLP from "../utils/EmbraceOTLP";
-import {SDKConfig} from "../interfaces/common";
+import {SDKConfig} from "../interfaces";
 
 import useEmbrace from "./useEmbrace";
 

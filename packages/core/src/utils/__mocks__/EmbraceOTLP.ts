@@ -1,4 +1,4 @@
-import {OTLPExporterConfig} from "../../interfaces/common";
+import {OTLPExporterConfig} from "../../interfaces";
 
 const mockEmbraceOTLPGet = jest.fn().mockReturnValue({
   initialize: jest.fn().mockResolvedValue(true),

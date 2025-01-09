@@ -1,8 +1,4 @@
-import {
-  AndroidConfig,
-  IOSConfig,
-  OTLPExporterConfig,
-} from "../interfaces/common";
+import {AndroidConfig, IOSConfig, OTLPExporterConfig} from "../interfaces";
 
 import EmbraceLogger from "./EmbraceLogger";
 

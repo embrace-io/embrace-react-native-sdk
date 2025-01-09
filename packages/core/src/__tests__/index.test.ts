@@ -1,9 +1,9 @@
 import {waitFor} from "@testing-library/react-native";
 
-import {handleGlobalError} from "../utils/ErrorUtil";
 import EmbraceOTLP from "../utils/EmbraceOTLP";
-import {ComponentError, logIfComponentError} from "../utils/ComponentError";
 import {initialize} from "../index";
+import {handleGlobalError} from "../api/error";
+import {ComponentError, logIfComponentError} from "../api/component";
 
 const testValue = "Value";
 

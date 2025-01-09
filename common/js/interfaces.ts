@@ -22,6 +22,10 @@ interface IOSConfig {
   disabledUrlPatterns?: string[];
 }
 
+interface LogProperties {
+  [key: string]: string;
+}
+
 interface ExporterConfig {
   endpoint: string;
   headers?: {key: string; token: string}[];
@@ -34,48 +38,11 @@ interface OTLPExporterConfig {
   otlpPackagePath?: string;
 }
 
-type LogSeverity = "warning" | "info" | "error";
-
-interface LogProperties {
-  [key: string]: string;
-}
-
-type SessionStatus = "INVALID" | "CRASH" | "CLEAN_EXIT";
-
-type MethodType =
-  | "get"
-  | "GET"
-  | "delete"
-  | "DELETE"
-  | "head"
-  | "HEAD"
-  | "options"
-  | "OPTIONS"
-  | "post"
-  | "POST"
-  | "put"
-  | "PUT"
-  | "patch"
-  | "PATCH"
-  | "purge"
-  | "PURGE"
-  | "link"
-  | "LINK"
-  | "unlink"
-  | "UNLINK"
-  | "connect"
-  | "CONNECT"
-  | "trace"
-  | "TRACE";
-
 export {
   SDKConfig,
   IOSConfig,
   AndroidConfig,
-  LogSeverity,
   LogProperties,
-  SessionStatus,
-  MethodType,
-  OTLPExporterConfig,
   ExporterConfig,
+  OTLPExporterConfig,
 };

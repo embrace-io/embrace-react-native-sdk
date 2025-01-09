@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-import {SDKConfig} from "../interfaces/common";
+import {SDKConfig} from "../interfaces";
 
 import {initialize} from "./../index";
 
