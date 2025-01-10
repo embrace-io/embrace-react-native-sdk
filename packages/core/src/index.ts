@@ -17,12 +17,14 @@ const tracking = require("promise/setimmediate/rejection-tracking");
 
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
 
+interface EmbraceInitArgs {
+  patch?: string;
+  sdkConfig?: SDKConfig;
+  debug?: boolean;
+}
+
 const initialize = async (
-  {
-    sdkConfig,
-    patch,
-    debug,
-  }: {patch?: string; sdkConfig?: SDKConfig; debug?: boolean} = {debug: true},
+  {sdkConfig, patch, debug}: EmbraceInitArgs = {debug: true},
 ): Promise<boolean> => {
   const logger = new EmbraceLogger(
     console,

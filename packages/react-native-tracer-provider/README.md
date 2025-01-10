@@ -14,7 +14,7 @@ any JS Opentelemetry instrumentation library or native instrumentation included 
 yarn add @embrace-io/native-tracer-provider
 ```
 
-Or
+or
 
 ```sh
 npm install @embrace-io/native-tracer-provider
@@ -26,7 +26,7 @@ Initialize the Tracer Provider near the start of your app's cycle:
 
 ```javascript
 
-import { EmbraceNativeTracerProvider } from "@embrace.io/react-native-tracer-provider";
+import { EmbraceNativeTracerProvider } from "@embrace-io/react-native-tracer-provider";
 import { trace } from "@opentelemetry/api";
 
 const optionalConfig = {...}; // See EmbraceNativeTracerProviderConfig in ./src/types/ for possible options
@@ -38,26 +38,12 @@ the SDK before the component that sets up the provider renders, or you can make 
 `useEmbraceNativeTracerProvider` hook to prevent it from triggering until the SDK is ready as in this example:
 
 ```javascript
-  const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(false);
-  const {tracerProvider} = useEmbraceNativeTracerProvider({}, embraceSDKLoaded);
+  const {isStarted} = useEmbrace({
+    ios: SDK_CONFIG,
+    debug: true,
+  });
 
-  useEffect(() => {
-    const init = async () => {
-      const hasStarted = await initEmbrace({
-        sdkConfig: {
-          ios: {
-            appId: "myAppId",
-          },
-        },
-      });
-
-      if (hasStarted) {
-        setEmbraceSDKLoaded(true);
-      }
-    };
-
-    init();
-  }, []);
+  const {tracerProvider} = useEmbraceNativeTracerProvider({}, isStarted);
 ```
 
 Any opentelemetry instrumentation libraries in your app will now find Embrace's provider and use it for tracing.
@@ -80,6 +66,7 @@ const MyScreen = () => {
     
     someAsyncOperation().then(() => span.end());
   }, []);
+
   return <View />;
 };
 ```
@@ -93,18 +80,20 @@ const MyScreen = () => {
 * Since communication with the native modules is asynchronous `span.spanContext()` will return a blank span context if
 executed immediately after a call to `startSpan` without yielding, for example:
 
-    ```javascript
-    const mySpan = tracer.startSpan("my-span");
-    const spanContext = mySpan.spanContext(); // can be configured to throw an error instead through EmbraceNativeTracerProviderConfig
-    console.log(spanContext.traceId) // prints ""
-    console.log(spanContext.spanId) // prints ""
-    ```
+```javascript
+  const mySpan = tracer.startSpan("my-span");
+  const spanContext = mySpan.spanContext(); // can be configured to throw an error instead through EmbraceNativeTracerProviderConfig
 
-    To avoid this issue you can use the async version:
+  console.log(spanContext.traceId) // prints ""
+  console.log(spanContext.spanId) // prints ""
+```
 
-    ```javascript
-    const mySpan = tracer.startSpan("my-span");
-    const spanContext = await (mySpan as EmbraceNativeSpan).spanContextAsync();
-    console.log(spanContext.traceId) // prints "51e60a6917dfe46871d7f1d39f66d02c"
-    console.log(spanContext.spanId) // prints "b2248eb58720064e"
-    ```
+To avoid this issue you can use the async version:
+
+```javascript
+  const mySpan = tracer.startSpan("my-span");
+  const spanContext = await (mySpan as EmbraceNativeSpan).spanContextAsync();
+
+  console.log(spanContext.traceId) // prints "51e60a6917dfe46871d7f1d39f66d02c"
+  console.log(spanContext.spanId) // prints "b2248eb58720064e"
+```

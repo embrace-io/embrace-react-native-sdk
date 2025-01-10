@@ -36,66 +36,47 @@ For this example we will use Grafana Cloud in terms of redirecting telemetry dat
 ```javascript
 import React, {useEffect, useMemo, useState} from "react";
 import {initialize as initEmbraceWithCustomExporters} from "@embrace-io/react-native-otlp";
-import {initialize as initEmbrace} from "@embrace-io/react-native";
+import {useEmbrace} from "@embrace-io/react-native";
 import {View, Text} from "react-native";
 import {Stack} from "expo-router";
 
-// NOTE: for this particular case where we use Grafana Cloud this token should be passed with the format `instance:token` converted into a base64 string.
-const token = "base64:instance:token";
+// for this particular case where we use Grafana Cloud this token should be passed with the format `instance:token` converted into a base64 string.
+const GRAFANA_TOKEN = "base64(instance:token)";
+const EXPORT_CONFIG = {
+  logExporter: {
+    endpoint: "https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/logs",
+    headers: [
+      {
+        key: "Authorization",
+        token: `Basic ${GRAFANA_TOKEN}`,
+      },
+    ],
+  },
+  traceExporter: {
+    endpoint:
+      "https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/traces",
+    headers: [
+      {
+        key: "Authorization",
+        token: `Basic ${GRAFANA_TOKEN}`,
+      },
+    ],
+  },
+};
+
+// this is the minimum of configuration needed at this point,
+// for more information please refer to docs under `@embrace-io/react-native`.
+// iOS is configurable through code, Android configuration happens at build time
+const SDK_CONFIG = {appId: "abcde"};
 
 function RootLayout() {
-  const [embraceLoaded, setEmbraceLoaded] = useState(false);
+  const {isPending} = useEmbrace({
+    ios: SDK_CONFIG,
+    exporters: EXPORT_CONFIG,
+    debug: true,
+  });
 
-  const handleStartCustomExporters = useMemo(
-    () =>
-      // returns a callback that need to be passed to the Embrace React Native SDK configuration
-      initEmbraceWithCustomExporters({
-        logExporter: {
-          endpoint:
-            "https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/logs",
-          headers: [
-            {
-              key: "Authorization",
-              token: `Basic ${token}`,
-            },
-          ],
-        },
-        traceExporter: {
-          endpoint:
-            "https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/traces",
-          headers: [
-            {
-              key: "Authorization",
-              token: `Basic ${token}`,
-            },
-          ],
-        },
-      }),
-    [],
-  );
-
-  useEffect(() => {
-    const init = async () => {
-      await initEmbrace({
-        sdkConfig: {
-          // this is the minimum of configuration needed at this point,
-          // for more information please refer to docs under @embrace-io/react-native.
-          // iOS is configurable through code, Android configuration happens at build time
-          ios: {
-            appId: "abcde",
-          },
-          // inject here the new method for initialize the Embrace React Native SDK using custom export
-          startCustomExport: handleStartCustomExporters,
-        },
-      });
-
-      setEmbraceLoaded(true);
-    };
-
-    init();
-  }, [onStartCustomExporters]);
-
-  if (!embraceLoaded) {
+  if (isPending) {
     return (
       <View>
         <Text>Loading Embrace</Text>
@@ -112,7 +93,6 @@ function RootLayout() {
 }
 
 export default RootLayout;
-
 ```
 
 ## Initializing in the Native Layer
