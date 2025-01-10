@@ -70,23 +70,15 @@ const initialize = async ({
     EmbraceManagerModule.setReactNativeVersion(packageVersion);
   }
 
-  // Only attempt to check for CodePush bundle URL in release mode. Otherwise CodePush will throw an exception.
-  // https://docs.microsoft.com/en-us/appcenter/distribution/codepush/react-native#plugin-configuration-ios
-  if (!__DEV__) {
+  // On Android the Swazzler stores the computed bundle ID as part of the build process and the SDK is able to
+  // read it at run time. On iOS however we don't retain this value so try and get it from the default bundle path
+  if (Platform.OS === "ios") {
     try {
-      const isCodePushPresent =
-        await EmbraceManagerModule.checkAndSetCodePushBundleURL();
+      const bundleJs =
+        await EmbraceManagerModule.getDefaultJavaScriptBundlePath();
 
-      // On Android the Swazzler stores the computed bundle ID as part of the build process and the SDK is able to
-      // read it at run time. On iOS however we don't retain this value so we either need to get it from the Code Push
-      // bundle or, if that isn't enabled, try and get it from the default bundle path
-      if (!isCodePushPresent && Platform.OS === "ios") {
-        const bundleJs =
-          await EmbraceManagerModule.getDefaultJavaScriptBundlePath();
-
-        if (bundleJs) {
-          EmbraceManagerModule.setJavaScriptBundlePath(bundleJs);
-        }
+      if (bundleJs) {
+        EmbraceManagerModule.setJavaScriptBundlePath(bundleJs);
       }
     } catch (e) {
       console.warn(
