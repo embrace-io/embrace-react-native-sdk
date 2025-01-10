@@ -131,7 +131,6 @@ export * from "./api/component";
 export * from "./api/error";
 export * from "./api/log";
 export * from "./api/session";
-export * from "./api/views";
 export * from "./api/network";
 export * from "./api/user";
 

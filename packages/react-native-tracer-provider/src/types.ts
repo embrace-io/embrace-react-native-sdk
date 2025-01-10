@@ -1,10 +1,11 @@
-import {TracerProvider} from "@opentelemetry/api";
+import {Tracer, TracerProvider} from "@opentelemetry/api";
 
 export interface EmbraceNativeTracerProviderReturn {
   isLoading: boolean;
   isError: boolean;
   error: string;
   tracerProvider: TracerProvider | null;
+  tracer: Tracer | null;
 }
 
 export interface EmbraceNativeTracerProviderConfig {

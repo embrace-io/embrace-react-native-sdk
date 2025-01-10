@@ -22,24 +22,15 @@ npm install @embrace-io/native-tracer-provider
 
 ### Setup in your code
 
-Initialize the Tracer Provider near the start of your app's cycle:
-
-```javascript
-
-import { EmbraceNativeTracerProvider } from "@embrace.io/react-native-tracer-provider";
-import { trace } from "@opentelemetry/api";
-
-const optionalConfig = {...}; // See EmbraceNativeTracerProviderConfig in ./src/types/ for possible options
-trace.setGlobalTracerProvider(new EmbraceNativeTracerProvider(optionalConfig));
-```
-
-The Embrace SDK will need to have started before you can use the tracer provider. To achieve this you can either start
-the SDK before the component that sets up the provider renders, or you can make use of the `enabled` parameter on the
-`useEmbraceNativeTracerProvider` hook to prevent it from triggering until the SDK is ready as in this example:
+Initialize the Tracer Provider near the start of your app's cycle. The Embrace SDK will need to have started before you
+can use the tracer provider. To achieve this you can either start the SDK before the component that sets up the provider
+renders, or you can make use of the `enabled` parameter on the `useEmbraceNativeTracerProvider` hook to prevent it from
+triggering until the SDK is ready as in this example:
 
 ```javascript
   const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(false);
-  const {tracerProvider} = useEmbraceNativeTracerProvider({}, embraceSDKLoaded);
+  const optionalConfig = {...}; // See EmbraceNativeTracerProviderConfig in ./src/types/ for possible options
+  const {tracerProvider: embraceTracerProvider, tracer: embraceTracer} = useEmbraceNativeTracerProvider(optionalConfig, embraceSDKLoaded);
 
   useEffect(() => {
     const init = async () => {
@@ -60,29 +51,48 @@ the SDK before the component that sets up the provider renders, or you can make 
   }, []);
 ```
 
-Any opentelemetry instrumentation libraries in your app will now find Embrace's provider and use it for tracing.
+You can then use the provided tracer to add custom instrumentations to your application:
 
-> [!NOTE]
->
-> Setting as the global tracer provider is not required, if you prefer you can simply pass a reference to the provider
-> and use it only where you want to
+```javascript
 
-You can also use the tracer to add custom instrumentations to your application:
+const MyScreen = () => {
+  useEffect(() => {
+    span = embraceTracer.startSpan("my-span");
+
+    someAsyncOperation().then(() => span.end());
+  }, []);
+  return <View />;
+};
+```
+
+If you'd prefer not to have to pass around the `tracer` object you can instead leverage helpers from the
+`@opentelemetry/api` library. First register the Embrace tracer provider as the global one:
+
+```javascript
+import { trace } from "@opentelemetry/api";
+trace.setGlobalTracerProvider(embraceTracerProvider);
+```
+
+You can then create new tracers on the fly where needed and the `getTracer` method from the OTel API will know to
+use Embrace as the tracer provider:
 
 ```javascript
 import { trace } from "@opentelemetry/api";
 
 const MyScreen = () => {
   useEffect(() => {
-    const tracer = trace.getTracer("my-application", "my-app-version");
+    const tracer = trace.getTracer("my-application");
     
     span = tracer.startSpan("my-span");
-    
+
     someAsyncOperation().then(() => span.end());
   }, []);
   return <View />;
 };
 ```
+
+This method of registering the tracer provider globally also means that any OTel instrumentation libraries in your app
+to will now automatically be able to find Embrace's provider and use it for tracing.
 
 ### Limitations
 
