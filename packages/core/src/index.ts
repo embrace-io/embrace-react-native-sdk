@@ -2,20 +2,14 @@
 
 import {Platform} from "react-native";
 
-import * as embracePackage from "../package.json";
-
-import {buildPackageVersion} from "./utils/bundle";
+import {trackUnhandledErrors} from "./utils/error";
+import {setEmbracePackageVersion, setReactNativeVersion} from "./utils/bundle";
 import EmbraceOTLP from "./utils/EmbraceOTLP";
 import EmbraceLogger from "./utils/EmbraceLogger";
 import {SDKConfig} from "./interfaces";
 import {handleError, handleGlobalError} from "./api/error";
 import {setJavaScriptPatch} from "./api/bundle";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
-
-const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
-const tracking = require("promise/setimmediate/rejection-tracking");
-
-const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
 
 interface EmbraceInitArgs {
   patch?: string;
@@ -45,6 +39,7 @@ const initialize = async (
     const embraceOTLP = new EmbraceOTLP(logger);
 
     try {
+      // consuming `@embrace-io/react-native-otlp`
       embraceOTLP.get();
     } catch {
       if (otlpExporters) {
@@ -60,7 +55,7 @@ const initialize = async (
     let isStarted;
     try {
       let startNativeEmbraceSDKWithOTLP = null;
-      // if package is installed/available and exporters are provided get the start method
+      // if package is installed/available and exporters are provided get the `start` method
       if (otlpExporters) {
         startNativeEmbraceSDKWithOTLP = embraceOTLP.set(otlpExporters);
       }
@@ -85,18 +80,13 @@ const initialize = async (
     }
   }
 
-  if (embracePackage) {
-    const {version} = embracePackage;
-    EmbraceManagerModule.setReactNativeSDKVersion(version);
-  }
+  // setting version of React Native used by the app
+  setReactNativeVersion();
+  // setting version of the Embrace RN package
+  setEmbracePackageVersion();
 
   if (patch) {
     setJavaScriptPatch(patch);
-  }
-
-  const packageVersion = buildPackageVersion(reactNativeVersion);
-  if (packageVersion) {
-    EmbraceManagerModule.setReactNativeVersion(packageVersion);
   }
 
   // Only attempt to check for CodePush bundle URL in release mode. Otherwise CodePush will throw an exception.
@@ -129,33 +119,15 @@ const initialize = async (
     return Promise.resolve(false);
   }
 
-  // setting the global error handler. this is available through React Native's ErrorUtils
+  // setting the global error handler
+  // this is available through React Native's ErrorUtils
   ErrorUtils.setGlobalHandler(
     handleGlobalError(ErrorUtils.getGlobalHandler(), handleError),
   );
 
-  tracking.enable({
-    allRejections: true,
-    onUnhandled: (_: unknown, error: Error) => {
-      let message = `${UNHANDLED_PROMISE_REJECTION_PREFIX}: ${error}`;
-      let stackTrace = "";
+  // through `promise/setimmediate/rejection-tracking`
+  trackUnhandledErrors();
 
-      if (error instanceof Error) {
-        message = `${UNHANDLED_PROMISE_REJECTION_PREFIX}: ${error.message}`;
-        stackTrace = error.stack || "";
-      }
-
-      return EmbraceManagerModule.logMessageWithSeverityAndProperties(
-        message,
-        "error",
-        {},
-        stackTrace,
-      );
-    },
-    onHandled: () => {},
-  });
-
-  // If there are no errors, it will return true
   return Promise.resolve(true);
 };
 
