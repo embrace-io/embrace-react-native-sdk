@@ -55,8 +55,9 @@ const initialize = async ({
         isStarted =
           await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
       }
-    } catch {
+    } catch (e) {
       isStarted = false;
+      console.warn(`[Embrace] From Native layer: ${e}`);
     }
 
     if (!isStarted) {
