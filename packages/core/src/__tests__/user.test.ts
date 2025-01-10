@@ -1,12 +1,10 @@
 import {
   addUserPersona,
   clearAllUserPersonas,
-  clearUserAsPayer,
   clearUserEmail,
   clearUserIdentifier,
   clearUsername,
   clearUserPersona,
-  setUserAsPayer,
   setUserEmail,
   setUserIdentifier,
   setUsername,
@@ -38,14 +36,6 @@ jest.mock("../EmbraceManagerModule", () => ({
     addUserPersona: (persona: string) => mockAddUserPersona(persona),
     clearUserPersona: (persona: string) => mockClearUserPersona(persona),
     clearAllUserPersonas: () => mockClearAllUserPersonas(),
-    setUserAsPayer: () => {
-      mockSetUserAsPayer();
-      return false;
-    },
-    clearUserAsPayer: () => {
-      mockClearUserAsPayer();
-      return false;
-    },
   },
 }));
 
@@ -107,26 +97,5 @@ describe("Personas Tests", () => {
   test("clearAllUserPersonas", async () => {
     await clearAllUserPersonas();
     expect(mockClearAllUserPersonas).toHaveBeenCalled();
-  });
-});
-
-describe("Payers Test", () => {
-  test("setUserAsPayer", async () => {
-    const promiseToResolve = setUserAsPayer();
-    jest.runAllTimers();
-    const result = await promiseToResolve;
-
-    expect(mockSetUserAsPayer).toHaveBeenCalled();
-    expect(result).toBe(false);
-  });
-
-  test("clearUserAsPayer", async () => {
-    const promiseToResolve = clearUserAsPayer();
-
-    jest.runAllTimers();
-    const result = await promiseToResolve;
-
-    expect(mockClearUserAsPayer).toHaveBeenCalled();
-    expect(result).toBe(false);
   });
 });

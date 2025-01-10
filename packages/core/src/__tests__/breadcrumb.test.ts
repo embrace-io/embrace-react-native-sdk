@@ -1,4 +1,4 @@
-import {addBreadcrumb, logScreen} from "../api/breadcrumb";
+import {addBreadcrumb} from "../api/breadcrumb";
 
 const mockAddBreadcrumb = jest.fn();
 
@@ -14,12 +14,5 @@ describe("breadcrumbs", () => {
   test("addBreadcrumb", async () => {
     await addBreadcrumb(MOCK_VIEW);
     expect(mockAddBreadcrumb).toHaveBeenCalledWith(MOCK_VIEW);
-  });
-
-  test("logScreen", async () => {
-    await logScreen(MOCK_VIEW);
-    expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-      `Opening screen [${MOCK_VIEW}]`,
-    );
   });
 });

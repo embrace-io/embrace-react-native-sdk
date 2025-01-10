@@ -12,8 +12,6 @@ import {
   addUserPersona,
   clearUserPersona,
   clearAllUserPersonas,
-  setUserAsPayer,
-  clearUserAsPayer,
   addSessionProperty,
   removeSessionProperty,
 } from "@embrace-io/react-native";
@@ -25,7 +23,6 @@ const PropertyTestingScreen = () => {
       await setUsername("user-name");
       await setUserEmail("user@test.com");
       await addUserPersona("persona1");
-      await setUserAsPayer();
     } catch (e) {
       console.log("failed to set user properties");
     }
@@ -37,7 +34,6 @@ const PropertyTestingScreen = () => {
       await clearUsername();
       await clearUserEmail();
       await clearUserPersona("persona1");
-      await clearUserAsPayer();
     } catch (e) {
       console.log("failed to clear user properties");
     }
