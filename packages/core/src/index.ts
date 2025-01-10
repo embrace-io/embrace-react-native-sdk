@@ -21,10 +21,15 @@ const initialize = async ({
 }: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
   const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
 
+  // if the sdk started in the native side the follow condition doesn't take any effect
   if (!hasNativeSDKStarted) {
-    if (Platform.OS === "ios" && !sdkConfig?.ios?.appId) {
+    if (
+      Platform.OS === "ios" &&
+      !sdkConfig?.ios?.appId &&
+      !sdkConfig?.startCustomExport
+    ) {
       console.warn(
-        "[Embrace] sdkConfig.ios.appId is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+        "[Embrace] `sdkConfig.ios.appId` is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);
