@@ -21,8 +21,6 @@ const mockClearUserEmail = jest.fn();
 const mockAddUserPersona = jest.fn();
 const mockClearUserPersona = jest.fn();
 const mockClearAllUserPersonas = jest.fn();
-const mockSetUserAsPayer = jest.fn();
-const mockClearUserAsPayer = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
