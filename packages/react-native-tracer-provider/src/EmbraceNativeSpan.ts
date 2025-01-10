@@ -141,6 +141,13 @@ export class EmbraceNativeSpan implements Span {
         normalizeAttributes(attributesOrStartTime),
         normalizeTime(timeStamp),
       );
+    } else if (timeStamp) {
+      TracerProviderModule.addEvent(
+        this.nativeID(),
+        name,
+        normalizeAttributes({}),
+        normalizeTime(timeStamp),
+      );
     } else {
       TracerProviderModule.addEvent(
         this.nativeID(),
