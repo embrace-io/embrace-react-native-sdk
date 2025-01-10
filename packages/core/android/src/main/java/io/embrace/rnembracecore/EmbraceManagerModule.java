@@ -269,21 +269,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void checkAndSetCodePushBundleURL(Promise promise) {
-        try {
-            Class<?> clazz = Class.forName("com.microsoft.codepush.react.CodePush");
-            Method method = clazz.getDeclaredMethod("getJSBundleFile");
-            String bundlePath = (String) method.invoke(null);
-            Embrace.getInstance().getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,bundlePath);
-            promise.resolve(true);
-        } catch (Exception e) {
-            Log.i("Embrace", "CodePush not present in build.", e);
-            promise.resolve(false);
-
-        }
-    }
-
-    @ReactMethod
     public void setJavaScriptBundlePath(String path, Promise promise) {
         try {
             Embrace.getInstance().getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,path);
