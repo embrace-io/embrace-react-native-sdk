@@ -46,7 +46,7 @@ const initialize = async ({
       if (startCustomExport) {
         if (!startSdkConfig.appId) {
           console.log(
-            "[Embrace] 'sdkConfig.ios.appId' not found, custom exporters will be used",
+            "[Embrace] 'sdkConfig.ios.appId' not found, only custom exporters will be used",
           );
         }
 
