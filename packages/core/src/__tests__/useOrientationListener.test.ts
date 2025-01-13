@@ -1,6 +1,6 @@
 import {renderHook} from "@testing-library/react-native";
 
-import {useOrientationListener} from "../utils/screenOrientation";
+import {useOrientationListener} from "../hooks/useOrientationListener";
 
 jest.useFakeTimers();
 
