@@ -46,7 +46,8 @@ const logger = new EmbraceLogger(console);
 /**
  * useOrientationListener
  *
- * @param enabled boolean flag that indicates whether the listener should run or not
+ * @param enabled
+ * boolean flag that indicates whether the listener should run or not
  * depending on the initialization of the `@embrace-io/react-native` (that is an async operation).
  * Default `true`
  */
