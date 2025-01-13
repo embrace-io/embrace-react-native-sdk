@@ -22,8 +22,8 @@ Individual packages are published from this monorepo, reasoning can be found in 
 | [`@embrace-io/react-native-apollo-graphql`](./packages/apollo-graphql)                 | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-apollo-graphql.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-apollo-graphql)                         |
 | [`@embrace-io/react-native-navigation`](./packages/react-native-navigation)            | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-navigation.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-navigation)                                 |
 | [`@embrace-io/react-navigation`](./packages/react-navigation)                          | [![npm](https://img.shields.io/npm/v/@embrace-io/react-navigation.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-navigation)                                               |
-| [`@embrace-io/react-native-spans`](./packages/spans)                                   | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-spans.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-spans)                                           |
 | [`@embrace-io/react-native-tracer-provider`](./packages/react-native-tracer-provider)  | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-tracer-provider.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-tracer-provider)                       |
+| [`@embrace-io/react-native-otlp`](./packages/react-native-otlp)  | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-otlp.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-otlp)                       |
 
 ## Support
 
