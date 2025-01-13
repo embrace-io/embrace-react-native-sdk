@@ -8,6 +8,21 @@ interface Package {
   ) => (sdkConfig: IOSConfig | AndroidConfig) => Promise<boolean>;
 }
 
+// should represent the relative path from `@embrace-io/react-native` to `@embrace-io/react-native-otlp` package,
+// both installed in the `node_modules` folder assuming the structure:
+// node_modules
+// └── @embrace-io
+//     ├── react-native
+//     │   └── lib
+//     │       └── src
+//     │           └── utils
+//     │               ├── EmbraceOTLP.js
+//     │               └── ...
+//     └── react-native-otlp
+//         └── lib
+//             └── src
+//                 ├── index.js
+//                 └── ...
 const RN_EMBRACE_OTLP_PATH =
   "../../../../../@embrace-io/react-native-otlp/lib/src";
 
@@ -17,37 +32,43 @@ class EmbraceOTLP {
 
   constructor(logger: EmbraceLogger) {
     this.logger = logger;
+
+    try {
+      // there is an issue with Metro bundler (https://github.com/facebook/metro/issues/666)
+      // that doesn't allow to import the package dynamically
+      // this.package = require("@embrace-io/react-native-otlp");
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const context = require.context(
+        RN_EMBRACE_OTLP_PATH,
+        false,
+        /index\.js$/,
+      );
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      context.keys().forEach(filename => {
+        // init RNEmbraceOTLP (if available)
+        this.package = context(filename);
+      });
+    } catch {
+      this.logger.error(
+        "an error ocurred when checking if `@embrace-io/react-native-otlp` was installed",
+      );
+    }
   }
 
-  public get = () => {
-    // TBD: Still an issue with Metro bundler
-    // https://github.com/facebook/metro/issues/666, will use require.context for now
-    // this.package = require("@embrace-io/react-native-otlp");
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const context = require.context(RN_EMBRACE_OTLP_PATH, false, /index\.js$/);
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    context.keys().forEach(filename => {
-      // Init RNEmbraceOTLP (if available)
-      this.package = context(filename);
-    });
-
-    return this.package;
-  };
-
-  public set = (exporters: OTLPExporterConfig) => {
+  public getStart = (exporters: OTLPExporterConfig) => {
     if (this.package?.initialize) {
       this.logger.log(
-        "@embrace-io/react-native-otlp` is installed and will be used",
+        "`@embrace-io/react-native-otlp` is installed and will be used",
       );
 
       return this.package?.initialize(exporters);
     } else {
       this.logger.log(
-        "`@embrace-io/react-native-otlp` is not installed and it's required. OTLP exporters will not be used",
+        "`@embrace-io/react-native-otlp` is not installed and it's required. OTLP exporters won't be used",
       );
     }
   };

@@ -39,44 +39,33 @@ const initialize = async (
       return Promise.resolve(false);
     }
 
-    const {exporters: otlpExporters, ...originalSdkConfig} = sdkConfig || {};
-    const embraceOTLP = new EmbraceOTLP(logger);
-
-    try {
-      // consuming `@embrace-io/react-native-otlp`
-      embraceOTLP.get();
-    } catch {
-      if (otlpExporters) {
-        logger.error(
-          "an error ocurred when checking if `@embrace-io/react-native-otlp` was installed",
-        );
-      }
-    }
-
-    const startSdkConfig = (isIOS && originalSdkConfig?.ios) || {};
+    const {exporters: otlpExporters} = sdkConfig || {};
+    const startSdkConfig = (isIOS && sdkConfig?.ios) || {};
 
     let isStarted;
     try {
-      let startNativeEmbraceSDKWithOTLP = null;
-      // if package is installed/available and exporters are provided get the `start` method
+      let otlpStart = null;
+
       if (otlpExporters) {
         if (!startSdkConfig.appId) {
           logger.log(
-            "[Embrace] 'sdkConfig.ios.appId' not found, only custom exporters will be used",
+            "'sdkConfig.ios.appId' not found, only custom exporters will be used",
           );
         }
 
-        startNativeEmbraceSDKWithOTLP = embraceOTLP.set(otlpExporters);
+        const otlp = new EmbraceOTLP(logger);
+        // if package is installed/available and exporters are provided get the `start` method
+        otlpStart = otlp.getStart(otlpExporters);
       }
 
-      isStarted = startNativeEmbraceSDKWithOTLP
-        ? // If OTLP exporter package is available, use it
-          await startNativeEmbraceSDKWithOTLP(startSdkConfig)
-        : // Otherwise, uses the core package
+      isStarted = otlpStart
+        ? // if OTLP exporter package is available, use it
+          await otlpStart(startSdkConfig)
+        : // otherwise, uses the core package
           await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
     } catch (e) {
       isStarted = false;
-      logger.warn(`[Embrace] From Native layer: ${e}`);
+      logger.warn(`from Native layer: ${e}`);
     }
 
     if (!isStarted) {
