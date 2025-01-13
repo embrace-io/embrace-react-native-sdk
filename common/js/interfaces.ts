@@ -7,7 +7,7 @@
 interface AndroidConfig {}
 
 interface IOSConfig {
-  appId: string;
+  appId?: string;
   appGroupId?: string;
   disableCrashReporter?: boolean;
   disableAutomaticViewCapture?: boolean;
