@@ -78,7 +78,7 @@ function RootLayout() {
 
   if (isPending) {
     return (
-      <View style={styles.container}>
+      <View>
         <Text>Loading Embrace</Text>
       </View>
     );
