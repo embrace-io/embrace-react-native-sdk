@@ -8,13 +8,13 @@ interface Formatter {
   format: (message: string) => string;
 }
 
-type Level = "info" | "warn" | "error";
+type Level = "error" | "warn" | "info";
 
 class EmbraceLogger implements Logger, Formatter {
   public out: Logger;
-  public level: Level[];
+  public level: Level;
 
-  constructor(out: Logger, level: Level[] = ["info", "warn", "error"]) {
+  constructor(out: Logger, level: Level = "info") {
     this.out = out;
     this.level = level;
   }
@@ -24,21 +24,20 @@ class EmbraceLogger implements Logger, Formatter {
   }
 
   public log(message: string) {
-    if (this.level.includes("info")) {
+    if (this.level === "info") {
       this.out.log(this.format(message));
     }
   }
 
   public warn(message: string) {
-    if (this.level.includes("warn")) {
+    if (this.level === "warn" || this.level === "info") {
       this.out.warn(this.format(message));
     }
   }
 
   public error(message: string) {
-    if (this.level.includes("error")) {
-      this.out.error(this.format(message));
-    }
+    // always print errors
+    this.out.error(this.format(message));
   }
 }
 

@@ -14,17 +14,14 @@ import {EmbraceManagerModule} from "./EmbraceManagerModule";
 interface EmbraceInitArgs {
   patch?: string;
   sdkConfig?: SDKConfig;
-  debug?: boolean;
+  debug?: "info" | "warn" | "error";
 }
 
 const initialize = async (
-  {sdkConfig, patch, debug}: EmbraceInitArgs = {debug: true},
+  {sdkConfig, patch, debug}: EmbraceInitArgs = {debug: "info"},
 ): Promise<boolean> => {
   const isIOS = Platform.OS === "ios";
-  const logger = new EmbraceLogger(
-    console,
-    debug ? ["info", "warn", "error"] : ["warn", "error"],
-  );
+  const logger = new EmbraceLogger(console, debug);
 
   const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
 

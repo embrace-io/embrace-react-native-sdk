@@ -7,7 +7,7 @@ import {initialize} from "./../index";
 const useEmbrace = (
   sdkConfig: SDKConfig,
   patch?: string,
-  debug: boolean = true,
+  debug: "error" | "warn" | "info" = "info",
 ) => {
   // States
   const [isPending, setIsPending] = useState(true);

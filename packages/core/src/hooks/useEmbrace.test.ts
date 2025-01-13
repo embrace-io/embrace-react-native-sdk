@@ -1,7 +1,7 @@
 import {renderHook, waitFor} from "@testing-library/react-native";
 
 import EmbraceOTLP from "../utils/EmbraceOTLP";
-import {SDKConfig} from "../interfaces";
+import {SDKConfig, EmbraceLoggerLevel} from "../interfaces";
 
 import {useEmbrace} from "./useEmbrace";
 
@@ -11,7 +11,7 @@ jest.spyOn(jest.requireActual("../utils/EmbraceOTLP"), "default");
 type UseEmbraceHook = {
   sdkConfig: SDKConfig;
   patch: string | undefined;
-  debug: boolean | undefined;
+  debug: EmbraceLoggerLevel | undefined;
 };
 
 const mockStartNativeEmbraceSDK = jest.fn().mockResolvedValue(true);
@@ -74,7 +74,7 @@ describe("useEmbrace", () => {
     rerender({
       sdkConfig: {ios: {appId: "test"}},
       patch: undefined,
-      debug: false,
+      debug: "error",
     });
 
     waitFor(() => {
@@ -97,7 +97,7 @@ describe("useEmbrace", () => {
             },
           },
           patch: "v1",
-          debug: true,
+          debug: "info",
         } as UseEmbraceHook,
       },
     );
@@ -130,25 +130,23 @@ describe("useEmbrace", () => {
             },
           },
           patch: "v1",
-          debug: true,
+          debug: "info",
         } as UseEmbraceHook,
       },
     );
 
-    const mockEmbraceOTLPGet = jest.fn().mockReturnValue({
+    const mockEmbraceOTLPGetStart = jest.fn().mockReturnValue({
       initialize: mockRNEmbraceOTLPInit,
     });
-    const mockEmbraceOTLPSet = jest.fn();
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     jest.mocked(EmbraceOTLP).mockImplementation(() => ({
-      get: mockEmbraceOTLPGet,
-      set: mockEmbraceOTLPSet,
+      getStart: mockEmbraceOTLPGetStart,
     }));
 
     waitFor(() => {
-      expect(mockEmbraceOTLPGet).toHaveBeenCalledTimes(1);
+      expect(mockEmbraceOTLPGetStart).toHaveBeenCalledTimes(1);
       expect(mockRNEmbraceOTLPInit).toHaveBeenCalledTimes(1);
 
       expect(result.current.isPending).toBeFalsy();
@@ -157,17 +155,15 @@ describe("useEmbrace", () => {
   });
 
   it("should throw if something goes wrong with React Native OTLP Package and there was exporter configuration available", async () => {
-    const mockEmbraceOTLPGet = jest.fn().mockImplementation(() => {
+    const mockEmbraceOTLPGetStart = jest.fn().mockImplementation(() => {
       // making it throw
       throw new Error();
     });
-    const mockEmbraceOTLPSet = jest.fn();
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     jest.mocked(EmbraceOTLP).mockImplementation(() => ({
-      get: mockEmbraceOTLPGet,
-      set: mockEmbraceOTLPSet,
+      getStart: mockEmbraceOTLPGetStart,
     }));
 
     const {result} = renderHook(
@@ -183,13 +179,13 @@ describe("useEmbrace", () => {
             },
           },
           patch: "v1",
-          debug: true,
+          debug: "info",
         } as UseEmbraceHook,
       },
     );
 
     waitFor(() => {
-      expect(mockEmbraceOTLPGet).toHaveBeenCalledTimes(1);
+      expect(mockEmbraceOTLPGetStart).toHaveBeenCalledTimes(1);
       expect(mockConsoleErr).toHaveBeenCalledWith(
         "[Embrace] an error ocurred when checking if `@embrace-io/react-native-otlp` was installed",
       );
@@ -200,13 +196,12 @@ describe("useEmbrace", () => {
   });
 
   it("should not initialize the React Native Embrace SDK if the initialization from the OTLP side returns false", () => {
-    const mockEmbraceOTLPGet = jest.fn().mockResolvedValue(false);
+    const mockEmbraceOTLPGetStart = jest.fn().mockResolvedValue(false);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     jest.mocked(EmbraceOTLP).mockImplementation(() => ({
-      get: mockEmbraceOTLPGet,
-      set: jest.fn().mockReturnValue(jest.fn()),
+      getStart: mockEmbraceOTLPGetStart,
     }));
 
     const {result} = renderHook(
@@ -222,7 +217,7 @@ describe("useEmbrace", () => {
             },
           },
           patch: "v1",
-          debug: true,
+          debug: "info",
         } as UseEmbraceHook,
       },
     );
