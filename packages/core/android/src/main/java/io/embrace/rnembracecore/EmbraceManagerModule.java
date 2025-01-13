@@ -254,21 +254,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void logRNAction(String name, Double startTime, Double endTime, ReadableMap properties, Integer payloadSize, String output, Promise promise) {
-        try {
-            long st = startTime.longValue();
-            long et = endTime.longValue();
-
-            final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<String, Object>();
-            Embrace.getInstance().getReactNativeInternalInterface().logRnAction(name, st, et, props, payloadSize, output);
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-
-    }
-
-    @ReactMethod
     public void setJavaScriptBundlePath(String path, Promise promise) {
         try {
             Embrace.getInstance().getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,path);
@@ -302,26 +287,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     public void endSession(Promise promise) {
         try {
             Embrace.getInstance().endSession();
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void setUserAsPayer(Promise promise) {
-        try {
-            Embrace.getInstance().setUserAsPayer();
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void clearUserAsPayer(Promise promise) {
-        try {
-            Embrace.getInstance().clearUserAsPayer();
             promise.resolve(true);
         } catch(Exception e) {
             promise.resolve(false);
