@@ -36,7 +36,14 @@ jest
   .spyOn(require("react-native").Dimensions, "addEventListener")
   .mockImplementation(mockAddEventListener);
 
-describe("screenOrientation.ts -> useOrientationListener", () => {
+describe("useOrientationListener.ts", () => {
+  it("not initializing if flag is off", () => {
+    renderHook(() => useOrientationListener(false));
+
+    expect(mockGetDimentions).not.toHaveBeenCalled();
+    expect(mockBreadcrumb).not.toHaveBeenCalled();
+  });
+
   it("initializing as Landscape", () => {
     renderHook(useOrientationListener);
 
@@ -134,7 +141,7 @@ describe("screenOrientation.ts -> useOrientationListener", () => {
 
     expect(mockBreadcrumb).not.toHaveBeenCalled();
     expect(mockConsoleWarn).toHaveBeenCalledWith(
-      "[Embrace] We could not determine the screen measurements. Orientation log skipped.",
+      "[Embrace] we could not determine the screen measurements. Orientation log skipped.",
     );
   });
 });

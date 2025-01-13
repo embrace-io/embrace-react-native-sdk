@@ -1,24 +1,15 @@
 import {Dimensions, ScaledSize} from "react-native";
-import {useCallback, useEffect, useRef} from "react";
+import {useEffect, useRef} from "react";
 
 import EmbraceLogger from "../logger";
 import {addBreadcrumb} from "..";
 
 type ScreenOrientation = "portrait" | "landscape";
-type Orientation = ScreenOrientation | undefined;
-
-type OrientationHandler = ({
-  window,
-  screen,
-}: {
-  window: ScaledSize;
-  screen: ScaledSize;
-}) => void;
 
 /**
  * Helper
  */
-const getOrientation = (screen: ScaledSize): Orientation => {
+const getOrientation = (screen: ScaledSize): ScreenOrientation | undefined => {
   const {width, height} = screen;
 
   if (width < height) {
@@ -36,7 +27,7 @@ const getOrientation = (screen: ScaledSize): Orientation => {
  * Helper
  */
 const logOrientationChange = (
-  orientation: Orientation,
+  orientation: ScreenOrientation,
   newOrientation?: ScreenOrientation,
 ) => {
   if (newOrientation) {
@@ -51,12 +42,32 @@ const logOrientationChange = (
 };
 
 const logger = new EmbraceLogger(console);
-const useOrientationListener = () => {
-  const initRef = useRef(false);
-  const orientationRef = useRef<Orientation>();
 
-  const handleOrientationChange: OrientationHandler = useCallback(
-    ({screen}) => {
+/**
+ * useOrientationListener
+ *
+ * @param enabled boolean flag that indicates whether the listener should run or not
+ * depending on the initialization of the `@embrace-io/react-native` (that is an async operation).
+ * Default `true`
+ */
+const useOrientationListener = (enabled: boolean = true) => {
+  const orientationRef = useRef<ScreenOrientation | undefined>();
+
+  /**
+   * Initialize the listener
+   */
+  useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
+    orientationRef.current = getOrientation(Dimensions.get("screen"));
+
+    if (orientationRef.current) {
+      logOrientationChange(orientationRef.current);
+    }
+
+    Dimensions.addEventListener("change", ({screen}) => {
       const newOrientation = getOrientation(screen);
 
       if (!newOrientation) {
@@ -67,35 +78,12 @@ const useOrientationListener = () => {
         return;
       }
 
-      if (orientationRef.current !== newOrientation) {
+      if (orientationRef.current && orientationRef.current !== newOrientation) {
         logOrientationChange(orientationRef.current, newOrientation);
         orientationRef.current = newOrientation;
       }
-    },
-    [],
-  );
-
-  /**
-   * Initialize the listener
-   */
-  useEffect(() => {
-    if (!initRef.current) {
-      const init = () => {
-        orientationRef.current = getOrientation(Dimensions.get("screen"));
-
-        if (orientationRef.current) {
-          logOrientationChange(orientationRef.current);
-        }
-
-        Dimensions.addEventListener("change", handleOrientationChange);
-      };
-
-      init();
-
-      // initialized just once
-      initRef.current = true;
-    }
-  }, [handleOrientationChange]);
+    });
+  }, [enabled]);
 };
 
 export {useOrientationListener};
