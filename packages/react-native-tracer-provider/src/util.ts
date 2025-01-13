@@ -6,7 +6,7 @@ import {Attributes, TimeInput, Link} from "@opentelemetry/api";
  *
  * See https://reactnative.dev/docs/native-modules-android#argument-types and https://reactnative.dev/docs/native-modules-ios#argument-types
  */
-export const normalizeTime = (time?: TimeInput): number => {
+const normalizeTime = (time?: TimeInput): number => {
   if (time === undefined) {
     return 0;
   }
@@ -32,18 +32,18 @@ export const normalizeTime = (time?: TimeInput): number => {
 /**
  * Parsing is handled on the native side, just need to make sure it is always defined
  */
-export const normalizeAttributes = (attributes?: Attributes) => {
+const normalizeAttributes = (attributes?: Attributes) => {
   return attributes || {};
 };
 
 /**
  * Parsing is handled on the native side, just need to make sure it is always defined
  */
-export const normalizeLinks = (links?: Link[]) => {
+const normalizeLinks = (links?: Link[]) => {
   return links || [];
 };
 
-export const isAttributes = (
+const isAttributes = (
   attributesOrTimeInput: Attributes | TimeInput | undefined,
 ): attributesOrTimeInput is Attributes => {
   return (
@@ -53,6 +53,14 @@ export const isAttributes = (
   );
 };
 
-export const logWarning = (msg: string) => {
+const logWarning = (msg: string) => {
   console.warn(`[Embrace] ${msg}`);
+};
+
+export {
+  normalizeTime,
+  normalizeAttributes,
+  normalizeLinks,
+  isAttributes,
+  logWarning,
 };
