@@ -21,7 +21,7 @@ const EmbraceTestHarness = ({
     sdkConfig.exporters = undefined;
   }
 
-  const {isPending} = useEmbrace(sdkConfig);
+  const {isPending, isStarted} = useEmbrace(sdkConfig);
 
   if (isPending) {
     return (
@@ -29,6 +29,14 @@ const EmbraceTestHarness = ({
         <Text>Loading Embrace</Text>
       </View>
     );
+  } else {
+    if (!isStarted) {
+      return (
+        <View style={styles.container}>
+          <Text>An error ocurred during the Embrace initialization</Text>
+        </View>
+      );
+    }
   }
 
   if (navigationStyle === "expo") {

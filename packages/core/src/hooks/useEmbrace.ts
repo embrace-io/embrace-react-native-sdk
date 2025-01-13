@@ -43,4 +43,4 @@ const useEmbrace = (
   };
 };
 
-export default useEmbrace;
+export {useEmbrace};

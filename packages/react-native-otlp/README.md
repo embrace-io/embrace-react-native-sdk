@@ -31,7 +31,7 @@ cd ios && pod install --repo-update
 
 ## Initialize
 
-For this example we will use Grafana Cloud in terms of redirecting telemetry data over there using OTLP endpoints. For more information about this please visit their online (docs)[https://grafana.com/docs/grafana-cloud/send-data/otlp/send-data-otlp/]
+For this example we will use Grafana Cloud in terms of redirecting telemetry data over there using OTLP endpoints. For more information about this please visit their online [docs](https://grafana.com/docs/grafana-cloud/send-data/otlp/send-data-otlp/)
 
 ```javascript
 import React, {useEffect, useMemo, useState} from "react";
@@ -65,18 +65,18 @@ const EXPORT_CONFIG = {
 };
 
 // this is the minimum of configuration needed at this point,
-// for more information please refer to docs under `@embrace-io/react-native`.
+// for more information please refer to docs under [`@embrace-io/react-native`](../core).
 // iOS is configurable through code, Android configuration happens at build time
 const SDK_CONFIG = {appId: "abcde"};
 
 function RootLayout() {
-  const {isPending} = useEmbrace({
+  const {isStarted} = useEmbrace({
     ios: SDK_CONFIG,
     exporters: EXPORT_CONFIG,
     debug: true,
   });
 
-  if (isPending) {
+  if (isStarted) {
     return (
       <View>
         <Text>Loading Embrace</Text>

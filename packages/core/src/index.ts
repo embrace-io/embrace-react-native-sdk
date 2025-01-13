@@ -20,16 +20,20 @@ interface EmbraceInitArgs {
 const initialize = async (
   {sdkConfig, patch, debug}: EmbraceInitArgs = {debug: true},
 ): Promise<boolean> => {
+  const isIOS = Platform.OS === "ios";
   const logger = new EmbraceLogger(
     console,
     debug ? ["info", "warn", "error"] : ["warn", "error"],
   );
 
   const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
+
+  // if the sdk started in the native side the follow condition doesn't take any effect.
+  // neither iOS setup() nor start() will be overridden
   if (!hasNativeSDKStarted) {
-    if (Platform.OS === "ios" && !sdkConfig?.ios?.appId) {
+    if (isIOS && !sdkConfig?.ios?.appId && !sdkConfig?.exporters) {
       logger.warn(
-        "sdkConfig.ios.appId is required to initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+        "[Embrace] 'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);
@@ -49,14 +53,19 @@ const initialize = async (
       }
     }
 
-    const startSdkConfig =
-      (Platform.OS === "ios" && originalSdkConfig?.ios) || {};
+    const startSdkConfig = (isIOS && originalSdkConfig?.ios) || {};
 
     let isStarted;
     try {
       let startNativeEmbraceSDKWithOTLP = null;
       // if package is installed/available and exporters are provided get the `start` method
       if (otlpExporters) {
+        if (!startSdkConfig.appId) {
+          logger.log(
+            "[Embrace] 'sdkConfig.ios.appId' not found, only custom exporters will be used",
+          );
+        }
+
         startNativeEmbraceSDKWithOTLP = embraceOTLP.set(otlpExporters);
       }
 
@@ -65,8 +74,9 @@ const initialize = async (
           await startNativeEmbraceSDKWithOTLP(startSdkConfig)
         : // Otherwise, uses the core package
           await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
-    } catch {
+    } catch (e) {
       isStarted = false;
+      logger.warn(`[Embrace] From Native layer: ${e}`);
     }
 
     if (!isStarted) {
@@ -89,23 +99,15 @@ const initialize = async (
     setJavaScriptPatch(patch);
   }
 
-  // Only attempt to check for CodePush bundle URL in release mode. Otherwise CodePush will throw an exception.
-  // https://docs.microsoft.com/en-us/appcenter/distribution/codepush/react-native#plugin-configuration-ios
-  if (!__DEV__) {
+  // On Android the Swazzler stores the computed bundle ID as part of the build process and the SDK is able to
+  // read it at run time. On iOS however we don't retain this value so try and get it from the default bundle path
+  if (isIOS) {
     try {
-      const isCodePushPresent =
-        await EmbraceManagerModule.checkAndSetCodePushBundleURL();
+      const bundleJs =
+        await EmbraceManagerModule.getDefaultJavaScriptBundlePath();
 
-      // On Android the Swazzler stores the computed bundle ID as part of the build process and the SDK is able to
-      // read it at run time. On iOS however we don't retain this value so we either need to get it from the Code Push
-      // bundle or, if that isn't enabled, try and get it from the default bundle path
-      if (!isCodePushPresent && Platform.OS === "ios") {
-        const bundleJs =
-          await EmbraceManagerModule.getDefaultJavaScriptBundlePath();
-
-        if (bundleJs) {
-          EmbraceManagerModule.setJavaScriptBundlePath(bundleJs);
-        }
+      if (bundleJs) {
+        EmbraceManagerModule.setJavaScriptBundlePath(bundleJs);
       }
     } catch (e) {
       logger.warn(
@@ -137,8 +139,8 @@ export * from "./api/component";
 export * from "./api/error";
 export * from "./api/log";
 export * from "./api/session";
-export * from "./api/views";
 export * from "./api/network";
 export * from "./api/user";
+export * from "./hooks/useEmbrace";
 
 export {initialize};

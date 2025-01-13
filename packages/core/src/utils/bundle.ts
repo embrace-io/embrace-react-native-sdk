@@ -25,14 +25,14 @@ const buildPackageVersion = (reactNativeVersion: {
   }
 };
 
-const setReactNativeVersion = () => {
+const setEmbracePackageVersion = () => {
   if (embracePackage) {
     const {version} = embracePackage;
     EmbraceManagerModule.setReactNativeSDKVersion(version);
   }
 };
 
-const setEmbracePackageVersion = () => {
+const setReactNativeVersion = () => {
   const packageVersion = buildPackageVersion(reactNativeVersion);
   if (packageVersion) {
     EmbraceManagerModule.setReactNativeVersion(packageVersion);
