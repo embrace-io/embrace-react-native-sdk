@@ -33,7 +33,7 @@ const EmbraceTestHarness = ({
     if (!isStarted) {
       return (
         <View style={styles.container}>
-          <Text>An error ocurred during the Embrace initialization</Text>
+          <Text>An error occurred during the Embrace initialization</Text>
         </View>
       );
     }

@@ -31,7 +31,7 @@ cd ios && pod install --repo-update
 
 ## Initialize
 
-For this example we will use Grafana Cloud in terms of redirecting telemetry data over there using OTLP endpoints. For more information about this please visit their online [docs](https://grafana.com/docs/grafana-cloud/send-data/otlp/send-data-otlp/)
+For this example we will use Grafana Cloud in terms of redirecting telemetry data over there using OTLP endpoints. For more information about this please visit their online [docs](https://grafana.com/docs/grafana-cloud/send-data/otlp/send-data-otlp/).
 
 ```javascript
 import React, {useEffect, useMemo, useState} from "react";
@@ -70,18 +70,22 @@ const EXPORT_CONFIG = {
 const SDK_CONFIG = {appId: "abcde"};
 
 function RootLayout() {
-  const {isStarted} = useEmbrace({
+  const {isPending, isStarted} = useEmbrace({
     ios: SDK_CONFIG,
     exporters: EXPORT_CONFIG,
     debug: true,
   });
 
-  if (isStarted) {
+  if (isPending) {
     return (
-      <View>
+      <View style={styles.container}>
         <Text>Loading Embrace</Text>
       </View>
     );
+  } else {
+    if (!isStarted) {
+      console.log('An error occurred during Embrace initialization');
+    }
   }
 
   // regular content of the application
