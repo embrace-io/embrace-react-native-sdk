@@ -2496,6 +2496,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-navigation@workspace:packages/react-native-navigation"
   dependencies:
+    "@opentelemetry/instrumentation-react-native-navigation": ../../integration-tests/artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz
     typescript: "npm:^5.6.3"
   peerDependencies:
     react-native: ">=0.56.0"
@@ -2535,16 +2536,6 @@ __metadata:
     semver: "npm:^7.1.3"
     typescript: "npm:^5.6.3"
     xcode: "npm:^3.0.1"
-  peerDependencies:
-    react-native: ">=0.56.0"
-  languageName: unknown
-  linkType: soft
-
-"@embrace-io/react-navigation@workspace:packages/react-navigation":
-  version: 0.0.0-use.local
-  resolution: "@embrace-io/react-navigation@workspace:packages/react-navigation"
-  dependencies:
-    typescript: "npm:^5.6.3"
   peerDependencies:
     react-native: ">=0.56.0"
   languageName: unknown
@@ -3779,6 +3770,15 @@ __metadata:
   version: 1.9.0
   resolution: "@opentelemetry/api@npm:1.9.0"
   checksum: 10c0/9aae2fe6e8a3a3eeb6c1fdef78e1939cf05a0f37f8a4fae4d6bf2e09eb1e06f966ece85805626e01ba5fab48072b94f19b835449e58b6d26720ee19a58298add
+  languageName: node
+  linkType: hard
+
+"@opentelemetry/instrumentation-react-native-navigation@file:../../integration-tests/artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz::locator=%40embrace-io%2Freact-native-navigation%40workspace%3Apackages%2Freact-native-navigation":
+  version: 0.1.0
+  resolution: "@opentelemetry/instrumentation-react-native-navigation@file:../../integration-tests/artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz#../../integration-tests/artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz::hash=c5d0f5&locator=%40embrace-io%2Freact-native-navigation%40workspace%3Apackages%2Freact-native-navigation"
+  peerDependencies:
+    "@opentelemetry/api": ^1.3.0
+  checksum: 10c0/db61691133e58393bdb6fbdcac57a38a119c3b525d869b50b1c5f414f18d1e2df2def1bd82cf1917e584e47e5efdff7e8cca6c3425d03f46ec9988f565f30495
   languageName: node
   linkType: hard
 
