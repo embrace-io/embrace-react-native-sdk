@@ -6,7 +6,7 @@ import {trackUnhandledErrors} from "./utils/error";
 import {setEmbracePackageVersion, setReactNativeVersion} from "./utils/bundle";
 import EmbraceOTLP from "./utils/EmbraceOTLP";
 import EmbraceLogger from "./utils/EmbraceLogger";
-import {SDKConfig} from "./interfaces";
+import {SDKConfig, EmbraceLoggerLevel} from "./interfaces";
 import {handleError, handleGlobalError} from "./api/error";
 import {setJavaScriptPatch} from "./api/bundle";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
@@ -14,7 +14,7 @@ import {EmbraceManagerModule} from "./EmbraceManagerModule";
 interface EmbraceInitArgs {
   patch?: string;
   sdkConfig?: SDKConfig;
-  debug?: "info" | "warn" | "error";
+  debug?: EmbraceLoggerLevel;
 }
 
 const initialize = async (

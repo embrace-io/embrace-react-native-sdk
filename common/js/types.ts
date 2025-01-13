@@ -28,4 +28,6 @@ type MethodType =
   | "trace"
   | "TRACE";
 
-export {LogSeverity, SessionStatus, MethodType};
+type EmbraceLoggerLevel = "info" | "error" | "warn";
+
+export {LogSeverity, SessionStatus, MethodType, EmbraceLoggerLevel};
