@@ -71,6 +71,7 @@ export const useEmbraceNativeTracerProvider = (
         })
         .finally(() => setIsLoading(false));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, config, enabled]);
 
   return {
