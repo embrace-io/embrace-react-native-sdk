@@ -2,9 +2,9 @@
 
 import {Platform} from "react-native";
 
+import {oltpGetStart} from "./utils/otlp";
 import {trackUnhandledErrors} from "./utils/error";
 import {setEmbracePackageVersion, setReactNativeVersion} from "./utils/bundle";
-import EmbraceOTLP from "./utils/EmbraceOTLP";
 import EmbraceLogger from "./utils/EmbraceLogger";
 import {SDKConfig, EmbraceLoggerLevel} from "./interfaces";
 import {handleError, handleGlobalError} from "./api/error";
@@ -14,14 +14,14 @@ import {EmbraceManagerModule} from "./EmbraceManagerModule";
 interface EmbraceInitArgs {
   patch?: string;
   sdkConfig?: SDKConfig;
-  debug?: EmbraceLoggerLevel;
+  logLevel?: EmbraceLoggerLevel;
 }
 
 const initialize = async (
-  {sdkConfig, patch, debug}: EmbraceInitArgs = {debug: "info"},
+  {sdkConfig, patch, logLevel}: EmbraceInitArgs = {logLevel: "info"},
 ): Promise<boolean> => {
   const isIOS = Platform.OS === "ios";
-  const logger = new EmbraceLogger(console, debug);
+  const logger = new EmbraceLogger(console, logLevel);
 
   const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
 
@@ -40,9 +40,12 @@ const initialize = async (
     const startSdkConfig = (isIOS && sdkConfig?.ios) || {};
 
     let isStarted;
-    try {
-      let otlpStart = null;
+    let otlpStart = null;
 
+    // separating blocks for throwing their own warning messages individually.
+    // if core/otlp blocks are combined into one try/catch and the otlp package throws an error
+    // the core package won't be able to start the SDK as fallback
+    try {
       if (otlpExporters) {
         if (!startSdkConfig.appId) {
           logger.log(
@@ -50,11 +53,16 @@ const initialize = async (
           );
         }
 
-        const otlp = new EmbraceOTLP(logger);
         // if package is installed/available and exporters are provided get the `start` method
-        otlpStart = otlp.getStart(otlpExporters);
+        otlpStart = oltpGetStart(logger, otlpExporters);
       }
+    } catch (e) {
+      // if something goes wrong with `oltpGetStart`it's caught here
+      logger.warn(`${e}`);
+    }
 
+    try {
+      // if the otlp package throws or is not available, the core package will work as usual printing the proper messages
       isStarted = otlpStart
         ? // if OTLP exporter package is available, use it
           await otlpStart(startSdkConfig)
@@ -62,7 +70,7 @@ const initialize = async (
           await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
     } catch (e) {
       isStarted = false;
-      logger.warn(`from Native layer: ${e}`);
+      logger.warn(`${e}`);
     }
 
     if (!isStarted) {

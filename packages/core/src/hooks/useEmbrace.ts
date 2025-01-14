@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
 
-import {SDKConfig} from "../interfaces";
+import {SDKConfig, EmbraceLoggerLevel} from "../interfaces";
 
 import {initialize} from "./../index";
 
 const useEmbrace = (
   sdkConfig: SDKConfig,
   patch?: string,
-  debug: "error" | "warn" | "info" = "info",
+  logLevel?: EmbraceLoggerLevel,
 ) => {
   // States
   const [isPending, setIsPending] = useState(true);
@@ -21,7 +21,7 @@ const useEmbrace = (
       const config = {
         patch,
         sdkConfig,
-        debug,
+        logLevel,
       };
 
       try {
@@ -35,7 +35,7 @@ const useEmbrace = (
     if (!isStarted) {
       initSDK();
     }
-  }, [sdkConfig, isStarted, debug, patch]);
+  }, [sdkConfig, isStarted, logLevel, patch]);
 
   return {
     isPending,

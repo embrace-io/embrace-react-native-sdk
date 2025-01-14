@@ -1,6 +1,6 @@
 import {waitFor} from "@testing-library/react-native";
 
-import EmbraceOTLP from "../utils/EmbraceOTLP";
+import {oltpGetStart} from "../utils/otlp";
 import {initialize} from "../index";
 import {handleGlobalError} from "../api/error";
 import {ComponentError, logIfComponentError} from "../api/component";
@@ -18,7 +18,9 @@ const mockLogUnhandledJSException = jest.fn();
 
 const ReactNativeMock = jest.requireMock("react-native");
 
-jest.mock("../utils/EmbraceOTLP");
+jest.mock("../utils/otlp", () => ({
+  oltpGetStart: jest.fn(),
+}));
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
@@ -190,17 +192,9 @@ describe("iOS: initialize", () => {
 
   it("should not call regular `startNativeEmbraceSDK` if `exporters` are available", async () => {
     const mockRNEmbraceOTLPInit = jest.fn().mockResolvedValue(true);
-    const mockEmbraceOTLPGet = jest.fn().mockReturnValue({
-      initialize: mockRNEmbraceOTLPInit,
-    });
-    const mockEmbraceOTLPSet = jest.fn().mockResolvedValue(true);
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    jest.mocked(EmbraceOTLP).mockImplementation(() => ({
-      set: mockEmbraceOTLPSet,
-      get: mockEmbraceOTLPGet,
-    }));
+    const mockOltpGetStart = jest
+      .mocked(oltpGetStart)
+      .mockImplementation(() => mockRNEmbraceOTLPInit);
 
     const isStarted = await initialize({
       sdkConfig: {
@@ -212,10 +206,7 @@ describe("iOS: initialize", () => {
     });
 
     waitFor(() => {
-      expect(mockEmbraceOTLPSet).toHaveBeenCalledTimes(1);
-      expect(mockEmbraceOTLPSet).toHaveBeenCalledWith({
-        logExporter: {endpoint: "http://localhost:8081"},
-      });
+      expect(mockOltpGetStart).toHaveBeenCalledTimes(1);
       expect(mockStart).not.toHaveBeenCalled();
       expect(isStarted).toBe(true);
     });

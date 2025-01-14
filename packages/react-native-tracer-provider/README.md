@@ -34,8 +34,6 @@ const {isStarted} = useEmbrace({
 
 const optionalConfig = {...}; // See EmbraceNativeTracerProviderConfig in ./src/types/ for possible options
 const {tracerProvider: embraceTracerProvider, tracer: embraceTracer} = useEmbraceNativeTracerProvider(optionalConfig, isStarted);
-
-const {tracerProvider} = useEmbraceNativeTracerProvider({}, isStarted);
 ```
 
 You can then use the provided tracer to add custom instrumentations to your application:

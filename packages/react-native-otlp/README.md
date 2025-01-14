@@ -72,8 +72,7 @@ const SDK_CONFIG = {appId: "abcde"};
 function RootLayout() {
   const {isPending, isStarted} = useEmbrace({
     ios: SDK_CONFIG,
-    exporters: EXPORT_CONFIG,
-    debug: true,
+    exporters: EXPORT_CONFIG
   });
 
   if (isPending) {
