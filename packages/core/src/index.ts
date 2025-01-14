@@ -57,12 +57,12 @@ const initialize = async (
         otlpStart = oltpGetStart(logger, otlpExporters);
       }
     } catch (e) {
-      // if something goes wrong with `oltpGetStart`it's caught here
+      // if something goes wrong with `oltpGetStart` it's caught here
       logger.warn(`${e}`);
     }
 
     try {
-      // if the otlp package throws or is not available, the core package will work as usual printing the proper messages
+      // if the otlp package throws or it is not available, the core package will work as usual printing the proper messages
       isStarted = otlpStart
         ? // if OTLP exporter package is available, use it
           await otlpStart(startSdkConfig)
