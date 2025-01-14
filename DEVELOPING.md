@@ -125,6 +125,8 @@ Try stopping and cleaning local services (in case there are unknown issues relat
   cd <app>/android
   ./gradlew --stop  // stop daemons
   rm -rf ~/.gradle/caches/
+  rm -rf .gradle/
+  rm -rf app/build/
   ./gradlew build --stacktrace
 ```
 
