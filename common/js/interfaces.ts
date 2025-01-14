@@ -2,10 +2,12 @@
  * Common interfaces shared by Embrace Packages
  */
 
+import {EmbraceLoggerLevel} from "./types";
+
 interface SDKConfig {
   ios?: IOSConfig;
   exporters?: OTLPExporterConfig;
-  debug?: boolean;
+  logLevel?: EmbraceLoggerLevel;
 }
 
 // Today Android is not configurable through code,

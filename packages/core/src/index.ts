@@ -45,20 +45,16 @@ const initialize = async (
     // separating blocks for throwing their own warning messages individually.
     // if core/otlp blocks are combined into one try/catch and the otlp package throws an error
     // the core package won't be able to start the SDK as fallback
-    try {
-      if (otlpExporters) {
-        if (!startSdkConfig.appId) {
-          logger.log(
-            "'sdkConfig.ios.appId' not found, only custom exporters will be used",
-          );
-        }
-
-        // if package is installed/available and exporters are provided get the `start` method
-        otlpStart = oltpGetStart(logger, otlpExporters);
+    // `oltpGetStart` has their own try/catch block
+    if (otlpExporters) {
+      if (!startSdkConfig.appId) {
+        logger.log(
+          "'sdkConfig.ios.appId' not found, only custom exporters will be used",
+        );
       }
-    } catch (e) {
-      // if something goes wrong with `oltpGetStart` it's caught here
-      logger.warn(`${e}`);
+
+      // if package is installed/available and exporters are provided get the `start` method
+      otlpStart = oltpGetStart(logger, otlpExporters);
     }
 
     try {

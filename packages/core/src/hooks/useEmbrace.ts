@@ -1,8 +1,7 @@
 import {useEffect, useState} from "react";
 
 import {SDKConfig, EmbraceLoggerLevel} from "../interfaces";
-
-import {initialize} from "./../index";
+import {initialize} from "../index";
 
 const useEmbrace = (
   sdkConfig: SDKConfig,

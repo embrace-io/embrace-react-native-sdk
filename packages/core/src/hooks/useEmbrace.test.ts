@@ -156,8 +156,10 @@ describe("useEmbrace", () => {
     const mockOltpGetStart = jest
       .mocked(oltpGetStart)
       .mockImplementation(() => {
-        // making `@embrace-io/react-native-otlp` throw
-        throw new Error();
+        try {
+          // making `@embrace-io/react-native-otlp` throw
+          throw new Error();
+        } catch {}
       });
 
     const {result} = renderHook(
@@ -183,6 +185,9 @@ describe("useEmbrace", () => {
       expect(result.current.isPending).toBeFalsy();
       // it should still initialize the SKD using the regular `@embrace-io/react-native` package
       expect(result.current.isStarted).toBeTruthy();
+      expect(mockConsoleLog).toHaveBeenCalledWith(
+        "[Embrace] native SDK was started",
+      );
     });
   });
 
