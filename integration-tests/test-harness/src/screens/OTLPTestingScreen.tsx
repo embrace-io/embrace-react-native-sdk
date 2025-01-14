@@ -10,19 +10,21 @@ const OTLPTestingScreen = () => {
   const {tracer} = useEmbraceNativeTracerProvider();
   const [span, setSpan] = useState<Span>();
 
-  if (!tracer) {
-    return <FullScreenMessage msg="Loading Tracer" />;
-  }
-
   const startManualSpan = useCallback(async () => {
-    setSpan(tracer.startSpan("otlp - custom export"));
-  }, []);
+    if (tracer) {
+      setSpan(tracer.startSpan("otlp - custom export"));
+    }
+  }, [tracer]);
 
   const stopManualSpan = useCallback(() => {
     if (span) {
       span.end();
     }
   }, [span]);
+
+  if (!tracer) {
+    return <FullScreenMessage msg="Loading Tracer" />;
+  }
 
   return (
     <View style={styles.container}>
