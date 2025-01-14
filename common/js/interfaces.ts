@@ -35,7 +35,6 @@ interface ExporterConfig {
 interface OTLPExporterConfig {
   logExporter?: ExporterConfig;
   traceExporter?: ExporterConfig;
-  otlpPackagePath?: string;
 }
 
 export {
