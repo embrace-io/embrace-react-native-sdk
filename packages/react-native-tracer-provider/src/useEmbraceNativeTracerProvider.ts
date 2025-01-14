@@ -19,7 +19,7 @@ import {EmbraceNativeTracerProvider} from "./EmbraceNativeTracerProvider";
  *
  * The JS side of its implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
  */
-export const useEmbraceNativeTracerProvider = (
+const useEmbraceNativeTracerProvider = (
   config?: EmbraceNativeTracerProviderConfig,
   enabled = true,
 ): EmbraceNativeTracerProviderReturn => {
@@ -81,3 +81,5 @@ export const useEmbraceNativeTracerProvider = (
     tracer,
   };
 };
+
+export {useEmbraceNativeTracerProvider};

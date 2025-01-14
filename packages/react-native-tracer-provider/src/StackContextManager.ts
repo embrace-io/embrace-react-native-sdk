@@ -28,7 +28,7 @@ import {Context, ContextManager, ROOT_CONTEXT} from "@opentelemetry/api";
  * Stack Context Manager for managing the state in web
  * it doesn't fully support the async calls though
  */
-export class StackContextManager implements ContextManager {
+class StackContextManager implements ContextManager {
   /**
    * whether the context manager is enabled or not
    */
@@ -132,3 +132,5 @@ export class StackContextManager implements ContextManager {
     }
   }
 }
+
+export {StackContextManager};

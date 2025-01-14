@@ -29,7 +29,7 @@ import {EmbraceNativeSpan} from "./EmbraceNativeSpan";
  *
  * The JS side of this implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
  */
-export class EmbraceNativeTracer implements Tracer {
+class EmbraceNativeTracer implements Tracer {
   private readonly name: string;
   private readonly version: string;
   private readonly schemaUrl: string;
@@ -143,3 +143,5 @@ export class EmbraceNativeTracer implements Tracer {
     return this.contextManager.with(contextWithSpanSet, fn, undefined, span);
   }
 }
+
+export {EmbraceNativeTracer};

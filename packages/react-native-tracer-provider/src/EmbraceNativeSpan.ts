@@ -29,7 +29,7 @@ import {TracerProviderModule} from "./TracerProviderModule";
  *
  * The JS side of this implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
  */
-export class EmbraceNativeSpan implements Span {
+class EmbraceNativeSpan implements Span {
   private readonly tracerName: string;
   private readonly tracerVersion: string;
   private readonly tracerSchemaUrl: string;
@@ -141,6 +141,13 @@ export class EmbraceNativeSpan implements Span {
         normalizeAttributes(attributesOrStartTime),
         normalizeTime(timeStamp),
       );
+    } else if (timeStamp) {
+      TracerProviderModule.addEvent(
+        this.nativeID(),
+        name,
+        normalizeAttributes({}),
+        normalizeTime(timeStamp),
+      );
     } else {
       TracerProviderModule.addEvent(
         this.nativeID(),
@@ -239,3 +246,5 @@ export class EmbraceNativeSpan implements Span {
     );
   }
 }
+
+export {EmbraceNativeSpan};
