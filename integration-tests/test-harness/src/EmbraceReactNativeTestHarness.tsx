@@ -1,5 +1,4 @@
 import * as React from "react";
-import {useRef} from "react";
 import {LogTestingScreen} from "./screens/LogTestingScreen";
 import {OTLPTestingScreen} from "./screens/OTLPTestingScreen";
 import {PropertyTestingScreen} from "./screens/PropertyTestingScreen";
@@ -11,7 +10,7 @@ import {
   useNavigationContainerRef,
 } from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
+import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {SpanTestingScreen} from "./screens/SpanTestingScreen";
 import {NSFTestingScreen} from "./screens/NSFTestingScreen";
 
@@ -19,20 +18,18 @@ const Tab = createBottomTabNavigator();
 
 export const EmbraceReactNativeTestHarness = () => {
   const navigationContainer = useNavigationContainerRef();
-  const navigationContainerRef = useRef(navigationContainer);
+  const navigationContainerRef = React.useRef(navigationContainer);
   const {tracerProvider} = useEmbraceNativeTracerProvider({});
 
   return (
     // `NavigationContainer` is waiting for what `useNavigationContainerRef` is returning (both exported from `@react-navigation/native`)
     <NavigationContainer ref={navigationContainer}>
-      <NavigationTracker
+      <EmbraceNavigationTracker
         ref={navigationContainerRef}
-        provider={tracerProvider || undefined}
-        config={{
-          attributes: {
-            "emb.type": "ux.view",
-          },
-          debug: true,
+        tracerProvider={tracerProvider || undefined}
+        screenAttributes={{
+          "is-test-harness": true,
+          package: "@react-navigation/native",
         }}>
         <Tab.Navigator
           screenOptions={{
@@ -89,7 +86,7 @@ export const EmbraceReactNativeTestHarness = () => {
             component={NSFTestingScreen}
           />
         </Tab.Navigator>
-      </NavigationTracker>
+      </EmbraceNavigationTracker>
     </NavigationContainer>
   );
 };
