@@ -36,14 +36,6 @@ const clearUserEmail = (): Promise<boolean> => {
   return EmbraceManagerModule.clearUserEmail();
 };
 
-const setUserAsPayer = (): Promise<boolean> => {
-  return EmbraceManagerModule.setUserAsPayer();
-};
-
-const clearUserAsPayer = (): Promise<boolean> => {
-  return EmbraceManagerModule.clearUserAsPayer();
-};
-
 export {
   addUserPersona,
   clearUserPersona,
@@ -54,6 +46,4 @@ export {
   clearUsername,
   setUserEmail,
   clearUserEmail,
-  setUserAsPayer,
-  clearUserAsPayer,
 };

@@ -136,5 +136,6 @@ export * from "./api/session";
 export * from "./api/network";
 export * from "./api/user";
 export * from "./hooks/useEmbrace";
+export * from "./hooks/useOrientationListener";
 
 export {initialize};

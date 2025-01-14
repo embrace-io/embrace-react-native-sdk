@@ -1,8 +1,8 @@
 import * as React from "react";
-import {useEmbrace} from "@embrace-io/react-native";
+import {useEmbrace, useOrientationListener} from "@embrace-io/react-native";
 import {Text, View} from "react-native";
 import {styles} from "./helpers/styles";
-import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces/Config";
+import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces";
 import {EmbraceExpoTestHarness} from "./EmbraceExpoTestHarness";
 import {EmbraceReactNativeTestHarness} from "./EmbraceReactNativeTestHarness";
 
@@ -22,6 +22,9 @@ const EmbraceTestHarness = ({
   }
 
   const {isPending, isStarted} = useEmbrace(sdkConfig);
+
+  // initializing orientation listener
+  useOrientationListener(isStarted);
 
   if (isPending) {
     return (
