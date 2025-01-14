@@ -1,7 +1,7 @@
 import {Dimensions, ScaledSize} from "react-native";
 import {useEffect, useRef} from "react";
 
-import EmbraceLogger from "../logger";
+import EmbraceLogger from "../utils/EmbraceLogger";
 import {addBreadcrumb} from "..";
 
 type ScreenOrientation = "portrait" | "landscape";
