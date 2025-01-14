@@ -25,13 +25,18 @@ const TracerProviderTestingScreen = () => {
   }, [isLoading, isError, error, tracerProvider]);
 
   const recordView = useCallback(async () => {
+    if (!tracer) {
+      console.log("failed to record view, tracer not ready");
+      return;
+    }
+
     try {
       const viewSpan = startView(tracer, "my-view");
       viewSpan.end();
     } catch (e) {
       console.log("failed to record view");
     }
-  }, []);
+  }, [tracer]);
 
   if (isLoading) {
     return <FullScreenMessage msg="Loading Tracer Provider" />;

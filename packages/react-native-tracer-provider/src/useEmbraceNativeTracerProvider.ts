@@ -71,7 +71,7 @@ const useEmbraceNativeTracerProvider = (
         })
         .finally(() => setIsLoading(false));
     }
-  }, [isLoading, config, enabled]);
+  }, [isLoading, config, enabled, tracerProvider]);
 
   return {
     isLoading,

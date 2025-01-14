@@ -6,7 +6,7 @@ import {
 } from "@embrace-io/react-native";
 import {Text, View} from "react-native";
 import {styles} from "./helpers/styles";
-import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces";
+import {SDKConfig} from "@embrace-io/react-native";
 import {EmbraceExpoTestHarness} from "./EmbraceExpoTestHarness";
 import {EmbraceReactNativeTestHarness} from "./EmbraceReactNativeTestHarness";
 import {initWithCustomExporters} from "./helpers/otlp";

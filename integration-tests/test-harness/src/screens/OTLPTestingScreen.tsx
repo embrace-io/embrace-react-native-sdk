@@ -2,15 +2,13 @@ import * as React from "react";
 import {useCallback, useState} from "react";
 import {Button, View, Text} from "react-native";
 import {styles} from "../helpers/styles";
-import {
-  EmbraceNativeSpan,
-  useEmbraceNativeTracerProvider,
-} from "@embrace-io/react-native-tracer-provider";
+import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import FullScreenMessage from "../components/FullScreenMessage";
+import {Span} from "@opentelemetry/api";
 
 const OTLPTestingScreen = () => {
   const {tracer} = useEmbraceNativeTracerProvider();
-  const [span, setSpan] = useState<EmbraceNativeSpan>();
+  const [span, setSpan] = useState<Span>();
 
   if (!tracer) {
     return <FullScreenMessage msg="Loading Tracer" />;
