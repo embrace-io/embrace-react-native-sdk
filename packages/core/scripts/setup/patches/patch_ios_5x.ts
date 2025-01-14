@@ -2,7 +2,7 @@
 // script to remove the old way of setting up the iOS SDK. Should eventually remove once enough people have upgraded
 
 import {getAppDelegateByIOSLanguage} from "../../util/ios";
-import EmbraceLogger from "../../../src/logger";
+import EmbraceLogger from "../../../src/utils/EmbraceLogger";
 
 import {
   IOS_LANGUAGE,

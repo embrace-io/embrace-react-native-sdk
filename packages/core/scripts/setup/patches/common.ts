@@ -1,5 +1,5 @@
 import {FileUpdatable} from "../../util/file";
-import EmbraceLogger from "../../../src/logger";
+import EmbraceLogger from "../../../src/utils/EmbraceLogger";
 
 // TODO refactor this
 const logger = new EmbraceLogger(console);

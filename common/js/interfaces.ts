@@ -2,6 +2,14 @@
  * Common interfaces shared by Embrace Packages
  */
 
+import {EmbraceLoggerLevel} from "./types";
+
+interface SDKConfig {
+  ios?: IOSConfig;
+  exporters?: OTLPExporterConfig;
+  logLevel?: EmbraceLoggerLevel;
+}
+
 // Today Android is not configurable through code,
 // this is a placeholder for future implementations.
 interface AndroidConfig {}
@@ -16,15 +24,26 @@ interface IOSConfig {
   disabledUrlPatterns?: string[];
 }
 
-interface SDKConfig {
-  ios?: IOSConfig;
-  startCustomExport?: (
-    config: IOSConfig | NonNullable<object>,
-  ) => Promise<boolean>;
-}
-
 interface LogProperties {
   [key: string]: string;
 }
 
-export {SDKConfig, IOSConfig, AndroidConfig, LogProperties};
+interface ExporterConfig {
+  endpoint: string;
+  headers?: {key: string; token: string}[];
+  timeout?: number;
+}
+
+interface OTLPExporterConfig {
+  logExporter?: ExporterConfig;
+  traceExporter?: ExporterConfig;
+}
+
+export {
+  SDKConfig,
+  IOSConfig,
+  AndroidConfig,
+  LogProperties,
+  ExporterConfig,
+  OTLPExporterConfig,
+};

@@ -8,7 +8,7 @@ import {
   xcodePatchable,
   findNameWithCaseSensitiveFromPath,
 } from "../util/ios";
-import EmbraceLogger from "../../src/logger";
+import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 import patch from "./patches/patch";
 import {apiToken, iosAppID, IPackageJson, packageJSON} from "./common";

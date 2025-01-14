@@ -1,18 +1,22 @@
+import {EmbraceLoggerLevel} from "../interfaces";
+
 interface Logger {
   log: (message: string) => void;
   warn: (message: string) => void;
   error: (message: string) => void;
 }
 
-interface MessageFormatter {
+interface Formatter {
   format: (message: string) => string;
 }
 
-class EmbraceLogger implements Logger, MessageFormatter {
+class EmbraceLogger implements Logger, Formatter {
   public out: Logger;
+  public level: EmbraceLoggerLevel;
 
-  constructor(out: Logger) {
+  constructor(out: Logger, level: EmbraceLoggerLevel = "info") {
     this.out = out;
+    this.level = level;
   }
 
   public format(message: string): string {
@@ -20,14 +24,19 @@ class EmbraceLogger implements Logger, MessageFormatter {
   }
 
   public log(message: string) {
-    this.out.log(this.format(message));
+    if (this.level === "info") {
+      this.out.log(this.format(message));
+    }
   }
 
   public warn(message: string) {
-    this.out.warn(this.format(message));
+    if (this.level === "warn" || this.level === "info") {
+      this.out.warn(this.format(message));
+    }
   }
 
   public error(message: string) {
+    // always print errors
     this.out.error(this.format(message));
   }
 }

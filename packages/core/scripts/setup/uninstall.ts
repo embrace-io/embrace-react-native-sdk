@@ -10,7 +10,7 @@ import {
 } from "../util/ios";
 import {FileUpdatable} from "../util/file";
 import {embraceJSON, getBuildGradlePatchable} from "../util/android";
-import EmbraceLogger from "../../src/logger";
+import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 import {
   getText,

@@ -18,7 +18,7 @@
     "lint:clang:fix": "./scripts/run-clang-format.sh --fix",
     "lint:swift": "./scripts/run-swiftlint.sh",
     "lint:swift:fix": "./scripts/run-swiftlint.sh --fix",
-    "test": "jest",
+    "test": "jest --maxWorkers=2",
     "android:test": "npx lerna run android:test",
     "ios:install": "npx lerna run ios:install",
     "ios:test": "npx lerna run ios:test --concurrency=1"

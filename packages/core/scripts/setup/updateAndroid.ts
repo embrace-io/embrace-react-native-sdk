@@ -1,5 +1,5 @@
 import Wizard from "../util/wizard";
-import EmbraceLogger from "../../src/logger";
+import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 import {patchBuildGradle} from "./android";
 

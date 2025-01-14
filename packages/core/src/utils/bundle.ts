@@ -1,3 +1,11 @@
+import {EmbraceManagerModule} from "../EmbraceManagerModule";
+import * as embracePackage from "../../package.json";
+
+const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
+
+const isObjectNonEmpty = (obj?: object): boolean =>
+  Object.keys(obj || {}).length > 0;
+
 const buildPackageVersion = (reactNativeVersion: {
   version: {
     major: string;
@@ -6,9 +14,6 @@ const buildPackageVersion = (reactNativeVersion: {
     prerelease: string | null;
   };
 }): string | void => {
-  const isObjectNonEmpty = (obj?: object): boolean =>
-    Object.keys(obj || {}).length > 0;
-
   if (
     isObjectNonEmpty(reactNativeVersion) &&
     isObjectNonEmpty(reactNativeVersion.version)
@@ -20,4 +25,18 @@ const buildPackageVersion = (reactNativeVersion: {
   }
 };
 
-export {buildPackageVersion};
+const setEmbracePackageVersion = () => {
+  if (embracePackage) {
+    const {version} = embracePackage;
+    EmbraceManagerModule.setReactNativeSDKVersion(version);
+  }
+};
+
+const setReactNativeVersion = () => {
+  const packageVersion = buildPackageVersion(reactNativeVersion);
+  if (packageVersion) {
+    EmbraceManagerModule.setReactNativeVersion(packageVersion);
+  }
+};
+
+export {setReactNativeVersion, setEmbracePackageVersion};

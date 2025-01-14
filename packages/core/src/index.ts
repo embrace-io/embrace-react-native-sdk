@@ -2,92 +2,96 @@
 
 import {Platform} from "react-native";
 
-import * as embracePackage from "../package.json";
-
-import {buildPackageVersion} from "./utils/bundle";
-import {SDKConfig} from "./interfaces";
+import {oltpGetStart} from "./utils/otlp";
+import {trackUnhandledErrors} from "./utils/error";
+import {setEmbracePackageVersion, setReactNativeVersion} from "./utils/bundle";
+import EmbraceLogger from "./utils/EmbraceLogger";
+import {SDKConfig, EmbraceLoggerLevel} from "./interfaces";
 import {handleError, handleGlobalError} from "./api/error";
 import {setJavaScriptPatch} from "./api/bundle";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
 
-const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
-const tracking = require("promise/setimmediate/rejection-tracking");
+interface EmbraceInitArgs {
+  patch?: string;
+  sdkConfig?: SDKConfig;
+  logLevel?: EmbraceLoggerLevel;
+}
 
-const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
+const initialize = async (
+  {sdkConfig, patch, logLevel}: EmbraceInitArgs = {logLevel: "info"},
+): Promise<boolean> => {
+  const isIOS = Platform.OS === "ios";
+  const logger = new EmbraceLogger(console, logLevel);
 
-const initialize = async ({
-  patch,
-  sdkConfig,
-}: {patch?: string; sdkConfig?: SDKConfig} = {}): Promise<boolean> => {
   const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
 
   // if the sdk started in the native side the follow condition doesn't take any effect.
   // neither iOS setup() nor start() will be overridden
   if (!hasNativeSDKStarted) {
-    if (
-      Platform.OS === "ios" &&
-      !sdkConfig?.ios?.appId &&
-      !sdkConfig?.startCustomExport
-    ) {
-      console.warn(
+    if (isIOS && !sdkConfig?.ios?.appId && !sdkConfig?.exporters) {
+      logger.warn(
         "[Embrace] 'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);
     }
 
-    const {startCustomExport, ...originalSdkConfig} = sdkConfig || {};
-
-    const startSdkConfig =
-      (Platform.OS === "ios" && originalSdkConfig?.ios) || {};
+    const {exporters: otlpExporters} = sdkConfig || {};
+    const startSdkConfig = (isIOS && sdkConfig?.ios) || {};
 
     let isStarted;
-    try {
-      if (startCustomExport) {
-        if (!startSdkConfig.appId) {
-          console.log(
-            "[Embrace] 'sdkConfig.ios.appId' not found, only custom exporters will be used",
-          );
-        }
+    let otlpStart = null;
 
-        isStarted = await startCustomExport(startSdkConfig);
-      } else {
-        isStarted =
-          await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
+    // separating blocks for throwing their own warning messages individually.
+    // if core/otlp blocks are combined into one try/catch and the otlp package throws an error
+    // the core package won't be able to start the SDK as fallback
+    // `oltpGetStart` has their own try/catch block
+    if (otlpExporters) {
+      if (!startSdkConfig.appId) {
+        logger.log(
+          "'sdkConfig.ios.appId' not found, only custom exporters will be used",
+        );
       }
+
+      // if package is installed/available and exporters are provided get the `start` method
+      otlpStart = oltpGetStart(logger, otlpExporters);
+    }
+
+    try {
+      // if the otlp package throws or it is not available, the core package will work as usual printing the proper messages
+      isStarted = otlpStart
+        ? // if OTLP exporter package is available, use it
+          await otlpStart(startSdkConfig)
+        : // otherwise, uses the core package
+          await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
     } catch (e) {
       isStarted = false;
-      console.warn(`[Embrace] From Native layer: ${e}`);
+      logger.warn(`${e}`);
     }
 
     if (!isStarted) {
-      console.warn(
-        "[Embrace] we could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+      logger.warn(
+        "we could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);
     } else {
-      console.log("[Embrace] native SDK was started");
+      logger.log("native SDK was started");
     }
   }
 
-  if (embracePackage) {
-    const {version} = embracePackage;
-    EmbraceManagerModule.setReactNativeSDKVersion(version);
-  }
+  // setting version of React Native used by the app
+  setReactNativeVersion();
+  // setting version of the Embrace RN package
+  setEmbracePackageVersion();
 
   if (patch) {
     setJavaScriptPatch(patch);
   }
 
-  const packageVersion = buildPackageVersion(reactNativeVersion);
-  if (packageVersion) {
-    EmbraceManagerModule.setReactNativeVersion(packageVersion);
-  }
-
   // On Android the Swazzler stores the computed bundle ID as part of the build process and the SDK is able to
   // read it at run time. On iOS however we don't retain this value so try and get it from the default bundle path
-  if (Platform.OS === "ios") {
+  if (isIOS) {
     try {
       const bundleJs =
         await EmbraceManagerModule.getDefaultJavaScriptBundlePath();
@@ -96,47 +100,26 @@ const initialize = async ({
         EmbraceManagerModule.setJavaScriptBundlePath(bundleJs);
       }
     } catch (e) {
-      console.warn(
-        "[Embrace] We were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle.",
+      logger.warn(
+        "we were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle.",
       );
     }
   }
 
   if (!ErrorUtils) {
-    console.warn(
-      "[Embrace] ErrorUtils is not defined. Not setting exception handler.",
-    );
-
+    logger.warn("ErrorUtils is not defined. Not setting exception handler.");
     return Promise.resolve(false);
   }
 
-  // setting the global error handler. this is available through React Native's ErrorUtils
+  // setting the global error handler
+  // this is available through React Native's ErrorUtils
   ErrorUtils.setGlobalHandler(
     handleGlobalError(ErrorUtils.getGlobalHandler(), handleError),
   );
 
-  tracking.enable({
-    allRejections: true,
-    onUnhandled: (_: unknown, error: Error) => {
-      let message = `${UNHANDLED_PROMISE_REJECTION_PREFIX}: ${error}`;
-      let stackTrace = "";
+  // through `promise/setimmediate/rejection-tracking`
+  trackUnhandledErrors();
 
-      if (error instanceof Error) {
-        message = `${UNHANDLED_PROMISE_REJECTION_PREFIX}: ${error.message}`;
-        stackTrace = error.stack || "";
-      }
-
-      return EmbraceManagerModule.logMessageWithSeverityAndProperties(
-        message,
-        "error",
-        {},
-        stackTrace,
-      );
-    },
-    onHandled: () => {},
-  });
-
-  // If there are no errors, it will return true
   return Promise.resolve(true);
 };
 
@@ -148,6 +131,7 @@ export * from "./api/log";
 export * from "./api/session";
 export * from "./api/network";
 export * from "./api/user";
+export * from "./hooks/useEmbrace";
 export * from "./hooks/useOrientationListener";
 export * from "./interfaces";
 
