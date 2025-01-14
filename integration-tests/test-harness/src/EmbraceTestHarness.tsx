@@ -1,6 +1,9 @@
 import {useEffect, useState} from "react";
 import * as React from "react";
-import {initialize as initEmbrace} from "@embrace-io/react-native";
+import {
+  initialize as initEmbrace,
+  useOrientationListener,
+} from "@embrace-io/react-native";
 import {Text, View} from "react-native";
 import {styles} from "./helpers/styles";
 import {SDKConfig} from "@embrace-io/react-native";
@@ -38,6 +41,9 @@ export const EmbraceTestHarness = ({
 
     init();
   }, [allowCustomExport]);
+
+  // initializing orientation listener
+  useOrientationListener(allowCustomExport);
 
   if (!embraceLoaded) {
     return (

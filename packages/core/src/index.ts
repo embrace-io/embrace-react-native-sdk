@@ -148,6 +148,7 @@ export * from "./api/log";
 export * from "./api/session";
 export * from "./api/network";
 export * from "./api/user";
+export * from "./hooks/useOrientationListener";
 export * from "./interfaces";
 
 export {initialize};
