@@ -1,4 +1,5 @@
-import React, {forwardRef, ReactNode} from "react";
+import * as React from "react";
+import {forwardRef, ReactNode} from "react";
 import {TracerProvider} from "@opentelemetry/api";
 
 import useTracerRef from "../utils/hooks/useTracerRef";
