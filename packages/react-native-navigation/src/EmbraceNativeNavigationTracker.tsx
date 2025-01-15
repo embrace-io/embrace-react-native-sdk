@@ -1,10 +1,11 @@
 import * as React from "react";
 import {ReactNode, forwardRef, useMemo} from "react";
+import {TracerProvider, TracerOptions, Attributes} from "@opentelemetry/api";
+
 import {
   NativeNavigationTracker,
   NativeNavigationTrackerRef,
-} from "@opentelemetry/instrumentation-react-native-navigation";
-import {TracerProvider, TracerOptions, Attributes} from "@opentelemetry/api";
+} from "./navigation";
 
 interface EmbraceNativeNavigationTrackerProps {
   children: ReactNode;

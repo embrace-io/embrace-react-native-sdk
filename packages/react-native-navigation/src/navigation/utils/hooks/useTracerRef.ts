@@ -44,7 +44,7 @@ const useTracerRef = (
 
       console.info("Updated TracerProvider. Switching to the new instance.");
     }
-  }, [provider, tracerOptions]);
+  }, [console, provider, tracerOptions]);
 
   return tracerRef;
 };

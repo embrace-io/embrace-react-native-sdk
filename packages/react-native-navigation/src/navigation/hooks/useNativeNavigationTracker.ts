@@ -34,7 +34,7 @@ const useNativeNavigationTracker = (
    */
   const initNativeNavigationSpan = useMemo(
     () => spanCreator(tracer, span, view, customAttributes),
-    [customAttributes],
+    [customAttributes, span, tracer],
   );
 
   /**
@@ -76,7 +76,7 @@ const useNativeNavigationTracker = (
 
       spanEnd(span);
     });
-  }, [navigationElRef, span, initNativeNavigationSpan]);
+  }, [navigationElRef, span, initNativeNavigationSpan, console]);
 
   /**
    * Start and end spans depending on the app state changes

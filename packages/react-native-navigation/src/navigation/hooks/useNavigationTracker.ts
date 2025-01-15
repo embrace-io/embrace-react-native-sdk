@@ -66,7 +66,7 @@ const useNavigationTracker = (
         initNavigationSpan(routeName);
       });
     }
-  }, [navigationElRef, initNavigationSpan]);
+  }, [navigationElRef, initNavigationSpan, console]);
 
   /**
    * Start and end spans depending on the app state changes

@@ -25,7 +25,7 @@ const useAppStateListener = (
 
       appStateHandler(view?.current, currentState);
     },
-    [span, tracer, attributes],
+    [tracer, span, attributes, view],
   );
 
   /**
