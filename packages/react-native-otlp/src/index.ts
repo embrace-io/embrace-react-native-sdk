@@ -81,4 +81,4 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
 };
 
 export {initialize};
-export {type OTLPExporterConfig};
+export * from "./interfaces";

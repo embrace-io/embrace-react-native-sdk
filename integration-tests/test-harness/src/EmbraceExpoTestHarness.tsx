@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
-import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
+import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {
   Stack,
   useNavigationContainerRef as useExpoNavigationContainerRef,
@@ -11,14 +11,12 @@ export const EmbraceExpoTestHarness = () => {
   const expoNavigationRef = useExpoNavigationContainerRef();
 
   return (
-    <NavigationTracker
+    <EmbraceNavigationTracker
       ref={expoNavigationRef}
-      provider={tracerProvider || undefined}
-      config={{
-        attributes: {
-          "emb.type": "ux.view",
-        },
-        debug: true,
+      tracerProvider={tracerProvider || undefined}
+      screenAttributes={{
+        "is-test-harness": true,
+        package: "expo-router",
       }}>
       <Stack>
         {/*
@@ -28,6 +26,6 @@ export const EmbraceExpoTestHarness = () => {
         */}
         <Stack.Screen name="(tabs)" options={{headerShown: false}} />
       </Stack>
-    </NavigationTracker>
+    </EmbraceNavigationTracker>
   );
 };
