@@ -1,9 +1,8 @@
 import * as React from "react";
 import {ReactNode, forwardRef, useMemo} from "react";
-// TBD: will export types from otel package so this can be pulled directly from `@opentelemetry/instrumentation-react-native-navigation`
-import {NavigationTrackerRef} from "@opentelemetry/instrumentation-react-native-navigation/build/src/components/NavigationTracker";
-import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
 import {TracerProvider, TracerOptions, Attributes} from "@opentelemetry/api";
+
+import {NavigationTracker, NavigationTrackerRef} from "./navigation";
 
 interface EmbraceNavigationTrackerProps {
   children: ReactNode;
