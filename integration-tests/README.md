@@ -89,7 +89,7 @@ Set the test app up with a particular embrace config:
 ./set-embrace-config.js <test-app> <config.json> --namespace=<namespace>
 ```
 
-Depending on the testing being done `embrace-configs/` has a few different configuration options: 
+Depending on the testing being done `embrace-configs/` has a few different configuration options:
 * using real app_ids without setting `endpoint` -> Sends actual data to Embrace allowing verifications to be done on
 the Embrace dashboard
 * pointing to either a local or remote mock-api -> Data is captured by the mock-api tool allowing the payloads that
@@ -109,6 +109,9 @@ npx expo run:android --variant release
 # react native
 npx react-native run-android --mode release
 ```
+
+Note when building this way the JS bundle becomes part of the app package and may not get updated if you make changes
+to the test harness, etc. To force a refresh remove `android/app/build/generated/assets/createBundleReleaseJsAndAssets/index.android.bundle`.
 
 iOS can be built and run in release mode by doing:
 
