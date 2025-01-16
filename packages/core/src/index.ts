@@ -30,7 +30,7 @@ const initialize = async (
   if (!hasNativeSDKStarted) {
     if (isIOS && !sdkConfig?.ios?.appId && !sdkConfig?.exporters) {
       logger.warn(
-        "[Embrace] 'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+        "'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);
