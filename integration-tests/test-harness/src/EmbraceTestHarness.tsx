@@ -5,17 +5,20 @@ import {styles} from "./helpers/styles";
 import {SDKConfig} from "@embrace-io/react-native";
 import {EmbraceExpoTestHarness} from "./EmbraceExpoTestHarness";
 import {EmbraceReactNativeTestHarness} from "./EmbraceReactNativeTestHarness";
+import {EmbraceWixTestHarness} from "./EmbraceWixTestHarness";
 
 type Props = {
   sdkConfig: SDKConfig;
-  navigationStyle: "expo" | "react-native";
+  navigationStyle: "expo" | "react-native" | "wix";
   allowCustomExport?: boolean;
+  children: React.ReactNode;
 };
 
 const EmbraceTestHarness = ({
   sdkConfig,
   navigationStyle,
   allowCustomExport = false,
+  children,
 }: Props) => {
   if (!allowCustomExport) {
     sdkConfig.exporters = undefined;
@@ -44,6 +47,8 @@ const EmbraceTestHarness = ({
 
   if (navigationStyle === "expo") {
     return <EmbraceExpoTestHarness />;
+  } else if (navigationStyle === "wix") {
+    return <EmbraceWixTestHarness>{children}</EmbraceWixTestHarness>;
   } else {
     return <EmbraceReactNativeTestHarness />;
   }
