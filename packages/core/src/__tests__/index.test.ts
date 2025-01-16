@@ -1,23 +1,12 @@
 import {waitFor} from "@testing-library/react-native";
 
 import {oltpGetStart} from "../utils/otlp";
+import {trackUnhandledError} from "../utils/error";
 import {AndroidConfig, initialize, IOSConfig} from "../index";
-import {handleGlobalError} from "../api/error";
-import {ComponentError, logIfComponentError} from "../api/component";
+import {handleError, handleGlobalError} from "../api/error";
+import {ComponentError} from "../api/component";
 
-const mockReactNative = jest.requireMock("react-native");
-const mockSetReactNativeVersion = jest.fn();
-const mockSetJavaScriptPatchNumber = jest.fn();
-const mockIsStarted = jest.fn().mockResolvedValue(false);
-const mockStart = jest.fn().mockResolvedValue(true);
-const mockSetReactNativeSDKVersion = jest.fn();
-const mockLogMessageWithSeverityAndProperties = jest.fn();
-const mockLogHandledError = jest.fn();
-const mockLogUnhandledJSException = jest.fn().mockResolvedValue(true);
-
-jest.mock("../utils/otlp", () => ({
-  oltpGetStart: jest.fn(),
-}));
+const rejectionTracking = require("promise/setimmediate/rejection-tracking");
 
 const mockConsoleInfo = jest.spyOn(console, "log").mockImplementation(m => m);
 const mockConsoleWarn = jest.spyOn(console, "warn").mockImplementation(m => m);
@@ -27,6 +16,14 @@ const INIT_SDK_CONFIG = {
   sdkConfig: {ios: {appId: "abc12"}},
 };
 
+const mockSetReactNativeVersion = jest.fn();
+const mockSetJavaScriptPatchNumber = jest.fn();
+const mockIsStarted = jest.fn();
+const mockStart = jest.fn().mockResolvedValue(true);
+const mockSetReactNativeSDKVersion = jest.fn();
+const mockLogMessageWithSeverityAndProperties = jest.fn();
+const mockLogHandledError = jest.fn();
+const mockLogUnhandledJSException = jest.fn().mockResolvedValue(true);
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
     setReactNativeVersion: (version: string) =>
@@ -71,33 +68,117 @@ jest.mock("../EmbraceManagerModule", () => ({
 jest.mock("react-native", () => ({
   Platform: {OS: "android"},
 }));
+const mockReactNative = jest.requireMock("react-native");
 
-describe("Android: initialize", () => {
-  beforeEach(() => {
-    jest.resetAllMocks();
+jest.mock("../utils/otlp", () => ({
+  oltpGetStart: jest.fn(),
+}));
 
-    mockStart.mockResolvedValue(true);
-    mockReactNative.Platform.OS = "android";
+describe("Both platforms", () => {
+  test("`initialize` applies global error handler", async () => {
+    const mockPreviousHandler = jest.fn();
+    // setting error handler that should be used in the global error handler
+    ErrorUtils.setGlobalHandler(mockPreviousHandler);
+
+    const isStarted = await initialize(INIT_SDK_CONFIG);
+    await waitFor(() => {
+      expect(isStarted).toBe(true);
+    });
+
+    const updatedHandler = ErrorUtils.getGlobalHandler();
+    const err = Error("My custom error message");
+
+    updatedHandler(err, true);
+
+    await waitFor(() => {
+      expect(mockPreviousHandler).toHaveBeenCalledWith(err, true);
+      expect(mockLogUnhandledJSException).toHaveBeenCalledWith(
+        "Error",
+        "My custom error message",
+        err.constructor.name,
+        err.stack,
+      );
+    });
   });
 
-  test("SDK already started (from Native side)", async () => {
-    mockIsStarted.mockReturnValueOnce(true);
+  test("`ErrorUtils.getGlobalHandler` handles the reject of `EmbraceManagerModule.logUnhandledJSException` method", async () => {
+    const mockPreviousHandler = jest.fn();
+    ErrorUtils.setGlobalHandler(mockPreviousHandler);
+    mockLogUnhandledJSException.mockRejectedValueOnce("Some rejected value");
+
     const isStarted = await initialize(INIT_SDK_CONFIG);
 
     await waitFor(() => {
       expect(isStarted).toBe(true);
+    });
 
-      expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.75.4");
-      expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith("v1");
-      expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith(
-        expect.any(String),
+    const updatedHandler = ErrorUtils.getGlobalHandler();
+    const err = Error("Test");
+
+    updatedHandler(err, true);
+
+    await waitFor(() => {
+      expect(mockPreviousHandler).toHaveBeenCalledWith(err, true);
+      expect(mockLogUnhandledJSException).toHaveBeenCalled();
+      expect(mockConsoleWarn).toHaveBeenCalledTimes(1);
+      expect(mockConsoleWarn).toHaveBeenCalledWith(
+        "[Embrace] Failed to log exception",
       );
-      expect(mockStart).not.toHaveBeenCalled();
-      expect(mockConsoleInfo).not.toHaveBeenCalled();
     });
   });
 
-  test("SDK should start as normal", async () => {
+  test("setting global handler", async () => {
+    const mockSetGlobalHandler = jest.fn();
+    ErrorUtils.setGlobalHandler = mockSetGlobalHandler;
+
+    const isStarted = await initialize(INIT_SDK_CONFIG);
+    await waitFor(() => {
+      expect(isStarted).toBe(true);
+      expect(mockSetGlobalHandler).toHaveBeenCalled();
+    });
+  });
+
+  test("applying previousHandler and throwing a component error", async () => {
+    const mockPreviousHandler = jest.fn().mockReturnValue(jest.fn());
+
+    const generatedGlobalErrorFunc = handleGlobalError(
+      mockPreviousHandler,
+      handleError,
+    );
+
+    const componentError = new Error("Test") as ComponentError;
+    componentError.componentStack = "in SomeScreen\n in SomeOtherScreen";
+
+    generatedGlobalErrorFunc(componentError, false);
+
+    await waitFor(() => {
+      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+        "Test",
+        "error",
+        {},
+        "in SomeScreen\n in SomeOtherScreen",
+      );
+      expect(mockPreviousHandler).toHaveBeenCalledWith(componentError, false);
+    });
+  });
+
+  test("`initialize` should set the listener for unhandled exceptions", async () => {
+    const mockRejectionTrackingEnable = jest.spyOn(rejectionTracking, "enable");
+
+    const isStarted = await initialize(INIT_SDK_CONFIG);
+    await waitFor(() => {
+      expect(isStarted).toBe(true);
+      expect(mockRejectionTrackingEnable).toHaveBeenCalledWith({
+        allRejections: true,
+        onUnhandled: trackUnhandledError,
+        onHandled: expect.any(Function),
+      });
+    });
+  });
+});
+
+describe("Android: initialize", () => {
+  test("SDK should start (in Js side)", async () => {
     const isStarted = await initialize(INIT_SDK_CONFIG);
 
     await waitFor(() => {
@@ -118,89 +199,26 @@ describe("Android: initialize", () => {
     });
   });
 
-  test("applies global error handler", async () => {
-    const previousHandler = jest.fn();
-    ErrorUtils.setGlobalHandler(previousHandler);
-    mockLogUnhandledJSException.mockResolvedValue(true);
-
-    const isStarted = await initialize(INIT_SDK_CONFIG);
-    await waitFor(() => {
-      expect(isStarted).toBe(true);
-    });
-
-    const updatedHandler = ErrorUtils.getGlobalHandler();
-    const err = Error("Test");
-
-    updatedHandler(err, true);
-
-    await waitFor(() => {
-      expect(previousHandler).toHaveBeenCalledWith(err, true);
-      expect(mockLogUnhandledJSException).toHaveBeenCalled();
-    });
-  });
-
-  test("global error handler handles logUnhandledJSException rejecting", async () => {
-    const previousHandler = jest.fn();
-    ErrorUtils.setGlobalHandler(previousHandler);
-    mockLogUnhandledJSException.mockRejectedValue("failed");
-
+  test("SDK already started (from Native side)", async () => {
+    mockIsStarted.mockReturnValueOnce(true);
     const isStarted = await initialize(INIT_SDK_CONFIG);
 
     await waitFor(() => {
       expect(isStarted).toBe(true);
-    });
 
-    const updatedHandler = ErrorUtils.getGlobalHandler();
-    const err = Error("Test");
-
-    updatedHandler(err, true);
-
-    await waitFor(() => {
-      expect(previousHandler).toHaveBeenCalledWith(err, true);
-      expect(mockLogUnhandledJSException).toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledTimes(1);
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
-        "[Embrace] Failed to log exception",
+      expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.75.4");
+      expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith("v1");
+      expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith(
+        expect.any(String),
       );
-    });
-  });
-
-  test("applying previousHandler and throwing a component error", async () => {
-    const mockPreviousHandler = jest.fn();
-    ErrorUtils.getGlobalHandler = mockPreviousHandler;
-
-    const isStarted = await initialize(INIT_SDK_CONFIG);
-    await waitFor(() => {
-      expect(isStarted).toBe(true);
-    });
-
-    const generatedGlobalErrorFunc = handleGlobalError(
-      mockPreviousHandler,
-      logIfComponentError,
-    );
-
-    const componentError = new Error("Test") as ComponentError;
-    componentError.componentStack = "in SomeScreen\n in SomeOtherScreen";
-
-    generatedGlobalErrorFunc(componentError, false);
-
-    await waitFor(() => {
-      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-        "Test",
-        "error",
-        {},
-        "in SomeScreen\n in SomeOtherScreen",
-      );
-      expect(mockPreviousHandler).toHaveBeenCalled();
+      expect(mockStart).not.toHaveBeenCalled();
+      expect(mockConsoleInfo).not.toHaveBeenCalled();
     });
   });
 });
 
 describe("iOS: initialize", () => {
-  beforeEach(() => {
-    jest.resetAllMocks();
-
-    mockStart.mockResolvedValue(true);
+  beforeAll(() => {
     mockReactNative.Platform.OS = "ios";
   });
 
@@ -214,7 +232,7 @@ describe("iOS: initialize", () => {
       sdkConfig: {
         ios: {appId: "abc12"},
         exporters: {
-          logExporter: {endpoint: "http://localhost:8081"},
+          logExporter: {endpoint: "http://localhost:8081/mock/log"},
         },
       },
     });
@@ -227,7 +245,7 @@ describe("iOS: initialize", () => {
   });
 
   test("SDK should not start because `appId` is missing and there is not configured custom exporters", async () => {
-    const isStarted = await initialize({patch: "v1"});
+    const isStarted = await initialize({patch: "v1", sdkConfig: {ios: {}}});
 
     await waitFor(() => {
       expect(isStarted).toBe(false);
@@ -242,7 +260,7 @@ describe("iOS: initialize", () => {
     });
   });
 
-  test("SDK should start as normal", async () => {
+  test("SDK should start (in Js side)", async () => {
     const isStarted = await initialize(INIT_SDK_CONFIG);
 
     await waitFor(() => {
@@ -256,7 +274,7 @@ describe("iOS: initialize", () => {
   });
 
   test("SDK start call rejects in the Native side", async () => {
-    mockStart.mockRejectedValue(
+    mockStart.mockRejectedValueOnce(
       "something went wrong in the native side (fake error message)",
     );
 

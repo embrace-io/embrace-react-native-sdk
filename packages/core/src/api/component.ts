@@ -1,9 +1,8 @@
+import {ErrorInfo} from "react";
+
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
-interface ComponentError extends Error {
-  componentStack: string;
-}
-
+type ComponentError = Error & ErrorInfo;
 const isJSXError = (error: Error): error is ComponentError => {
   return "componentStack" in error;
 };
