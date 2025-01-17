@@ -1,5 +1,5 @@
 {
-  "name": "@embrace-io/react-native-action-tracker",
+  "name": "@embrace-io/react-native-redux",
   "version": "5.2.0",
   "description": "Collects telemetry from dispatching actions with Redux",
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
@@ -12,13 +12,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/embrace-io/embrace-react-native-sdk",
-    "directory": "packages/react-native-action-tracker"
+    "directory": "packages/react-native-redux"
   },
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/src/index.js",
-  "typings": "lib/src/index.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -43,11 +43,10 @@
     "react-native": ">=0.56.0"
   },
   "devDependencies": {
-    "@opentelemetry/api": "^1.3.0",
+    "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/sdk-trace-base": "^1.25.1",
     "@reduxjs/toolkit": "^2.5.0",
     "@testing-library/react": "^14.0.0",
-    "react-redux": "^8.1.3",
     "redux": "^5.0.1",
     "typescript": "^5.6.3"
   },

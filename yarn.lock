@@ -2367,7 +2367,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5":
+"@babel/runtime@npm:^7.12.5":
   version: 7.26.0
   resolution: "@babel/runtime@npm:7.26.0"
   dependencies:
@@ -2502,22 +2502,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@embrace-io/react-native-action-tracker@workspace:packages/react-native-action-tracker":
-  version: 0.0.0-use.local
-  resolution: "@embrace-io/react-native-action-tracker@workspace:packages/react-native-action-tracker"
-  dependencies:
-    "@opentelemetry/api": "npm:^1.3.0"
-    "@opentelemetry/sdk-trace-base": "npm:^1.25.1"
-    "@reduxjs/toolkit": "npm:^2.5.0"
-    "@testing-library/react": "npm:^14.0.0"
-    react-redux: "npm:^8.1.3"
-    redux: "npm:^5.0.1"
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    react-native: ">=0.56.0"
-  languageName: unknown
-  linkType: soft
-
 "@embrace-io/react-native-navigation@workspace:packages/react-native-navigation":
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-navigation@workspace:packages/react-native-navigation"
@@ -2532,6 +2516,21 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@embrace-io/react-native-otlp@workspace:packages/react-native-otlp"
   dependencies:
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    react-native: ">=0.56.0"
+  languageName: unknown
+  linkType: soft
+
+"@embrace-io/react-native-redux@workspace:packages/react-native-redux":
+  version: 0.0.0-use.local
+  resolution: "@embrace-io/react-native-redux@workspace:packages/react-native-redux"
+  dependencies:
+    "@opentelemetry/api": "npm:^1.3.0"
+    "@opentelemetry/sdk-trace-base": "npm:^1.25.1"
+    "@reduxjs/toolkit": "npm:^2.5.0"
+    "@testing-library/react": "npm:^14.0.0"
+    redux: "npm:^5.0.1"
     typescript: "npm:^5.6.3"
   peerDependencies:
     react-native: ">=0.56.0"
@@ -4523,16 +4522,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/hoist-non-react-statics@npm:^3.3.1":
-  version: 3.3.6
-  resolution: "@types/hoist-non-react-statics@npm:3.3.6"
-  dependencies:
-    "@types/react": "npm:*"
-    hoist-non-react-statics: "npm:^3.3.0"
-  checksum: 10c0/149a4c217d81f21f8a1e152160a59d5b99b6a9aa6d354385d5f5bc02760cbf1e170a8442ba92eb653befff44b0c5bc2234bb77ce33e0d11a65f779e8bab5c321
-  languageName: node
-  linkType: hard
-
 "@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.0, @types/istanbul-lib-coverage@npm:^2.0.1":
   version: 2.0.6
   resolution: "@types/istanbul-lib-coverage@npm:2.0.6"
@@ -4668,13 +4657,6 @@ __metadata:
   version: 2.0.3
   resolution: "@types/stack-utils@npm:2.0.3"
   checksum: 10c0/1f4658385ae936330581bcb8aa3a066df03867d90281cdf89cc356d404bd6579be0f11902304e1f775d92df22c6dd761d4451c804b0a4fba973e06211e9bd77c
-  languageName: node
-  linkType: hard
-
-"@types/use-sync-external-store@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@types/use-sync-external-store@npm:0.0.3"
-  checksum: 10c0/82824c1051ba40a00e3d47964cdf4546a224e95f172e15a9c62aa3f118acee1c7518b627a34f3aa87298a2039f982e8509f92bfcc18bea7c255c189c293ba547
   languageName: node
   linkType: hard
 
@@ -8681,15 +8663,6 @@ __metadata:
   dependencies:
     hermes-estree: "npm:0.23.1"
   checksum: 10c0/56907e6136d2297543922dd9f8ee27378ef010c11dc1e0b4a0866faab2c527613b0edcda5e1ebc0daa0ca1ae6528734dfc479e18267aabe4dce0c7198217fd97
-  languageName: node
-  linkType: hard
-
-"hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.2":
-  version: 3.3.2
-  resolution: "hoist-non-react-statics@npm:3.3.2"
-  dependencies:
-    react-is: "npm:^16.7.0"
-  checksum: 10c0/fe0889169e845d738b59b64badf5e55fa3cf20454f9203d1eb088df322d49d4318df774828e789898dcb280e8a5521bb59b3203385662ca5e9218a6ca5820e74
   languageName: node
   linkType: hard
 
@@ -12719,7 +12692,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.13.1, react-is@npm:^16.7.0":
+"react-is@npm:^16.13.1":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 10c0/33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
@@ -12785,38 +12758,6 @@ __metadata:
   bin:
     react-native: cli.js
   checksum: 10c0/e368c7257cb16e3501975c2cf7d1168b3878724e83042d21ea796f91363892a2c0fcafc85864322ec241ed89c1e62fdaa2688265a84da335b6e66d76406b7a71
-  languageName: node
-  linkType: hard
-
-"react-redux@npm:^8.1.3":
-  version: 8.1.3
-  resolution: "react-redux@npm:8.1.3"
-  dependencies:
-    "@babel/runtime": "npm:^7.12.1"
-    "@types/hoist-non-react-statics": "npm:^3.3.1"
-    "@types/use-sync-external-store": "npm:^0.0.3"
-    hoist-non-react-statics: "npm:^3.3.2"
-    react-is: "npm:^18.0.0"
-    use-sync-external-store: "npm:^1.0.0"
-  peerDependencies:
-    "@types/react": ^16.8 || ^17.0 || ^18.0
-    "@types/react-dom": ^16.8 || ^17.0 || ^18.0
-    react: ^16.8 || ^17.0 || ^18.0
-    react-dom: ^16.8 || ^17.0 || ^18.0
-    react-native: ">=0.59"
-    redux: ^4 || ^5.0.0-beta.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-    "@types/react-dom":
-      optional: true
-    react-dom:
-      optional: true
-    react-native:
-      optional: true
-    redux:
-      optional: true
-  checksum: 10c0/64c8be2765568dc66a3c442a41dd0ed74fe048d5ceb7a4fe72e5bac3d3687996a7115f57b5156af7406521087065a0e60f9194318c8ca99c55e9ce48558980ce
   languageName: node
   linkType: hard
 
@@ -14736,15 +14677,6 @@ __metadata:
   dependencies:
     punycode: "npm:^2.1.0"
   checksum: 10c0/4ef57b45aa820d7ac6496e9208559986c665e49447cb072744c13b66925a362d96dd5a46c4530a6b8e203e5db5fe849369444440cb22ecfc26c679359e5dfa3c
-  languageName: node
-  linkType: hard
-
-"use-sync-external-store@npm:^1.0.0":
-  version: 1.4.0
-  resolution: "use-sync-external-store@npm:1.4.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/ec011a5055962c0f6b509d6e78c0b143f8cd069890ae370528753053c55e3b360d3648e76cfaa854faa7a59eb08d6c5fb1015e60ffde9046d32f5b2a295acea5
   languageName: node
   linkType: hard
 

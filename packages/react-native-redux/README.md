@@ -11,13 +11,13 @@ Here's how you add the redux tracker to the session.
 ### Install the component
 
 ```sh
-yarn add @embrace-io/action-tracker
+yarn add @embrace-io/redux
 ```
 
 Or
 
 ```sh
-npm install @embrace-io/action-tracker
+npm install @embrace-io/redux
 ```
 
 ### Adding the component to your code
@@ -26,7 +26,7 @@ npm install @embrace-io/action-tracker
 import { applyMiddleware, compose, configureStore } from "@reduxjs/toolkit";
 
 // Import Embrace's Middleware
-import { buildEmbraceMiddleware } from "@embrace-io/action-tracker";
+import { buildEmbraceMiddleware } from "@embrace-io/redux";
 
 // Create the Enhancer that applies Embrace's Middleware
 const middlewareEnhancer = applyMiddleware(buildEmbraceMiddleware());

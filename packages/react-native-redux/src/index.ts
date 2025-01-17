@@ -20,20 +20,35 @@ type EmbraceAttributes = {
 
 const attributeTransform = (attrs: Attributes) => {
   const transformed: EmbraceAttributes = {
-    name: attrs.type?.toString(),
     "emb.type": "sys.rn_action",
-    outcome: attrs["action.outcome"]?.toString(),
   };
+
+  if (attrs["action.type"]) {
+    transformed.name = attrs["action.type"]?.toString();
+  }
 
   if (attrs["action.payload"]) {
     transformed.payload_size = zip(attrs["action.payload"].toString()).length;
   }
 
+  if (attrs["action.outcome"]) {
+    transformed.outcome = attrs["action.outcome"]?.toString();
+  }
+
   return transformed;
 };
 
-const useActionTracker = <RootState>(
-  tracerProvider?: TracerProvider,
+const createMiddleware = <RootState>(
+  tracerProvider: TracerProvider,
+  // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
+  // eslint-disable-next-line @typescript-eslint/ban-types
+): Middleware<{}, RootState> =>
+  dispatchMiddleware(tracerProvider, {
+    attributeTransform,
+  });
+
+const useMiddleware = <RootState>(
+  tracerProvider?: TracerProvider | null,
 ): UseActionTrackerReturn<RootState> => {
   // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -43,11 +58,7 @@ const useActionTracker = <RootState>(
     if (tracerProvider && !middleware) {
       // since `middleware` is a function the wrapping anonymous function is needed here to avoid using the overloaded
       // signature of `setMiddleware` that accepts a function as the first argument
-      setMiddleware(() =>
-        dispatchMiddleware(tracerProvider, {
-          attributeTransform,
-        }),
-      );
+      setMiddleware(() => createMiddleware<RootState>(tracerProvider));
     }
   }, [tracerProvider, middleware]);
 
@@ -56,4 +67,4 @@ const useActionTracker = <RootState>(
   };
 };
 
-export {useActionTracker, attributeTransform};
+export {useMiddleware, createMiddleware};

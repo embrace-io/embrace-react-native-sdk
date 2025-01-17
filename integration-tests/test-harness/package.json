@@ -14,8 +14,10 @@
   "peerDependencies": {
     "@embrace-io/react-native": "*",
     "@embrace-io/react-native-otlp": "*",
+    "@embrace-io/react-native-redux": "*",
     "@embrace-io/react-native-tracer-provider": "*",
     "@opentelemetry/instrumentation-react-native-navigation": "*",
+    "@reduxjs/toolkit": "*",
     "expo-router": "*",
     "react": "*",
     "react-native": "*"
@@ -23,9 +25,11 @@
   "devDependencies": {
     "@embrace-io/react-native": "file:../artifacts/embrace-io-react-native-local.tgz",
     "@embrace-io/react-native-otlp": "file:../artifacts/embrace-io-react-native-otlp-local.tgz",
+    "@embrace-io/react-native-redux": "file:../artifacts/embrace-io-react-native-redux-local.tgz",
     "@embrace-io/react-native-tracer-provider": "file:../artifacts/embrace-io-react-native-tracer-provider-local.tgz",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/instrumentation-react-native-navigation": "file:../artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz",
+    "@reduxjs/toolkit": "^2.5.0",
     "expo-router": "~3.5.14",
     "react": "18.2.0",
     "react-native": "0.74.1",

@@ -78,7 +78,7 @@ describe("instrumentation/dispatch.ts", () => {
     );
 
     expect(getTracerSpy).toHaveBeenCalledWith(
-      "@embrace-io/react-native-action-tracker",
+      "@embrace-io/react-native-redux",
       "",
     );
 
