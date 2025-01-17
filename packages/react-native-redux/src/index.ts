@@ -15,7 +15,7 @@ type EmbraceAttributes = {
   name?: string;
   "emb.type": string;
   outcome?: string;
-  payload_size?: number;
+  payload_size?: string;
 };
 
 const attributeTransform = (attrs: Attributes) => {
@@ -28,7 +28,9 @@ const attributeTransform = (attrs: Attributes) => {
   }
 
   if (attrs["action.payload"]) {
-    transformed.payload_size = zip(attrs["action.payload"].toString()).length;
+    transformed.payload_size = zip(
+      attrs["action.payload"].toString(),
+    ).length.toString();
   }
 
   if (attrs["action.outcome"]) {
@@ -38,7 +40,7 @@ const attributeTransform = (attrs: Attributes) => {
   return transformed;
 };
 
-const createMiddleware = <RootState>(
+const createEmbraceMiddleware = <RootState>(
   tracerProvider: TracerProvider,
   // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -47,7 +49,7 @@ const createMiddleware = <RootState>(
     attributeTransform,
   });
 
-const useMiddleware = <RootState>(
+const useEmbraceMiddleware = <RootState>(
   tracerProvider?: TracerProvider | null,
 ): UseActionTrackerReturn<RootState> => {
   // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
@@ -58,7 +60,7 @@ const useMiddleware = <RootState>(
     if (tracerProvider && !middleware) {
       // since `middleware` is a function the wrapping anonymous function is needed here to avoid using the overloaded
       // signature of `setMiddleware` that accepts a function as the first argument
-      setMiddleware(() => createMiddleware<RootState>(tracerProvider));
+      setMiddleware(() => createEmbraceMiddleware<RootState>(tracerProvider));
     }
   }, [tracerProvider, middleware]);
 
@@ -67,4 +69,4 @@ const useMiddleware = <RootState>(
   };
 };
 
-export {useMiddleware, createMiddleware};
+export {useEmbraceMiddleware, createEmbraceMiddleware};

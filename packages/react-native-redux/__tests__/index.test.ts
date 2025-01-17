@@ -1,7 +1,7 @@
 import {renderHook, waitFor} from "@testing-library/react-native";
 import {configureStore, Tuple} from "@reduxjs/toolkit";
 
-import {useMiddleware} from "../src";
+import {useEmbraceMiddleware} from "../src";
 
 import {counterActions, rootReducer} from "./helpers/store";
 import {
@@ -36,7 +36,7 @@ describe("React Native Action Tracker", () => {
 
   it("should apply the middleware with Embrace specific attributes", async () => {
     const provider = createInstanceProvider(exporter);
-    const {result} = renderHook(() => useMiddleware(provider));
+    const {result} = renderHook(() => useEmbraceMiddleware(provider));
     await waitFor(() => expect(result.current.middleware).toBeTruthy());
 
     const store = configureStore({
@@ -53,14 +53,14 @@ describe("React Native Action Tracker", () => {
           "emb.type": "sys.rn_action",
           name: "COUNTER_DECREASE:normal",
           outcome: "success",
-          payload_size: 31,
+          payload_size: "31",
         },
       },
     ]);
   });
 
   it("should handle a provider not being ready yet", () => {
-    const {result} = renderHook(() => useMiddleware(undefined));
+    const {result} = renderHook(() => useEmbraceMiddleware(undefined));
     expect(result.current.middleware).toBeFalsy();
   });
 });

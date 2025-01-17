@@ -1,40 +1,72 @@
-# React Native Embrace - Redux Tracker
+# React Native Embrace - Redux
 
 > [!IMPORTANT]
 >
-> This module requires [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native).
+> This module requires both the [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native) and
+> the [React Native Embrace Tracer Provider](https://www.npmjs.com/package/@embrace-io/react-native-tracer-provider).
 
-Embrace can collect basic session data and crashes as you've already seen in the [Crash Reporting](https://embrace.io/docs/react-native/integration/crash-reporting) and [Session Reporting](https://embrace.io/docs/react-native/integration/session-reporting) sections.
-Embrace can also collect the actions that your app dispatched and its state (SUCCESS AND FAILED)
-Here's how you add the redux tracker to the session.
+This package use's Embrace's React Native SDK and OpenTelemetry Tracer Provider to collect telemetry around dispatching
+actions with Redux. It provides a custom middleware that can be configured with your Redux store.
 
-### Install the component
+## Install the component
 
 ```sh
-yarn add @embrace-io/redux
+yarn add @embrace-io/react-native-redux
 ```
 
 Or
 
 ```sh
-npm install @embrace-io/redux
+npm install @embrace-io/redux-native-redux
 ```
 
-### Adding the component to your code
+## Add the middleware
 
-```javascript
-import { applyMiddleware, compose, configureStore } from "@reduxjs/toolkit";
+### With hooks
 
-// Import Embrace's Middleware
-import { buildEmbraceMiddleware } from "@embrace-io/redux";
+```typescript
+import {useEffect, useState} from "react";
+import {EnhancedStore, configureStore, Tuple} from "@reduxjs/toolkit";
+import {useEmbrace} from "@embrace-io/react-native";
+import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {useEmbraceMiddleware} from "@embrace-io/react-native-redux";
 
-// Create the Enhancer that applies Embrace's Middleware
-const middlewareEnhancer = applyMiddleware(buildEmbraceMiddleware());
+const MyApp = () => {
+  const {isStarted} = useEmbrace({ios: {appId: "MYAPP"}});
+  const {tracerProvider} = useEmbraceNativeTracerProvider({}, isStarted);
+  const {middleware} = useEmbraceMiddleware(tracerProvider);
+  const [store, setStore] = useState<EnhancedStore>();
 
-// Compose your Enhancers with Embrace's enhancer
-const composedEnhancers = compose(middlewareEnhancer);
-export default configureStore({
-  // your reducers
-  enhancers: [composedEnhancers],
-});
+  useEffect(() => {
+    if (middleware && !store) {
+      setStore(
+        configureStore({
+          reducer: rootReducer,
+          middleware: () => new Tuple(middleware),
+        }),
+      );
+    }
+  }, [middleware, store]);
+
+  ...
+
+};
+```
+
+### Without hooks
+
+```typescript
+import {configureStore, Tuple} from "@reduxjs/toolkit";
+import {initialize} from "@embrace-io/react-native";
+import {EmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {createEmbraceMiddleware} from "@embrace-io/react-native-redux";
+
+const setupStore = async () => {
+  await initialize({sdkConfig: {ios: {appId: "abc123"}}});
+  const tracerProvider = new EmbraceNativeTracerProvider();
+  return configureStore({
+    reducer: rootReducer,
+    middleware: () => new Tuple(createEmbraceMiddleware(tracerProvider)),
+  });
+};
 ```
