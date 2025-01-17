@@ -1,6 +1,6 @@
-import {Middleware} from "redux";
 import {useEffect, useState} from "react";
 import {zip} from "gzip-js";
+import {Middleware} from "@reduxjs/toolkit";
 import {Attributes, TracerProvider} from "@opentelemetry/api";
 
 import {dispatchMiddleware} from "./instrumentation";

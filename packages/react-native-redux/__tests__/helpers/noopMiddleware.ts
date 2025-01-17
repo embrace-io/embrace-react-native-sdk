@@ -1,4 +1,4 @@
-import {Middleware} from "redux";
+import {Middleware} from "@reduxjs/toolkit";
 
 const middleware = <
   RootState,

@@ -1,5 +1,9 @@
-import {combineReducers, Reducer} from "redux";
-import {configureStore, Tuple} from "@reduxjs/toolkit";
+import {
+  configureStore,
+  Tuple,
+  combineReducers,
+  Reducer,
+} from "@reduxjs/toolkit";
 import {SpanExporter} from "@opentelemetry/sdk-trace-base";
 
 import {dispatchMiddleware} from "../../src/instrumentation";

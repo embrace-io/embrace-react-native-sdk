@@ -5,7 +5,7 @@
 > This module requires both the [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native) and
 > the [React Native Embrace Tracer Provider](https://www.npmjs.com/package/@embrace-io/react-native-tracer-provider).
 
-This package use's Embrace's React Native SDK and OpenTelemetry Tracer Provider to collect telemetry around dispatching
+This package uses Embrace's React Native SDK and OpenTelemetry Tracer Provider to collect telemetry around dispatching
 actions with Redux. It provides a custom middleware that can be configured with your Redux store.
 
 ## Install the component

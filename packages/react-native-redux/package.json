@@ -39,14 +39,19 @@
   "scripts": {
     "build": "tsc"
   },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "gzip-js": "^0.3.2"
+  },
   "peerDependencies": {
+    "@reduxjs/toolkit": "*",
     "react-native": ">=0.56.0"
   },
   "devDependencies": {
-    "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/sdk-trace-base": "^1.25.1",
     "@reduxjs/toolkit": "^2.5.0",
     "@testing-library/react": "^14.0.0",
+    "@types/gzip-js": "^0.3.5",
     "redux": "^5.0.1",
     "typescript": "^5.6.3"
   },
