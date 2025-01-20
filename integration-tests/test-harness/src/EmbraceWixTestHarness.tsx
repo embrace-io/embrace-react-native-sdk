@@ -1,31 +1,63 @@
 import * as React from "react";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
-import {
-  NavigationContainer,
-  useNavigationContainerRef,
-} from "@react-navigation/native";
 import {Navigation} from "react-native-navigation";
 import {EmbraceNativeNavigationTracker} from "@embrace-io/react-native-navigation";
+import FullScreenMessage from "./components/FullScreenMessage";
+import {
+  SDKConfig,
+  useEmbrace,
+  useOrientationListener,
+} from "@embrace-io/react-native";
 
-export const EmbraceWixTestHarness: React.FC<{children: React.ReactNode}> = ({
+type Props = {
+  sdkConfig: SDKConfig;
+  allowCustomExport?: boolean;
+  children?: React.ReactNode;
+};
+
+const EmbraceWixTestHarness = ({
+  sdkConfig,
+  allowCustomExport = false,
   children,
-}) => {
-  const navigationContainer = useNavigationContainerRef();
-  const {tracerProvider} = useEmbraceNativeTracerProvider({});
+}: Props) => {
+  if (!allowCustomExport) {
+    sdkConfig.exporters = undefined;
+  }
+
+  const {isPending, isStarted} = useEmbrace(sdkConfig);
+
+  const {tracerProvider, isLoading: isLoadingTracerProvider} =
+    useEmbraceNativeTracerProvider({}, isStarted);
+
   const nativeNavigationRef = React.useRef(Navigation.events());
 
+  // initializing orientation listener
+  useOrientationListener(isStarted);
+
   return (
-    // `NavigationContainer` is waiting for what `useNavigationContainerRef` is returning (both exported from `@react-navigation/native`)
-    <NavigationContainer ref={navigationContainer}>
-      <EmbraceNativeNavigationTracker
-        ref={nativeNavigationRef}
-        tracerProvider={tracerProvider || undefined}
-        screenAttributes={{
-          "is-test-harness": true,
-          package: "wix/react-native-navigation",
-        }}>
-        {children}
-      </EmbraceNativeNavigationTracker>
-    </NavigationContainer>
+    <EmbraceNativeNavigationTracker
+      ref={nativeNavigationRef}
+      tracerProvider={tracerProvider || undefined}
+      screenAttributes={{
+        "test.attr": 98765,
+        package: "wix/react-native-navigation",
+      }}>
+      {isPending && <FullScreenMessage msg="Loading Embrace" />}
+
+      {!isPending && !isStarted && (
+        <FullScreenMessage msg="An error occurred during the Embrace initialization" />
+      )}
+
+      {(isLoadingTracerProvider || tracerProvider === null) && (
+        <FullScreenMessage msg="Loading Tracer Provider" />
+      )}
+
+      {isStarted &&
+        !isLoadingTracerProvider &&
+        tracerProvider !== null &&
+        children}
+    </EmbraceNativeNavigationTracker>
   );
 };
+
+export {EmbraceWixTestHarness};

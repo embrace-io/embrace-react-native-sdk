@@ -76,8 +76,10 @@ const initialize = async (
 
       return Promise.resolve(false);
     } else {
-      logger.log("native SDK was started");
+      logger.log("SDK was started in the JavaScript side");
     }
+  } else {
+    logger.log("SDK in the Native side");
   }
 
   // setting version of React Native used by the app

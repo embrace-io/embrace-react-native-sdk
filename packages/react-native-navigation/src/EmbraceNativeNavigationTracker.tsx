@@ -5,7 +5,7 @@ import {TracerProvider, TracerOptions, Attributes} from "@opentelemetry/api";
 import {
   NativeNavigationTracker,
   NativeNavigationTrackerRef,
-} from "./navigation";
+} from "./instrumentation";
 
 interface EmbraceNativeNavigationTrackerProps {
   children: ReactNode;

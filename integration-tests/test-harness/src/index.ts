@@ -1,4 +1,6 @@
 export * from "./EmbraceTestHarness";
+export * from "./EmbraceWixTestHarness";
+
 export * from "./screens/LogTestingScreen";
 export * from "./screens/MiscTestingScreen";
 export * from "./screens/OTLPTestingScreen";

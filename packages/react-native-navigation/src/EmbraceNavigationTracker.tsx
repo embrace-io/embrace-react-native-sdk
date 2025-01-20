@@ -2,7 +2,7 @@ import * as React from "react";
 import {ReactNode, forwardRef, useMemo} from "react";
 import {TracerProvider, TracerOptions, Attributes} from "@opentelemetry/api";
 
-import {NavigationTracker, NavigationTrackerRef} from "./navigation";
+import {NavigationTracker, NavigationTrackerRef} from "./instrumentation";
 
 interface EmbraceNavigationTrackerProps {
   children: ReactNode;
