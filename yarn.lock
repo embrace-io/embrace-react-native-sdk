@@ -2545,7 +2545,7 @@ __metadata:
   resolution: "@embrace-io/react-native-tracer-provider@workspace:packages/react-native-tracer-provider"
   dependencies:
     "@opentelemetry/api": "npm:^1.9.0"
-    "@testing-library/react-native": "npm:^12.5.1"
+    "@testing-library/react-native": "npm:^13.0.1"
     typescript: "npm:^5.6.3"
   peerDependencies:
     react-native: ">=0.56.0"
@@ -4399,22 +4399,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-native@npm:^12.5.1":
-  version: 12.9.0
-  resolution: "@testing-library/react-native@npm:12.9.0"
+"@testing-library/react-native@npm:^13.0.1":
+  version: 13.0.1
+  resolution: "@testing-library/react-native@npm:13.0.1"
   dependencies:
+    chalk: "npm:^4.1.2"
     jest-matcher-utils: "npm:^29.7.0"
     pretty-format: "npm:^29.7.0"
     redent: "npm:^3.0.0"
   peerDependencies:
-    jest: ">=28.0.0"
-    react: ">=16.8.0"
-    react-native: ">=0.59"
-    react-test-renderer: ">=16.8.0"
+    jest: ">=29.0.0"
+    react: ">=18.2.0"
+    react-native: ">=0.71"
+    react-test-renderer: ">=18.2.0"
   peerDependenciesMeta:
     jest:
       optional: true
-  checksum: 10c0/d29a2c9a4f1318a8fbf7d53927e42c34bd3bc00c46ba7e4010828c927a2b504cbaa3284deba7780fa467b6b1b2d5ce1a4a2ab9f2d1d08d7a1740dc5b2242df21
+  checksum: 10c0/c73848832bc1b724ac6ef188f0e4bf77ec1cb0589a5245d449bed3e384048ced818a27340635eabeb6cb5f323225b8d37fca6377925b4be28923a9a23779296f
   languageName: node
   linkType: hard
 
