@@ -1,3 +1,4 @@
+import {trackUnhandledError} from "../utils/error";
 import {logHandledError} from "../api/log";
 import {ComponentError, logIfComponentError} from "../api/component";
 import {LogProperties} from "../../src/interfaces";
@@ -106,5 +107,33 @@ describe("Handled JS Exceptions", () => {
     await logHandledError("not an error", undefined);
 
     expect(mockLogHandledError).not.toHaveBeenCalled();
+  });
+});
+
+describe("`trackUnhandledError()`", () => {
+  it("'Error' instance", async () => {
+    const error = new Error("`trackUnhandledError` test message");
+    trackUnhandledError("any value", error);
+
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+      "Unhandled promise rejection: `trackUnhandledError` test message",
+      "error",
+      {},
+      error.stack,
+    );
+  });
+
+  it("not an instance of 'Error'", async () => {
+    const error = "not an Error instance";
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    trackUnhandledError("any value", error);
+
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+      "Unhandled promise rejection: not an Error instance",
+      "error",
+      {},
+      "",
+    );
   });
 });
