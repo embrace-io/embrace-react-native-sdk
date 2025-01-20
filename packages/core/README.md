@@ -16,19 +16,21 @@ _If you need an App ID and API Token, [Go to our dashboard](https://dash.embrace
 
 ## Add the JavaScript library
 
-```sh
-    npm install @embrace-io/react-native
-```
-
-Or
+npm:
 
 ```sh
-    yarn add @embrace-io/react-native
+npm install @embrace-io/react-native
 ```
 
-For iOS you will also need to install the pod:
+yarn:
 
-```shell
+```sh
+yarn add @embrace-io/react-native
+```
+
+For iOS you will also need to install or update pods for the application:
+
+```sh
 cd ios && pod install --repo-update
 ```
 

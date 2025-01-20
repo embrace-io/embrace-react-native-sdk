@@ -10,14 +10,16 @@ Here's how you add the screen tracker to the session.
 
 ### Install the component
 
-```sh
-yarn add @embrace-io/react-native-navigation
-```
-
-Or
+npm:
 
 ```sh
 npm install @embrace-io/react-native-navigation
+```
+
+yarn:
+
+```sh
+yarn add @embrace-io/react-native-navigation
 ```
 
 ### Adding the component to your code
