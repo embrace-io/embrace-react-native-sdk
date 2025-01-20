@@ -50,7 +50,14 @@ export default function TabLayout() {
         name="nsf"
         options={{
           title: "nsf",
-          tabBarAccessibilityLabel: "EMBRACE NSF TESTING",
+          tabBarAccessibilityLabel: "NSF TESTING",
+        }}
+      />
+      <Tabs.Screen
+        name="redux"
+        options={{
+          title: "redux",
+          tabBarAccessibilityLabel: "REDUX TESTING",
         }}
       />
     </Tabs>
