@@ -3,12 +3,12 @@
 import {Platform} from "react-native";
 
 import {oltpGetStart} from "./utils/otlp";
-import {trackUnhandledErrors} from "./utils/error";
+import {setUnhandledErrors} from "./utils/error";
 import {setEmbracePackageVersion, setReactNativeVersion} from "./utils/bundle";
 import EmbraceLogger from "./utils/EmbraceLogger";
 import {SDKConfig, EmbraceLoggerLevel} from "./interfaces";
 import {handleError, handleGlobalError} from "./api/error";
-import {setJavaScriptPatch} from "./api/bundle";
+import {setJavaScriptBundlePath, setJavaScriptPatch} from "./api/bundle";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
 
 interface EmbraceInitArgs {
@@ -30,7 +30,7 @@ const initialize = async (
   if (!hasNativeSDKStarted) {
     if (isIOS && !sdkConfig?.ios?.appId && !sdkConfig?.exporters) {
       logger.warn(
-        "[Embrace] 'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+        "'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);
@@ -97,7 +97,7 @@ const initialize = async (
         await EmbraceManagerModule.getDefaultJavaScriptBundlePath();
 
       if (bundleJs) {
-        EmbraceManagerModule.setJavaScriptBundlePath(bundleJs);
+        setJavaScriptBundlePath(bundleJs);
       }
     } catch (e) {
       logger.warn(
@@ -118,7 +118,7 @@ const initialize = async (
   );
 
   // through `promise/setimmediate/rejection-tracking`
-  trackUnhandledErrors();
+  setUnhandledErrors();
 
   return Promise.resolve(true);
 };
