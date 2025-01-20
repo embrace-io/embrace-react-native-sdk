@@ -14,6 +14,7 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
 import {SpanTestingScreen} from "./screens/SpanTestingScreen";
 import {NSFTestingScreen} from "./screens/NSFTestingScreen";
+import {ReduxTestingScreen} from "./screens/ReduxTestingScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -87,6 +88,13 @@ export const EmbraceReactNativeTestHarness = () => {
               tabBarAccessibilityLabel: "NSF TESTING",
             }}
             component={NSFTestingScreen}
+          />
+          <Tab.Screen
+            name="redux"
+            options={{
+              tabBarAccessibilityLabel: "REDUX TESTING",
+            }}
+            component={ReduxTestingScreen}
           />
         </Tab.Navigator>
       </NavigationTracker>

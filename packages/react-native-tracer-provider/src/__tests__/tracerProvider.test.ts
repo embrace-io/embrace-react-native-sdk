@@ -13,6 +13,10 @@ import {
   EmbraceNativeTracerProviderConfig,
   EmbraceNativeSpan,
   useEmbraceNativeTracerProvider,
+  startView,
+  endAsFailed,
+  asParent,
+  recordCompletedSpan,
 } from "../index";
 
 const mockSetupTracer = jest.fn();
@@ -129,6 +133,33 @@ describe("Embrace Native Tracer Provider", () => {
     expect(mockSetupTracer).toHaveBeenCalledWith("some-tracer", "v17", "");
   });
 
+  it("should provide a tracer by default", async () => {
+    const {result} = renderHook(() => useEmbraceNativeTracerProvider());
+
+    await waitFor(() => expect(result.current.tracer).toBeTruthy());
+
+    expect(mockSetupTracer).toHaveBeenCalledWith(
+      "embrace-default-tracer",
+      "",
+      "",
+    );
+
+    result.current.tracer!.startSpan("my-span");
+
+    expect(mockStartSpan).toHaveBeenCalledWith(
+      "embrace-default-tracer",
+      "",
+      "",
+      "embrace-default-tracer___1",
+      "my-span",
+      "",
+      0,
+      {},
+      [],
+      "",
+    );
+  });
+
   it("should error if getting a tracer provider before the Embrace SDK has started", async () => {
     mockIsStarted.mockReturnValue(Promise.resolve(false));
 
@@ -141,6 +172,7 @@ describe("Embrace Native Tracer Provider", () => {
         error:
           "The Embrace SDK must be started to use the TracerProvider, please invoke `initialize` from `@embrace-io/react-native`.",
         tracerProvider: null,
+        tracer: null,
       });
     });
   });
@@ -156,6 +188,7 @@ describe("Embrace Native Tracer Provider", () => {
         isError: true,
         error: "Failed to setup EmbraceNativeTracerProvider",
         tracerProvider: null,
+        tracer: null,
       });
     });
   });
@@ -556,6 +589,32 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
+  it("should allow adding an event to a span without attributes and a timestamp as the 3rd argument", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
+    span.addEvent("my-event", undefined, 1590556800033);
+
+    expect(mockAddEvent).toHaveBeenCalledWith(
+      "test_v1__1",
+      "my-event",
+      {},
+      1590556800033,
+    );
+  });
+
+  it("should defer to the 3rd argument when both are set as timestamp when adding an event", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
+    span.addEvent("my-event", 1590556800022, 1590556800033);
+
+    expect(mockAddEvent).toHaveBeenCalledWith(
+      "test_v1__1",
+      "my-event",
+      {},
+      1590556800033,
+    );
+  });
+
   it("should allow setting links on a span", async () => {
     const tracer = await getTestTracer({});
     const span = tracer.startSpan("my-span");
@@ -767,5 +826,139 @@ describe("Embrace Native Tracer Provider", () => {
     expect(mockClearCompletedSpans).not.toHaveBeenCalled();
     mockAppStateListener.mock.calls[0][1]();
     expect(mockClearCompletedSpans).toHaveBeenCalled();
+  });
+
+  it("should provide a convenience function for starting a span representing a view", async () => {
+    const tracer = await getTestTracer({});
+
+    startView(tracer, "my-view");
+
+    expect(mockStartSpan).toHaveBeenCalledWith(
+      "test",
+      "v1",
+      "",
+      "test_v1__1",
+      "emb-screen-view",
+      "",
+      0,
+      {
+        "view.name": "my-view",
+        "emb.type": "ux.view",
+      },
+      [],
+      "",
+    );
+  });
+
+  it("should provide a convenience function for ending a span as failed", async () => {
+    const tracer = await getTestTracer({});
+    const span = tracer.startSpan("my-span");
+    endAsFailed(span);
+
+    expect(mockSetStatus).toHaveBeenCalledWith("test_v1__1", {
+      code: "ERROR",
+    });
+    expect(mockEndSpan).toHaveBeenCalledWith("test_v1__1", 0);
+  });
+
+  it("should provide a convenience function for using a span as a parent", async () => {
+    const tracer = await getTestTracer({});
+
+    const parentSpan = tracer.startSpan("the-parent");
+    mockStartSpan.mockClear();
+
+    tracer.startSpan("the-child", {}, asParent(parentSpan));
+
+    expect(mockStartSpan).toHaveBeenCalledWith(
+      "test",
+      "v1",
+      "",
+      "test_v1__2",
+      "the-child",
+      "",
+      0,
+      {},
+      [],
+      "test_v1__1",
+    );
+  });
+
+  it("should provide a convenience function for recording a completed span", async () => {
+    const tracer = await getTestTracer({});
+    const parentSpan = tracer.startSpan("the-parent");
+    mockStartSpan.mockClear();
+
+    recordCompletedSpan(tracer, "completed-span", {
+      kind: SpanKind.CONSUMER,
+      startTime: 1718409600000,
+      attributes: {
+        "my-attr-1": "hello",
+      },
+      parent: parentSpan,
+      endTime: 1718409600099,
+      events: [
+        {
+          name: "completed-span-event-1",
+          attributes: {"event-attr": "bar"},
+          timeStamp: 1718409600011,
+        },
+        {
+          name: "completed-span-event-2",
+        },
+      ],
+      status: {code: SpanStatusCode.ERROR},
+    });
+    expect(mockStartSpan).toHaveBeenCalledWith(
+      "test",
+      "v1",
+      "",
+      "test_v1__2",
+      "completed-span",
+      "CONSUMER",
+      1718409600000,
+      {
+        "my-attr-1": "hello",
+      },
+      [],
+      "test_v1__1",
+    );
+    expect(mockAddEvent).toHaveBeenCalledTimes(2);
+    expect(mockAddEvent).toHaveBeenCalledWith(
+      "test_v1__2",
+      "completed-span-event-1",
+      {"event-attr": "bar"},
+      1718409600011,
+    );
+    expect(mockAddEvent).toHaveBeenCalledWith(
+      "test_v1__2",
+      "completed-span-event-2",
+      {},
+      0,
+    );
+    expect(mockSetStatus).toHaveBeenCalledWith("test_v1__2", {
+      code: "ERROR",
+    });
+    expect(mockEndSpan).toHaveBeenCalledWith("test_v1__2", 1718409600099);
+  });
+
+  it("should provide a convenience function for recording a completed span without options", async () => {
+    const tracer = await getTestTracer({});
+
+    recordCompletedSpan(tracer, "completed-span");
+    expect(mockStartSpan).toHaveBeenCalledWith(
+      "test",
+      "v1",
+      "",
+      "test_v1__1",
+      "completed-span",
+      "",
+      0,
+      {},
+      [],
+      "",
+    );
+    expect(mockAddEvent).not.toHaveBeenCalled();
+    expect(mockSetStatus).not.toHaveBeenCalled();
+    expect(mockEndSpan).toHaveBeenCalledWith("test_v1__1", 0);
   });
 });

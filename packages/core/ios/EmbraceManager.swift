@@ -25,7 +25,6 @@ private let EMB_EXC = "emb-js"
 @objc(EmbraceManager)
 class EmbraceManager: NSObject {
     private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
-    private var spanRepository = SpanRepository()
     private var config: SDKConfig = SDKConfig(from: NSDictionary())
 
     @objc(setJavaScriptBundlePath:resolver:rejecter:)
@@ -65,7 +64,9 @@ class EmbraceManager: NSObject {
 
         DispatchQueue.main.async {
             do {
-                try Embrace.setup(options: initEmbraceOptions(config: self.config, exporters: nil)).start()
+                try Embrace.setup(options: initEmbraceOptions(config: self.config, exporters: nil))
+                    .start()
+
                 resolve(true)
             } catch let error {
                 reject("START_EMBRACE_SDK", "Error starting Embrace SDK", error)
@@ -176,27 +177,6 @@ class EmbraceManager: NSObject {
     func endSession(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         Embrace.client?.endCurrentSession()
         resolve(true)
-    }
-
-    @objc
-    func checkAndSetCodePushBundleURL(
-        _ resolve: @escaping RCTPromiseResolveBlock,
-        rejecter reject: @escaping RCTPromiseRejectBlock
-    ) {
-        DispatchQueue.global(qos: .background).async {
-            do {
-                guard let url = CodePushHelper.getCodePushURL() else {
-                    resolve(false)
-                    return
-                }
-
-                let bundleID = try computeBundleID(path: url.path)
-                try Embrace.client?.metadata.addResource(key: REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, value: bundleID.id, lifespan: .process)
-                resolve(true)
-            } catch let error {
-                reject("CHECK_AND_SET_CODEPUSH_BUNDLE_URL", "Error setting Codepush Bundle URL", error)
-            }
-        }
     }
 
     @objc(addUserPersona:resolver:rejecter:)
@@ -317,52 +297,6 @@ class EmbraceManager: NSObject {
 
     }
 
-    @objc
-    func setUserAsPayer(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            try Embrace.client?.metadata.add(persona: "payer")
-            resolve(true)
-        } catch let error {
-            reject("SET_USER_PAYER", "Error adding User Payer", error)
-        }
-    }
-
-    @objc
-    func clearUserAsPayer(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            try Embrace.client?.metadata.remove(persona: "payer", lifespan: .session)
-            resolve(true)
-        } catch let error {
-            reject("CLEAR_USER_PAYER", "Error removing User Payer", error)
-        }
-    }
-
-    @objc(startView:resolver:rejecter:)
-    func startView(_ viewName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-
-        let span = Embrace.client?.buildSpan(name: "emb-screen-view")
-        .setAttribute(key: "view.name", value: viewName)
-        .setAttribute(key: "emb.type", value: "ux.view")
-        .startSpan()
-
-        var spanId = ""
-        if span != nil {
-        spanId = spanRepository.spanStarted(span: span!)
-        }
-
-        if spanId.isEmpty {
-        reject("START_SPAN_ERROR", "Failed to start span", nil)
-        } else {
-        resolve(spanId)
-        }
-    }
-
-  @objc(endView:resolver:rejecter:)
-  func endView(_ spanId: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-
-    stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0, resolver: resolve, rejecter: reject)
-  }
-
     private func severityFromString(from inputString: String) -> LogSeverity {
         switch inputString {
         case "info":
@@ -476,26 +410,8 @@ class EmbraceManager: NSObject {
         }
     }
 
-    /*
-     * Spans API
-     */
-
     private func dateFrom(ms: Double) -> Date {
         return Date(timeIntervalSince1970: TimeInterval(ms / 1000.0))
-    }
-
-    private func attributeValuesFrom(dict: NSDictionary) -> [String: AttributeValue] {
-        var attributes = [String: AttributeValue]()
-
-        for (key, value) in dict {
-            if let key = key as? String, let value = value as? String {
-                attributes.updateValue(AttributeValue(value), forKey: key)
-            } else {
-                os_log("unexpected non-string attribute for span", log: log, type: .error)
-            }
-        }
-
-        return attributes
     }
 
     private func attributeStringsFrom(dict: NSDictionary) -> [String: String] {
@@ -512,50 +428,6 @@ class EmbraceManager: NSObject {
         return attributes
     }
 
-    private func errorCodeFrom(str: String) -> SpanErrorCode? {
-        switch str {
-        case "Failure":
-            return .failure
-        case "UserAbandon":
-            return .userAbandon
-        case "Unknown":
-            return .unknown
-        default:
-            return nil
-        }
-    }
-
-    private func eventsFrom(array: NSArray) -> [RecordingSpanEvent] {
-        var events =  [RecordingSpanEvent]()
-
-        for evt in array {
-            if let evt = evt as? NSDictionary {
-                let name = evt.value(forKey: EVENT_NAME_KEY) as? String
-                let timeStampMs = evt.value(forKey: EVENT_TIMESTAMP_KEY) as? Double
-                let attributes = evt.value(forKey: EVENT_ATTRIBUTES_KEY) as? NSDictionary
-
-                if name == nil {
-                    os_log("missing name for event", log: log, type: .error)
-                    continue
-                }
-
-                if timeStampMs == nil {
-                    os_log("missing timestamp for event: %@", log: log, type: .error, name!)
-                    continue
-                }
-
-                if attributes == nil {
-                    events.append(RecordingSpanEvent(name: name!, timestamp: dateFrom(ms: timeStampMs!)))
-                } else {
-                    events.append(RecordingSpanEvent(name: name!, timestamp: dateFrom(ms: timeStampMs!),
-                                                     attributes: attributeValuesFrom(dict: attributes!)))
-                }
-            }
-        }
-
-        return events
-    }
-
     private func createNetworkSpanName(url: String, httpMethod: String) -> String {
         var name = "emb-" + httpMethod.uppercased()
 
@@ -567,151 +439,6 @@ class EmbraceManager: NSObject {
         }
 
         return name
-    }
-
-    @objc(startSpan:parentSpanId:startTimeMs:resolver:rejecter:)
-    func startSpan(
-        _ name: String,
-        parentSpanId: String,
-        startTimeMs: NSNumber,
-        resolver resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-    ) {
-        let spanBuilder = Embrace.client?.buildSpan(name: name)
-
-        if spanBuilder == nil {
-            reject("START_SPAN_ERROR", "Error starting span, Embrace SDK may not be initialized", nil)
-            return
-        }
-
-        if !parentSpanId.isEmpty, let parent = spanRepository.get(spanId: parentSpanId) {
-            spanBuilder?.setParent(parent)
-        }
-
-        if !startTimeMs.doubleValue.isZero {
-            spanBuilder?.setStartTime(time: dateFrom(ms: startTimeMs.doubleValue))
-        }
-
-        let span = spanBuilder?.startSpan()
-
-        var id = ""
-        if span != nil {
-            id = spanRepository.spanStarted(span: span!)
-        }
-
-        if id.isEmpty {
-            reject("START_SPAN_ERROR", "Error starting span", nil)
-        } else {
-            resolve(id)
-        }
-    }
-
-    @objc(stopSpan:errorCodeString:endTimeMs:resolver:rejecter:)
-    func stopSpan(
-        _ spanId: String,
-        errorCodeString: String,
-        endTimeMs: NSNumber,
-        resolver resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-    ) {
-        let span = spanRepository.get(spanId: spanId)
-
-        if span == nil {
-            reject("STOP_SPAN_ERROR", "Could not retrieve a span with the given id", nil)
-            return
-        }
-
-        let errorCode = errorCodeFrom(str: errorCodeString)
-
-        if endTimeMs.doubleValue.isZero {
-            span?.end(errorCode: errorCode)
-        } else {
-            span?.end(errorCode: errorCode, time: dateFrom(ms: endTimeMs.doubleValue))
-        }
-
-        spanRepository.spanEnded(span: span!)
-
-        resolve(true)
-    }
-
-    @objc(addSpanEventToSpan:name:time:attributes:resolver:rejecter:)
-    func addSpanEventToSpan(
-        _ spanId: String,
-        name: String,
-        time: Double,
-        attributes: NSDictionary,
-        resolver resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-    ) {
-        let span = spanRepository.get(spanId: spanId)
-
-        if span == nil {
-            reject("ADD_SPAN_EVENT_TO_SPAN_ERROR", "Could not retrieve a span with the given id", nil)
-            return
-        }
-
-        if attributes.count == 0 {
-            span?.addEvent(name: name, timestamp: dateFrom(ms: time))
-        } else {
-            span?.addEvent(name: name, attributes: attributeValuesFrom(dict: attributes), timestamp: dateFrom(ms: time))
-        }
-
-        Embrace.client?.flush(span!)
-
-        resolve(true)
-    }
-
-    @objc(addSpanAttributeToSpan:key:value:resolver:rejecter:)
-    func addSpanAttributeToSpan(
-        _ spanId: String,
-        key: String,
-        value: String,
-        resolver resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-    ) {
-        let span = spanRepository.get(spanId: spanId)
-
-        if span == nil {
-            reject("ADD_SPAN_ATTRIBUTE_TO_SPAN_ERROR", "Could not retrieve a span with the given id", nil)
-            return
-        }
-
-        span?.setAttribute(key: key, value: value)
-        Embrace.client?.flush(span!)
-
-        resolve(true)
-    }
-
-    @objc(recordCompletedSpan:startTimeMs:endTimeMs:errorCodeString:parentSpanId:attributes:events:resolver:rejecter:)
-    func recordCompletedSpan(
-        _ name: String,
-        startTimeMs: Double,
-        endTimeMs: Double,
-        errorCodeString: String,
-        parentSpanId: String,
-        attributes: NSDictionary,
-        events: NSArray,
-        resolver resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-    ) {
-        var parent: Span?
-        if !parentSpanId.isEmpty {
-            parent = spanRepository.get(spanId: parentSpanId)
-        }
-
-        if Embrace.client == nil {
-            reject("RECORD_COMPLETED_SPAN_ERROR", "Error recording span, Embrace SDK may not be initialized", nil)
-            return
-        }
-
-        var attributeStrings = attributeStringsFrom(dict: attributes)
-        Embrace.client?.recordCompletedSpan(name: name, type: SpanType.performance, parent: parent,
-                                            startTime: dateFrom(ms: startTimeMs), endTime: dateFrom(ms: endTimeMs),
-                                            attributes: attributeStrings,
-                                            events: eventsFrom(array: events),
-                                            errorCode: errorCodeFrom(str: errorCodeString))
-
-        resolve(true)
     }
 
     @objc(logHandledError:stacktrace:properties:resolver:rejecter:)

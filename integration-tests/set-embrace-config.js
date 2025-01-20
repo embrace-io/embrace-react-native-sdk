@@ -187,6 +187,8 @@
       disableNetworkSpanForwarding: !config.enable_network_span_forwarding,
       disabledUrlPatterns: config.disabled_url_patterns,
     },
+    // this is meant for both platforms but it shouldn't be added into the `embrace-config.json` file in the android app
+    exporters: config.exporters,
   };
 
   fs.writeFileSync(iOSConfigPath, JSON.stringify(iOSConfig, undefined, 2));

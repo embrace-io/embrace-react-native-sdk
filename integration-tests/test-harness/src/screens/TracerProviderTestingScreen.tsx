@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Button, View, Text} from "react-native";
-import {useMemo} from "react";
+import {useCallback, useMemo} from "react";
 import {styles} from "../helpers/styles";
 import {
   generateBasicSpan,
@@ -8,7 +8,10 @@ import {
   generateTestSpans,
 } from "../helpers/generateSpans";
 import {Tracer} from "@opentelemetry/api";
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {
+  useEmbraceNativeTracerProvider,
+  startView,
+} from "@embrace-io/react-native-tracer-provider";
 import FullScreenMessage from "../components/FullScreenMessage";
 
 const TracerProviderTestingScreen = () => {
@@ -20,6 +23,20 @@ const TracerProviderTestingScreen = () => {
       return tracerProvider.getTracer("span-test", "1.0");
     }
   }, [isLoading, isError, error, tracerProvider]);
+
+  const recordView = useCallback(async () => {
+    if (!tracer) {
+      console.log("failed to record view, tracer not ready");
+      return;
+    }
+
+    try {
+      const viewSpan = startView(tracer, "my-view");
+      viewSpan.end();
+    } catch (e) {
+      console.log("failed to record view");
+    }
+  }, [tracer]);
 
   if (isLoading) {
     return <FullScreenMessage msg="Loading Tracer Provider" />;
@@ -45,6 +62,7 @@ const TracerProviderTestingScreen = () => {
           onPress={() => generateNestedSpans(tracer!)}
           title={"GENERATE NESTED SPANS"}
         />
+        <Button onPress={recordView} title="Record View" />
       </View>
     </View>
   );

@@ -196,23 +196,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startView(String screen, Promise promise) {
-        try {
-            Embrace.getInstance().getReactNativeInternalInterface().logRnView(screen);
-            promise.resolve(screen);
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void endView(String screen, Promise promise) {
-        // This method is only for compatibility, Android does not need an end event to end the view, but iOS does
-        // TODO this should be changed to span in the future
-        promise.resolve(true);
-    }
-
-    @ReactMethod
     public void logHandledError(String message, String javascriptStackTrace, ReadableMap properties, Promise promise) {
         try {
             final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<>();
@@ -271,36 +254,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void logRNAction(String name, Double startTime, Double endTime, ReadableMap properties, Integer payloadSize, String output, Promise promise) {
-        try {
-            long st = startTime.longValue();
-            long et = endTime.longValue();
-
-            final Map<String, Object> props = properties != null ? properties.toHashMap() : new HashMap<String, Object>();
-            Embrace.getInstance().getReactNativeInternalInterface().logRnAction(name, st, et, props, payloadSize, output);
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-
-    }
-
-    @ReactMethod
-    public void checkAndSetCodePushBundleURL(Promise promise) {
-        try {
-            Class<?> clazz = Class.forName("com.microsoft.codepush.react.CodePush");
-            Method method = clazz.getDeclaredMethod("getJSBundleFile");
-            String bundlePath = (String) method.invoke(null);
-            Embrace.getInstance().getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,bundlePath);
-            promise.resolve(true);
-        } catch (Exception e) {
-            Log.i("Embrace", "CodePush not present in build.", e);
-            promise.resolve(false);
-
-        }
-    }
-
-    @ReactMethod
     public void setJavaScriptBundlePath(String path, Promise promise) {
         try {
             Embrace.getInstance().getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,path);
@@ -334,26 +287,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     public void endSession(Promise promise) {
         try {
             Embrace.getInstance().endSession();
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void setUserAsPayer(Promise promise) {
-        try {
-            Embrace.getInstance().setUserAsPayer();
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod
-    public void clearUserAsPayer(Promise promise) {
-        try {
-            Embrace.getInstance().clearUserAsPayer();
             promise.resolve(true);
         } catch(Exception e) {
             promise.resolve(false);
@@ -463,127 +396,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             promise.resolve(false);
         }
 
-    }
-
-    @ReactMethod()
-    public void startSpan(String name, String parentSpanId, Double startTimeMs, Promise promise) {
-        try {
-            Long startTime = null;
-            if (startTimeMs != null && startTimeMs > 0) {
-                startTime = startTimeMs.longValue();
-            }
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().startSpan(name, parentSpanId, startTime));
-        } catch(Exception e) {
-            promise.resolve(null);
-        }
-    }
-
-    private Map<String, String> convertToReadableMap(ReadableMap readableMap) {
-        if (readableMap == null) {
-            return null;
-        }
-
-        Map<String, String> stringMap = new HashMap<>();
-
-        for (String key : readableMap.toHashMap().keySet()) {
-            stringMap.put(key, readableMap.getString(key));
-        }
-
-        return stringMap;
-    }
-
-    private ErrorCode getSpanErrorCodebyString(String errorCode) {
-        switch (errorCode) {
-            case "Failure":
-                return ErrorCode.FAILURE;
-
-            case "UserAbandon":
-                return ErrorCode.USER_ABANDON;
-
-            case "Unknown":
-                return ErrorCode.UNKNOWN;
-
-            default:
-                return null;
-        }
-    }
-
-    private List<Map<String, Object>> transformListReadableMapToListMap(ReadableArray items) {
-        List<Map<String, Object>> objectMapList = new ArrayList<>();
-
-        try {
-            for (int i = 0; i < items.size(); i++) {
-                ReadableMap readableMap = items.getMap(i);
-
-                if (readableMap != null) {
-                    Map<String, Object> map = readableMap.toHashMap();
-                    if (map.containsKey("timestampMs") && map.get("timestampMs") instanceof Double) {
-                        double timestampMs = (Double) map.get("timestampMs");
-                        map.put("timestampMs", (long) timestampMs);
-                    }
-                    objectMapList.add(map);
-                }
-            }
-        } catch(Exception e) {
-            Log.e("Embrace", "There was an error in parsing the span event data", e);
-        }
-
-        return objectMapList;
-    }
-
-    @ReactMethod()
-    public void stopSpan(String spanId, String errorCodeString, Double endTimeMs, Promise promise) {
-        try {
-            Long endTime = null;
-            if (endTimeMs != null && endTimeMs > 0) {
-                endTime = endTimeMs.longValue();
-            }
-
-            ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().stopSpan(spanId, errorCodeInstance, endTime));
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod()
-    public void addSpanAttributeToSpan(String spanId, String key, String value, Promise promise) {
-        try {
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().addSpanAttribute(spanId, key, value));
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod()
-    public void addSpanEventToSpan(String spanId, String name, Double time, ReadableMap attributes, Promise promise) {
-        try {
-
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().addSpanEvent(spanId, name, time.longValue(), this.convertToReadableMap(attributes)));
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
-    }
-
-    @ReactMethod()
-    public void recordCompletedSpan(String name, Double startTimeMs, Double endTimeMs, String errorCodeString, String parentSpanId, ReadableMap attributes, ReadableArray events, Promise promise) {
-        try {
-            ErrorCode errorCodeInstance = this.getSpanErrorCodebyString(errorCodeString);
-
-            Long startTime = null;
-            if (startTimeMs != null && startTimeMs > 0) {
-                startTime = startTimeMs.longValue();
-            }
-
-            Long endTime = null;
-            if (endTimeMs != null && endTimeMs > 0) {
-                endTime = endTimeMs.longValue();
-            }
-
-            promise.resolve(Embrace.getInstance().getReactNativeInternalInterface().recordCompletedSpan(name, startTime, endTime, errorCodeInstance, parentSpanId, this.convertToReadableMap(attributes), this.transformListReadableMapToListMap(events)));
-        } catch(Exception e) {
-            promise.resolve(false);
-        }
     }
 
     public boolean isNetworkSpanForwardingEnabled() {

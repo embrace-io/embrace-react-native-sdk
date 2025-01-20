@@ -1,5 +1,5 @@
 import {IOS_LANGUAGE, MAIN_CLASS_BY_LANGUAGE} from "../setup/patches/common";
-import EmbraceLogger from "../../src/logger";
+import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 import {FileUpdatable, getFileContents, Patchable} from "./file";
 

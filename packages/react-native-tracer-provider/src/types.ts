@@ -1,13 +1,14 @@
-import {TracerProvider} from "@opentelemetry/api";
+import {Tracer, TracerProvider} from "@opentelemetry/api";
 
-export interface EmbraceNativeTracerProviderReturn {
+interface EmbraceNativeTracerProviderReturn {
   isLoading: boolean;
   isError: boolean;
   error: string;
   tracerProvider: TracerProvider | null;
+  tracer: Tracer | null;
 }
 
-export interface EmbraceNativeTracerProviderConfig {
+interface EmbraceNativeTracerProviderConfig {
   /** Determines the behaviour when a span's context is not currently available when grabbed synchronously */
   spanContextSyncBehaviour?: SpanContextSyncBehaviour;
 
@@ -19,4 +20,10 @@ export interface EmbraceNativeTracerProviderConfig {
  *  - return_empty: return a span context with blank strings for the span and trace IDs
  *  - throw: throw an error
  */
-export type SpanContextSyncBehaviour = "return_empty" | "throw";
+type SpanContextSyncBehaviour = "return_empty" | "throw";
+
+export {
+  EmbraceNativeTracerProviderReturn,
+  EmbraceNativeTracerProviderConfig,
+  SpanContextSyncBehaviour,
+};

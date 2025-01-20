@@ -4,7 +4,7 @@
   "sdk_config": {
     "networking": {
       "enable_network_span_forwarding": true,
-      "disabled_url_patterns": ["otlp-gateway-.*.grafana."]
+      "disabled_url_patterns": ["grafana.net"]
     },
     "base_urls": {
       "config": "http://10.0.2.2:8877",

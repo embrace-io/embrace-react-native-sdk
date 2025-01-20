@@ -1,12 +1,10 @@
-import {useEffect, useState} from "react";
 import * as React from "react";
-import {initialize as initEmbrace} from "@embrace-io/react-native";
+import {useEmbrace, useOrientationListener} from "@embrace-io/react-native";
 import {Text, View} from "react-native";
 import {styles} from "./helpers/styles";
-import {SDKConfig} from "@embrace-io/react-native/lib/src/interfaces/Config";
+import {SDKConfig} from "@embrace-io/react-native";
 import {EmbraceExpoTestHarness} from "./EmbraceExpoTestHarness";
 import {EmbraceReactNativeTestHarness} from "./EmbraceReactNativeTestHarness";
-import {initWithCustomExporters} from "./helpers/otlp";
 
 type Props = {
   sdkConfig: SDKConfig;
@@ -14,37 +12,34 @@ type Props = {
   allowCustomExport?: boolean;
 };
 
-export const EmbraceTestHarness = ({
+const EmbraceTestHarness = ({
   sdkConfig,
   navigationStyle,
   allowCustomExport = false,
 }: Props) => {
-  const [embraceLoaded, setEmbraceLoaded] = useState(false);
+  if (!allowCustomExport) {
+    sdkConfig.exporters = undefined;
+  }
 
-  useEffect(() => {
-    const init = async () => {
-      const config = {
-        sdkConfig,
-      };
+  const {isPending, isStarted} = useEmbrace(sdkConfig);
 
-      if (allowCustomExport) {
-        config.sdkConfig.startCustomExport = initWithCustomExporters();
-      }
+  // initializing orientation listener
+  useOrientationListener(isStarted);
 
-      await initEmbrace(config);
-
-      setEmbraceLoaded(true);
-    };
-
-    init();
-  }, [allowCustomExport]);
-
-  if (!embraceLoaded) {
+  if (isPending) {
     return (
       <View style={styles.container}>
         <Text>Loading Embrace</Text>
       </View>
     );
+  } else {
+    if (!isStarted) {
+      return (
+        <View style={styles.container}>
+          <Text>An error occurred during the Embrace initialization</Text>
+        </View>
+      );
+    }
   }
 
   if (navigationStyle === "expo") {
@@ -53,3 +48,5 @@ export const EmbraceTestHarness = ({
     return <EmbraceReactNativeTestHarness />;
   }
 };
+
+export {EmbraceTestHarness};

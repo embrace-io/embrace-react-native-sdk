@@ -1,6 +1,6 @@
 import {NativeModules} from "react-native";
 import {useEffect, useState} from "react";
-import {TracerProvider} from "@opentelemetry/api";
+import {Tracer, TracerProvider} from "@opentelemetry/api";
 
 import {logWarning} from "./util";
 import {
@@ -19,7 +19,7 @@ import {EmbraceNativeTracerProvider} from "./EmbraceNativeTracerProvider";
  *
  * The JS side of its implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
  */
-export const useEmbraceNativeTracerProvider = (
+const useEmbraceNativeTracerProvider = (
   config?: EmbraceNativeTracerProviderConfig,
   enabled = true,
 ): EmbraceNativeTracerProviderReturn => {
@@ -29,6 +29,7 @@ export const useEmbraceNativeTracerProvider = (
   const [tracerProvider, setTracerProvider] = useState<TracerProvider | null>(
     null,
   );
+  const [tracer, setTracer] = useState<Tracer | null>(null);
 
   useEffect(() => {
     if (error) {
@@ -59,7 +60,9 @@ export const useEmbraceNativeTracerProvider = (
             );
             setIsError(true);
           } else if (!tracerProvider) {
-            setTracerProvider(new EmbraceNativeTracerProvider(config));
+            const provider = new EmbraceNativeTracerProvider(config);
+            setTracerProvider(provider);
+            setTracer(provider.getTracer("embrace-default-tracer"));
           }
         })
         .catch(() => {
@@ -68,12 +71,15 @@ export const useEmbraceNativeTracerProvider = (
         })
         .finally(() => setIsLoading(false));
     }
-  }, [isLoading, config, enabled]);
+  }, [isLoading, config, enabled, tracerProvider]);
 
   return {
     isLoading,
     isError,
     error,
     tracerProvider,
+    tracer,
   };
 };
+
+export {useEmbraceNativeTracerProvider};

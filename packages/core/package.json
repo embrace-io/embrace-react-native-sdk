@@ -4,7 +4,6 @@
   "description": "A React Native wrapper for the Embrace SDK",
   "dependencies": {
     "glob": "^11.0.0",
-    "gzip-js": "^0.3.2",
     "inquirer": "^12.0.0",
     "promise": "^8.0.3",
     "semver": "^7.1.3",
@@ -53,7 +52,7 @@
     "bug tracker"
   ],
   "scripts": {
-    "js:shared": "mkdir -p ./src/interfaces/common && cp -r ../../common/interfaces/* ./src/interfaces/common",
+    "js:shared": "mkdir -p ./src/interfaces/common && cp -r ../../common/js/* ./src/interfaces/common",
     "ios:shared": "mkdir -p ./ios/common && cp -r ../../common/ios/* ./ios/common/",
     "android:test": "cd test-project && yarn install && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
     "build": "yarn run js:shared && yarn run ios:shared && node update_android_version.ts && tsc",

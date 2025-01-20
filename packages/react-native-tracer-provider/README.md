@@ -14,7 +14,7 @@ any JS Opentelemetry instrumentation library or native instrumentation included 
 yarn add @embrace-io/native-tracer-provider
 ```
 
-Or
+or
 
 ```sh
 npm install @embrace-io/native-tracer-provider
@@ -22,67 +22,63 @@ npm install @embrace-io/native-tracer-provider
 
 ### Setup in your code
 
-Initialize the Tracer Provider near the start of your app's cycle:
+Initialize the Tracer Provider near the start of your app's cycle. The Embrace SDK will need to have started before you
+can use the tracer provider. To achieve this you can either start the SDK before the component that sets up the provider
+renders, or you can make use of the `enabled` parameter on the `useEmbraceNativeTracerProvider` hook to prevent it from
+triggering until the SDK is ready as in this example:
 
 ```javascript
-
-import { EmbraceNativeTracerProvider } from "@embrace.io/react-native-tracer-provider";
-import { trace } from "@opentelemetry/api";
+const {isStarted} = useEmbrace({
+  ios: SDK_CONFIG,
+});
 
 const optionalConfig = {...}; // See EmbraceNativeTracerProviderConfig in ./src/types/ for possible options
-trace.setGlobalTracerProvider(new EmbraceNativeTracerProvider(optionalConfig));
+const {tracerProvider: embraceTracerProvider, tracer: embraceTracer} = useEmbraceNativeTracerProvider(optionalConfig, isStarted);
 ```
 
-The Embrace SDK will need to have started before you can use the tracer provider. To achieve this you can either start
-the SDK before the component that sets up the provider renders, or you can make use of the `enabled` parameter on the
-`useEmbraceNativeTracerProvider` hook to prevent it from triggering until the SDK is ready as in this example:
+You can then use the provided tracer to add custom instrumentations to your application:
 
 ```javascript
-  const [embraceSDKLoaded, setEmbraceSDKLoaded] = useState<boolean>(false);
-  const {tracerProvider} = useEmbraceNativeTracerProvider({}, embraceSDKLoaded);
 
+const MyScreen = () => {
   useEffect(() => {
-    const init = async () => {
-      const hasStarted = await initEmbrace({
-        sdkConfig: {
-          ios: {
-            appId: "myAppId",
-          },
-        },
-      });
+    span = embraceTracer.startSpan("my-span");
 
-      if (hasStarted) {
-        setEmbraceSDKLoaded(true);
-      }
-    };
-
-    init();
+    someAsyncOperation().then(() => span.end());
   }, []);
+  return <View />;
+};
 ```
 
-Any opentelemetry instrumentation libraries in your app will now find Embrace's provider and use it for tracing.
+If you'd prefer not to have to pass around the `tracer` object you can instead leverage helpers from the
+`@opentelemetry/api` library. First register the Embrace tracer provider as the global one:
 
-> [!NOTE]
->
-> Setting as the global tracer provider is not required, if you prefer you can simply pass a reference to the provider
-> and use it only where you want to
+```javascript
+import { trace } from "@opentelemetry/api";
+trace.setGlobalTracerProvider(embraceTracerProvider);
+```
 
-You can also use the tracer to add custom instrumentations to your application:
+You can then create new tracers on the fly where needed and the `getTracer` method from the OTel API will know to
+use Embrace as the tracer provider:
 
 ```javascript
 import { trace } from "@opentelemetry/api";
 
 const MyScreen = () => {
   useEffect(() => {
-    const tracer = trace.getTracer("my-application", "my-app-version");
+    const tracer = trace.getTracer("my-application");
     
     span = tracer.startSpan("my-span");
-    
+
     someAsyncOperation().then(() => span.end());
   }, []);
+
   return <View />;
 };
 ```
+
+This method of registering the tracer provider globally also means that any OTel instrumentation libraries in your app
+to will now automatically be able to find Embrace's provider and use it for tracing.
 
 ### Limitations
 
@@ -93,18 +89,20 @@ const MyScreen = () => {
 * Since communication with the native modules is asynchronous `span.spanContext()` will return a blank span context if
 executed immediately after a call to `startSpan` without yielding, for example:
 
-    ```javascript
-    const mySpan = tracer.startSpan("my-span");
-    const spanContext = mySpan.spanContext(); // can be configured to throw an error instead through EmbraceNativeTracerProviderConfig
-    console.log(spanContext.traceId) // prints ""
-    console.log(spanContext.spanId) // prints ""
-    ```
+```javascript
+  const mySpan = tracer.startSpan("my-span");
+  const spanContext = mySpan.spanContext(); // can be configured to throw an error instead through EmbraceNativeTracerProviderConfig
 
-    To avoid this issue you can use the async version:
+  console.log(spanContext.traceId) // prints ""
+  console.log(spanContext.spanId) // prints ""
+```
 
-    ```javascript
-    const mySpan = tracer.startSpan("my-span");
-    const spanContext = await (mySpan as EmbraceNativeSpan).spanContextAsync();
-    console.log(spanContext.traceId) // prints "51e60a6917dfe46871d7f1d39f66d02c"
-    console.log(spanContext.spanId) // prints "b2248eb58720064e"
-    ```
+To avoid this issue you can use the async version:
+
+```javascript
+  const mySpan = tracer.startSpan("my-span");
+  const spanContext = await (mySpan as EmbraceNativeSpan).spanContextAsync();
+
+  console.log(spanContext.traceId) // prints "51e60a6917dfe46871d7f1d39f66d02c"
+  console.log(spanContext.spanId) // prints "b2248eb58720064e"
+```

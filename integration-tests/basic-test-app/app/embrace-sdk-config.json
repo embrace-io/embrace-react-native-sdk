@@ -4,6 +4,18 @@
     "endpointBaseUrl": "http://localhost:8877",
     "disableAutomaticViewCapture": true,
     "disableNetworkSpanForwarding": false,
-    "disabledUrlPatterns": ["otlp-gateway-.*.grafana."]
+    "disabledUrlPatterns": ["grafana.net"]
+  },
+  "exporters": {
+    "logExporter": {
+      "endpoint": "http://localhost/log",
+      "headers": [{"key": "Authorization", "token": "Basic __TOKEN__"}],
+      "timeout": 30000
+    },
+    "traceExporter": {
+      "endpoint": "http://localhost/trace",
+      "headers": [{"key": "Authorization", "token": "Basic __TOKEN__"}],
+      "timeout": 30000
+    }
   }
 }

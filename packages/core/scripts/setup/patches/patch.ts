@@ -4,7 +4,7 @@ import {
   getAppDelegateByIOSLanguage,
 } from "../../util/ios";
 import {getMainApplicationPatchable} from "../../util/android";
-import EmbraceLogger from "../../../src/logger";
+import EmbraceLogger from "../../../src/utils/EmbraceLogger";
 
 import {
   PATCH_IOS_OBJECTIVEC_APPDELEGATE_5X,
