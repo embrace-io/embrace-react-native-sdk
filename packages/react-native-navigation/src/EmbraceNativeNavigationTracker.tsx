@@ -36,8 +36,8 @@ const EmbraceNativeNavigationTracker = forwardRef<
     const attributes = useMemo(() => {
       if (screenAttributes) {
         return {
-          ...EMBRACE_ATTRIBUTES,
           ...screenAttributes,
+          ...EMBRACE_ATTRIBUTES,
         };
       }
 

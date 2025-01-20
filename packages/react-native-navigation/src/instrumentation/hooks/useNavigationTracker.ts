@@ -24,7 +24,7 @@ const useNavigationTracker = (
   }, [ref]);
 
   const {attributes: customAttributes, debug} = config ?? {};
-  const console = useConsole(!!debug);
+  const console = useRef(useConsole(!!debug));
 
   const span = useSpanRef();
   const view = useRef<string | null>(null);
@@ -34,7 +34,7 @@ const useNavigationTracker = (
    */
   const initNavigationSpan = useMemo(
     () => spanCreator(tracer, span, view, customAttributes),
-    [customAttributes],
+    [customAttributes, span, tracer],
   );
 
   /**
@@ -43,7 +43,7 @@ const useNavigationTracker = (
    */
   useEffect(() => {
     if (!navigationElRef) {
-      console.warn(
+      console.current.warn(
         "Navigation ref is not available. Make sure this is properly configured.",
       );
 
@@ -55,7 +55,7 @@ const useNavigationTracker = (
         const {name: routeName} = navigationElRef.getCurrentRoute() ?? {};
 
         if (!routeName) {
-          console.warn(
+          console.current.warn(
             "Navigation route name is not available. Make sure this is properly configured.",
           );
 
@@ -66,7 +66,7 @@ const useNavigationTracker = (
         initNavigationSpan(routeName);
       });
     }
-  }, [navigationElRef, initNavigationSpan, console]);
+  }, [navigationElRef, initNavigationSpan]);
 
   /**
    * Start and end spans depending on the app state changes

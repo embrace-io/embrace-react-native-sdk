@@ -24,8 +24,8 @@ const useNativeNavigationTracker = (
   }, [ref]);
 
   const {attributes: customAttributes, debug} = config ?? {};
-  const console = useConsole(!!debug);
 
+  const console = useRef(useConsole(!!debug));
   const view = useRef<string | null>(null);
   const span = useSpanRef();
 
@@ -43,7 +43,7 @@ const useNativeNavigationTracker = (
    */
   useEffect(() => {
     if (!navigationElRef) {
-      console.warn(
+      console.current.warn(
         "Navigation ref is not available. Make sure this is properly configured.",
       );
 
@@ -53,7 +53,7 @@ const useNativeNavigationTracker = (
 
     navigationElRef.registerComponentDidAppearListener(({componentName}) => {
       if (!componentName) {
-        console.warn(
+        console.current.warn(
           "Navigation component name is not available. Make sure this is properly configured.",
         );
 
@@ -66,7 +66,7 @@ const useNativeNavigationTracker = (
 
     navigationElRef.registerComponentDidDisappearListener(({componentName}) => {
       if (!componentName) {
-        console.warn(
+        console.current.warn(
           "Navigation component name is not available. Make sure this is properly configured.",
         );
 
@@ -76,7 +76,7 @@ const useNativeNavigationTracker = (
 
       spanEnd(span);
     });
-  }, [navigationElRef, span, initNativeNavigationSpan, console]);
+  }, [navigationElRef, span, initNativeNavigationSpan]);
 
   /**
    * Start and end spans depending on the app state changes

@@ -2,21 +2,45 @@ import * as React from "react";
 import {Navigation} from "react-native-navigation";
 import {EmbraceWixTestHarness} from "../EmbraceWixTestHarness";
 import {LogTestingScreen} from "../screens/LogTestingScreen";
-import {SDKConfig} from "@embrace-io/react-native";
+import {initialize, SDKConfig} from "@embrace-io/react-native";
 import {SpanTestingScreen} from "../screens/SpanTestingScreen";
 import {PropertyTestingScreen} from "../screens/PropertyTestingScreen";
 import {TracerProviderTestingScreen} from "../screens/TracerProviderTestingScreen";
 import {OTLPTestingScreen} from "../screens/OTLPTestingScreen";
 import {MiscTestingScreen} from "../screens/MiscTestingScreen";
 import {NSFTestingScreen} from "../screens/NSFTestingScreen";
+import {EmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {TracerProvider} from "@opentelemetry/api";
 
-const registerWixComponents = (sdkConfig: SDKConfig) => {
+const wixAppInit = async (sdkConfig: SDKConfig) => {
+  await initialize({
+    sdkConfig,
+    patch: "wix",
+    logLevel: "info",
+  });
+
+  let provider;
+  try {
+    provider = new EmbraceNativeTracerProvider();
+  } catch (e) {
+    console.log(
+      "Error creating `EmbraceNativeTracerProvider`. Will use global tracer provider instead",
+      e,
+    );
+  }
+
+  registerWixComponents(provider);
+  registerWixScreens();
+  configureWixScreenOptions();
+  configureWixDefaultOptions();
+};
+
+const registerWixComponents = async (tracerProvider?: TracerProvider) => {
   Navigation.registerComponent(
     "HomeScreen",
-    // configuring Embrace + Embrace Wix wrapper for navigation
-    // entry point of app
     () => () => (
-      <EmbraceWixTestHarness sdkConfig={sdkConfig} allowCustomExport={false}>
+      // entry point of app
+      <EmbraceWixTestHarness provider={tracerProvider}>
         <LogTestingScreen />
       </EmbraceWixTestHarness>
     ),
@@ -30,7 +54,7 @@ const registerWixComponents = (sdkConfig: SDKConfig) => {
     "TracerProviderScreen",
     () => TracerProviderTestingScreen,
   );
-  Navigation.registerComponent("OtlpScren", () => OTLPTestingScreen);
+  Navigation.registerComponent("OtlpScreen", () => OTLPTestingScreen);
   Navigation.registerComponent("MiscScreen", () => MiscTestingScreen);
   Navigation.registerComponent("NsfScreen", () => NSFTestingScreen);
 };
@@ -161,6 +185,7 @@ const configureWixScreenOptions = () => {
       text: "Property",
     },
   };
+
   // @ts-ignore
   NSFTestingScreen.options = {
     topBar: {
@@ -172,6 +197,7 @@ const configureWixScreenOptions = () => {
       text: "Nsf",
     },
   };
+
   // @ts-ignore
   OTLPTestingScreen.options = {
     topBar: {
@@ -183,6 +209,7 @@ const configureWixScreenOptions = () => {
       text: "Otlp",
     },
   };
+
   // @ts-ignore
   TracerProviderTestingScreen.options = {
     topBar: {
@@ -230,9 +257,4 @@ const configureWixDefaultOptions = () => {
   });
 };
 
-export {
-  registerWixComponents,
-  registerWixScreens,
-  configureWixScreenOptions,
-  configureWixDefaultOptions,
-};
+export {wixAppInit};

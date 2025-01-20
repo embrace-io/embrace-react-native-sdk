@@ -1,61 +1,30 @@
 import * as React from "react";
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {useRef} from "react";
 import {Navigation} from "react-native-navigation";
 import {EmbraceNativeNavigationTracker} from "@embrace-io/react-native-navigation";
-import FullScreenMessage from "./components/FullScreenMessage";
-import {
-  SDKConfig,
-  useEmbrace,
-  useOrientationListener,
-} from "@embrace-io/react-native";
+import {useOrientationListener} from "@embrace-io/react-native";
+import {TracerProvider} from "@opentelemetry/api";
 
 type Props = {
-  sdkConfig: SDKConfig;
-  allowCustomExport?: boolean;
   children?: React.ReactNode;
+  provider?: TracerProvider;
 };
 
-const EmbraceWixTestHarness = ({
-  sdkConfig,
-  allowCustomExport = false,
-  children,
-}: Props) => {
-  if (!allowCustomExport) {
-    sdkConfig.exporters = undefined;
-  }
-
-  const {isPending, isStarted} = useEmbrace(sdkConfig);
-
-  const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({}, isStarted);
-
-  const nativeNavigationRef = React.useRef(Navigation.events());
+const EmbraceWixTestHarness = ({children, provider}: Props) => {
+  const nativeNavigationRef = useRef(Navigation.events());
 
   // initializing orientation listener
-  useOrientationListener(isStarted);
+  useOrientationListener(true);
 
   return (
     <EmbraceNativeNavigationTracker
       ref={nativeNavigationRef}
-      tracerProvider={tracerProvider || undefined}
+      tracerProvider={provider}
       screenAttributes={{
         "test.attr": 98765,
         package: "wix/react-native-navigation",
       }}>
-      {isPending && <FullScreenMessage msg="Loading Embrace" />}
-
-      {!isPending && !isStarted && (
-        <FullScreenMessage msg="An error occurred during the Embrace initialization" />
-      )}
-
-      {(isLoadingTracerProvider || tracerProvider === null) && (
-        <FullScreenMessage msg="Loading Tracer Provider" />
-      )}
-
-      {isStarted &&
-        !isLoadingTracerProvider &&
-        tracerProvider !== null &&
-        children}
+      {children}
     </EmbraceNativeNavigationTracker>
   );
 };
