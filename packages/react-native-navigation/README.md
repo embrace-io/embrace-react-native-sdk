@@ -1,32 +1,40 @@
 # React Native Embrace - Navigation
 
-TBD
+> [!IMPORTANT]
+>
+> This module requires both the [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native) and
+> the [React Native Embrace Tracer Provider](https://www.npmjs.com/package/@embrace-io/react-native-tracer-provider).
 
-## Install
+This package uses Embrace's React Native SDK and OpenTelemetry Tracer Provider to collect telemetry around Navigation based on [expo-router](https://github.com/expo/expo/tree/main/packages/expo-router), [@react-navigation/native](https://github.com/react-navigation/react-navigation) and [react-native-navigation](https://wix.github.io/react-native-navigation/).
 
-```sh
-yarn add @embrace-io/react-native-navigation
-```
+## Install the component
 
-or
+npm:
 
 ```sh
 npm install @embrace-io/react-native-navigation
 ```
 
-## Setup in your code
+yarn:
 
-If you are using `expo-router` or `@react-navigation/native` you need to wrap your entire application with the `NavigationTracker` component.
+```sh
+yarn add @embrace-io/react-native-navigation
+```
+
+## Setup in your code
 
 Using `expo-router`:
 
 ```javascript
+// App.tsx
+
+import React from 'react';
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {Stack, useNavigationContainerRef} from 'expo-router';
 import {useEmbrace} from "@embrace-io/react-native";
 
-const App: FC = () => {
+const App = () => {
   const {isStarted} = useEmbrace({ios: {appId: "abc123"}});
 
   // The provider is something you need to configure and pass down as prop into the `EmbraceNavigationTracker` component 
@@ -55,12 +63,13 @@ const App: FC = () => {
       tracerProvider={tracerProvider}
       // These static attributes will be passed into each created span
       screenAttributes={{
-        "static.attribute.key": "static.attribute.value",
-        "custom.attribute.key": "custom.attribute.value",
+          "static.attribute": 123456,
+          "custom.key": "abcd...",
       }}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{headerShown: false}} />
         <Stack.Screen name="+not-found" />
+        ... rest of stack
       </Stack>
     </EmbraceNavigationTracker>
   );
@@ -69,10 +78,12 @@ const App: FC = () => {
 export default App;
 ```
 
-If you are using purely `@react-navigation/native`:
+If you are using purely [@react-navigation/native](https://github.com/react-navigation/react-navigation):
 
 ```javascript
-import {FC} from 'react';
+// App.tsx
+
+import React from 'react';
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {
@@ -117,8 +128,8 @@ const App = () => {
         ref={navigationRef}
         tracerProvider={tracerProvider}
         screenAttributes={{
-          "static.attribute.key": "static.attribute.value",
-          "custom.attribute.key": "custom.attribute.value",
+          "static.attribute": 123456,
+          "custom.key": "abcd...",
         }}>
         <Tab.Navigator
           screenOptions={{
@@ -139,6 +150,7 @@ const App = () => {
             }}
             component={CheckoutPage}
           />
+          ... rest of tabs
         </Tab.Navigator>
       </EmbraceNavigationTracker>
     </NavigationContainer>
@@ -148,9 +160,65 @@ const App = () => {
 export default App;
 ```
 
-If you are using `wix/react-native-navigation` you are also able to track navigation.
-You have to make sure you wrap your Root view with the `EmbraceNativeNavigationTracker` component and configure it as described before. 
+NOTE: If you are using [@react-navigation/native](https://github.com/react-navigation/react-navigation) you need to wrap your entire application with the `NavigationTracker` component as described in their official documentation.
+
+If you are using [react-native-navigation](https://wix.github.io/react-native-navigation/) you are also able to track navigation changes.
+You have to make sure you wrap your entry view with the `<EmbraceNativeNavigationTracker />` component and initialize Embrace as soon as possible to avoid missing telemetry data.
 
 ```javascript
-TBD example
+// index.ts
+
+import React, {useRef} from "react";
+import {EmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {TracerProvider} from "@opentelemetry/api";
+import {EmbraceNativeNavigationTracker} from "@embrace-io/react-native-navigation";
+import {initialize} from "@embrace-io/react-native";
+import {Navigation} from "react-native-navigation";
+import {HomeScreen} from "screens/HomeScreen";
+
+const initApp = async () => {
+  // this example os showing how we can initialize Embrace not using hooks
+  await initialize({
+    sdkConfig: {
+      ios: {appId: "__YOUR_APP_ID__"},
+    },
+  });
+
+  let embraceTracerProvider: TracerProvider;
+  try {
+    embraceTracerProvider = new EmbraceNativeTracerProvider();
+  } catch (e) {
+    console.log(
+      "Error creating `EmbraceNativeTracerProvider`. Will use global tracer provider instead",
+      e,
+    );
+  }
+
+  Navigation.registerComponent(
+    "HomeScreen",
+    () =>
+      (props) => {
+        // make sure to wrap the events registry instance in a React ref
+        const navRef = useRef(Navigation.events());
+
+        return (
+          <EmbraceNativeNavigationTracker
+            ref={navRef}
+            tracerProvider={embraceTracerProvider}
+            screenAttributes={{
+              "test.attr": 98765,
+              dev: true,
+            }}>
+            <HomeScreen {...props} />
+          </EmbraceNativeNavigationTracker>
+        );
+      },
+    () => HomeScreen,
+  );
+
+  // ... rest of registration and configuration
+};
+
+// root of the app
+initApp();
 ```
