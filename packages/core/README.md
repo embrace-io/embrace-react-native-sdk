@@ -16,19 +16,21 @@ _If you need an App ID and API Token, [Go to our dashboard](https://dash.embrace
 
 ## Add the JavaScript library
 
-```sh
-    npm install @embrace-io/react-native
-```
-
-Or
+npm:
 
 ```sh
-    yarn add @embrace-io/react-native
+npm install @embrace-io/react-native
 ```
 
-For iOS you will also need to install the pod:
+yarn:
 
-```shell
+```sh
+yarn add @embrace-io/react-native
+```
+
+For iOS you will also need to install or update pods for the application:
+
+```sh
 cd ios && pod install --repo-update
 ```
 
@@ -88,6 +90,14 @@ export default App;
 
 The Embrace SDK allows you to view both native and JavaScript stack traces for crashes and error logs.
 Refer to our guide on [uploading symbol files](https://embrace.io/docs/react-native/integration/upload-symbol-files/).
+
+## Additional features
+
+Additional features for our SDK are kept in other packages to allow you to include just the dependencies for the ones
+you are using and to keep your overall bundle size smaller. Once this core package is installed you can check out the
+documentation in our [Feature Reference](/react-native/features/) to learn more about these additional packages. The
+various screens in our [Test Harness](https://github.com/embrace-io/embrace-react-native-sdk/tree/main/integration-tests/test-harness)
+also provide examples of how these packages can be used with the core SDK.
 
 ## Troubleshooting
 

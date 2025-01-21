@@ -10,14 +10,16 @@ actions with Redux. It provides a custom middleware that can be configured with 
 
 ## Install the component
 
+npm:
+
 ```sh
-yarn add @embrace-io/react-native-redux
+npm install @embrace-io/react-native-redux
 ```
 
-Or
+yarn:
 
 ```sh
-npm install @embrace-io/redux-native-redux
+yarn add @embrace-io/react-native-redux
 ```
 
 ## Add the middleware

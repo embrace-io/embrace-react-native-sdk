@@ -12,11 +12,13 @@ It's mandatory for the use of this package to have previously installed `@embrac
 
 ## Add the JavaScript library
 
+npm:
+
 ```sh
 npm install @embrace-io/react-native-otlp
 ```
 
-Or
+yarn:
 
 ```sh
 yarn add @embrace-io/react-native-otlp
@@ -24,8 +26,7 @@ yarn add @embrace-io/react-native-otlp
 
 For iOS you will also need to install or update pods for the application:
 
-```shell
-// <root_app>/ios
+```sh
 cd ios && pod install --repo-update
 ```
 
