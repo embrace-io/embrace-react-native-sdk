@@ -7,16 +7,24 @@ import {
   recordNetworkRequest,
 } from "@embrace-io/react-native";
 
-const NSFTestingScreen = () => {
-  const handleAutoNetworkCall = useCallback(async () => {
+const NetworkTestingScreen = () => {
+  const handleAuto200NetworkCall = useCallback(async () => {
     try {
-      await fetch("https://request.fake/sdk/auto/interception");
+      await fetch("https://example.com");
     } catch (error) {
       console.log("Error fetching...", error);
     }
   }, []);
 
-  const handlelogNetworkClientError = useCallback(() => {
+  const handleAuto404NetworkCall = useCallback(async () => {
+    try {
+      await fetch("https://example.com/sdk/auto/interception");
+    } catch (error) {
+      console.log("Error fetching...", error);
+    }
+  }, []);
+
+  const handleLogNetworkClientError = useCallback(() => {
     const now = new Date();
 
     logNetworkClientError(
@@ -47,7 +55,8 @@ const NSFTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Regular Network Call</Text>
-        <Button onPress={handleAutoNetworkCall} title="Discover!" />
+        <Button onPress={handleAuto200NetworkCall} title="200 Request" />
+        <Button onPress={handleAuto404NetworkCall} title="404 Request" />
       </View>
 
       <View style={styles.section}>
@@ -57,7 +66,7 @@ const NSFTestingScreen = () => {
           title="Record Network Request"
         />
         <Button
-          onPress={handlelogNetworkClientError}
+          onPress={handleLogNetworkClientError}
           title="Log Network Client Error"
         />
       </View>
@@ -65,4 +74,4 @@ const NSFTestingScreen = () => {
   );
 };
 
-export {NSFTestingScreen};
+export {NetworkTestingScreen};

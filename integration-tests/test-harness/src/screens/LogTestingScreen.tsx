@@ -10,6 +10,26 @@ import {
   logWarning,
 } from "@embrace-io/react-native";
 
+const SubErrorComponent2 = () => {
+  throw new TypeError("Upssssssss");
+};
+
+const SubErrorComponent1 = () => {
+  return (
+    <View>
+      <SubErrorComponent2 />
+    </View>
+  );
+};
+
+const ErrorComponent = () => {
+  return (
+    <View>
+      <SubErrorComponent1 />
+    </View>
+  );
+};
+
 const LogTestingScreen = () => {
   const triggerErrorLog = useCallback(() => {
     logHandledError(new TypeError("This is an Error Log (with JS Stacktrace)"));
@@ -49,6 +69,11 @@ const LogTestingScreen = () => {
     );
   }, []);
 
+  const [isError, setIsError] = React.useState(false);
+  const triggerRenderError = useCallback(() => {
+    setIsError(true);
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.section}>
@@ -72,6 +97,12 @@ const LogTestingScreen = () => {
         <Text style={styles.title}>Unhandled Exceptions</Text>
         <Button onPress={triggerAnonymousCrash} title="Anonymous Crash" />
         <Button onPress={triggerCrash} title="Crash" />
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.title}>Render Errors</Text>
+        <Button onPress={triggerRenderError} title="Trigger a Render error" />
+        {isError && <ErrorComponent />}
       </View>
     </View>
   );
