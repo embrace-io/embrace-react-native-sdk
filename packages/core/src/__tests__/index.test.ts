@@ -187,7 +187,7 @@ describe("Android: initialize", () => {
       // because it's android it should not pass any config to the native layer
       expect(mockStart).toHaveBeenCalledWith({});
 
-      expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.75.4");
+      expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.76.6");
       expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith("v1");
       expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith(
         expect.any(String),
@@ -206,7 +206,7 @@ describe("Android: initialize", () => {
     await waitFor(() => {
       expect(isStarted).toBe(true);
 
-      expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.75.4");
+      expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.76.6");
       expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith("v1");
       expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith(
         expect.any(String),
