@@ -10,14 +10,22 @@ any JS Opentelemetry instrumentation library or native instrumentation included 
 
 ### Install
 
+npm:
+
 ```sh
-yarn add @embrace-io/native-tracer-provider
+npm install @embrace-io/react-native-tracer-provider
 ```
 
-or
+yarn:
 
 ```sh
-npm install @embrace-io/native-tracer-provider
+yarn add @embrace-io/react-native-tracer-provider
+```
+
+For iOS you will also need to install or update pods for the application:
+
+```sh
+cd ios && pod install --repo-update
 ```
 
 ### Setup in your code
