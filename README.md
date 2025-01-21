@@ -15,14 +15,14 @@ please head to our website to [sign up](https://dash.embrace.io/signup/) and fol
 
 Individual packages are published from this monorepo, reasoning can be found in [Babel's design doc](https://github.com/babel/babel/blob/main/doc/design/monorepo.md).
 
-| Package                                                                                | Version                                                                                                                                                                                       |
-|----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`@embrace-io/react-native`](./packages/core)                                          | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native)                                                       |
-| [`@embrace-io/react-native-action-tracker`](./packages/action-tracker)                 | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-action-tracker.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-action-tracker)                         |
-| [`@embrace-io/react-native-navigation`](./packages/react-native-navigation)            | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-navigation.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-navigation)                                 |
-| [`@embrace-io/react-navigation`](./packages/react-navigation)                          | [![npm](https://img.shields.io/npm/v/@embrace-io/react-navigation.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-navigation)                                               |
-| [`@embrace-io/react-native-tracer-provider`](./packages/react-native-tracer-provider)  | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-tracer-provider.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-tracer-provider)                       |
-| [`@embrace-io/react-native-otlp`](./packages/react-native-otlp)  | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-otlp.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-otlp)                       |
+| Package                                                                               | Version                                                                                                                                                                 |
+|---------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`@embrace-io/react-native`](./packages/core)                                         | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native)                                 |
+| [`@embrace-io/react-native-redux`](./packages/react-native-redux)   | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-redux.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-redux)   |
+| [`@embrace-io/react-native-navigation`](./packages/react-native-navigation)           | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-navigation.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-navigation)           |
+| [`@embrace-io/react-navigation`](./packages/react-navigation)                         | [![npm](https://img.shields.io/npm/v/@embrace-io/react-navigation.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-navigation)                         |
+| [`@embrace-io/react-native-tracer-provider`](./packages/react-native-tracer-provider) | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-tracer-provider.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-tracer-provider) |
+| [`@embrace-io/react-native-otlp`](./packages/react-native-otlp)                       | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-otlp.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-otlp)                       |
 
 ## Support
 

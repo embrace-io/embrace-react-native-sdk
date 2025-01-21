@@ -15,6 +15,7 @@ module.exports = {
     "<rootDir>/packages/.*/native-src/",
     "<rootDir>/packages/core/test-project/",
     "<rootDir>/packages/.*/node_modules/",
+    "<rootDir>/packages/.*/__tests__/helpers/",
   ],
   collectCoverage: true,
   coverageThreshold: {

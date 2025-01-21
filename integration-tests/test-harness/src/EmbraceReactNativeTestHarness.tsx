@@ -15,6 +15,7 @@ import {SpanTestingScreen} from "./screens/SpanTestingScreen";
 import {NSFTestingScreen} from "./screens/NSFTestingScreen";
 import FullScreenMessage from "./components/FullScreenMessage";
 import {useEmbrace} from "@embrace-io/react-native";
+import {ReduxTestingScreen} from "./screens/ReduxTestingScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -96,6 +97,13 @@ export const EmbraceReactNativeTestHarness = () => {
               tabBarAccessibilityLabel: "NSF TESTING",
             }}
             component={NSFTestingScreen}
+          />
+          <Tab.Screen
+            name="redux"
+            options={{
+              tabBarAccessibilityLabel: "REDUX TESTING",
+            }}
+            component={ReduxTestingScreen}
           />
         </Tab.Navigator>
       </EmbraceNavigationTracker>
