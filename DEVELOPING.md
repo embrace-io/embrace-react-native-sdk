@@ -49,6 +49,7 @@ See the [integration testing README](./integration-tests/README.md) for more det
 1. Bump the Android (SDK + Swazzler)/iOS dependencies to the latest available stable versions in `./yarn.config.cjs`
 2. Run `yarn constraints --fix` to propagate this change to all package.json files
 3. Run `yarn build` to update build files to the latest versions
+4. Run `yarn ios:install` to update the iOS test projects
 
 ## Branching strategy
 
