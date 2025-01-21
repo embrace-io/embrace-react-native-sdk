@@ -56,7 +56,6 @@
     "react-native": ">=0.56.0"
   },
   "devDependencies": {
-    "@testing-library/react-native": "^12.5.1",
     "typescript": "^5.6.3"
   },
   "embrace": {
