@@ -1,7 +1,7 @@
 {
   "name": "@embrace-io/react-native-navigation",
   "version": "5.2.0",
-  "description": "A React Native wrapper for the OTel Navigation instrumentation library that creates telemetry data representing screens",
+  "description": "A React Native wrapper for the OTel Navigation instrumentation library that creates telemetry data representing Navigation changes",
   "dependencies": {
     "@opentelemetry/api": "^1.9.0"
   },
@@ -18,13 +18,24 @@
     "build": "tsc"
   },
   "peerDependencies": {
-    "react-native": ">=0.56.0"
+    "react-native": ">=0.56.0",
+    "@react-navigation/native": "*",
+    "expo-router": "*",
+    "react-native-navigation": "*"
+  },
+  "peerDependenciesMeta": {
+    "@react-navigation/native": {
+      "optional": true
+    },
+    "expo-router": {
+      "optional": true
+    },
+    "react-native-navigation": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "@react-navigation/native": "^6.1.18",
     "@testing-library/react-native": "^12.5.1",
-    "expo-router": "^3.5.23",
-    "react-native-navigation": "^7.40.3",
     "typescript": "^5.6.3"
   },
   "embrace": {

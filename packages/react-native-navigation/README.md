@@ -37,13 +37,13 @@ import {useEmbrace} from "@embrace-io/react-native";
 const App = () => {
   const {isStarted} = useEmbrace({ios: {appId: "abc123"}});
 
-  // The provider is something you need to configure and pass down as prop into the `EmbraceNavigationTracker` component 
-  // If your choice is not to pass any custom tracer provider, the <EmbraceNavigationTracker /> component will use the global one.
-  // In both cases you have to make sure a tracer provider is registered BEFORE you attempt to record the first span.
+  // The provider is something you need to configure and pass down as prop into the `<EmbraceNavigationTracker />` component 
+  // If your choice is not to pass any custom tracer provider, the component will use the global one.
+  // In both cases you have to make sure a tracer provider is registered BEFORE you attempt to record the first span (otherwise somo initial telemetrt can be missed).
   const {tracerProvider, isLoading: isLoadingTracerProvider} =
     useEmbraceNativeTracerProvider({}, isStarted);
 
-  // If you do not use `expo-router` the same hook is also available in `@react-navigation/native` since `expo-router` is built on top of it
+  // If you do not use `expo-router` the same hook is also available in `@react-navigation/native` since `expo-router` is built on top of it.
   // Make sure this ref is passed also to the navigation container at the root of your app (if not, the ref would be empty and you will get a console.warn message instead).
   const expoNavigationRef = useNavigationContainerRef();
 
@@ -221,4 +221,48 @@ const initApp = async () => {
 
 // root of the app
 initApp();
+```
+
+## Disable Auto Tracking for Native Screens
+
+Embrace also collects automatically the Native screens, if you do not want to see Native components in the Session you can disable it:
+
+### Android
+
+Go to your `embrace-config.json` inside `android/app/src/main` and add the `sdk_config` key.
+With these changes your file should at least look like the following:
+
+```json
+{
+  "app_id": "APP_ID",
+  "api_token": "API_TOKEN",
+  "sdk_config": {
+    "view_config": {
+      "enable_automatic_activity_capture": false // disabling automatic capture
+    }
+  }
+}
+```
+
+### iOS:
+
+Go to the `Embrace-info.plist` inside the iOS project and add the `ENABLE_AUTOMATIC_VIEW_CAPTURE` flag with `false` value.
+The file should look like the following:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>API_KEY</key>
+  <string>{YOUR_API_KEY_VALUE}</string>
+  <key>CRASH_REPORT_ENABLED</key>
+  <true/>
+    <!-- Add this key and the value as false-->
+  <key>ENABLE_AUTOMATIC_VIEW_CAPTURE</key>
+  <false/>
+
+  <!-- ... other configuration -->
+</dict>
+</plist>
 ```
