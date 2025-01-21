@@ -13,10 +13,12 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "io.embrace.basictestapp"
+      "bundleIdentifier": "io.embrace.basictestapp",
+      "newArchEnabled": false
     },
     "android": {
-      "package": "io.embrace.basictestapp"
+      "package": "io.embrace.basictestapp",
+      "newArchEnabled": false
     },
     "web": {
       "bundler": "metro",
