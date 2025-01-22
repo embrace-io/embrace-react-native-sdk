@@ -1,31 +1,22 @@
 import * as React from "react";
-import {forwardRef, ReactNode} from "react";
-import {TracerProvider} from "@opentelemetry/api";
+import {forwardRef} from "react";
 
 import useTracerRef from "../utils/hooks/useTracerRef";
-import {NavigationTrackerConfig} from "../types/navigation";
-import useNavigationTracker, {NavRef} from "../hooks/useNavigationTracker";
+import {TrackerProps} from "../types/navigation";
+import useNavigationTracker, {
+  NavRef as NavigationTrackerRef,
+} from "../hooks/useNavigationTracker";
 
-type NavigationTrackerRef = NavRef;
+const NavigationTracker = forwardRef<NavigationTrackerRef, TrackerProps>(
+  ({children, provider, config}, ref) => {
+    // Initializing a Trace instance
+    const tracer = useTracerRef(provider, config);
 
-interface NavigationTrackerProps {
-  children: ReactNode;
-  // selected provider, configured by the app consumer if global tracer is not enough
-  provider?: TracerProvider;
-  config?: NavigationTrackerConfig;
-}
+    useNavigationTracker(ref, tracer, config);
 
-const NavigationTracker = forwardRef<
-  NavigationTrackerRef,
-  NavigationTrackerProps
->(({children, provider, config}, ref) => {
-  // Initializing a Trace instance
-  const tracer = useTracerRef(provider, config);
-
-  useNavigationTracker(ref, tracer, config);
-
-  return <>{children}</>;
-});
+    return <>{children}</>;
+  },
+);
 
 NavigationTracker.displayName = "NavigationTracker";
 

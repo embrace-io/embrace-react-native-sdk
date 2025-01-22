@@ -2,7 +2,7 @@ import {MutableRefObject, useEffect, useRef} from "react";
 import {trace, Tracer, TracerProvider} from "@opentelemetry/api";
 
 import {PACKAGE_NAME, PACKAGE_VERSION} from "../../version";
-import {NavigationTrackerConfig} from "../../types/navigation";
+import {TrackerConfig} from "../../types/navigation";
 
 import useConsole from "./useConsole";
 
@@ -10,7 +10,7 @@ export type TracerRef = MutableRefObject<Tracer | null>;
 
 const useTracerRef = (
   provider?: TracerProvider,
-  config?: NavigationTrackerConfig,
+  config?: TrackerConfig,
 ): TracerRef => {
   const {debug, tracerOptions} = config ?? {};
   const tracerRef = useRef<Tracer | null>(null);

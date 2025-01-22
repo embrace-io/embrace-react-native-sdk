@@ -5,7 +5,7 @@ import {FC, useRef} from "react";
 import {render} from "@testing-library/react-native";
 import api from "@opentelemetry/api";
 
-import {EmbraceNativeNavigationTracker} from "../EmbraceNativeNavigationTracker";
+import {EmbraceNativeNavigationTracker} from "../";
 
 import {
   shutdownInstanceProvider,

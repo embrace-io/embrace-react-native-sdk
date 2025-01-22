@@ -4,10 +4,7 @@ import {spanCreator, spanEnd} from "../utils/spanFactory";
 import {TracerRef} from "../utils/hooks/useTracerRef";
 import useSpanRef from "../utils/hooks/useSpanRef";
 import useConsole from "../utils/hooks/useConsole";
-import {
-  INavigationContainer,
-  NavigationTrackerConfig,
-} from "../types/navigation";
+import {INavigationContainer, TrackerConfig} from "../types/navigation";
 
 import useAppStateListener from "./useAppStateListener";
 
@@ -16,7 +13,7 @@ export type NavRef = INavigationContainer;
 const useNavigationTracker = (
   ref: ForwardedRef<NavRef>,
   tracer: TracerRef,
-  config?: NavigationTrackerConfig,
+  config?: TrackerConfig,
 ) => {
   const navigationElRef = useMemo(() => {
     const isMutableRef = ref !== null && typeof ref !== "function";
