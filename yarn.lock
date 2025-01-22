@@ -2533,8 +2533,6 @@ __metadata:
   peerDependenciesMeta:
     "@react-navigation/native":
       optional: true
-    expo-router:
-      optional: true
     react-native-navigation:
       optional: true
   languageName: unknown
