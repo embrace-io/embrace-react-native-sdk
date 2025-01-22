@@ -1,14 +1,17 @@
-import {Navigation} from "react-native-navigation";
+import {EventsRegistry} from "react-native-navigation";
 import {ReactNode} from "react";
-import {useNavigationContainerRef as useReactNativeNavigationExpoContainerRef} from "expo-router";
-import {useNavigationContainerRef as useReactNativeNavigationContainerRef} from "@react-navigation/native";
+import {EventConsumer, EventMapBase, Route} from "@react-navigation/native";
 import {Attributes, TracerOptions, TracerProvider} from "@opentelemetry/api";
 
-export type INativeNavigationContainer = ReturnType<typeof Navigation.events>;
+export type INativeNavigationContainer = Pick<
+  EventsRegistry,
+  "registerComponentDidDisappearListener" | "registerComponentDidAppearListener"
+>;
 
-export type INavigationContainer =
-  | ReturnType<typeof useReactNativeNavigationContainerRef>
-  | ReturnType<typeof useReactNativeNavigationExpoContainerRef>["current"];
+export type INavigationContainer = Pick<
+  EventConsumer<EventMapBase>,
+  "addListener"
+> & {getCurrentRoute: () => Route<string> | undefined};
 
 export interface TrackerConfig {
   attributes?: Attributes;
