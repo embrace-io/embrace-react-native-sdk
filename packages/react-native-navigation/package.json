@@ -35,7 +35,10 @@
     }
   },
   "devDependencies": {
+    "@opentelemetry/sdk-trace-base": "^1.25.1",
+    "@react-navigation/native": "^6.1.18",
     "@testing-library/react-native": "^13.0.1",
+    "react-native-navigation": "^7.40.3",
     "typescript": "^5.6.3"
   },
   "embrace": {
