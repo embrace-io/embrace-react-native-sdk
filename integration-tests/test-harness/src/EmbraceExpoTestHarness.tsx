@@ -6,12 +6,10 @@ import {
   useNavigationContainerRef as useExpoNavigationContainerRef,
 } from "expo-router";
 import FullScreenMessage from "./components/FullScreenMessage";
-import {useEmbrace} from "@embrace-io/react-native";
 
 export const EmbraceExpoTestHarness = () => {
-  const {isStarted} = useEmbrace({ios: {appId: "abc123"}});
   const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({}, isStarted);
+    useEmbraceNativeTracerProvider({});
   const expoNavigationRef = useExpoNavigationContainerRef();
 
   if (isLoadingTracerProvider || tracerProvider === null) {

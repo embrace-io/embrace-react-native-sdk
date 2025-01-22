@@ -23,7 +23,7 @@ cd ..
 ```
 
 4. open `node_modules/react-native-navigation/autolink/postlink/run.js` and `node_modules/react-native-navigation/autolink/postlink/path.js`
-5. from `node_modules/react-native-navigation/autolink/postlink/run.js` comment out all related to android (it's not prepared for kotlin, it's trying to get java files and it doesn't work at least at the moment of writing thi README.md)
+5. from `node_modules/react-native-navigation/autolink/postlink/run.js` comment out all related to android (it's not prepared for kotlin, it's trying to get java files and it doesn't work at least at the moment of writing this README.md)
 6. from `node_modules/react-native-navigation/autolink/postlink/path.js` comment out line 
 
 ```javascript

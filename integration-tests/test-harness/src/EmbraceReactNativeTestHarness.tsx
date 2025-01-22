@@ -10,7 +10,6 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {SpanTestingScreen} from "./screens/SpanTestingScreen";
 import FullScreenMessage from "./components/FullScreenMessage";
-import {useEmbrace} from "@embrace-io/react-native";
 import {NetworkTestingScreen} from "./screens/NetworkTestingScreen";
 import {ReduxTestingScreen} from "./screens/ReduxTestingScreen";
 
@@ -20,12 +19,8 @@ export const EmbraceReactNativeTestHarness = () => {
   const navigationContainer = useNavigationContainerRef();
   const navigationContainerRef = React.useRef(navigationContainer);
 
-  // TBD: should we have a different hook that tell us if Embrace is started without the need of passing sdk config?
-  // FIXME: if we use the hook multiple times as it is now it's printing extra console logs making me think some code is running multiple times when it shouldn't. To double-check during QA.
-  const {isStarted} = useEmbrace({ios: {appId: "abc123"}}); // here the hook would ignore whatever we put in since the sdk is already is started (done in the root of test harness)
-
   const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({}, isStarted);
+    useEmbraceNativeTracerProvider({});
 
   if (isLoadingTracerProvider || tracerProvider === null) {
     return <FullScreenMessage msg="Loading Tracer Provider" />;

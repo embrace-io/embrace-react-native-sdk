@@ -239,7 +239,5 @@ describe("EmbraceNativeNavigationTracker.tsx", () => {
         },
       },
     ]);
-
-    // handleAppStateChange("active");
   });
 });
