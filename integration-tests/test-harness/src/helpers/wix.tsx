@@ -4,11 +4,10 @@ import {EmbraceWixTestHarness} from "../EmbraceWixTestHarness";
 import {LogTestingScreen} from "../screens/LogTestingScreen";
 import {initialize, SDKConfig} from "@embrace-io/react-native";
 import {SpanTestingScreen} from "../screens/SpanTestingScreen";
-import {PropertyTestingScreen} from "../screens/PropertyTestingScreen";
-import {TracerProviderTestingScreen} from "../screens/TracerProviderTestingScreen";
-import {OTLPTestingScreen} from "../screens/OTLPTestingScreen";
-import {MiscTestingScreen} from "../screens/MiscTestingScreen";
-import {NSFTestingScreen} from "../screens/NSFTestingScreen";
+import {ReduxTestingScreen} from "../screens/ReduxTestingScreen";
+import {NetworkTestingScreen} from "../screens/NetworkTestingScreen";
+import {UserTestingScreen} from "../screens/UserTestingScreen";
+
 import {EmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {TracerProvider} from "@opentelemetry/api";
 
@@ -49,14 +48,9 @@ const registerWixComponents = async (tracerProvider?: TracerProvider) => {
 
   // rest of navigation
   Navigation.registerComponent("SpanScreen", () => SpanTestingScreen);
-  Navigation.registerComponent("PropertyScreen", () => PropertyTestingScreen);
-  Navigation.registerComponent(
-    "TracerProviderScreen",
-    () => TracerProviderTestingScreen,
-  );
-  Navigation.registerComponent("OtlpScreen", () => OTLPTestingScreen);
-  Navigation.registerComponent("MiscScreen", () => MiscTestingScreen);
-  Navigation.registerComponent("NsfScreen", () => NSFTestingScreen);
+  Navigation.registerComponent("ReduxScreen", () => ReduxTestingScreen);
+  Navigation.registerComponent("NetworkScreen", () => NetworkTestingScreen);
+  Navigation.registerComponent("UserScreen", () => UserTestingScreen);
 };
 
 const registerWixScreens = () => {
@@ -92,7 +86,7 @@ const registerWixScreens = () => {
                 children: [
                   {
                     component: {
-                      name: "PropertyScreen",
+                      name: "ReduxScreen",
                     },
                   },
                 ],
@@ -103,7 +97,7 @@ const registerWixScreens = () => {
                 children: [
                   {
                     component: {
-                      name: "TracerProviderScreen",
+                      name: "NetworkScreen",
                     },
                   },
                 ],
@@ -114,29 +108,7 @@ const registerWixScreens = () => {
                 children: [
                   {
                     component: {
-                      name: "OtlpScreen",
-                    },
-                  },
-                ],
-              },
-            },
-            {
-              stack: {
-                children: [
-                  {
-                    component: {
-                      name: "MiscScreen",
-                    },
-                  },
-                ],
-              },
-            },
-            {
-              stack: {
-                children: [
-                  {
-                    component: {
-                      name: "NsfScreen",
+                      name: "UserScreen",
                     },
                   },
                 ],
@@ -175,61 +147,38 @@ const configureWixScreenOptions = () => {
   };
 
   // @ts-ignore
-  PropertyTestingScreen.options = {
+  ReduxTestingScreen.options = {
     topBar: {
       title: {
-        text: "Property",
+        text: "Redux",
       },
     },
     bottomTab: {
-      text: "Property",
+      text: "Redux",
     },
   };
 
   // @ts-ignore
-  NSFTestingScreen.options = {
+  NetworkTestingScreen.options = {
     topBar: {
       title: {
-        text: "Nsf",
+        text: "Network",
       },
     },
     bottomTab: {
-      text: "Nsf",
+      text: "Network",
     },
   };
 
   // @ts-ignore
-  OTLPTestingScreen.options = {
+  UserTestingScreen.options = {
     topBar: {
       title: {
-        text: "Otlp",
+        text: "User",
       },
     },
     bottomTab: {
-      text: "Otlp",
-    },
-  };
-
-  // @ts-ignore
-  TracerProviderTestingScreen.options = {
-    topBar: {
-      title: {
-        text: "Tracer provider",
-      },
-    },
-    bottomTab: {
-      text: "Tracer provider",
-    },
-  };
-  // @ts-ignore
-  MiscTestingScreen.options = {
-    topBar: {
-      title: {
-        text: "Misc",
-      },
-    },
-    bottomTab: {
-      text: "Misc",
+      text: "User",
     },
   };
 };
