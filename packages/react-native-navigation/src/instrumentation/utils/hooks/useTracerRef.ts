@@ -30,7 +30,7 @@ const useTracerRef = (
           trace.getTracer(PACKAGE_NAME, PACKAGE_VERSION);
     }
 
-    // this is useful in cases where the provider is passed but it's still `null` or `undefined` (given a re-render or something specific of the lyfecycle of the app that implements the library)
+    // this is useful in cases where the provider is passed but it's still `null` or `undefined` (given a re-render or something specific of the lifecycle of the app that implements the library)
     if (
       tracerRef.current !== null &&
       provider !== undefined &&

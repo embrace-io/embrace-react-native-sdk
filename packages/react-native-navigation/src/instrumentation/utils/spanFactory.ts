@@ -53,7 +53,7 @@ const spanEnd = (
 
     span.current.end();
 
-    // make sure we destroy any existent span
+    // make sure we destroy any existing span
     span.current = null;
   }
 };
