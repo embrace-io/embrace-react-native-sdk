@@ -1,17 +1,17 @@
 import {AppState} from "react-native";
 import * as React from "react";
 import {FC, useRef} from "react";
-
+import {render} from "@testing-library/react-native";
+import * as rnn from "@react-navigation/native";
 import api from "@opentelemetry/api";
+
 import {EmbraceNavigationTracker} from "../EmbraceNavigationTracker";
-import {TestSpanExporter} from "./helpers/exporter";
+
 import {
   shutdownInstanceProvider,
   createInstanceProvider,
 } from "./helpers/provider";
-import {render} from "@testing-library/react-native";
-
-import * as rnn from "@react-navigation/native";
+import {TestSpanExporter} from "./helpers/exporter";
 // hacky way of letting jest.spyOn work as usual. there is some kind of bug that prevents to spy directly into the `useNavigationContainerRef` hook
 const rnn2 = {...rnn};
 

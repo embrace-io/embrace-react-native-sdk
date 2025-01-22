@@ -1,16 +1,17 @@
+import {Navigation} from "react-native-navigation";
 import {AppState} from "react-native";
 import * as React from "react";
 import {FC, useRef} from "react";
-
+import {render} from "@testing-library/react-native";
 import api from "@opentelemetry/api";
-import {Navigation} from "react-native-navigation";
+
 import {EmbraceNativeNavigationTracker} from "../EmbraceNativeNavigationTracker";
-import {TestSpanExporter} from "./helpers/exporter";
+
 import {
   shutdownInstanceProvider,
   createInstanceProvider,
 } from "./helpers/provider";
-import {render} from "@testing-library/react-native";
+import {TestSpanExporter} from "./helpers/exporter";
 
 const AppWithProvider: FC<{
   exporter: TestSpanExporter;
