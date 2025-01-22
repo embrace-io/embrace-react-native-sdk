@@ -14,9 +14,12 @@ import {
   clearAllUserPersonas,
   addSessionProperty,
   removeSessionProperty,
+  getDeviceId,
+  getCurrentSessionId,
+  getLastRunEndState,
 } from "@embrace-io/react-native";
 
-const PropertyTestingScreen = () => {
+const UserTestingScreen = () => {
   const setUserProperties = useCallback(async () => {
     try {
       await setUserIdentifier("user-identifier");
@@ -71,24 +74,41 @@ const PropertyTestingScreen = () => {
     }
   }, []);
 
+  const getMetadata = useCallback(async () => {
+    try {
+      const deviceId = await getDeviceId();
+      const sessionId = await getCurrentSessionId();
+      const lastRunEndState = await getLastRunEndState();
+      console.log("deviceId: ", deviceId);
+      console.log("sessionId: ", sessionId);
+      console.log("lastRunEndState: ", lastRunEndState);
+    } catch (e) {
+      console.log("failed to get metadata from the SDK");
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.title}>User</Text>
+        <Text style={styles.title}>User Properties</Text>
         <Button onPress={setUserProperties} title="Set User Properties" />
         <Button onPress={clearUserProperties} title="Clear User Properties" />
         <Button onPress={clearPersonas} title="Clear All User Personas" />
       </View>
       <View style={styles.section}>
-        <Text style={styles.title}>User</Text>
+        <Text style={styles.title}>Session Properties</Text>
         <Button onPress={setSessionProperties} title="Set Session Properties" />
         <Button
           onPress={clearSessionProperties}
           title="Clear Session Properties"
         />
       </View>
+      <View style={styles.section}>
+        <Text style={styles.title}>Retrieval</Text>
+        <Button onPress={getMetadata} title="Retrieve Metadata" />
+      </View>
     </View>
   );
 };
 
-export {PropertyTestingScreen};
+export {UserTestingScreen};

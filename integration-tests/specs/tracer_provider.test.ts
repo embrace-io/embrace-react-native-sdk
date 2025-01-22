@@ -35,7 +35,7 @@ describe("Tracer Provider", () => {
   };
 
   beforeEach(async () => {
-    const tracerProviderScreen = await driver.$("~TRACER PROVIDER TESTING");
+    const tracerProviderScreen = await driver.$("~SPAN TESTING");
     await tracerProviderScreen.click();
     await new Promise(r => setTimeout(r, 1000));
   });
