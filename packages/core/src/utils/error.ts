@@ -16,6 +16,7 @@ const trackUnhandledError = (_: unknown, error: Error) => {
     "error",
     {},
     stackTrace,
+    !!stackTrace,
   );
 };
 

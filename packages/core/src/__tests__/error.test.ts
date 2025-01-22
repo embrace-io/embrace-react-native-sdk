@@ -1,7 +1,7 @@
 import {trackUnhandledError} from "../utils/error";
 import {logHandledError} from "../api/log";
 import {ComponentError, logIfComponentError} from "../api/component";
-import {LogProperties} from "../../src/interfaces";
+import {LogProperties, LogSeverity} from "../../src/interfaces";
 
 const mockLogHandledError = jest.fn();
 const mockLogMessageWithSeverityAndProperties = jest.fn();
@@ -15,15 +15,17 @@ jest.mock("../EmbraceManagerModule", () => ({
     ) => mockLogHandledError(message, stackTrace, properties),
     logMessageWithSeverityAndProperties: (
       message: string,
-      errorType: string,
+      severity: LogSeverity,
       properties: LogProperties,
-      componentStack: string,
+      stacktrace: string,
+      includeStacktrace: boolean,
     ) => {
       mockLogMessageWithSeverityAndProperties(
         message,
-        errorType,
+        severity,
         properties,
-        componentStack,
+        stacktrace,
+        includeStacktrace,
       );
       return Promise.resolve(true);
     },
@@ -71,6 +73,7 @@ describe("Component Error", () => {
         "error",
         {},
         "in SomeScreen/n in SomeOtherScreen",
+        true,
       );
     });
   });
@@ -120,6 +123,7 @@ describe("`trackUnhandledError()`", () => {
       "error",
       {},
       error.stack,
+      true,
     );
   });
 
@@ -134,6 +138,7 @@ describe("`trackUnhandledError()`", () => {
       "error",
       {},
       "",
+      false,
     );
   });
 });

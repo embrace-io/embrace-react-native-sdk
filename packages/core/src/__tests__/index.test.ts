@@ -38,12 +38,14 @@ jest.mock("../EmbraceManagerModule", () => ({
       severity: string,
       properties: object,
       stacktrace: string,
+      includeStacktrace: boolean,
     ) =>
       mockLogMessageWithSeverityAndProperties(
         message,
         severity,
         properties,
         stacktrace,
+        includeStacktrace,
       ),
     logUnhandledJSException: (
       name: string,
@@ -179,6 +181,7 @@ describe("SDK initialization", () => {
           "error",
           {},
           "in SomeScreen\n in SomeOtherScreen",
+          true,
         );
         expect(mockPreviousHandler).toHaveBeenCalledWith(componentError, false);
       });
