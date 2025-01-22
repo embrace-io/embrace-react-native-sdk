@@ -45,6 +45,7 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
     "error",
     {},
     componentStack,
+    true,
   );
 };
 
