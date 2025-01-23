@@ -119,7 +119,13 @@ const initialize = async (
   );
 
   if (sdkConfig?.trackUnhandledRejections) {
-    enableUnhandledRejectionTracking();
+    try {
+      enableUnhandledRejectionTracking();
+    } catch (e) {
+      logger.warn(
+        "we were unable to setup tracking of unhandled promise rejections.",
+      );
+    }
   }
 
   return Promise.resolve(true);
