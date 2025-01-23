@@ -35,6 +35,8 @@ const enableUnhandledRejectionTracking = () => {
   if (hermesInternal?.hasPromise?.()) {
     hermesInternal?.enablePromiseRejectionTracker?.(rejectionTrackingConfig);
   } else {
+    // [Unhandled Rejections](https://github.com/then/promise/blob/master/Readme.md#unhandled-rejections)
+    // [promise/setimmediate/rejection-tracking](https://github.com/then/promise/blob/master/src/rejection-tracking.js)
     require("promise/setimmediate/rejection-tracking").enable(
       rejectionTrackingConfig,
     );
