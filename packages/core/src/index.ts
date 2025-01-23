@@ -3,7 +3,7 @@
 import {Platform} from "react-native";
 
 import {oltpGetStart} from "./utils/otlp";
-import {setUnhandledErrors} from "./utils/error";
+import {enableUnhandledRejectionTracking} from "./utils/error";
 import {setEmbracePackageVersion, setReactNativeVersion} from "./utils/bundle";
 import EmbraceLogger from "./utils/EmbraceLogger";
 import {SDKConfig, EmbraceLoggerLevel} from "./interfaces";
@@ -118,8 +118,9 @@ const initialize = async (
     handleGlobalError(ErrorUtils.getGlobalHandler(), handleError),
   );
 
-  // through `promise/setimmediate/rejection-tracking`
-  setUnhandledErrors();
+  if (sdkConfig?.trackUnhandledRejections) {
+    enableUnhandledRejectionTracking();
+  }
 
   return Promise.resolve(true);
 };

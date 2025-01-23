@@ -8,6 +8,7 @@ interface SDKConfig {
   ios?: IOSConfig;
   exporters?: OTLPExporterConfig;
   logLevel?: EmbraceLoggerLevel;
+  trackUnhandledRejections?: boolean;
 }
 
 // Today Android is not configurable through code,
