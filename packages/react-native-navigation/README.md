@@ -26,8 +26,6 @@ yarn add @embrace-io/react-native-navigation
 Using `expo-router`:
 
 ```javascript
-// App.tsx
-
 import React from 'react';
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
@@ -35,7 +33,11 @@ import {Stack, useNavigationContainerRef} from 'expo-router';
 import {useEmbrace} from "@embrace-io/react-native";
 
 const App = () => {
-  const {isStarted} = useEmbrace({ios: {appId: "abc123"}});
+  const {isStarted} = useEmbrace({
+    ios: {
+      appId: "__APP_ID__"
+    }
+  });
 
   // The provider is something you need to configure and pass down as prop into the `<EmbraceNavigationTracker />` component 
   // If your choice is not to pass any custom tracer provider, the component will use the global one.
@@ -81,8 +83,6 @@ export default App;
 If you are using purely [@react-navigation/native](https://github.com/react-navigation/react-navigation):
 
 ```javascript
-// App.tsx
-
 import React from 'react';
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
@@ -98,7 +98,11 @@ import CheckoutPage from "screens/CheckoutPage";
 const Tab = createBottomTabNavigator();
 
 const App = () => {
-  const {isStarted} = useEmbrace({ios: {appId: "abc123"}});
+  const {isStarted} = useEmbrace({
+    ios: {
+      appId: "__APP_ID__"
+    }
+  });
 
   // The provider is something you need to configure and pass down as prop into the `EmbraceNavigationTracker` component 
   // If your choice is not to pass any custom tracer provider, the <EmbraceNavigationTracker /> component will use the global one.
@@ -167,7 +171,6 @@ You have to make sure you wrap your entry view with the `<EmbraceNativeNavigatio
 
 ```javascript
 // index.ts
-
 import React, {useRef} from "react";
 import {EmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {TracerProvider} from "@opentelemetry/api";
@@ -177,10 +180,10 @@ import {Navigation} from "react-native-navigation";
 import {HomeScreen} from "screens/HomeScreen";
 
 const initApp = async () => {
-  // this example os showing how we can initialize Embrace not using hooks
+  // this example is showing how we can initialize Embrace not using hooks
   await initialize({
     sdkConfig: {
-      ios: {appId: "__YOUR_APP_ID__"},
+      ios: {appId: "__APP_ID__"},
     },
   });
 
@@ -227,6 +230,39 @@ initApp();
 
 Embrace also collects automatically the Native screens, if you do not want to see Native components in the Session you can disable it:
 
+### JavaScript
+
+```javascript
+const App = () => {
+  const {isPending, isStarted} = useEmbrace({
+    ios: {
+      appId: "__APP_ID__",
+      disableAutomaticViewCapture: true, // disabling the feature just for iOS
+    },
+  });
+
+
+  if (isPending) {
+    return (
+      <View>
+        <Text>Loading Embrace</Text>
+      </View>
+    );
+  } else {
+    if (!isStarted) {
+      console.log('An error occurred during Embrace initialization');
+    }
+  }
+
+  // regular content of the application
+  return (
+    ...  
+  );
+}
+
+export default App
+```
+
 ### Android
 
 Go to your `embrace-config.json` inside `android/app/src/main` and add the `sdk_config` key.
@@ -246,23 +282,35 @@ With these changes your file should at least look like the following:
 
 ### iOS:
 
-Go to the `Embrace-info.plist` inside the iOS project and add the `ENABLE_AUTOMATIC_VIEW_CAPTURE` flag with `false` value.
-The file should look like the following:
+If you used the automated installation script or followed the manual steps for setting up the iOS SDK then you can
+modify the setup in `EmbraceInitializer.swift` to remove the view capture service, see [Configurating the iOS SDK](/ios/open-source/integration/embrace-options/)
+for more details:
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>API_KEY</key>
-  <string>{YOUR_API_KEY_VALUE}</string>
-  <key>CRASH_REPORT_ENABLED</key>
-  <true/>
-    <!-- Add this key and the value as false-->
-  <key>ENABLE_AUTOMATIC_VIEW_CAPTURE</key>
-  <false/>
+```swift
+import Foundation
+import EmbraceIO
+import EmbraceCrash
 
-  <!-- ... other configuration -->
-</dict>
-</plist>
+@objcMembers class EmbraceInitializer: NSObject {
+    static func start() -> Void {
+        do {
+         
+            try Embrace
+                .setup(
+                    options: Embrace.Options(
+                        appId: "__APP_ID__",
+                        platform: .reactNative,
+                        captureServices: CaptureServiceBuilder()
+                            .addDefaults()
+                            .remove(ofType: ViewCaptureService.self)
+                            .build(),
+                        crashReporter: EmbraceCrashReporter()
+                    )
+                )
+                .start()
+        } catch let e {
+            print("Error starting Embrace \(e.localizedDescription)")
+        }
+    }
+}
 ```

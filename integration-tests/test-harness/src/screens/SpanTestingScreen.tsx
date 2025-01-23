@@ -24,7 +24,7 @@ const SpanTestingScreen = () => {
     if (tracerProvider) {
       return tracerProvider.getTracer("span-test", "1.0");
     }
-  }, [isLoading, isError, error, tracerProvider]);
+  }, [tracerProvider]);
 
   const recordViewHandler = useCallback(async () => {
     if (!tracer) {
