@@ -1,24 +1,28 @@
 import * as React from "react";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
-import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
+import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {
   Stack,
   useNavigationContainerRef as useExpoNavigationContainerRef,
 } from "expo-router";
+import FullScreenMessage from "./components/FullScreenMessage";
 
 export const EmbraceExpoTestHarness = () => {
-  const {tracerProvider} = useEmbraceNativeTracerProvider({});
+  const {tracerProvider, isLoading: isLoadingTracerProvider} =
+    useEmbraceNativeTracerProvider({});
   const expoNavigationRef = useExpoNavigationContainerRef();
 
+  if (isLoadingTracerProvider || tracerProvider === null) {
+    return <FullScreenMessage msg="Loading Tracer Provider" />;
+  }
+
   return (
-    <NavigationTracker
+    <EmbraceNavigationTracker
       ref={expoNavigationRef}
-      provider={tracerProvider || undefined}
-      config={{
-        attributes: {
-          "emb.type": "ux.view",
-        },
-        debug: true,
+      tracerProvider={tracerProvider}
+      screenAttributes={{
+        "test.attr": 123456,
+        package: "expo-router",
       }}>
       <Stack>
         {/*
@@ -28,6 +32,6 @@ export const EmbraceExpoTestHarness = () => {
         */}
         <Stack.Screen name="(tabs)" options={{headerShown: false}} />
       </Stack>
-    </NavigationTracker>
+    </EmbraceNavigationTracker>
   );
 };

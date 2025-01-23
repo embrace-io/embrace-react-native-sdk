@@ -1,5 +1,4 @@
 import * as React from "react";
-import {useRef} from "react";
 import {LogTestingScreen} from "./screens/LogTestingScreen";
 import {UserTestingScreen} from "./screens/UserTestingScreen";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
@@ -8,8 +7,9 @@ import {
   useNavigationContainerRef,
 } from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
+import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {SpanTestingScreen} from "./screens/SpanTestingScreen";
+import FullScreenMessage from "./components/FullScreenMessage";
 import {NetworkTestingScreen} from "./screens/NetworkTestingScreen";
 import {ReduxTestingScreen} from "./screens/ReduxTestingScreen";
 
@@ -17,20 +17,24 @@ const Tab = createBottomTabNavigator();
 
 export const EmbraceReactNativeTestHarness = () => {
   const navigationContainer = useNavigationContainerRef();
-  const navigationContainerRef = useRef(navigationContainer);
-  const {tracerProvider} = useEmbraceNativeTracerProvider({});
+  const navigationContainerRef = React.useRef(navigationContainer);
+
+  const {tracerProvider, isLoading: isLoadingTracerProvider} =
+    useEmbraceNativeTracerProvider({});
+
+  if (isLoadingTracerProvider || tracerProvider === null) {
+    return <FullScreenMessage msg="Loading Tracer Provider" />;
+  }
 
   return (
     // `NavigationContainer` is waiting for what `useNavigationContainerRef` is returning (both exported from `@react-navigation/native`)
     <NavigationContainer ref={navigationContainer}>
-      <NavigationTracker
+      <EmbraceNavigationTracker
         ref={navigationContainerRef}
-        provider={tracerProvider || undefined}
-        config={{
-          attributes: {
-            "emb.type": "ux.view",
-          },
-          debug: true,
+        tracerProvider={tracerProvider}
+        screenAttributes={{
+          "test.attr": 654321,
+          package: "@react-navigation/native",
         }}>
         <Tab.Navigator
           screenOptions={{
@@ -73,7 +77,7 @@ export const EmbraceReactNativeTestHarness = () => {
             component={ReduxTestingScreen}
           />
         </Tab.Navigator>
-      </NavigationTracker>
+      </EmbraceNavigationTracker>
     </NavigationContainer>
   );
 };

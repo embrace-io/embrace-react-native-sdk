@@ -67,11 +67,8 @@ test_app=$1
 shift
 handle_options "$@"
 
-# NOTE: opentelemetry-instrumentation-react-native-navigation comes from outside this repo so we include it as
-# a prebuilt artifact
-third_party_dependencies="
-  ./artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz
-"
+# In case of introducing third party dependencies, add them here
+third_party_dependencies=""
 
 embrace_local_dependencies="
   ./artifacts/embrace-io-react-native-local.tgz
@@ -85,6 +82,7 @@ if [ "$version" = "local" ]; then
 else
   embrace_dependencies="
     @embrace-io/react-native@$version
+    @embrace-io/react-native-navigation@$version
     @embrace-io/react-native-otlp@$version
     @embrace-io/react-native-redux@$version
     @embrace-io/react-native-tracer-provider@$version
@@ -101,6 +99,7 @@ if [ "$skip_sdk_packages" = false ]; then
     # build required packages
     pushd ..
     npx lerna run build --scope=@embrace-io/react-native
+    npx lerna run build --scope=@embrace-io/react-native-navigation
     npx lerna run build --scope=@embrace-io/react-native-otlp
     npx lerna run build --scope=@embrace-io/react-native-redux
     npx lerna run build --scope=@embrace-io/react-native-tracer-provider

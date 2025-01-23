@@ -36,7 +36,6 @@ For this example we will use Grafana Cloud in terms of redirecting telemetry dat
 
 ```javascript
 import React, {useEffect, useMemo, useState} from "react";
-import {initialize as initEmbraceWithCustomExporters} from "@embrace-io/react-native-otlp";
 import {useEmbrace} from "@embrace-io/react-native";
 import {View, Text} from "react-native";
 import {Stack} from "expo-router";
@@ -101,7 +100,7 @@ export default RootLayout;
 
 ## Initializing in the Native Layer
 
-If you already have the Embrace React Native SDK initialized in the Native Side or if you are planning to run the install scripts mentioned in our docs section you could still get benefit of the OTLP custom export feature. Remember that the the install scripts are adding the minimum code needed for initializing Embrace in the Native side but are not integrating the configuration for exporting the telemetry data into your backend of your choice. For this you would need to tweak manually both the Android/iOS sides.
+If you already have the Embrace React Native SDK initialized in the Native Side or if you are planning to run the install scripts mentioned in our docs section you could still get benefit of the OTLP custom export feature. Remember that the install scripts are adding the minimum code needed for initializing Embrace in the Native side but are not integrating the configuration for exporting the telemetry data into your backend of your choice. For this you would need to tweak manually both the Android/iOS sides.
 
 ### iOS
 
