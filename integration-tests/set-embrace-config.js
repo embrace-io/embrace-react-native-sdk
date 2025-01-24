@@ -165,6 +165,13 @@
   console.log(`Wrote ${androidConfigPath}`);
 
   /*
+    interface SDKConfig {
+      ios?: IOSConfig;
+      exporters?: OTLPExporterConfig;
+      logLevel?: EmbraceLoggerLevel;
+      trackUnhandledRejections?: boolean;
+    }
+
     interface IOSConfig {
       ios: {
         appId: string;
@@ -175,11 +182,11 @@
       };
     }
    */
-  const iOSConfigPath = fs.existsSync(`${appPath}/app`)
+  const sdkConfigPath = fs.existsSync(`${appPath}/app`)
     ? `${appPath}/app/embrace-sdk-config.json`
     : `${appPath}/embrace-sdk-config.json`;
 
-  const iOSConfig = {
+  const sdkConfig = {
     ios: {
       appId: config.ios_app_id,
       endpointBaseUrl: config.endpoint,
@@ -189,8 +196,9 @@
     },
     // this is meant for both platforms but it shouldn't be added into the `embrace-config.json` file in the android app
     exporters: config.exporters,
+    trackUnhandledRejections: config.trackUnhandledRejections,
   };
 
-  fs.writeFileSync(iOSConfigPath, JSON.stringify(iOSConfig, undefined, 2));
-  console.log(`Wrote ${iOSConfigPath}`);
+  fs.writeFileSync(sdkConfigPath, JSON.stringify(sdkConfig, undefined, 2));
+  console.log(`Wrote ${sdkConfigPath}`);
 }

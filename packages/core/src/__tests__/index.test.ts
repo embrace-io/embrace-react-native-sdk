@@ -1,7 +1,7 @@
 import {waitFor} from "@testing-library/react-native";
 
 import {oltpGetStart} from "../utils/otlp";
-import {trackUnhandledError} from "../utils/error";
+import {trackUnhandledRejection} from "../utils/error";
 import {AndroidConfig, initialize, IOSConfig} from "../index";
 import {handleError, handleGlobalError} from "../api/error";
 import {ComponentError} from "../api/component";
@@ -96,6 +96,8 @@ describe("SDK initialization", () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    // @ts-expect-error HermesInternal isn't part of `global`'s type
+    global.HermesInternal = undefined;
   });
 
   describe("Both platforms", () => {
@@ -187,7 +189,27 @@ describe("SDK initialization", () => {
       });
     });
 
-    test("`initialize` should set the listener for unhandled exceptions", async () => {
+    test("`initialize` should set the listener for unhandled promise rejections when the flag is set", async () => {
+      const mockRejectionTrackingEnable = jest.spyOn(
+        rejectionTracking,
+        "enable",
+      );
+
+      const isStarted = await initialize({
+        patch: "v1",
+        sdkConfig: {ios: {appId: "abc12"}, trackUnhandledRejections: true},
+      });
+      await waitFor(() => {
+        expect(isStarted).toBe(true);
+        expect(mockRejectionTrackingEnable).toHaveBeenCalledWith({
+          allRejections: true,
+          onUnhandled: trackUnhandledRejection,
+          onHandled: expect.any(Function),
+        });
+      });
+    });
+
+    test("`initialize` should not set the listener for unhandled promise rejections when the flag is not set", async () => {
       const mockRejectionTrackingEnable = jest.spyOn(
         rejectionTracking,
         "enable",
@@ -196,9 +218,30 @@ describe("SDK initialization", () => {
       const isStarted = await initialize(INIT_SDK_CONFIG);
       await waitFor(() => {
         expect(isStarted).toBe(true);
-        expect(mockRejectionTrackingEnable).toHaveBeenCalledWith({
+        expect(mockRejectionTrackingEnable).not.toHaveBeenCalled();
+      });
+    });
+
+    test("should use Hermes unhandled promise rejection tracking when available", async () => {
+      const hermesInternal = {
+        hasPromise: () => true,
+        enablePromiseRejectionTracker: jest.fn(),
+      };
+
+      // @ts-expect-error HermesInternal isn't part of `global`'s type
+      global.HermesInternal = hermesInternal;
+
+      const isStarted = await initialize({
+        patch: "v1",
+        sdkConfig: {ios: {appId: "abc12"}, trackUnhandledRejections: true},
+      });
+      await waitFor(() => {
+        expect(isStarted).toBe(true);
+        expect(
+          hermesInternal.enablePromiseRejectionTracker,
+        ).toHaveBeenCalledWith({
           allRejections: true,
-          onUnhandled: trackUnhandledError,
+          onUnhandled: trackUnhandledRejection,
           onHandled: expect.any(Function),
         });
       });

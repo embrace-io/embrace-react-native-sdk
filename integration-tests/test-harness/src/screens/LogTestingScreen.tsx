@@ -69,6 +69,10 @@ const LogTestingScreen = () => {
     );
   }, []);
 
+  const triggerUnhandledPromiseRejection = useCallback(() => {
+    Promise.reject(new Error("fail"));
+  }, []);
+
   const [isError, setIsError] = React.useState(false);
   const triggerRenderError = useCallback(() => {
     setIsError(true);
@@ -94,13 +98,13 @@ const LogTestingScreen = () => {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.title}>Unhandled Exceptions</Text>
+        <Text style={styles.title}>Errors</Text>
         <Button onPress={triggerAnonymousCrash} title="Anonymous Crash" />
         <Button onPress={triggerCrash} title="Crash" />
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.title}>Render Errors</Text>
+        <Button
+          onPress={triggerUnhandledPromiseRejection}
+          title="Trigger an Unhandled Promise rejection"
+        />
         <Button onPress={triggerRenderError} title="Trigger a Render error" />
         {isError && <ErrorComponent />}
       </View>

@@ -1,0 +1,20 @@
+{
+  "api_token": "13f327e891ad45858949004eb755b9f1",
+  "android_app_id": "8FCf9",
+  "ios_app_id": "cvKeD",
+  "enable_network_span_forwarding": true,
+  "disabled_url_patterns": ["grafana.net"],
+  "trackUnhandledRejections": true,
+  "exporters": {
+    "logExporter": {
+      "endpoint": "https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/logs",
+      "headers": [{"key": "Authorization", "token": "Basic __TOKEN__"}],
+      "timeout": 30000
+    },
+    "traceExporter": {
+      "endpoint": "https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/traces",
+      "headers": [{"key": "Authorization", "token": "Basic __TOKEN__"}],
+      "timeout": 30000
+    }
+  }
+}
