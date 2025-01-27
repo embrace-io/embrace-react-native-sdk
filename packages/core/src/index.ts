@@ -47,7 +47,7 @@ const initialize = async (
     // the core package won't be able to start the SDK as fallback
     // `oltpGetStart` has their own try/catch block
     if (otlpExporters) {
-      if (!startSdkConfig.appId) {
+      if (isIOS && !startSdkConfig.appId) {
         logger.log(
           "'sdkConfig.ios.appId' not found, only custom exporters will be used",
         );

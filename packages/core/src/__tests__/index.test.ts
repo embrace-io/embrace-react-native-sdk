@@ -1,6 +1,6 @@
 import {waitFor} from "@testing-library/react-native";
 
-import {oltpGetStart} from "../utils/otlp";
+import * as otlpHelper from "../utils/otlp";
 import {trackUnhandledRejection} from "../utils/error";
 import {AndroidConfig, initialize, IOSConfig} from "../index";
 import {handleError, handleGlobalError} from "../api/error";
@@ -75,13 +75,10 @@ jest.mock("react-native", () => ({
 }));
 const mockReactNative = jest.requireMock("react-native");
 
-jest.mock("../utils/otlp", () => ({
-  oltpGetStart: jest.fn(),
-}));
-
 describe("SDK initialization", () => {
   let mockConsoleWarn: jest.SpyInstance;
   let mockConsoleInfo: jest.SpyInstance;
+  let mockConsoleError: jest.SpyInstance;
 
   const mockIsDev = (isDev: boolean) =>
     // @ts-expect-error __DEV__ isn't expected on `global`'s type, but it does exist here since jest adds it to
@@ -91,6 +88,8 @@ describe("SDK initialization", () => {
   beforeEach(() => {
     mockConsoleWarn = jest.spyOn(console, "warn").mockImplementation(m => m);
     mockConsoleInfo = jest.spyOn(console, "log").mockImplementation(m => m);
+    mockConsoleError = jest.spyOn(console, "error").mockImplementation(m => m);
+
     mockIsDev(false);
   });
 
@@ -289,6 +288,32 @@ describe("SDK initialization", () => {
         expect(mockConsoleInfo).not.toHaveBeenCalled();
       });
     });
+
+    // not mocking OTLP helpers and letting it throw errors for testing purposes (require.context)
+    it("exporter config is passed but OTLP throw error", async () => {
+      const isStarted = await initialize({
+        patch: "v1",
+        sdkConfig: {
+          exporters: {
+            traceExporter: {
+              endpoint: "http://localhost/trace",
+            },
+          },
+        },
+      });
+
+      await waitFor(() => {
+        // since it's android and there is no `ios.appId` it should not log this message
+        expect(mockConsoleInfo).not.toHaveBeenCalledWith(
+          "[Embrace] 'sdkConfig.ios.appId' not found, only custom exporters will be used",
+        );
+        expect(mockConsoleError).toHaveBeenNthCalledWith(
+          1,
+          "[Embrace] an error ocurred when checking if `@embrace-io/react-native-otlp` was installed",
+        );
+        expect(isStarted).toBe(true);
+      });
+    });
   });
 
   describe("iOS: initialize", () => {
@@ -297,10 +322,11 @@ describe("SDK initialization", () => {
     });
 
     it("should not call regular `startNativeEmbraceSDK` if `exporters` are available", async () => {
-      const mockRNEmbraceOTLPInit = jest.fn().mockResolvedValue(true);
-      const mockOltpGetStart = jest
-        .mocked(oltpGetStart)
-        .mockImplementation(() => mockRNEmbraceOTLPInit);
+      const mockOltpGetStart = jest.fn().mockResolvedValue(true);
+
+      jest
+        .spyOn(otlpHelper, "oltpGetStart")
+        .mockImplementation(() => mockOltpGetStart);
 
       const isStarted = await initialize({
         sdkConfig: {
