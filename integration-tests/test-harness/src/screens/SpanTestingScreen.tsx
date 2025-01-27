@@ -48,6 +48,7 @@ const SpanTestingScreen = () => {
 
     try {
       const parentSpan = tracer.startSpan("test-1");
+      parentSpan.end();
       const startTime = new Date().getTime();
       const eventTime = startTime + 300;
       const endTime = startTime + 1500;
@@ -64,9 +65,11 @@ const SpanTestingScreen = () => {
             timeStamp: eventTime,
           },
         ],
-        parent: parentSpan,
       });
       recordCompletedSpan(tracer, "my-minimal-completed-span");
+      recordCompletedSpan(tracer, "my-completed-span-with-parent", {
+        parent: parentSpan,
+      });
     } catch (e) {
       console.log("failed to record completed span: ", e);
     }
