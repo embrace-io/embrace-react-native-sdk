@@ -72,6 +72,7 @@ third_party_dependencies=""
 
 embrace_local_dependencies="
   ./artifacts/embrace-io-react-native-local.tgz
+  ./artifacts/embrace-io-react-native-navigation-local.tgz
   ./artifacts/embrace-io-react-native-otlp-local.tgz
   ./artifacts/embrace-io-react-native-redux-local.tgz
   ./artifacts/embrace-io-react-native-tracer-provider-local.tgz
@@ -107,6 +108,7 @@ if [ "$skip_sdk_packages" = false ]; then
 
     # pack required packages into tarballs
     ./pack.sh ../packages/core/ artifacts/embrace-io-react-native-local.tgz
+    ./pack.sh ../packages/react-native-navigation/ artifacts/embrace-io-react-native-navigation-local.tgz
     ./pack.sh ../packages/react-native-otlp/ artifacts/embrace-io-react-native-otlp-local.tgz
     ./pack.sh ../packages/react-native-redux/ artifacts/embrace-io-react-native-redux-local.tgz
     ./pack.sh ../packages/react-native-tracer-provider/ artifacts/embrace-io-react-native-tracer-provider-local.tgz
