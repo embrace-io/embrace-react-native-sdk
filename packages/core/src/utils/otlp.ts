@@ -36,6 +36,8 @@ const oltpGetStart = (
     // that doesn't allow to import the package dynamically
     // this.package = require("@embrace-io/react-native-otlp");
 
+    // `require.context` support introduced in https://github.com/facebook/metro/releases/tag/v0.72.1
+    // old Metro versions need `transformer.unstable_allowRequireContext` flag to be enabled to not throw when using `require.context`
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     const context = require.context(RN_EMBRACE_OTLP_PATH, false, /index\.js$/);
