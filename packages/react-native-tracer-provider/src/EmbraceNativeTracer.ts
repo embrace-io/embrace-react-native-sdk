@@ -33,7 +33,6 @@ class EmbraceNativeTracer implements Tracer {
   private readonly name: string;
   private readonly version: string;
   private readonly schemaUrl: string;
-  private spansCreated: number;
   private readonly contextManager: ContextManager;
   private readonly spanContextSyncBehaviour: SpanContextSyncBehaviour;
   constructor(
@@ -46,7 +45,6 @@ class EmbraceNativeTracer implements Tracer {
     this.name = name;
     this.version = version;
     this.schemaUrl = schemaUrl;
-    this.spansCreated = 0;
     this.contextManager = contextManager;
     this.spanContextSyncBehaviour = spanContextSyncBehaviour;
   }
@@ -62,12 +60,10 @@ class EmbraceNativeTracer implements Tracer {
     ) as EmbraceNativeSpan;
     const parentNativeID = (!root && parentSpan && parentSpan.nativeID()) || "";
 
-    this.spansCreated += 1;
     const nativeSpan = new EmbraceNativeSpan(
       this.name,
       this.version,
       this.schemaUrl,
-      this.spansCreated,
       this.spanContextSyncBehaviour,
     );
 
