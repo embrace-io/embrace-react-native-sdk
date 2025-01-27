@@ -289,8 +289,8 @@ describe("SDK initialization", () => {
       });
     });
 
-    // NOTE: not mocking OTLP and letting it throws for testing the fallback
-    it("exporter config is passed but OTLP throws", async () => {
+    // not mocking OTLP helpers and letting it throw errors for testing purposes (require.context)
+    it("exporter config is passed but OTLP throw error", async () => {
       const isStarted = await initialize({
         patch: "v1",
         sdkConfig: {
