@@ -52,39 +52,88 @@ To run these steps manually refer to [this section of our guide](https://embrace
 
 ## Initialize the Embrace SDK
 
-Initialize method applies the necessary listener to your application. This allow Embrace to track javascript errors, check js bundle changes (if you use OTA), track js patch and react native versions.
+### Without hooks
+
+Calling the `initialize` method setups up the tracking for the SDK on the JS side. This is needed even if you choose
+to start the SDK earlier on the native side as explained below, however in that case the configuration passed through
+in the `sdkConfig` object is ignored in favor of the native startup configuration.
 
 ```javascript
-import {View} from "react-native";
-import React, {useEffect} from "react";
-import {initialize} from "@embrace-io/react-native";
+import React, { useEffect, useState } from 'react'
+import { initialize } from '@embrace-io/react-native';
 
 const App = () => {
   useEffect(() => {
-    // `initialize` is a Promise, so if you want to perform an action and it must be tracked, it is recommended to await for the method to finish
-    const handleInit = async () => {
-      const hasStarted = await initialize({
-        sdkConfig: {
-          ios: {
-            appId: "abcdf",
+    const initEmbrace = async () => {
+      try {
+        const isStarted = await initialize({
+          sdkConfig: {
+            ios: {
+              appId: "abcdf",
+            },
           },
-        },
-      });
+        });
 
-      if (hasStarted) {
-        // do something
+        if (isStarted) {
+          // do something
+        }
+      } catch {
+        console.log("Error initializing Embrace SDK");
       }
     };
 
-    handleInit();
-  }, []);
+    initEmbrace();
+  });
 
-  // rest of the app
-  return <View>...</View>;
-};
+  // regular content of the application
+  return (
+    ...
+  );
+}
 
-export default App;
+export default App
 ```
+
+### With hooks
+
+We expose also a hook that handles the initialization of Embrace in a more React friendly way:
+
+```javascript
+import React, { useEffect, useState } from 'react'
+import { useEmbrace } from '@embrace-io/react-native';
+
+const App = () => {
+  // minimum of configuration required
+  const {isPending, isStarted} = useEmbrace({
+    ios: {
+      appId: "__APP_ID__", // 5 digits string
+    },
+  });
+
+
+  if (isPending) {
+    return (
+      <View>
+        <Text>Loading Embrace</Text>
+      </View>
+    );
+  } else {
+    if (!isStarted) {
+      console.log('An error occurred during Embrace initialization');
+    }
+  }
+
+  // regular content of the application
+  return (
+    ...
+  );
+}
+
+export default App
+```
+
+In both cases we recommend to use these methods to initialize the React Native Embrace SDK at the top level of your
+application just once to prevent side effects in the JavaScript layer.
 
 ## Uploading source maps
 

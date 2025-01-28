@@ -140,6 +140,7 @@ export * from "./api/session";
 export * from "./api/network";
 export * from "./api/user";
 export * from "./hooks/useEmbrace";
+export * from "./hooks/useEmbraceIsStarted";
 export * from "./hooks/useOrientationListener";
 export * from "./interfaces";
 
