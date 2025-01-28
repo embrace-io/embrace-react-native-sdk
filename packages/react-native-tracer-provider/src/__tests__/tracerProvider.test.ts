@@ -7,6 +7,7 @@ import {
   SpanStatusCode,
   Link,
   trace,
+  Span,
 } from "@opentelemetry/api";
 
 import {
@@ -17,6 +18,7 @@ import {
   endAsFailed,
   asParent,
   recordCompletedSpan,
+  EmbraceNativeTracerProvider,
 } from "../index";
 
 const mockSetupTracer = jest.fn();
@@ -106,6 +108,9 @@ describe("Embrace Native Tracer Provider", () => {
     );
   });
 
+  const getEmptySpan = (): Span =>
+    new EmbraceNativeSpan("", "", "", "return_empty");
+
   const getTestTracer = async ({
     name = "test",
     version = "v1",
@@ -144,13 +149,13 @@ describe("Embrace Native Tracer Provider", () => {
       "",
     );
 
-    result.current.tracer!.startSpan("my-span");
+    const span = result.current.tracer!.startSpan("my-span");
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "embrace-default-tracer",
       "",
       "",
-      "embrace-default-tracer___1",
+      (span as EmbraceNativeSpan).nativeID(),
       "my-span",
       "",
       0,
@@ -203,13 +208,13 @@ describe("Embrace Native Tracer Provider", () => {
 
   it("should allow starting a span", async () => {
     const tracer = await getTestTracer({});
-    tracer.startSpan("my-span");
+    const span = tracer.startSpan("my-span");
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "",
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "my-span",
       "",
       0,
@@ -221,7 +226,7 @@ describe("Embrace Native Tracer Provider", () => {
 
   it("should allow starting a span with options", async () => {
     const tracer = await getTestTracer({});
-    tracer.startSpan("my-span", {
+    const span = tracer.startSpan("my-span", {
       kind: SpanKind.CONSUMER,
       startTime: 1718409600000,
       attributes: {
@@ -249,7 +254,7 @@ describe("Embrace Native Tracer Provider", () => {
       "test",
       "v1",
       "",
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "my-span",
       "CONSUMER",
       1718409600000,
@@ -282,19 +287,19 @@ describe("Embrace Native Tracer Provider", () => {
     const parentContext = trace.setSpan(context.active(), parent);
     mockStartSpan.mockClear();
 
-    tracer.startSpan("my-child-span", {}, parentContext);
+    const child = tracer.startSpan("my-child-span", {}, parentContext);
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "",
-      "test_v1__2",
+      (child as EmbraceNativeSpan).nativeID(),
       "my-child-span",
       "",
       0,
       {},
       [],
-      "test_v1__1",
+      (parent as EmbraceNativeSpan).nativeID(),
     );
   });
 
@@ -304,13 +309,17 @@ describe("Embrace Native Tracer Provider", () => {
     const parentContext = trace.setSpan(context.active(), parent);
     mockStartSpan.mockClear();
 
-    tracer.startSpan("my-child-span", {root: true}, parentContext);
+    const child = tracer.startSpan(
+      "my-child-span",
+      {root: true},
+      parentContext,
+    );
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "",
-      "test_v1__2",
+      (child as EmbraceNativeSpan).nativeID(),
       "my-child-span",
       "",
       0,
@@ -322,12 +331,14 @@ describe("Embrace Native Tracer Provider", () => {
 
   it("should allow starting an active span", async () => {
     const tracer = await getTestTracer({});
+    let child = getEmptySpan();
+    let parentNativeID: string = "";
     tracer.startActiveSpan("my-active-span", () => {
       expect(mockStartSpan).toHaveBeenCalledWith(
         "test",
         "v1",
         "",
-        "test_v1__1",
+        expect.any(String),
         "my-active-span",
         "",
         0,
@@ -335,32 +346,35 @@ describe("Embrace Native Tracer Provider", () => {
         [],
         "",
       );
+      parentNativeID = mockStartSpan.mock.calls[0][3];
       mockStartSpan.mockClear();
-      tracer.startSpan("my-child-span");
+      child = tracer.startSpan("my-child-span");
     });
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "",
-      "test_v1__2",
+      (child as EmbraceNativeSpan).nativeID(),
       "my-child-span",
       "",
       0,
       {},
       [],
-      "test_v1__1",
+      parentNativeID,
     );
   });
 
   it("should allow starting an active span with options", async () => {
     const tracer = await getTestTracer({});
+    let child = getEmptySpan();
+    let parentNativeID: string = "";
     tracer.startActiveSpan("my-active-span", {kind: SpanKind.CLIENT}, () => {
       expect(mockStartSpan).toHaveBeenCalledWith(
         "test",
         "v1",
         "",
-        "test_v1__1",
+        expect.any(String),
         "my-active-span",
         "CLIENT",
         0,
@@ -368,21 +382,22 @@ describe("Embrace Native Tracer Provider", () => {
         [],
         "",
       );
+      parentNativeID = mockStartSpan.mock.calls[0][3];
       mockStartSpan.mockClear();
-      tracer.startSpan("my-child-span");
+      child = tracer.startSpan("my-child-span");
     });
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "",
-      "test_v1__2",
+      (child as EmbraceNativeSpan).nativeID(),
       "my-child-span",
       "",
       0,
       {},
       [],
-      "test_v1__1",
+      parentNativeID,
     );
   });
 
@@ -392,12 +407,13 @@ describe("Embrace Native Tracer Provider", () => {
     const parentContext = trace.setSpan(context.active(), parent);
     mockStartSpan.mockClear();
 
+    let child = getEmptySpan();
     tracer.startActiveSpan("my-active-span", {kind: SpanKind.CLIENT}, () => {
       expect(mockStartSpan).toHaveBeenCalledWith(
         "test",
         "v1",
         "",
-        "test_v1__2",
+        expect.any(String),
         "my-active-span",
         "CLIENT",
         0,
@@ -405,21 +421,22 @@ describe("Embrace Native Tracer Provider", () => {
         [],
         "",
       );
+
       mockStartSpan.mockClear();
-      tracer.startSpan("my-child-span", {}, parentContext);
+      child = tracer.startSpan("my-child-span", {}, parentContext);
     });
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "",
-      "test_v1__3",
+      (child as EmbraceNativeSpan).nativeID(),
       "my-child-span",
       "",
       0,
       {},
       [],
-      "test_v1__1",
+      (parent as EmbraceNativeSpan).nativeID(),
     );
   });
 
@@ -429,12 +446,14 @@ describe("Embrace Native Tracer Provider", () => {
         setGlobalContextManager: false,
       },
     });
+    let child = getEmptySpan();
+    let parentNativeID: string = "";
     tracer.startActiveSpan("my-active-span", {kind: SpanKind.CLIENT}, () => {
       expect(mockStartSpan).toHaveBeenCalledWith(
         "test",
         "v1",
         "",
-        "test_v1__1",
+        expect.any(String),
         "my-active-span",
         "CLIENT",
         0,
@@ -442,24 +461,25 @@ describe("Embrace Native Tracer Provider", () => {
         [],
         "",
       );
+      parentNativeID = mockStartSpan.mock.calls[0][3];
       mockStartSpan.mockClear();
 
       expect(trace.getSpan(context.active())).toBeFalsy();
 
-      tracer.startSpan("my-child-span");
+      child = tracer.startSpan("my-child-span");
     });
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "",
-      "test_v1__2",
+      (child as EmbraceNativeSpan).nativeID(),
       "my-child-span",
       "",
       0,
       {},
       [],
-      "test_v1__1",
+      parentNativeID,
     );
   });
 
@@ -526,9 +546,12 @@ describe("Embrace Native Tracer Provider", () => {
     const span = tracer.startSpan("my-span");
     span.setAttribute("my-attr", "val1");
 
-    expect(mockSetAttributes).toHaveBeenCalledWith("test_v1__1", {
-      "my-attr": "val1",
-    });
+    expect(mockSetAttributes).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      {
+        "my-attr": "val1",
+      },
+    );
 
     mockSetAttributes.mockClear();
     span.setAttributes({
@@ -536,10 +559,13 @@ describe("Embrace Native Tracer Provider", () => {
       "my-other-attr": "val2",
     });
 
-    expect(mockSetAttributes).toHaveBeenCalledWith("test_v1__1", {
-      "my-attr": "val1",
-      "my-other-attr": "val2",
-    });
+    expect(mockSetAttributes).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      {
+        "my-attr": "val1",
+        "my-other-attr": "val2",
+      },
+    );
   });
 
   it("should allow adding an event to a span", async () => {
@@ -547,7 +573,12 @@ describe("Embrace Native Tracer Provider", () => {
     const span = tracer.startSpan("my-span");
     span.addEvent("my-event");
 
-    expect(mockAddEvent).toHaveBeenCalledWith("test_v1__1", "my-event", {}, 0);
+    expect(mockAddEvent).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      "my-event",
+      {},
+      0,
+    );
   });
 
   it("should allow adding an event to a span with attributes", async () => {
@@ -556,7 +587,7 @@ describe("Embrace Native Tracer Provider", () => {
     span.addEvent("my-event", {"my-attr": "val1"});
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "my-event",
       {"my-attr": "val1"},
       0,
@@ -569,7 +600,7 @@ describe("Embrace Native Tracer Provider", () => {
     span.addEvent("my-event", new Date(Date.UTC(2019, 5, 15, 0, 0, 0, 0)));
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "my-event",
       {},
       1560556800000,
@@ -582,7 +613,7 @@ describe("Embrace Native Tracer Provider", () => {
     span.addEvent("my-event", {"my-attr": "val1"}, 1590556800000);
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "my-event",
       {"my-attr": "val1"},
       1590556800000,
@@ -595,7 +626,7 @@ describe("Embrace Native Tracer Provider", () => {
     span.addEvent("my-event", undefined, 1590556800033);
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "my-event",
       {},
       1590556800033,
@@ -608,7 +639,7 @@ describe("Embrace Native Tracer Provider", () => {
     span.addEvent("my-event", 1590556800022, 1590556800033);
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "my-event",
       {},
       1590556800033,
@@ -632,7 +663,10 @@ describe("Embrace Native Tracer Provider", () => {
 
     span.addLink(link1);
 
-    expect(mockAddLinks).toHaveBeenCalledWith("test_v1__1", [link1]);
+    expect(mockAddLinks).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      [link1],
+    );
 
     mockAddLinks.mockClear();
     const link2 = {
@@ -648,23 +682,32 @@ describe("Embrace Native Tracer Provider", () => {
     };
     span.addLinks([link2]);
 
-    expect(mockAddLinks).toHaveBeenCalledWith("test_v1__1", [link2]);
+    expect(mockAddLinks).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      [link2],
+    );
   });
 
   it("should allow setting a span's status", async () => {
     const tracer = await getTestTracer({});
     const span = tracer.startSpan("my-span");
     span.setStatus({code: SpanStatusCode.ERROR});
-    expect(mockSetStatus).toHaveBeenCalledWith("test_v1__1", {
-      code: "ERROR",
-    });
+    expect(mockSetStatus).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      {
+        code: "ERROR",
+      },
+    );
   });
 
   it("should allow updating a span's name", async () => {
     const tracer = await getTestTracer({});
     const span = tracer.startSpan("my-span");
     span.updateName("new-name");
-    expect(mockUpdateName).toHaveBeenCalledWith("test_v1__1", "new-name");
+    expect(mockUpdateName).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      "new-name",
+    );
   });
 
   it("should allow recording an exception on the span", async () => {
@@ -673,7 +716,7 @@ describe("Embrace Native Tracer Provider", () => {
     span.recordException({message: "error", name: "error-name"});
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "exception",
       {"exception.message": "error", "exception.type": "error-name"},
       0,
@@ -691,7 +734,7 @@ describe("Embrace Native Tracer Provider", () => {
     });
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "exception",
       {
         "exception.message": "error",
@@ -708,7 +751,7 @@ describe("Embrace Native Tracer Provider", () => {
     span.recordException("error", new Date(Date.UTC(2024, 5, 15, 0, 0, 0)));
 
     expect(mockAddEvent).toHaveBeenCalledWith(
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "exception",
       {"exception.message": "error"},
       1718409600000,
@@ -723,7 +766,10 @@ describe("Embrace Native Tracer Provider", () => {
 
     span.end();
 
-    expect(mockEndSpan).toHaveBeenCalledWith("test_v1__1", 0);
+    expect(mockEndSpan).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      0,
+    );
     expect(span.isRecording()).toBe(false);
 
     // No update operations should go through after the span is ended
@@ -764,7 +810,10 @@ describe("Embrace Native Tracer Provider", () => {
     const span = tracer.startSpan("my-span");
     span.end([1600556800, 200000000]);
 
-    expect(mockEndSpan).toHaveBeenCalledWith("test_v1__1", 1600556800200);
+    expect(mockEndSpan).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      1600556800200,
+    );
   });
 
   it("should allow getting a tracer with a schemaUrl", async () => {
@@ -777,14 +826,14 @@ describe("Embrace Native Tracer Provider", () => {
     });
     expect(mockSetupTracer).toHaveBeenCalledWith("test", "v1", "s1");
 
-    tracer.startSpan("my-span");
+    const span = tracer.startSpan("my-span");
 
     // Schema URL should be included to uniquely identify tracer and spans
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "s1",
-      "test_v1_s1_1",
+      (span as EmbraceNativeSpan).nativeID(),
       "my-span",
       "",
       0,
@@ -801,19 +850,19 @@ describe("Embrace Native Tracer Provider", () => {
     parent.end();
     mockStartSpan.mockClear();
 
-    tracer.startSpan("my-child-span", {}, parentContext);
+    const child = tracer.startSpan("my-child-span", {}, parentContext);
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "",
-      "test_v1__2",
+      (child as EmbraceNativeSpan).nativeID(),
       "my-child-span",
       "",
       0,
       {},
       [],
-      "test_v1__1",
+      (parent as EmbraceNativeSpan).nativeID(),
     );
   });
 
@@ -831,13 +880,13 @@ describe("Embrace Native Tracer Provider", () => {
   it("should provide a convenience function for starting a span representing a view", async () => {
     const tracer = await getTestTracer({});
 
-    startView(tracer, "my-view");
+    const span = startView(tracer, "my-view");
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "",
-      "test_v1__1",
+      (span as EmbraceNativeSpan).nativeID(),
       "emb-screen-view",
       "",
       0,
@@ -848,6 +897,12 @@ describe("Embrace Native Tracer Provider", () => {
       [],
       "",
     );
+
+    span.end();
+    expect(mockEndSpan).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      0,
+    );
   });
 
   it("should provide a convenience function for ending a span as failed", async () => {
@@ -855,10 +910,16 @@ describe("Embrace Native Tracer Provider", () => {
     const span = tracer.startSpan("my-span");
     endAsFailed(span);
 
-    expect(mockSetStatus).toHaveBeenCalledWith("test_v1__1", {
-      code: "ERROR",
-    });
-    expect(mockEndSpan).toHaveBeenCalledWith("test_v1__1", 0);
+    expect(mockSetStatus).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      {
+        code: "ERROR",
+      },
+    );
+    expect(mockEndSpan).toHaveBeenCalledWith(
+      (span as EmbraceNativeSpan).nativeID(),
+      0,
+    );
   });
 
   it("should provide a convenience function for using a span as a parent", async () => {
@@ -867,19 +928,19 @@ describe("Embrace Native Tracer Provider", () => {
     const parentSpan = tracer.startSpan("the-parent");
     mockStartSpan.mockClear();
 
-    tracer.startSpan("the-child", {}, asParent(parentSpan));
+    const child = tracer.startSpan("the-child", {}, asParent(parentSpan));
 
     expect(mockStartSpan).toHaveBeenCalledWith(
       "test",
       "v1",
       "",
-      "test_v1__2",
+      (child as EmbraceNativeSpan).nativeID(),
       "the-child",
       "",
       0,
       {},
       [],
-      "test_v1__1",
+      (parentSpan as EmbraceNativeSpan).nativeID(),
     );
   });
 
@@ -912,7 +973,7 @@ describe("Embrace Native Tracer Provider", () => {
       "test",
       "v1",
       "",
-      "test_v1__2",
+      expect.any(String),
       "completed-span",
       "CONSUMER",
       1718409600000,
@@ -920,25 +981,26 @@ describe("Embrace Native Tracer Provider", () => {
         "my-attr-1": "hello",
       },
       [],
-      "test_v1__1",
+      (parentSpan as EmbraceNativeSpan).nativeID(),
     );
+    const spanNativeID = mockStartSpan.mock.lastCall[3];
     expect(mockAddEvent).toHaveBeenCalledTimes(2);
     expect(mockAddEvent).toHaveBeenCalledWith(
-      "test_v1__2",
+      spanNativeID,
       "completed-span-event-1",
       {"event-attr": "bar"},
       1718409600011,
     );
     expect(mockAddEvent).toHaveBeenCalledWith(
-      "test_v1__2",
+      spanNativeID,
       "completed-span-event-2",
       {},
       0,
     );
-    expect(mockSetStatus).toHaveBeenCalledWith("test_v1__2", {
+    expect(mockSetStatus).toHaveBeenCalledWith(spanNativeID, {
       code: "ERROR",
     });
-    expect(mockEndSpan).toHaveBeenCalledWith("test_v1__2", 1718409600099);
+    expect(mockEndSpan).toHaveBeenCalledWith(spanNativeID, 1718409600099);
   });
 
   it("should provide a convenience function for recording a completed span without options", async () => {
@@ -949,7 +1011,7 @@ describe("Embrace Native Tracer Provider", () => {
       "test",
       "v1",
       "",
-      "test_v1__1",
+      expect.any(String),
       "completed-span",
       "",
       0,
@@ -959,6 +1021,28 @@ describe("Embrace Native Tracer Provider", () => {
     );
     expect(mockAddEvent).not.toHaveBeenCalled();
     expect(mockSetStatus).not.toHaveBeenCalled();
-    expect(mockEndSpan).toHaveBeenCalledWith("test_v1__1", 0);
+    expect(mockEndSpan).toHaveBeenCalledWith(expect.any(String), 0);
+  });
+
+  it("should not collide on native span IDs when multiple tracer providers and tracers are instantiated", async () => {
+    const provider1 = new EmbraceNativeTracerProvider();
+    const tracer1 = provider1.getTracer("tracer", "v1");
+    const tracer2 = provider1.getTracer("tracer", "v1");
+    const provider2 = new EmbraceNativeTracerProvider();
+    const tracer3 = provider2.getTracer("tracer", "v1");
+    const tracer4 = provider2.getTracer("tracer", "v2");
+    const seenIDs = new Set();
+    [
+      tracer1.startSpan("span1-tracer-1"),
+      tracer1.startSpan("span2-tracer-1"),
+      tracer2.startSpan("span3-tracer-2"),
+      tracer3.startSpan("span4-tracer-3"),
+      tracer4.startSpan("span5-tracer-4"),
+      tracer4.startSpan("span6-tracer-4"),
+    ].forEach(span => {
+      const nativeID = (span as EmbraceNativeSpan).nativeID();
+      expect(seenIDs.has(nativeID)).toBe(false);
+      seenIDs.add(nativeID);
+    });
   });
 });
