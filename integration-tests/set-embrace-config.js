@@ -23,11 +23,11 @@
       "app_id": "abcdf",
       "api_token": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "sdk_config": {
+        "app_framework": "react_native",
         "base_urls": {
           "config": "http://10.0.2.2:8989",
           "data": "http://10.0.2.2:8989",
-          "data_dev": "http://10.0.2.2:8989",
-          "images": "http://10.0.2.2:8989"
+          "data_dev": "http://10.0.2.2:8989"
         },
         "view_config": {
           "enable_automatic_activity_capture": false
@@ -91,12 +91,12 @@
     interface AndroidConfig {
       app_id: string;
       api_token: string;
-      sdk_config?: {
+      sdk_config: {
+        app_framework: "react_native";
         base_urls?: {
           config: string;
           data: string;
           data_dev: string;
-          images: string;
         };
         view_config?: {
           enable_automatic_activity_capture: boolean;
@@ -112,6 +112,9 @@
   const androidConfig = {
     app_id: config.android_app_id,
     api_token: config.api_token,
+    sdk_config: {
+      app_framework: "react_native",
+    },
   };
 
   if (
@@ -120,8 +123,6 @@
     config.enable_network_span_forwarding ||
     config.disabled_url_patterns
   ) {
-    androidConfig.sdk_config = {};
-
     if (config.enable_network_span_forwarding || config.disabled_url_patterns) {
       androidConfig.sdk_config.networking = {};
 
@@ -146,7 +147,6 @@
         config: androidEndpoint,
         data: androidEndpoint,
         data_dev: androidEndpoint,
-        images: androidEndpoint,
       };
     }
 

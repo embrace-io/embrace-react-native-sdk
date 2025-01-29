@@ -143,6 +143,9 @@ export const embraceJSONContents = (params: {
 }) => {
   return `{
     "app_id": "${params.appID}",
-    "api_token": "${params.apiToken}"
+    "api_token": "${params.apiToken}",
+    "sdk_config": {
+        "app_framework": "react_native"
+    }
 }`;
 };

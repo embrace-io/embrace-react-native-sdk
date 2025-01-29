@@ -177,11 +177,7 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
             }
 
             // 2) Embrace Start
-            Embrace.getInstance().start(
-                this.context.getApplicationContext(),
-                false,
-                Embrace.AppFramework.REACT_NATIVE
-            )
+            Embrace.getInstance().start(this.context.getApplicationContext())
 
             promise.resolve(true)
         } catch (e: Exception) {

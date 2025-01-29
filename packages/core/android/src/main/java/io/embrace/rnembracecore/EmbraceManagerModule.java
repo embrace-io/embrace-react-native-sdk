@@ -6,21 +6,17 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableArray;
 
 import com.facebook.react.bridge.Promise;
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
 
-import io.embrace.android.embracesdk.internal.network.http.InternalNetworkApiImpl;
-import io.embrace.android.embracesdk.spans.ErrorCode;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.Nonnull;
 
 import io.embrace.android.embracesdk.Embrace;
+import io.embrace.android.embracesdk.internal.EmbraceInternalApi;
+import io.embrace.android.embracesdk.internal.network.http.InternalNetworkApiImpl;
 import io.embrace.android.embracesdk.Severity;
 import io.embrace.android.embracesdk.network.EmbraceNetworkRequest;
 import io.embrace.android.embracesdk.network.http.HttpMethod;
@@ -54,7 +50,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     public void startNativeEmbraceSDK(ReadableMap config, Promise promise) {
         // config for now is only used to setup the iOS SDK, the Android SDK reads its config from a file
         try {
-            Embrace.getInstance().start(this.context.getApplicationContext(), false, Embrace.AppFramework.REACT_NATIVE);
+            Embrace.getInstance().start(this.context.getApplicationContext());
             promise.resolve(true);
         } catch(Exception e) {
             promise.resolve(false);
@@ -216,7 +212,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void logUnhandledJSException(String name, String message, String type, String stacktrace, Promise promise) {
         try {
-            Embrace.getInstance().getReactNativeInternalInterface().logUnhandledJsException(name, message, type, stacktrace);
+            EmbraceInternalApi.getInstance().getReactNativeInternalInterface().logUnhandledJsException(name, message, type, stacktrace);
             promise.resolve(true);
         } catch(Exception e) {
             promise.resolve(false);
@@ -226,7 +222,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setJavaScriptPatchNumber(String number, Promise promise) {
         try {
-            Embrace.getInstance().getReactNativeInternalInterface().setJavaScriptPatchNumber(number);
+            EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setJavaScriptPatchNumber(number);
             promise.resolve(true);
         } catch(Exception e) {
             promise.resolve(false);
@@ -236,7 +232,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setReactNativeSDKVersion(String number, Promise promise) {
         try {
-            Embrace.getInstance().getReactNativeInternalInterface().setReactNativeSdkVersion(number);
+            EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setReactNativeSdkVersion(number);
             promise.resolve(true);
         } catch (Exception e) {
             promise.resolve(false);
@@ -246,7 +242,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setReactNativeVersion(String version, Promise promise) {
         try {
-            Embrace.getInstance().getReactNativeInternalInterface().setReactNativeVersionNumber(version);
+            EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setReactNativeVersionNumber(version);
             promise.resolve(true);
         } catch(Exception e) {
             promise.resolve(false);
@@ -256,7 +252,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setJavaScriptBundlePath(String path, Promise promise) {
         try {
-            Embrace.getInstance().getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,path);
+            EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,path);
             promise.resolve(true);
         } catch(Exception e) {
             promise.resolve(false);
@@ -333,10 +329,9 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         long st = startInMillis.longValue();
         long et = endInMillis.longValue();
 
-        Integer method = parseMethodFromString(httpMethod);
-
-        if (method == null) {
-            Log.e("Embrace", "Failed to log network requests. Unexpected or null http method.");
+        HttpMethod parsedMethod = parseMethodFromString(httpMethod);
+        if (parsedMethod == null) {
+            Log.e("Embrace", "Failed to log network requests. Unexpected http method: " + httpMethod);
             promise.resolve(false);
             return;
         }
@@ -344,7 +339,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         try {
             Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromCompletedRequest(
                     url,
-                    HttpMethod.fromInt(method),
+                    parsedMethod,
                     st,
                     et,
                     bytesSent.intValue(),
@@ -371,10 +366,9 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         long st = startInMillis.longValue();
         long et = endInMillis.longValue();
 
-        boolean isHTTPMethodValid = validateHTTPMethod(httpMethod);
-
-        if (!isHTTPMethodValid) {
-            Log.e("Embrace", "Failed to log network requests. Unexpected or null http method.");
+        HttpMethod parsedMethod = parseMethodFromString(httpMethod);
+        if (parsedMethod == null) {
+            Log.e("Embrace", "Failed to log network requests. Unexpected http method: " + httpMethod);
             promise.resolve(false);
             return;
         }
@@ -382,7 +376,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         try {
             Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromIncompleteRequest(
                     url,
-                    HttpMethod.fromString(httpMethod.toUpperCase()),
+                    parsedMethod,
                     st,
                     et,
                     errorType,
@@ -406,36 +400,11 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         return Embrace.getInstance().generateW3cTraceparent();
     }
 
-    private boolean validateHTTPMethod(String httpMethod) {
-        return parseMethodFromString(httpMethod) != null;
-    }
-
-    private Integer parseMethodFromString(String httpMethod) {
-        if (httpMethod == null) {
+    private HttpMethod parseMethodFromString(String httpMethod) {
+        try {
+            return HttpMethod.fromString(httpMethod);
+        } catch(Exception e) {
             return null;
-        }
-
-        switch (httpMethod.toUpperCase()) {
-            case "GET":
-                return 1;
-            case "HEAD":
-                return 2;
-            case "POST":
-                return 3;
-            case "PUT":
-                return 4;
-            case "DELETE":
-                return 5;
-            case "CONNECT":
-                return 6;
-            case "OPTIONS":
-                return 7;
-            case "TRACE":
-                return 8;
-            case "PATCH":
-                return 9;
-            default:
-                return null;
         }
     }
 }

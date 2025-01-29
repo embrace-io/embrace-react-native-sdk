@@ -2,6 +2,7 @@
   "app_id": "abcdf",
   "api_token": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "sdk_config": {
+    "app_framework": "react_native",
     "networking": {
       "enable_network_span_forwarding": true,
       "disabled_url_patterns": ["grafana.net"]
@@ -9,8 +10,7 @@
     "base_urls": {
       "config": "http://10.0.2.2:8877",
       "data": "http://10.0.2.2:8877",
-      "data_dev": "http://10.0.2.2:8877",
-      "images": "http://10.0.2.2:8877"
+      "data_dev": "http://10.0.2.2:8877"
     },
     "view_config": {
       "enable_automatic_activity_capture": false

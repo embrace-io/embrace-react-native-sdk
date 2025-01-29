@@ -153,7 +153,7 @@ let GRAFANA_LOGS_ENDPOINT = "https://otlp-gateway-prod-us-central-0.grafana.net/
 Similar to iOS, if you already ran the install script you will see the following line already in place in your `MainApplication` file:
 
 ```
-Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE)
+Embrace.getInstance().start(this)
 ```
 
 Tweak the `onCreate` method using this following this snippet to initialize the exporters with the minimum configuration needed. Notice that you already have all of what you need, so no extra imports are required into this file.
@@ -173,7 +173,7 @@ Embrace.getInstance().addSpanExporter(spanExporter.build())
 Embrace.getInstance().addLogRecordExporter(logExporter.build())
 
 // This is the line already added by the install script
-Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE)
+Embrace.getInstance().start(this)
 ```
 
 

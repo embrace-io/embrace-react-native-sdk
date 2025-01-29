@@ -128,7 +128,7 @@ function enforceEmbraceMetadata({Yarn}) {
 
     workspace.set("embrace", {
       iosVersion: "6.7.0",
-      androidVersion: "6.14.0",
+      androidVersion: "7.0.0",
     });
   }
 }
