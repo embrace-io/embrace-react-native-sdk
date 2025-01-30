@@ -39,7 +39,7 @@ describe("useEmbraceIsStarted", () => {
 
   it("should handle getting an error when checking if the Native SDK is started", async () => {
     mockIsStarted.mockRejectedValue("some error");
-    const {result} = renderHook(() => useEmbraceIsStarted());
+    const {result} = renderHook(useEmbraceIsStarted);
 
     expect(result.current.isChecking).toBe(true);
     await waitFor(() => {
