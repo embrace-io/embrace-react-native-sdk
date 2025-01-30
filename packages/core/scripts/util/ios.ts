@@ -15,8 +15,10 @@ export const embraceNativePod = `pod 'EmbraceIO'`;
 
 export const bundlePhaseRE = /react-native-xcode\.sh/;
 
+export const makeSourcemapDirectory =
+  'mkdir -p "$CONFIGURATION_BUILD_DIR/embrace-assets"';
 export const exportSourcemapRNVariable =
-  'export SOURCEMAP_FILE="$CONFIGURATION_BUILD_DIR/main.jsbundle.map";';
+  'export SOURCEMAP_FILE="$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map";';
 
 export const EMBRACE_IMPORT_OBJECTIVEC = ({
   bridgingHeader,
