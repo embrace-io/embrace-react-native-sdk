@@ -55,7 +55,7 @@ class RNEmbraceOTLPTest {
     }
 
     private fun otlpStart(config: WritableMap) {
-        val context: ReactApplicationContext = mock() {
+        val context: ReactApplicationContext = mock {
             on { applicationContext } doReturn mock<Context>()
         }
         val embraceOTLPModule = RNEmbraceOTLPModule(context)
@@ -102,7 +102,7 @@ class RNEmbraceOTLPTest {
         otlpConfig.putMap("traceExporter", traceExporter)
         otlpConfig.putMap("logExporter", logExporter)
 
-        otlpStart(otlpConfig);
+        otlpStart(otlpConfig)
 
         // embrace starts without issues
         verify(promise, times(1)).resolve(true)
@@ -110,7 +110,7 @@ class RNEmbraceOTLPTest {
 
     @Test
     fun testStartWithMissingExporters() {
-        otlpStart(JavaOnlyMap());
+        otlpStart(JavaOnlyMap())
 
         val logs = logHandler.records.map { it.message }
         assertEquals(listOf("Neither Traces nor Logs configuration were found, skipping custom export."), logs)
@@ -144,7 +144,7 @@ class RNEmbraceOTLPTest {
 
         otlpConfig.putMap("traceExporter", traceExporter)
 
-        otlpStart(otlpConfig);
+        otlpStart(otlpConfig)
 
         // embrace starts without issues if only trace export config is found
         verify(promise, times(1)).resolve(true)
@@ -175,7 +175,7 @@ class RNEmbraceOTLPTest {
 
         otlpConfig.putMap("logExporter", logExporter)
 
-        otlpStart(otlpConfig);
+        otlpStart(otlpConfig)
 
         // embrace starts without issues if only log export config is found
         verify(promise, times(1)).resolve(true)
@@ -206,7 +206,7 @@ class RNEmbraceOTLPTest {
 
         otlpConfig.putMap("logExporter", logExporter)
 
-        otlpStart(otlpConfig);
+        otlpStart(otlpConfig)
         val logs = logHandler.records.map { it.message }
         assertEquals(listOf("Skipping invalid header. `key` and/or `token` are null or blank."), logs)
 
