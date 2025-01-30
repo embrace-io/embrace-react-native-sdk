@@ -11,10 +11,10 @@ def embraceInternal = "io.embrace:embrace-internal-api:$packageJson.embrace.andr
 
 // covering custom dependencies specific to Embrace and OpenTelemetry
 dependencies {
-    // if it is an app use `implementation` otherwise use the `api` annotation
+    // if it is an app use `compileOnly` otherwise use the `api` annotation
     if (plugins.hasPlugin('com.android.application')) {
-        implementation embrace
-        implementation embraceInternal
+        compileOnly embrace
+        compileOnly embraceInternal
     } else if (plugins.hasPlugin('com.android.library')) {
         api embrace
         api embraceInternal

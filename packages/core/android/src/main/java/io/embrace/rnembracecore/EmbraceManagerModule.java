@@ -16,14 +16,12 @@ import javax.annotation.Nonnull;
 
 import io.embrace.android.embracesdk.Embrace;
 import io.embrace.android.embracesdk.internal.EmbraceInternalApi;
-import io.embrace.android.embracesdk.internal.network.http.InternalNetworkApiImpl;
 import io.embrace.android.embracesdk.Severity;
 import io.embrace.android.embracesdk.network.EmbraceNetworkRequest;
 import io.embrace.android.embracesdk.network.http.HttpMethod;
 
 public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     private final ReactApplicationContext context;
-    private final InternalNetworkApiImpl embraceNetworkApi = new InternalNetworkApiImpl();
 
     public EmbraceManagerModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -393,7 +391,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     public boolean isNetworkSpanForwardingEnabled() {
-        return embraceNetworkApi.isNetworkSpanForwardingEnabled();
+        return EmbraceInternalApi.getInstance().getReactNativeInternalInterface().isNetworkSpanForwardingEnabled();
     }
 
     public String generateW3cTraceparent() {

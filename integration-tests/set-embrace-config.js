@@ -26,8 +26,7 @@
         "app_framework": "react_native",
         "base_urls": {
           "config": "http://10.0.2.2:8989",
-          "data": "http://10.0.2.2:8989",
-          "data_dev": "http://10.0.2.2:8989"
+          "data": "http://10.0.2.2:8989"
         },
         "view_config": {
           "enable_automatic_activity_capture": false
@@ -96,7 +95,6 @@
         base_urls?: {
           config: string;
           data: string;
-          data_dev: string;
         };
         view_config?: {
           enable_automatic_activity_capture: boolean;
@@ -146,7 +144,6 @@
       androidConfig.sdk_config.base_urls = {
         config: androidEndpoint,
         data: androidEndpoint,
-        data_dev: androidEndpoint,
       };
     }
 

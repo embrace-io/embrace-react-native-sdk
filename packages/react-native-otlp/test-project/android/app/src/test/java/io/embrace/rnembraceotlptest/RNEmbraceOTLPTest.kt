@@ -1,5 +1,6 @@
 package io.embrace.rnembraceotlptest
 
+import android.content.Context
 import android.os.SystemClock
 import com.facebook.react.bridge.JavaOnlyArray
 import com.facebook.react.bridge.JavaOnlyMap
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mockStatic
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -52,10 +54,17 @@ class RNEmbraceOTLPTest {
         log.useParentHandlers = false
     }
 
+    private fun otlpStart(config: WritableMap) {
+        val context: ReactApplicationContext = mock() {
+            on { applicationContext } doReturn mock<Context>()
+        }
+        val embraceOTLPModule = RNEmbraceOTLPModule(context)
+
+        embraceOTLPModule.startNativeEmbraceSDK(JavaOnlyMap(), config, promise)
+    }
+
     @Test
     fun testStartNativeEmbraceSDK() {
-        val context: ReactApplicationContext = mock()
-        val embraceOTLPModule = RNEmbraceOTLPModule(context)
         val otlpConfig: WritableMap = JavaOnlyMap()
 
         val traceExporter: WritableMap = JavaOnlyMap().apply {
@@ -93,7 +102,7 @@ class RNEmbraceOTLPTest {
         otlpConfig.putMap("traceExporter", traceExporter)
         otlpConfig.putMap("logExporter", logExporter)
 
-        embraceOTLPModule.startNativeEmbraceSDK(JavaOnlyMap(), otlpConfig, promise)
+        otlpStart(otlpConfig);
 
         // embrace starts without issues
         verify(promise, times(1)).resolve(true)
@@ -101,10 +110,7 @@ class RNEmbraceOTLPTest {
 
     @Test
     fun testStartWithMissingExporters() {
-        val context: ReactApplicationContext = mock()
-        val embraceOTLPModule = RNEmbraceOTLPModule(context)
-
-        embraceOTLPModule.startNativeEmbraceSDK(JavaOnlyMap(), JavaOnlyMap(), promise)
+        otlpStart(JavaOnlyMap());
 
         val logs = logHandler.records.map { it.message }
         assertEquals(listOf("Neither Traces nor Logs configuration were found, skipping custom export."), logs)
@@ -115,8 +121,6 @@ class RNEmbraceOTLPTest {
 
     @Test
     fun testStartWithTraceExporterOnly() {
-        val context: ReactApplicationContext = mock()
-        val embraceOTLPModule = RNEmbraceOTLPModule(context)
         val otlpConfig: WritableMap = JavaOnlyMap()
 
         val traceExporter: WritableMap = JavaOnlyMap().apply {
@@ -140,7 +144,7 @@ class RNEmbraceOTLPTest {
 
         otlpConfig.putMap("traceExporter", traceExporter)
 
-        embraceOTLPModule.startNativeEmbraceSDK(JavaOnlyMap(), otlpConfig, promise)
+        otlpStart(otlpConfig);
 
         // embrace starts without issues if only trace export config is found
         verify(promise, times(1)).resolve(true)
@@ -148,8 +152,6 @@ class RNEmbraceOTLPTest {
 
     @Test
     fun testStartWithLogExporterOnly() {
-        val context: ReactApplicationContext = mock()
-        val embraceOTLPModule = RNEmbraceOTLPModule(context)
         val otlpConfig: WritableMap = JavaOnlyMap()
 
         val logExporter: WritableMap = JavaOnlyMap().apply {
@@ -173,7 +175,7 @@ class RNEmbraceOTLPTest {
 
         otlpConfig.putMap("logExporter", logExporter)
 
-        embraceOTLPModule.startNativeEmbraceSDK(JavaOnlyMap(), otlpConfig, promise)
+        otlpStart(otlpConfig);
 
         // embrace starts without issues if only log export config is found
         verify(promise, times(1)).resolve(true)
@@ -181,8 +183,6 @@ class RNEmbraceOTLPTest {
 
     @Test
     fun testInvalidHeader() {
-        val context: ReactApplicationContext = mock()
-        val embraceOTLPModule = RNEmbraceOTLPModule(context)
         val otlpConfig: WritableMap = JavaOnlyMap()
 
         val logExporter: WritableMap = JavaOnlyMap().apply {
@@ -206,9 +206,8 @@ class RNEmbraceOTLPTest {
 
         otlpConfig.putMap("logExporter", logExporter)
 
-        embraceOTLPModule.startNativeEmbraceSDK(JavaOnlyMap(), otlpConfig, promise)
+        otlpStart(otlpConfig);
         val logs = logHandler.records.map { it.message }
-        print(logs)
         assertEquals(listOf("Skipping invalid header. `key` and/or `token` are null or blank."), logs)
 
         // embrace starts without issues if only log export config is found
