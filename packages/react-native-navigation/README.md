@@ -265,7 +265,7 @@ export default App
 
 ### Android
 
-Go to your `embrace-config.json` inside `android/app/src/main` and add the `sdk_config` key.
+Go to your `embrace-config.json` inside `android/app/src/main` and edit the `sdk_config` key.
 With these changes your file should at least look like the following:
 
 ```json
@@ -273,6 +273,7 @@ With these changes your file should at least look like the following:
   "app_id": "APP_ID",
   "api_token": "API_TOKEN",
   "sdk_config": {
+    "app_framework": "react_native",
     "view_config": {
       "enable_automatic_activity_capture": false // disabling automatic capture
     }

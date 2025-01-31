@@ -92,7 +92,7 @@ class RNEmbraceCoreTest {
             embraceInstance = Embrace.getInstance()
             embraceInstance.addSpanExporter(spanExporter)
             embraceInstance.addLogRecordExporter(logExporter)
-            embraceInstance.start(mockApplication, Embrace.AppFramework.REACT_NATIVE)
+            embraceInstance.start(mockApplication)
             assertTrue(Embrace.getInstance().isStarted)
             return
         }

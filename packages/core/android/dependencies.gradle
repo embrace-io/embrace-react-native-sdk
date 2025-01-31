@@ -7,13 +7,16 @@ def packageJsonFile = file("$packageJsonPath/package.json")
 def packageJson = json.parse(packageJsonFile)
 
 def embrace = "io.embrace:embrace-android-sdk:$packageJson.embrace.androidVersion"
+def embraceInternal = "io.embrace:embrace-internal-api:$packageJson.embrace.androidVersion"
 
 // covering custom dependencies specific to Embrace and OpenTelemetry
 dependencies {
     // if it is an app use `implementation` otherwise use the `api` annotation
     if (plugins.hasPlugin('com.android.application')) {
         implementation embrace
+        implementation embraceInternal
     } else if (plugins.hasPlugin('com.android.library')) {
         api embrace
+        api embraceInternal
     }
 }

@@ -28,14 +28,12 @@ export const EMBRACE_INIT_SWIFT = "EmbraceInitializer.start()";
 export const EMBRACE_IMPORT_JAVA =
   "import io.embrace.android.embracesdk.Embrace;";
 
-export const EMBRACE_INIT_JAVA =
-  "Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE);";
+export const EMBRACE_INIT_JAVA = "Embrace.getInstance().start(this);";
 
 export const EMBRACE_IMPORT_KOTLIN =
   "import io.embrace.android.embracesdk.Embrace";
 
-export const EMBRACE_INIT_KOTLIN =
-  "Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE)";
+export const EMBRACE_INIT_KOTLIN = "Embrace.getInstance().start(this)";
 
 const logger = new EmbraceLogger(console);
 
