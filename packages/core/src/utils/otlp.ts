@@ -37,8 +37,8 @@ const oltpGetStart = (
     // this.package = require("@embrace-io/react-native-otlp");
 
     // Metro introduced `require.context` support by default in https://github.com/facebook/metro/releases/tag/v0.76.3
-    // and it's available since https://github.com/facebook/metro/releases/tag/v0.72.0 without requiring extra configuration
-    // old Metro versions (prior to v0.72.0) need `transformer.unstable_allowRequireContext` flag to be enabled to not throw when using `require.context`
+    // React Native applications need `transformer.unstable_allowRequireContext` flag to be enabled to not throw when using `require.context`
+    // Expo apps already have this flag enabled by default (https://github.com/expo/expo/blob/main/packages/%40expo/metro-config/build/ExpoMetroConfig.js#L299)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     const context = require.context(RN_EMBRACE_OTLP_PATH, false, /index\.js$/);
@@ -49,10 +49,11 @@ const oltpGetStart = (
       // init RNEmbraceOTLP (if available)
       otlpPackage = context(filename);
     });
-  } catch {
+  } catch (e) {
     logger.error(
       "an error ocurred when checking if `@embrace-io/react-native-otlp` was installed",
     );
+    logger.error(String(e));
   }
 
   if (otlpPackage?.initialize) {
