@@ -307,8 +307,9 @@ describe("SDK initialization", () => {
         expect(mockConsoleInfo).not.toHaveBeenCalledWith(
           "[Embrace] 'sdkConfig.ios.appId' not found, only custom exporters will be used",
         );
-        expect(mockConsoleError).toHaveBeenNthCalledWith(
-          1,
+        // embrace manual error + metro exception
+        expect(mockConsoleError).toHaveBeenCalledTimes(2);
+        expect(mockConsoleError).toHaveBeenCalledWith(
           "[Embrace] an error ocurred when checking if `@embrace-io/react-native-otlp` was installed",
         );
         expect(isStarted).toBe(true);
