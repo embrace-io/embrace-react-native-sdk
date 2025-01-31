@@ -6,6 +6,7 @@ import {
   exportSourcemapRNVariable,
   findNameWithCaseSensitiveFromPath,
   getPodFile,
+  makeSourcemapDirectory,
   xcodePatchable,
 } from "../util/ios";
 import {FileUpdatable} from "../util/file";
@@ -226,7 +227,7 @@ export const removeEmbraceFromXcode = () => {
         project.findAndRemovePhase("Upload Debug Symbols to Embrace");
         project.modifyPhase(
           bundlePhaseKey,
-          `${exportSourcemapRNVariable}\n`,
+          `${makeSourcemapDirectory}\n${exportSourcemapRNVariable}\n`,
           "",
         );
         project.findAndRemovePhase("/EmbraceIO/run.sh");
