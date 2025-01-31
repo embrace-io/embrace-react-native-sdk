@@ -19,10 +19,9 @@ describe("useEmbraceIsStarted", () => {
     mockIsStarted.mockResolvedValue(true);
     const {result} = renderHook(useEmbraceIsStarted);
 
-    expect(result.current.isChecking).toBe(true);
+    expect(result.current).toBe(null);
     await waitFor(() => {
-      expect(result.current.isChecking).toBe(false);
-      expect(result.current.isStarted).toBe(true);
+      expect(result.current).toBe(true);
     });
   });
 
@@ -30,10 +29,9 @@ describe("useEmbraceIsStarted", () => {
     mockIsStarted.mockResolvedValue(false);
     const {result} = renderHook(useEmbraceIsStarted);
 
-    expect(result.current.isChecking).toBe(true);
+    expect(result.current).toBe(null);
     await waitFor(() => {
-      expect(result.current.isChecking).toBe(false);
-      expect(result.current.isStarted).toBe(false);
+      expect(result.current).toBe(false);
     });
   });
 
@@ -41,10 +39,9 @@ describe("useEmbraceIsStarted", () => {
     mockIsStarted.mockRejectedValue("some error");
     const {result} = renderHook(useEmbraceIsStarted);
 
-    expect(result.current.isChecking).toBe(true);
+    expect(result.current).toBe(null);
     await waitFor(() => {
-      expect(result.current.isChecking).toBe(false);
-      expect(result.current.isStarted).toBe(false);
+      expect(result.current).toBe(false);
     });
   });
 });

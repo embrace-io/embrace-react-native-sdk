@@ -25,23 +25,25 @@ const EmbraceTestHarness = ({
   if (!allowCustomExport) {
     sdkConfig.exporters = undefined;
   }
-  const {isChecking: isCheckingStarted, isStarted: alreadyStarted} =
-    useEmbraceIsStarted();
+  const alreadyStarted = useEmbraceIsStarted();
   const {isPending, isStarted} = useEmbrace(sdkConfig);
 
   useEffect(() => {
-    if (!isCheckingStarted) {
-      if (alreadyStarted) {
-        console.log(
-          "Embrace SDK has already been started, sdkConfig won't have an effect",
-        );
-      } else {
-        console.log(
-          `Embrace SDK will be started using the following config: ${JSON.stringify(sdkConfig, null, 2)}`,
-        );
-      }
+    if (alreadyStarted === null) {
+      // still checking
+      return;
     }
-  }, [isCheckingStarted, alreadyStarted]);
+
+    if (alreadyStarted) {
+      console.log(
+        "Embrace SDK has already been started, sdkConfig won't have an effect",
+      );
+    } else {
+      console.log(
+        `Embrace SDK will be started using the following config: ${JSON.stringify(sdkConfig, null, 2)}`,
+      );
+    }
+  }, [alreadyStarted]);
 
   // initializing orientation listener
   useOrientationListener(isStarted);
