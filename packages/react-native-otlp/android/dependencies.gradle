@@ -11,10 +11,10 @@ def opentelemetry = "io.opentelemetry:opentelemetry-exporter-otlp:1.43.0"
 
 // covering custom dependencies specific to Embrace and OpenTelemetry
 dependencies {
-  // if it is an app use `compileOnly` otherwise use the `api` annotation
+  // if it is an app use `implementation` otherwise use the `api` annotation
   if (plugins.hasPlugin('com.android.application')) {
-    compileOnly embrace
-    compileOnly opentelemetry
+    implementation embrace
+    implementation opentelemetry
   } else if (plugins.hasPlugin('com.android.library')) {
     api embrace
     api opentelemetry
