@@ -1,5 +1,3 @@
-import {afterEach} from "node:test";
-
 import {renderHook, waitFor} from "@testing-library/react-native";
 
 import {oltpGetStart} from "../utils/otlp";
@@ -42,11 +40,11 @@ jest.mock("../EmbraceManagerModule", () => ({
 const mockConsoleLog = jest.spyOn(console, "log").mockImplementation(m => m);
 const mockConsoleWarn = jest.spyOn(console, "warn").mockImplementation(m => m);
 
-afterEach(() => {
-  jest.clearAllMocks();
-});
-
 describe("useEmbrace", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("should start the Embrace React Native SDK", async () => {
     const {result, rerender} = renderHook(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
