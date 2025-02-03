@@ -148,7 +148,7 @@ let GRAFANA_LOGS_ENDPOINT = "https://otlp-gateway-prod-us-central-0.grafana.net/
 }
 ```
 
-## Android
+### Android
 
 Similar to iOS, if you already ran the install script you will see the following line already in place in your `MainApplication` file:
 
@@ -156,7 +156,16 @@ Similar to iOS, if you already ran the install script you will see the following
 Embrace.getInstance().start(this)
 ```
 
-Tweak the `onCreate` method using this following this snippet to initialize the exporters with the minimum configuration needed. Notice that you already have all of what you need, so no extra imports are required into this file.
+Tweak the `onCreate` method using the following snippet to initialize the exporters with the minimum configuration needed.
+
+Add the following imports:
+
+```kotlin
+import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
+import io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter
+```
+
+And then the following in the OnCreate method:
 
 ```kotlin
 // Preparing Span Exporter config with the minimum required
@@ -176,6 +185,83 @@ Embrace.getInstance().addLogRecordExporter(logExporter.build())
 Embrace.getInstance().start(this)
 ```
 
+## Disable tracing for the OTLP export network requests
+
+Embrace automatically creates spans for network requests, however because the OTLP export itself makes a network request
+this can produce a cycle where the export's network request creates a span which is then exported and then creates another
+span, etc.
+
+To avoid this you can configure the endpoint to which you are exporting to be ignored on both Android and iOS.
+
+### Android
+
+Edit `android/app/src/main/embrace-config.json` in your app and add the `disabled_url_patterns` key. In the above example
+if you were exporting to Grafana your config would look like:
+
+```json
+{
+  "app_id": "xxxxx",
+  "api_token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "sdk_config": {
+    "app_framework": "react_native",
+    "networking": {
+      "enable_network_span_forwarding": true,
+      "disabled_url_patterns": [
+        "grafana.net"
+      ]
+    }
+  }
+}
+```
+
+### iOS
+
+When initializing in the JS layer you can simply include the `disabledUrlPatterns` key, in the above example if you were
+exporting to Grafana you would add the following in the `SDK_CONFIG`: 
+
+```json
+"disabledUrlPatterns": [
+    "grafana.net"
+]
+```
+
+When initializing in Swift more configuration is required when setting up Embrace. First add the following import to
+`EmbraceInitializer.swift`:
+
+```swift
+import EmbraceCrash
+```
+
+Then setup a custom `URLSessionCaptureService` that ignores the Grafana export:
+
+```swift
+let servicesBuilder = CaptureServiceBuilder()
+let urlSessionServiceOptions = URLSessionCaptureService.Options(
+  injectTracingHeader: true,
+  requestsDataSource: nil,
+  ignoredURLs: ["grafana.net"]
+)
+// manually adding the URLSessionCaptureService
+servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
+// adding defaults
+servicesBuilder.addDefaults()
+```
+
+Finally pass the additional configuration when starting the SDK:
+
+```swift
+try Embrace
+    .setup(
+        options: Embrace.Options(
+          appId: "__YOUR APP ID__",
+          platform: .reactNative,
+          captureServices: servicesBuilder.build(),
+          crashReporter: EmbraceCrashReporter(),
+          export: OpenTelemetryExport(spanExporter: traceExporter, logExporter: logExporter) // passing the configuration into `export`
+        )
+    )
+    .start()
+```
 
 ## Troubleshooting
 
