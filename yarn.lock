@@ -12351,8 +12351,8 @@ __metadata:
   linkType: hard
 
 "react-native-navigation@npm:^7.40.3":
-  version: 7.40.3
-  resolution: "react-native-navigation@npm:7.40.3"
+  version: 7.41.0
+  resolution: "react-native-navigation@npm:7.41.0"
   dependencies:
     hoist-non-react-statics: "npm:3.x.x"
     lodash: "npm:4.17.x"
@@ -12368,7 +12368,7 @@ __metadata:
       optional: true
   bin:
     rnn-link: autolink/postlink/run.js
-  checksum: 10c0/e15b0b345edc3a0fd2349f58e4000b953e797021d4b8751bc7a4e078faadeb63172302dfafc44fa29a55666cd60914fa07b0509dc6b0af16debf4bafb9d2c4e8
+  checksum: 10c0/9aab017213146c675f2eed589206a4fd1eda1d9e063b4fdafd9a4be3d608220164c2fe9771caa56eefb78c51bdebc343f6c022f330d651002dbc6075639610d7
   languageName: node
   linkType: hard
 
