@@ -97,3 +97,5 @@ nx.json
 
 # Yarn
 .yarn
+
+.env
