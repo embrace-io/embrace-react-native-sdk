@@ -55,5 +55,8 @@
     "react-test-renderer": "^19.0.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.36.0"
   }
 }
