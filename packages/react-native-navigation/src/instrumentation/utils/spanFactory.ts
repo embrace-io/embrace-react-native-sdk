@@ -4,6 +4,7 @@ import {Attributes} from "@opentelemetry/api";
 
 import {TracerRef} from "./hooks/useTracerRef";
 import {SpanRef} from "./hooks/useSpanRef";
+import {ConsoleStub} from "./hooks/useConsole";
 
 const ATTRIBUTES = {
   initialView: "view.launch",
@@ -63,11 +64,13 @@ const spanCreator =
     tracer: TracerRef,
     span: SpanRef,
     view: MutableRefObject<string | null>,
+    console: Console | ConsoleStub,
     customAttributes?: Attributes,
   ) =>
   (currentRouteName: string) => {
     if (!tracer.current) {
       // do nothing in case for some reason the tracer is not initialized
+      console.log("[Embrace] no tracer available, not creating a span");
       return;
     }
 
@@ -78,9 +81,11 @@ const spanCreator =
 
     // it means the view has changed and we are ending the previous span
     if (shouldEndCurrentSpan) {
+      console.log("[Embrace] ending the current view span");
       spanEnd(span);
     }
 
+    console.log(`[Embrace] starting a span for ${currentRouteName}`);
     spanStart(tracer, span, currentRouteName, customAttributes, isInitialView);
 
     // last step before it changes the view
@@ -95,8 +100,12 @@ const spanCreatorAppState =
     }
 
     if (currentState === "active") {
+      console.log(
+        `[Embrace] moving into the foreground and starting span for ${currentRouteName}`,
+      );
       spanStart(tracer, span, currentRouteName, customAttributes);
     } else {
+      console.log("[Embrace] moving into the background");
       spanEnd(span, currentState);
     }
   };

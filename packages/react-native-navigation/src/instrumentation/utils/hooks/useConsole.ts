@@ -31,3 +31,4 @@ const useConsole = (debug: boolean) =>
   }, [debug]);
 
 export default useConsole;
+export type ConsoleStub = typeof consoleStub;
