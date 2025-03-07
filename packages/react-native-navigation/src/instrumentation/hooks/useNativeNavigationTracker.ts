@@ -30,7 +30,7 @@ const useNativeNavigationTracker = (
    * Navigation Span Factory
    */
   const initNativeNavigationSpan = useMemo(
-    () => spanCreator(tracer, span, view, customAttributes),
+    () => spanCreator(tracer, span, view, console.current, customAttributes),
     [customAttributes, span, tracer],
   );
 
@@ -41,7 +41,7 @@ const useNativeNavigationTracker = (
   useEffect(() => {
     if (!navigationElRef) {
       console.current.warn(
-        "Navigation ref is not available. Make sure this is properly configured.",
+        "[Embrace] Navigation ref is not available. Make sure this is properly configured.",
       );
 
       // do nothing in case for some reason there is no navigationElRef
@@ -51,7 +51,7 @@ const useNativeNavigationTracker = (
     navigationElRef.registerComponentDidAppearListener(({componentName}) => {
       if (!componentName) {
         console.current.warn(
-          "Navigation component name is not available. Make sure this is properly configured.",
+          "[Embrace] Navigation component name is not available. Make sure this is properly configured.",
         );
 
         // do nothing in case for some reason there is no route
@@ -64,7 +64,7 @@ const useNativeNavigationTracker = (
     navigationElRef.registerComponentDidDisappearListener(({componentName}) => {
       if (!componentName) {
         console.current.warn(
-          "Navigation component name is not available. Make sure this is properly configured.",
+          "[Embrace] Navigation component name is not available. Make sure this is properly configured.",
         );
 
         // do nothing in case for some reason there is no route
