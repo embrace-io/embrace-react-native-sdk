@@ -25,19 +25,16 @@ const spanStart = (
     return;
   }
 
-  // Starting the span
-  span.current = tracer.current.startSpan(currentRouteName);
-
-  span.current.setAttributes({
+  const attributes = {
     // it should create the first span knowing there is not a previous view
     [ATTRIBUTES.initialView]: !!isLaunch,
     // it should set the view name in case it's useful to have this as an attr
     [ATTRIBUTES.viewName]: currentRouteName,
-  });
+    ...customAttributes,
+  };
 
-  if (customAttributes) {
-    span.current.setAttributes(customAttributes);
-  }
+  // Starting the span
+  span.current = tracer.current.startSpan(currentRouteName, {attributes});
 };
 
 const spanEnd = (
