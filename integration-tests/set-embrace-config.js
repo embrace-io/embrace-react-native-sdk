@@ -53,6 +53,7 @@
   const fs = require("fs");
   const {Command} = require("commander");
   const program = new Command();
+  const loadEnvVar = require("../config/env");
   let appPath, configPath;
 
   program
@@ -81,7 +82,9 @@
       endpoint: string;
     }
   */
+
   const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+
   if (options.namespace && config.endpoint) {
     config.endpoint = config.endpoint.replace("<namespace>", options.namespace);
   }
@@ -109,7 +112,7 @@
   const androidConfigPath = `${appPath}/android/app/src/main/embrace-config.json`;
   const androidConfig = {
     app_id: config.android_app_id,
-    api_token: config.api_token,
+    api_token: loadEnvVar("EMBRACE_ORG_TOKEN", configPath),
     sdk_config: {
       app_framework: "react_native",
     },
