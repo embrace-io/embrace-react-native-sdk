@@ -130,27 +130,6 @@ const addFile = (
   }
 };
 
-/*
-const getBridgingHeaderName = (project: XCodeProject, groupName: string) => {
-  const productModuleName =
-    getBuildProperty(project, groupName, "PRODUCT_MODULE_NAME") || groupName;
-  return projectNameToBridgingHeader(productModuleName);
-};
-
-
-const getTargetHash = (project: XCodeProject, name: string) => {
-  const target = project.pbxTargetByName(name);
-  return target ? target.buildConfigurationList : "";
-};
-
-const getBuildProperty = (
-  project: XCodeProject,
-  groupName: string,
-  propertyName: string,
-) => {
-  return project.getBuildProperty(propertyName, undefined, groupName);
-};
-
 const updateBuildProperty = (
   project: XCodeProject,
   groupName: string,
@@ -172,6 +151,15 @@ const updateBuildProperty = (
     }
   }
 };
+
+const getTargetHash = (project: XCodeProject, name: string) => {
+  const target = project.pbxTargetByName(name);
+  return target ? target.buildConfigurationList : "";
+};
+
+/*
+
+
 
 const removeResourceFile = (
   project: XCodeProject,
@@ -238,12 +226,6 @@ const addBridgingHeader = (
   );
 };
 
-// https://developer.apple.com/documentation/swift/importing-swift-into-objective-c#Overview
-const projectNameToBridgingHeader = (projectName: string): string => {
-  const alphanumericOnly = projectName.replace(/\W+/g, "_");
-  const firstNumberReplaced = alphanumericOnly.replace(/^\d/, "_");
-  return `${firstNumberReplaced}-Swift.h`;
-};
 
 const getBridgingHeaderContents = () => {
   return `//
@@ -268,4 +250,4 @@ const findNameWithCaseSensitiveFromPath = (path: string, name: string) => {
 };
  */
 
-export {addFile};
+export {addFile, updateBuildProperty};

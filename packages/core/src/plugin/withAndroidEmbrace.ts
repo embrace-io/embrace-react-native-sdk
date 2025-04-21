@@ -8,6 +8,7 @@ import {
 } from "@expo/config-plugins";
 
 import {EmbraceProps} from "./types";
+import {addAfter, hasMatch} from "./textUtils";
 
 // TODO, fails if using `import` here?
 const path = require("path");
@@ -18,29 +19,6 @@ const androidLegacyPluginRE = /(\s*)apply plugin.*com\.android\.application/;
 const androidPluginRE = /(\s*)id.*\(.*com\.android\.application.*\)\.*/;
 const importAndroidAppRE = /(\s*)import android\.app\.Application/;
 const onCreateRE = /(\s*)super\.onCreate\(\)/;
-
-const hasMatch = (lines: string[], matcher: string) =>
-  lines.find(line => line.match(matcher));
-
-const addAfter = (lines: string[], matcher: RegExp, toAdd: string) => {
-  let match;
-  let matchIndex = 0;
-  for (let l = 0; l < lines.length; l++) {
-    match = lines[l].match(matcher);
-    if (match) {
-      matchIndex = l;
-      break;
-    }
-  }
-  if (!match) {
-    return false;
-  }
-
-  const whitespace = match[1];
-  lines.splice(matchIndex + 1, 0, `${whitespace}${toAdd}`);
-
-  return true;
-};
 
 const withAndroidEmbraceJSONConfig: ConfigPlugin<EmbraceProps> = (
   expoConfig,

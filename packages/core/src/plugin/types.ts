@@ -3,6 +3,7 @@ type EmbraceProps = {
   iOSAppId: string;
   apiToken: string;
   androidCustomConfig?: object;
+  productModuleName?: string;
 };
 
 export {EmbraceProps};
