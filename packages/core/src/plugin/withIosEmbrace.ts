@@ -63,17 +63,17 @@ const withIosEmbraceAddInitializer: ConfigPlugin<EmbraceProps> = (
       }
     }
 
-    if (project.hasFile(filePath)) {
+    const projectRelativePath = path.join(
+      projectName,
+      "EmbraceInitializer.swift",
+    );
+
+    if (project.hasFile(projectRelativePath)) {
       console.warn("has file already");
       return config;
     }
 
-    addFile(
-      project,
-      projectName,
-      path.join(projectName, "EmbraceInitializer.swift"),
-      "source",
-    );
+    addFile(project, projectName, projectRelativePath, "source");
 
     fs.writeFileSync(project.filepath, project.writeSync());
 

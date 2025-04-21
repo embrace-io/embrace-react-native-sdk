@@ -110,8 +110,14 @@ const addFile = (
     groupName,
   );
   const group = findHash(project.hash.project.objects.PBXGroup, groupName);
+
   if (target && group) {
     const file = project.addFile(path, group[0], {target: target[0]});
+
+    if (!file) {
+      return;
+    }
+
     file.target = target[0];
     file.uuid = project.generateUuid();
     project.addToPbxBuildFileSection(file);

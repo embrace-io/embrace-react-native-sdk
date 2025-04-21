@@ -1,5 +1,5 @@
 {
-  "name": "basic-test-app",
+  "name": "basictestapp",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
@@ -14,8 +14,10 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@embrace-io/react-native": "file:../../packages/core/embrace-io-react-native-5.1.0.tgz",
+    "@embrace-io/react-native": "file:../../packages/core/embrace-io-react-native-6.0.1.tgz",
+    "@embrace-io/react-native-navigation": "file:../artifacts/embrace-io-react-native-navigation-local.tgz",
     "@embrace-io/react-native-otlp": "file:../artifacts/embrace-io-react-native-otlp-local.tgz",
+    "@embrace-io/react-native-redux": "file:../artifacts/embrace-io-react-native-redux-local.tgz",
     "@embrace-io/react-native-spans": "file:../artifacts/embrace-io-react-native-spans-local.tgz",
     "@embrace-io/react-native-test-harness": "file:../artifacts/embrace-io-react-native-test-harness-local.tgz",
     "@embrace-io/react-native-tracer-provider": "file:../artifacts/embrace-io-react-native-tracer-provider-local.tgz",

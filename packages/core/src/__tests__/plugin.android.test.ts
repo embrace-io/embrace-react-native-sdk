@@ -78,7 +78,7 @@ jest.mock("@expo/config-plugins", () => {
   };
 });
 
-describe("Expo Config Plugin", () => {
+describe("Expo Config Plugin Android", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
