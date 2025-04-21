@@ -67,17 +67,15 @@ test_app=$1
 shift
 handle_options "$@"
 
-# NOTE: opentelemetry-instrumentation-react-native-navigation comes from outside this repo so we include it as
-# a prebuilt artifact
-third_party_dependencies="
-  ./artifacts/opentelemetry-instrumentation-react-native-navigation-0.1.0.tgz
-"
+# In case of introducing third party dependencies, add them here
+third_party_dependencies=""
 
 embrace_local_dependencies="
   ./artifacts/embrace-io-react-native-local.tgz
+  ./artifacts/embrace-io-react-native-navigation-local.tgz
   ./artifacts/embrace-io-react-native-otlp-local.tgz
+  ./artifacts/embrace-io-react-native-redux-local.tgz
   ./artifacts/embrace-io-react-native-tracer-provider-local.tgz
-  ./artifacts/embrace-io-react-native-spans-local.tgz
   $third_party_dependencies
 "
 if [ "$version" = "local" ]; then
@@ -85,8 +83,10 @@ if [ "$version" = "local" ]; then
 else
   embrace_dependencies="
     @embrace-io/react-native@$version
+    @embrace-io/react-native-navigation@$version
+    @embrace-io/react-native-otlp@$version
+    @embrace-io/react-native-redux@$version
     @embrace-io/react-native-tracer-provider@$version
-    @embrace-io/react-native-spans@$version
     $third_party_dependencies
   "
 fi
@@ -100,16 +100,18 @@ if [ "$skip_sdk_packages" = false ]; then
     # build required packages
     pushd ..
     npx lerna run build --scope=@embrace-io/react-native
+    npx lerna run build --scope=@embrace-io/react-native-navigation
     npx lerna run build --scope=@embrace-io/react-native-otlp
+    npx lerna run build --scope=@embrace-io/react-native-redux
     npx lerna run build --scope=@embrace-io/react-native-tracer-provider
-    npx lerna run build --scope=@embrace-io/react-native-spans
     popd
 
     # pack required packages into tarballs
     ./pack.sh ../packages/core/ artifacts/embrace-io-react-native-local.tgz
+    ./pack.sh ../packages/react-native-navigation/ artifacts/embrace-io-react-native-navigation-local.tgz
     ./pack.sh ../packages/react-native-otlp/ artifacts/embrace-io-react-native-otlp-local.tgz
+    ./pack.sh ../packages/react-native-redux/ artifacts/embrace-io-react-native-redux-local.tgz
     ./pack.sh ../packages/react-native-tracer-provider/ artifacts/embrace-io-react-native-tracer-provider-local.tgz
-    ./pack.sh ../packages/spans/ artifacts/embrace-io-react-native-spans-local.tgz
   fi
 
   echo "========================================"

@@ -1,10 +1,8 @@
-import {MethodType} from "../interfaces/HTTP";
-import {applyNetworkInterceptors} from "../index";
+import {MethodType} from "../interfaces";
+import {logNetworkClientError, recordNetworkRequest} from "../api/network";
 
-const mockLogNetworkRequest = jest.fn();
 const mockLogNetworkClientError = jest.fn();
-
-const ReactNativeMock = jest.requireMock("react-native");
+const mockLogNetworkRequest = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
@@ -16,7 +14,6 @@ jest.mock("../EmbraceManagerModule", () => ({
       bytesSent: number,
       bytesReceived: number,
       statusCode: number,
-      error: string,
     ) =>
       mockLogNetworkRequest(
         url,
@@ -26,7 +23,6 @@ jest.mock("../EmbraceManagerModule", () => ({
         bytesSent,
         bytesReceived,
         statusCode,
-        error,
       ),
     logNetworkClientError: (
       url: string,
@@ -47,369 +43,69 @@ jest.mock("../EmbraceManagerModule", () => ({
   },
 }));
 
-jest.mock("react-native", () => ({
-  Platform: {OS: "android"},
-}));
+describe("Record network call", () => {
+  const url = "https://httpbin.org/v1/random/api";
+  const method = "get";
+  const nowdate = new Date();
+  const st = nowdate.getTime();
+  const et = nowdate.setUTCSeconds(30);
+  const bytesIn = 111;
+  const bytesOut = 222;
+  const networkStatus = 200;
 
-const getAxiosMocked = () => {
-  return {
-    interceptors: {
-      request: {
-        handlers: [] as Record<string, any>,
-        use(
-          requestConfig?: (t: any) => any,
-          requestOnReject?: (t: any) => any,
-        ) {
-          this.handlers.push({
-            fulfilled: requestConfig,
-            rejected: requestOnReject,
-          });
-        },
-      },
-      response: {
-        handlers: [] as Record<string, any>,
-        use(
-          responseConfig?: (t: any) => any,
-          responseOnReject?: (t: any) => any,
-        ) {
-          this.handlers.push({
-            fulfilled: responseConfig,
-            rejected: responseOnReject,
-          });
-        },
-      },
-    },
-  };
-};
+  it("record a Completed network request", async () => {
+    await recordNetworkRequest(
+      url,
+      method,
+      st,
+      et,
+      bytesIn,
+      bytesOut,
+      networkStatus,
+    );
 
-describe("Log network call With Axios", () => {
-  beforeEach(() => {
-    jest.resetAllMocks();
-    ReactNativeMock.Platform.OS = "android";
-  });
-
-  test("Verify the instance has an Axios structure", () => {
-    const axiosMockedOK = {
-      interceptors: {
-        request: {
-          use: jest.fn(),
-        },
-        response: {
-          use: jest.fn(),
-        },
-      },
-    };
-    const axiosMockedNOK = {
-      otherVariableThatWeDontUse: true,
-    };
-    const axiosMockedNOKJustInterceptor = {
-      interceptors: {},
-      otherVariableThatWeDontUse: true,
-    };
-    const axiosMockedNOKInterceptorWithRequest = {
-      interceptors: {
-        request: {
-          otherVariableThatWeDontUse: true,
-        },
-        response: {
-          otherVariableThatWeDontUse: true,
-        },
-      },
-    };
-
-    expect(applyNetworkInterceptors(axiosMockedOK)).resolves.toEqual(true);
-    // @ts-expect-error testing invalid case
-    expect(applyNetworkInterceptors()).resolves.toEqual(false);
-    // @ts-expect-error testing invalid case
-    expect(applyNetworkInterceptors(axiosMockedNOK)).resolves.toEqual(false);
-    expect(
-      // @ts-expect-error testing invalid case
-      applyNetworkInterceptors(axiosMockedNOKJustInterceptor),
-    ).resolves.toEqual(false);
-    expect(
-      // @ts-expect-error testing invalid case
-      applyNetworkInterceptors(axiosMockedNOKInterceptorWithRequest),
-    ).resolves.toEqual(false);
-  });
-
-  test("Axios 'use' methods should be called", () => {
-    const axiosMocked = {
-      interceptors: {
-        request: {
-          use: jest.fn(),
-        },
-        response: {
-          use: jest.fn(),
-        },
-      },
-    };
-
-    applyNetworkInterceptors(axiosMocked);
-    expect(axiosMocked.interceptors.request.use).toHaveBeenCalled();
-    expect(axiosMocked.interceptors.response.use).toHaveBeenCalled();
-  });
-
-  test("Axios 'use' methods should be called with Func", () => {
-    Promise.reject = jest.fn();
-    const axiosMocked = getAxiosMocked();
-    applyNetworkInterceptors(axiosMocked);
-
-    expect(axiosMocked.interceptors.request.handlers.length).toEqual(1);
-    expect(axiosMocked.interceptors.response.handlers.length).toEqual(1);
-
-    axiosMocked.interceptors.request.handlers[0].rejected("");
-    axiosMocked.interceptors.response.handlers[0].rejected("");
-
-    const requestMock = {embraceMetadata: {startInMillis: 1655838253076}};
-
-    expect(
-      Object.keys(axiosMocked.interceptors.request.handlers[0].fulfilled({})),
-    ).toEqual(Object.keys(requestMock));
-
-    const responsePropMock = {
-      config: {
-        method: "get",
-        url: "google.com",
-        embraceMetadata: {startInMillis: 1655838253076},
-        data: {getBytes: () => 123},
-      },
-      status: 200,
-      data: {getBytes: () => 12},
-    };
-
-    axiosMocked.interceptors.response.handlers[0].fulfilled(responsePropMock);
-
-    expect(mockLogNetworkRequest).toHaveBeenCalledTimes(1);
-
-    expect(Promise.reject).toHaveBeenCalledTimes(2);
-  });
-
-  test("Axios Request Config param not set", () => {
-    const axiosMocked = getAxiosMocked();
-    applyNetworkInterceptors(axiosMocked);
-
-    expect(axiosMocked.interceptors.request.handlers[0].fulfilled()).toEqual(
-      undefined,
+    expect(mockLogNetworkRequest).toHaveBeenCalledWith(
+      url,
+      method,
+      st,
+      et,
+      bytesIn,
+      bytesOut,
+      networkStatus,
     );
   });
 
-  test("Shouldn't track network data", () => {
-    Promise.reject = jest.fn();
-    const axiosMocked = getAxiosMocked();
-    applyNetworkInterceptors(axiosMocked);
+  it("record an Incomplete network request", async () => {
+    await recordNetworkRequest(url, method, st, et);
 
-    const responsePropMockWithoutMethod = {
-      config: {
-        url: "google.com",
-        embraceMetadata: {startInMillis: 1655838253076},
-        data: {getBytes: () => 123},
-      },
-      status: 200,
-      data: {getBytes: () => 12},
-    };
-
-    axiosMocked.interceptors.response.handlers[0].fulfilled(
-      responsePropMockWithoutMethod,
-    );
-
-    const responsePropMockWithoutURL = {
-      config: {
-        method: "get",
-        embraceMetadata: {startInMillis: 1655838253076},
-        data: {getBytes: () => 123},
-      },
-      status: 200,
-      data: {getBytes: () => 12},
-    };
-
-    axiosMocked.interceptors.response.handlers[0].fulfilled(
-      responsePropMockWithoutURL,
-    );
-
-    const responsePropMockWithoutMetadata = {
-      config: {
-        method: "get",
-        url: "google.com",
-        data: undefined,
-      },
-      status: 200,
-      data: undefined,
-    };
-
-    axiosMocked.interceptors.response.handlers[0].fulfilled(
-      responsePropMockWithoutMetadata,
-    );
-
-    expect(mockLogNetworkRequest).toHaveBeenCalledTimes(0);
-  });
-
-  test("Not tracking bytes", () => {
-    const axiosMocked = getAxiosMocked();
-    applyNetworkInterceptors(axiosMocked);
-
-    const responsePropMock = {
-      config: {
-        method: "get",
-        url: "google.com",
-        embraceMetadata: {startInMillis: 1655838253076},
-        data: {},
-      },
-      status: 200,
-      data: {},
-    };
-
-    axiosMocked.interceptors.response.handlers[0].fulfilled(responsePropMock);
-  });
-
-  test("Track rejected error", () => {
-    const axiosMocked = getAxiosMocked();
-    applyNetworkInterceptors(axiosMocked);
-
-    const responseErrorPropMock = {
-      message: "undefined is not an object",
-      stack: "evaluating 'd[0].a'",
-    };
-
-    axiosMocked.interceptors.response.handlers[0].rejected(
-      responseErrorPropMock,
-    );
-
-    expect(mockLogNetworkRequest).toHaveBeenCalledTimes(0);
-  });
-
-  test("Track http code != 2xx iOS", () => {
-    ReactNativeMock.Platform.OS = "ios";
-    const axiosMocked = getAxiosMocked();
-    applyNetworkInterceptors(axiosMocked);
-
-    const responseErrorPropMock = {
-      message: "Request failed with status code 404",
-      response: {
-        config: {
-          method: "get",
-          url: "google.com",
-          embraceMetadata: {startInMillis: 1655838253076},
-          data: {getBytes: () => 123},
-        },
-        status: 404,
-        data: {getBytes: () => 12},
-      },
-    };
-
-    axiosMocked.interceptors.response.handlers[0].rejected(
-      responseErrorPropMock,
-    );
-
-    expect(mockLogNetworkRequest).toHaveBeenCalledTimes(1);
-  });
-
-  test("Track http code != 2xx", () => {
-    const axiosMocked = getAxiosMocked();
-    applyNetworkInterceptors(axiosMocked);
-
-    const responseErrorPropMock = {
-      message: "Request failed with status code 404",
-      response: {
-        config: {
-          method: "get",
-          url: "google.com",
-          embraceMetadata: {startInMillis: 1655838253076},
-          data: {getBytes: () => 123},
-        },
-        status: 404,
-        data: {getBytes: () => 12},
-      },
-    };
-
-    axiosMocked.interceptors.response.handlers[0].rejected(
-      responseErrorPropMock,
-    );
-
-    expect(mockLogNetworkClientError).toHaveBeenCalledTimes(1);
-  });
-
-  test("Error on logNetworkRequest", () => {
-    mockLogNetworkClientError.mockImplementation(() => {
-      throw Error;
-    });
-    const axiosMocked = getAxiosMocked();
-    applyNetworkInterceptors(axiosMocked);
-
-    const responseErrorPropMock = {
-      message: "Request failed with status code 404",
-      response: {
-        config: {
-          method: "get",
-          url: "google.com",
-          embraceMetadata: {startInMillis: 1655838253076},
-          data: undefined,
-        },
-        status: 404,
-        data: undefined,
-      },
-    };
-
-    axiosMocked.interceptors.response.handlers[0].rejected(
-      responseErrorPropMock,
+    expect(mockLogNetworkRequest).toHaveBeenCalledWith(
+      url,
+      method,
+      st,
+      et,
+      -1,
+      -1,
+      -1,
     );
   });
 
-  test("No Track network because the information was incomplete", () => {
-    const axiosMocked = getAxiosMocked();
-    applyNetworkInterceptors(axiosMocked);
-
-    const responseErrorPropMock = {
-      message: "Request failed with status code 404",
-      response: {
-        config: {
-          method: "get",
-          embraceMetadata: {startInMillis: 1655838253076},
-        },
-        status: 404,
-      },
-    };
-
-    axiosMocked.interceptors.response.handlers[0].rejected(
-      responseErrorPropMock,
+  it("record a network client error", async () => {
+    await logNetworkClientError(
+      url,
+      method,
+      st,
+      et,
+      "error-type",
+      "error-message",
     );
 
-    expect(mockLogNetworkRequest).toHaveBeenCalledTimes(0);
-  });
-
-  test("logNetworkRequest failed", () => {
-    const axiosMocked = getAxiosMocked();
-    applyNetworkInterceptors(axiosMocked);
-
-    const responsePropMock = {
-      config: {
-        method: "get",
-        url: "google.com",
-        embraceMetadata: {startInMillis: 1655838253076},
-        data: {getBytes: () => 123},
-      },
-      status: 200,
-      data: {getBytes: () => 12},
-    };
-
-    axiosMocked.interceptors.response.handlers[0].fulfilled(responsePropMock);
-  });
-
-  test("Axios Use methods should not be called", () => {
-    const axiosMocked = {
-      interceptors: {
-        request: {
-          use: jest.fn(),
-        },
-        response: {
-          use: jest.fn(),
-        },
-      },
-    };
-
-    // @ts-expect-error testing invalid case
-    applyNetworkInterceptors();
-
-    expect(axiosMocked.interceptors.request.use).toHaveBeenCalledTimes(0);
-    expect(axiosMocked.interceptors.response.use).toHaveBeenCalledTimes(0);
+    expect(mockLogNetworkClientError).toHaveBeenCalledWith(
+      url,
+      method,
+      st,
+      et,
+      "error-type",
+      "error-message",
+    );
   });
 });

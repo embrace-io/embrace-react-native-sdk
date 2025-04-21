@@ -29,7 +29,13 @@ import {TracerProviderModule} from "./TracerProviderModule";
  *
  * The JS side of this implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
  */
-export class EmbraceNativeSpan implements Span {
+
+// Need an ID that spans from JS can use to communicate with their stored instances on the native side. A uuid would
+// work but did not want to introduce extra work or another dependency here. Instead, it should be enough to keep a
+// global count of the spans created by any tracer or tracer provider and use a given span's createdIndex as their ID
+let spansCreated = 0;
+
+class EmbraceNativeSpan implements Span {
   private readonly tracerName: string;
   private readonly tracerVersion: string;
   private readonly tracerSchemaUrl: string;
@@ -43,17 +49,17 @@ export class EmbraceNativeSpan implements Span {
     tracerName: string,
     tracerVersion: string,
     tracerSchemaUrl: string,
-    createdIndex: number,
     spanContextSyncBehaviour: SpanContextSyncBehaviour,
   ) {
     this.tracerName = tracerName;
     this.tracerVersion = tracerVersion;
     this.tracerSchemaUrl = tracerSchemaUrl;
-    this.createdIndex = createdIndex;
     this.spanContextSyncBehaviour = spanContextSyncBehaviour;
+    this.createdIndex = spansCreated++;
   }
 
   public nativeID(): string {
+    // Only `this.createdIndex` is strictly needed for uniqueness, keeping the other values for debugging purposes
     return `${this.tracerName}_${this.tracerVersion}_${this.tracerSchemaUrl}_${this.createdIndex}`;
   }
 
@@ -139,6 +145,13 @@ export class EmbraceNativeSpan implements Span {
         this.nativeID(),
         name,
         normalizeAttributes(attributesOrStartTime),
+        normalizeTime(timeStamp),
+      );
+    } else if (timeStamp) {
+      TracerProviderModule.addEvent(
+        this.nativeID(),
+        name,
+        normalizeAttributes({}),
         normalizeTime(timeStamp),
       );
     } else {
@@ -239,3 +252,5 @@ export class EmbraceNativeSpan implements Span {
     );
   }
 }
+
+export {EmbraceNativeSpan};

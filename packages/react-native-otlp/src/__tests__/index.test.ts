@@ -1,6 +1,6 @@
 import {Platform, NativeModules} from "react-native";
 
-import {SDKConfig} from "../interfaces/common";
+import {SDKConfig} from "../interfaces";
 import {initialize, type OTLPExporterConfig} from "../index";
 
 const IOS_SDK_BASE_CONFIG = {

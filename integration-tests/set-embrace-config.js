@@ -23,11 +23,10 @@
       "app_id": "abcdf",
       "api_token": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "sdk_config": {
+        "app_framework": "react_native",
         "base_urls": {
           "config": "http://10.0.2.2:8989",
-          "data": "http://10.0.2.2:8989",
-          "data_dev": "http://10.0.2.2:8989",
-          "images": "http://10.0.2.2:8989"
+          "data": "http://10.0.2.2:8989"
         },
         "view_config": {
           "enable_automatic_activity_capture": false
@@ -91,12 +90,11 @@
     interface AndroidConfig {
       app_id: string;
       api_token: string;
-      sdk_config?: {
+      sdk_config: {
+        app_framework: "react_native";
         base_urls?: {
           config: string;
           data: string;
-          data_dev: string;
-          images: string;
         };
         view_config?: {
           enable_automatic_activity_capture: boolean;
@@ -112,6 +110,9 @@
   const androidConfig = {
     app_id: config.android_app_id,
     api_token: config.api_token,
+    sdk_config: {
+      app_framework: "react_native",
+    },
   };
 
   if (
@@ -120,8 +121,6 @@
     config.enable_network_span_forwarding ||
     config.disabled_url_patterns
   ) {
-    androidConfig.sdk_config = {};
-
     if (config.enable_network_span_forwarding || config.disabled_url_patterns) {
       androidConfig.sdk_config.networking = {};
 
@@ -145,8 +144,6 @@
       androidConfig.sdk_config.base_urls = {
         config: androidEndpoint,
         data: androidEndpoint,
-        data_dev: androidEndpoint,
-        images: androidEndpoint,
       };
     }
 
@@ -165,6 +162,13 @@
   console.log(`Wrote ${androidConfigPath}`);
 
   /*
+    interface SDKConfig {
+      ios?: IOSConfig;
+      exporters?: OTLPExporterConfig;
+      logLevel?: EmbraceLoggerLevel;
+      trackUnhandledRejections?: boolean;
+    }
+
     interface IOSConfig {
       ios: {
         appId: string;
@@ -175,11 +179,11 @@
       };
     }
    */
-  const iOSConfigPath = fs.existsSync(`${appPath}/app`)
+  const sdkConfigPath = fs.existsSync(`${appPath}/app`)
     ? `${appPath}/app/embrace-sdk-config.json`
     : `${appPath}/embrace-sdk-config.json`;
 
-  const iOSConfig = {
+  const sdkConfig = {
     ios: {
       appId: config.ios_app_id,
       endpointBaseUrl: config.endpoint,
@@ -187,8 +191,11 @@
       disableNetworkSpanForwarding: !config.enable_network_span_forwarding,
       disabledUrlPatterns: config.disabled_url_patterns,
     },
+    // this is meant for both platforms but it shouldn't be added into the `embrace-config.json` file in the android app
+    exporters: config.exporters,
+    trackUnhandledRejections: config.trackUnhandledRejections,
   };
 
-  fs.writeFileSync(iOSConfigPath, JSON.stringify(iOSConfig, undefined, 2));
-  console.log(`Wrote ${iOSConfigPath}`);
+  fs.writeFileSync(sdkConfigPath, JSON.stringify(sdkConfig, undefined, 2));
+  console.log(`Wrote ${sdkConfigPath}`);
 }

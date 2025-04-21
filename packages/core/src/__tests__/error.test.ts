@@ -1,33 +1,47 @@
-import {ComponentError, logIfComponentError} from "../utils/ComponentError";
+import {trackUnhandledRejection} from "../utils/error";
+import {logHandledError} from "../api/log";
+import {ComponentError, logIfComponentError} from "../api/component";
+import {LogProperties, LogSeverity} from "../../src/interfaces";
 
-import {Properties} from "./../index";
-
+const mockLogHandledError = jest.fn();
 const mockLogMessageWithSeverityAndProperties = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
+    logHandledError: (
+      message: string,
+      stackTrace: string,
+      properties: LogProperties,
+    ) => mockLogHandledError(message, stackTrace, properties),
     logMessageWithSeverityAndProperties: (
       message: string,
-      errorType: string,
-      properties: Properties,
-      componentStack: string,
+      severity: LogSeverity,
+      properties: LogProperties,
+      stacktrace: string,
+      includeStacktrace: boolean,
     ) => {
       mockLogMessageWithSeverityAndProperties(
         message,
-        errorType,
+        severity,
         properties,
-        componentStack,
+        stacktrace,
+        includeStacktrace,
       );
       return Promise.resolve(true);
     },
   },
 }));
 
-describe("Component Error", () => {
-  beforeEach(() => {
-    jest.resetAllMocks();
-  });
+jest.mock("../utils/log", () => ({
+  ...jest.requireActual("../utils/log"),
+  generateStackTrace: () => jest.fn(),
+}));
 
+beforeEach(() => {
+  jest.resetAllMocks();
+});
+
+describe("Component Error", () => {
   describe("error is not a `ComponentError", () => {
     it("and it should not log an extra unhandled exception", async () => {
       const customError = new Error("Ups!");
@@ -59,7 +73,72 @@ describe("Component Error", () => {
         "error",
         {},
         "in SomeScreen/n in SomeOtherScreen",
+        true,
       );
     });
+  });
+});
+
+describe("Handled JS Exceptions", () => {
+  const testError = new Error("This is a test error");
+
+  it("error (instance of Error) with properties", async () => {
+    const testProps = {foo: "bar"};
+    await logHandledError(testError, testProps);
+
+    expect(mockLogHandledError).toHaveBeenCalledWith(
+      testError.message,
+      testError.stack,
+      testProps,
+    );
+  });
+
+  it("error (instance of Error) without properties", async () => {
+    await logHandledError(testError, undefined);
+
+    expect(mockLogHandledError).toHaveBeenCalledWith(
+      testError.message,
+      testError.stack,
+      {},
+    );
+  });
+
+  it("not an instance of error", async () => {
+    // even when ts complains about the type, we want to test this scenario
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await logHandledError("not an error", undefined);
+
+    expect(mockLogHandledError).not.toHaveBeenCalled();
+  });
+});
+
+describe("`trackUnhandledRejection()`", () => {
+  it("'Error' instance", async () => {
+    const error = new Error("`trackUnhandledRejection` test message");
+    trackUnhandledRejection("any value", error);
+
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+      "Unhandled promise rejection: `trackUnhandledRejection` test message",
+      "error",
+      {},
+      error.stack,
+      true,
+    );
+  });
+
+  it("not an instance of 'Error'", async () => {
+    const error = "not an Error instance";
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    trackUnhandledRejection("any value", error);
+
+    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+      "Unhandled promise rejection: not an Error instance",
+      "error",
+      {},
+      "",
+      false,
+    );
   });
 });

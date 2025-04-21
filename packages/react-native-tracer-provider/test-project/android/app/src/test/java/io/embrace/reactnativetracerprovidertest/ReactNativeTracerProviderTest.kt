@@ -21,6 +21,7 @@ import io.embrace.reactnativetracerprovider.ReactNativeTracerProviderModule
 import io.embrace.reactnativetracerprovider.WritableMapBuilder
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.trace.SpanId
@@ -109,10 +110,10 @@ class ReactNativeTracerProviderModuleTest {
             // Start the Embrace SDK
             val embraceInstance = Embrace.getInstance()
             embraceInstance.addSpanExporter(exporter)
-            embraceInstance.start(mockApplication, Embrace.AppFramework.REACT_NATIVE)
+            embraceInstance.start(mockApplication)
             assertTrue(Embrace.getInstance().isStarted)
 
-            extraAttributes = listOf("emb.process_identifier", "emb.key", "emb.type", "emb.private.sequence_id")
+            extraAttributes = listOf("emb.process_identifier", "emb.type", "emb.private.sequence_id")
 
             return
         }
@@ -560,7 +561,7 @@ class ReactNativeTracerProviderModuleTest {
             "my-span-1", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise
         )
-        tracerProviderModule.setStatus("span_0", JavaOnlyMap.of("code", "ERROR"))
+        tracerProviderModule.setStatus("span_0", JavaOnlyMap.of("code", "ERROR", "message", "some message"))
         tracerProviderModule.endSpan("span_0", 0.0)
 
         tracerProviderModule.startSpan(
@@ -568,7 +569,7 @@ class ReactNativeTracerProviderModuleTest {
             "my-span-2", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
             "", promise
         )
-        tracerProviderModule.setStatus("span_1", JavaOnlyMap.of("code", "OK", "message", "some message"))
+        tracerProviderModule.setStatus("span_1", JavaOnlyMap.of("code", "OK"))
         tracerProviderModule.endSpan("span_1", 0.0)
 
         argumentCaptor<Collection<SpanData>>().apply {
@@ -577,11 +578,11 @@ class ReactNativeTracerProviderModuleTest {
 
             val span1 = allValues[0].asSequence().withIndex().elementAt(0).value
             assertEquals(StatusCode.ERROR, span1.status.statusCode)
-            assertEquals("", span1.status.description)
+            assertEquals("some message", span1.status.description)
 
             val span2 = allValues[1].asSequence().withIndex().elementAt(0).value
             assertEquals(StatusCode.OK, span2.status.statusCode)
-            assertEquals("some message", span2.status.description)
+            assertEquals("", span2.status.description)
         }
     }
 
@@ -687,7 +688,7 @@ class ReactNativeTracerProviderModuleTest {
 
     @Test
     fun embraceSDKNotStarted() {
-        mockkStatic(Embrace::class)
+        mockkObject(Embrace.Companion)
         val embraceMock = mock<Embrace> {
             on { isStarted } doReturn false
         }

@@ -19,38 +19,24 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="prop"
+        name="user"
         options={{
-          title: "prop",
-          tabBarAccessibilityLabel: "PROPERTY TESTING",
+          title: "user",
+          tabBarAccessibilityLabel: "USER TESTING",
         }}
       />
       <Tabs.Screen
-        name="tracer-provider"
+        name="network"
         options={{
-          title: "tracer",
-          tabBarAccessibilityLabel: "TRACER PROVIDER TESTING",
+          title: "network",
+          tabBarAccessibilityLabel: "NETWORK TESTING",
         }}
       />
       <Tabs.Screen
-        name="otlp"
+        name="redux"
         options={{
-          title: "otlp",
-          tabBarAccessibilityLabel: "EMBRACE OTLP",
-        }}
-      />
-      <Tabs.Screen
-        name="misc"
-        options={{
-          title: "misc",
-          tabBarAccessibilityLabel: "MISC TESTING",
-        }}
-      />
-      <Tabs.Screen
-        name="nsf"
-        options={{
-          title: "nsf",
-          tabBarAccessibilityLabel: "EMBRACE NSF TESTING",
+          title: "redux",
+          tabBarAccessibilityLabel: "REDUX TESTING",
         }}
       />
     </Tabs>

@@ -40,6 +40,27 @@ final class RNEmbraceOTLPTests: XCTestCase {
         module = RNEmbraceOTLP()
         promise = Promise()
     }
+    
+    func testStartNativeEmbraceSDKWithNoAppId() throws {
+        let expectation = self.expectation(description: "testStartNativeEmbraceSDKWithNoAppId")
+
+        module.startNativeEmbraceSDK(sdkConfigDict: [:], // no appId
+                                     otlpExportConfigDict: [
+                                        "traceExporter":  [
+                                            "endpoint": "https://test-trace-endpoint/v1",
+                                            "headers": [("Authorization", "base64_instance:token")],
+                                            "timeout": NSNumber(200000)
+                                        ],
+                                    ],
+                                     resolve: { result in
+                                        self.promise.resolve(val: result)
+                                        expectation.fulfill()
+                                    },
+                                     rejecter: promise.reject)
+
+        waitForExpectations(timeout: 3)
+        XCTAssertEqual(promise.resolveCalls.count, 1)
+    }
 
     // happy path
     func testStartNativeEmbraceSDK() throws {

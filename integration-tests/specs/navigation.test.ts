@@ -58,7 +58,7 @@ describe("Navigation", () => {
   });
 
   it("should record navigation between screens", async () => {
-    const secondScreen = await driver.$("~TRACER PROVIDER TESTING");
+    const secondScreen = await driver.$("~SPAN TESTING");
     await secondScreen.click();
     await new Promise(r => setTimeout(r, 1000));
     const homeScreen = await driver.$("~LOG TESTING");

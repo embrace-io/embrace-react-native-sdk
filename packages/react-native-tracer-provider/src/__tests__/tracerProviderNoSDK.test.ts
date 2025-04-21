@@ -14,6 +14,7 @@ describe("Embrace Native Tracer Provider with no SDK", () => {
         error:
           "You must have the Embrace SDK available to use the TracerProvider, please install `@embrace-io/react-native`.",
         tracerProvider: null,
+        tracer: null,
       });
     });
   });

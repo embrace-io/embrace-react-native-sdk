@@ -42,6 +42,7 @@ jobs:
             - 'packages/**/*.swift'
             - 'packages/**/*.m'
             - 'packages/**/*.h'
+            - 'packages/**/test-project/ios/Podfile.lock'
 
       - name: Cache Derived Data
         uses: actions/cache@v4

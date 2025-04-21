@@ -1,0 +1,61 @@
+{
+  "name": "@embrace-io/react-native-redux",
+  "version": "6.0.1",
+  "description": "Collects telemetry from dispatching actions with Redux",
+  "author": "Embrace <support@embrace.io> (https://embrace.io/)",
+  "bugs": {
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk/issues",
+    "email": "support@embrace.io"
+  },
+  "homepage": "https://github.com/embrace-io/embrace-react-native-sdk",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/embrace-io/embrace-react-native-sdk",
+    "directory": "packages/react-native-redux"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "keywords": [
+    "embrace",
+    "react-native",
+    "tracking",
+    "redux",
+    "observability",
+    "instrumentation",
+    "telemetry",
+    "bug tracker"
+  ],
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "gzip-js": "^0.3.2"
+  },
+  "peerDependencies": {
+    "@reduxjs/toolkit": "*",
+    "react-native": ">=0.56.0"
+  },
+  "devDependencies": {
+    "@opentelemetry/sdk-trace-base": "^1.25.1",
+    "@reduxjs/toolkit": "^2.5.0",
+    "@types/gzip-js": "^0.3.5",
+    "redux": "^5.0.1",
+    "typescript": "^5.6.3"
+  },
+  "embrace": {
+    "iosVersion": "6.8.1",
+    "androidVersion": "7.2.0"
+  }
+}

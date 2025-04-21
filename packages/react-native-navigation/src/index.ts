@@ -1,40 +1,15 @@
-import {NativeModules} from "react-native";
+import {
+  NativeNavigationTracker,
+  NavigationTracker,
+  NativeNavigationTrackerRef,
+  NavigationTrackerRef,
+} from "./instrumentation";
+import {EmbraceNavigationWrapper} from "./EmbraceNavigationWrapper";
 
-import {INavigation} from "../navigation/interfaces/NavigationInterfaces";
+const EmbraceNavigationTracker =
+  EmbraceNavigationWrapper<NavigationTrackerRef>(NavigationTracker);
 
-import NavigationTracker from "./NavigationTracker";
+const EmbraceNativeNavigationTracker =
+  EmbraceNavigationWrapper<NativeNavigationTrackerRef>(NativeNavigationTracker);
 
-/**
- * This interface is to define Navigation instances name
- */
-export interface INavigationInstances {
-  [instanceName: string]: NavigationTracker;
-}
-
-export default class EmbraceNavigationTracker {
-  public static build = (
-    navigation: INavigation,
-    instanceName: string = "embrace-init",
-  ): number => {
-    if (!NativeModules.EmbraceManager) {
-      console.warn(
-        "[Embrace] You must have the Embrace SDK to track screens, run `yarn add @embrace-io/react-native`.",
-      );
-      return 0;
-    }
-    if (!navigation) {
-      console.warn(
-        "[Embrace] Navigation reference was not provided. Navigation tracker was not applied.",
-      );
-      return 0;
-    }
-    if (!EmbraceNavigationTracker.instances[instanceName]) {
-      EmbraceNavigationTracker.instances[instanceName] = new NavigationTracker(
-        navigation,
-      );
-    }
-
-    return 1;
-  };
-  private static instances: INavigationInstances = {};
-}
+export {EmbraceNavigationTracker, EmbraceNativeNavigationTracker};

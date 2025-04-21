@@ -10,55 +10,103 @@ import {
   logWarning,
 } from "@embrace-io/react-native";
 
+const SubErrorComponent2 = () => {
+  throw new TypeError("Upssssssss");
+};
+
+const SubErrorComponent1 = () => {
+  return (
+    <View>
+      <SubErrorComponent2 />
+    </View>
+  );
+};
+
+const ErrorComponent = () => {
+  return (
+    <View>
+      <SubErrorComponent1 />
+    </View>
+  );
+};
+
 const LogTestingScreen = () => {
-  const handleErrorLog = useCallback(() => {
-    logHandledError(
-      new TypeError("triggering handled error (will show js stacktrace)"),
+  const triggerErrorLog = useCallback(() => {
+    logHandledError(new TypeError("This is an Error Log (with JS Stacktrace)"));
+  }, []);
+
+  const triggerAnonymousCrash = useCallback(() => {
+    throw new ReferenceError("Anonymous Crash (Unhandled JS Exception)");
+  }, []);
+
+  const triggerCrash = useCallback(function myLovellyUnhandledError() {
+    throw new ReferenceError("Crash (Unhandled JS Exception)");
+  }, []);
+
+  const triggerLogs = useCallback(() => {
+    logWarning("This is a Warning log");
+    logInfo("This is a Info log");
+    logError("This is a Error log");
+
+    logMessage("This is a Message (log)", "warning", {
+      "property.test": "abcd",
+      "another.property": "efghy-jklmn-opqrs-tuvwx-yz",
+    });
+  }, []);
+
+  const triggerNoStacktraceLogs = useCallback(() => {
+    logWarning("This is a Warning log without stacktrace", false);
+    logError("This is a Error log without stacktrace", false);
+
+    logMessage(
+      "This is a Message (log without stacktrace)",
+      "warning",
+      {
+        "property.test": "abcd",
+        "another.property": "efghy-jklmn-opqrs-tuvwx-yz",
+      },
+      false,
     );
   }, []);
 
-  const handleLogUnhandledError = useCallback(() => {
-    throw new ReferenceError("triggering a crash (unhandled js exception)");
+  const triggerUnhandledPromiseRejection = useCallback(() => {
+    Promise.reject(new Error("fail"));
   }, []);
 
-  const handleLogUnhandledErrorNotAnonymous = useCallback(
-    function myLovellyUnhandledError() {
-      throw new ReferenceError("triggering a crash (unhandled js exception)");
-    },
-    [],
-  );
-
-  const sendLogs = useCallback(() => {
-    logWarning("Warning log (manually triggered)");
-    logInfo("Info log (manually triggered)");
-    logError("Error log (manually triggered)");
-  }, []);
-
-  const sendMessage = useCallback(() => {
-    logMessage("Message log (manually triggered) with severity", "warning", {
-      "custom.property.test": "hey",
-      "another.property": "ho",
-      "yet.another": "hum",
-      "rn.sdk.test": "1234567",
-    });
+  const [isError, setIsError] = React.useState(false);
+  const triggerRenderError = useCallback(() => {
+    setIsError(true);
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Logs</Text>
-        <Button onPress={sendLogs} title="LOGs (war/info/error)" />
-        <Button onPress={sendMessage} title="Custom Message (also a log)" />
-        <Button onPress={handleErrorLog} title="Handled JS Exception" />
+        <Button
+          onPress={triggerLogs}
+          title="Info / Warning / Error / Message"
+        />
+        <Button onPress={triggerErrorLog} title="Handled Exception" />
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.title}>Crashes (Unhandled Exceptions)</Text>
-        <Button onPress={handleLogUnhandledError} title="CRASH" />
+        <Text style={styles.title}>Logs (no Stack Traces)</Text>
         <Button
-          onPress={handleLogUnhandledErrorNotAnonymous}
-          title="CRASH (not anonymous)"
+          onPress={triggerNoStacktraceLogs}
+          title="Warning / Error / Message"
         />
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.title}>Errors</Text>
+        <Button onPress={triggerAnonymousCrash} title="Anonymous Crash" />
+        <Button onPress={triggerCrash} title="Crash" />
+        <Button
+          onPress={triggerUnhandledPromiseRejection}
+          title="Trigger an Unhandled Promise rejection"
+        />
+        <Button onPress={triggerRenderError} title="Trigger a Render error" />
+        {isError && <ErrorComponent />}
       </View>
     </View>
   );

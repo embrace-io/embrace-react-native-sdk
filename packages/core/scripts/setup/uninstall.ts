@@ -6,11 +6,12 @@ import {
   exportSourcemapRNVariable,
   findNameWithCaseSensitiveFromPath,
   getPodFile,
+  makeSourcemapDirectory,
   xcodePatchable,
 } from "../util/ios";
 import {FileUpdatable} from "../util/file";
 import {embraceJSON, getBuildGradlePatchable} from "../util/android";
-import EmbraceLogger from "../../src/logger";
+import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 import {
   getText,
@@ -226,7 +227,7 @@ export const removeEmbraceFromXcode = () => {
         project.findAndRemovePhase("Upload Debug Symbols to Embrace");
         project.modifyPhase(
           bundlePhaseKey,
-          `${exportSourcemapRNVariable}\n`,
+          `${makeSourcemapDirectory}\n${exportSourcemapRNVariable}\n`,
           "",
         );
         project.findAndRemovePhase("/EmbraceIO/run.sh");

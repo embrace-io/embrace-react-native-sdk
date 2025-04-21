@@ -1,38 +1,40 @@
 import * as React from "react";
-import {useRef} from "react";
 import {LogTestingScreen} from "./screens/LogTestingScreen";
-import {OTLPTestingScreen} from "./screens/OTLPTestingScreen";
-import {PropertyTestingScreen} from "./screens/PropertyTestingScreen";
-import {TracerProviderTestingScreen} from "./screens/TracerProviderTestingScreen";
-import {MiscTestingScreen} from "./screens/MiscTestingScreen";
+import {UserTestingScreen} from "./screens/UserTestingScreen";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {
   NavigationContainer,
   useNavigationContainerRef,
 } from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {NavigationTracker} from "@opentelemetry/instrumentation-react-native-navigation";
+import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {SpanTestingScreen} from "./screens/SpanTestingScreen";
-import {NSFTestingScreen} from "./screens/NSFTestingScreen";
+import FullScreenMessage from "./components/FullScreenMessage";
+import {NetworkTestingScreen} from "./screens/NetworkTestingScreen";
+import {ReduxTestingScreen} from "./screens/ReduxTestingScreen";
 
 const Tab = createBottomTabNavigator();
 
 export const EmbraceReactNativeTestHarness = () => {
   const navigationContainer = useNavigationContainerRef();
-  const navigationContainerRef = useRef(navigationContainer);
-  const {tracerProvider} = useEmbraceNativeTracerProvider({});
+  const navigationContainerRef = React.useRef(navigationContainer);
+
+  const {tracerProvider, isLoading: isLoadingTracerProvider} =
+    useEmbraceNativeTracerProvider({});
+
+  if (isLoadingTracerProvider || tracerProvider === null) {
+    return <FullScreenMessage msg="Loading Tracer Provider" />;
+  }
 
   return (
     // `NavigationContainer` is waiting for what `useNavigationContainerRef` is returning (both exported from `@react-navigation/native`)
     <NavigationContainer ref={navigationContainer}>
-      <NavigationTracker
+      <EmbraceNavigationTracker
         ref={navigationContainerRef}
-        provider={tracerProvider || undefined}
-        config={{
-          attributes: {
-            "emb.type": "ux.view",
-          },
-          debug: true,
+        tracerProvider={tracerProvider}
+        screenAttributes={{
+          "test.attr": 654321,
+          package: "@react-navigation/native",
         }}>
         <Tab.Navigator
           screenOptions={{
@@ -54,42 +56,28 @@ export const EmbraceReactNativeTestHarness = () => {
             component={SpanTestingScreen}
           />
           <Tab.Screen
-            name="prop"
+            name="user"
             options={{
-              tabBarAccessibilityLabel: "PROPERTY TESTING",
+              tabBarAccessibilityLabel: "USER TESTING",
             }}
-            component={PropertyTestingScreen}
+            component={UserTestingScreen}
           />
           <Tab.Screen
-            name="tracer"
+            name="network"
             options={{
-              tabBarAccessibilityLabel: "TRACER PROVIDER TESTING",
+              tabBarAccessibilityLabel: "NETWORK TESTING",
             }}
-            component={TracerProviderTestingScreen}
+            component={NetworkTestingScreen}
           />
           <Tab.Screen
-            name="otlp"
+            name="redux"
             options={{
-              tabBarAccessibilityLabel: "EMBRACE OTLP",
+              tabBarAccessibilityLabel: "REDUX TESTING",
             }}
-            component={OTLPTestingScreen}
-          />
-          <Tab.Screen
-            name="misc"
-            options={{
-              tabBarAccessibilityLabel: "MISC TESTING",
-            }}
-            component={MiscTestingScreen}
-          />
-          <Tab.Screen
-            name="nsf"
-            options={{
-              tabBarAccessibilityLabel: "NSF TESTING",
-            }}
-            component={NSFTestingScreen}
+            component={ReduxTestingScreen}
           />
         </Tab.Navigator>
-      </NavigationTracker>
+      </EmbraceNavigationTracker>
     </NavigationContainer>
   );
 };

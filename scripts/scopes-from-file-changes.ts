@@ -3,15 +3,15 @@
   /*
   Takes a list of file path changes like:
 
-    ./scopes-from-file-changes.ts packages/core/something.txt packages/core/something-else.txt packages/spans/src/bar.txt
+    ./scopes-from-file-changes.ts packages/core/something.txt packages/core/something-else.txt packages/react-native-tracer-provider/src/bar.txt
 
   And converts it to a list of scopes that can be used as flags to a lerna command
 
-    --scope=@embrace-io/react-native-spans --scope=@embrace-io/react-native
+    --scope=@embrace-io/react-native-tracer-provider --scope=@embrace-io/react-native
 
   Example:
 
-    yarn run foo $(./scopes-from-file-changes.ts packages/core/something.txt packages/spans/src/bar.txt)
+    yarn run foo $(./scopes-from-file-changes.ts packages/core/something.txt packages/react-native-tracer-provider/src/bar.txt)
    */
 
   const changedFiles = process.argv.slice(2);

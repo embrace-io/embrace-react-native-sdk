@@ -1,4 +1,4 @@
-import EmbraceLogger from "../../src/logger";
+import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 const logger = new EmbraceLogger(console);
 export interface Field {

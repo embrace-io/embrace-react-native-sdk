@@ -68,36 +68,6 @@ private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-
 
 private let DEFAULT_WAIT_TIME = Double(ProcessInfo.processInfo.environment["IOS_TEST_WAIT_TIME"] ?? "") ?? 5.0
 
-// There isn't a way to stop the Embrace SDK once started so this Test case must run before the subsequent ones that start the SDK
-// prepend 'Aa' as a hack to force it first in the alphabetical execution order
-class AaEmbraceSpansSDKNotStartedTests: XCTestCase {
-    var module: EmbraceManager!
-    var promise: Promise!
-
-    override func setUp() async throws {
-        promise = Promise()
-        module = EmbraceManager()
-    }
-
-    func testStartSpanEmbraceNotStarted() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 0)
-        XCTAssertEqual(promise.rejectCalls.count, 1)
-        XCTAssertEqual(promise.rejectCalls[0], "Error starting span, Embrace SDK may not be initialized")
-    }
-
-    func testRecordCompletedSpanEmbraceNotStarted() async throws {
-        module.recordCompletedSpan("my-span", startTimeMs: 0.0, endTimeMs: 0.0,
-                                   errorCodeString: "", parentSpanId: "",
-                                   attributes: NSDictionary(), events: NSArray(),
-                                   resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 0)
-        XCTAssertEqual(promise.rejectCalls.count, 1)
-        XCTAssertEqual(promise.rejectCalls[0], "Error recording span, Embrace SDK may not be initialized")
-    }
-}
-
 class EmbraceManagerTests: XCTestCase {
     static var logExporter: TestLogExporter!
     static var spanExporter: TestSpanExporter!
@@ -198,6 +168,10 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func testLogHandledError() async throws {
+        // This is the first test case that runs in alphabetical order, add an extra sleep to
+        // give the Embrace SDK a chance to startup before executing
+        try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
+
         module.logHandledError("my handled error", stacktrace: "stacktrace as string", properties: NSDictionary(), resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()
@@ -243,480 +217,203 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func testLogMessageWithSeverity() async throws {
+        // 1) should include Native stacktrace
         module.logMessageWithSeverityAndProperties("my log message", severity: "warning", properties: NSDictionary(),
                                                    stacktrace: "",
+                                                   includeStacktrace: true,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        // 2) should not include any stacktrace (neither Native nor JS)
+        module.logMessageWithSeverityAndProperties("my log message without stacktrace", severity: "warning", properties: NSDictionary(),
+                                                   stacktrace: "",
+                                                   includeStacktrace: false,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()
+        XCTAssertEqual(promise.resolveCalls.count, 2)
+        XCTAssertEqual(exportedLogs.count, 2)
 
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertEqual(exportedLogs.count, 1)
+        // 1) just one stacktrace
         XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"]) // empty js stacktrace
+        XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"]) // since the JS stacktrace is empty and `includeStacktrace` is `true` it will add the Native one
 
-        // empty js stacktrace
-        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
-        // if the js stacktrace is empty, will add the native one
-        XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
+        // 2) no stacktrace at all
+        XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
+        XCTAssertEqual(exportedLogs[1].body?.description, "my log message without stacktrace")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.ios"]) // even when the JS is empty since `includeStacktrace` is `false` it won't include stacktraces
     }
 
     func testLogMessageWithSeverityAndProperties() async throws {
-        module.logMessageWithSeverityAndProperties("my log message", severity: "error", properties: NSDictionary(dictionary: [
+        module.logMessageWithSeverityAndProperties("my error log", severity: "error", properties: NSDictionary(dictionary: [
                                                     "prop1": "foo",
                                                     "prop2": "bar"
                                                   ]),
                                                    stacktrace: "",
+                                                   includeStacktrace: true,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        module.logMessageWithSeverityAndProperties("my warning log", severity: "warning", properties: NSDictionary(dictionary: [
+                                                    "prop1": "foo",
+                                                    "prop2": "bar"
+                                                  ]),
+                                                   stacktrace: "",
+                                                   includeStacktrace: true,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        module.logMessageWithSeverityAndProperties("my info log", severity: "info", properties: NSDictionary(dictionary: [
+                                                    "prop1": "foo",
+                                                    "prop2": "bar"
+                                                  ]),
+                                                   stacktrace: "",
+                                                   includeStacktrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()
+        XCTAssertEqual(promise.resolveCalls.count, 3)
+        XCTAssertEqual(exportedLogs.count, 3)
 
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertEqual(exportedLogs.count, 1)
+        // error log
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
-        XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
+        XCTAssertEqual(exportedLogs[0].body?.description, "my error log")
         XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
         XCTAssertEqual(exportedLogs[0].attributes["prop1"]!.description, "foo")
         XCTAssertEqual(exportedLogs[0].attributes["prop2"]!.description, "bar")
-
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
-        // if the js stacktrace is empty, will add the native one
         XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
+
+        // warning log
+        XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
+        XCTAssertEqual(exportedLogs[1].body?.description, "my warning log")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[1].attributes["prop1"]!.description, "foo")
+        XCTAssertEqual(exportedLogs[1].attributes["prop2"]!.description, "bar")
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.rn"])
+        XCTAssertNotNil(exportedLogs[1].attributes["emb.stacktrace.ios"])
+
+        // info log
+        XCTAssertEqual(exportedLogs[2].severity?.description, "INFO")
+        XCTAssertEqual(exportedLogs[2].body?.description, "my info log")
+        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[2].attributes["prop1"]!.description, "foo")
+        XCTAssertEqual(exportedLogs[2].attributes["prop2"]!.description, "bar")
+        // `info` logs should not add stacktrace even when the `includeStacktrace` boolean is passed as true
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.ios"])
     }
 
-    func testLogMessageWithStackTrace() async throws {
-        module.logMessageWithSeverityAndProperties("my log message", severity: "warning", properties: NSDictionary(),
-                                                   stacktrace: "my stack trace",
+    func testLogMessageWithJSStackTrace() async throws {
+        module.logMessageWithSeverityAndProperties("my error message", severity: "error", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: true,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        module.logMessageWithSeverityAndProperties("my warning message", severity: "warning", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: true,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+
+        module.logMessageWithSeverityAndProperties("my info message", severity: "info", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()
-
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertEqual(exportedLogs.count, 1)
-        XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
-        XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "my stack trace")
-    }
-
-    func testStartSpan() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        module.startSpan("span-never-stopped", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 2)
-        let spanId = (promise.resolveCalls[0] as? String)!
-        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
         XCTAssertEqual(promise.resolveCalls.count, 3)
-        XCTAssertTrue((promise.resolveCalls[2] as? Bool)!)
+        XCTAssertEqual(exportedLogs.count, 3)
 
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 1)
-        XCTAssertEqual(exportedSpans[0].name, "my-span")
-        XCTAssertNil(exportedSpans[0].parentSpanId)
-        XCTAssertEqual(exportedSpans[0].attributes.count, 1)
-        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[0].status, Status.ok)
-        XCTAssertTrue(exportedSpans[0].hasEnded)
+        // error
+        XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
+        XCTAssertEqual(exportedLogs[0].body?.description, "my error message")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "my JS stack trace")
+        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
 
-        // the concept of 'key spans' is no longer supported, it was deprecated
-        XCTAssertNil(exportedSpans[0].attributes["emb.key"])
+        // warning
+        XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
+        XCTAssertEqual(exportedLogs[1].body?.description, "my warning message")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.stacktrace.rn"]!.description, "my JS stack trace")
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.ios"])
+
+        // info
+        XCTAssertEqual(exportedLogs[2].severity?.description, "INFO")
+        XCTAssertEqual(exportedLogs[2].body?.description, "my info message")
+        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]!.description, "sys.log")
+        // `info` logs should not add stacktrace even when the `includeStacktrace` boolean is passed as true
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.ios"])
     }
 
-    func testStartSpanWithParent() async throws {
-        module.startSpan("parent-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let parentSpanId = (promise.resolveCalls[0] as? String)!
-        promise.reset()
+    func testLogMessageWithNoStackTrace() async throws {
+        // error
+        module.logMessageWithSeverityAndProperties("my error message", severity: "error", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+        module.logMessageWithSeverityAndProperties("my error message", severity: "error", properties: NSDictionary(),
+                                                   stacktrace: "",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
 
-        module.startSpan("child-span", parentSpanId: parentSpanId, startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let childSpanId = (promise.resolveCalls[0] as? String)!
+        // warning
+        module.logMessageWithSeverityAndProperties("my warning message", severity: "warning", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+        module.logMessageWithSeverityAndProperties("my warning message", severity: "warning", properties: NSDictionary(),
+                                                   stacktrace: "",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
 
-        module.stopSpan(parentSpanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(childSpanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
+        // info
+        module.logMessageWithSeverityAndProperties("my info message", severity: "info", properties: NSDictionary(),
+                                                   stacktrace: "my JS stack trace",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
+        module.logMessageWithSeverityAndProperties("my info message", severity: "info", properties: NSDictionary(),
+                                                   stacktrace: "",
+                                                   includeStacktrace: false,
+                                                   resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 2)
-        XCTAssertEqual(exportedSpans[0].name, "parent-span")
-        XCTAssertNil(exportedSpans[0].parentSpanId)
-        XCTAssertEqual(exportedSpans[1].name, "child-span")
-        XCTAssertEqual(exportedSpans[1].parentSpanId?.hexString, exportedSpans[0].spanId.hexString)
+        let exportedLogs = try await getExportedLogs()
+        XCTAssertEqual(promise.resolveCalls.count, 6)
+        XCTAssertEqual(exportedLogs.count, 6)
+
+        // error log passing js stacktrace
+        XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
+        XCTAssertEqual(exportedLogs[0].body?.description, "my error message")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
+        // error log passing empty stacktrace
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.ios"])
+
+        // warning log passing js stacktrace
+        XCTAssertEqual(exportedLogs[2].severity?.description, "WARN")
+        XCTAssertEqual(exportedLogs[2].body?.description, "my warning message")
+        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.ios"])
+        // warning log passing empty stacktrace
+        XCTAssertNil(exportedLogs[3].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[3].attributes["emb.stacktrace.ios"])
+
+        // info log passing js stacktrace
+        XCTAssertEqual(exportedLogs[4].severity?.description, "INFO")
+        XCTAssertEqual(exportedLogs[4].body?.description, "my info message")
+        XCTAssertEqual(exportedLogs[4].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertNil(exportedLogs[4].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[4].attributes["emb.stacktrace.ios"])
+        // info log  passing empty stacktrace
+        XCTAssertNil(exportedLogs[5].attributes["emb.stacktrace.rn"])
+        XCTAssertNil(exportedLogs[5].attributes["emb.stacktrace.ios"])
     }
-
-    func testStartSpanWithStoppedParent() async throws {
-        module.startSpan("stopped-parent-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let parentSpanId = (promise.resolveCalls[0] as? String)!
-        module.stopSpan(parentSpanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        promise.reset()
-
-        module.startSpan("child-span", parentSpanId: parentSpanId, startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let childSpanId = (promise.resolveCalls[0] as? String)!
-        module.stopSpan(childSpanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 2)
-        XCTAssertEqual(exportedSpans[0].name, "stopped-parent-span")
-        XCTAssertNil(exportedSpans[0].parentSpanId)
-        XCTAssertEqual(exportedSpans[1].name, "child-span")
-        XCTAssertEqual(exportedSpans[1].parentSpanId?.hexString, exportedSpans[0].spanId.hexString)
-    }
-
-    func testStartSpanWithTimes() async throws {
-        module.startSpan("span-with-times", parentSpanId: "", startTimeMs: 1721765402001.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let spanId = (promise.resolveCalls[0] as? String)!
-        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 1721765409002.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 1)
-        XCTAssertEqual(exportedSpans[0].name, "span-with-times")
-        XCTAssertEqual(exportedSpans[0].startTime, Date(timeIntervalSince1970: 1721765402.001))
-        XCTAssertEqual(exportedSpans[0].endTime, Date(timeIntervalSince1970: 1721765409.002))
-    }
-
-    func testStopSpanWithErrorCode() async throws {
-        module.startSpan("failure-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        module.startSpan("user-abandon-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        module.startSpan("unknown-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        module.startSpan("invalid-error-code-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 4)
-        let failureSpanId = (promise.resolveCalls[0] as? String)!
-        let userAbandonSpanId = (promise.resolveCalls[1] as? String)!
-        let unknownSpanId = (promise.resolveCalls[2] as? String)!
-        let invalidErrorCodeSpanId = (promise.resolveCalls[3] as? String)!
-
-        module.stopSpan(failureSpanId, errorCodeString: "Failure", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(userAbandonSpanId, errorCodeString: "UserAbandon", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(unknownSpanId, errorCodeString: "Unknown", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(invalidErrorCodeSpanId, errorCodeString: "foo", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 4)
-        XCTAssertEqual(exportedSpans[0].name, "failure-span")
-        XCTAssertEqual(exportedSpans[0].status, Status.error(description: "failure"))
-        XCTAssertEqual(exportedSpans[0].attributes["emb.error_code"]!.description, "failure")
-
-        XCTAssertEqual(exportedSpans[1].name, "user-abandon-span")
-        XCTAssertEqual(exportedSpans[1].status, Status.error(description: "userAbandon"))
-        XCTAssertEqual(exportedSpans[1].attributes["emb.error_code"]!.description, "userAbandon")
-
-        XCTAssertEqual(exportedSpans[2].name, "unknown-span")
-        XCTAssertEqual(exportedSpans[2].status, Status.error(description: "unknown"))
-        XCTAssertEqual(exportedSpans[2].attributes["emb.error_code"]!.description, "unknown")
-
-        XCTAssertEqual(exportedSpans[3].name, "invalid-error-code-span")
-        XCTAssertEqual(exportedSpans[3].status, Status.ok)
-        XCTAssertNil(exportedSpans[3].attributes["emb.error_code"])
-    }
-
-    func testStopSpanInvalidId() async throws {
-        module.stopSpan("invalid", errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 0)
-        XCTAssertEqual(promise.rejectCalls.count, 1)
-        XCTAssertEqual(promise.rejectCalls[0], "Could not retrieve a span with the given id")
-    }
-
-    func testAddSpanEvent() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let spanId = (promise.resolveCalls[0] as? String)!
-
-        module.addSpanEventToSpan(spanId, name: "my-event", time: 1721765404001.0, attributes: NSDictionary(),
-                                  resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 2)
-        XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
-        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        // Events added after the span ends should be ignored
-        module.addSpanEventToSpan(spanId, name: "my-event-after-stop", time: 0.0, attributes: NSDictionary(),
-                                  resolver: promise.resolve, rejecter: promise.reject)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 1)
-        XCTAssertEqual(exportedSpans[0].name, "my-span")
-        XCTAssertEqual(exportedSpans[0].events.count, 1)
-        XCTAssertEqual(exportedSpans[0].events[0].name, "my-event")
-        XCTAssertEqual(exportedSpans[0].events[0].timestamp, Date(timeIntervalSince1970: 1721765404.001))
-        XCTAssertEqual(exportedSpans[0].events[0].attributes.count, 0)
-    }
-
-    func testAddSpanEventWithAttributes() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let spanId = (promise.resolveCalls[0] as? String)!
-
-        module.addSpanEventToSpan(spanId, name: "my-event", time: 1721765404001.0,
-                                  attributes: NSDictionary(dictionary: [
-                                    "my-attr1": "foo",
-                                    "my-attr2": "bar"
-                                  ]),
-                                  resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 1)
-        XCTAssertEqual(exportedSpans[0].name, "my-span")
-        XCTAssertEqual(exportedSpans[0].events.count, 1)
-        XCTAssertEqual(exportedSpans[0].events[0].name, "my-event")
-        XCTAssertEqual(exportedSpans[0].events[0].timestamp, Date(timeIntervalSince1970: 1721765404.001))
-        XCTAssertEqual(exportedSpans[0].events[0].attributes.count, 2)
-        XCTAssertEqual(exportedSpans[0].events[0].attributes["my-attr1"]!.description, "foo")
-        XCTAssertEqual(exportedSpans[0].events[0].attributes["my-attr2"]!.description, "bar")
-    }
-
-    func testAddSpanEventInvalidId() async throws {
-        module.addSpanEventToSpan("invalid", name: "my-event", time: 1721765404001.0, attributes: NSDictionary(),
-                                  resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 0)
-        XCTAssertEqual(promise.rejectCalls.count, 1)
-        XCTAssertEqual(promise.rejectCalls[0], "Could not retrieve a span with the given id")
-    }
-
-    func testAddSpanAttribute() async throws {
-        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let spanId = (promise.resolveCalls[0] as? String)!
-
-        module.addSpanAttributeToSpan(spanId, key: "my-attr1", value: "foo",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 2)
-        XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
-        module.addSpanAttributeToSpan(spanId, key: "my-attr2", value: "bar",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        // Attributes added after the span ends should be ignored
-        module.addSpanAttributeToSpan(spanId, key: "my-attr3", value: "baz",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 1)
-        XCTAssertEqual(exportedSpans[0].name, "my-span")
-        XCTAssertEqual(exportedSpans[0].attributes.count, 3)
-        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]!.description, "foo")
-        XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]!.description, "bar")
-
-        // the concept of 'key spans' is no longer supported, it was deprecated
-        XCTAssertNil(exportedSpans[0].attributes["emb.key"])
-    }
-
-    func testAddSpanAttributeDuplicate() async throws {
-        // This is the first test case that runs in alphabetical order, add an extra sleep to
-        // give the Embrace SDK a chance to startup before executing
-        try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-
-        module.startSpan("my-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let spanId = (promise.resolveCalls[0] as? String)!
-
-        module.addSpanAttributeToSpan(spanId, key: "my-attr1", value: "foo",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 2)
-        XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
-        // Add the same key again, the value should get overridden
-        module.addSpanAttributeToSpan(spanId, key: "my-attr1", value: "bar",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-        module.stopSpan(spanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 1)
-        XCTAssertEqual(exportedSpans[0].name, "my-span")
-        XCTAssertEqual(exportedSpans[0].attributes.count, 2)
-        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]!.description, "bar")
-
-        // 'markAsKeySpan()' was deprecated. the concept of 'key spans' is no longer supported
-        XCTAssertNil(exportedSpans[0].attributes["emb.key"])
-    }
-
-    func testAddSpanAttributeInvalidId() async throws {
-        module.addSpanAttributeToSpan("invalid", key: "my-attr1", value: "foo",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 0)
-        XCTAssertEqual(promise.rejectCalls.count, 1)
-        XCTAssertEqual(promise.rejectCalls[0], "Could not retrieve a span with the given id")
-    }
-
-    func testRecordCompletedSpan() async throws {
-        let attributes = NSDictionary(dictionary: [
-            "my-attr1": "foo",
-            "my-attr2": "bar"
-        ])
-        let events = NSArray(array: [
-            NSDictionary(dictionary: [
-                "name": "event-1",
-                "timeStampMs": 1721765405077.0
-            ]),
-            NSDictionary(dictionary: [
-                "name": "event-2",
-                "timeStampMs": 1721765406088.0,
-                "attributes": NSDictionary(dictionary: [
-                    "event-2-attr-1": "foo",
-                    "event-2-attr-2": "bar"
-                ])
-            ])
-        ])
-
-        module.recordCompletedSpan("my-span", startTimeMs: 1721765404001.0, endTimeMs: 1721765407003.0,
-                                   errorCodeString: "", parentSpanId: "", attributes: attributes, events: events,
-                                   resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 1)
-        XCTAssertEqual(exportedSpans[0].name, "my-span")
-        XCTAssertNil(exportedSpans[0].parentSpanId)
-        XCTAssertEqual(exportedSpans[0].attributes.count, 3)
-        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]!.description, "foo")
-        XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]!.description, "bar")
-        XCTAssertEqual(exportedSpans[0].startTime, Date(timeIntervalSince1970: 1721765404.001))
-        XCTAssertEqual(exportedSpans[0].endTime, Date(timeIntervalSince1970: 1721765407.003))
-        XCTAssertEqual(exportedSpans[0].events.count, 2)
-        XCTAssertEqual(exportedSpans[0].events[0].name, "event-1")
-        XCTAssertEqual(exportedSpans[0].events[0].timestamp, Date(timeIntervalSince1970: 1721765405.077))
-        XCTAssertEqual(exportedSpans[0].events[0].attributes.count, 0)
-        XCTAssertEqual(exportedSpans[0].events[1].name, "event-2")
-        XCTAssertEqual(exportedSpans[0].events[1].timestamp, Date(timeIntervalSince1970: 1721765406.088))
-        XCTAssertEqual(exportedSpans[0].events[1].attributes.count, 2)
-        XCTAssertEqual(exportedSpans[0].events[1].attributes["event-2-attr-1"]!.description, "foo")
-        XCTAssertEqual(exportedSpans[0].events[1].attributes["event-2-attr-2"]!.description, "bar")
-        XCTAssertEqual(exportedSpans[0].status, Status.ok)
-        XCTAssertTrue(exportedSpans[0].hasEnded)
-    }
-
-    func testRecordCompletedSpanWithParent() async throws {
-        module.startSpan("parent-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let parentSpanId = (promise.resolveCalls[0] as? String)!
-        module.stopSpan(parentSpanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        promise.reset()
-
-        module.recordCompletedSpan("my-span-valid-parent", startTimeMs: 0.0, endTimeMs: 0.0,
-                                   errorCodeString: "", parentSpanId: parentSpanId,
-                                   attributes: NSDictionary(), events: NSArray(),
-                                   resolver: promise.resolve, rejecter: promise.reject)
-        // An invalid parent ID shouldn't prevent the span from otherwise being recorded
-        module.recordCompletedSpan("my-span-invalid-parent", startTimeMs: 0.0, endTimeMs: 0.0,
-                                   errorCodeString: "", parentSpanId: "invalid",
-                                   attributes: NSDictionary(), events: NSArray(),
-                                   resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 2)
-        XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
-        XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 3)
-        XCTAssertEqual(exportedSpans[0].name, "parent-span")
-        XCTAssertNil(exportedSpans[0].attributes["emb.key"])
-        XCTAssertEqual(exportedSpans[1].name, "my-span-valid-parent")
-        XCTAssertEqual(exportedSpans[1].parentSpanId?.hexString, exportedSpans[0].spanId.hexString)
-        XCTAssertEqual(exportedSpans[1].attributes.count, 1)
-        XCTAssertEqual(exportedSpans[1].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[1].events.count, 0)
-        XCTAssertTrue(exportedSpans[1].hasEnded)
-        XCTAssertEqual(exportedSpans[2].name, "my-span-invalid-parent")
-        XCTAssertNil(exportedSpans[2].parentSpanId)
-        XCTAssertEqual(exportedSpans[2].attributes.count, 1)
-        XCTAssertEqual(exportedSpans[2].attributes["emb.type"]!.description, "perf")
-        XCTAssertEqual(exportedSpans[2].events.count, 0)
-        XCTAssertTrue(exportedSpans[2].hasEnded)
-    }
-
-    func testRecordCompletedSpanWithErrorCode() async throws {
-        module.recordCompletedSpan("my-span", startTimeMs: 0.0, endTimeMs: 0.0,
-                                   errorCodeString: "Failure", parentSpanId: "",
-                                   attributes: NSDictionary(), events: NSArray(),
-                                   resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 1)
-        XCTAssertEqual(exportedSpans[0].name, "my-span")
-        XCTAssertEqual(exportedSpans[0].status, Status.error(description: "failure"))
-        XCTAssertEqual(exportedSpans[0].attributes["emb.error_code"]!.description, "failure")
-    }
-
-    func testCompletedSpansRemovedOnSessionEnd() async throws {
-        module.startSpan("stopped-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        module.startSpan("active-span", parentSpanId: "", startTimeMs: 0.0,
-                         resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 2)
-        let stoppedSpanId = (promise.resolveCalls[0] as? String)!
-        let activeSpanId = (promise.resolveCalls[1] as? String)!
-        module.stopSpan(stoppedSpanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        promise.reset()
-
-        // Before the session end accessing both spans should be valid
-        module.addSpanAttributeToSpan(stoppedSpanId, key: "attr1", value: "foo",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-        module.addSpanAttributeToSpan(activeSpanId, key: "attr1", value: "foo",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 2)
-        XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
-        XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
-        promise.reset()
-
-        Embrace.client?.endCurrentSession()
-        // After ending the session the completed span should no longer be accessible
-        module.addSpanAttributeToSpan(activeSpanId, key: "attr2", value: "bar",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
-        module.addSpanAttributeToSpan(stoppedSpanId, key: "attr2", value: "bar",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.rejectCalls.count, 1)
-        XCTAssertEqual(promise.rejectCalls[0], "Could not retrieve a span with the given id")
-        promise.reset()
-
-        // Stopping the 2nd span and ending the session again should clear it as well
-        module.stopSpan(activeSpanId, errorCodeString: "", endTimeMs: 0.0,
-                        resolver: promise.resolve, rejecter: promise.reject)
-        Embrace.client?.endCurrentSession()
-        module.addSpanAttributeToSpan(stoppedSpanId, key: "attr2", value: "bar",
-                                      resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.rejectCalls.count, 1)
-        XCTAssertEqual(promise.rejectCalls[0], "Could not retrieve a span with the given id")
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 2)
-   }
 
     func testLogNetworkRequest() async throws {
         module.logNetworkRequest("https://otest.com/v1/products", httpMethod: "get", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: 1000, bytesReceived: 2000, statusCode: 200, resolver: promise.resolve, rejecter: promise.reject)
@@ -776,24 +473,6 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedSpans[0].attributes["error.message"]!.description, "this is my error")
         XCTAssertEqual(exportedSpans[0].attributes["error.type"]!.description, "custom error")
         XCTAssertNotNil(exportedSpans[0].attributes["emb.w3c_traceparent"])
-    }
-
-    func testStartEndView() async throws {
-        module.startView("my-view", resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        let viewSpanId = (promise.resolveCalls[0] as? String)!
-        module.startView("my-not-ended-view", resolver: promise.resolve, rejecter: promise.reject)
-        promise.reset()
-
-        module.endView(viewSpanId, resolver: promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
-
-        let exportedSpans = try await getExportedSpans()
-        XCTAssertEqual(exportedSpans.count, 1)
-        XCTAssertEqual(exportedSpans[0].name, "emb-screen-view")
-        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "ux.view")
-        XCTAssertEqual(exportedSpans[0].attributes["view.name"]!.description, "my-view")
     }
 }
 

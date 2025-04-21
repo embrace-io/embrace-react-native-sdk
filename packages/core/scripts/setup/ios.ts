@@ -7,8 +7,9 @@ import {
   podfilePatchable,
   xcodePatchable,
   findNameWithCaseSensitiveFromPath,
+  makeSourcemapDirectory,
 } from "../util/ios";
-import EmbraceLogger from "../../src/logger";
+import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 import patch from "./patches/patch";
 import {apiToken, iosAppID, IPackageJson, packageJSON} from "./common";
@@ -101,7 +102,7 @@ export const patchXcodeBundlePhase = {
         project.modifyPhase(
           bundlePhaseKey,
           /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m,
-          `${exportSourcemapRNVariable}\n`,
+          `${makeSourcemapDirectory}\n${exportSourcemapRNVariable}\n`,
         );
         return project.patch();
       }),
@@ -129,7 +130,7 @@ export const addUploadBuildPhase = {
             null,
             {
               shellPath: "/bin/sh",
-              shellScript: `REACT_NATIVE_MAP_PATH="$CONFIGURATION_BUILD_DIR/main.jsbundle.map" EMBRACE_ID=${id} EMBRACE_TOKEN=${token} ${embRunScript}`,
+              shellScript: `REACT_NATIVE_MAP_PATH="$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map" EMBRACE_ID=${id} EMBRACE_TOKEN=${token} ${embRunScript}`,
             },
           );
           return project.patch();

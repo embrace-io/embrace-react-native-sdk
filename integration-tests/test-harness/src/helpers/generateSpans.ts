@@ -18,7 +18,11 @@ import {
   trace,
   Tracer,
 } from "@opentelemetry/api";
-import {EmbraceNativeSpan} from "@embrace-io/react-native-tracer-provider";
+import {
+  EmbraceNativeSpan,
+  asParent,
+  endAsFailed,
+} from "@embrace-io/react-native-tracer-provider";
 import {Platform} from "react-native";
 
 export function generateBasicSpan(tracer: Tracer) {
@@ -84,6 +88,9 @@ export async function generateTestSpans(tracer: Tracer) {
   ]);
   span3.recordException({message: "span exception"});
   span3.end();
+
+  // Use helper for ending in error
+  endAsFailed(tracer.startSpan("test-with-endAsFailed"));
 }
 
 export function generateNestedSpans(tracer: Tracer) {
@@ -112,4 +119,7 @@ export function generateNestedSpans(tracer: Tracer) {
 
   // Parent span ID should still be set if the parent was already ended
   tracer.startSpan("test-6", {}, contextWithSpan1).end();
+
+  // Use helper for setting parent
+  tracer.startSpan("test-with-asParent", {}, asParent(span1)).end();
 }

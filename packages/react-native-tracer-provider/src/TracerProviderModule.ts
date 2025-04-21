@@ -6,14 +6,15 @@ const LINKING_ERROR =
   "- You rebuilt the app after installing the package\n" +
   "- You are not using Expo Go\n";
 
-export const TracerProviderModule =
-  NativeModules.ReactNativeTracerProviderModule
-    ? NativeModules.ReactNativeTracerProviderModule
-    : new Proxy(
-        {},
-        {
-          get() {
-            throw new Error(LINKING_ERROR);
-          },
+const TracerProviderModule = NativeModules.ReactNativeTracerProviderModule
+  ? NativeModules.ReactNativeTracerProviderModule
+  : new Proxy(
+      {},
+      {
+        get() {
+          throw new Error(LINKING_ERROR);
         },
-      );
+      },
+    );
+
+export {TracerProviderModule};
