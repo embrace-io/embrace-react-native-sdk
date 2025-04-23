@@ -4,6 +4,7 @@ import {type ExportedConfigWithProps} from "@expo/config-plugins";
 import {
   withIosEmbraceAddBridgingHeader,
   withIosEmbraceAddInitializer,
+  withIosEmbraceAddUploadPhase,
   withIosEmbraceInvokeInitializer,
 } from "../plugin/withIosEmbrace";
 
@@ -54,6 +55,31 @@ const mockFilePath = (name: string) =>
 const readMockFile = (name: string) =>
   fs.readFileSync(mockFilePath(name)).toString();
 
+const setupTempProjectFile = (
+  originalFileName: string,
+  mockUUIDs: string[] = [],
+) => {
+  // the iOS project file gets overwritten in place so copy the mock to a tmp dir first
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "plugin-test-"));
+  fs.mkdirSync(path.join(tmp, "basictestapp.xcodeproj"));
+  fs.mkdirSync(path.join(tmp, "basictestapp"));
+  const projectPath = path.join(
+    tmp,
+    "basictestapp.xcodeproj",
+    "project.pbxproj",
+  );
+  const originalFile = readMockFile(originalFileName);
+  fs.writeFileSync(projectPath, originalFile);
+
+  const pbx = xcode.project(projectPath);
+  pbx.parseSync();
+
+  // Project UUID is non-deterministic, override the function for testing by passing in a static list of IDs to use
+  pbx.generateUuid = () => mockUUIDs.pop();
+
+  return {pbx, tmp, projectPath, contents: originalFile};
+};
+
 jest.mock("@expo/config-plugins", () => {
   const plugins = jest.requireActual("@expo/config-plugins");
   return {
@@ -76,28 +102,10 @@ describe("Expo Config Plugin iOS", () => {
 
   describe("withIosEmbraceAddInitializer", () => {
     it("adds the EmbraceInitializer.swift project file", async () => {
-      // withIosEmbraceAddInitializer overwrites the file in place so copy the mock to a tmp dir first
-      const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "plugin-test-"));
-      fs.mkdirSync(path.join(tmp, "basictestapp.xcodeproj"));
-      fs.mkdirSync(path.join(tmp, "basictestapp"));
-      const projectPath = path.join(
-        tmp,
-        "basictestapp.xcodeproj",
-        "project.pbxproj",
+      const {pbx, tmp, projectPath} = setupTempProjectFile(
+        "xcodeprojWithoutEmbrace.pbxproj",
+        ["FDCB4B30CE074D9DBF3488C0", "364FBCC5B81042249FAB62DD"],
       );
-      const beforeEmbrace = readMockFile("xcodeprojWithoutEmbrace.pbxproj");
-      fs.writeFileSync(projectPath, beforeEmbrace);
-
-      const pbx = xcode.project(projectPath);
-      pbx.parseSync();
-
-      // Project UUID is non-deterministic, override the function for testing passing in the static IDs
-      // from the mock file
-      const mockUUIDs = [
-        "FDCB4B30CE074D9DBF3488C0",
-        "364FBCC5B81042249FAB62DD",
-      ];
-      pbx.generateUuid = () => mockUUIDs.pop();
 
       const mockConfig = getMockModConfig({
         platform: "ios",
@@ -254,28 +262,10 @@ describe("Expo Config Plugin iOS", () => {
 
   describe("withIosEmbraceAddBridgingHeader", () => {
     it("adds the Swift bridging header", async () => {
-      // withIosEmbraceAddBridgingHeader overwrites the file in place so copy the mock to a tmp dir first
-      const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "plugin-test-"));
-      fs.mkdirSync(path.join(tmp, "basictestapp.xcodeproj"));
-      fs.mkdirSync(path.join(tmp, "basictestapp"));
-      const projectPath = path.join(
-        tmp,
-        "basictestapp.xcodeproj",
-        "project.pbxproj",
+      const {pbx, tmp, projectPath} = setupTempProjectFile(
+        "xcodeprojNoBridgingHeader.pbxproj",
+        ["A46AD91AB1474E0A94A4CACD", "16AE3E77E00D49E9B12CCBE0"],
       );
-      const beforeEmbrace = readMockFile("xcodeprojNoBridgingHeader.pbxproj");
-      fs.writeFileSync(projectPath, beforeEmbrace);
-
-      const pbx = xcode.project(projectPath);
-      pbx.parseSync();
-
-      // Project UUID is non-deterministic, override the function for testing passing in the static IDs
-      // from the mock file
-      const mockUUIDs = [
-        "FDCB4B30CE074D9DBF3488C0",
-        "364FBCC5B81042249FAB62DD",
-      ];
-      pbx.generateUuid = () => mockUUIDs.pop();
 
       const mockConfig = getMockModConfig({
         platform: "ios",
@@ -305,13 +295,12 @@ describe("Expo Config Plugin iOS", () => {
       ).toEqual(expectedHeader);
 
       const expectedAfterHeader = readMockFile(
-        "xcodeprojWithoutEmbrace.pbxproj",
+        "xcodeprojWithBridgingHeader.pbxproj",
       );
       expect(fs.readFileSync(projectPath).toString()).toEqual(
         expectedAfterHeader,
       );
 
-      /*
       // No updates should be performed when EmbraceInitializer.swift already exists
       await modFunc(mockConfig);
 
@@ -325,22 +314,12 @@ describe("Expo Config Plugin iOS", () => {
       expect(fs.readFileSync(projectPath).toString()).toEqual(
         expectedAfterHeader,
       );
-
-       */
     });
 
     it("does nothing if the Swift bridging header is already added", async () => {
-      // withIosEmbraceAddBridgingHeader overwrites the file in place so copy the mock to a tmp dir first
-      const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "plugin-test-"));
-      fs.mkdirSync(path.join(tmp, "basictestapp.xcodeproj"));
-      const projectPath = path.join(
-        tmp,
-        "basictestapp.xcodeproj",
-        "project.pbxproj",
+      const {pbx, tmp} = setupTempProjectFile(
+        "xcodeprojNoBridgingHeader.pbxproj",
       );
-      const beforeEmbrace = readMockFile("xcodeprojWithoutEmbrace.pbxproj");
-      fs.writeFileSync(projectPath, beforeEmbrace);
-      const pbx = xcode.project(projectPath);
 
       const mockConfig = getMockModConfig({
         platform: "ios",
@@ -356,6 +335,46 @@ describe("Expo Config Plugin iOS", () => {
       });
 
       expect(mockWithXcodeProject).toHaveBeenCalled();
+    });
+  });
+
+  describe("withIosEmbraceAddUploadPhase", () => {
+    it("modifies the react native bundle phase and adds the Embrace upload phase", async () => {
+      const {pbx, tmp, projectPath} = setupTempProjectFile(
+        "xcodeprojWithoutEmbrace.pbxproj",
+        ["86732A137C194E2FB986E7FA"],
+      );
+
+      const mockConfig = getMockModConfig({
+        platform: "ios",
+        platformProjectRoot: tmp,
+        projectName: "basictestapp",
+        modResults: pbx,
+      });
+
+      withIosEmbraceAddUploadPhase(mockConfig, {
+        androidAppId: "",
+        apiToken: "apiToken456",
+        iOSAppId: "ios789",
+      });
+
+      expect(mockWithXcodeProject).toHaveBeenCalled();
+      const modFunc = mockWithXcodeProject.mock.lastCall[0];
+      await modFunc(mockConfig);
+
+      const expectedAfterPhase = readMockFile(
+        "xcodeprojWithEmbraceBuildPhase.pbxproj",
+      );
+      expect(fs.readFileSync(projectPath).toString()).toEqual(
+        expectedAfterPhase,
+      );
+
+      // No updates should be performed when the phase has already been added
+      await modFunc(mockConfig);
+
+      expect(fs.readFileSync(projectPath).toString()).toEqual(
+        expectedAfterPhase,
+      );
     });
   });
 });

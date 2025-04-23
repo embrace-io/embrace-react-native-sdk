@@ -9,10 +9,10 @@ import {
 
 import {EmbraceProps} from "./types";
 import {addAfter, hasMatch} from "./textUtils";
+import {writeIfNotExists} from "./fileUtils";
 
 // TODO, fails if using `import` here?
 const path = require("path");
-const fs = require("fs");
 
 const androidBuildToolsRE = /(\s*)classpath.*com\.android\.tools\.build:gradle/;
 const androidLegacyPluginRE = /(\s*)apply plugin.*com\.android\.application/;
@@ -35,29 +35,19 @@ const withAndroidEmbraceJSONConfig: ConfigPlugin<EmbraceProps> = (
         "embrace-config.json",
       );
 
-      try {
-        const fd = fs.openSync(filePath, "wx");
-        fs.writeFileSync(
-          fd,
-          JSON.stringify(
-            {
-              app_id: props.androidAppId,
-              api_token: props.apiToken,
-              ...props.androidCustomConfig,
-            },
-            null,
-            2,
-          ),
-        );
-      } catch (e) {
-        if (e instanceof Error && e.message.includes("EEXIST")) {
-          // Don't try and overwrite the file if it already exists
-        } else {
-          console.error(
-            `withAndroidEmbraceJSONConfig failed to write ${filePath}: ${e}`,
-          );
-        }
-      }
+      writeIfNotExists(
+        filePath,
+        JSON.stringify(
+          {
+            app_id: props.androidAppId,
+            api_token: props.apiToken,
+            ...props.androidCustomConfig,
+          },
+          null,
+          2,
+        ),
+        "withAndroidEmbraceJSONConfig",
+      );
 
       return config;
     },

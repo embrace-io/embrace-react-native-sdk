@@ -6,9 +6,15 @@ import {
   withXcodeProject,
 } from "@expo/config-plugins";
 
-import {addFile, updateBuildProperty} from "./xcodeproj";
+import {
+  addFile,
+  findPhase,
+  modifyPhase,
+  updateBuildProperty,
+} from "./xcodeproj";
 import {EmbraceProps} from "./types";
 import {addAfter, hasMatch} from "./textUtils";
+import {writeIfNotExists} from "./fileUtils";
 
 // TODO, fails if using `import` here?
 const path = require("path");
@@ -60,18 +66,11 @@ const withIosEmbraceAddInitializer: ConfigPlugin<EmbraceProps> = (
       "EmbraceInitializer.swift",
     );
 
-    try {
-      const fd = fs.openSync(filePath, "wx");
-      fs.writeFileSync(fd, getEmbraceInitializerContents(props.iOSAppId));
-    } catch (e) {
-      if (e instanceof Error && e.message.includes("EEXIST")) {
-        // Don't try and overwrite the file if it already exists
-      } else {
-        throw new Error(
-          `withIosEmbraceAddInitializer failed to write ${filePath}: ${e}`,
-        );
-      }
-    }
+    writeIfNotExists(
+      filePath,
+      getEmbraceInitializerContents(props.iOSAppId),
+      "withIosEmbraceAddInitializer",
+    );
 
     const projectRelativePath = path.join(
       projectName,
@@ -182,18 +181,13 @@ const withIosEmbraceAddBridgingHeader: ConfigPlugin<
       filename,
     );
 
-    try {
-      const fd = fs.openSync(filePath, "wx");
-      fs.writeFileSync(fd, getBridgingHeaderContents());
-    } catch (e) {
-      if (e instanceof Error && e.message.includes("EEXIST")) {
-        // Don't try and overwrite the file if it already exists
-        return config;
-      } else {
-        throw new Error(
-          `withIosEmbraceAddBridgingHeader failed to write ${filePath}: ${e}`,
-        );
-      }
+    const wrote = writeIfNotExists(
+      filePath,
+      getBridgingHeaderContents(),
+      "withIosEmbraceAddBridgingHeader",
+    );
+    if (!wrote) {
+      return config;
     }
 
     const projectRelativePath = path.join(projectName, filename);
@@ -202,16 +196,72 @@ const withIosEmbraceAddBridgingHeader: ConfigPlugin<
       return config;
     }
 
-    addFile(project, projectName, projectRelativePath, "source");
+    addFile(project, projectName, projectRelativePath, "resource");
 
     updateBuildProperty(
       project,
       projectName,
       "SWIFT_OBJC_BRIDGING_HEADER",
-      projectRelativePath,
+      `"${projectRelativePath}"`,
     );
 
     fs.writeFileSync(project.filepath, project.writeSync());
+
+    return config;
+  });
+};
+
+const rnBundleScript = "react-native-xcode.sh";
+const embUploadScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';
+const sourceMapPath =
+  "$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map";
+const exportSourcemapLine = `export SOURCEMAP_FILE="${sourceMapPath}"`;
+
+const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
+  expoConfig,
+  props,
+) => {
+  return withXcodeProject(expoConfig, async config => {
+    let modified = false;
+    const project = config.modResults;
+
+    const bundlePhase = findPhase(project, rnBundleScript);
+    if (!bundlePhase) {
+      throw new Error("Could not find React Native bundle phase to modify");
+    }
+
+    if (!hasMatch(bundlePhase.code, "embrace-assets")) {
+      modifyPhase(
+        project,
+        bundlePhase.key,
+        /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m,
+        `mkdir -p "$CONFIGURATION_BUILD_DIR/embrace-assets"\n` +
+          `${exportSourcemapLine}\n`,
+      );
+      modified = true;
+    }
+
+    const uploadBuildPhaseKey = findPhase(project, "EmbraceIO/run.sh");
+    if (!uploadBuildPhaseKey) {
+      project.addBuildPhase(
+        [],
+        "PBXShellScriptBuildPhase",
+        "Upload Debug Symbols to Embrace",
+        null,
+        {
+          shellPath: "/bin/sh",
+          shellScript: JSON.stringify(
+            `REACT_NATIVE_MAP_PATH="${sourceMapPath}" EMBRACE_ID=${props.iOSAppId} EMBRACE_TOKEN=${props.apiToken} ${embUploadScript}\n` +
+              `rm "${sourceMapPath}"`,
+          ),
+        },
+      );
+      modified = true;
+    }
+
+    if (modified) {
+      fs.writeFileSync(project.filepath, project.writeSync());
+    }
 
     return config;
   });
@@ -222,10 +272,7 @@ const withIosEmbrace: ConfigPlugin<EmbraceProps> = (config, props) => {
     config = withIosEmbraceAddInitializer(config, props);
     config = withIosEmbraceInvokeInitializer(config, props);
     config = withIosEmbraceAddBridgingHeader(config, props);
-    /*
-  TODO
-  - add build phase for uploading source maps
-   */
+    config = withIosEmbraceAddUploadPhase(config, props);
   } catch (e) {
     WarningAggregator.addWarningIOS(
       "@embrace-io/expo-config-plugin",
@@ -243,4 +290,5 @@ export {
   withIosEmbraceAddInitializer,
   withIosEmbraceInvokeInitializer,
   withIosEmbraceAddBridgingHeader,
+  withIosEmbraceAddUploadPhase,
 };

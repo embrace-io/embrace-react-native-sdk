@@ -1,103 +1,60 @@
+import {hasMatch} from "./textUtils";
+
 type ProjectFileType = "resource" | "source";
 
 type XCodeProject = any;
 
-/*
-
-// TODO, fails if using `import` here?
-const path = require("path");
-const fs = require("fs");
+type BuildPhase = {
+  key: string;
+  code: string[];
+};
 
 const buildPhaseObj = (project: XCodeProject): {[key: string]: any} => {
   return project.hash.project.objects.PBXShellScriptBuildPhase || {};
 };
 
+const findPhase = (
+  project: XCodeProject,
+  matcher: string,
+): BuildPhase | null => {
+  const phases = buildPhaseObj(project);
+  const phaseKeys = Object.keys(phases);
 
-const hasLine = (key: string, line: string | RegExp): boolean => {
-  const buildPhaseObj = buildPhaseObj();
-  const phase = buildPhaseObj[key];
-  if (!phase) {
-    return false;
+  for (let i = 0; i < phaseKeys.length; i++) {
+    const key = phaseKeys[i];
+    const phase = phases[key];
+    const code = phase.shellScript && [phase.shellScript];
+
+    if (code && hasMatch(code, matcher)) {
+      return {key, code};
+    }
   }
-  if (!phase.shellScript) {
-    return false;
-  }
-  const code = JSON.parse(phase.shellScript);
-  return (line instanceof RegExp ? code.search(line) : code.indexOf(line)) > -1;
+
+  return null;
 };
 
-const modifyPhase = (key: string, line: string | RegExp, add: string) => {
-  // Doesn't include line
-  if (!hasLine(key, line)) {
-    return;
-  }
-  // Already has add
-  if (add && hasLine(key, add)) {
-    return;
-  }
-  const buildPhaseObj = buildPhaseObj();
-  const phase = buildPhaseObj[key];
-  if (!phase) {
-    return;
-  }
-  if (!phase.shellScript) {
-    return;
-  }
+const modifyPhase = (
+  project: XCodeProject,
+  phaseKey: string,
+  matcher: RegExp,
+  addBefore: string,
+) => {
+  const phase = buildPhaseObj(project)[phaseKey];
   let code = JSON.parse(phase.shellScript);
   code = code.replace(
-    line,
-    (match: string) => `${add}${add === "" ? "" : match}`,
+    matcher,
+    (match: string) => `${addBefore}${addBefore === "" ? "" : match}`,
   );
 
   phase.shellScript = JSON.stringify(code);
-};
-const findPhase = (line: string | RegExp): string => {
-  const buildPhaseObj = buildPhaseObj();
-  return (
-    Object.keys(buildPhaseObj).find(key => {
-      return hasLine(key, line);
-    }) || ""
+  /*
+  phase.shellSckript = phase.shellScript.replace(
+    match,
+    (match: string) => `${addBefore}${addBefore === "" ? "" : match}`,
   );
+
+     */
 };
-
-const findAndRemovePhase = (project: XCodeProject, line: string | RegExp) => {
-  const buildPhaseObj = buildPhaseObj();
-
-  project.hash.project.objects.PBXShellScriptBuildPhase = Object.keys(
-    buildPhaseObj,
-  ).reduce((a, key) => {
-    const phase = buildPhaseObj[key];
-    if (!phase) {
-      return a;
-    }
-    if (phase.shellScript) {
-      const code = JSON.parse(phase.shellScript);
-      if (code.search(line) > -1) {
-        return a;
-      }
-    }
-
-    return {...a, [key]: buildPhaseObj[key]};
-  }, {});
-  const nativeTargets = project.hash.project.objects.PBXNativeTarget;
-  project.hash.project.objects.PBXNativeTarget = Object.keys(
-    nativeTargets,
-  ).reduce((a, key) => {
-    const phase = nativeTargets[key];
-    if (!phase) {
-      return a;
-    }
-    if (phase.buildPhases) {
-      phase.buildPhases = phase.buildPhases.filter(
-        ({comment}: {comment: string}) =>
-          !comment.includes("Upload Debug Symbols to Embrace"),
-      );
-    }
-    return {...a, [key]: phase};
-  }, {});
-};
-
- */
 
 const addFile = (
   project: XCodeProject,
@@ -157,97 +114,10 @@ const getTargetHash = (project: XCodeProject, name: string) => {
   return target ? target.buildConfigurationList : "";
 };
 
-/*
-
-
-
-const removeResourceFile = (
-  project: XCodeProject,
-  groupName: string,
-  path: string,
-) => {
-  const target = findHash(
-    project.hash.project.objects.PBXNativeTarget,
-    groupName,
-  );
-  const group = findHash(project.hash.project.objects.PBXGroup, groupName);
-  if (target && group) {
-    const file = project.removeSourceFile(path, {target: target[0]}, group[0]);
-    project.removeFromPbxResourcesBuildPhase(file);
-  }
-};
-
- */
-
 const findHash = (objects: any, groupName: string) => {
   return Object.entries(objects).find(([_, group]: [any, any]): boolean => {
     return group.name === groupName;
   });
 };
 
-/*
-const addBridgingHeader = (
-  project: XCodeProject,
-  projectName: string,
-  filePath: string,
-) => {
-  const bridgingHeader = getBuildProperty(
-    project,
-    projectName,
-    "SWIFT_OBJC_BRIDGING_HEADER",
-  );
-
-  if (bridgingHeader) {
-    return;
-  }
-
-  // Add the bridging header file
-  const filename = `${projectName}-Bridging-Header.h`;
-  fs.writeFileSync(
-    path.join(filePath, "../../", projectName, filename),
-    getBridgingHeaderContents(),
-  );
-
-  const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
-    filePath,
-    projectName,
-  );
-  addFile(
-    nameWithCaseSensitive,
-    `${nameWithCaseSensitive}/${filename}`,
-    "source",
-  );
-
-  updateBuildProperty(
-    project,
-    projectName,
-    "SWIFT_OBJC_BRIDGING_HEADER",
-    `"${nameWithCaseSensitive}/${filename}"`,
-  );
-};
-
-
-const getBridgingHeaderContents = () => {
-  return `//
-//  Use this file to import your target's public headers that you would like to expose to Swift.
-//
-`;
-};
-
-
-const findNameWithCaseSensitiveFromPath = (path: string, name: string) => {
-  const pathSplitted = path.split("/");
-  const nameInLowerCase = name.toLocaleLowerCase();
-
-  const nameFounded = pathSplitted.find(
-    element => element.toLocaleLowerCase() === `${nameInLowerCase}.xcodeproj`,
-  );
-  if (nameFounded) {
-    return nameFounded.replace(".xcodeproj", "");
-  }
-
-  return name;
-};
- */
-
-export {addFile, updateBuildProperty};
+export {addFile, updateBuildProperty, findPhase, modifyPhase};

@@ -1,5 +1,6 @@
-const hasMatch = (lines: string[], matcher: string) =>
-  lines.find(line => line.match(matcher));
+const hasMatch = (lines: string[], matcher: string) => {
+  return lines.find(line => line.match(matcher));
+};
 
 const addAfter = (lines: string[], matcher: RegExp, toAdd: string) => {
   let match;
