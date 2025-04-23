@@ -2,7 +2,6 @@ import {
   ConfigPlugin,
   WarningAggregator,
   withAppDelegate,
-  // withDangerousMod,
   withXcodeProject,
 } from "@expo/config-plugins";
 
@@ -19,6 +18,15 @@ import {writeIfNotExists} from "./fileUtils";
 // TODO, fails if using `import` here?
 const path = require("path");
 const fs = require("fs");
+
+const importAppDelegateHeaderRE = /(\s*)#import "AppDelegate\.h"/;
+const objcAppLaunchRE = /(\s*)self.moduleName = @"main"/;
+const swifthAppLaunchRE = /(\s*)func\s+application\(\s*_\s*[^}]*\{/;
+const rnBundleScript = "react-native-xcode.sh";
+const embUploadScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';
+const sourceMapPath =
+  "$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map";
+const exportSourcemapLine = `export SOURCEMAP_FILE="${sourceMapPath}"`;
 
 const getEmbraceInitializerContents = (appId: string) => {
   return `import Foundation
@@ -77,21 +85,14 @@ const withIosEmbraceAddInitializer: ConfigPlugin<EmbraceProps> = (
       "EmbraceInitializer.swift",
     );
 
-    if (project.hasFile(projectRelativePath)) {
-      return config;
+    if (!project.hasFile(projectRelativePath)) {
+      addFile(project, projectName, projectRelativePath, "source");
+      fs.writeFileSync(project.filepath, project.writeSync());
     }
-
-    addFile(project, projectName, projectRelativePath, "source");
-
-    fs.writeFileSync(project.filepath, project.writeSync());
 
     return config;
   });
 };
-
-const importAppDelegateHeaderRE = /(\s*)#import "AppDelegate\.h"/;
-const objcAppLaunchRE = /(\s*)self.moduleName = @"main"/;
-const swifthAppLaunchRE = /(\s*)func\s+application\(\s*_\s*[^}]*\{/;
 
 const withIosEmbraceInvokeInitializer: ConfigPlugin<EmbraceProps> = (
   expoConfig,
@@ -180,42 +181,29 @@ const withIosEmbraceAddBridgingHeader: ConfigPlugin<
       projectName,
       filename,
     );
-
-    const wrote = writeIfNotExists(
+    const projectRelativePath = path.join(projectName, filename);
+    writeIfNotExists(
       filePath,
       getBridgingHeaderContents(),
       "withIosEmbraceAddBridgingHeader",
     );
-    if (!wrote) {
-      return config;
+
+    if (!project.hasFile(projectRelativePath)) {
+      addFile(project, projectName, projectRelativePath, "resource");
+
+      updateBuildProperty(
+        project,
+        projectName,
+        "SWIFT_OBJC_BRIDGING_HEADER",
+        `"${projectRelativePath}"`,
+      );
+
+      fs.writeFileSync(project.filepath, project.writeSync());
     }
-
-    const projectRelativePath = path.join(projectName, filename);
-
-    if (project.hasFile(projectRelativePath)) {
-      return config;
-    }
-
-    addFile(project, projectName, projectRelativePath, "resource");
-
-    updateBuildProperty(
-      project,
-      projectName,
-      "SWIFT_OBJC_BRIDGING_HEADER",
-      `"${projectRelativePath}"`,
-    );
-
-    fs.writeFileSync(project.filepath, project.writeSync());
 
     return config;
   });
 };
-
-const rnBundleScript = "react-native-xcode.sh";
-const embUploadScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';
-const sourceMapPath =
-  "$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map";
-const exportSourcemapLine = `export SOURCEMAP_FILE="${sourceMapPath}"`;
 
 const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
   expoConfig,
@@ -241,8 +229,7 @@ const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
       modified = true;
     }
 
-    const uploadBuildPhaseKey = findPhase(project, "EmbraceIO/run.sh");
-    if (!uploadBuildPhaseKey) {
+    if (!findPhase(project, "EmbraceIO/run.sh")) {
       project.addBuildPhase(
         [],
         "PBXShellScriptBuildPhase",

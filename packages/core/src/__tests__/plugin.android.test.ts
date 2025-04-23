@@ -11,6 +11,8 @@ import {
   withAndroidEmbraceSwazzlerDependency,
 } from "../plugin/withAndroidEmbrace";
 
+import {getMockModConfig, readMockFile} from "./pluginTestUtils";
+
 // TODO, fails if using `import` here?
 const path = require("path");
 const os = require("os");
@@ -20,37 +22,6 @@ const mockWithProjectBuildGradle = jest.fn();
 const mockWithAppBuildGradle = jest.fn();
 const mockWithDangerousMod = jest.fn();
 const mockWithMainApplication = jest.fn();
-
-const getMockExpoConfig = (): ExpoConfig => ({name: "", slug: ""});
-const getMockModConfig = (props: {
-  platform?: string;
-  platformProjectRoot?: string;
-  language?: string;
-  contents?: string;
-}): ExportedConfigWithProps =>
-  ({
-    ...getMockExpoConfig(),
-    ...{
-      modRequest: {
-        projectRoot: "project/",
-        platformProjectRoot:
-          props.platformProjectRoot || `project/${props.platform || ""}`,
-        modName: "",
-        platform: props.platform || "",
-        introspect: false,
-        ignoreExistingNativeFiles: false,
-      },
-      modResults: {
-        path: "",
-        language: props.language || "",
-        contents: props.contents || "",
-      },
-      modRawConfig: getMockExpoConfig(),
-    },
-  }) as ExportedConfigWithProps;
-
-const readMockFile = (name: string) =>
-  fs.readFileSync(path.join(__dirname, "__plugin_mocks__", name)).toString();
 
 jest.mock("@expo/config-plugins", () => {
   const plugins = jest.requireActual("@expo/config-plugins");
