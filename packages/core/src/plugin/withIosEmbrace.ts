@@ -23,7 +23,6 @@ const importAppDelegateHeaderRE = /(\s*)#import "AppDelegate\.h"/;
 const objcAppLaunchRE = /(\s*)self.moduleName = @"main"/;
 const swifthAppLaunchRE = /(\s*)func\s+application\(\s*_\s*[^}]*\{/;
 const rnBundleScript = "react-native-xcode.sh";
-const embUploadScript = '"${PODS_ROOT}/EmbraceIO/run.sh"';
 const sourceMapPath =
   "$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map";
 const exportSourcemapLine = `export SOURCEMAP_FILE="${sourceMapPath}"`;
@@ -134,6 +133,19 @@ const withIosEmbraceInvokeInitializer: ConfigPlugin<EmbraceProps> = (
           "failed to add the bridging header import to the AppDelegate file",
         );
       }
+
+      const addedExpoModulesImport = addAfter(
+        lines,
+        // Look for the import of AppDelegate.h and add the import underneath
+        importAppDelegateHeaderRE,
+        `#import "ExpoModulesCore-Swift.h"`,
+      );
+
+      if (!addedExpoModulesImport) {
+        throw new Error(
+          "failed to add the expo modules import to the AppDelegate file",
+        );
+      }
     }
 
     const addedInit = addAfter(
@@ -229,6 +241,9 @@ const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
       modified = true;
     }
 
+    /*
+    shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\" EMBRACE_ID=ios789 EMBRACE_TOKEN=apiToken456 \"${PODS_ROOT}/EmbraceIO/run.sh\"\nrm \"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\"";
+     */
     if (!findPhase(project, "EmbraceIO/run.sh")) {
       project.addBuildPhase(
         [],
@@ -237,10 +252,9 @@ const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
         null,
         {
           shellPath: "/bin/sh",
-          shellScript: JSON.stringify(
-            `REACT_NATIVE_MAP_PATH="${sourceMapPath}" EMBRACE_ID=${props.iOSAppId} EMBRACE_TOKEN=${props.apiToken} ${embUploadScript}\n` +
-              `rm "${sourceMapPath}"`,
-          ),
+          shellScript:
+            `REACT_NATIVE_MAP_PATH="${sourceMapPath}" EMBRACE_ID=${props.iOSAppId} EMBRACE_TOKEN=${props.apiToken} "\${PODS_ROOT}/EmbraceIO/run.sh"\\n` +
+            `rm "${sourceMapPath}"`,
         },
       );
       modified = true;

@@ -8,7 +8,7 @@ import {
   withIosEmbraceInvokeInitializer,
 } from "../plugin/withIosEmbrace";
 
-import {getMockModConfig, readMockFile} from "./pluginTestUtils";
+import {getMockModConfig, readMockFile} from "./pluginUtils";
 
 // TODO, fails if using `import` here?
 const path = require("path");

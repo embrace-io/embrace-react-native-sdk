@@ -41,7 +41,10 @@ const withAndroidEmbraceJSONConfig: ConfigPlugin<EmbraceProps> = (
           {
             app_id: props.androidAppId,
             api_token: props.apiToken,
-            ...props.androidCustomConfig,
+            sdk_config: {
+              app_framework: "react_native",
+              ...props.androidSDKConfig,
+            },
           },
           null,
           2,
@@ -65,16 +68,13 @@ const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
       return config;
     }
 
-    // Kotlin and Groovy DSLs require different quote characters:
-    // https://developer.android.com/build/migrate-to-kotlin-dsl#convert-strings
-    const quote = config.modResults.language === "groovy" ? `'` : `"`;
-
     const success = addAfter(
       lines,
       // Look for a dependency on 'com.android.tools.build:gradle', which all projects should have, so that we can
       // add our own dependency underneath
       androidBuildToolsRE,
-      `classpath(${quote}io.embrace:embrace-swazzler:\${findProject(":embrace-io_react-native").properties["emb_android_sdk"]}${quote})`,
+      // https://developer.android.com/build/migrate-to-kotlin-dsl#convert-strings
+      `classpath("io.embrace:embrace-swazzler:\${findProject(':embrace-io_react-native').properties['emb_android_sdk']}")`,
     );
 
     if (!success) {
@@ -160,7 +160,7 @@ const withAndroidEmbraceOnCreate: ConfigPlugin<EmbraceProps> = expoConfig => {
       // Want the Embrace SDK initialization to happen right after the super.OnCreate() call in the
       // Application.onCreate() method
       onCreateRE,
-      `Embrace.getInstance().start(this, false, Embrace.AppFramework.REACT_NATIVE)${language === "java" ? ";" : ""}`,
+      `Embrace.getInstance().start(this)${language === "java" ? ";" : ""}`,
     );
 
     if (!addedInit) {

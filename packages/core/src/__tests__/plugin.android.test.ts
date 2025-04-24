@@ -11,7 +11,7 @@ import {
   withAndroidEmbraceSwazzlerDependency,
 } from "../plugin/withAndroidEmbrace";
 
-import {getMockModConfig, readMockFile} from "./pluginTestUtils";
+import {getMockModConfig, readMockFile} from "./pluginUtils";
 
 // TODO, fails if using `import` here?
 const path = require("path");
@@ -69,8 +69,10 @@ describe("Expo Config Plugin Android", () => {
         androidAppId: "APPID",
         apiToken: "TOKEN",
         iOSAppId: "",
-        androidCustomConfig: {
-          enable_network_span_forwarding: true,
+        androidSDKConfig: {
+          networking: {
+            enable_network_span_forwarding: true,
+          },
         },
       });
 
@@ -87,7 +89,12 @@ describe("Expo Config Plugin Android", () => {
       expect(JSON.parse(config)).toEqual({
         app_id: "APPID",
         api_token: "TOKEN",
-        enable_network_span_forwarding: true,
+        sdk_config: {
+          app_framework: "react_native",
+          networking: {
+            enable_network_span_forwarding: true,
+          },
+        },
       });
     });
   });

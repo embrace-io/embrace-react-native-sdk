@@ -94,8 +94,8 @@ const updateBuildProperty = (
   value: string,
 ) => {
   const targetHash = getTargetHash(project, groupName);
-  const configurations = project.pbxXcBuildConfigurationSection();
-  const xcConfigList = project.pbxXcConfigurationList();
+  const configurations = project.pbxXCBuildConfigurationSection();
+  const xcConfigList = project.pbxXCConfigurationList();
   for (const configName in xcConfigList) {
     if (configName !== targetHash) {
       continue;

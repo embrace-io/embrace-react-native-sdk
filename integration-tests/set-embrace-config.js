@@ -63,6 +63,11 @@
       "--namespace <namespace>",
       "namespace value to substitute when pointing to the mock-api",
     )
+    .option(
+      "--prebuild",
+      "writes config to the app.json expo config instead of native directories",
+    )
+
     .action((app, config) => {
       appPath = app;
       configPath = config;
@@ -154,12 +159,14 @@
     }
   }
 
-  fs.writeFileSync(
-    androidConfigPath,
-    JSON.stringify(androidConfig, undefined, 2),
-  );
+  if (!options.prebuild) {
+    fs.writeFileSync(
+      androidConfigPath,
+      JSON.stringify(androidConfig, undefined, 2),
+    );
 
-  console.log(`Wrote ${androidConfigPath}`);
+    console.log(`Wrote ${androidConfigPath}`);
+  }
 
   /*
     interface SDKConfig {
@@ -198,4 +205,34 @@
 
   fs.writeFileSync(sdkConfigPath, JSON.stringify(sdkConfig, undefined, 2));
   console.log(`Wrote ${sdkConfigPath}`);
+
+  if (options.prebuild) {
+    const appJSONPath = `${appPath}/app.json`;
+    const appJSONConfig = JSON.parse(fs.readFileSync(appJSONPath, "utf8"));
+
+    const embracePluginIndex = appJSONConfig.expo.plugins.findIndex(
+      plugin => plugin.length && plugin[0] === "@embrace-io/react-native",
+    );
+
+    // Remove the existing entry
+    if (embracePluginIndex >= 0) {
+      appJSONConfig.expo.plugins.splice(embracePluginIndex, 1);
+    }
+
+    // Add the updated plugin entry
+    appJSONConfig.expo.plugins.push([
+      "@embrace-io/react-native",
+      {
+        androidAppId: config.android_app_id,
+        iOSAppId: config.ios_app_id,
+        apiToken: config.api_token,
+        androidSDKConfig: androidConfig.sdk_config,
+      },
+    ]);
+
+    // Overwrite the file
+    fs.writeFileSync(appJSONPath, JSON.stringify(appJSONConfig, undefined, 2));
+
+    console.log(`Wrote ${appJSONPath}`);
+  }
 }

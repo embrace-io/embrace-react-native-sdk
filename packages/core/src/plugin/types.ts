@@ -2,7 +2,7 @@ type EmbraceProps = {
   androidAppId: string;
   iOSAppId: string;
   apiToken: string;
-  androidCustomConfig?: object;
+  androidSDKConfig?: object;
   productModuleName?: string;
 };
 

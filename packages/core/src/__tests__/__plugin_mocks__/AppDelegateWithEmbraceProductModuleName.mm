@@ -1,4 +1,5 @@
 #import "AppDelegate.h"
+#import "ExpoModulesCore-Swift.h"
 #import "MyProduct-Swift.h"
 
 #import <React/RCTBundleURLProvider.h>
