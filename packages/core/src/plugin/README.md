@@ -25,7 +25,8 @@ To apply this in your project include the following in your `app.json`:
 }
 ```
 
-TODO --> which props are required?
+Refer to [EmbraceProps](./types.ts) for a description of the properties available to configure
+the plugin.
 
 For more details and troubleshooting see [Adding the React Native Embrace SDK](https://embrace.io/docs/react-native/integration/add-embrace-sdk/)
 in our docs.
