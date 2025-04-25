@@ -11,7 +11,7 @@ import {
   withAndroidEmbraceSwazzlerDependency,
 } from "../plugin/withAndroidEmbrace";
 
-import {getMockModConfig, readMockFile} from "./pluginUtils";
+import {getMockModConfig, readMockFile} from "./helpers/pluginTestUtils";
 
 // TODO, fails if using `import` here?
 const path = require("path");

@@ -36,7 +36,7 @@ const getMockModConfig = (props: {
   }) as ExportedConfigWithProps;
 
 const mockFilePath = (name: string) =>
-  path.join(__dirname, "__plugin_mocks__", name);
+  path.join(__dirname, "..", "__plugin_mocks__", name);
 
 const readMockFile = (name: string) =>
   fs.readFileSync(mockFilePath(name)).toString();
