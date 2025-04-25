@@ -25,11 +25,19 @@
     "plugins": [
       "expo-router",
       [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 24
+          }
+        }
+      ],
+      [
         "@embrace-io/react-native",
         {
-          "androidAppId": "android123",
-          "apiToken": "apiToken456",
-          "iOSAppId": "ios789"
+          "androidAppId": "REPLACE_ME",
+          "apiToken": "REPLACE_ME",
+          "iOSAppId": "REPLACE_ME"
         }
       ]
     ],

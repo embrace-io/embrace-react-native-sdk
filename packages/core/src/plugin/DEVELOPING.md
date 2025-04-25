@@ -7,7 +7,7 @@ Unit tests are defined in `../__tests__/plugin.test.ts`. To test the behaviour i
 
 ```shell
 cd ../../integration-tests
-npx create-expo <app-path> --no-install  --template ./templates/expo-rn74-prebuild-template/expoprebuildrn74-1.0.0.tgz
+npx create-expo <app-path> --no-install  --template ./templates/expo-rn74-prebuild-template/expo-rn74-prebuild-template-1.0.0.tgz
 ./update-embrace-packages.sh <app-path>
 ./set-embrace-config.js <app-path>  ./embrace-configs/<config>.json --prebuild
 cd <app-path>
