@@ -2,7 +2,7 @@
   "name": "react-native-tracer-provider-test-project",
   "private": true,
   "dependencies": {
-    "react-native": "^0.75.4"
+    "react-native": "^0.75.5"
   },
   "engines": {
     "node": ">=18"
