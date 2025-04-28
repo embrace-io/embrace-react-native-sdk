@@ -365,7 +365,7 @@
 			outputPaths = (
 			);
 			shellPath = /bin/sh;
-			shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\" EMBRACE_ID=ios789 EMBRACE_TOKEN=apiToken456 \"${PODS_ROOT}/EmbraceIO/run.sh\"\nrm \"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\"";
+			shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\" EMBRACE_ID=ios789 EMBRACE_TOKEN=apiToken456 \"${PODS_ROOT}/EmbraceIO/run.sh\"\nrm -f \"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
