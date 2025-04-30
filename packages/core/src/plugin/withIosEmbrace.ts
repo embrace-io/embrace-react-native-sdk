@@ -252,9 +252,7 @@ const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
         null,
         {
           shellPath: "/bin/sh",
-          shellScript:
-            `REACT_NATIVE_MAP_PATH="${sourceMapPath}" EMBRACE_ID=${props.iOSAppId} EMBRACE_TOKEN=${props.apiToken} "\${PODS_ROOT}/EmbraceIO/run.sh"\\n` +
-            `rm -f "${sourceMapPath}"`,
+          shellScript: `REACT_NATIVE_MAP_PATH="${sourceMapPath}" EMBRACE_ID=${props.iOSAppId} EMBRACE_TOKEN=${props.apiToken} "\${PODS_ROOT}/EmbraceIO/run.sh"`,
         },
       );
       modified = true;
