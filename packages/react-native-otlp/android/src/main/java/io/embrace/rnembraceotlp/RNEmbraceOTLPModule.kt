@@ -45,8 +45,8 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
 
         for (i in 0 until headers.size()) {
             val header = headers.getMap(i)
-            val keyVal = header.getString("key")
-            val tokenVal = header.getString("token")
+            val keyVal = header?.getString("key")
+            val tokenVal = header?.getString("token")
 
             if (!keyVal.isNullOrBlank() && !tokenVal.isNullOrBlank()) {
                 headerList.add(HeaderConfig(key = keyVal, token = tokenVal))
