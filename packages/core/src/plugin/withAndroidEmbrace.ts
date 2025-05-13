@@ -11,7 +11,6 @@ import {EmbraceProps} from "./types";
 import {addAfter, hasMatch} from "./textUtils";
 import {writeIfNotExists} from "./fileUtils";
 
-// TODO, fails if using `import` here?
 const path = require("path");
 
 const androidBuildToolsRE = /(\s*)classpath.*com\.android\.tools\.build:gradle/;

@@ -10,7 +10,6 @@ import {
 
 import {getMockModConfig, readMockFile} from "./helpers/pluginTestUtils";
 
-// TODO, fails if using `import` here?
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
