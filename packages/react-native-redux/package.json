@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native-redux",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "Collects telemetry from dispatching actions with Redux",
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
@@ -55,7 +55,7 @@
     "typescript": "^5.6.3"
   },
   "embrace": {
-    "iosVersion": "6.8.1",
+    "iosVersion": "6.8.5",
     "androidVersion": "7.2.0"
   }
 }
