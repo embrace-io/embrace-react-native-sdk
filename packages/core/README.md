@@ -49,7 +49,7 @@ If you are using Expo's `prebuild` system to manage your native files you can ma
         ...
         
         [
-            "@embrace-io/react-native",
+            "@embrace-io/react-native/lib/app.plugin.js",
             {
                 "androidAppId": "__ANDROID_APP_ID__",
                 "iOSAppId": "__IOS_APP_ID__",
