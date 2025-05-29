@@ -222,6 +222,38 @@ describe("Expo Config Plugin iOS", () => {
       )) as ExportedConfigWithProps;
       expect(updatedAgainConfig.modResults.contents).toEqual(afterEmbrace);
     });
+
+    it("adds the Embrace initialization call to AppDelegate.swift from Expo 53", async () => {
+      const beforeEmbrace = readMockFile("AppDelegateExpo53.swift");
+      const afterEmbrace = readMockFile("AppDelegateExpo53WithEmbrace.swift");
+      const mockConfig = getMockModConfig({
+        platform: "ios",
+        projectName: "basictestapp",
+        language: "swift",
+        contents: beforeEmbrace,
+      });
+
+      withIosEmbraceInvokeInitializer(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "",
+      });
+
+      expect(mockWithAppDelegate).toHaveBeenCalled();
+
+      const modFunc = mockWithAppDelegate.mock.lastCall[0];
+      const updatedConfig = (await modFunc(
+        mockConfig,
+      )) as ExportedConfigWithProps;
+
+      expect(updatedConfig.modResults.contents).toEqual(afterEmbrace);
+
+      // Running again should not do any more modification
+      const updatedAgainConfig = (await modFunc(
+        updatedConfig,
+      )) as ExportedConfigWithProps;
+      expect(updatedAgainConfig.modResults.contents).toEqual(afterEmbrace);
+    });
   });
 
   describe("withIosEmbraceAddBridgingHeader", () => {

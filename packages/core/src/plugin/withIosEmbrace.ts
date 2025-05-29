@@ -21,6 +21,7 @@ const fs = require("fs");
 const importAppDelegateHeaderRE = /(\s*)#import "AppDelegate\.h"/;
 const objcAppLaunchRE = /(\s*)self.moduleName = @"main"/;
 const swifthAppLaunchRE = /(\s*)func\s+application\(\s*_\s*[^}]*\{/;
+const swifthUpdatedAppLaunchRE = /(\s*)let.*ExpoReactNativeFactory.*/;
 const rnBundleScript = "react-native-xcode.sh";
 const sourceMapPath =
   "$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map";
@@ -157,9 +158,24 @@ const withIosEmbraceInvokeInitializer: ConfigPlugin<EmbraceProps> = (
     );
 
     if (!addedInit) {
-      throw new Error(
-        "failed to add the Embrace initialization to the AppDelegate application method",
+      if (language !== "swift") {
+        throw new Error(
+          "failed to add the Embrace initialization to the AppDelegate application method",
+        );
+      }
+
+      // Default AppDelegate.swift changed on later versions of expo, try one more time with a different regex
+      const addedInitUpdatedSwift = addAfter(
+        lines,
+        swifthUpdatedAppLaunchRE,
+        "EmbraceInitializer.start()",
       );
+
+      if (!addedInitUpdatedSwift) {
+        throw new Error(
+          "failed to add the Embrace initialization to the AppDelegate application method",
+        );
+      }
     }
 
     config.modResults.contents = lines.join("\n");
