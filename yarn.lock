@@ -14554,21 +14554,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-lifecycles-compat@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "react-lifecycles-compat@npm:3.0.4"
-  checksum: 10c0/1d0df3c85af79df720524780f00c064d53a9dd1899d785eddb7264b378026979acbddb58a4b7e06e7d0d12aa1494fd5754562ee55d32907b15601068dae82c27
+"react-lifecycles-compat@npm:2.0.0":
+  version: 2.0.0
+  resolution: "react-lifecycles-compat@npm:2.0.0"
+  checksum: 10c0/fcf79779d7651370ecf5669923dcdcf9c6062997f7ad00cd72b4e4f6df1d190df502bbea70ad068689e8f90f172b8d7d86b7e098cd7e2cefef28ce0e33b06e13
   languageName: node
   linkType: hard
 
 "react-native-navigation@npm:^7.40.3":
-  version: 7.44.0
-  resolution: "react-native-navigation@npm:7.44.0"
+  version: 7.48.0
+  resolution: "react-native-navigation@npm:7.48.0"
   dependencies:
     hoist-non-react-statics: "npm:3.x.x"
     lodash: "npm:4.17.x"
     prop-types: "npm:15.x.x"
-    react-lifecycles-compat: "npm:^3.0.4"
+    react-lifecycles-compat: "npm:2.0.0"
     tslib: "npm:1.9.3"
   peerDependencies:
     react: "*"
@@ -14579,7 +14579,7 @@ __metadata:
       optional: true
   bin:
     rnn-link: autolink/postlink/run.js
-  checksum: 10c0/f7f4d739b60f9852b3b8097cd64331aacf7a2a38c86f5b862c29a8f3a6ad849ef9dde30a975cf801a6e5a335e5ef2d5ebdbae0dbe2da538e5c8e6ba6eeedddde
+  checksum: 10c0/7aa5c5ff8e8a2fa120f0bb4a28f0520ee3279d85e32d4b6f7c471037b9dff892221a3ee51fd27c997dd58b80900e211cb68b21065431f96c003d8989ff8516df
   languageName: node
   linkType: hard
 
