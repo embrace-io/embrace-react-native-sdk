@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Install Node (${{ matrix.node-version }})
         uses: actions/setup-node@v4
@@ -54,5 +56,7 @@ jobs:
         if: steps.changed_files.outputs.android == 'true'
 
       - name: Run Android Unit Tests
-        run: yarn run android:test $(./scripts/scopes-from-file-changes.ts ${{ steps.changed_files.outputs.android_files }})
+        run: yarn run android:test $(./scripts/scopes-from-file-changes.ts ${STEPS_CHANGED_FILES_OUTPUTS_ANDROID_FILES})
         if: steps.changed_files.outputs.android == 'true'
+        env:
+          STEPS_CHANGED_FILES_OUTPUTS_ANDROID_FILES: ${{ steps.changed_files.outputs.android_files }}
