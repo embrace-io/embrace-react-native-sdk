@@ -118,6 +118,10 @@ android {
             useLegacyPackaging (findProperty('expo.useLegacyPackaging')?.toBoolean() ?: false)
         }
     }
+    // Required to support API levels <= 25
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
 }
 
 // Apply static values from `gradle.properties` to the `android.packagingOptions`
@@ -167,6 +171,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Required to support API levels <= 25
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }
 
 buildscript {
@@ -181,3 +188,8 @@ buildscript {
 
 apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim(), "../native_modules.gradle");
 applyNativeModulesAppBuildGradle(project)
+
+embrace {
+    //  Set for integration testing, since we don't use a real API token the upload step generates a 403
+    failBuildOnUploadErrors.set(false)
+}
