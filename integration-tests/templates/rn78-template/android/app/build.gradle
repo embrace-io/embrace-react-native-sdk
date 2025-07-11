@@ -128,3 +128,8 @@ buildscript {
         classpath "io.embrace:embrace-swazzler:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}"
     }
 }
+
+embrace {
+    //  Set for integration testing, since we don't use a real API token the upload step generates a 403
+    failBuildOnUploadErrors.set(false)
+}

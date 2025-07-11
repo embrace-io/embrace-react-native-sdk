@@ -179,3 +179,8 @@ buildscript {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+embrace {
+    //  Set for integration testing, since we don't use a real API token the upload step generates a 403
+    failBuildOnUploadErrors.set(false)
+}
