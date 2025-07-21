@@ -86,7 +86,7 @@ android {
     }
 
     compileOptions {
-        coreLibraryDesugaringEnabled = true
+        isCoreLibraryDesugaringEnabled = true
     }
 
     namespace = "io.embrace.rnembracecoretest"
