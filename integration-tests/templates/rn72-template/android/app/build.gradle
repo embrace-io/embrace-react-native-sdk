@@ -102,8 +102,13 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    // Required to support API levels <= 25
     compileOptions {
         coreLibraryDesugaringEnabled true
+    }
+    // Required when using updated AGP version
+    buildFeatures {
+        buildConfig true
     }
 }
 

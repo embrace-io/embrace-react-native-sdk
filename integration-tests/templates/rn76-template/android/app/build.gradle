@@ -106,6 +106,7 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    // Required to support API levels <= 25
     compileOptions {
         coreLibraryDesugaringEnabled true
     }

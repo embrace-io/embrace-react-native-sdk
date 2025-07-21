@@ -118,6 +118,7 @@ android {
             useLegacyPackaging (findProperty('expo.useLegacyPackaging')?.toBoolean() ?: false)
         }
     }
+    // Required to support API levels <= 25
     compileOptions {
         coreLibraryDesugaringEnabled true
     }
