@@ -85,10 +85,6 @@ android {
         }
     }
 
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
-
     namespace = "io.embrace.reactnativetracerprovidertest"
     defaultConfig {
         applicationId = "io.embrace.reactnativetracerprovidertest"
@@ -149,8 +145,6 @@ dependencies {
     } else {
         implementation(jscFlavor)
     }
-
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 }
 
 tasks.withType<Test> {

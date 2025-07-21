@@ -85,10 +85,6 @@ android {
         }
     }
 
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
-
     namespace = "io.embrace.rnembracecoretest"
     defaultConfig {
         applicationId = "io.embrace.rnembracecoretest"
@@ -145,8 +141,6 @@ dependencies {
     } else {
         implementation(jscFlavor)
     }
-
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 }
 
 tasks.withType<Test> {

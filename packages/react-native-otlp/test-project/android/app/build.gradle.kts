@@ -79,10 +79,6 @@ android {
         }
     }
 
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
-
     namespace = "io.embrace.rnembraceotlptest"
     defaultConfig {
         applicationId = "io.embrace.rnembraceotlptest"
@@ -138,8 +134,6 @@ dependencies {
     } else {
         implementation(jscFlavor)
     }
-
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 }
 
 detekt {

@@ -113,7 +113,7 @@ class ReactNativeTracerProviderModuleTest {
             embraceInstance.start(mockApplication)
             assertTrue(Embrace.getInstance().isStarted)
 
-            extraAttributes = listOf("emb.process_identifier", "emb.type", "emb.private.sequence_id")
+            extraAttributes = listOf("emb.process_identifier", "emb.type", "emb.private.sequence_id", "session.id")
 
             return
         }
