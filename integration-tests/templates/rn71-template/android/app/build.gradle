@@ -131,6 +131,14 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    // Required to support API levels <= 25
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+    // Required when using updated AGP version
+    buildFeatures {
+        buildConfig true
+    }
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
@@ -166,6 +174,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Required to support API levels <= 25
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }
 
 buildscript {
@@ -179,3 +190,8 @@ buildscript {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+embrace {
+    //  Set for integration testing, since we don't use a real API token the upload step generates a 403
+    failBuildOnUploadErrors.set(false)
+}
