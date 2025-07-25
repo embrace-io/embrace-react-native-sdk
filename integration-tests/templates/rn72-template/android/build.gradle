@@ -19,7 +19,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.1.1") // rn 0.72.x originally did not specify a version
+        classpath("com.android.tools.build:gradle:8.3.0") // Minimum AGP version to avoid desugaring issues
         classpath("com.facebook.react:react-native-gradle-plugin")
     }
 }
