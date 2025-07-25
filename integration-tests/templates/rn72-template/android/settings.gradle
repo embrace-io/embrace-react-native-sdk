@@ -1,4 +1,6 @@
 rootProject.name = 'ProjectName'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
+// In package.json we set a devDependency on "@react-native/gradle-plugin": "0.73.5" since the gradle-plugin packaged
+// with RN 0.72.x sets `kotlin("jvm") version "1.7.22"` and we require a higher version of Kotlin
 includeBuild('../node_modules/@react-native/gradle-plugin')
