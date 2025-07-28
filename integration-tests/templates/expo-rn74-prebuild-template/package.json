@@ -14,7 +14,7 @@
     "@expo/vector-icons": "14.0.0",
     "@react-navigation/bottom-tabs": "6.6.1",
     "@react-navigation/native": "6.0.2",
-    "expo": "51.0.9",
+    "expo": "51.0.38",
     "expo-build-properties": "0.12.5",
     "expo-constants": "16.0.2",
     "expo-dev-client": "4.0.26",
