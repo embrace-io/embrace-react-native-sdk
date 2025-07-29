@@ -40,8 +40,16 @@ be one that has been tagged with `0.minor-stable`.
 A similar approach can be done using Expo's cli for creating new apps:
 
 ```bash
-npx create-expo
+npx create-expo --no-install
 ```
+
+Templates can also be applied using the --template flag if you need to apply an older expo sdk version:
+
+```bash
+npx create-expo --no-install --template https://github.com/expo/expo/tree/sdk-52/templates/expo-template-blank-typescript
+```
+
+To know more about these templates take a look at [create-expo/templates](https://github.com/expo/expo/tree/main/templates)
 
 Though note that in this case a version can't be passed as different releases of expo are tied to particular RN versions,
 instead you can run a different version of the `create-expo` package.

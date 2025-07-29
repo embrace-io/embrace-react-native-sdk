@@ -16,7 +16,7 @@ jobs:
       matrix:
         node-version: [18.x]
         jdk-version: ["17"]
-        test-app: [expo-rn74, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
+        test-app: [expo-rn74, expo-rn79, rn80, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
         platform: [android, ios]
 
     runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
