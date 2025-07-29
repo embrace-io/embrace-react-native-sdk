@@ -67,7 +67,10 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
     private fun stringListFromReadableArray(array: ReadableArray): List<String> {
         val list: MutableList<String> = mutableListOf()
         for (i in 0..array.size() - 1) {
-            list.add(array.getString(i))
+            val str = array.getString(i)
+            if (str != null) {
+                list.add(str)
+            }
         }
         return list
     }
@@ -265,8 +268,8 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         // Set links
         for (i in 0..links.size() - 1) {
             val link = links.getMap(i)
-            val linkSpanContext = link.getMap(LINK_SPAN_CONTEXT_KEY) ?: continue
-            val linkAttributes = link.getMap(LINK_ATTRIBUTES_KEY)
+            val linkSpanContext = link?.getMap(LINK_SPAN_CONTEXT_KEY) ?: continue
+            val linkAttributes = link?.getMap(LINK_ATTRIBUTES_KEY)
 
             if (linkAttributes == null) {
                 val spanContext = spanContextFromReadableMap(linkSpanContext)
@@ -319,8 +322,8 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         val span = getSpan(spanBridgeId) ?: return
         for (i in 0..links.size() - 1) {
             val link = links.getMap(i)
-            val linkSpanContext = link.getMap(LINK_SPAN_CONTEXT_KEY) ?: continue
-            val linkAttributes = link.getMap(LINK_ATTRIBUTES_KEY)
+            val linkSpanContext = link?.getMap(LINK_SPAN_CONTEXT_KEY) ?: continue
+            val linkAttributes = link?.getMap(LINK_ATTRIBUTES_KEY)
 
             if (linkAttributes == null) {
                 span.addLink(spanContextFromReadableMap(linkSpanContext))

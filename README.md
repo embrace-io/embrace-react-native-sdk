@@ -25,7 +25,7 @@ Individual packages are published from this monorepo, reasoning can be found in 
 
 ## Support
 
-If you have a feature suggestion or have spotted something that doesn't look right please open an [issue](https://github.com/embrace-io/embrace-react-native-sdk/issues/new) for the Embrace team to triage or reach out in our [Community Slack](https://join.slack.com/t/embraceio-community/shared_invite/zt-ywr4jhzp-DLROX0ndN9a0soHMf6Ksow) for direct, faster assistance.
+If you have a feature suggestion or have spotted something that doesn't look right please open an [issue](https://github.com/embrace-io/embrace-react-native-sdk/issues/new) for the Embrace team to triage or reach out in our [Community Slack](https://community.embrace.io/) for direct, faster assistance.
 
 ## Contributions
 

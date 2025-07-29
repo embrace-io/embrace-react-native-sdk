@@ -21,6 +21,12 @@ const startServer = async (trace: boolean) => {
       httpResponse: {
         body: "{}",
         statusCode: 200,
+        headers: [
+          {name: "Access-Control-Allow-Origin", values: ["*"]},
+          {name: "Access-Control-Allow-Methods", values: ["POST"]},
+          {name: "Access-Control-Allow-Headers", values: ["*"]},
+          {name: "Access-Control-Max-Age", values: ["1728000"]},
+        ],
       },
       times: {
         unlimited: true,

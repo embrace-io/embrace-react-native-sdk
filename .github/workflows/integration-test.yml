@@ -4,6 +4,10 @@ on:
   workflow_dispatch:
   pull_request:
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   build:
     if: startsWith(github.head_ref, 'release/')
@@ -12,7 +16,7 @@ jobs:
       matrix:
         node-version: [18.x]
         jdk-version: ["17"]
-        test-app: [expo-rn74, rn76, rn75, rn74, rn73, rn72, rn71]
+        test-app: [expo-rn74, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
         platform: [android, ios]
 
     runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
@@ -20,6 +24,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Install Node (${{ matrix.node-version }})
         uses: actions/setup-node@v4

@@ -5,6 +5,10 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   build:
     strategy:
@@ -23,6 +27,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Install Node (${{ matrix.node-version }})
         uses: actions/setup-node@v4
@@ -33,7 +39,7 @@ jobs:
       - name: Enables corepack
         run: corepack enable
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
         id: changed_files
         with:
           list-files: shell
@@ -66,5 +72,7 @@ jobs:
         if: steps.changed_files.outputs.ios == 'true'
 
       - name: Run iOS Unit Tests
-        run: yarn run ios:test $(./scripts/scopes-from-file-changes.ts ${{ steps.changed_files.outputs.ios_files }})
+        run: yarn run ios:test $(./scripts/scopes-from-file-changes.ts ${STEPS_CHANGED_FILES_OUTPUTS_IOS_FILES})
         if: steps.changed_files.outputs.ios == 'true'
+        env:
+          STEPS_CHANGED_FILES_OUTPUTS_IOS_FILES: ${{ steps.changed_files.outputs.ios_files }}

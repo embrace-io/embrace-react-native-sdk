@@ -96,11 +96,11 @@ describe("EmbraceNativeNavigationTracker.tsx", () => {
     );
 
     expect(mockConsoleWarn).toHaveBeenCalledWith(
-      "Navigation ref is not available. Make sure this is properly configured.",
+      "[Embrace] Navigation ref is not available. Make sure this is properly configured.",
     );
 
     expect(mockConsoleInfo).toHaveBeenCalledWith(
-      "No TracerProvider found. Using global tracer instead.",
+      "[Embrace] No TracerProvider found. Using global tracer instead.",
     );
 
     expect(mockGlobalTracer).toHaveBeenCalledWith(
@@ -118,14 +118,14 @@ describe("EmbraceNativeNavigationTracker.tsx", () => {
     expect(mockStartSpan).not.toHaveBeenCalled();
 
     expect(mockConsoleWarn).toHaveBeenCalledWith(
-      "Navigation component name is not available. Make sure this is properly configured.",
+      "[Embrace] Navigation component name is not available. Make sure this is properly configured.",
     );
 
     const didDisappearCall = mockDidDisappearListener.mock.calls[0][0];
     didDisappearCall({componentName: null});
 
     expect(mockConsoleWarn).toHaveBeenCalledWith(
-      "Navigation component name is not available. Make sure this is properly configured.",
+      "[Embrace] Navigation component name is not available. Make sure this is properly configured.",
     );
   });
 
@@ -133,10 +133,10 @@ describe("EmbraceNativeNavigationTracker.tsx", () => {
     render(<AppWithProvider exporter={exporter} />);
 
     expect(mockConsoleInfo).toHaveBeenCalledWith(
-      "TracerProvider. Using custom tracer.",
+      "[Embrace] TracerProvider. Using custom tracer.",
     );
     expect(mockConsoleInfo).toHaveBeenCalledWith(
-      "Updated TracerProvider. Switching to the new instance.",
+      "[Embrace] Updated TracerProvider. Switching to the new instance.",
     );
 
     expect(mockDidAppearListener).toHaveBeenCalled();

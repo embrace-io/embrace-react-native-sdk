@@ -260,7 +260,7 @@ describe("SDK initialization", () => {
         // should only be called for iOS
         expect(mockGetDefaultJavaScriptBundlePath).not.toHaveBeenCalled();
 
-        expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.76.6");
+        expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.78.0");
         expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith("v1");
         expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith(
           expect.any(String),
@@ -279,7 +279,7 @@ describe("SDK initialization", () => {
       await waitFor(() => {
         expect(isStarted).toBe(true);
 
-        expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.76.6");
+        expect(mockSetReactNativeVersion).toHaveBeenCalledWith("0.78.0");
         expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith("v1");
         expect(mockSetReactNativeSDKVersion).toHaveBeenCalledWith(
           expect.any(String),

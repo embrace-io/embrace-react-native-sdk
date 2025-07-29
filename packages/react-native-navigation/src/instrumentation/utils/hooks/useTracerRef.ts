@@ -19,9 +19,11 @@ const useTracerRef = (
   useEffect(() => {
     if (tracerRef.current === null) {
       if (!provider) {
-        console.info("No TracerProvider found. Using global tracer instead.");
+        console.info(
+          "[Embrace] No TracerProvider found. Using global tracer instead.",
+        );
       } else {
-        console.info("TracerProvider. Using custom tracer.");
+        console.info("[Embrace] TracerProvider. Using custom tracer.");
       }
 
       tracerRef.current = provider
@@ -42,7 +44,9 @@ const useTracerRef = (
         tracerOptions,
       );
 
-      console.info("Updated TracerProvider. Switching to the new instance.");
+      console.info(
+        "[Embrace] Updated TracerProvider. Switching to the new instance.",
+      );
     }
   }, [console, provider, tracerOptions]);
 

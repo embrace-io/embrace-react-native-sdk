@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "A React Native wrapper for the Embrace SDK",
   "dependencies": {
     "glob": "^11.0.0",
@@ -9,7 +9,13 @@
     "xcode": "^3.0.1"
   },
   "peerDependencies": {
+    "expo": ">=47.0.0",
     "react-native": ">=0.56.0"
+  },
+  "peerDependenciesMeta": {
+    "expo": {
+      "optional": true
+    }
   },
   "files": [
     "lib",
@@ -54,15 +60,16 @@
     "js:shared": "mkdir -p ./src/interfaces/common && cp -r ../../common/js/* ./src/interfaces/common",
     "ios:shared": "mkdir -p ./ios/common && cp -r ../../common/ios/* ./ios/common/",
     "android:test": "cd test-project && yarn install && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
-    "build": "yarn run js:shared && yarn run ios:shared && node update_android_version.ts && tsc",
+    "build": "yarn run js:shared && yarn run ios:shared && node update_android_version.ts && tsc && cp app.plugin.js lib/",
     "ios:install": "cd test-project && yarn install && cd ios && pod install --repo-update && rm .xcode.env.local",
     "ios:test": "yarn run ios:shared && ../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceCoreTests.xcworkspace RNEmbraceCoreTests"
   },
   "devDependencies": {
+    "expo": "^53.0.19",
     "typescript": "^5.6.3"
   },
   "embrace": {
-    "iosVersion": "6.7.1",
-    "androidVersion": "7.0.0"
+    "iosVersion": "6.8.5",
+    "androidVersion": "7.6.1"
   }
 }

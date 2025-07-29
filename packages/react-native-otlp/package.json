@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native-otlp",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "A React Native wrapper for the Embrace SDK that allows to connect to OTLP endpoints",
   "files": [
     "lib",
@@ -32,8 +32,8 @@
     "typescript": "^5.6.3"
   },
   "embrace": {
-    "iosVersion": "6.7.1",
-    "androidVersion": "7.0.0"
+    "iosVersion": "6.8.5",
+    "androidVersion": "7.6.1"
   },
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {

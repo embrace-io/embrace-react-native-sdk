@@ -14,8 +14,8 @@ const androidCapabilities = [
   },
   {
     "bstack:options": {
-      deviceName: "Samsung Galaxy S8",
-      platformVersion: "7.0",
+      deviceName: "Samsung Galaxy S9",
+      platformVersion: "8.0",
       platformName: "android",
     },
   },
