@@ -98,4 +98,4 @@ nx.json
 # Yarn
 .yarn
 
-.env
+.env.*
