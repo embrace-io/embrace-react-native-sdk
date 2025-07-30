@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "exporn79template.app"
-               BlueprintName = "exporn79template"
-               ReferencedContainer = "container:exporn79template.xcodeproj">
+               BuildableName = "ExpoRN79.app"
+               BlueprintName = "ExpoRN79"
+               ReferencedContainer = "container:ExpoRN79.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "exporn79templateTests.xctest"
-               BlueprintName = "exporn79templateTests"
-               ReferencedContainer = "container:exporn79template.xcodeproj">
+               BuildableName = "ExpoRN79Tests.xctest"
+               BlueprintName = "ExpoRN79Tests"
+               ReferencedContainer = "container:ExpoRN79.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "exporn79template.app"
-            BlueprintName = "exporn79template"
-            ReferencedContainer = "container:exporn79template.xcodeproj">
+            BuildableName = "ExpoRN79.app"
+            BlueprintName = "ExpoRN79"
+            ReferencedContainer = "container:ExpoRN79.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "exporn79template.app"
-            BlueprintName = "exporn79template"
-            ReferencedContainer = "container:exporn79template.xcodeproj">
+            BuildableName = "ExpoRN79.app"
+            BlueprintName = "ExpoRN79"
+            ReferencedContainer = "container:ExpoRN79.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

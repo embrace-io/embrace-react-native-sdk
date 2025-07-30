@@ -1,9 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <style name="AppTheme" parent="Theme.EdgeToEdge">
-    <!-- Customize your theme here. -->
     <item name="android:statusBarColor">#ffffff</item>
   </style>
   <style name="Theme.App.SplashScreen" parent="AppTheme">
-    <!-- Customize your theme here. -->
   </style>
 </resources>

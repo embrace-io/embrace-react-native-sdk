@@ -1,4 +1,4 @@
-package com.expo.rn79.template
+package io.embrace.exporn79
 
 import android.app.Application
 import android.content.res.Configuration

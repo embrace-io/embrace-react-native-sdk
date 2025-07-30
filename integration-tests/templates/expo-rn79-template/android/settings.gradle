@@ -31,7 +31,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
 }
 expoAutolinking.useExpoModules()
 
-rootProject.name = 'expo-rn79-template'
+rootProject.name = 'ExpoRN79'
 
 expoAutolinking.useExpoVersionCatalog()
 

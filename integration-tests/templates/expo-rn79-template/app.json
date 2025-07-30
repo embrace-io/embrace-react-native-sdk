@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "expo-rn79-template",
-    "slug": "expo-rn79-template",
+    "name": "ExpoRN79",
+    "slug": "expo-test-app-template",
     "version": "1.0.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
+    "scheme": "exporn79",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
       "resizeMode": "contain",
@@ -12,14 +13,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.expo.rn79.template"
+      "bundleIdentifier": "io.embrace.exporn79"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.expo.rn79.template"
+      "package": "io.embrace.exporn79"
     }
   }
 }
