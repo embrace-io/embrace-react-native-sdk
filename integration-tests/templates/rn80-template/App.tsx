@@ -1,5 +1,5 @@
 import React from 'react';
-import {EmbraceTestHarness} from '@embrace-io/react-native-test-harness';
+import { EmbraceTestHarness } from '@embrace-io/react-native-test-harness';
 import sdkConfig from './embrace-sdk-config.json';
 
 const App = () => {
@@ -10,6 +10,6 @@ const App = () => {
       allowCustomExport={false}
     />
   );
-}
+};
 
 export default App;

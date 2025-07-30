@@ -1,4 +1,4 @@
-package io.embrace.rn80template
+package com.projectname
 
 import android.app.Application
 import com.facebook.react.PackageList
