@@ -10,6 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@embrace-io/react-native": "file:../../artifacts/embrace-io-react-native-local.tgz",
+    "@embrace-io/react-native-navigation": "file:../../artifacts/embrace-io-react-native-navigation-local.tgz",
+    "@embrace-io/react-native-otlp": "file:../../artifacts/embrace-io-react-native-otlp-local.tgz",
+    "@embrace-io/react-native-redux": "file:../../artifacts/embrace-io-react-native-redux-local.tgz",
+    "@embrace-io/react-native-test-harness": "file:../../artifacts/embrace-io-react-native-test-harness-local.tgz",
+    "@embrace-io/react-native-tracer-provider": "file:../../artifacts/embrace-io-react-native-tracer-provider-local.tgz",
     "react": "19.1.0",
     "react-native": "0.80.2",
     "react-native-safe-area-context": "5.5.2",
