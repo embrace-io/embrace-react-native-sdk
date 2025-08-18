@@ -2,10 +2,6 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
-import EmbraceCore
-import EmbraceCrash
-import EmbraceCommonInternal
-import EmbraceOTelInternal
 import OpenTelemetryApi
 
 class SDKConfig: NSObject {
@@ -31,7 +27,7 @@ class SDKConfig: NSObject {
 func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> Embrace.Options {
     var embraceOptions: Embrace.Options {
         var crashReporter: CrashReporter?
-        crashReporter = config.disableCrashReporter ? nil : EmbraceCrashReporter()
+        crashReporter = config.disableCrashReporter ? nil : KSCrashReporter()
         
         let servicesBuilder = CaptureServiceBuilder()
         
@@ -55,9 +51,7 @@ func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> E
         
         var endpoints: Embrace.Endpoints?
         if config.endpointBaseUrl != nil {
-            endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!,
-                                          developmentBaseURL: config.endpointBaseUrl!,
-                                          configBaseURL: config.endpointBaseUrl!)
+            endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!, configBaseURL: config.endpointBaseUrl!)
         }
                 
         if (config.appId == nil && exporters != nil) {

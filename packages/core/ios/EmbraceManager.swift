@@ -2,12 +2,7 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
-import EmbraceCore
-import EmbraceCrash
-import EmbraceCommonInternal
-import EmbraceOTelInternal
 import OpenTelemetryApi
-import EmbraceSemantics
 
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"
 private let HOSTED_PLATFORM_VERSION_RESOURCE_KEY = "hosted_platform_version"
@@ -51,10 +46,16 @@ class EmbraceManager: NSObject {
 
     @objc
     func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        if let embraceStarted = Embrace.client?.started {
-            resolve(embraceStarted)
-        } else {
+        guard let state = Embrace.client?.state else {
             resolve(false)
+            return
+        }
+
+        switch state {
+            case .started:
+                resolve(true)
+            case .initialized, .notInitialized, .stopped:
+                resolve(false)
         }
     }
 
@@ -191,12 +192,8 @@ class EmbraceManager: NSObject {
 
     @objc
     func clearAllUserPersonas(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            try Embrace.client?.metadata.removeAllPersonas()
-            resolve(true)
-        } catch let error {
-            reject("CLEAR_ALL_USER_PERSONAS", "Error clearing all User Personas", error)
-        }
+        Embrace.client?.metadata.removeAllPersonas()
+        resolve(true)
     }
 
     @objc(clearUserPersona:resolver:rejecter:)
@@ -522,6 +519,6 @@ class EmbraceManager: NSObject {
     }
 
     func injectW3cTraceparent(span: any Span) {
-        span.setAttribute(key: "emb.w3c_traceparent", value: EmbraceCore.W3C.traceparent(from: span.context))
+        span.setAttribute(key: "emb.w3c_traceparent", value: W3C.traceparent(from: span.context))
     }
 }

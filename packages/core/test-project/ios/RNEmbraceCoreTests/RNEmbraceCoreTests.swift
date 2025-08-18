@@ -1,9 +1,7 @@
 import XCTest
 import EmbraceIO
-import EmbraceOTelInternal
 import OpenTelemetryApi
 import OpenTelemetrySdk
-import EmbraceCommonInternal
 
 @testable import RNEmbraceCore
 
@@ -84,9 +82,7 @@ class EmbraceManagerTests: XCTestCase {
                 .setup( options: .init(
                     appId: "myApp",
                     // Set a fake endpoint for unit tests otherwise we'll end up sending actual payloads to Embrace
-                    endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null",
-                                                 developmentBaseURL: "http://localhost/dev/null",
-                                                 configBaseURL: "http://localhost/dev/null"),
+                    endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null", configBaseURL: "http://localhost/dev/null"),
                     export:
                         OpenTelemetryExport(
                             spanExporter: self.spanExporter,
@@ -95,7 +91,7 @@ class EmbraceManagerTests: XCTestCase {
                     )
                 )
                 .start()
-        } catch let error as EmbraceCore.Embrace {
+        } catch let error as Embrace {
             print(error)
         } catch {
             print(error.localizedDescription)

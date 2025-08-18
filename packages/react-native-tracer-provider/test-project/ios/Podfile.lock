@@ -1,17 +1,19 @@
 PODS:
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
-  - EmbraceIO (6.8.5):
-    - EmbraceIO/EmbraceIO (= 6.8.5)
-  - EmbraceIO/EmbraceCaptureService (6.8.5):
+  - EmbraceIO (6.14.0-rc2):
+    - EmbraceIO/EmbraceIO (= 6.14.0-rc2)
+  - EmbraceIO/EmbraceCaptureService (6.14.0-rc2):
+    - EmbraceIO/EmbraceConfiguration
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceCommonInternal (6.8.5)
-  - EmbraceIO/EmbraceConfigInternal (6.8.5):
+  - EmbraceIO/EmbraceCommonInternal (6.14.0-rc2):
+    - EmbraceIO/OpenTelemetrySdk
+  - EmbraceIO/EmbraceConfigInternal (6.14.0-rc2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfiguration
-  - EmbraceIO/EmbraceConfiguration (6.8.5)
-  - EmbraceIO/EmbraceCore (6.8.5):
+  - EmbraceIO/EmbraceConfiguration (6.14.0-rc2)
+  - EmbraceIO/EmbraceCore (6.14.0-rc2):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfigInternal
@@ -21,53 +23,74 @@ PODS:
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/EmbraceUploadInternal
-  - EmbraceIO/EmbraceCoreDataInternal (6.8.5):
+  - EmbraceIO/EmbraceCoreDataInternal (6.14.0-rc2):
     - EmbraceIO/EmbraceCommonInternal
-  - EmbraceIO/EmbraceCrash (6.8.5):
+  - EmbraceIO/EmbraceCrash (6.14.0-rc2):
     - EmbraceIO/EmbraceCommonInternal
-    - EmbraceIO/KSCrash
-  - EmbraceIO/EmbraceIO (6.8.5):
+    - EmbraceIO/EmbraceKSCrash
+    - EmbraceIO/EmbraceSemantics
+  - EmbraceIO/EmbraceIO (6.14.0-rc2):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCore
     - EmbraceIO/EmbraceCrash
+    - EmbraceIO/EmbraceKSCrashBacktraceSupport
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceObjCUtilsInternal (6.8.5)
-  - EmbraceIO/EmbraceOTelInternal (6.8.5):
+  - EmbraceIO/EmbraceKSCrash (6.14.0-rc2):
+    - KSCrash (= 2.3.0)
+  - EmbraceIO/EmbraceKSCrashBacktraceSupport (6.14.0-rc2):
+    - EmbraceIO/EmbraceCommonInternal
+    - EmbraceIO/EmbraceKSCrash
+  - EmbraceIO/EmbraceObjCUtilsInternal (6.14.0-rc2)
+  - EmbraceIO/EmbraceOTelInternal (6.14.0-rc2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceSemantics (6.8.5):
+  - EmbraceIO/EmbraceSemantics (6.14.0-rc2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceStorageInternal (6.8.5):
+  - EmbraceIO/EmbraceStorageInternal (6.14.0-rc2):
     - EmbraceIO/EmbraceCommonInternal
+    - EmbraceIO/EmbraceCoreDataInternal
     - EmbraceIO/EmbraceSemantics
-    - EmbraceIO/GRDB
-  - EmbraceIO/EmbraceUploadInternal (6.8.5):
+  - EmbraceIO/EmbraceUploadInternal (6.14.0-rc2):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCoreDataInternal
     - EmbraceIO/EmbraceOTelInternal
-    - EmbraceIO/GRDB
-  - EmbraceIO/GRDB (6.8.5)
-  - EmbraceIO/KSCrash (6.8.5):
-    - EmbraceIO/KSCrashCore
-    - EmbraceIO/KSCrashRecording
-    - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashCore (6.8.5)
-  - EmbraceIO/KSCrashRecording (6.8.5):
-    - EmbraceIO/KSCrashRecordingCore
-  - EmbraceIO/KSCrashRecordingCore (6.8.5):
-    - EmbraceIO/KSCrashCore
-  - EmbraceIO/OpenTelemetryApi (6.8.5)
-  - EmbraceIO/OpenTelemetrySdk (6.8.5):
-    - EmbraceIO/OpenTelemetryApi
+  - EmbraceIO/OpenTelemetrySdk (6.14.0-rc2):
+    - OpenTelemetry-Swift-Sdk (= 2.1.1)
   - FBLazyVector (0.75.4)
   - fmt (9.1.0)
   - glog (0.3.5)
   - hermes-engine (0.75.4):
     - hermes-engine/Pre-built (= 0.75.4)
   - hermes-engine/Pre-built (0.75.4)
+  - KSCrash (2.3.0):
+    - KSCrash/Installations (= 2.3.0)
+  - KSCrash/Core (2.3.0)
+  - KSCrash/DemangleFilter (2.3.0):
+    - KSCrash/Recording
+  - KSCrash/Filters (2.3.0):
+    - KSCrash/Recording
+    - KSCrash/RecordingCore
+    - KSCrash/ReportingCore
+  - KSCrash/Installations (2.3.0):
+    - KSCrash/DemangleFilter
+    - KSCrash/Filters
+    - KSCrash/Recording
+    - KSCrash/Sinks
+  - KSCrash/Recording (2.3.0):
+    - KSCrash/RecordingCore
+  - KSCrash/RecordingCore (2.3.0):
+    - KSCrash/Core
+  - KSCrash/ReportingCore (2.3.0):
+    - KSCrash/Core
+  - KSCrash/Sinks (2.3.0):
+    - KSCrash/Filters
+    - KSCrash/Recording
+  - OpenTelemetry-Swift-Api (2.1.1)
+  - OpenTelemetry-Swift-Sdk (2.1.1):
+    - OpenTelemetry-Swift-Api (= 2.1.1)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1558,17 +1581,39 @@ PODS:
     - React-logger (= 0.75.4)
     - React-perflogger (= 0.75.4)
     - React-utils (= 0.75.4)
+  - RNEmbraceTracerProvider (6.3.0):
+    - DoubleConversion
+    - EmbraceIO (= 6.14.0-rc2)
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - EmbraceIO (= 6.8.5)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
+  - KSCrash
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -1626,11 +1671,15 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNEmbraceTracerProvider (from `../../../react-native-tracer-provider`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - EmbraceIO
+    - KSCrash
+    - OpenTelemetry-Swift-Api
+    - OpenTelemetry-Swift-Sdk
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1757,17 +1806,22 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNEmbraceTracerProvider:
+    :path: "../../../react-native-tracer-provider"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
   boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  EmbraceIO: 05dc3d5ea307acfce9d64eccfe475fb0c3118c3d
+  EmbraceIO: 54b0a9e60dd183b81b2012fce6b37bd04d2e9a8f
   FBLazyVector: 430e10366de01d1e3d57374500b1b150fe482e6d
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
   hermes-engine: ea92f60f37dba025e293cbe4b4a548fd26b610a0
+  KSCrash: 250c0bbff688ece48e7206e09a7c4684abbea1ee
+  OpenTelemetry-Swift-Api: 2805fb676a622961994eaad5fd07ed0c5efa6999
+  OpenTelemetry-Swift-Sdk: 853c923fcf6e8d79035f645b6fc52dc63f853c96
   RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
   RCTDeprecation: 726d24248aeab6d7180dac71a936bbca6a994ed1
   RCTRequired: a94e7febda6db0345d207e854323c37e3a31d93b
@@ -1823,9 +1877,10 @@ SPEC CHECKSUMS:
   React-utils: cbe8b8b3d7b2ac282e018e46f0e7b25cdc87c5a0
   ReactCodegen: 4bcb34e6b5ebf6eef5cee34f55aa39991ea1c1f1
   ReactCommon: 6a952e50c2a4b694731d7682aaa6c79bc156e4ad
+  RNEmbraceTracerProvider: 9609b810a35a84c509f8a4aa6e0c0d3fe7a1d4fc
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  Yoga: aa3df615739504eebb91925fc9c58b4922ea9a08
+  Yoga: 055f92ad73f8c8600a93f0e25ac0b2344c3b07e6
 
-PODFILE CHECKSUM: 8a42854bb512b05ba8e76a5c1b6d099f48aca459
+PODFILE CHECKSUM: fb374774adf815a27bf94c2941c4aaade1a07cd2
 
 COCOAPODS: 1.15.2

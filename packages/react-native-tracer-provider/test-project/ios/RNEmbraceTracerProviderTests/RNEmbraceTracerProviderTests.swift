@@ -1,10 +1,8 @@
 import React
 import XCTest
 import EmbraceIO
-import EmbraceOTelInternal
 import OpenTelemetryApi
 import OpenTelemetrySdk
-import EmbraceCommonInternal
 
 @testable import RNEmbraceTracerProvider
 
@@ -45,8 +43,18 @@ class TestSpanExporter: SpanExporter {
     func shutdown(explicitTimeout: TimeInterval?) {}
 }
 
-private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-setup", "emb-process-launch",
-                                           "POST /dev/null/v2/logs", "POST /dev/null/v2/spans"]
+private let EMBRACE_INTERNAL_SPAN_NAMES = [
+    "emb-app-pre-main-init",
+    "emb-app-first-frame-rendered",
+    "emb-app-startup-warm",
+    "emb-sdk-start-process",
+    "emb-process-launch",
+    "emb-session",
+    "emb-sdk-start",
+    "emb-setup",
+    "POST /dev/null/v2/logs",
+    "POST /dev/null/v2/spans"
+]
 
 private let DEFAULT_WAIT_TIME = Double(ProcessInfo.processInfo.environment["IOS_TEST_WAIT_TIME"] ?? "") ?? 5.0
 
@@ -64,16 +72,11 @@ class ReactNativeTracerProviderTests: XCTestCase {
               .setup( options: .init(
                   appId: "myApp",
                   // Set a fake endpoint for unit tests otherwise we'll end up sending actual payloads to Embrace
-                  endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null",
-                                               developmentBaseURL: "http://localhost/dev/null",
-                                               configBaseURL: "http://localhost/dev/null"),
-                  export:
-                      OpenTelemetryExport(
-                          spanExporter: self.exporter
-                      )
+                  endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null", configBaseURL: "http://localhost/dev/null"),
+                  export: OpenTelemetryExport(spanExporter: self.exporter)
               ))
               .start()
-      } catch let error as EmbraceCore.Embrace {
+      } catch let error as Embrace {
           print(error)
       } catch {
           print(error.localizedDescription)
@@ -430,5 +433,5 @@ class EmbraceSpansSDKNotStartedTests: XCTestCase {
     XCTAssertEqual(promise.resolveCalls.count, 0)
     XCTAssertEqual(promise.rejectCalls.count, 1)
     XCTAssertEqual(promise.rejectCalls[0], "tracer not found")
-   }
+  }
 }
