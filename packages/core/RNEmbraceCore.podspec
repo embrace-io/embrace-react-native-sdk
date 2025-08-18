@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
     # Don't install the dependencies when we run `pod install` in the old architecture.
     if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
       s.compiler_flags = folly_compiler_flags + " -DRCT_NEW_ARCH_ENABLED=1"
-      s.pod_target_xcconfig    = {
+      s.pod_target_xcconfig = {
           "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
           "OTHER_CPLUSPLUSFLAGS" => "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1",
           "CLANG_CXX_LANGUAGE_STANDARD" => "c++17"
@@ -42,6 +42,9 @@ Pod::Spec.new do |s|
     end
   end
 
-  load 'ios/dependencies.rb'
-  load_dependencies(s)
+  spm_dependency(s,
+    url: 'https://github.com/embrace-io/embrace-apple-sdk', 
+    requirement: {kind: 'upToNextMajorVersion', minimumVersion: package["version"]}, 
+    products: ["EmbraceIO", "EmbraceCore", "EmbraceCrash", "EmbraceSemantics"]
+  )
 end

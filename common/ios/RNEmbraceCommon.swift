@@ -55,9 +55,7 @@ func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> E
         
         var endpoints: Embrace.Endpoints?
         if config.endpointBaseUrl != nil {
-            endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!,
-                                          developmentBaseURL: config.endpointBaseUrl!,
-                                          configBaseURL: config.endpointBaseUrl!)
+            endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!, configBaseURL: config.endpointBaseUrl!)
         }
                 
         if (config.appId == nil && exporters != nil) {

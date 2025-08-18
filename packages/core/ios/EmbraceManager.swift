@@ -51,8 +51,8 @@ class EmbraceManager: NSObject {
 
     @objc
     func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        if let embraceStarted = Embrace.client?.started {
-            resolve(embraceStarted)
+        if let isEmbraceStarted = Embrace.client?.state {
+            resolve(isEmbraceStarted)
         } else {
             resolve(false)
         }
@@ -191,12 +191,8 @@ class EmbraceManager: NSObject {
 
     @objc
     func clearAllUserPersonas(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            try Embrace.client?.metadata.removeAllPersonas()
-            resolve(true)
-        } catch let error {
-            reject("CLEAR_ALL_USER_PERSONAS", "Error clearing all User Personas", error)
-        }
+        Embrace.client?.metadata.removeAllPersonas()
+        resolve(true)
     }
 
     @objc(clearUserPersona:resolver:rejecter:)
