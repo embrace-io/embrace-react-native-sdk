@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56F45AD05A89D6A294961B47 /* Pods_RNEmbraceTracerProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 798543ED71C04D20FED781AD /* Pods_RNEmbraceTracerProvider.framework */; };
 		6DD302962CE647E800D064C4 /* ReactNativeTracerProviderModule-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6B1E12CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule-Bridging-Header.h */; };
 		6DD6B1E52CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DD6B1E12CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule-Bridging-Header.h */; };
 		6DD6B1E62CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6B1DF2CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.mm */; };
 		6DD6B1E72CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6B1E02CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.swift */; };
 		6DED2F552CE514B200A9735A /* RNEmbraceTracerProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DED2F4C2CE514B200A9735A /* RNEmbraceTracerProvider.framework */; };
 		6DED2F692CE5193400A9735A /* RNEmbraceTracerProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DED2F672CE5193400A9735A /* RNEmbraceTracerProviderTests.swift */; };
-		7189C027AA29DFB62C276548 /* libPods-RNEmbraceTracerProvider.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4586BB370C7A9ECE0A680868 /* libPods-RNEmbraceTracerProvider.a */; };
-		C62D19A73FE91C044FB400CF /* libPods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DBC880C389FB197BB832505E /* libPods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.a */; };
+		E096F0D57B65C21F87D6AFC5 /* Pods_RNEmbraceTracerProvider_RNEmbraceTracerProviderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04407E9E32C2A524A8039AEA /* Pods_RNEmbraceTracerProvider_RNEmbraceTracerProviderTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,17 +28,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04407E9E32C2A524A8039AEA /* Pods_RNEmbraceTracerProvider_RNEmbraceTracerProviderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceTracerProvider_RNEmbraceTracerProviderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E77F947636C8C9199BE515E /* Pods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests/Pods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.debug.xcconfig"; sourceTree = "<group>"; };
-		4586BB370C7A9ECE0A680868 /* libPods-RNEmbraceTracerProvider.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNEmbraceTracerProvider.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DD6B1DF2CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ReactNativeTracerProviderModule.mm; sourceTree = "<group>"; };
 		6DD6B1E02CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeTracerProviderModule.swift; sourceTree = "<group>"; };
 		6DD6B1E12CE51A2C00FA5FB8 /* ReactNativeTracerProviderModule-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactNativeTracerProviderModule-Bridging-Header.h"; sourceTree = "<group>"; };
 		6DED2F4C2CE514B200A9735A /* RNEmbraceTracerProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbraceTracerProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DED2F542CE514B200A9735A /* RNEmbraceTracerProviderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNEmbraceTracerProviderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DED2F672CE5193400A9735A /* RNEmbraceTracerProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNEmbraceTracerProviderTests.swift; sourceTree = "<group>"; };
+		798543ED71C04D20FED781AD /* Pods_RNEmbraceTracerProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceTracerProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E6B4218B8EB0494019BEEA3 /* Pods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests/Pods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.release.xcconfig"; sourceTree = "<group>"; };
 		CCA6F2280A5D21BDDBA7104F /* Pods-RNEmbraceTracerProvider.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceTracerProvider.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceTracerProvider/Pods-RNEmbraceTracerProvider.debug.xcconfig"; sourceTree = "<group>"; };
-		DBC880C389FB197BB832505E /* libPods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFB7848F574777A07F5D861A /* Pods-RNEmbraceTracerProvider.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceTracerProvider.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceTracerProvider/Pods-RNEmbraceTracerProvider.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -47,7 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7189C027AA29DFB62C276548 /* libPods-RNEmbraceTracerProvider.a in Frameworks */,
+				56F45AD05A89D6A294961B47 /* Pods_RNEmbraceTracerProvider.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +56,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DED2F552CE514B200A9735A /* RNEmbraceTracerProvider.framework in Frameworks */,
-				C62D19A73FE91C044FB400CF /* libPods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.a in Frameworks */,
+				E096F0D57B65C21F87D6AFC5 /* Pods_RNEmbraceTracerProvider_RNEmbraceTracerProviderTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,8 +105,8 @@
 		8FAE341628A2F977A7BF2C51 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4586BB370C7A9ECE0A680868 /* libPods-RNEmbraceTracerProvider.a */,
-				DBC880C389FB197BB832505E /* libPods-RNEmbraceTracerProvider-RNEmbraceTracerProviderTests.a */,
+				798543ED71C04D20FED781AD /* Pods_RNEmbraceTracerProvider.framework */,
+				04407E9E32C2A524A8039AEA /* Pods_RNEmbraceTracerProvider_RNEmbraceTracerProviderTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -484,6 +484,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD = "";
 				LDPLUSPLUS = "";
@@ -554,6 +565,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD = "";
 				LDPLUSPLUS = "";

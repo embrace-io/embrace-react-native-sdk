@@ -27,8 +27,8 @@ target 'RNEmbraceCorePlaceholder' do
   pod 'RNEmbraceCore', :path => '../../../core'
 
   target 'RNEmbraceCoreTests' do
-    inherit! :complete
     # Pods for testing
+    inherit! :complete
   end
 
   post_install do |installer|
