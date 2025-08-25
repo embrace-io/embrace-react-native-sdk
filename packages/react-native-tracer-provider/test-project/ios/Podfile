@@ -23,8 +23,8 @@ target 'RNEmbraceTracerProvider' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # using real RNEmbraceCore.podspec to install EmbraceIO
-  pod 'RNEmbraceCore', :path => '../../../core'
+  # using real RNEmbraceTracerProvider.podspec to install EmbraceIO
+  pod 'RNEmbraceTracerProvider', :path => '../../../react-native-tracer-provider'
 
   target 'RNEmbraceTracerProviderTests' do
     # Pods for testing

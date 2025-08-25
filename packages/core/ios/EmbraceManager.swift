@@ -2,12 +2,7 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
-import EmbraceCore
-import EmbraceCrash
-import EmbraceCommonInternal
-import EmbraceOTelInternal
 import OpenTelemetryApi
-import EmbraceSemantics
 
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"
 private let HOSTED_PLATFORM_VERSION_RESOURCE_KEY = "hosted_platform_version"
@@ -518,6 +513,6 @@ class EmbraceManager: NSObject {
     }
 
     func injectW3cTraceparent(span: any Span) {
-        span.setAttribute(key: "emb.w3c_traceparent", value: EmbraceCore.W3C.traceparent(from: span.context))
+        span.setAttribute(key: "emb.w3c_traceparent", value: W3C.traceparent(from: span.context))
     }
 }

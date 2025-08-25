@@ -41,9 +41,11 @@ Pod::Spec.new do |s|
     end
   end
 
-  spm_dependency(s,
-    url: 'https://github.com/embrace-io/embrace-apple-sdk', 
-    requirement: {kind: 'upToNextMajorVersion', minimumVersion: package["version"]}, 
-    products: ["EmbraceIO", "EmbraceCore", "EmbraceCrash", "EmbraceSemantics"]
-  )
+  s.dependency 'EmbraceIO', package["embrace"]["iosVersion"]
+
+  # spm_dependency(s,
+  #   url: 'https://github.com/embrace-io/embrace-apple-sdk', 
+  #   requirement: {kind: 'upToNextMajorVersion', minimumVersion: package["version"]}, 
+  #   products: ["EmbraceIO", "EmbraceCore", "EmbraceCrash", "EmbraceSemantics"]
+  # )
 end

@@ -14,6 +14,9 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+# Make KSCrash modular so Swift can import it
+pod 'KSCrash', :modular_headers => true
+
 target 'RNEmbraceCorePlaceholder' do
   config = use_native_modules!
 
@@ -27,8 +30,8 @@ target 'RNEmbraceCorePlaceholder' do
   pod 'RNEmbraceCore', :path => '../../../core'
 
   target 'RNEmbraceCoreTests' do
-    # Pods for testing
-    inherit! :complete
+    # Pods for testing -> replicating customer's app
+    inherit! :search_paths
   end
 
   post_install do |installer|
@@ -38,6 +41,6 @@ target 'RNEmbraceCorePlaceholder' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
-    )
+    )    
   end
 end

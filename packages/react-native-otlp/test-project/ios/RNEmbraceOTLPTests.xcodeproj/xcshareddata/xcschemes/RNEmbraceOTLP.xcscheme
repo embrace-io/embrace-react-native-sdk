@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6D2523B02CC800C7000ECCEA"
-               BuildableName = "RNEmbraceOTLP.framework"
-               BlueprintName = "RNEmbraceOTLP"
+               BuildableName = "RNEmbraceOTLPPlaceholder.framework"
+               BlueprintName = "RNEmbraceOTLPPlaceholder"
                ReferencedContainer = "container:RNEmbraceOTLPTests.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -68,8 +68,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6D2523B02CC800C7000ECCEA"
-            BuildableName = "RNEmbraceOTLP.framework"
-            BlueprintName = "RNEmbraceOTLP"
+            BuildableName = "RNEmbraceOTLPPlaceholder.framework"
+            BlueprintName = "RNEmbraceOTLPPlaceholder"
             ReferencedContainer = "container:RNEmbraceOTLPTests.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
