@@ -52,8 +52,10 @@ Pod::Spec.new do |s|
     url: 'https://github.com/open-telemetry/opentelemetry-swift',
     requirement: { kind: 'exactVersion', version: '2.0.0' },
     products: [
-      "OpenTelemetryProtocolCommon",
-      "OpenTelemetryProtocolHttp"
+      "OpenTelemetryApi",
+      "OpenTelemetrySdk",
+      "OpenTelemetryProtocolExporterHTTP",
+      "OpenTelemetryProtocolExporter"
     ]
   )
 end

@@ -46,4 +46,14 @@ Pod::Spec.new do |s|
     requirement: {kind: 'upToNextMajorVersion', minimumVersion: package["version"]}, 
     products: ["EmbraceIO", "EmbraceCore", "EmbraceCrash", "EmbraceSemantics"]
   )
+
+  spm_dependency(
+    s,
+    url: 'https://github.com/open-telemetry/opentelemetry-swift',
+    requirement: { kind: 'exactVersion', version: '2.0.0' },
+    products: [
+      "OpenTelemetryApi",
+      "OpenTelemetrySdk",
+    ]
+  )
 end

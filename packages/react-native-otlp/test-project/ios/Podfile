@@ -23,11 +23,11 @@ target 'RNEmbraceOTLPPlaceholder' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # using real RNEmbraceOTLP.podspec to install EmbraceIO + OpenTelemetry dependencies
+  # RNEmbraceOTLP.podspec from local path, injecting Apple Embrace SDK
   pod 'RNEmbraceOTLP', :path => '../../../react-native-otlp'
 
   target 'RNEmbraceOTLPTests' do
-    # Pods for testing
+    # Pods inherited by the suite, different than real app
     inherit! :complete
   end
 

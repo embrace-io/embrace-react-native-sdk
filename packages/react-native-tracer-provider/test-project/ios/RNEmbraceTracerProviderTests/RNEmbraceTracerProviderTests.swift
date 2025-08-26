@@ -51,7 +51,6 @@ private let EMBRACE_INTERNAL_SPAN_NAMES = [
     "emb-app-startup-warm",
     "emb-sdk-start-process",
     "emb-process-launch",
-
     "emb-session",
     "emb-sdk-start",
     "emb-setup",

@@ -1497,7 +1497,7 @@ PODS:
     - React-logger (= 0.75.4)
     - React-perflogger (= 0.75.4)
     - React-utils (= 0.75.4)
-  - RNEmbraceCore (6.2.0):
+  - RNEmbraceTracerProvider (6.3.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1585,7 +1585,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - RNEmbraceCore (from `../../../core`)
+  - RNEmbraceTracerProvider (from `../../../react-native-tracer-provider`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1716,8 +1716,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  RNEmbraceCore:
-    :path: "../../../core"
+  RNEmbraceTracerProvider:
+    :path: "../../../react-native-tracer-provider"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1783,10 +1783,10 @@ SPEC CHECKSUMS:
   React-utils: d1bae5ac6a5fb94a772ebfc7a7e1aba3a6706a3a
   ReactCodegen: 99b435b58bd874bb0626b3fb16437d2e8735d370
   ReactCommon: 1007c09a406a451ddbd874e51511aa541d6034f6
-  RNEmbraceCore: 994e9c1d400a68f8832933a2ada90e0f5603c722
+  RNEmbraceTracerProvider: 0e5528ea96f8ae7095efd359ac80f5a41c9f762c
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: b05994d1933f507b0a28ceaa4fdb968dc18da178
 
-PODFILE CHECKSUM: b0bf6cd16cddae120aeacd0ae2eb1d088de4b6fa
+PODFILE CHECKSUM: b0aa08d96329ed0f86d5c89ed0739ab04ce0c8b9
 
 COCOAPODS: 1.15.2

@@ -14,7 +14,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'RNEmbraceTracerProvider' do
+target 'RNEmbraceTracerProviderPlaceholder' do
   config = use_native_modules!
 
   use_react_native!(
@@ -23,7 +23,7 @@ target 'RNEmbraceTracerProvider' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # using real RNEmbraceTracerProvider.podspec to install EmbraceIO
+  # RNEmbraceTracerProvider.podspec from local path, injecting Apple Embrace SDK
   pod 'RNEmbraceTracerProvider', :path => '../../../react-native-tracer-provider'
 
   target 'RNEmbraceTracerProviderTests' do

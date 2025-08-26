@@ -2,7 +2,12 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
+import EmbraceCore
+import EmbraceCrash
+import EmbraceCommonInternal
+import EmbraceOTelInternal
 import OpenTelemetryApi
+import EmbraceSemantics
 
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"
 private let HOSTED_PLATFORM_VERSION_RESOURCE_KEY = "hosted_platform_version"
@@ -46,7 +51,8 @@ class EmbraceManager: NSObject {
 
     @objc
     func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        if let isEmbraceStarted = Embrace.client?.state {
+        if let isEmbraceStarted = Embrace.client?.state as? EmbraceSDKState,
+           isEmbraceStarted == .started {
             resolve(isEmbraceStarted)
         } else {
             resolve(false)

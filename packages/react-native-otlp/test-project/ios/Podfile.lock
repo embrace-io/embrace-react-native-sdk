@@ -1497,7 +1497,28 @@ PODS:
     - React-logger (= 0.75.4)
     - React-perflogger (= 0.75.4)
     - React-utils (= 0.75.4)
-  - RNEmbraceOTLP (6.2.0):
+  - RNEmbraceCore (6.3.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - RNEmbraceOTLP (6.3.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1585,6 +1606,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNEmbraceCore (from `../../../core`)
   - RNEmbraceOTLP (from `../../../react-native-otlp`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1716,6 +1738,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNEmbraceCore:
+    :path: "../../../core"
   RNEmbraceOTLP:
     :path: "../../../react-native-otlp"
   Yoga:
@@ -1783,10 +1807,11 @@ SPEC CHECKSUMS:
   React-utils: d1bae5ac6a5fb94a772ebfc7a7e1aba3a6706a3a
   ReactCodegen: 99b435b58bd874bb0626b3fb16437d2e8735d370
   ReactCommon: 1007c09a406a451ddbd874e51511aa541d6034f6
-  RNEmbraceOTLP: 999f2e2cc770866228b519a7324cf6d7d6240aa4
+  RNEmbraceCore: 52463bc96c76fa7b7a67b5f64f3fb21871edb189
+  RNEmbraceOTLP: f7f80363e194670a6294c93e5ca9d795ed51fe3a
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: b05994d1933f507b0a28ceaa4fdb968dc18da178
 
-PODFILE CHECKSUM: f17b7074440962ec4dad14e777b717fefbd38e00
+PODFILE CHECKSUM: 477c6c8c445fca4b7446c16f7de075e033c51d4c
 
 COCOAPODS: 1.15.2

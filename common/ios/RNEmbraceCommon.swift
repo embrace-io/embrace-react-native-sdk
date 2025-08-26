@@ -2,6 +2,10 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
+import EmbraceCore
+import EmbraceCrash
+import EmbraceCommonInternal
+import EmbraceOTelInternal
 import OpenTelemetryApi
 
 class SDKConfig: NSObject {
