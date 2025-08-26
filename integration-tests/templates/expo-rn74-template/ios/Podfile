@@ -15,6 +15,10 @@ install! 'cocoapods',
 
 prepare_react_native_project!
 
+# NOTE: needed since iOS 6.13.0
+# Make KSCrash modular so Swift can import it
+pod 'KSCrash', :modular_headers => true
+
 target 'HelloWorld' do
   use_expo_modules!
   config = use_native_modules!

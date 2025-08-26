@@ -14,6 +14,9 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+# Make KSCrash modular so Swift can import it
+pod 'KSCrash', :modular_headers => true
+
 target 'RNEmbraceTracerProviderPlaceholder' do
   config = use_native_modules!
 

@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1854FE08C2FE233108D8DAC2 /* Pods_RNEmbraceOTLPPlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F71A83AE33BFA049665519 /* Pods_RNEmbraceOTLPPlaceholder.framework */; };
+		04ACCE6BC48FEE3B7CAE679A /* libPods-RNEmbraceOTLPPlaceholder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D03391C73057054A126C9BC /* libPods-RNEmbraceOTLPPlaceholder.a */; };
 		6D2523B92CC800C7000ECCEA /* RNEmbraceOTLPPlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D2523B12CC800C7000ECCEA /* RNEmbraceOTLPPlaceholder.framework */; };
 		6D2523C92CC800ED000ECCEA /* RNEmbraceOTLPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523C72CC800ED000ECCEA /* RNEmbraceOTLPTests.swift */; };
-		9408A4FECC6185FCB17A107F /* Pods_RNEmbraceOTLPPlaceholder_RNEmbraceOTLPTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84ABF61E48A1AFD20745419 /* Pods_RNEmbraceOTLPPlaceholder_RNEmbraceOTLPTests.framework */; };
+		9697AE8C31D27384A41719C6 /* libPods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 394B8BCDD37855AC8B4E0D18 /* libPods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,15 +24,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D03391C73057054A126C9BC /* libPods-RNEmbraceOTLPPlaceholder.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNEmbraceOTLPPlaceholder.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		394B8BCDD37855AC8B4E0D18 /* libPods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		57D018F8B40CF4B1DF12F30D /* Pods-RNEmbraceOTLPPlaceholder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceOTLPPlaceholder.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceOTLPPlaceholder/Pods-RNEmbraceOTLPPlaceholder.debug.xcconfig"; sourceTree = "<group>"; };
 		6D2523B12CC800C7000ECCEA /* RNEmbraceOTLPPlaceholder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbraceOTLPPlaceholder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D2523B82CC800C7000ECCEA /* RNEmbraceOTLPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNEmbraceOTLPTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D2523C72CC800ED000ECCEA /* RNEmbraceOTLPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNEmbraceOTLPTests.swift; sourceTree = "<group>"; };
 		70FAC9C812C01DEA1B694ECA /* Pods-RNEmbraceOTLPPlaceholder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceOTLPPlaceholder.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceOTLPPlaceholder/Pods-RNEmbraceOTLPPlaceholder.release.xcconfig"; sourceTree = "<group>"; };
-		A5F71A83AE33BFA049665519 /* Pods_RNEmbraceOTLPPlaceholder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceOTLPPlaceholder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2C58B75E18DC2F4A58053B1 /* Pods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests/Pods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.release.xcconfig"; sourceTree = "<group>"; };
 		D45B8D8B3FD51472AFB33183 /* Pods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests/Pods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.debug.xcconfig"; sourceTree = "<group>"; };
-		D84ABF61E48A1AFD20745419 /* Pods_RNEmbraceOTLPPlaceholder_RNEmbraceOTLPTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceOTLPPlaceholder_RNEmbraceOTLPTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1854FE08C2FE233108D8DAC2 /* Pods_RNEmbraceOTLPPlaceholder.framework in Frameworks */,
+				04ACCE6BC48FEE3B7CAE679A /* libPods-RNEmbraceOTLPPlaceholder.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,7 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D2523B92CC800C7000ECCEA /* RNEmbraceOTLPPlaceholder.framework in Frameworks */,
-				9408A4FECC6185FCB17A107F /* Pods_RNEmbraceOTLPPlaceholder_RNEmbraceOTLPTests.framework in Frameworks */,
+				9697AE8C31D27384A41719C6 /* libPods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,8 +97,8 @@
 		F22AA28418E41BC8766AF24D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A5F71A83AE33BFA049665519 /* Pods_RNEmbraceOTLPPlaceholder.framework */,
-				D84ABF61E48A1AFD20745419 /* Pods_RNEmbraceOTLPPlaceholder_RNEmbraceOTLPTests.framework */,
+				0D03391C73057054A126C9BC /* libPods-RNEmbraceOTLPPlaceholder.a */,
+				394B8BCDD37855AC8B4E0D18 /* libPods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

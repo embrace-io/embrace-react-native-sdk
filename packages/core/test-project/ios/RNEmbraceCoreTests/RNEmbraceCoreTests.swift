@@ -1,9 +1,7 @@
 import XCTest
 import EmbraceIO
-import EmbraceOTelInternal
 import OpenTelemetryApi
 import OpenTelemetrySdk
-import EmbraceCommonInternal
 
 @testable import RNEmbraceCore
 
@@ -93,7 +91,7 @@ class EmbraceManagerTests: XCTestCase {
                     )
                 )
                 .start()
-        } catch let error as EmbraceCore.Embrace {
+        } catch let error as Embrace {
             print(error)
         } catch {
             print(error.localizedDescription)
