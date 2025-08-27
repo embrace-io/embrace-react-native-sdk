@@ -27,8 +27,7 @@ const rnBundleScript = "react-native-xcode.sh";
 const sourceMapPath =
   "$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map";
 const exportSourcemapLine = `export SOURCEMAP_FILE="${sourceMapPath}"`;
-
-const KSCRASH_LINE = `pod 'KSCrash', :modular_headers => true`;
+const ksCrashConfig = `pod 'KSCrash', :modular_headers => true`;
 
 const withIosEmbraceAddKSCrashPod: ConfigPlugin = expoConfig => {
   return withDangerousMod(expoConfig, [
@@ -41,7 +40,7 @@ const withIosEmbraceAddKSCrashPod: ConfigPlugin = expoConfig => {
       const contents = fs.readFileSync(podfilePath, "utf8");
 
       // Idempotent: do nothing if already present
-      if (contents.includes(KSCRASH_LINE)) {
+      if (contents.includes(ksCrashConfig)) {
         return config;
       }
 
@@ -56,7 +55,7 @@ const withIosEmbraceAddKSCrashPod: ConfigPlugin = expoConfig => {
       const before = contents.slice(0, insertAt).replace(/\s*$/, "\n"); // ensure newline
       const after = contents.slice(insertAt);
 
-      const injected = `${before}# [EmbraceIO] Make KSCrash modular so Swift can import it\n${KSCRASH_LINE}\n\n${after}`;
+      const injected = `${before}# [EmbraceIO] Make KSCrash modular so Swift can import it\n${ksCrashConfig}\n\n${after}`;
 
       fs.writeFileSync(podfilePath, injected);
       return config;
