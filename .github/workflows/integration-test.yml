@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    if: startsWith(github.head_ref, 'release/')
+    # if: startsWith(github.head_ref, 'release/')
     strategy:
       fail-fast: false
       matrix:
