@@ -21,6 +21,9 @@ jobs:
 
     runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
 
+    env:
+      NO_FLIPPER: 1
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
