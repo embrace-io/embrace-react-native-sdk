@@ -4,6 +4,10 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, "13.0"
 prepare_react_native_project!
 
+# NOTE: needed since iOS 6.13.0
+# Make KSCrash modular so Swift can import it
+pod 'KSCrash', :modular_headers => true
+
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
 #
@@ -14,11 +18,6 @@ prepare_react_native_project!
 #     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
 # ```
 flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
-
-# NOTE: needed since iOS 6.13.0
-# Make KSCrash modular so Swift can import it
-pod 'KSCrash', :modular_headers => true
-
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
