@@ -1,12 +1,12 @@
 import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 const logger = new EmbraceLogger(console);
-export interface Field {
+interface Field {
   name: string;
   fetch: () => Promise<any>;
 }
 
-export interface Step {
+interface Step {
   name: string;
   run: (wizard: Wizard) => Promise<any>;
   isCompleted?: boolean;
@@ -32,21 +32,27 @@ class Wizard {
     this.steps = this.steps.concat(step);
   }
 
-  public fieldValue(field: Field): Promise<any> {
+  public async fieldValue(field: Field): Promise<any> {
     const value = this.fieldValues[field.name];
+
     if (value !== undefined) {
       return Promise.resolve(value);
     }
+
     return field.fetch().then((val: any) => {
       this.fieldValues[field.name] = val;
+
       return val;
     });
   }
 
   public fieldValueList(list: Field[]): Promise<any[]> {
     return list.reduce(
-      (chain: Promise<any[]>, field: Field): Promise<any[]> =>
-        chain.then(results => field.fetch().then(res => [...results, res])),
+      async (chain: Promise<any[]>, field: Field): Promise<any[]> => {
+        return chain.then(results =>
+          field.fetch().then(res => [...results, res]),
+        );
+      },
       Promise.resolve([]),
     );
   }
@@ -54,27 +60,34 @@ class Wizard {
   public getUncompletedSteps(): Step[] {
     return this.steps.filter(step => !step.isCompleted);
   }
+
   public processSteps(): Promise<any[]> {
     return this.steps.reduce(
-      (chain: Promise<any[]>, step: Step): Promise<any[]> =>
-        chain.then(results => {
+      async (chain: Promise<any[]>, step: Step): Promise<any[]> => {
+        return chain.then(async results => {
           return step.run(this).then(res => {
             logger.log(`${step.name} was completed`);
+
             step.isCompleted = true;
+
             return [...results, res];
           });
-        }),
+        });
+      },
       Promise.resolve([]),
     );
   }
-  public runSteps(): Promise<void> {
+
+  public async runSteps(): Promise<void> {
     return this.processSteps()
       .then(() => {
-        logger.log("done");
+        logger.log("Done");
       })
       .catch(err => {
-        logger.error("error in setting up Embrace: " + err);
+        logger.error("Error in setting up Embrace: " + err);
+
         const uncompletedSteps = this.getUncompletedSteps();
+
         uncompletedSteps.forEach(uncompletedStep => {
           logger.error(
             `We could not complete: ${
@@ -90,3 +103,4 @@ class Wizard {
 }
 
 export default Wizard;
+export {Field, Step};

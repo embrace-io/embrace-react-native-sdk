@@ -215,6 +215,7 @@ const patch = (
         fileName,
       );
     }
+
     if (order === "before") {
       return addLineBeforeToTextInFile(
         file,
@@ -224,10 +225,13 @@ const patch = (
       );
     }
   });
+
   const hasToPatch = result.some(item => item);
+
   if (hasToPatch) {
     file.patch();
   }
+
   return hasToPatch;
 };
 

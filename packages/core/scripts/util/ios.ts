@@ -92,11 +92,7 @@ export const embracePlistPatchable = (): Promise<FileUpdatable> => {
   });
 };
 
-export const xcodePatchable = ({
-  name,
-}: {
-  name: string;
-}): Promise<XcodeProject> => {
+export const xcodePatchable = (projectName: string): Promise<XcodeProject> => {
   return new Promise((resolve, reject) => {
     const projectPathFounded: string[] = glob.sync(
       "**/*.xcodeproj/project.pbxproj",
@@ -108,7 +104,9 @@ export const xcodePatchable = ({
       projectPath = projectPathFounded[0];
     } else if (projectPathFounded.length > 1) {
       projectPath = projectPathFounded.find((path: string) => {
-        return path.toLocaleLowerCase().indexOf(name.toLocaleLowerCase()) > -1;
+        return (
+          path.toLocaleLowerCase().indexOf(projectName.toLocaleLowerCase()) > -1
+        );
       });
     }
 
@@ -133,8 +131,7 @@ export const getXcodeProject = (path: string): Promise<XcodeProject> => {
         return reject(err);
       }
 
-      const proj = new XcodeProject(path, project);
-      resolve(proj);
+      resolve(new XcodeProject(path, project));
     });
   });
 };
@@ -252,10 +249,12 @@ export class XcodeProject implements Patchable {
       this.project.hash.project.objects.PBXNativeTarget,
       groupName,
     );
+
     const group = this.findHash(
       this.project.hash.project.objects.PBXGroup,
       groupName,
     );
+
     if (target && group) {
       const file = this.project.addFile(path, group[0], {target: target[0]});
       file.target = target[0];
@@ -390,11 +389,13 @@ export const findNameWithCaseSensitiveFromPath = (
   name: string,
 ) => {
   const pathSplitted = path.split("/");
+
   const nameInLowerCase = name.toLocaleLowerCase();
 
   const nameFounded = pathSplitted.find(
     element => element.toLocaleLowerCase() === `${nameInLowerCase}.xcodeproj`,
   );
+
   if (nameFounded) {
     return nameFounded.replace(".xcodeproj", "");
   }

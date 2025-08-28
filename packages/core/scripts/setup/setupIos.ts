@@ -8,13 +8,16 @@ import {
   iosPodfile,
   patchXcodeBundlePhase,
 } from "./ios";
-import {apiToken, iosAppID, packageJSON} from "./common";
+import {apiToken, iosAppID, iosProjectFolderName, packageJSON} from "./common";
 
-const logger = new EmbraceLogger(console);
+const IOS_REGISTER_FIELDS = [
+  iosAppID,
+  apiToken,
+  iosProjectFolderName,
+  packageJSON,
+];
 
-logger.log("initializing setup wizard for ios");
-
-const iosSteps = [
+const IOS_STEPS = [
   addEmbraceInitializerSwift,
   iosInitializeEmbrace,
   iosPodfile,
@@ -22,10 +25,15 @@ const iosSteps = [
   addUploadBuildPhase,
 ];
 
+const logger = new EmbraceLogger(console);
+logger.log("Initializing Setup Wizard for iOS");
+
 const run = () => {
   const wiz = new Wizard();
-  [iosAppID, apiToken, packageJSON].map(field => wiz.registerField(field));
-  [...iosSteps].map(step => wiz.registerStep(step));
+
+  IOS_REGISTER_FIELDS.map(field => wiz.registerField(field));
+  IOS_STEPS.map(step => wiz.registerStep(step));
+
   wiz.runSteps();
 };
 
