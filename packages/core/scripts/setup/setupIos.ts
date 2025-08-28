@@ -5,7 +5,8 @@ import {
   addUploadBuildPhase,
   addEmbraceInitializerSwift,
   iosInitializeEmbrace,
-  iosPodfile,
+  iOSPodfilePatch,
+  iosPodfileKSCrashPatch,
   patchXcodeBundlePhase,
 } from "./ios";
 import {apiToken, iosAppID, iosProjectFolderName, packageJSON} from "./common";
@@ -20,7 +21,8 @@ const IOS_REGISTER_FIELDS = [
 const IOS_STEPS = [
   addEmbraceInitializerSwift,
   iosInitializeEmbrace,
-  iosPodfile,
+  iOSPodfilePatch,
+  iosPodfileKSCrashPatch,
   patchXcodeBundlePhase,
   addUploadBuildPhase,
 ];
@@ -29,12 +31,12 @@ const logger = new EmbraceLogger(console);
 logger.log("Initializing Setup Wizard for iOS");
 
 const run = () => {
-  const wiz = new Wizard();
+  const wizard = new Wizard();
 
-  IOS_REGISTER_FIELDS.map(field => wiz.registerField(field));
-  IOS_STEPS.map(step => wiz.registerStep(step));
+  IOS_REGISTER_FIELDS.forEach(field => wizard.registerField(field));
+  IOS_STEPS.forEach(step => wizard.registerStep(step));
 
-  wiz.runSteps();
+  wizard.runSteps();
 };
 
 export default run;

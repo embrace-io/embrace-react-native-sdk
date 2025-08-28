@@ -1,13 +1,14 @@
 import Wizard from "../util/wizard";
 import {
-  bundlePhaseRE,
-  embraceNativePod,
-  embRunScript,
-  exportSourcemapRNVariable,
+  BUNDLE_PHASE_REGEXP,
+  EMBR_NATIVE_POD,
+  EMBR_RUN_SCRIPT,
+  EXPORT_SOURCEMAP_RN_VAR,
   podfilePatchable,
   xcodePatchable,
   findNameWithCaseSensitiveFromPath,
-  makeSourcemapDirectory,
+  MKDIR_SOURCEMAP_DIR,
+  EMBR_KSCRASH_MODULAR_HEADER_POD,
 } from "../util/ios";
 import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
@@ -25,13 +26,12 @@ const fs = require("fs");
 
 const semverGte = require("semver/functions/gte");
 
-const logger = new EmbraceLogger(console);
+const LOGGER = new EmbraceLogger(console);
 
 const tryToPatchAppDelegate = async (
   iOSProjectName: string,
 ): Promise<boolean> => {
   const project = await xcodePatchable(iOSProjectName);
-  console.log("tryToPatchAppDelegate", project);
   const bridgingHeader = project.getBridgingHeaderName(iOSProjectName);
   const response = patch("objectivec", iOSProjectName, {bridgingHeader});
 
@@ -60,11 +60,26 @@ const iosInitializeEmbrace = {
   name: "iOS initialize Embrace",
   run: async (wizard: Wizard) => {
     const name = await getIOSProjectName(wizard);
-    console.log("iosInitializeEmbrace", name);
     return tryToPatchAppDelegate(name);
   },
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
+};
+
+const patchPodFileWithKSCrash = async () => {
+  return podfilePatchable().then(podfile => {
+    if (podfile.hasLine(EMBR_KSCRASH_MODULAR_HEADER_POD)) {
+      LOGGER.warn("Already has 'KSCrash' pod with modular headers enabled");
+      return;
+    }
+
+    podfile.addBefore(
+      "linkage = ENV['USE_FRAMEWORKS']",
+      `${EMBR_KSCRASH_MODULAR_HEADER_POD}\n`,
+    );
+
+    return podfile.patch();
+  });
 };
 
 const patchPodfile = (json: IPackageJson) => {
@@ -78,7 +93,7 @@ const patchPodfile = (json: IPackageJson) => {
 
   // If 6.0.0, autolink should have linked the Pod.
   if (semverGte("6.0.0", rnVersionSanitized)) {
-    logger.log(
+    LOGGER.log(
       "Skipping patching Podfile since react-native is on an autolink supported version",
     );
 
@@ -86,22 +101,30 @@ const patchPodfile = (json: IPackageJson) => {
   }
 
   return podfilePatchable().then(podfile => {
-    if (podfile.hasLine(embraceNativePod)) {
-      logger.warn("Already has EmbraceIO pod");
+    if (podfile.hasLine(EMBR_NATIVE_POD)) {
+      LOGGER.warn("Already has 'EmbraceIO' pod");
       return;
     }
 
-    podfile.addBefore("use_react_native", `${embraceNativePod}\n`);
+    podfile.addBefore("use_react_native", `${EMBR_NATIVE_POD}\n`);
 
     return podfile.patch();
   });
 };
 
-const iosPodfile = {
+const iOSPodfilePatch = {
   name: "Podfile patch (Only React Native v < 0.6)",
   run: async (wizard: Wizard): Promise<any> => {
-    const name = await getIOSProjectName(wizard);
-    return patchPodfile(name);
+    return wizard.fieldValue(packageJSON).then(patchPodfile);
+  },
+  docURL:
+    "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#native-modules",
+};
+
+const iosPodfileKSCrashPatch = {
+  name: "KSCrash enabling modular headers",
+  run: async (_wizard: Wizard): Promise<any> => {
+    return patchPodFileWithKSCrash();
   },
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#native-modules",
@@ -113,24 +136,24 @@ const patchXcodeBundlePhase = {
     return getIOSProjectName(wizard)
       .then(xcodePatchable)
       .then(project => {
-        const bundlePhaseKey = project.findPhase(bundlePhaseRE);
+        const bundlePhaseKey = project.findPhase(BUNDLE_PHASE_REGEXP);
 
         if (!bundlePhaseKey) {
-          logger.error("Could not find Xcode React Native bundle phase");
+          LOGGER.error("Could not find Xcode React Native bundle phase");
           return;
         }
 
-        if (project.hasLine(bundlePhaseKey, exportSourcemapRNVariable)) {
-          logger.warn("Already patched Xcode React Native bundle phase");
+        if (project.hasLine(bundlePhaseKey, EXPORT_SOURCEMAP_RN_VAR)) {
+          LOGGER.warn("Already patched Xcode React Native bundle phase");
           return;
         }
 
-        logger.log("Patching Xcode React Native bundle phase");
+        LOGGER.log("Patching Xcode React Native bundle phase");
 
         project.modifyPhase(
           bundlePhaseKey,
-          /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m,
-          `${makeSourcemapDirectory}\n${exportSourcemapRNVariable}\n`,
+          BUNDLE_PHASE_REGEXP,
+          `${MKDIR_SOURCEMAP_DIR}\n${EXPORT_SOURCEMAP_RN_VAR}\n`,
         );
 
         return project.patch();
@@ -145,10 +168,10 @@ const addUploadBuildPhase = {
   run: (wizard: Wizard): Promise<any> =>
     getIOSProjectName(wizard).then(async name => {
       return xcodePatchable(name).then(project => {
-        const uploadBuildPhaseKey = project.findPhase(embRunScript);
+        const uploadBuildPhaseKey = project.findPhase(EMBR_RUN_SCRIPT);
 
         if (uploadBuildPhaseKey) {
-          logger.warn("Already added upload phase");
+          LOGGER.warn("Already added upload phase");
           return;
         }
 
@@ -163,7 +186,7 @@ const addUploadBuildPhase = {
             null,
             {
               shellPath: "/bin/sh",
-              shellScript: `REACT_NATIVE_MAP_PATH="$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map" EMBRACE_ID=${id} EMBRACE_TOKEN=${token} ${embRunScript}`,
+              shellScript: `REACT_NATIVE_MAP_PATH="$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map" EMBRACE_ID=${id} EMBRACE_TOKEN=${token} ${EMBR_RUN_SCRIPT}`,
             },
           );
 
@@ -189,8 +212,13 @@ const addEmbraceInitializerSwift = {
       fs.writeFileSync(fd, getEmbraceInitializerContents(appId));
     } catch (e) {
       if (e instanceof Error && e.message.includes("EEXIST")) {
-        logger.warn("EmbraceInitializer.swift already exists");
+        LOGGER.warn("EmbraceInitializer.swift already exists");
         return;
+      } else if (e instanceof Error && e.message.includes("ENOENT")) {
+        const ENOENT_CUSTOM_MESSAG =
+          "It seems like the name in package.json doesn't match with the project name in the iOS native project. Perhaps the app was created using a custom package name? (using --package-name flag). Please verify that the name of the iOS project and try it again.";
+
+        throw `${e}. ${ENOENT_CUSTOM_MESSAG}`;
       } else {
         throw e;
       }
@@ -241,8 +269,10 @@ import EmbraceIO
 export {
   tryToPatchAppDelegate,
   patchPodfile,
+  getIOSProjectName,
   iosInitializeEmbrace,
-  iosPodfile,
+  iOSPodfilePatch,
+  iosPodfileKSCrashPatch,
   patchXcodeBundlePhase,
   addUploadBuildPhase,
   addEmbraceInitializerSwift,

@@ -39,7 +39,7 @@ const withIosEmbraceAddKSCrashPod: ConfigPlugin = expoConfig => {
       );
       const contents = fs.readFileSync(podfilePath, "utf8");
 
-      // Idempotent: do nothing if already present
+      // do nothing if already present
       if (contents.includes(ksCrashConfig)) {
         return config;
       }
@@ -52,10 +52,11 @@ const withIosEmbraceAddKSCrashPod: ConfigPlugin = expoConfig => {
       }
 
       const insertAt = match.index;
-      const before = contents.slice(0, insertAt).replace(/\s*$/, "\n"); // ensure newline
+      const before = contents.slice(0, insertAt).replace(/\s*$/, "\n");
       const after = contents.slice(insertAt);
 
-      const injected = `${before}# [EmbraceIO] Make KSCrash modular so Swift can import it\n${ksCrashConfig}\n\n${after}`;
+      const comment = "# [Embrace] Make KSCrash modular so Swift can import it";
+      const injected = `${before}${comment} \n${ksCrashConfig}\n\n${after}`;
 
       fs.writeFileSync(podfilePath, injected);
       return config;

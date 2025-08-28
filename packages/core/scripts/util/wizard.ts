@@ -1,6 +1,5 @@
 import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
-const logger = new EmbraceLogger(console);
 interface Field {
   name: string;
   fetch: () => Promise<any>;
@@ -12,6 +11,8 @@ interface Step {
   isCompleted?: boolean;
   docURL: string;
 }
+
+const LOGGER = new EmbraceLogger(console);
 
 class Wizard {
   private fields: {[name: string]: Field};
@@ -66,7 +67,7 @@ class Wizard {
       async (chain: Promise<any[]>, step: Step): Promise<any[]> => {
         return chain.then(async results => {
           return step.run(this).then(res => {
-            logger.log(`${step.name} was completed`);
+            LOGGER.log(`${step.name} was completed`);
 
             step.isCompleted = true;
 
@@ -81,20 +82,15 @@ class Wizard {
   public async runSteps(): Promise<void> {
     return this.processSteps()
       .then(() => {
-        logger.log("Done");
+        LOGGER.log("Done.");
       })
       .catch(err => {
-        logger.error("Error in setting up Embrace: " + err);
-
-        const uncompletedSteps = this.getUncompletedSteps();
-
-        uncompletedSteps.forEach(uncompletedStep => {
-          logger.error(
-            `We could not complete: ${
-              uncompletedStep.name
-            }, Please refer to the docs at ${
-              uncompletedStep.docURL ||
-              "https://embrace.io/docs/react-native/integration/"
+        LOGGER.error("Error in setting up Embrace: " + err);
+        this.getUncompletedSteps().forEach(uncompletedStep => {
+          const {name, docURL} = uncompletedStep;
+          LOGGER.error(
+            `We could not complete: ${name}, Please refer to the docs at ${
+              docURL || "https://embrace.io/docs/react-native/integration/"
             }`,
           );
         });
