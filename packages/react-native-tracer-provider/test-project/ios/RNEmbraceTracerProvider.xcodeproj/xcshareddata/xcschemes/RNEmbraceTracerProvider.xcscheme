@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6DED2F4B2CE514B200A9735A"
-               BuildableName = "RNEmbraceTracerProvider.framework"
-               BlueprintName = "RNEmbraceTracerProvider"
+               BuildableName = "RNEmbraceTracerProviderPlaceholder.framework"
+               BlueprintName = "RNEmbraceTracerProviderPlaceholder"
                ReferencedContainer = "container:RNEmbraceTracerProvider.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -51,8 +51,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6DED2F4B2CE514B200A9735A"
-            BuildableName = "RNEmbraceTracerProvider.framework"
-            BlueprintName = "RNEmbraceTracerProvider"
+            BuildableName = "RNEmbraceTracerProviderPlaceholder.framework"
+            BlueprintName = "RNEmbraceTracerProviderPlaceholder"
             ReferencedContainer = "container:RNEmbraceTracerProvider.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

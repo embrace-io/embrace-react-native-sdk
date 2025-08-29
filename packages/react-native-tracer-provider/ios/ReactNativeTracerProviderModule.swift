@@ -1,8 +1,8 @@
 import React
 import JavaScriptCore
 import Foundation
-import OpenTelemetryApi
 import EmbraceIO
+import OpenTelemetryApi
 import os
 
 /*
@@ -140,12 +140,13 @@ class ReactNativeTracerProviderModule: NSObject {
   @objc(setupTracer:version:schemaUrl:)
   func setupTracer(name: String, version: String, schemaUrl: String) {
     if tracerProvider == nil {
-      if (Embrace.client?.started) != nil {
-        tracerProvider = OpenTelemetry.instance.tracerProvider
-      } else {
-        os_log("cannot access tracer provider, Embrace SDK has not been started", log: log, type: .error)
-        return
-      }
+        if let state = Embrace.client?.state as? EmbraceSDKState,
+           state == .started {
+            tracerProvider = OpenTelemetry.instance.tracerProvider
+        } else {
+            os_log("cannot access tracer provider, Embrace SDK has not been started", log: log, type: .error)
+            return
+        }
     }
 
     let id = getTracerKey(name: name, version: version, schemaUrl: schemaUrl)

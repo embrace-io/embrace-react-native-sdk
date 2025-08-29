@@ -1,8 +1,11 @@
 import React
+import OpenTelemetryProtocolExporterHttp
+import OpenTelemetryProtocolExporterCommon
 import JavaScriptCore
 import Foundation
 import EmbraceIO
 import EmbraceCrash
+import OpenTelemetryApi
 import OpenTelemetrySdk
 import EmbraceCommonInternal
 import OSLog

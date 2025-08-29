@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "30DFDA612C486677009F2ECC"
-               BuildableName = "RNEmbraceCore.framework"
-               BlueprintName = "RNEmbraceCore"
+               BuildableName = "RNEmbraceCorePlaceholder.framework"
+               BlueprintName = "RNEmbraceCorePlaceholder"
                ReferencedContainer = "container:RNEmbraceCoreTests.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -51,8 +51,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "30DFDA612C486677009F2ECC"
-            BuildableName = "RNEmbraceCore.framework"
-            BlueprintName = "RNEmbraceCore"
+            BuildableName = "RNEmbraceCorePlaceholder.framework"
+            BlueprintName = "RNEmbraceCorePlaceholder"
             ReferencedContainer = "container:RNEmbraceCoreTests.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

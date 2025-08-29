@@ -1,9 +1,7 @@
-
-# React Native
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
-    "../node_modules/react-native/scripts/react_native_pods.rb",
+    "react-native/scripts/react_native_pods.rb",
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
@@ -16,8 +14,10 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'RNEmbraceTracerProvider' do
-  # Pods for RNEmbraceTracerProvider
+# Make KSCrash modular so Swift can import it
+pod 'KSCrash', :modular_headers => true
+
+target 'RNEmbraceTracerProviderPlaceholder' do
   config = use_native_modules!
 
   use_react_native!(
@@ -26,18 +26,14 @@ target 'RNEmbraceTracerProvider' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # Custom
-  # loading `dependencies` file
-  load '../../ios/dependencies.rb'
-  # installing custom dependencies from the original RNEmbraceTracerProvider
-  load_dependencies()
-  
+  # RNEmbraceTracerProvider.podspec from local path, injecting Apple Embrace SDK
+  pod 'RNEmbraceTracerProvider', :path => '../../../react-native-tracer-provider'
+
   target 'RNEmbraceTracerProviderTests' do
     # Pods for testing
     inherit! :complete
   end
 
-  # React Native
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(

@@ -1,6 +1,6 @@
 {
   "name": "@embrace-io/react-native-tracer-provider",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "description": "A React Native for the Embrace SDK that conforms to the OpenTelemetry TracerProvider interface",
   "dependencies": {
     "@opentelemetry/api": "^1.9.0"
@@ -50,7 +50,7 @@
     "build": "tsc",
     "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detekt && ./gradlew :app:testDebugUnitTest && cd ../../",
     "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceTracerProvider.xcworkspace RNEmbraceTracerProviderTests",
-    "ios:install": "cd test-project && yarn install && cd ios && pod install --repo-update && rm .xcode.env.local"
+    "ios:install": "cd test-project && yarn install && cd ios && USE_FRAMEWORKS=dynamic pod install --repo-update && rm .xcode.env.local"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"
@@ -59,7 +59,7 @@
     "typescript": "^5.6.3"
   },
   "embrace": {
-    "iosVersion": "6.8.5",
+    "iosVersion": "6.13.0",
     "androidVersion": "7.6.1"
   }
 }
