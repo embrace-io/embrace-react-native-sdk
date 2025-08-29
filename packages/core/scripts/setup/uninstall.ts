@@ -3,11 +3,13 @@ import {
   BUNDLE_PHASE_REGEXP,
   EMBR_KSCRASH_MODULAR_HEADER_POD,
   EMBR_NATIVE_POD,
+  EMBR_RUN_SCRIPT,
   embracePlistPatchable,
   EXPORT_SOURCEMAP_RN_VAR,
   findNameWithCaseSensitiveFromPath,
   getPodFile,
   MKDIR_SOURCEMAP_DIR,
+  UPLOAD_SYMBOLS_PHASE,
   xcodePatchable,
 } from "../util/ios";
 import {FileUpdatable} from "../util/file";
@@ -258,14 +260,14 @@ export const removeEmbraceFromXcode = async (wizard: Wizard) => {
           `${nameWithCaseSensitive}/EmbraceInitializer.swift`,
         );
 
-        project.findAndRemovePhase("Upload Debug Symbols to Embrace");
+        project.findAndRemovePhase(UPLOAD_SYMBOLS_PHASE);
         project.modifyPhase(
           bundlePhaseKey,
           `${MKDIR_SOURCEMAP_DIR}\n${EXPORT_SOURCEMAP_RN_VAR}\n`,
           "",
         );
 
-        project.findAndRemovePhase("/EmbraceIO/run.sh");
+        project.findAndRemovePhase(EMBR_RUN_SCRIPT);
         project.patch();
         resolve(project.writeSync());
       })

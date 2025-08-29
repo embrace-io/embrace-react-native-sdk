@@ -13,6 +13,7 @@ type ProjectFileType = "resource" | "source";
 
 const LOGGER = new EmbraceLogger(console);
 
+const UPLOAD_SYMBOLS_PHASE = "[Embrace] Upload Symbols Map";
 const EMBRACE_INIT_OBJECTIVEC = "[EmbraceInitializer start];";
 const EMBR_RUN_SCRIPT =
   '"$SRCROOT/../node_modules/@embrace-io/react-native/ios/scripts/run.sh"';
@@ -23,13 +24,14 @@ pod 'KSCrash', :modular_headers => true
 `;
 const BUNDLE_PHASE_REGEXP =
   /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m;
-
 const MKDIR_SOURCEMAP_DIR =
   'mkdir -p "$CONFIGURATION_BUILD_DIR/embrace-assets"';
 const EXPORT_SOURCEMAP_RN_VAR =
   'export SOURCEMAP_FILE="$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map";';
 const DOCS_MESSAGE =
   "Please refer to the docs at https://embrace.io/docs to update manually";
+const ENOENT_XCODE_PROJ_ERROR_MESSAGE =
+  "Looks like the app name in package.json doesn't match your iOS project. If you used a custom package name (--package-name), double-check the iOS project name and rerun";
 
 const EMBRACE_IMPORT_OBJECTIVEC = ({
   bridgingHeader,
@@ -122,7 +124,7 @@ const xcodePatchable = (projectName: string): Promise<XcodeProject> => {
 
     if (!projectPath) {
       return reject(
-        LOGGER.format(`Could not find xcode project file. ${DOCS_MESSAGE}.`),
+        `Could not find xcode project file. ${ENOENT_XCODE_PROJ_ERROR_MESSAGE}. ${DOCS_MESSAGE}.`,
       );
     }
 
@@ -211,7 +213,7 @@ class XcodeProject implements Patchable {
     );
   }
 
-  public findAndRemovePhase(line: string | RegExp) {
+  public findAndRemovePhase(match: string | RegExp) {
     const buildPhaseObj = this.buildPhaseObj();
 
     this.project.hash.project.objects.PBXShellScriptBuildPhase = Object.keys(
@@ -221,16 +223,41 @@ class XcodeProject implements Patchable {
       if (!phase) {
         return a;
       }
+
+      // against the name of the Phase
+      if (phase.name) {
+        // supporting regexp
+        const isRegExp = match instanceof RegExp && match.test(phase.name);
+
+        // checking plane string
+        const isPlaneString =
+          typeof match === "string" && phase.name.includes(match);
+
+        if (isRegExp || isPlaneString) {
+          return a;
+        }
+      }
+
+      // against a line of the Shell Script
       if (phase.shellScript) {
-        const code = JSON.parse(phase.shellScript);
-        if (code.search(line) > -1) {
+        // supporting regexp
+        const isRegExp =
+          match instanceof RegExp && match.test(phase.shellScript);
+
+        // checking plane string
+        const isPlaneString =
+          typeof match === "string" && phase.shellScript.includes(match);
+
+        if (isRegExp || isPlaneString) {
           return a;
         }
       }
 
       return {...a, [key]: buildPhaseObj[key]};
     }, {});
+
     const nativeTargets = this.project.hash.project.objects.PBXNativeTarget;
+
     this.project.hash.project.objects.PBXNativeTarget = Object.keys(
       nativeTargets,
     ).reduce((a, key) => {
@@ -238,12 +265,14 @@ class XcodeProject implements Patchable {
       if (!phase) {
         return a;
       }
+
       if (phase.buildPhases) {
         phase.buildPhases = phase.buildPhases.filter(
           ({comment}: {comment: string}) =>
-            !comment.includes("Upload Debug Symbols to Embrace"),
+            !comment.includes(UPLOAD_SYMBOLS_PHASE),
         );
       }
+
       return {...a, [key]: phase};
     }, {});
   }
@@ -425,6 +454,8 @@ export {
   EXPORT_SOURCEMAP_RN_VAR,
   EMBR_RUN_SCRIPT,
   EMBRACE_INIT_OBJECTIVEC,
+  UPLOAD_SYMBOLS_PHASE,
+  ENOENT_XCODE_PROJ_ERROR_MESSAGE,
   EMBRACE_IMPORT_OBJECTIVEC,
   getAppDelegateByIOSLanguage,
   getPodFile,

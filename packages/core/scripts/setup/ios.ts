@@ -9,6 +9,8 @@ import {
   findNameWithCaseSensitiveFromPath,
   MKDIR_SOURCEMAP_DIR,
   EMBR_KSCRASH_MODULAR_HEADER_POD,
+  UPLOAD_SYMBOLS_PHASE,
+  ENOENT_XCODE_PROJ_ERROR_MESSAGE,
 } from "../util/ios";
 import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
@@ -164,29 +166,29 @@ const patchXcodeBundlePhase = {
 };
 
 const addUploadBuildPhase = {
-  name: "Add upload phase",
+  name: `Add '${UPLOAD_SYMBOLS_PHASE}' phase`,
   run: (wizard: Wizard): Promise<any> =>
     getIOSProjectName(wizard).then(async name => {
       return xcodePatchable(name).then(project => {
         const uploadBuildPhaseKey = project.findPhase(EMBR_RUN_SCRIPT);
 
         if (uploadBuildPhaseKey) {
-          LOGGER.warn("Already added upload phase");
+          LOGGER.warn(`Already added '${UPLOAD_SYMBOLS_PHASE}' phase`);
           return;
         }
 
         return wizard.fieldValueList([iosAppID, apiToken]).then(list => {
-          const [id, token] = list;
+          const [appId, token] = list;
           const proj = project.project;
 
           proj.addBuildPhase(
             [],
             "PBXShellScriptBuildPhase",
-            "Upload Debug Symbols to Embrace",
+            UPLOAD_SYMBOLS_PHASE,
             null,
             {
               shellPath: "/bin/sh",
-              shellScript: `REACT_NATIVE_MAP_PATH="$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map" EMBRACE_ID=${id} EMBRACE_TOKEN=${token} ${EMBR_RUN_SCRIPT}`,
+              shellScript: `REACT_NATIVE_MAP_PATH="$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map" EMBRACE_ID=${appId} EMBRACE_TOKEN=${token} ${EMBR_RUN_SCRIPT}`,
             },
           );
 
@@ -204,7 +206,6 @@ const addEmbraceInitializerSwift = {
     const appId = await wizard.fieldValue(iosAppID);
     const name = await getIOSProjectName(wizard);
     const project = await xcodePatchable(name);
-
     const filePath = path.join("ios", name, "EmbraceInitializer.swift");
 
     try {
@@ -215,10 +216,7 @@ const addEmbraceInitializerSwift = {
         LOGGER.warn("EmbraceInitializer.swift already exists");
         return;
       } else if (e instanceof Error && e.message.includes("ENOENT")) {
-        const ENOENT_CUSTOM_MESSAG =
-          "It seems like the name in package.json doesn't match with the project name in the iOS native project. Perhaps the app was created using a custom package name? (using --package-name flag). Please verify that the name of the iOS project and try it again.";
-
-        throw `${e}. ${ENOENT_CUSTOM_MESSAG}`;
+        throw `${e}. ${ENOENT_XCODE_PROJ_ERROR_MESSAGE}`;
       } else {
         throw e;
       }
@@ -270,6 +268,7 @@ export {
   tryToPatchAppDelegate,
   patchPodfile,
   getIOSProjectName,
+  patchPodFileWithKSCrash,
   iosInitializeEmbrace,
   iOSPodfilePatch,
   iosPodfileKSCrashPatch,
