@@ -13,12 +13,10 @@ interface Formatter {
 class EmbraceLogger implements Logger, Formatter {
   public out: Logger;
   public level: EmbraceLoggerLevel;
-  private isColorSupported: boolean;
 
   constructor(out: Logger, level: EmbraceLoggerLevel = "info") {
     this.out = out;
     this.level = level;
-    this.isColorSupported = process.stdout.isTTY;
   }
 
   public format(message: string): string {
@@ -33,29 +31,13 @@ class EmbraceLogger implements Logger, Formatter {
 
   public warn(message: string) {
     if (this.level === "warn" || this.level === "info") {
-      this.out.warn(this.yellow(this.format(message)));
+      this.out.warn(this.format(message));
     }
   }
 
   public error(message: string) {
     // always print errors
-    this.out.error(this.red(this.format(message)));
-  }
-
-  private red(message: string) {
-    if (this.isColorSupported) {
-      return `\x1b[31m${message}\x1b[0m`;
-    }
-
-    return message;
-  }
-
-  private yellow(message: string) {
-    if (this.isColorSupported) {
-      return `\x1b[33m${message}\x1b[0m`;
-    }
-
-    return message;
+    this.out.error(this.format(message));
   }
 }
 
