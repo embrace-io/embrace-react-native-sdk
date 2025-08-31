@@ -317,7 +317,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\" EMBRACE_ID=zmgv4 EMBRACE_TOKEN=48c50305c463ff3a53acbf8d7449a0da \"$SRCROOT/../node_modules/@embrace-io/react-native/ios/scripts/run.sh\"";
+			shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\" EMBRACE_ID=abcde EMBRACE_TOKEN=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \"$SRCROOT/../node_modules/@embrace-io/react-native/ios/scripts/run.sh\"";
 		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
