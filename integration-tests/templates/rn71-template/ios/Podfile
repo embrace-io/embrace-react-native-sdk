@@ -1,13 +1,6 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-# Hoist-safe resolve of Embrace's CocoaPods helper
-require Pod::Executable.execute_command('node', ['-p',
-  'require.resolve(
-    "@embrace-io/react-native/ios/lib/cocoapods-rn-embrace-sdk.rb",
-    { paths: [process.argv[1]] }
-  )', __dir__]).strip
-
 platform :ios, "13.0"
 prepare_react_native_project!
 
@@ -66,8 +59,6 @@ target 'ProjectName' do
       # necessary for Mac Catalyst builds
       :mac_catalyst_enabled => false
     )
-
-    RNEmbraceIOKSCrashHeadersPatch.run(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end

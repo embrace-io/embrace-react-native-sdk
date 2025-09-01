@@ -13,7 +13,7 @@ type ProjectFileType = "resource" | "source";
 
 const LOGGER = new EmbraceLogger(console);
 
-const UPLOAD_SYMBOLS_PHASE = "Embrace Symbol Uploads";
+const UPLOAD_SYMBOLS_PHASE = "[Embrace] Upload Symbols Map";
 const EMBRACE_INIT_OBJECTIVEC = "[EmbraceInitializer start];";
 const EMBR_RUN_SCRIPT =
   '"$SRCROOT/../node_modules/@embrace-io/react-native/ios/scripts/run.sh"';
@@ -22,8 +22,6 @@ const EMBR_KSCRASH_MODULAR_HEADER_POD = `
 # [Embrace] Make KSCrash modular so Swift can import it 
 pod 'KSCrash', :modular_headers => true
 `;
-const EMBR_RN_IOS_KS_CRASH_HEADERS_SCRIPT_REQUIRE = `require_relative '../node_modules/@embrace-io/react-native/ios/lib/cocoapods-rn-embrace-sdk'`;
-const EMBR_RN_IOS_KS_CRASH_HEADERS_POST_INSTALL = `RNEmbraceIOKSCrashHeadersPatch.run(installer)`;
 const BUNDLE_PHASE_REGEXP =
   /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m;
 const MKDIR_SOURCEMAP_DIR =
@@ -451,8 +449,6 @@ export {
   type ProjectFileType,
   EMBR_NATIVE_POD,
   EMBR_KSCRASH_MODULAR_HEADER_POD,
-  EMBR_RN_IOS_KS_CRASH_HEADERS_SCRIPT_REQUIRE,
-  EMBR_RN_IOS_KS_CRASH_HEADERS_POST_INSTALL,
   BUNDLE_PHASE_REGEXP,
   MKDIR_SOURCEMAP_DIR,
   EXPORT_SOURCEMAP_RN_VAR,

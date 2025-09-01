@@ -11,8 +11,6 @@ import {
   EMBR_KSCRASH_MODULAR_HEADER_POD,
   UPLOAD_SYMBOLS_PHASE,
   ENOENT_XCODE_PROJ_ERROR_MESSAGE,
-  EMBR_RN_IOS_KS_CRASH_HEADERS_SCRIPT_REQUIRE,
-  EMBR_RN_IOS_KS_CRASH_HEADERS_POST_INSTALL,
 } from "../util/ios";
 import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
@@ -70,54 +68,20 @@ const iosInitializeEmbrace = {
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
 };
 
-const patchPodFileWithKSCrashPod = async () => {
-  const podfile = await podfilePatchable();
+const patchPodFileWithKSCrash = async () => {
+  return podfilePatchable().then(podfile => {
+    if (podfile.hasLine(EMBR_KSCRASH_MODULAR_HEADER_POD)) {
+      LOGGER.warn("Already has 'KSCrash' pod with modular headers enabled");
+      return;
+    }
 
-  if (podfile.hasLine(EMBR_KSCRASH_MODULAR_HEADER_POD)) {
-    LOGGER.warn("Already has 'KSCrash' pod with modular headers enabled");
-    return;
-  }
-
-  podfile.addBefore(
-    "linkage = ENV['USE_FRAMEWORKS']",
-    `${EMBR_KSCRASH_MODULAR_HEADER_POD}\n`,
-  );
-
-  return podfile.patch();
-};
-
-const patchPodFileWithKSCrashScript = async () => {
-  const podfile = await podfilePatchable();
-
-  if (podfile.hasLine(EMBR_RN_IOS_KS_CRASH_HEADERS_SCRIPT_REQUIRE)) {
-    LOGGER.warn("Already has 'cocoapods-rn-embrace-sdk' plugin");
-    return;
-  }
-
-  const LINE =
-    "require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'";
-
-  podfile.addAfter(LINE, `\n${EMBR_RN_IOS_KS_CRASH_HEADERS_SCRIPT_REQUIRE}`);
-
-  return podfile.patch();
-};
-
-const patchPodFilePostInstallWithKsCrashModule = async () => {
-  const podfile = await podfilePatchable();
-
-  if (podfile.hasLine(EMBR_RN_IOS_KS_CRASH_HEADERS_POST_INSTALL)) {
-    LOGGER.warn(
-      "Already has 'RNEmbraceIOKSCrashHeadersPatch' post install module",
+    podfile.addBefore(
+      "linkage = ENV['USE_FRAMEWORKS']",
+      `${EMBR_KSCRASH_MODULAR_HEADER_POD}\n`,
     );
-    return;
-  }
 
-  const REGEXP =
-    /^([ \t]*)react_native_post_install\s*\(([\s\S]*?)^\1[ \t]*\)\s*/m;
-
-  podfile.addAfter(REGEXP, `${EMBR_RN_IOS_KS_CRASH_HEADERS_POST_INSTALL}\n`);
-
-  return podfile.patch();
+    return podfile.patch();
+  });
 };
 
 const patchPodfile = (json: IPackageJson) => {
@@ -162,9 +126,7 @@ const iOSPodfilePatch = {
 const iosPodfileKSCrashPatch = {
   name: "KSCrash enabling modular headers",
   run: async (_wizard: Wizard): Promise<any> => {
-    return patchPodFileWithKSCrashPod()
-      .then(patchPodFileWithKSCrashScript)
-      .then(patchPodFilePostInstallWithKsCrashModule);
+    return patchPodFileWithKSCrash();
   },
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#native-modules",
@@ -306,7 +268,7 @@ export {
   tryToPatchAppDelegate,
   patchPodfile,
   getIOSProjectName,
-  patchPodFileWithKSCrashPod,
+  patchPodFileWithKSCrash,
   iosInitializeEmbrace,
   iOSPodfilePatch,
   iosPodfileKSCrashPatch,

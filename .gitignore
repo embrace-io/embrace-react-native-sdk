@@ -87,7 +87,6 @@ RNTester/build
 # Dist
 /dist
 /packages/**/lib/
-!/packages/**/ios/lib/
 
 # VS Code
 .vscode/
