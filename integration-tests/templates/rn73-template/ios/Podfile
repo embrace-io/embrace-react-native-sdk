@@ -5,6 +5,14 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
+# Hoist-safe resolve of Embrace's CocoaPods helper
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "@embrace-io/react-native/ios/lib/cocoapods-rn-embrace-sdk.rb",
+    { paths: [process.argv[1]] }
+  )', __dir__]).strip
+
+
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
@@ -55,5 +63,6 @@ target 'ProjectName' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+    RNEmbraceIOKSCrashHeadersPatch.run(installer)
   end
 end

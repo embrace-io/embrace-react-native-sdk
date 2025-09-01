@@ -3,6 +3,8 @@ import {
   BUNDLE_PHASE_REGEXP,
   EMBR_KSCRASH_MODULAR_HEADER_POD,
   EMBR_NATIVE_POD,
+  EMBR_RN_IOS_KS_CRASH_HEADERS_POST_INSTALL,
+  EMBR_RN_IOS_KS_CRASH_HEADERS_SCRIPT_REQUIRE,
   EMBR_RUN_SCRIPT,
   embracePlistPatchable,
   EXPORT_SOURCEMAP_RN_VAR,
@@ -97,11 +99,39 @@ const UNINSTALL_IOS_KSCRASH_PODFILE: IUnlinkEmbraceCode = {
   docUrl: "",
 };
 
+const UNINSTALL_IOS_KSCRASH_HEADER_REQUIRE_MODULE: IUnlinkEmbraceCode = {
+  stepName:
+    "Removing the require of the Embrace module that patches headers for KSCrash",
+  fileName: "Podfile",
+  textsToDelete: [
+    {
+      ITextToDelete: `${EMBR_RN_IOS_KS_CRASH_HEADERS_SCRIPT_REQUIRE}\n`,
+    },
+  ],
+  findFileFunction: getPodFile,
+  docUrl: "",
+};
+
+const UNINSTALL_IOS_KSCRASH_HEADER_RUN_MODULE: IUnlinkEmbraceCode = {
+  stepName:
+    "Removing the run of the Embrace module that patches headers for KSCrash",
+  fileName: "Podfile",
+  textsToDelete: [
+    {
+      ITextToDelete: `${EMBR_RN_IOS_KS_CRASH_HEADERS_POST_INSTALL}\n`,
+    },
+  ],
+  findFileFunction: getPodFile,
+  docUrl: "",
+};
+
 type UNLINK_EMBRACE_CODE =
   | "swazzlerImport"
   | "swazzlerApply"
   | "podFileImport"
-  | "ksCrashPodImport";
+  | "ksCrashPodImport"
+  | "ksCrashHeaderRequireModule"
+  | "ksCrashHeaderRunModule";
 
 type SupportedPatches = {
   [key in UNLINK_EMBRACE_CODE]: IUnlinkEmbraceCode;
@@ -112,6 +142,8 @@ const UNLINK_EMBRACE_CODE: SupportedPatches = {
   swazzlerApply: UNINSTALL_ANDROID_SWAZZLER_APPLY,
   podFileImport: UNINSTALL_IOS_PODFILE,
   ksCrashPodImport: UNINSTALL_IOS_KSCRASH_PODFILE,
+  ksCrashHeaderRequireModule: UNINSTALL_IOS_KSCRASH_HEADER_REQUIRE_MODULE,
+  ksCrashHeaderRunModule: UNINSTALL_IOS_KSCRASH_HEADER_RUN_MODULE,
 };
 
 export const removeEmbraceLinkFromFile = (

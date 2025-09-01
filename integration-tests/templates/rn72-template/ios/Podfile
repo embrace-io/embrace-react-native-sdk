@@ -5,6 +5,12 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "@embrace-io/react-native/ios/lib/cocoapods-rn-embrace-sdk.rb",
+    { paths: [process.argv[1]] }
+  )', __dir__]).strip
+
 platform :ios, "13.0"
 prepare_react_native_project!
 
@@ -61,6 +67,7 @@ target 'ProjectName' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+    RNEmbraceIOKSCrashHeadersPatch.run(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end

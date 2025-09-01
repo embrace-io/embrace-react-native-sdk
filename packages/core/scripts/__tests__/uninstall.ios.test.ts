@@ -16,6 +16,13 @@ const fs = require("fs");
 
 jest.useFakeTimers();
 
+// avoiding real logs in unit tests
+beforeAll(() => {
+  jest.spyOn(console, "log").mockImplementation(() => {});
+  jest.spyOn(console, "error").mockImplementation(() => {});
+  jest.spyOn(console, "warn").mockImplementation(() => {});
+});
+
 beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
@@ -81,8 +88,8 @@ describe("Uninstall Script iOS", () => {
     const shouldUnpatch = await removeEmbraceLinkFromFile("ksCrashPodImport");
     expect(shouldUnpatch).toBe(true);
 
-    const {patchPodFileWithKSCrash} = require("../setup/ios");
-    await patchPodFileWithKSCrash();
+    const {patchPodFileWithKSCrashPod} = require("../setup/ios");
+    await patchPodFileWithKSCrashPod();
   });
 
   test("Remove Embrace From Xcode", async () => {

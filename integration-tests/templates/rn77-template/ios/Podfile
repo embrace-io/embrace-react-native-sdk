@@ -5,6 +5,8 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
+require_relative '../node_modules/@embrace-io/react-native/ios/lib/cocoapods-rn-embrace-sdk'
+
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
@@ -35,5 +37,6 @@ target 'ProjectName' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    RNEmbraceIOKSCrashHeadersPatch.run(installer)
   end
 end
