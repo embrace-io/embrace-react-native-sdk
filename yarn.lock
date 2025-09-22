@@ -3383,11 +3383,11 @@ __metadata:
   linkType: hard
 
 "@dotenvx/dotenvx@npm:^1.48.3":
-  version: 1.48.3
-  resolution: "@dotenvx/dotenvx@npm:1.48.3"
+  version: 1.50.1
+  resolution: "@dotenvx/dotenvx@npm:1.50.1"
   dependencies:
     commander: "npm:^11.1.0"
-    dotenv: "npm:^16.4.5"
+    dotenv: "npm:^17.2.1"
     eciesjs: "npm:^0.4.10"
     execa: "npm:^5.1.1"
     fdir: "npm:^6.2.0"
@@ -3397,7 +3397,7 @@ __metadata:
     which: "npm:^4.0.0"
   bin:
     dotenvx: src/cli/dotenvx.js
-  checksum: 10c0/4415bb59b6beb128e0bb9fac4f8dd84b2f0296090645262a02c2cb5f22d432b21156a1dd06da51ea04626496385e447fcb6cad0ced3bac6a1a7f1c73b6a3823a
+  checksum: 10c0/742c1b59b2c8e910a734263f4715b77a165f19e09acc1407ae81d61a533e217f99dfd83ace65c8bdddff27b7bea501147d76938debb1e96da886b39cc057f85f
   languageName: node
   linkType: hard
 
@@ -8782,10 +8782,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.4.5":
-  version: 16.6.1
-  resolution: "dotenv@npm:16.6.1"
-  checksum: 10c0/15ce56608326ea0d1d9414a5c8ee6dcf0fffc79d2c16422b4ac2268e7e2d76ff5a572d37ffe747c377de12005f14b3cc22361e79fc7f1061cce81f77d2c973dc
+"dotenv@npm:^17.2.1":
+  version: 17.2.2
+  resolution: "dotenv@npm:17.2.2"
+  checksum: 10c0/be66513504590aff6eccb14167625aed9bd42ce80547f4fe5d195860211971a7060949b57108dfaeaf90658f79e40edccd3f233f0a978bff507b5b1565ae162b
   languageName: node
   linkType: hard
 
