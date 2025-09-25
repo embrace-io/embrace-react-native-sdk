@@ -42,11 +42,5 @@ Pod::Spec.new do |s|
   end
 
   s.dependency 'EmbraceIO', package["embrace"]["iosVersion"]
-
-  # TBD before release:
-  # Introduce opentelemetry-swift extra products:
-  # - "OpenTelemetryProtocolExporterHTTP"
-  # - "OpenTelemetryProtocolExporter"
-  #
-  # Unit tests expected to fail
+  s.dependency 'OpenTelemetry-Swift-Protocol-Exporter-Http', '2.1.0'
 end

@@ -10,7 +10,6 @@
 		04ACCE6BC48FEE3B7CAE679A /* libPods-RNEmbraceOTLPPlaceholder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D03391C73057054A126C9BC /* libPods-RNEmbraceOTLPPlaceholder.a */; };
 		6D2523B92CC800C7000ECCEA /* RNEmbraceOTLPPlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D2523B12CC800C7000ECCEA /* RNEmbraceOTLPPlaceholder.framework */; };
 		6D2523C92CC800ED000ECCEA /* RNEmbraceOTLPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2523C72CC800ED000ECCEA /* RNEmbraceOTLPTests.swift */; };
-		9697AE8C31D27384A41719C6 /* libPods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 394B8BCDD37855AC8B4E0D18 /* libPods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +48,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D2523B92CC800C7000ECCEA /* RNEmbraceOTLPPlaceholder.framework in Frameworks */,
-				9697AE8C31D27384A41719C6 /* libPods-RNEmbraceOTLPPlaceholder-RNEmbraceOTLPTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,10 +407,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -489,10 +484,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

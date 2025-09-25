@@ -1,13 +1,11 @@
 import React
-import OpenTelemetryProtocolExporterHttp
-import OpenTelemetryProtocolExporterCommon
 import JavaScriptCore
 import Foundation
 import EmbraceIO
-import EmbraceCrash
 import OpenTelemetryApi
 import OpenTelemetrySdk
-import EmbraceCommonInternal
+import OpenTelemetryProtocolExporterCommon
+import OpenTelemetryProtocolExporterHttp
 import OSLog
 
 @objc class RNExporterConfig: NSObject {
@@ -56,13 +54,15 @@ class RNEmbraceOTLP: NSObject {
           let headersDict = Dictionary(uniqueKeysWithValues: headers)
           urlConfig.httpAdditionalHeaders = headersDict
       }
+      
+      let httpClient = BaseHTTPClient(session: URLSession(configuration: urlConfig));
 
       return OtlpHttpTraceExporter(endpoint: URL(string: endpoint)!,
                                 config: OtlpConfiguration(
                                     timeout: timeout,
                                     headers: headers
                                 ),
-                                useSession: URLSession(configuration: urlConfig),
+                                httpClient: httpClient,
                                 envVarHeaders: headers
       )
   }
@@ -76,12 +76,14 @@ class RNEmbraceOTLP: NSObject {
         urlConfig.httpAdditionalHeaders = headersDict
     }
 
+    let httpClient = BaseHTTPClient(session: URLSession(configuration: urlConfig));
+
     return OtlpHttpLogExporter(endpoint: URL(string: endpoint)!,
                                config: OtlpConfiguration(
                                   timeout: timeout,
                                   headers: headers
                                ),
-                               useSession: URLSession(configuration: urlConfig),
+                               httpClient: httpClient,
                                envVarHeaders: headers
     )
   }

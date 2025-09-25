@@ -27,7 +27,7 @@ class SDKConfig: NSObject {
 func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> Embrace.Options {
     var embraceOptions: Embrace.Options {
         var crashReporter: CrashReporter?
-        crashReporter = config.disableCrashReporter ? nil : EmbraceCrashReporter()
+        crashReporter = config.disableCrashReporter ? nil : KSCrashReporter()
         
         let servicesBuilder = CaptureServiceBuilder()
         
