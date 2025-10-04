@@ -8,13 +8,16 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+# Make KSCrash modular so Swift can import it
+pod 'KSCrash', :modular_headers => true
+
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'RNEmbraceCore' do
+target 'RNEmbraceCorePlaceholder' do
   config = use_native_modules!
 
   use_react_native!(
@@ -23,14 +26,12 @@ target 'RNEmbraceCore' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # loading `dependencies` file
-  load '../../ios/dependencies.rb'
-  # installing custom dependencies from the original RNEmbraceCore
-  load_dependencies()
+  # using real RNEmbraceCore.podspec to install EmbraceIO
+  pod 'RNEmbraceCore', :path => '../../../core'
 
   target 'RNEmbraceCoreTests' do
+    # Pods inherited by the suite, different than real app
     inherit! :complete
-    # Pods for testing
   end
 
   post_install do |installer|
@@ -40,6 +41,6 @@ target 'RNEmbraceCore' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
-    )
+    )    
   end
 end

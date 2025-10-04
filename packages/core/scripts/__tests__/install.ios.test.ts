@@ -2,15 +2,24 @@ const fs = require("fs");
 
 jest.useFakeTimers();
 
+// avoiding real logs in unit tests
+beforeAll(() => {
+  jest.spyOn(console, "log").mockImplementation(() => {});
+  jest.spyOn(console, "error").mockImplementation(() => {});
+  jest.spyOn(console, "warn").mockImplementation(() => {});
+});
+
 beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
 
 const copyMock = (from: string, to: string) => {
   const dir = "./packages/core/scripts/__tests__/tmp/";
+
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
+
   fs.copyFile(from, to, () => {});
 };
 
@@ -26,6 +35,7 @@ describe("Install Script iOS", () => {
     jest.mock("glob", () => ({
       sync: () => ["./packages/core/scripts/__tests__/tmp/PatchAppDelegate.mm"],
     }));
+
     jest.mock(
       "../../../../../../package.json",
       () => ({
@@ -58,6 +68,7 @@ describe("Install Script iOS", () => {
     );
     expect(afterRemoval.toString()).toEqual(mockWithoutEmbrace.toString());
   });
+
   test("Patch AppDelegate.swift", async () => {
     const originalMockPath =
       "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace.swift";
@@ -101,6 +112,7 @@ describe("Install Script iOS", () => {
     );
     expect(afterRemoval.toString()).toEqual(mockWithoutEmbrace.toString());
   });
+
   test("Patch Podfile", async () => {
     jest.mock("glob", () => ({
       sync: () => [

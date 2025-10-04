@@ -1,10 +1,8 @@
 import React
 import XCTest
 import EmbraceIO
-import EmbraceOTelInternal
 import OpenTelemetryApi
 import OpenTelemetrySdk
-import EmbraceCommonInternal
 
 @testable import RNEmbraceOTLP
 
