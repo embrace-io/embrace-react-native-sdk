@@ -8,7 +8,6 @@ import {
   xcodePatchable,
   findNameWithCaseSensitiveFromPath,
   MKDIR_SOURCEMAP_DIR,
-  EMBR_KSCRASH_MODULAR_HEADER_POD,
   UPLOAD_SYMBOLS_PHASE,
   ENOENT_XCODE_PROJ_ERROR_MESSAGE,
 } from "../util/ios";
@@ -68,22 +67,6 @@ const iosInitializeEmbrace = {
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
 };
 
-const patchPodFileWithKSCrash = async () => {
-  return podfilePatchable().then(podfile => {
-    if (podfile.hasLine(EMBR_KSCRASH_MODULAR_HEADER_POD)) {
-      LOGGER.warn("Already has 'KSCrash' pod with modular headers enabled");
-      return;
-    }
-
-    podfile.addBefore(
-      "linkage = ENV['USE_FRAMEWORKS']",
-      `${EMBR_KSCRASH_MODULAR_HEADER_POD}\n`,
-    );
-
-    return podfile.patch();
-  });
-};
-
 const patchPodfile = (json: IPackageJson) => {
   const rnVersion = (json.dependencies || {})["react-native"];
 
@@ -118,15 +101,6 @@ const iOSPodfilePatch = {
   name: "Podfile patch (Only React Native v < 0.6)",
   run: async (wizard: Wizard): Promise<any> => {
     return wizard.fieldValue(packageJSON).then(patchPodfile);
-  },
-  docURL:
-    "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#native-modules",
-};
-
-const iosPodfileKSCrashPatch = {
-  name: "KSCrash enabling modular headers",
-  run: async (_wizard: Wizard): Promise<any> => {
-    return patchPodFileWithKSCrash();
   },
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#native-modules",
@@ -268,10 +242,8 @@ export {
   tryToPatchAppDelegate,
   patchPodfile,
   getIOSProjectName,
-  patchPodFileWithKSCrash,
   iosInitializeEmbrace,
   iOSPodfilePatch,
-  iosPodfileKSCrashPatch,
   patchXcodeBundlePhase,
   addUploadBuildPhase,
   addEmbraceInitializerSwift,

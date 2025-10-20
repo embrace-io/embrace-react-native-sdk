@@ -1,7 +1,6 @@
 import Wizard, {Step} from "../util/wizard";
 import {
   BUNDLE_PHASE_REGEXP,
-  EMBR_KSCRASH_MODULAR_HEADER_POD,
   EMBR_NATIVE_POD,
   EMBR_RUN_SCRIPT,
   embracePlistPatchable,
@@ -85,23 +84,7 @@ const UNINSTALL_IOS_PODFILE: IUnlinkEmbraceCode = {
   docUrl: "",
 };
 
-const UNINSTALL_IOS_KSCRASH_PODFILE: IUnlinkEmbraceCode = {
-  stepName: "Removing KSCrash pod from Podfile",
-  fileName: "Podfile",
-  textsToDelete: [
-    {
-      ITextToDelete: `${EMBR_KSCRASH_MODULAR_HEADER_POD}\n`,
-    },
-  ],
-  findFileFunction: getPodFile,
-  docUrl: "",
-};
-
-type UNLINK_EMBRACE_CODE =
-  | "swazzlerImport"
-  | "swazzlerApply"
-  | "podFileImport"
-  | "ksCrashPodImport";
+type UNLINK_EMBRACE_CODE = "swazzlerImport" | "swazzlerApply" | "podFileImport";
 
 type SupportedPatches = {
   [key in UNLINK_EMBRACE_CODE]: IUnlinkEmbraceCode;
@@ -111,7 +94,6 @@ const UNLINK_EMBRACE_CODE: SupportedPatches = {
   swazzlerImport: UNINSTALL_ANDROID_SWAZZLER_IMPORT,
   swazzlerApply: UNINSTALL_ANDROID_SWAZZLER_APPLY,
   podFileImport: UNINSTALL_IOS_PODFILE,
-  ksCrashPodImport: UNINSTALL_IOS_KSCRASH_PODFILE,
 };
 
 export const removeEmbraceLinkFromFile = (

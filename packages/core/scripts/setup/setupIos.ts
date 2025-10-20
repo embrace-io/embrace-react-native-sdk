@@ -6,7 +6,6 @@ import {
   addEmbraceInitializerSwift,
   iosInitializeEmbrace,
   iOSPodfilePatch,
-  iosPodfileKSCrashPatch,
   patchXcodeBundlePhase,
 } from "./ios";
 import {apiToken, iosAppID, iosProjectFolderName, packageJSON} from "./common";
@@ -22,7 +21,6 @@ const IOS_STEPS = [
   addEmbraceInitializerSwift,
   iosInitializeEmbrace,
   iOSPodfilePatch,
-  iosPodfileKSCrashPatch,
   patchXcodeBundlePhase,
   addUploadBuildPhase,
 ];
