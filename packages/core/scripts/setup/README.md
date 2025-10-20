@@ -14,7 +14,6 @@ The setup script for iOS includes:
 - `addEmbraceInitializerSwift`: Adds `EmbraceInitializer.swift` to the project which includes the code for setting up and starting the iOS SDK.
 - `iosInitializeEmbrace`: It patches the AppDelegate m|mm or swift to call the start method from `EmbraceInitializer.swift`.
 - `iOSPodfilePatch`: It patches the Podfile, only in < 0.6 adding the dependency. This is useful if the app does not have autolink for some reason.
-- `iosPodfileKSCrashPatch`: It patches the Podfile adding the KSCrash pod with modular headers enabled. Needed by the native Embrace iOS SDK to build.
 - `patchXcodeBundlePhase`: It patches the `Bundle React Native code and images` created by React Native, adding a line to export the sourcemap to a desired path.
 - `addUploadBuildPhase`: It adds the `Upload Debug Symbols to Embrace` to the build phase.
 
