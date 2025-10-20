@@ -13,7 +13,7 @@ type ProjectFileType = "resource" | "source";
 
 const LOGGER = new EmbraceLogger(console);
 
-const UPLOAD_SYMBOLS_PHASE = "Embrace Symbol Uploads";
+const UPLOAD_SYMBOLS_PHASE = "Upload Debug Symbols to Embrace";
 const EMBRACE_INIT_OBJECTIVEC = "[EmbraceInitializer start];";
 const EMBR_RUN_SCRIPT =
   '"$SRCROOT/../node_modules/@embrace-io/react-native/ios/scripts/run.sh"';

@@ -204,7 +204,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
-				97C34991B317492A8B2EBA12 /* Embrace Symbol Uploads */,
+				97C34991B317492A8B2EBA12 /* Upload Debug Symbols to Embrace */,
 			);
 			buildRules = (
 			);
@@ -305,14 +305,14 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EmbraceTestSuite/Pods-EmbraceTestSuite-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		97C34991B317492A8B2EBA12 /* Embrace Symbol Uploads */ = {
+		97C34991B317492A8B2EBA12 /* Upload Debug Symbols to Embrace */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embrace Symbol Uploads";
+			name = "Upload Debug Symbols to Embrace";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
