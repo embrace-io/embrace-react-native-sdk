@@ -1,12 +1,15 @@
 import Wizard, {Step} from "../util/wizard";
 import {
-  bundlePhaseRE,
-  embraceNativePod,
+  BUNDLE_PHASE_REGEXP,
+  EMBR_KSCRASH_MODULAR_HEADER_POD,
+  EMBR_NATIVE_POD,
+  EMBR_RUN_SCRIPT,
   embracePlistPatchable,
-  exportSourcemapRNVariable,
+  EXPORT_SOURCEMAP_RN_VAR,
   findNameWithCaseSensitiveFromPath,
   getPodFile,
-  makeSourcemapDirectory,
+  MKDIR_SOURCEMAP_DIR,
+  UPLOAD_SYMBOLS_PHASE,
   xcodePatchable,
 } from "../util/ios";
 import {FileUpdatable} from "../util/file";
@@ -19,6 +22,8 @@ import {
   SUPPORTED_REMOVALS,
 } from "./patches/patch";
 import {SUPPORTED_LANGUAGES} from "./patches/common";
+import {getIOSProjectName} from "./ios";
+import {iosProjectFolderName} from "./common";
 import {androidEmbraceSwazzlerPlugin, androidGenericVersion} from "./android";
 
 const fs = require("fs");
@@ -27,7 +32,7 @@ const glob = require("glob");
 
 const packageJson = require("../../../../../../package.json");
 
-const logger = new EmbraceLogger(console);
+const LOGGER = new EmbraceLogger(console);
 
 interface ITextToDelete {
   ITextToDelete: string | RegExp;
@@ -73,14 +78,31 @@ const UNINSTALL_IOS_PODFILE: IUnlinkEmbraceCode = {
   fileName: "Podfile",
   textsToDelete: [
     {
-      ITextToDelete: `${embraceNativePod}\n`,
+      ITextToDelete: `${EMBR_NATIVE_POD}\n`,
     },
   ],
   findFileFunction: getPodFile,
   docUrl: "",
 };
 
-type UNLINK_EMBRACE_CODE = "swazzlerImport" | "swazzlerApply" | "podFileImport";
+const UNINSTALL_IOS_KSCRASH_PODFILE: IUnlinkEmbraceCode = {
+  stepName: "Removing KSCrash pod from Podfile",
+  fileName: "Podfile",
+  textsToDelete: [
+    {
+      ITextToDelete: `${EMBR_KSCRASH_MODULAR_HEADER_POD}\n`,
+    },
+  ],
+  findFileFunction: getPodFile,
+  docUrl: "",
+};
+
+type UNLINK_EMBRACE_CODE =
+  | "swazzlerImport"
+  | "swazzlerApply"
+  | "podFileImport"
+  | "ksCrashPodImport";
+
 type SupportedPatches = {
   [key in UNLINK_EMBRACE_CODE]: IUnlinkEmbraceCode;
 };
@@ -89,13 +111,14 @@ const UNLINK_EMBRACE_CODE: SupportedPatches = {
   swazzlerImport: UNINSTALL_ANDROID_SWAZZLER_IMPORT,
   swazzlerApply: UNINSTALL_ANDROID_SWAZZLER_APPLY,
   podFileImport: UNINSTALL_IOS_PODFILE,
+  ksCrashPodImport: UNINSTALL_IOS_KSCRASH_PODFILE,
 };
 
 export const removeEmbraceLinkFromFile = (
   patch: UNLINK_EMBRACE_CODE,
 ): boolean => {
   if (UNLINK_EMBRACE_CODE[patch] === undefined) {
-    logger.warn("This language is not supported");
+    LOGGER.warn("This language is not supported");
     return false;
   }
 
@@ -105,20 +128,24 @@ export const removeEmbraceLinkFromFile = (
   const file = findFileFunction();
 
   if (!file) {
-    logger.warn("The file to be patched not found");
+    LOGGER.warn("The file to be patched not found");
     return false;
   }
 
   const result = textsToDelete.map(item => {
     const {ITextToDelete} = item;
-    logger.log(`Deleting ${ITextToDelete} from ${fileName}`);
+    LOGGER.log(`Deleting ${ITextToDelete} from ${fileName}`);
     file.deleteLine(ITextToDelete);
+
     return ITextToDelete;
   });
+
   const hasToPatch = result.some(item => item);
+
   if (hasToPatch) {
     file.patch();
   }
+
   return hasToPatch;
 };
 
@@ -127,7 +154,7 @@ export const removeEmbraceImportAndStartFromFile = (
 ): boolean => {
   const definition = SUPPORTED_REMOVALS[patch];
   if (definition === undefined) {
-    logger.warn("This language is not supported");
+    LOGGER.warn("This language is not supported");
     return false;
   }
 
@@ -136,7 +163,7 @@ export const removeEmbraceImportAndStartFromFile = (
   const file = findFileFunction(patch, packageJson.name);
 
   if (!file) {
-    logger.warn("The file to be patched not found");
+    LOGGER.warn("The file to be patched not found");
     return false;
   }
 
@@ -147,13 +174,14 @@ export const removeEmbraceImportAndStartFromFile = (
     const toDelete = Array.isArray(textToAdd) ? textToAdd : [textToAdd];
 
     toDelete.forEach(line => {
-      logger.log(`Deleting ${line} from ${fileName}`);
+      LOGGER.log(`Deleting ${line} from ${fileName}`);
 
       const padding = file.getPaddingFromString(line)?.replace(line, "");
       const finalTextToDelete = getTextToAddWithBreakingLine(
         `${padding}${line}`,
         breakingLine,
       );
+
       file.deleteLine(finalTextToDelete);
 
       hasToPatch = true;
@@ -171,7 +199,7 @@ export const removeEmbraceConfigFileAndroid = async () => {
     const androidConfigFile = await embraceJSON();
     fs.unlinkSync(androidConfigFile.path);
   } catch (_) {
-    logger.error(
+    LOGGER.error(
       "Could not find embrace-config.json, Please refer to the docs at https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually ",
     );
   }
@@ -189,30 +217,36 @@ export const removeEmbraceConfigFileIos = async () => {
 export const removeEmbraceInitializerFileIos = async () => {
   try {
     const p = glob.sync("ios/**/EmbraceInitializer.swift")[0];
+
     if (!p) {
-      logger.format("Could not find EmbraceInitializer.swift");
+      LOGGER.format("Could not find EmbraceInitializer.swift");
       return false;
     }
+
     fs.unlinkSync(p);
+
     return true;
   } catch (_) {
     return false;
   }
 };
 
-export const removeEmbraceFromXcode = () => {
+export const removeEmbraceFromXcode = async (wizard: Wizard) => {
+  const name = await getIOSProjectName(wizard);
+
   return new Promise(resolve => {
-    xcodePatchable(packageJson)
+    xcodePatchable(name)
       .then(project => {
-        const bundlePhaseKey = project.findPhase(bundlePhaseRE);
+        const bundlePhaseKey = project.findPhase(BUNDLE_PHASE_REGEXP);
         if (!bundlePhaseKey) {
-          logger.error(
+          LOGGER.error(
             "Could not find bundle phase, Please refer to the docs at https://embrace.io/docs/react-native/integration/upload-symbol-files/",
           );
         }
+
         const nameWithCaseSensitive = findNameWithCaseSensitiveFromPath(
           project.path,
-          packageJson.name,
+          name,
         );
 
         // Plist longer exists on iOS 6.x, keep this step to for 5.x upgrades
@@ -220,22 +254,25 @@ export const removeEmbraceFromXcode = () => {
           nameWithCaseSensitive,
           `${nameWithCaseSensitive}/Embrace-Info.plist`,
         );
+
         project.removeResourceFile(
           nameWithCaseSensitive,
           `${nameWithCaseSensitive}/EmbraceInitializer.swift`,
         );
-        project.findAndRemovePhase("Upload Debug Symbols to Embrace");
+
+        project.findAndRemovePhase(UPLOAD_SYMBOLS_PHASE);
         project.modifyPhase(
           bundlePhaseKey,
-          `${makeSourcemapDirectory}\n${exportSourcemapRNVariable}\n`,
+          `${MKDIR_SOURCEMAP_DIR}\n${EXPORT_SOURCEMAP_RN_VAR}\n`,
           "",
         );
-        project.findAndRemovePhase("/EmbraceIO/run.sh");
+
+        project.findAndRemovePhase(EMBR_RUN_SCRIPT);
         project.patch();
         resolve(project.writeSync());
       })
-      .catch(r => {
-        logger.error(
+      .catch(_r => {
+        LOGGER.error(
           "Could not find bundle phase, Please refer to the docs at https://embrace.io/docs/react-native/integration/upload-symbol-files/",
         );
       });
@@ -245,7 +282,7 @@ export const removeEmbraceFromXcode = () => {
 const getRemoveEmbraceFromXcodeStep = () => {
   return {
     name: "Removing Embrace in Xcode",
-    run: (wizard: Wizard) => removeEmbraceFromXcode(),
+    run: (wizard: Wizard) => removeEmbraceFromXcode(wizard),
     docURL: "",
   };
 };
@@ -253,7 +290,7 @@ const getRemoveEmbraceFromXcodeStep = () => {
 const getRemoveEmbraceConfigFileAndroidStep = () => {
   return {
     name: "Removing Android Embrace Config File",
-    run: (wizard: Wizard) =>
+    run: (_wizard: Wizard) =>
       new Promise(resolve => {
         resolve(removeEmbraceConfigFileAndroid());
       }),
@@ -265,7 +302,7 @@ const getRemoveEmbraceConfigFileAndroidStep = () => {
 const getRemoveEmbraceConfigFileIosStep = () => {
   return {
     name: "Removing iOS Embrace Config File",
-    run: (wizard: Wizard) =>
+    run: (_wizard: Wizard) =>
       new Promise(resolve => {
         resolve(removeEmbraceConfigFileIos());
       }),
@@ -277,7 +314,7 @@ const getRemoveEmbraceConfigFileIosStep = () => {
 const getRemoveEmbraceInitializerIosStep = () => {
   return {
     name: "Removing iOS Embrace Initializer File",
-    run: (wizard: Wizard) =>
+    run: (_wizard: Wizard) =>
       new Promise(resolve => {
         resolve(removeEmbraceInitializerFileIos());
       }),
@@ -287,61 +324,66 @@ const getRemoveEmbraceInitializerIosStep = () => {
 };
 
 const getUnlinkFilesStep = () => {
-  return Object.entries(UNLINK_EMBRACE_CODE).map(([key, value]) => {
-    const run = (wizard: Wizard) =>
-      new Promise((resolve, reject) => {
+  return Object.entries(UNLINK_EMBRACE_CODE).map(([key, value]) => ({
+    name: value.stepName,
+    docURL: value.docUrl,
+    run: (_wizard: Wizard) => {
+      return new Promise((resolve, reject) => {
         try {
           resolve(removeEmbraceLinkFromFile(key as UNLINK_EMBRACE_CODE));
         } catch (e) {
           reject(e);
         }
       });
-    return {
-      name: value.stepName,
-      run,
-      docURL: value.docUrl,
-    } as Step;
-  });
+    },
+  }));
 };
 
 const getUnlinkImportStartFilesStep = () => {
   return Object.entries(SUPPORTED_REMOVALS).map(([key, value]) => {
-    const run = (wizard: Wizard) =>
-      new Promise((resolve, reject) => {
-        try {
-          resolve(
-            removeEmbraceImportAndStartFromFile(key as SUPPORTED_LANGUAGES),
-          );
-        } catch (e) {
-          reject(e);
-        }
-      });
-
     return {
       name: value?.fileName
         ? `Removing Embrace code in ${value?.fileName}`
         : "Removing Embrace code",
-      run,
+      run: (_wizard: Wizard) =>
+        new Promise((resolve, reject) => {
+          try {
+            resolve(
+              removeEmbraceImportAndStartFromFile(key as SUPPORTED_LANGUAGES),
+            );
+          } catch (e) {
+            reject(e);
+          }
+        }),
       docURL:
         "https://embrace.io/docs/react-native/integration/session-reporting/#starting-embrace-sdk-from-android--ios",
-    } as Step;
+    };
   });
 };
 
 const transformUninstalFunctionsToSteps = (): Step[] => {
   const steps = getUnlinkFilesStep();
+
   steps.push(...getUnlinkImportStartFilesStep());
   steps.push(getRemoveEmbraceConfigFileAndroidStep());
   steps.push(getRemoveEmbraceConfigFileIosStep()); // Plist longer exists on iOS 6.x, keep this step to for 5.x upgrades
   steps.push(getRemoveEmbraceInitializerIosStep());
   steps.push(getRemoveEmbraceFromXcodeStep());
+
   return steps;
 };
 
 const run = () => {
-  const wiz = new Wizard();
-  [...transformUninstalFunctionsToSteps()].map(step => wiz.registerStep(step));
-  wiz.runSteps();
+  const wizard = new Wizard();
+
+  // in case the app jas a custom name for the iOS project
+  wizard.registerField(iosProjectFolderName);
+
+  transformUninstalFunctionsToSteps().forEach(step =>
+    wizard.registerStep(step),
+  );
+
+  wizard.runSteps();
 };
 
 run();
