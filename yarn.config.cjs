@@ -4,12 +4,12 @@
  */
 
 /** @type {import('@yarnpkg/types')} */
-const {defineConfig} = require("@yarnpkg/types");
+const { defineConfig } = require("@yarnpkg/types");
 
 /**
  *  Enforces consistent package metadata
  */
-function enforcePackageInfo({Yarn}) {
+function enforcePackageInfo({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
     if (workspace.manifest.private) {
       continue;
@@ -63,8 +63,8 @@ function enforcePackageInfo({Yarn}) {
 /**
  *  Enforces that a dependency doesn't appear in both `dependencies` and `devDependencies`
  */
-function enforceNoDualTypeDependencies({Yarn}) {
-  for (const dependency of Yarn.dependencies({type: "devDependencies"})) {
+function enforceNoDualTypeDependencies({ Yarn }) {
+  for (const dependency of Yarn.dependencies({ type: "devDependencies" })) {
     const otherDependency = Yarn.dependency({
       workspace: dependency.workspace,
       ident: dependency.ident,
@@ -79,8 +79,8 @@ function enforceNoDualTypeDependencies({Yarn}) {
 /**
  *  Enforces each package having a peerDependency on React Native
  */
-function enforceReactNativePeerDependency({Yarn}) {
-  for (const dependency of Yarn.dependencies({ident: "react-native"})) {
+function enforceReactNativePeerDependency({ Yarn }) {
+  for (const dependency of Yarn.dependencies({ ident: "react-native" })) {
     if (dependency.type === "peerDependencies") {
       dependency.update(">=0.56.0");
     }
@@ -90,8 +90,8 @@ function enforceReactNativePeerDependency({Yarn}) {
 /**
  *  Enforces each package having a common typescript version
  */
-function enforceCommonTypescript({Yarn}) {
-  for (const dependency of Yarn.dependencies({ident: "typescript"})) {
+function enforceCommonTypescript({ Yarn }) {
+  for (const dependency of Yarn.dependencies({ ident: "typescript" })) {
     dependency.update("^5.6.3");
   }
 }
@@ -100,7 +100,7 @@ function enforceCommonTypescript({Yarn}) {
  *  Enforces that a workspace MUST depend on the same version of a dependency as the one used by the other workspaces
  *  Taken from: https://yarnpkg.com/features/constraints
  */
-function enforceConsistentDependenciesAcrossTheProject({Yarn}) {
+function enforceConsistentDependenciesAcrossTheProject({ Yarn }) {
   for (const dependency of Yarn.dependencies()) {
     const isPeer = dependency.type === "peerDependencies";
 
@@ -120,7 +120,7 @@ function enforceConsistentDependenciesAcrossTheProject({Yarn}) {
 /**
  *  Enforces each package having the same Embrace metadata
  */
-function enforceEmbraceMetadata({Yarn}) {
+function enforceEmbraceMetadata({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
     if (workspace.manifest.private) {
       continue;
@@ -128,7 +128,7 @@ function enforceEmbraceMetadata({Yarn}) {
 
     workspace.set("embrace", {
       iosVersion: "6.8.5",
-      androidVersion: "7.6.1",
+      androidVersion: "7.9.2",
     });
   }
 }
