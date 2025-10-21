@@ -113,7 +113,7 @@ class ReactNativeTracerProviderModuleTest {
             embraceInstance.start(mockApplication)
             assertTrue(Embrace.getInstance().isStarted)
 
-            extraAttributes = listOf("emb.process_identifier", "emb.type", "emb.private.sequence_id")
+            extraAttributes = listOf("emb.process_identifier", "emb.type", "emb.private.sequence_id", "session.id")
 
             return
         }
@@ -238,11 +238,14 @@ class ReactNativeTracerProviderModuleTest {
             )
         )
 
+        // Skipping links for now as they are both not currently supported AND causing issues with 0.4.0 OtelJavaSpanBuilderAdapter.kt:
+        // https://github.com/embrace-io/opentelemetry-kotlin/blob/82ea41fdfc2dfcac893f202f7e76c7a6bc4f7fae/opentelemetry-kotlin-compat/src/jvmMain/kotlin/io/embrace/opentelemetry/kotlin/tracing/OtelJavaSpanBuilderAdapter.kt#L101
         tracerProviderModule.startSpan(
             "test", "v1", "", "span_0",
-            "my-span", "CLIENT", 1718386928001.0, attributes, links,
+            "my-span", "CLIENT", 1718386928001.0, attributes, JavaOnlyArray(),
             "", promise
         )
+
         tracerProviderModule.endSpan("span_0", 1728386928001.0)
 
         argumentCaptor<Collection<SpanData>>().apply {
