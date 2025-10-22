@@ -92,6 +92,16 @@ android {
     useLibrary("android.test.mock")
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("io.opentelemetry:opentelemetry-bom:1.51.0")
+        force("io.opentelemetry:opentelemetry-api:1.51.0")
+        force("io.opentelemetry:opentelemetry-sdk:1.51.0")
+        force("io.opentelemetry:opentelemetry-context:1.51.0")
+        force("io.opentelemetry:opentelemetry-exporter-otlp:1.51.0")
+    }
+}
+
 /**
  * The preferred build flavor of JavaScriptCore (JSC)
  *

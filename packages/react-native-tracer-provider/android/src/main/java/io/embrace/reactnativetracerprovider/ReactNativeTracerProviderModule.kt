@@ -72,7 +72,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
                 list.add(str)
             }
         }
-        return list
+        return list.toList()
     }
 
     private fun doubleListFromReadableArray(array: ReadableArray): List<Double> {
@@ -80,7 +80,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         for (i in 0..array.size() - 1) {
             list.add(array.getDouble(i))
         }
-        return list
+        return list.toList()
     }
 
     private fun booleanListFromReadableArray(array: ReadableArray): List<Boolean> {
@@ -88,7 +88,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         for (i in 0..array.size() - 1) {
             list.add(array.getBoolean(i))
         }
-        return list
+        return list.toList()
     }
 
     private fun attributesFromReadableMap(map: ReadableMap): Attributes {
