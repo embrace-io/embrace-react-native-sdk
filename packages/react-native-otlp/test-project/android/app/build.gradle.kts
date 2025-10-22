@@ -94,14 +94,11 @@ android {
 
 configurations.all {
     resolutionStrategy {
-        // Force kotlin-stdlib to a version compatible with compiler 1.9.0
-        force("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24")
-
-        // Force okhttp and okio to versions compiled with Kotlin 1.x (not 2.x)
-        force("com.squareup.okhttp3:okhttp:4.12.0")
-        force("com.squareup.okio:okio:3.9.0")
+        force("io.opentelemetry:opentelemetry-bom:1.51.0")
+        force("io.opentelemetry:opentelemetry-api:1.51.0")
+        force("io.opentelemetry:opentelemetry-sdk:1.51.0")
+        force("io.opentelemetry:opentelemetry-context:1.51.0")
+        force("io.opentelemetry:opentelemetry-exporter-otlp:1.51.0")
     }
 }
 
