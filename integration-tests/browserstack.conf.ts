@@ -1,4 +1,4 @@
-import {get} from "https";
+import { get } from "https";
 
 // For capabilities choose a device that is close to the minimum required OS we support on both Android and iOS
 // as well as one that represents the latest supported OS.
@@ -14,8 +14,8 @@ const androidCapabilities = [
   },
   {
     "bstack:options": {
-      deviceName: "Samsung Galaxy S9",
-      platformVersion: "8.0",
+      deviceName: "Samsung Galaxy Note 9",
+      platformVersion: "8.1",
       platformName: "android",
     },
   },
@@ -98,7 +98,7 @@ exports.config = {
 // Code to support common capabilities
 exports.config.capabilities.forEach(function (caps) {
   for (let key in exports.config.commonCapabilities)
-    caps[key] = {...caps[key], ...exports.config.commonCapabilities[key]};
+    caps[key] = { ...caps[key], ...exports.config.commonCapabilities[key] };
 });
 
 /*
