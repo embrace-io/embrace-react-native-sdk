@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "ExpoRN79",
+    "slug": "expo-test-app-template",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "exporn79",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "io.embrace.exporn79"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "io.embrace.exporn79"
+    }
+  }
+}
