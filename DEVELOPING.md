@@ -5,6 +5,7 @@
 ```bash
 corepack enable
 yarn install
+brew install cocoapods
 ```
 
 ## Adding a new package
