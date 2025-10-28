@@ -44,12 +44,13 @@ if [[ $action == "set" ]]; then
   fi
 
   # Update packages/*/package.json
-  corepack enable
-  yarn constraints --fix
-  yarn build
+  echo "$(date): corepack enable" && corepack enable
+  echo "$(date): yarn install" && yarn install
+  echo "$(date): yarn constraints --fix" && yarn constraints --fix
+  echo "$(date): yarn build" && yarn build
 
   # Update packages/*/*/*/Podfile.lock
   if [[ $platform == "apple" ]]; then
-    yarn ios:install
+    echo "$(date): yarn ios:install" && yarn ios:install
   fi
 fi
