@@ -15,7 +15,7 @@ jobs:
           - platform: "android"
             runner: "ubuntu-latest"
           - platform: "apple"
-            runner: "macos-latest"
+            runner: "ubuntu-latest"
     permissions:
       contents: write
       pull-requests: write
@@ -41,6 +41,16 @@ jobs:
           echo "CURRENT=$current"
           echo "CURRENT=$current" >> $GITHUB_ENV
 
+      - uses: ruby/setup-ruby@d5126b9b3579e429dd52e51e68624dda2e05be25 # v1.267.0
+        if: ${{ matrix.platform == 'apple' }}
+        with:
+          ruby-version: "3.4"
+
+      - name: Install cocoapods
+        if: ${{ matrix.platform == 'apple' }}
+        run: |
+          gem install -n /usr/local/bin cocoapods
+
       - name: Update
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,10 +60,6 @@ jobs:
 
           if echo $open_prs | grep $SDK | grep "to ${LATEST}"; then
             echo "There is already an open pull request to update ${SDK} to ${LATEST}, exiting"
-            exit 0
-          elif [[ $open_prs != "[]" ]]; then
-            echo "There is already open pull request, but it is to a different version"
-            gh pr comment $(echo $open_prs | jq '.[].number') --body "There is a newer ${SDK} version ${LATEST}, close this PR to allow automatic update."
             exit 0
           else
             if [[ $LATEST == $CURRENT ]]; then

@@ -36,7 +36,6 @@ if [[ $action == "set" ]]; then
   # Example: https://github.com/embrace-io/embrace-react-native-sdk/pull/535
   if [[ $platform == "android" ]]; then
     $SED -i "s/androidVersion: \"[^\"]*\"/androidVersion: \"${version}\"/" yarn.config.cjs
-    $SED -i "s/^emb_android_sdk=.*/emb_android_sdk=${version}/" packages/core/android/gradle.properties
   fi
 
   # Example: https://github.com/embrace-io/embrace-react-native-sdk/pull/474
@@ -51,7 +50,6 @@ if [[ $action == "set" ]]; then
 
   # Update packages/*/*/*/Podfile.lock
   if [[ $platform == "apple" ]]; then
-    brew install cocoapods
     yarn ios:install
   fi
 fi
