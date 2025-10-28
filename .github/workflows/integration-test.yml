@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    if: startsWith(github.head_ref, 'release/')
+    if: ${{ startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'embrace-ci/') }}
     strategy:
       fail-fast: false
       matrix:
