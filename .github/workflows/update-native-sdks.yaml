@@ -41,6 +41,11 @@ jobs:
           echo "CURRENT=$current"
           echo "CURRENT=$current" >> $GITHUB_ENV
 
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22.x"
+          cache: "npm"
+
       - uses: ruby/setup-ruby@d5126b9b3579e429dd52e51e68624dda2e05be25 # v1.267.0
         if: ${{ matrix.platform == 'apple' }}
         with:
