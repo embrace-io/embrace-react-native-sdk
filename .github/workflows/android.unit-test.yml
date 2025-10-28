@@ -12,22 +12,15 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x]
-        jdk-version: ["17"]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      - name: Install Node (${{ matrix.node-version }})
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: ".node-version"
           cache: "npm"
 
       - name: Enables corepack
@@ -48,15 +41,14 @@ jobs:
         run: yarn install
         if: steps.changed_files.outputs.android == 'true'
 
-      - name: Install JDK ${{ matrix.jdk-version }}
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'adopt'
-          java-version: ${{ matrix.jdk-version }}
+      - uses: actions/setup-java@v5
         if: steps.changed_files.outputs.android == 'true'
+        with:
+          distribution: "adopt"
+          java-version-file: ".java-version"
 
       - name: Run Android Unit Tests
-        run: yarn run android:test $(./scripts/scopes-from-file-changes.ts ${STEPS_CHANGED_FILES_OUTPUTS_ANDROID_FILES})
         if: steps.changed_files.outputs.android == 'true'
+        run: yarn run android:test $(./scripts/scopes-from-file-changes.ts ${STEPS_CHANGED_FILES_OUTPUTS_ANDROID_FILES})
         env:
           STEPS_CHANGED_FILES_OUTPUTS_ANDROID_FILES: ${{ steps.changed_files.outputs.android_files }}

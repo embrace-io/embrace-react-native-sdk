@@ -11,12 +11,7 @@ permissions:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        node-version: [18.x]
-        os: [macos-latest]
-
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
     env:
       IOS_TEST_OS: 17.5
       IOS_TEST_PLATFORM: iOS Simulator
@@ -30,10 +25,9 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install Node (${{ matrix.node-version }})
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: ".node-version"
           cache: "npm"
 
       - name: Enables corepack
