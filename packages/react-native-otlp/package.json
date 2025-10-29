@@ -32,7 +32,7 @@
     "typescript": "^5.6.3"
   },
   "embrace": {
-    "iosVersion": "6.8.5",
+    "iosVersion": "6.14.1",
     "androidVersion": "7.9.2"
   },
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
