@@ -16,19 +16,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        node-version: [18.x]
-
     steps:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - name: Use Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: ".node-version"
           cache: "npm"
       - run: corepack enable
       - run: yarn
