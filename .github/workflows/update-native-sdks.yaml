@@ -31,7 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SDK: embrace-${{ matrix.platform }}-sdk
         run: |
-          latest=$(gh release list --repo embrace-io/${SDK} --exclude-drafts --exclude-pre-releases --limit 1 --json tagName --jq '.[].tagName')
+          latest=$(gh release list --repo embrace-io/${SDK} --exclude-drafts --exclude-pre-releases --json tagName,isLatest --jq '.[] | select(.isLatest)|.tagName')
           echo "LATEST=$latest"
           echo "LATEST=$latest" >> $GITHUB_ENV
 
@@ -40,21 +40,6 @@ jobs:
           current=$(/bin/bash scripts/native_sdk_helper.sh get ${{ matrix.platform }})
           echo "CURRENT=$current"
           echo "CURRENT=$current" >> $GITHUB_ENV
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "22.x"
-          cache: "npm"
-
-      - uses: ruby/setup-ruby@d5126b9b3579e429dd52e51e68624dda2e05be25 # v1.267.0
-        if: ${{ matrix.platform == 'apple' }}
-        with:
-          ruby-version: "3.4"
-
-      - name: Install cocoapods
-        if: ${{ matrix.platform == 'apple' }}
-        run: |
-          gem install -n /usr/local/bin cocoapods
 
       - name: Update
         env:
