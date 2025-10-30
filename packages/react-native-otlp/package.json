@@ -22,7 +22,7 @@
     "ios:shared": "mkdir -p ./ios/common && cp -r ../../common/ios/* ./ios/common/",
     "build": "yarn run js:shared && yarn run ios:shared && tsc",
     "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
-    "ios:install": "cd test-project && yarn install && cd ios && pod cache clean --all && USE_FRAMEWORKS=dynamic pod install --repo-update && rm .xcode.env.local",
+    "ios:install": "cd test-project && yarn install && cd ios && rm -rf ~/Library/Caches/CocoaPods && USE_FRAMEWORKS=dynamic pod install --repo-update && rm .xcode.env.local",
     "ios:test": "yarn run ios:shared && ../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceOTLPTests.xcworkspace RNEmbraceOTLPTests"
   },
   "peerDependencies": {

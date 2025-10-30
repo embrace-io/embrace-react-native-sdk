@@ -50,7 +50,7 @@
     "build": "tsc",
     "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detekt && ./gradlew :app:testDebugUnitTest && cd ../../",
     "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceTracerProvider.xcworkspace RNEmbraceTracerProviderTests",
-    "ios:install": "cd test-project && yarn install && cd ios && pod cache clean --all && USE_FRAMEWORKS=dynamic pod install --repo-update && rm .xcode.env.local"
+    "ios:install": "cd test-project && yarn install && cd ios && rm -rf ~/Library/Caches/CocoaPods && USE_FRAMEWORKS=dynamic pod install --repo-update && rm .xcode.env.local"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"
