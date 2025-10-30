@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4CE0DA3443167E0781D7B84B /* Pods_RNEmbraceTracerProviderPlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E1F53925FF338F7CA982963 /* Pods_RNEmbraceTracerProviderPlaceholder.framework */; };
 		6DED2F552CE514B200A9735A /* RNEmbraceTracerProviderPlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DED2F4C2CE514B200A9735A /* RNEmbraceTracerProviderPlaceholder.framework */; };
 		6DED2F692CE5193400A9735A /* RNEmbraceTracerProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DED2F672CE5193400A9735A /* RNEmbraceTracerProviderTests.swift */; };
-		C705BA40B5A664AED2F375DB /* libPods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 17B15D83F85E217373A6526D /* libPods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.a */; };
-		CC9A337F8FCB31BE990B7A69 /* libPods-RNEmbraceTracerProviderPlaceholder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCCB3BC52E15D58E0AFA56C7 /* libPods-RNEmbraceTracerProviderPlaceholder.a */; };
+		9DECAF394B51E7F2DDF3CCF8 /* Pods_RNEmbraceTracerProviderPlaceholder_RNEmbraceTracerProviderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44C843F4631102AF0B8D1CD3 /* Pods_RNEmbraceTracerProviderPlaceholder_RNEmbraceTracerProviderTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,15 +24,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		17B15D83F85E217373A6526D /* libPods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E4613A8EA82F96D95FEC167 /* Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.release.xcconfig"; sourceTree = "<group>"; };
+		2E1F53925FF338F7CA982963 /* Pods_RNEmbraceTracerProviderPlaceholder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceTracerProviderPlaceholder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		44C843F4631102AF0B8D1CD3 /* Pods_RNEmbraceTracerProviderPlaceholder_RNEmbraceTracerProviderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceTracerProviderPlaceholder_RNEmbraceTracerProviderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DED2F4C2CE514B200A9735A /* RNEmbraceTracerProviderPlaceholder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbraceTracerProviderPlaceholder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DED2F542CE514B200A9735A /* RNEmbraceTracerProviderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNEmbraceTracerProviderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DED2F672CE5193400A9735A /* RNEmbraceTracerProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNEmbraceTracerProviderTests.swift; sourceTree = "<group>"; };
 		79691F4140105E088979D5AE /* Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9F4418DF9A8E2AD9A2107B3D /* Pods-RNEmbraceTracerProviderPlaceholder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceTracerProviderPlaceholder.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder/Pods-RNEmbraceTracerProviderPlaceholder.release.xcconfig"; sourceTree = "<group>"; };
 		C53BDEAEB2C321E6F2BE5493 /* Pods-RNEmbraceTracerProviderPlaceholder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceTracerProviderPlaceholder.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder/Pods-RNEmbraceTracerProviderPlaceholder.debug.xcconfig"; sourceTree = "<group>"; };
-		DCCB3BC52E15D58E0AFA56C7 /* libPods-RNEmbraceTracerProviderPlaceholder.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNEmbraceTracerProviderPlaceholder.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC9A337F8FCB31BE990B7A69 /* libPods-RNEmbraceTracerProviderPlaceholder.a in Frameworks */,
+				4CE0DA3443167E0781D7B84B /* Pods_RNEmbraceTracerProviderPlaceholder.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,7 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DED2F552CE514B200A9735A /* RNEmbraceTracerProviderPlaceholder.framework in Frameworks */,
-				C705BA40B5A664AED2F375DB /* libPods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.a in Frameworks */,
+				9DECAF394B51E7F2DDF3CCF8 /* Pods_RNEmbraceTracerProviderPlaceholder_RNEmbraceTracerProviderTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,8 +86,8 @@
 		9F32574E8D2F7DD80A6F98E9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DCCB3BC52E15D58E0AFA56C7 /* libPods-RNEmbraceTracerProviderPlaceholder.a */,
-				17B15D83F85E217373A6526D /* libPods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.a */,
+				2E1F53925FF338F7CA982963 /* Pods_RNEmbraceTracerProviderPlaceholder.framework */,
+				44C843F4631102AF0B8D1CD3 /* Pods_RNEmbraceTracerProviderPlaceholder_RNEmbraceTracerProviderTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
