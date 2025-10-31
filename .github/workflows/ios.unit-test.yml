@@ -71,8 +71,28 @@ jobs:
         run: yarn run ios:install
         if: steps.changed_files.outputs.ios == 'true'
 
+      - name: Check System Resources (Before Tests)
+        if: steps.changed_files.outputs.ios == 'true'
+        run: |
+          echo "=== Disk Space ==="
+          df -h
+          echo "=== Memory Stats ==="
+          vm_stat
+          echo "=== Top Processes ==="
+          top -l 1 -n 10 -stats pid,command,mem
+
       - name: Run iOS Unit Tests
         run: yarn run ios:test $(./scripts/scopes-from-file-changes.ts ${STEPS_CHANGED_FILES_OUTPUTS_IOS_FILES})
         if: steps.changed_files.outputs.ios == 'true'
         env:
           STEPS_CHANGED_FILES_OUTPUTS_IOS_FILES: ${{ steps.changed_files.outputs.ios_files }}
+
+      - name: Check System Resources (After Tests)
+        if: always() && steps.changed_files.outputs.ios == 'true'
+        run: |
+          echo "=== Disk Space ==="
+          df -h
+          echo "=== Memory Stats ==="
+          vm_stat
+          echo "=== DerivedData Size ==="
+          du -sh ~/Library/Developer/Xcode/DerivedData || echo "DerivedData not found"
