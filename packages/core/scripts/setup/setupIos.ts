@@ -5,28 +5,38 @@ import {
   addUploadBuildPhase,
   addEmbraceInitializerSwift,
   iosInitializeEmbrace,
-  iosPodfile,
+  iOSPodfilePatch,
+  iosPodfileKSCrashPatch,
   patchXcodeBundlePhase,
 } from "./ios";
-import {apiToken, iosAppID, packageJSON} from "./common";
+import {apiToken, iosAppID, iosProjectFolderName, packageJSON} from "./common";
 
-const logger = new EmbraceLogger(console);
+const IOS_REGISTER_FIELDS = [
+  iosAppID,
+  apiToken,
+  iosProjectFolderName,
+  packageJSON,
+];
 
-logger.log("initializing setup wizard for ios");
-
-const iosSteps = [
+const IOS_STEPS = [
   addEmbraceInitializerSwift,
   iosInitializeEmbrace,
-  iosPodfile,
+  iOSPodfilePatch,
+  iosPodfileKSCrashPatch,
   patchXcodeBundlePhase,
   addUploadBuildPhase,
 ];
 
+const logger = new EmbraceLogger(console);
+logger.log("Initializing Setup Wizard for iOS");
+
 const run = () => {
-  const wiz = new Wizard();
-  [iosAppID, apiToken, packageJSON].map(field => wiz.registerField(field));
-  [...iosSteps].map(step => wiz.registerStep(step));
-  wiz.runSteps();
+  const wizard = new Wizard();
+
+  IOS_REGISTER_FIELDS.forEach(field => wizard.registerField(field));
+  IOS_STEPS.forEach(step => wizard.registerStep(step));
+
+  wizard.runSteps();
 };
 
 export default run;

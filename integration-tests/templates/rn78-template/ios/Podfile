@@ -8,6 +8,10 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+# NOTE: needed since iOS 6.13.0
+# Make KSCrash modular so Swift can import it
+pod 'KSCrash', :modular_headers => true
+
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green

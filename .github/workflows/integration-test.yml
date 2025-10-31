@@ -16,10 +16,14 @@ jobs:
       matrix:
         node-version: [22.x]
         jdk-version: ["17"]
-        test-app: [expo-rn74, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
+        test-app:
+          [expo-rn74, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
         platform: [android, ios]
 
     runs-on: ${{ matrix.platform == 'ios' && 'macos-14' || 'ubuntu-latest' }}
+
+    env:
+      NO_FLIPPER: 1
 
     steps:
       - name: Checkout code
@@ -42,7 +46,7 @@ jobs:
       - name: Install JDK ${{ matrix.jdk-version }}
         uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
+          distribution: "adopt"
           java-version: ${{ matrix.jdk-version }}
         if: matrix.platform == 'android'
 
@@ -56,7 +60,7 @@ jobs:
 
       - name: Run Integration Tests
         working-directory: ./integration-tests
-        run:  npm run test-remote
+        run: npm run test-remote
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}

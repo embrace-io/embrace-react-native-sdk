@@ -31,7 +31,7 @@ NOTE: `--pm yarn` is set to workaround an issue with the @react-native-community
 set in ../package.json is modified so make sure to revert afterwards.
 
 After initializing, move over the created app into the templates folder (`mv ProjectName templates/my-new-template`) and
-remove any unneeded files then add Embrace specific setup.
+remove any unneeded files then add Embrace specific setup (install scripts may help).
 
 The ["Current Tags"](https://www.npmjs.com/package/react-native?activeTab=versions) section of the react-native package
 in NPM can help decide which specific patch version to pin the template to for a given minor version, there will generally
