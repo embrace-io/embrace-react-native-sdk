@@ -60,9 +60,9 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     env:
-      IOS_TEST_OS: 18.5
+      IOS_TEST_OS: 17.5
       IOS_TEST_PLATFORM: iOS Simulator
-      IOS_TEST_DEVICE: iPhone 16 Pro
+      IOS_TEST_DEVICE: iPhone 15 Pro
       IOS_TEST_SDK: iphonesimulator
       IOS_TEST_WAIT_TIME: 15
 
@@ -141,9 +141,9 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     env:
-      IOS_TEST_OS: 18.5
+      IOS_TEST_OS: 17.5
       IOS_TEST_PLATFORM: iOS Simulator
-      IOS_TEST_DEVICE: iPhone 16 Pro
+      IOS_TEST_DEVICE: iPhone 15 Pro
       IOS_TEST_SDK: iphonesimulator
       IOS_TEST_WAIT_TIME: 15
 
@@ -226,9 +226,9 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     env:
-      IOS_TEST_OS: 18.5
+      IOS_TEST_OS: 17.5
       IOS_TEST_PLATFORM: iOS Simulator
-      IOS_TEST_DEVICE: iPhone 16 Pro
+      IOS_TEST_DEVICE: iPhone 15 Pro
       IOS_TEST_SDK: iphonesimulator
       IOS_TEST_WAIT_TIME: 15
 
