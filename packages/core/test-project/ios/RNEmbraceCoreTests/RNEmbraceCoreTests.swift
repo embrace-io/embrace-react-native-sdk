@@ -320,14 +320,22 @@ class EmbraceManagerTests: XCTestCase {
 
         let exportedLogs = try await getExportedLogs()
 
-        // Debug: Print all exported logs to diagnose CI failure
-        print("DEBUG: testLogMessageWithJSStackTrace - exportedLogs.count = \(exportedLogs.count)")
+        // Debug: Use NSLog to ensure output appears in CI logs
+        NSLog("========== testLogMessageWithJSStackTrace DEBUG START ==========")
+        NSLog("Total exported logs count: \(exportedLogs.count)")
+        NSLog("Promise resolve calls: \(promise.resolveCalls.count)")
         for (index, log) in exportedLogs.enumerated() {
-            print("DEBUG: Log[\(index)] - severity: \(log.severity?.description ?? "nil"), body: \(log.body?.description ?? "nil"), emb.type: \(log.attributes["emb.type"]?.description ?? "nil")")
+            let severity = log.severity?.description ?? "nil"
+            let body = log.body?.description ?? "nil"
+            let embType = log.attributes["emb.type"]?.description ?? "nil"
+            let rnStacktrace = log.attributes["emb.stacktrace.rn"]?.description ?? "nil"
+            let iosStacktrace = log.attributes["emb.stacktrace.ios"]?.description ?? "nil"
+            NSLog("Log[\(index)]: severity=\(severity), body=\(body), emb.type=\(embType), emb.stacktrace.rn=\(rnStacktrace), emb.stacktrace.ios=\(iosStacktrace)")
         }
+        NSLog("========== testLogMessageWithJSStackTrace DEBUG END ==========")
 
         XCTAssertEqual(promise.resolveCalls.count, 3)
-        XCTAssertEqual(exportedLogs.count, 3)
+        XCTAssertEqual(exportedLogs.count, 3, "Expected 3 logs but got \(exportedLogs.count). See NSLog output above for details.")
 
         // error
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
