@@ -319,6 +319,13 @@ class EmbraceManagerTests: XCTestCase {
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs()
+
+        // Debug: Print all exported logs to diagnose CI failure
+        print("DEBUG: testLogMessageWithJSStackTrace - exportedLogs.count = \(exportedLogs.count)")
+        for (index, log) in exportedLogs.enumerated() {
+            print("DEBUG: Log[\(index)] - severity: \(log.severity?.description ?? "nil"), body: \(log.body?.description ?? "nil"), emb.type: \(log.attributes["emb.type"]?.description ?? "nil")")
+        }
+
         XCTAssertEqual(promise.resolveCalls.count, 3)
         XCTAssertEqual(exportedLogs.count, 3)
 

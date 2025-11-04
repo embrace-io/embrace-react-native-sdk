@@ -214,6 +214,10 @@ jobs:
           echo "=== DerivedData Size ==="
           du -sh ~/Library/Developer/Xcode/DerivedData || echo "DerivedData not found"
 
+  # OTLP tests run WITHOUT code coverage due to memory constraints on macos-latest (~7GB RAM).
+  # The OTLP package has heavy dependencies (OpenTelemetry Protocol exporters, Protobuf, etc.)
+  # combined with USE_FRAMEWORKS=dynamic, which causes excessive memory usage when code coverage is enabled.
+  # Core and tracer-provider packages still run WITH coverage. See scripts/run-ios-tests-no-coverage.sh
   test-otlp:
     strategy:
       matrix:
