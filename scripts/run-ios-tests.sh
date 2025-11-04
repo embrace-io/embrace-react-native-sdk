@@ -1,6 +1,7 @@
 #!/bin/bash
 WORKSPACE=$1
 SCHEME=$2
-# Use "Any iOS Simulator Device" to avoid issues with specific iOS versions not being available on all CI runners
-xcodebuild test -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk iphonesimulator -enableCodeCoverage YES -destination 'platform=iOS Simulator,id=dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder' -disable-concurrent-testing -jobs 1 | xcbeautify
+# Use iPhone 16 Pro without specifying OS version - xcodebuild picks any available iOS version for this device
+# GitHub Actions macos-latest runners (as of Nov 2024) have iPhone 16 series simulators
+xcodebuild test -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk iphonesimulator -enableCodeCoverage YES -destination 'platform=iOS Simulator,name=iPhone 16 Pro' -disable-concurrent-testing -jobs 1 | xcbeautify
 exit  "${PIPESTATUS[0]}"
