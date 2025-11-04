@@ -1,5 +1,6 @@
 #!/bin/bash
 WORKSPACE=$1
 SCHEME=$2
-xcodebuild test -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$IOS_TEST_SDK" -enableCodeCoverage YES -destination "platform=$IOS_TEST_PLATFORM,name=$IOS_TEST_DEVICE,OS=$IOS_TEST_OS" -disable-concurrent-testing -jobs 1 | xcbeautify
+# Use "Any iOS Simulator Device" to avoid issues with specific iOS versions not being available on all CI runners
+xcodebuild test -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk iphonesimulator -enableCodeCoverage YES -destination 'platform=iOS Simulator,id=dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder' -disable-concurrent-testing -jobs 1 | xcbeautify
 exit  "${PIPESTATUS[0]}"
