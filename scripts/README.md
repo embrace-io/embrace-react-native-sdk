@@ -8,8 +8,8 @@ This directory contains scripts for running iOS unit tests.
 Runs iOS tests **with code coverage enabled**.
 
 **Used by:**
-- `@embrace-io/react-native` (core package)
-- `@embrace-io/react-native-tracer-provider`
+- Local development (recommended)
+- Manual coverage collection
 
 **Usage:**
 ```bash
@@ -20,26 +20,54 @@ Runs iOS tests **with code coverage enabled**.
 Runs iOS tests **without code coverage**.
 
 **Used by:**
-- `@embrace-io/react-native-otlp`
+- **All packages on CI** (`@embrace-io/react-native`, `@embrace-io/react-native-tracer-provider`, `@embrace-io/react-native-otlp`)
 
-**Why no coverage for OTLP?**
+**Usage:**
+```bash
+./run-ios-tests-no-coverage.sh <workspace> <scheme>
+```
 
-The OTLP package has significantly heavier dependencies than other packages:
-- OpenTelemetry Protocol exporters
-- Protobuf libraries
-- Additional OTLP-specific dependencies
+## Why No Coverage on CI?
 
-When combined with:
-- `USE_FRAMEWORKS=dynamic` (required for EmbraceIO 6.14.1+)
-- Code coverage instrumentation
-- GitHub Actions `macos-latest` runners (~7GB RAM)
+After upgrading to EmbraceIO 6.14.1+, we're required to use `USE_FRAMEWORKS=dynamic` for CocoaPods. This significantly increases memory usage and build times because:
 
-...the build process consumes excessive memory, leading to swapping and eventual OOM failures.
+1. **Every dependency becomes a separate framework** (instead of static libraries)
+2. **Each framework must be individually:**
+   - Compiled
+   - Linked
+   - Code signed
+   - Loaded into memory (wired pages)
 
-Running OTLP tests without coverage reduces memory footprint enough to complete successfully on free CI runners, while still verifying functionality.
+3. **Code coverage adds additional overhead:**
+   - Instruments all code
+   - Creates coverage data files
+   - Increases memory pressure during build
 
-**Coverage on other packages:**
-Core and tracer-provider packages still run with full code coverage enabled.
+### The Problem
 
-**Running OTLP with coverage locally:**
-If you need coverage data for OTLP (e.g., for local development), you can temporarily modify `packages/react-native-otlp/package.json` to use `run-ios-tests.sh` instead. This works fine on local machines with more RAM.
+On GitHub Actions `macos-latest` runners (~7GB RAM):
+- **With coverage**: Build times of 50+ minutes, frequent OOM/hangs
+- **Without coverage**: Build times of ~15-20 minutes, reliable completion
+
+### The Solution
+
+**CI (all packages):** Run tests without coverage to ensure fast, reliable test execution
+**Local development:** Run tests with coverage using `run-ios-tests.sh` where hardware is better
+
+### Running Tests with Coverage Locally
+
+To collect coverage data on your local machine:
+
+1. Temporarily modify any `package.json`:
+   ```json
+   "ios:test": "yarn run ios:shared && ../../scripts/run-ios-tests.sh ..."
+   ```
+
+2. Or run directly:
+   ```bash
+   cd packages/core  # or tracer-provider, otlp
+   yarn run ios:shared
+   ../../scripts/run-ios-tests.sh test-project/ios/YourWorkspace.xcworkspace YourScheme
+   ```
+
+Local machines typically have more RAM and better I/O, so coverage works fine.

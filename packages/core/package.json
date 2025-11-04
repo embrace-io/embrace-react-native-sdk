@@ -62,7 +62,7 @@
     "android:test": "cd test-project && yarn install && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
     "build": "yarn run js:shared && yarn run ios:shared && node update_android_version.ts && tsc && cp app.plugin.js lib/",
     "ios:install": "yarn run ios:shared && cd test-project && yarn install && cd ios && rm -rf ~/Library/Caches/CocoaPods && USE_FRAMEWORKS=dynamic pod install --repo-update && rm .xcode.env.local",
-    "ios:test": "yarn run ios:shared && ../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceCoreTests.xcworkspace RNEmbraceCoreTests"
+    "ios:test": "yarn run ios:shared && ../../scripts/run-ios-tests-no-coverage.sh test-project/ios/RNEmbraceCoreTests.xcworkspace RNEmbraceCoreTests"
   },
   "devDependencies": {
     "expo": "^53.0.19",
