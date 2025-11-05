@@ -117,6 +117,15 @@ jobs:
         run: yarn run ios:test:core
         if: steps.changed_files.outputs.core == 'true'
 
+      - name: Upload Test Results (xcresult bundle)
+        if: always() && steps.changed_files.outputs.core == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-core-test-results
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceCoreTests-*/Logs/Test/*.xcresult
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Check System Resources (After Tests)
         if: always() && steps.changed_files.outputs.core == 'true'
         run: |
@@ -191,6 +200,15 @@ jobs:
       - name: Run Tracer Provider iOS Unit Tests
         run: yarn run ios:test:tracer-provider
         if: steps.changed_files.outputs.tracer-provider == 'true'
+
+      - name: Upload Test Results (xcresult bundle)
+        if: always() && steps.changed_files.outputs.tracer-provider == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-tracer-provider-test-results
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceTracerProvider-*/Logs/Test/*.xcresult
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Check System Resources (After Tests)
         if: always() && steps.changed_files.outputs.tracer-provider == 'true'
@@ -270,6 +288,15 @@ jobs:
       - name: Run OTLP iOS Unit Tests
         run: yarn run ios:test:otlp
         if: steps.changed_files.outputs.otlp == 'true'
+
+      - name: Upload Test Results (xcresult bundle)
+        if: always() && steps.changed_files.outputs.otlp == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-otlp-test-results
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceOTLPTests-*/Logs/Test/*.xcresult
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Check System Resources (After Tests)
         if: always() && steps.changed_files.outputs.otlp == 'true'
