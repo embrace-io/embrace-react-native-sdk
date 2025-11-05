@@ -15,7 +15,7 @@ class Promise {
     }
 
     func reject(a: String?, b: String?, c: Error?) {
-        rejectCalls.append(b!)
+        rejectCalls.append(b ?? "unknown error")
     }
 
     func reset() {

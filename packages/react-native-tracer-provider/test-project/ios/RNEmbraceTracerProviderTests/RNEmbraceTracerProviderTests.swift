@@ -76,6 +76,10 @@ class ReactNativeTracerProviderTests: XCTestCase {
                   export: OpenTelemetryExport(spanExporter: self.exporter)
               ))
               .start()
+
+          // Wait for SDK to fully initialize before running tests
+          // On CI, SDK initialization takes longer after keychain write errors
+          Thread.sleep(forTimeInterval: 10.0)
       } catch let error as Embrace {
           print(error)
       } catch {
