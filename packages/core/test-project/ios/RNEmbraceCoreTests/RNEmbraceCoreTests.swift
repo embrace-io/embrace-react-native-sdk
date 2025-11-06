@@ -101,8 +101,19 @@ class EmbraceManagerTests: XCTestCase {
     override func setUp() async throws {
         promise = Promise()
         module = EmbraceManager()
+
+        // Flush any pending exports from previous tests before clearing
+        _ = EmbraceManagerTests.logExporter.forceFlush(explicitTimeout: 1.0)
+        _ = EmbraceManagerTests.spanExporter.flush(explicitTimeout: 1.0)
+
+        // Add small delay to ensure flush completes before reset
+        try await Task.sleep(nanoseconds: UInt64(0.5 * Double(NSEC_PER_SEC)))
+
         EmbraceManagerTests.logExporter.reset(explicitTimeout: nil)
         EmbraceManagerTests.spanExporter.reset(explicitTimeout: nil)
+
+        // Add another small delay to ensure reset completes before test starts
+        try await Task.sleep(nanoseconds: UInt64(0.5 * Double(NSEC_PER_SEC)))
     }
 
     func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
