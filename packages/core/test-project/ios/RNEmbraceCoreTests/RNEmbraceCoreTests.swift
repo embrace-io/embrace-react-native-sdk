@@ -58,7 +58,7 @@ class TestLogExporter: LogRecordExporter {
 
     func getLogsSince(index: Int) -> [OpenTelemetrySdk.ReadableLogRecord] {
         queue.sync {
-            guard index <= _exportedLogs.count else { return [] }
+            guard index < _exportedLogs.count else { return [] }
             return Array(_exportedLogs[index...])
         }
     }
