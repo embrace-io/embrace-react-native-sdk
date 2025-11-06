@@ -18,7 +18,7 @@ class TestSpanExporter: SpanExporter {
     }
 
     func reset(explicitTimeout: TimeInterval?) {
-        exportedSpans.removeAll()
+        // Don't clear the array - the SDK might be holding references
     }
 
     func shutdown(explicitTimeout: TimeInterval?) {}
@@ -40,9 +40,9 @@ class TestLogExporter: LogRecordExporter {
     }
 
     func reset(explicitTimeout: TimeInterval?) {
-        queue.sync {
-            _exportedLogs.removeAll()
-        }
+        // Don't actually clear the array - the SDK might be holding references
+        // Tests will use getLogsSince() to get only new logs
+        queue.sync { }
     }
 
     func forceFlush(explicitTimeout: TimeInterval?) -> OpenTelemetrySdk.ExportResult {
@@ -52,8 +52,14 @@ class TestLogExporter: LogRecordExporter {
     }
 
     func shutdown(explicitTimeout: TimeInterval?) {
+        // Don't clear - same reason as reset()
+        queue.sync { }
+    }
+
+    func getLogsSince(index: Int) -> [OpenTelemetrySdk.ReadableLogRecord] {
         queue.sync {
-            _exportedLogs.removeAll()
+            guard index <= _exportedLogs.count else { return [] }
+            return Array(_exportedLogs[index...])
         }
     }
 }
@@ -86,6 +92,8 @@ class EmbraceManagerTests: XCTestCase {
     static var spanExporter: TestSpanExporter!
     var module: EmbraceManager!
     var promise: Promise!
+    var startingLogCount: Int = 0
+    var startingSpanCount: Int = 0
 
     override class func setUp() {
         super.setUp()
@@ -116,13 +124,16 @@ class EmbraceManagerTests: XCTestCase {
     override func setUp() async throws {
         promise = Promise()
         module = EmbraceManager()
-        EmbraceManagerTests.logExporter.reset(explicitTimeout: nil)
-        EmbraceManagerTests.spanExporter.reset(explicitTimeout: nil)
+        // Track starting counts instead of clearing
+        startingLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
+        startingSpanCount = EmbraceManagerTests.spanExporter.exportedSpans.count
     }
 
     func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
         try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-        return EmbraceManagerTests.logExporter.exportedLogs.filter { log in
+        // Only get logs since this test started
+        let newLogs = EmbraceManagerTests.logExporter.getLogsSince(index: startingLogCount)
+        return newLogs.filter { log in
             log.severity != .debug &&
             log.attributes["emb.type"]?.description != "sys.internal"
         }
@@ -130,7 +141,11 @@ class EmbraceManagerTests: XCTestCase {
 
     func getExportedSpans() async throws -> [SpanData] {
         try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-        return EmbraceManagerTests.spanExporter.exportedSpans.filter { span in
+        // Only get spans since this test started
+        let allSpans = EmbraceManagerTests.spanExporter.exportedSpans
+        guard startingSpanCount < allSpans.count else { return [] }
+        let newSpans = Array(allSpans[startingSpanCount...])
+        return newSpans.filter { span in
             !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
         }
     }
