@@ -85,8 +85,9 @@ class EmbraceManagerTests: XCTestCase {
                     endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null", configBaseURL: "http://localhost/dev/null"),
                     export:
                         OpenTelemetryExport(
-                            spanExporter: self.spanExporter,
-                            logExporter: self.logExporter
+                            spanExporter: self.spanExporter
+                            // TEMPORARILY REMOVED logExporter to test if keychain error only affects log export
+                            // logExporter: self.logExporter
                         )
                     )
                 )
