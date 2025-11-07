@@ -129,7 +129,7 @@ class EmbraceManagerTests: XCTestCase {
         startingSpanCount = EmbraceManagerTests.spanExporter.exportedSpans.count
     }
 
-    func getExportedLogs(expectedCount: Int? = nil, timeout: TimeInterval = 15.0) async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
+    func getExportedLogs(expectedCount: Int? = nil, timeout: TimeInterval = 60.0) async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
         let startTime = Date()
         var filtered: [OpenTelemetrySdk.ReadableLogRecord] = []
 

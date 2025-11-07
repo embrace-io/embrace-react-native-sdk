@@ -223,13 +223,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -244,13 +240,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -265,13 +257,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder/Pods-RNEmbraceTracerProviderPlaceholder-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder/Pods-RNEmbraceTracerProviderPlaceholder-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -494,7 +482,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -571,7 +562,10 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
