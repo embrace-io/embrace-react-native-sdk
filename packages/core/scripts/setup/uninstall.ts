@@ -376,7 +376,7 @@ const transformUninstalFunctionsToSteps = (): Step[] => {
 const run = () => {
   const wizard = new Wizard();
 
-  // in case the app jas a custom name for the iOS project
+  // in case the app has a custom name for the iOS project
   wizard.registerField(iosProjectFolderName);
 
   transformUninstalFunctionsToSteps().forEach(step =>
