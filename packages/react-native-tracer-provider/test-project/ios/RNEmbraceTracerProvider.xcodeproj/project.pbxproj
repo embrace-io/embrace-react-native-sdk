@@ -24,7 +24,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		113467062EBC4A3500BB9FBF /* RNEmbraceTracerProviderTests.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RNEmbraceTracerProviderTests.entitlements; sourceTree = "<group>"; };
 		1E4613A8EA82F96D95FEC167 /* Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.release.xcconfig"; sourceTree = "<group>"; };
 		2E1F53925FF338F7CA982963 /* Pods_RNEmbraceTracerProviderPlaceholder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceTracerProviderPlaceholder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		44C843F4631102AF0B8D1CD3 /* Pods_RNEmbraceTracerProviderPlaceholder_RNEmbraceTracerProviderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceTracerProviderPlaceholder_RNEmbraceTracerProviderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,7 +78,6 @@
 		6DED2F682CE5193400A9735A /* RNEmbraceTracerProviderTests */ = {
 			isa = PBXGroup;
 			children = (
-				113467062EBC4A3500BB9FBF /* RNEmbraceTracerProviderTests.entitlements */,
 				6DED2F672CE5193400A9735A /* RNEmbraceTracerProviderTests.swift */,
 			);
 			path = RNEmbraceTracerProviderTests;
@@ -588,7 +586,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 79691F4140105E088979D5AE /* Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = RNEmbraceTracerProviderTests/RNEmbraceTracerProviderTests.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -608,7 +605,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1E4613A8EA82F96D95FEC167 /* Pods-RNEmbraceTracerProviderPlaceholder-RNEmbraceTracerProviderTests.release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = RNEmbraceTracerProviderTests/RNEmbraceTracerProviderTests.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
