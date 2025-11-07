@@ -99,3 +99,9 @@ nx.json
 .yarn
 
 .env.*
+
+# Test diagnostics and artifacts
+*_Diagnostics/
+CoreTestsFailing/
+RNEmbraceCoreTests-*/
+logs.txt
