@@ -10,19 +10,13 @@ permissions:
   pull-requests: read
 
 jobs:
-  build:
+  lint:
     strategy:
       matrix:
         node-version: [18.x]
         os: [macos-latest]
 
     runs-on: ${{ matrix.os }}
-    env:
-      IOS_TEST_OS: 17.5
-      IOS_TEST_PLATFORM: iOS Simulator
-      IOS_TEST_DEVICE: iPhone 15 Pro
-      IOS_TEST_SDK: iphonesimulator
-      IOS_TEST_WAIT_TIME: 15
 
     steps:
       - name: Checkout code
@@ -50,15 +44,6 @@ jobs:
             - 'packages/**/*.h'
             - 'packages/**/test-project/ios/Podfile.lock'
 
-      - name: Cache Derived Data
-        uses: actions/cache@v4
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: Derived-Data-${{ runner.os }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj, Podfile.lock') }}
-          restore-keys: |
-            Derived-Data-${{ runner.os }}
-        if: steps.changed_files.outputs.ios == 'true'
-
       - name: Install Root Node Modules
         run: yarn install
         if: steps.changed_files.outputs.ios == 'true'
@@ -67,12 +52,258 @@ jobs:
         run: yarn run lint:swift
         if: steps.changed_files.outputs.ios == 'true'
 
-      - name: Install Node Modules + CocoaPods Dependencies
-        run: yarn run ios:install
-        if: steps.changed_files.outputs.ios == 'true'
+  test-core:
+    strategy:
+      matrix:
+        node-version: [18.x]
+        os: [macos-latest]
 
-      - name: Run iOS Unit Tests
-        run: yarn run ios:test $(./scripts/scopes-from-file-changes.ts ${STEPS_CHANGED_FILES_OUTPUTS_IOS_FILES})
-        if: steps.changed_files.outputs.ios == 'true'
-        env:
-          STEPS_CHANGED_FILES_OUTPUTS_IOS_FILES: ${{ steps.changed_files.outputs.ios_files }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Install Node (${{ matrix.node-version }})
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Enables corepack
+        run: corepack enable
+
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: changed_files
+        with:
+          list-files: shell
+          filters: |
+            core:
+            - 'packages/core/**/*.swift'
+            - 'packages/core/**/*.m'
+            - 'packages/core/**/*.h'
+            - 'packages/core/test-project/ios/Podfile.lock'
+
+      - name: Cache Derived Data
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: Derived-Data-Core-${{ runner.os }}-${{ hashFiles('packages/core/**/*.xcodeproj/project.pbxproj', 'packages/core/test-project/ios/Podfile.lock') }}
+          restore-keys: |
+            Derived-Data-Core-${{ runner.os }}
+        if: steps.changed_files.outputs.core == 'true'
+
+      - name: Install Root Node Modules
+        run: yarn install
+        if: steps.changed_files.outputs.core == 'true'
+
+      - name: Install Core Package Dependencies
+        run: yarn run ios:install:core
+        if: steps.changed_files.outputs.core == 'true'
+
+      - name: Check System Resources (Before Tests)
+        if: steps.changed_files.outputs.core == 'true'
+        run: |
+          echo "=== Disk Space ==="
+          df -h
+          echo "=== Memory Stats ==="
+          vm_stat
+          echo "=== Top Processes ==="
+          top -l 1 -n 10 -stats pid,command,mem
+
+      - name: Run Core iOS Unit Tests
+        run: yarn run ios:test:core
+        if: steps.changed_files.outputs.core == 'true'
+
+      - name: Upload Test Results (xcresult bundle)
+        if: always() && steps.changed_files.outputs.core == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-core-test-results
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceCoreTests-*/Logs/Test/*.xcresult
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Check System Resources (After Tests)
+        if: always() && steps.changed_files.outputs.core == 'true'
+        run: |
+          echo "=== Disk Space ==="
+          df -h
+          echo "=== Memory Stats ==="
+          vm_stat
+          echo "=== DerivedData Size ==="
+          du -sh ~/Library/Developer/Xcode/DerivedData || echo "DerivedData not found"
+
+  test-tracer-provider:
+    strategy:
+      matrix:
+        node-version: [18.x]
+        os: [macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Install Node (${{ matrix.node-version }})
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Enables corepack
+        run: corepack enable
+
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: changed_files
+        with:
+          list-files: shell
+          filters: |
+            tracer-provider:
+            - 'packages/react-native-tracer-provider/**/*.swift'
+            - 'packages/react-native-tracer-provider/**/*.m'
+            - 'packages/react-native-tracer-provider/**/*.h'
+            - 'packages/react-native-tracer-provider/test-project/ios/Podfile.lock'
+
+      - name: Cache Derived Data
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: Derived-Data-TracerProvider-${{ runner.os }}-${{ hashFiles('packages/react-native-tracer-provider/**/*.xcodeproj/project.pbxproj', 'packages/react-native-tracer-provider/test-project/ios/Podfile.lock') }}
+          restore-keys: |
+            Derived-Data-TracerProvider-${{ runner.os }}
+        if: steps.changed_files.outputs.tracer-provider == 'true'
+
+      - name: Install Root Node Modules
+        run: yarn install
+        if: steps.changed_files.outputs.tracer-provider == 'true'
+
+      - name: Install Tracer Provider Package Dependencies
+        run: yarn run ios:install:tracer-provider
+        if: steps.changed_files.outputs.tracer-provider == 'true'
+
+      - name: Check System Resources (Before Tests)
+        if: steps.changed_files.outputs.tracer-provider == 'true'
+        run: |
+          echo "=== Disk Space ==="
+          df -h
+          echo "=== Memory Stats ==="
+          vm_stat
+          echo "=== Top Processes ==="
+          top -l 1 -n 10 -stats pid,command,mem
+
+      - name: Run Tracer Provider iOS Unit Tests
+        run: yarn run ios:test:tracer-provider
+        if: steps.changed_files.outputs.tracer-provider == 'true'
+
+      - name: Upload Test Results (xcresult bundle)
+        if: always() && steps.changed_files.outputs.tracer-provider == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-tracer-provider-test-results
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceTracerProvider-*/Logs/Test/*.xcresult
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Check System Resources (After Tests)
+        if: always() && steps.changed_files.outputs.tracer-provider == 'true'
+        run: |
+          echo "=== Disk Space ==="
+          df -h
+          echo "=== Memory Stats ==="
+          vm_stat
+          echo "=== DerivedData Size ==="
+          du -sh ~/Library/Developer/Xcode/DerivedData || echo "DerivedData not found"
+
+  # All iOS tests run WITHOUT code coverage due to performance/memory constraints on macos-latest.
+  # USE_FRAMEWORKS=dynamic (required for EmbraceIO 6.14.1+) combined with code coverage creates
+  # excessive build times and memory pressure on free CI runners. Code coverage can be collected
+  # locally where hardware resources are better. See scripts/run-ios-tests-no-coverage.sh
+  test-otlp:
+    strategy:
+      matrix:
+        node-version: [18.x]
+        os: [macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Install Node (${{ matrix.node-version }})
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Enables corepack
+        run: corepack enable
+
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: changed_files
+        with:
+          list-files: shell
+          filters: |
+            otlp:
+            - 'packages/react-native-otlp/**/*.swift'
+            - 'packages/react-native-otlp/**/*.m'
+            - 'packages/react-native-otlp/**/*.h'
+            - 'packages/react-native-otlp/test-project/ios/Podfile.lock'
+
+      - name: Cache Derived Data
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: Derived-Data-OTLP-${{ runner.os }}-${{ hashFiles('packages/react-native-otlp/**/*.xcodeproj/project.pbxproj', 'packages/react-native-otlp/test-project/ios/Podfile.lock') }}
+          restore-keys: |
+            Derived-Data-OTLP-${{ runner.os }}
+        if: steps.changed_files.outputs.otlp == 'true'
+
+      - name: Install Root Node Modules
+        run: yarn install
+        if: steps.changed_files.outputs.otlp == 'true'
+
+      - name: Install OTLP Package Dependencies
+        run: yarn run ios:install:otlp
+        if: steps.changed_files.outputs.otlp == 'true'
+
+      - name: Check System Resources (Before Tests)
+        if: steps.changed_files.outputs.otlp == 'true'
+        run: |
+          echo "=== Disk Space ==="
+          df -h
+          echo "=== Memory Stats ==="
+          vm_stat
+          echo "=== Top Processes ==="
+          top -l 1 -n 10 -stats pid,command,mem
+
+      - name: Run OTLP iOS Unit Tests
+        run: yarn run ios:test:otlp
+        if: steps.changed_files.outputs.otlp == 'true'
+
+      - name: Upload Test Results (xcresult bundle)
+        if: always() && steps.changed_files.outputs.otlp == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-otlp-test-results
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceOTLPTests-*/Logs/Test/*.xcresult
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Check System Resources (After Tests)
+        if: always() && steps.changed_files.outputs.otlp == 'true'
+        run: |
+          echo "=== Disk Space ==="
+          df -h
+          echo "=== Memory Stats ==="
+          vm_stat
+          echo "=== DerivedData Size ==="
+          du -sh ~/Library/Developer/Xcode/DerivedData || echo "DerivedData not found"

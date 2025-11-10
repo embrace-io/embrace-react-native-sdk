@@ -21,7 +21,13 @@
     "test": "jest --maxWorkers=2",
     "android:test": "npx lerna run android:test",
     "ios:install": "npx lerna run ios:install",
-    "ios:test": "npx lerna run ios:test --concurrency=1"
+    "ios:install:core": "npx lerna run ios:install --scope=@embrace-io/react-native",
+    "ios:install:tracer-provider": "npx lerna run ios:install --scope=@embrace-io/react-native-tracer-provider",
+    "ios:install:otlp": "npx lerna run ios:install --scope=@embrace-io/react-native-otlp",
+    "ios:test": "npx lerna run ios:test --concurrency=1",
+    "ios:test:core": "npx lerna run ios:test --scope=@embrace-io/react-native",
+    "ios:test:tracer-provider": "npx lerna run ios:test --scope=@embrace-io/react-native-tracer-provider",
+    "ios:test:otlp": "npx lerna run ios:test --scope=@embrace-io/react-native-otlp"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

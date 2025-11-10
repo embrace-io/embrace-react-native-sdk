@@ -8,6 +8,14 @@ yarn install
 brew install cocoapods
 ```
 
+Notice that if you are using a different yarn version globally you could apply the required version (yarn@4.3.1 as mentioned in ./package.json through `packageManager`) just local to this project by running
+
+```bash
+corepack enable
+corepack prepare yarn@4.3.1 --activate
+corepack yarn install
+```
+
 ## Adding a new package
 
 Any new package under ./packages/ will get automatically picked up as a new Yarn workspace. The directory should include:
@@ -128,6 +136,8 @@ Try stopping and cleaning local services (in case there are unknown issues relat
   ./gradlew --stop  // stop daemons
   rm -rf ~/.gradle/caches/
   rm -rf .gradle/
+  rm -rf ~/.gradle/daemon/
+  rm -rf ~/.gradle/native/
   rm -rf app/build/
   ./gradlew build --stacktrace
 ```

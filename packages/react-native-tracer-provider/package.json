@@ -49,8 +49,9 @@
   "scripts": {
     "build": "tsc",
     "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detekt && ./gradlew :app:testDebugUnitTest && cd ../../",
-    "ios:test": "../../scripts/run-ios-tests.sh test-project/ios/RNEmbraceTracerProvider.xcworkspace RNEmbraceTracerProviderTests",
-    "ios:install": "cd test-project && yarn install && cd ios && pod install --repo-update && rm .xcode.env.local"
+    "ios:shared": "mkdir -p ./ios/common && cp -r ../../common/ios/* ./ios/common/",
+    "ios:test": "yarn run ios:shared && ../../scripts/run-ios-tests-no-coverage.sh test-project/ios/RNEmbraceTracerProvider.xcworkspace RNEmbraceTracerProviderTests",
+    "ios:install": "yarn run ios:shared && cd test-project && yarn install && cd ios && rm -rf ~/Library/Caches/CocoaPods && USE_FRAMEWORKS=dynamic pod install --repo-update && rm .xcode.env.local"
   },
   "peerDependencies": {
     "react-native": ">=0.56.0"
@@ -59,7 +60,7 @@
     "typescript": "^5.6.3"
   },
   "embrace": {
-    "iosVersion": "6.8.5",
+    "iosVersion": "6.14.1",
     "androidVersion": "7.9.2"
   }
 }

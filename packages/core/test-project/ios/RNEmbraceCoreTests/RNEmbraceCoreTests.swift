@@ -1,9 +1,7 @@
 import XCTest
 import EmbraceIO
-import EmbraceOTelInternal
 import OpenTelemetryApi
 import OpenTelemetrySdk
-import EmbraceCommonInternal
 
 @testable import RNEmbraceCore
 
@@ -20,29 +18,50 @@ class TestSpanExporter: SpanExporter {
     }
 
     func reset(explicitTimeout: TimeInterval?) {
-        exportedSpans.removeAll()
+        // Don't clear the array - the SDK might be holding references
     }
 
     func shutdown(explicitTimeout: TimeInterval?) {}
 }
 
 class TestLogExporter: LogRecordExporter {
-    var exportedLogs: [OpenTelemetrySdk.ReadableLogRecord] = []
+    private let queue = DispatchQueue(label: "TestLogExporter")
+    private var _exportedLogs: [OpenTelemetrySdk.ReadableLogRecord] = []
+
+    var exportedLogs: [OpenTelemetrySdk.ReadableLogRecord] {
+        queue.sync { _exportedLogs }
+    }
 
     func export(logRecords: [OpenTelemetrySdk.ReadableLogRecord], explicitTimeout: TimeInterval?) -> OpenTelemetrySdk.ExportResult {
-        exportedLogs.append(contentsOf: logRecords)
+        queue.sync {
+            _exportedLogs.append(contentsOf: logRecords)
+        }
         return OpenTelemetrySdk.ExportResult.success
     }
 
     func reset(explicitTimeout: TimeInterval?) {
-        exportedLogs.removeAll()
+        // Don't actually clear the array - the SDK might be holding references
+        // Tests will use getLogsSince() to get only new logs
+        queue.sync { }
     }
 
     func forceFlush(explicitTimeout: TimeInterval?) -> OpenTelemetrySdk.ExportResult {
+        // Actually wait for any pending operations to complete
+        queue.sync { }
         return OpenTelemetrySdk.ExportResult.success
     }
 
-    func shutdown(explicitTimeout: TimeInterval?) {}
+    func shutdown(explicitTimeout: TimeInterval?) {
+        // Don't clear - same reason as reset()
+        queue.sync { }
+    }
+
+    func getLogsSince(index: Int) -> [OpenTelemetrySdk.ReadableLogRecord] {
+        queue.sync {
+            guard index < _exportedLogs.count else { return [] }
+            return Array(_exportedLogs[index...])
+        }
+    }
 }
 
 class Promise {
@@ -54,8 +73,8 @@ class Promise {
     }
 
     func reject(a: String?, b: String?, c: Error?) {
-        rejectCalls.append(b!)
-    }
+      rejectCalls.append(b ?? "unknown error")
+  }
 
     func reset() {
         resolveCalls.removeAll()
@@ -73,6 +92,8 @@ class EmbraceManagerTests: XCTestCase {
     static var spanExporter: TestSpanExporter!
     var module: EmbraceManager!
     var promise: Promise!
+    var startingLogCount: Int = 0
+    var startingSpanCount: Int = 0
 
     override class func setUp() {
         super.setUp()
@@ -84,9 +105,7 @@ class EmbraceManagerTests: XCTestCase {
                 .setup( options: .init(
                     appId: "myApp",
                     // Set a fake endpoint for unit tests otherwise we'll end up sending actual payloads to Embrace
-                    endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null",
-                                                 developmentBaseURL: "http://localhost/dev/null",
-                                                 configBaseURL: "http://localhost/dev/null"),
+                    endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null", configBaseURL: "http://localhost/dev/null"),
                     export:
                         OpenTelemetryExport(
                             spanExporter: self.spanExporter,
@@ -95,7 +114,7 @@ class EmbraceManagerTests: XCTestCase {
                     )
                 )
                 .start()
-        } catch let error as EmbraceCore.Embrace {
+        } catch let error as Embrace {
             print(error)
         } catch {
             print(error.localizedDescription)
@@ -105,21 +124,47 @@ class EmbraceManagerTests: XCTestCase {
     override func setUp() async throws {
         promise = Promise()
         module = EmbraceManager()
-        EmbraceManagerTests.logExporter.reset(explicitTimeout: nil)
-        EmbraceManagerTests.spanExporter.reset(explicitTimeout: nil)
+        // Track starting counts instead of clearing
+        startingLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
+        startingSpanCount = EmbraceManagerTests.spanExporter.exportedSpans.count
     }
 
-    func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
-        try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-        return EmbraceManagerTests.logExporter.exportedLogs.filter { log in
-            log.severity != .debug &&
-            log.attributes["emb.type"]?.description != "sys.internal"
+    func getExportedLogs(expectedCount: Int? = nil, timeout: TimeInterval = 60.0) async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
+        let startTime = Date()
+        var filtered: [OpenTelemetrySdk.ReadableLogRecord] = []
+
+        // Poll for logs until we get the expected count or timeout
+        while Date().timeIntervalSince(startTime) < timeout {
+            let newLogs = EmbraceManagerTests.logExporter.getLogsSince(index: startingLogCount)
+            filtered = newLogs.filter { log in
+                log.severity != .debug &&
+                log.attributes["emb.type"]?.description != "sys.internal"
+            }
+
+            if let expected = expectedCount, filtered.count >= expected {
+                break
+            }
+
+            // If no expected count, wait the default time and return
+            if expectedCount == nil {
+                try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
+                break
+            }
+
+            // Short sleep between polls
+            try await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
         }
+
+        return filtered
     }
 
     func getExportedSpans() async throws -> [SpanData] {
         try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-        return EmbraceManagerTests.spanExporter.exportedSpans.filter { span in
+        // Only get spans since this test started
+        let allSpans = EmbraceManagerTests.spanExporter.exportedSpans
+        guard startingSpanCount < allSpans.count else { return [] }
+        let newSpans = Array(allSpans[startingSpanCount...])
+        return newSpans.filter { span in
             !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
         }
     }
@@ -174,45 +219,56 @@ class EmbraceManagerTests: XCTestCase {
 
         module.logHandledError("my handled error", stacktrace: "stacktrace as string", properties: NSDictionary(), resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs()
+        let exportedLogs = try await getExportedLogs(expectedCount: 1)
+
+        guard exportedLogs.count == 1 else {
+            XCTFail("Expected 1 exported log, got \(exportedLogs.count)")
+            return
+        }
 
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertEqual(exportedLogs.count, 1)
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my handled error")
 
-        XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "stacktrace as string")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]?.description, "stacktrace as string")
         // should not be present since the js one is added
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
 
-        XCTAssertNotNil(exportedLogs[0].attributes["session.id"]!.description)
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.exception_handling"]!.description, "handled")
+        XCTAssertNotNil(exportedLogs[0].attributes["session.id"]?.description)
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]?.description, "sys.log")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.state"]?.description, "foreground")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.exception_handling"]?.description, "handled")
     }
 
     func testLogUnhandledJSException() async throws {
         module.logUnhandledJSException("my unhandled exception", message: "unhandled message", type: "Error", stacktrace: "stacktrace as string", resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs()
+        let exportedLogs = try await getExportedLogs(expectedCount: 1)
+
+        guard exportedLogs.count == 1 else {
+            XCTFail("Expected 1 exported log, got \(exportedLogs.count)")
+            return
+        }
+
         XCTAssertEqual(promise.resolveCalls.count, 1)
         XCTAssertEqual(exportedLogs.count, 1)
 
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my unhandled exception")
 
-        XCTAssertNotNil(exportedLogs[0].attributes["session.id"]!.description)
+        XCTAssertNotNil(exportedLogs[0].attributes["session.id"]?.description)
 
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.ios.react_native_crash")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]?.description, "sys.ios.react_native_crash")
 
-        XCTAssertEqual(exportedLogs[0].attributes["emb.ios.react_native_crash.js_exception"]!.description, "stacktrace as string")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.ios.react_native_crash.js_exception"]?.description, "stacktrace as string")
         // should not be present since the js one is added
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
 
-        XCTAssertEqual(exportedLogs[0].attributes["emb.state"]!.description, "foreground")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.state"]?.description, "foreground")
 
-        XCTAssertEqual(exportedLogs[0].attributes["exception.message"]!.description, "unhandled message")
-        XCTAssertEqual(exportedLogs[0].attributes["exception.type"]!.description, "Error")
+        XCTAssertEqual(exportedLogs[0].attributes["exception.message"]?.description, "unhandled message")
+        XCTAssertEqual(exportedLogs[0].attributes["exception.type"]?.description, "Error")
         XCTAssertNotNil(exportedLogs[0].attributes["exception.id"])
     }
 
@@ -229,21 +285,27 @@ class EmbraceManagerTests: XCTestCase {
                                                    includeStacktrace: false,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs()
+        let exportedLogs = try await getExportedLogs(expectedCount: 2)
+
+        guard exportedLogs.count == 2 else {
+            XCTFail("Expected 2 exported logs, got \(exportedLogs.count)")
+            return
+        }
+
         XCTAssertEqual(promise.resolveCalls.count, 2)
         XCTAssertEqual(exportedLogs.count, 2)
 
         // 1) just one stacktrace
         XCTAssertEqual(exportedLogs[0].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[0].body?.description, "my log message")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]?.description, "sys.log")
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"]) // empty js stacktrace
         XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"]) // since the JS stacktrace is empty and `includeStacktrace` is `true` it will add the Native one
 
         // 2) no stacktrace at all
         XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[1].body?.description, "my log message without stacktrace")
-        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]?.description, "sys.log")
         XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.rn"])
         XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.ios"]) // even when the JS is empty since `includeStacktrace` is `false` it won't include stacktraces
     }
@@ -273,34 +335,40 @@ class EmbraceManagerTests: XCTestCase {
                                                    includeStacktrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs()
+        let exportedLogs = try await getExportedLogs(expectedCount: 3)
+
+        guard exportedLogs.count == 3 else {
+            XCTFail("Expected 3 exported logs, got \(exportedLogs.count)")
+            return
+        }
+
         XCTAssertEqual(promise.resolveCalls.count, 3)
         XCTAssertEqual(exportedLogs.count, 3)
 
         // error log
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my error log")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
-        XCTAssertEqual(exportedLogs[0].attributes["prop1"]!.description, "foo")
-        XCTAssertEqual(exportedLogs[0].attributes["prop2"]!.description, "bar")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]?.description, "sys.log")
+        XCTAssertEqual(exportedLogs[0].attributes["prop1"]?.description, "foo")
+        XCTAssertEqual(exportedLogs[0].attributes["prop2"]?.description, "bar")
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
         XCTAssertNotNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
 
         // warning log
         XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[1].body?.description, "my warning log")
-        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]!.description, "sys.log")
-        XCTAssertEqual(exportedLogs[1].attributes["prop1"]!.description, "foo")
-        XCTAssertEqual(exportedLogs[1].attributes["prop2"]!.description, "bar")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]?.description, "sys.log")
+        XCTAssertEqual(exportedLogs[1].attributes["prop1"]?.description, "foo")
+        XCTAssertEqual(exportedLogs[1].attributes["prop2"]?.description, "bar")
         XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.rn"])
         XCTAssertNotNil(exportedLogs[1].attributes["emb.stacktrace.ios"])
 
         // info log
         XCTAssertEqual(exportedLogs[2].severity?.description, "INFO")
         XCTAssertEqual(exportedLogs[2].body?.description, "my info log")
-        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]!.description, "sys.log")
-        XCTAssertEqual(exportedLogs[2].attributes["prop1"]!.description, "foo")
-        XCTAssertEqual(exportedLogs[2].attributes["prop2"]!.description, "bar")
+        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]?.description, "sys.log")
+        XCTAssertEqual(exportedLogs[2].attributes["prop1"]?.description, "foo")
+        XCTAssertEqual(exportedLogs[2].attributes["prop2"]?.description, "bar")
         // `info` logs should not add stacktrace even when the `includeStacktrace` boolean is passed as true
         XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.rn"])
         XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.ios"])
@@ -322,28 +390,34 @@ class EmbraceManagerTests: XCTestCase {
                                                    includeStacktrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs()
+        let exportedLogs = try await getExportedLogs(expectedCount: 3)
+
+        guard exportedLogs.count == 3 else {
+            XCTFail("Expected 3 exported logs, got \(exportedLogs.count)")
+            return
+        }
+
         XCTAssertEqual(promise.resolveCalls.count, 3)
         XCTAssertEqual(exportedLogs.count, 3)
 
         // error
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my error message")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]!.description, "my JS stack trace")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]?.description, "sys.log")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.stacktrace.rn"]?.description, "my JS stack trace")
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
 
         // warning
         XCTAssertEqual(exportedLogs[1].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[1].body?.description, "my warning message")
-        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]!.description, "sys.log")
-        XCTAssertEqual(exportedLogs[1].attributes["emb.stacktrace.rn"]!.description, "my JS stack trace")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.type"]?.description, "sys.log")
+        XCTAssertEqual(exportedLogs[1].attributes["emb.stacktrace.rn"]?.description, "my JS stack trace")
         XCTAssertNil(exportedLogs[1].attributes["emb.stacktrace.ios"])
 
         // info
         XCTAssertEqual(exportedLogs[2].severity?.description, "INFO")
         XCTAssertEqual(exportedLogs[2].body?.description, "my info message")
-        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]?.description, "sys.log")
         // `info` logs should not add stacktrace even when the `includeStacktrace` boolean is passed as true
         XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.rn"])
         XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.ios"])
@@ -380,14 +454,20 @@ class EmbraceManagerTests: XCTestCase {
                                                    includeStacktrace: false,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs()
+        let exportedLogs = try await getExportedLogs(expectedCount: 6)
+
+        guard exportedLogs.count == 6 else {
+            XCTFail("Expected 6 exported logs, got \(exportedLogs.count)")
+            return
+        }
+
         XCTAssertEqual(promise.resolveCalls.count, 6)
         XCTAssertEqual(exportedLogs.count, 6)
 
         // error log passing js stacktrace
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")
         XCTAssertEqual(exportedLogs[0].body?.description, "my error message")
-        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[0].attributes["emb.type"]?.description, "sys.log")
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.rn"])
         XCTAssertNil(exportedLogs[0].attributes["emb.stacktrace.ios"])
         // error log passing empty stacktrace
@@ -397,7 +477,7 @@ class EmbraceManagerTests: XCTestCase {
         // warning log passing js stacktrace
         XCTAssertEqual(exportedLogs[2].severity?.description, "WARN")
         XCTAssertEqual(exportedLogs[2].body?.description, "my warning message")
-        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[2].attributes["emb.type"]?.description, "sys.log")
         XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.rn"])
         XCTAssertNil(exportedLogs[2].attributes["emb.stacktrace.ios"])
         // warning log passing empty stacktrace
@@ -407,7 +487,7 @@ class EmbraceManagerTests: XCTestCase {
         // info log passing js stacktrace
         XCTAssertEqual(exportedLogs[4].severity?.description, "INFO")
         XCTAssertEqual(exportedLogs[4].body?.description, "my info message")
-        XCTAssertEqual(exportedLogs[4].attributes["emb.type"]!.description, "sys.log")
+        XCTAssertEqual(exportedLogs[4].attributes["emb.type"]?.description, "sys.log")
         XCTAssertNil(exportedLogs[4].attributes["emb.stacktrace.rn"])
         XCTAssertNil(exportedLogs[4].attributes["emb.stacktrace.ios"])
         // info log  passing empty stacktrace
@@ -419,7 +499,17 @@ class EmbraceManagerTests: XCTestCase {
         module.logNetworkRequest("https://otest.com/v1/products", httpMethod: "get", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: 1000, bytesReceived: 2000, statusCode: 200, resolver: promise.resolve, rejecter: promise.reject)
 
         XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
+
+        guard promise.resolveCalls.count == 1 else {
+            XCTFail("Expected 1 resolve call, got \(promise.resolveCalls.count)")
+            return
+        }
+
+        guard let boolValue = promise.resolveCalls.first as? Bool else {
+            XCTFail("Expected Bool value in resolveCalls")
+            return
+        }
+        XCTAssertTrue(boolValue)
 
         module.logNetworkRequest("https://otest.com/", httpMethod: "POST", startInMillis: 1723221815889, endInMillis: 1723221815891, bytesSent: -1, bytesReceived: -2, statusCode: -1, resolver: promise.resolve, rejecter: promise.reject)
 
@@ -427,21 +517,26 @@ class EmbraceManagerTests: XCTestCase {
 
         let exportedSpans = try await getExportedSpans()
 
+        guard exportedSpans.count == 3 else {
+            XCTFail("Expected 3 exported spans, got \(exportedSpans.count)")
+            return
+        }
+
         XCTAssertEqual(exportedSpans[0].name, "emb-GET /v1/products")
         XCTAssertEqual(exportedSpans[0].startTime, Date(timeIntervalSince1970: 1723221815.889))
         XCTAssertEqual(exportedSpans[0].endTime, Date(timeIntervalSince1970: 1723221815.891))
-        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf.network_request")
-        XCTAssertEqual(exportedSpans[0].attributes["url.full"]!.description, "https://otest.com/v1/products")
-        XCTAssertEqual(exportedSpans[0].attributes["http.request.method"]!.description, "GET")
-        XCTAssertEqual(exportedSpans[0].attributes["http.response.body.size"]!.description, "2000")
-        XCTAssertEqual(exportedSpans[0].attributes["http.request.body.size"]!.description, "1000")
-        XCTAssertEqual(exportedSpans[0].attributes["http.response.status_code"]!.description, "200")
+        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]?.description, "perf.network_request")
+        XCTAssertEqual(exportedSpans[0].attributes["url.full"]?.description, "https://otest.com/v1/products")
+        XCTAssertEqual(exportedSpans[0].attributes["http.request.method"]?.description, "GET")
+        XCTAssertEqual(exportedSpans[0].attributes["http.response.body.size"]?.description, "2000")
+        XCTAssertEqual(exportedSpans[0].attributes["http.request.body.size"]?.description, "1000")
+        XCTAssertEqual(exportedSpans[0].attributes["http.response.status_code"]?.description, "200")
         XCTAssertNotNil(exportedSpans[0].attributes["emb.w3c_traceparent"])
 
         XCTAssertEqual(exportedSpans[1].name, "emb-POST")
         XCTAssertEqual(exportedSpans[1].startTime, Date(timeIntervalSince1970: 1723221815.889))
         XCTAssertEqual(exportedSpans[1].endTime, Date(timeIntervalSince1970: 1723221815.891))
-        XCTAssertEqual(exportedSpans[1].attributes["url.full"]!.description, "https://otest.com/")
+        XCTAssertEqual(exportedSpans[1].attributes["url.full"]?.description, "https://otest.com/")
         XCTAssertNotNil(exportedSpans[1].attributes["emb.w3c_traceparent"])
 
         // negative values should not be added
@@ -452,8 +547,8 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(exportedSpans[2].name, "emb-POST /v2/error")
         XCTAssertEqual(exportedSpans[2].startTime, Date(timeIntervalSince1970: 1723221815.889))
         XCTAssertEqual(exportedSpans[2].endTime, Date(timeIntervalSince1970: 1723221815.891))
-        XCTAssertEqual(exportedSpans[2].attributes["url.full"]!.description, "https://otest.com/v2/error")
-        XCTAssertEqual(exportedSpans[2].attributes["http.response.status_code"]!.description, "500")
+        XCTAssertEqual(exportedSpans[2].attributes["url.full"]?.description, "https://otest.com/v2/error")
+        XCTAssertEqual(exportedSpans[2].attributes["http.response.status_code"]?.description, "500")
         XCTAssertEqual(exportedSpans[2].status, Status.ok)
         XCTAssertNotNil(exportedSpans[2].attributes["emb.w3c_traceparent"])
     }
@@ -462,16 +557,32 @@ class EmbraceManagerTests: XCTestCase {
         module.logNetworkClientError("https://otest.com/v1/products", httpMethod: "get", startInMillis: 1723221815889, endInMillis: 1723221815891, errorType: "custom error", errorMessage: "this is my error", resolver: promise.resolve, rejecter: promise.reject)
 
         XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
+
+        guard promise.resolveCalls.count == 1 else {
+            XCTFail("Expected 1 resolve call, got \(promise.resolveCalls.count)")
+            return
+        }
+
+        // XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
+        guard let boolValue = promise.resolveCalls.first as? Bool else {
+            XCTFail("Expected Bool value in resolveCalls")
+            return
+        }
+        XCTAssertTrue(boolValue)
 
         let exportedSpans = try await getExportedSpans()
 
+        guard exportedSpans.count == 1 else {
+            XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
+            return
+        }
+
         XCTAssertEqual(exportedSpans[0].name, "emb-GET /v1/products")
-        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]!.description, "perf.network_request")
-        XCTAssertEqual(exportedSpans[0].attributes["url.full"]!.description, "https://otest.com/v1/products")
-        XCTAssertEqual(exportedSpans[0].attributes["http.request.method"]!.description, "GET")
-        XCTAssertEqual(exportedSpans[0].attributes["error.message"]!.description, "this is my error")
-        XCTAssertEqual(exportedSpans[0].attributes["error.type"]!.description, "custom error")
+        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]?.description, "perf.network_request")
+        XCTAssertEqual(exportedSpans[0].attributes["url.full"]?.description, "https://otest.com/v1/products")
+        XCTAssertEqual(exportedSpans[0].attributes["http.request.method"]?.description, "GET")
+        XCTAssertEqual(exportedSpans[0].attributes["error.message"]?.description, "this is my error")
+        XCTAssertEqual(exportedSpans[0].attributes["error.type"]?.description, "custom error")
         XCTAssertNotNil(exportedSpans[0].attributes["emb.w3c_traceparent"])
     }
 }
@@ -504,46 +615,46 @@ class ComputeBundleIDTests: XCTestCase {
        }
     }
 
-    func testNothingCached() {
-        let fileURL = try? writeTempFile(contents: "console.log('my js bundle');")
-        let bundleID = try? computeBundleID(path: fileURL!.path())
-        XCTAssertEqual(bundleID?.id, "29da484ad2a259e9de64a991cfec7f10")
-        XCTAssertFalse(bundleID!.cached)
+    func testNothingCached() throws {
+        let fileURL = try writeTempFile(contents: "console.log('my js bundle');")
+        let bundleID = try computeBundleID(path: fileURL.path())
+        XCTAssertEqual(bundleID.id, "29da484ad2a259e9de64a991cfec7f10")
+        XCTAssertFalse(bundleID.cached)
     }
 
-    func testDifferentPath() {
-        let fileURL = try? writeTempFile(contents: "console.log('my js bundle');")
-        var bundleID = try? computeBundleID(path: fileURL!.path())
-        XCTAssertEqual(bundleID?.id, "29da484ad2a259e9de64a991cfec7f10")
-        XCTAssertFalse(bundleID!.cached)
+    func testDifferentPath() throws {
+        let fileURL = try writeTempFile(contents: "console.log('my js bundle');")
+        var bundleID = try computeBundleID(path: fileURL.path())
+        XCTAssertEqual(bundleID.id, "29da484ad2a259e9de64a991cfec7f10")
+        XCTAssertFalse(bundleID.cached)
 
-        let otherURL = try? writeTempFile(contents: "console.log('my other bundle');")
-        bundleID = try? computeBundleID(path: otherURL!.path())
-        XCTAssertEqual(bundleID?.id, "9a7ef24cdaf5cdb927eab12cb0bfd30d")
-        XCTAssertFalse(bundleID!.cached)
+        let otherURL = try writeTempFile(contents: "console.log('my other bundle');")
+        bundleID = try computeBundleID(path: otherURL.path())
+        XCTAssertEqual(bundleID.id, "9a7ef24cdaf5cdb927eab12cb0bfd30d")
+        XCTAssertFalse(bundleID.cached)
     }
 
-    func testSamePathNotModified() {
-        let fileURL = try? writeTempFile(contents: "console.log('my js bundle');")
-        var bundleID = try? computeBundleID(path: fileURL!.path())
-        XCTAssertEqual(bundleID?.id, "29da484ad2a259e9de64a991cfec7f10")
-        XCTAssertFalse(bundleID!.cached)
+    func testSamePathNotModified() throws {
+        let fileURL = try writeTempFile(contents: "console.log('my js bundle');")
+        var bundleID = try computeBundleID(path: fileURL.path())
+        XCTAssertEqual(bundleID.id, "29da484ad2a259e9de64a991cfec7f10")
+        XCTAssertFalse(bundleID.cached)
 
-        bundleID = try? computeBundleID(path: fileURL!.path())
-        XCTAssertEqual(bundleID?.id, "29da484ad2a259e9de64a991cfec7f10")
-        XCTAssertTrue(bundleID!.cached)
+        bundleID = try computeBundleID(path: fileURL.path())
+        XCTAssertEqual(bundleID.id, "29da484ad2a259e9de64a991cfec7f10")
+        XCTAssertTrue(bundleID.cached)
     }
 
-    func testSamePathModified() {
-        let fileURL = try? writeTempFile(contents: "console.log('my js bundle');")
-        var bundleID = try? computeBundleID(path: fileURL!.path())
-        XCTAssertEqual(bundleID?.id, "29da484ad2a259e9de64a991cfec7f10")
-        XCTAssertFalse(bundleID!.cached)
+    func testSamePathModified() throws {
+        let fileURL = try writeTempFile(contents: "console.log('my js bundle');")
+        var bundleID = try computeBundleID(path: fileURL.path())
+        XCTAssertEqual(bundleID.id, "29da484ad2a259e9de64a991cfec7f10")
+        XCTAssertFalse(bundleID.cached)
 
-        let sameURL = try? writeTempFile(contents: "console.log('my other bundle');", url: fileURL)
+        let sameURL = try writeTempFile(contents: "console.log('my other bundle');", url: fileURL)
         XCTAssertEqual(fileURL, sameURL)
-        bundleID = try? computeBundleID(path: sameURL!.path())
-        XCTAssertEqual(bundleID?.id, "9a7ef24cdaf5cdb927eab12cb0bfd30d")
-        XCTAssertFalse(bundleID!.cached)
+        bundleID = try computeBundleID(path: sameURL.path())
+        XCTAssertEqual(bundleID.id, "9a7ef24cdaf5cdb927eab12cb0bfd30d")
+        XCTAssertFalse(bundleID.cached)
     }
 }
