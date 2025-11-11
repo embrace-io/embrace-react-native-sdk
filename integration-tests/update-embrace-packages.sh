@@ -145,5 +145,5 @@ if [ -f "$test_app/patch-expo-file-system.sh" ]; then
   echo "======================================="
   echo "Applying expo-file-system Kotlin patch"
   echo "======================================="
-  bash $test_app/patch-expo-file-system.sh
+  (cd $test_app && bash ./patch-expo-file-system.sh)
 fi
