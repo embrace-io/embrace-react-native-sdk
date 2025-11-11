@@ -139,3 +139,11 @@ if [ "$skip_test_harness" = false ]; then
   echo "===================================="
   npm --prefix $test_app add ./artifacts/embrace-io-react-native-test-harness-local.tgz
 fi
+
+# Apply expo-file-system patch if the script exists (for expo-rn74 template)
+if [ -f "$test_app/patch-expo-file-system.sh" ]; then
+  echo "======================================="
+  echo "Applying expo-file-system Kotlin patch"
+  echo "======================================="
+  bash $test_app/patch-expo-file-system.sh
+fi
