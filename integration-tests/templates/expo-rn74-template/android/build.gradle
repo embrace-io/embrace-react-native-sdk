@@ -39,4 +39,15 @@ allprojects {
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
     }
+
+    configurations.all {
+        resolutionStrategy {
+            // Force Kotlin stdlib version to match compiler (1.9.23) to avoid metadata version conflicts
+            force("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.23")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23")
+            // Force okio version compatible with Kotlin 1.9.x (3.9.0 is last version built with Kotlin 1.9.x)
+            force("com.squareup.okio:okio:3.9.0")
+        }
+    }
 }
