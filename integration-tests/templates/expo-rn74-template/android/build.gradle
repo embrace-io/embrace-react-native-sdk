@@ -7,7 +7,9 @@ buildscript {
         minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '24')
         compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '34')
         targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34')
-        kotlinVersion = findProperty('android.kotlinVersion') ?: '1.9.23'
+        kotlinVersion = findProperty('android.kotlinVersion') ?: '1.9.24'
+        // Java version for Gradle/AGP compatibility
+        javaVersion = JavaVersion.VERSION_17
 
         ndkVersion = "26.1.10909125"
     }
@@ -18,7 +20,7 @@ buildscript {
     dependencies {
         classpath('com.android.tools.build:gradle:8.3.0') // Minimum AGP version to avoid desugaring issues
         classpath('com.facebook.react:react-native-gradle-plugin')
-        classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
     }
 }
 
@@ -42,10 +44,10 @@ allprojects {
 
     configurations.all {
         resolutionStrategy {
-            // Force Kotlin stdlib version to match compiler (1.9.23) to avoid metadata version conflicts
-            force("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
-            force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.23")
-            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23")
+            // Force Kotlin stdlib version to match compiler (1.9.24) to avoid metadata version conflicts
+            force("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24")
             // Force okio version compatible with Kotlin 1.9.x (3.9.0 is last version built with Kotlin 1.9.x)
             force("com.squareup.okio:okio:3.9.0")
         }
