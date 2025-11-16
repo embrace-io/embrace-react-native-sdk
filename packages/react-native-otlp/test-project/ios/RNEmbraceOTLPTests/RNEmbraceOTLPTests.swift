@@ -1,10 +1,8 @@
 import React
 import XCTest
 import EmbraceIO
-import EmbraceOTelInternal
 import OpenTelemetryApi
 import OpenTelemetrySdk
-import EmbraceCommonInternal
 
 @testable import RNEmbraceOTLP
 
@@ -17,7 +15,7 @@ class Promise {
     }
 
     func reject(a: String?, b: String?, c: Error?) {
-        rejectCalls.append(b!)
+        rejectCalls.append(b ?? "unknown error")
     }
 
     func reset() {

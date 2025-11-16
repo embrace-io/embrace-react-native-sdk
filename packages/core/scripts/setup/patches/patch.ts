@@ -35,7 +35,7 @@ export const EMBRACE_IMPORT_KOTLIN =
 
 export const EMBRACE_INIT_KOTLIN = "Embrace.getInstance().start(this)";
 
-const logger = new EmbraceLogger(console);
+const LOGGER = new EmbraceLogger(console);
 
 const PATCH_IOS_SWIFT_APPDELEGATE: IPatchDefinition = {
   fileName: MAIN_CLASS_BY_LANGUAGE.swift,
@@ -49,7 +49,7 @@ const PATCH_IOS_SWIFT_APPDELEGATE: IPatchDefinition = {
   ],
   findFileFunction: (language: SUPPORTED_LANGUAGES, projectName?: string) => {
     if (!projectName) {
-      logger.warn("The project name is required");
+      LOGGER.warn("The project name is required");
       return undefined;
     }
     return getAppDelegateByIOSLanguage(projectName, language as IOS_LANGUAGE);
@@ -74,9 +74,10 @@ const PATCH_IOS_OBJECTIVEC_APPDELEGATE: IPatchDefinition = {
   ],
   findFileFunction: (language: SUPPORTED_LANGUAGES, projectName?: string) => {
     if (!projectName) {
-      logger.warn("The project name is required");
+      LOGGER.warn("The project name is required");
       return undefined;
     }
+
     return getAppDelegateByIOSLanguage(projectName, language as IOS_LANGUAGE);
   },
 };
@@ -100,6 +101,7 @@ const PATCH_ANDROID_KOTLIN_MAIN_ACTIVITTY: IPatchDefinition = {
   findFileFunction: (language: SUPPORTED_LANGUAGES) =>
     getMainApplicationPatchable(language as ANDROID_LANGUAGE),
 };
+
 const PATCH_ANDROID_JAVA_MAIN_ACTIVITTY: IPatchDefinition = {
   fileName: MAIN_CLASS_BY_LANGUAGE.java,
   textsToAdd: [
@@ -178,14 +180,15 @@ const patch = (
   const patchDefinition = SUPPORTED_PATCHES[language];
 
   if (patchDefinition === undefined) {
-    return logger.warn("This language is not supported");
+    return LOGGER.warn("This language is not supported");
   }
+
   const {fileName, textsToAdd, findFileFunction} = patchDefinition;
 
   const file = findFileFunction(language, projectName);
 
   if (!file) {
-    return logger.warn("The file to be patched not found");
+    return LOGGER.warn("The file to be patched not found");
   }
 
   const result = textsToAdd.map(item => {
@@ -215,6 +218,7 @@ const patch = (
         fileName,
       );
     }
+
     if (order === "before") {
       return addLineBeforeToTextInFile(
         file,
@@ -224,10 +228,13 @@ const patch = (
       );
     }
   });
+
   const hasToPatch = result.some(item => item);
+
   if (hasToPatch) {
     file.patch();
   }
+
   return hasToPatch;
 };
 

@@ -1,4 +1,9 @@
-import {EMBRACE_IMPORT_OBJECTIVEC, EMBRACE_INIT_OBJECTIVEC} from "../util/ios";
+import Wizard from "../util/wizard";
+import {
+  EMBR_RUN_SCRIPT,
+  EMBRACE_IMPORT_OBJECTIVEC,
+  EMBRACE_INIT_OBJECTIVEC,
+} from "../util/ios";
 import {
   EMBRACE_IMPORT_OBJECTIVEC_5X,
   EMBRACE_IMPORT_SWIFT_5X,
@@ -10,6 +15,13 @@ import {EMBRACE_INIT_SWIFT} from "../setup/patches/patch";
 const fs = require("fs");
 
 jest.useFakeTimers();
+
+// avoiding real logs in unit tests
+beforeAll(() => {
+  jest.spyOn(console, "log").mockImplementation(() => {});
+  jest.spyOn(console, "error").mockImplementation(() => {});
+  jest.spyOn(console, "warn").mockImplementation(() => {});
+});
 
 beforeEach(() => {
   jest.clearAllMocks().resetModules();
@@ -24,6 +36,10 @@ const copyMock = (from: string, to: string) => {
 };
 
 describe("Uninstall Script iOS", () => {
+  jest
+    .spyOn(Wizard.prototype, "fieldValueList")
+    .mockResolvedValueOnce(["t3st4", {name: "io.embrace.testapp"}]);
+
   test("Remove Embrace From Podfile", async () => {
     jest.mock("glob", () => ({
       sync: () => ["./packages/core/scripts/__tests__/__mocks__/ios/Podfile"],
@@ -50,8 +66,32 @@ describe("Uninstall Script iOS", () => {
         "react-native": "0.0.0",
       },
     };
+
     await patchPodfile(mockPackageJson);
   });
+
+  test("Remove KSCrash from Podfile", async () => {
+    jest.mock("glob", () => ({
+      sync: () => ["./packages/core/scripts/__tests__/__mocks__/ios/Podfile"],
+    }));
+
+    jest.mock("semver/functions/gte", () => () => false);
+    jest.mock(
+      "../../../../../../package.json",
+      () => ({
+        name: "test",
+      }),
+      {virtual: true},
+    );
+    const {removeEmbraceLinkFromFile} = require("../setup/uninstall");
+
+    const shouldUnpatch = await removeEmbraceLinkFromFile("ksCrashPodImport");
+    expect(shouldUnpatch).toBe(true);
+
+    const {patchPodFileWithKSCrash} = require("../setup/ios");
+    await patchPodFileWithKSCrash();
+  });
+
   test("Remove Embrace From Xcode", async () => {
     const tmp = "./packages/core/scripts/__tests__/tmp/";
     const xcodeProj = `${tmp}/removeTest.xcodeproj`;
@@ -86,22 +126,24 @@ describe("Uninstall Script iOS", () => {
 
     const xcode = await xcodePatchable(packageJsonMock);
 
-    expect(!!xcode.findPhase("EmbraceIO")).toBe(true);
+    expect(!!xcode.findPhase(EMBR_RUN_SCRIPT)).toBe(true);
     expect(!!xcode.findPhase("SOURCEMAP_FILE")).toBe(true);
 
     const {removeEmbraceFromXcode} = require("../setup/uninstall");
 
-    const result = await removeEmbraceFromXcode();
-    expect(result.includes("EmbraceIO")).toBe(false);
+    const wizard = new Wizard();
+    const result = await removeEmbraceFromXcode(wizard);
+    expect(result.includes(EMBR_RUN_SCRIPT)).toBe(false);
     expect(result.includes("SOURCEMAP_FILE")).toBe(false);
 
     xcode.patch();
 
     const xcodeAfterPatch = await xcodePatchable(packageJsonMock);
 
-    expect(!!xcodeAfterPatch.findPhase("EmbraceIO")).toBe(true);
+    expect(!!xcodeAfterPatch.findPhase(EMBR_RUN_SCRIPT)).toBe(true);
     expect(!!xcodeAfterPatch.findPhase("SOURCEMAP_FILE")).toBe(true);
   });
+
   test("Unlink Embrace From AppDelegate.mm - TEST FAILS", async () => {
     jest.mock("glob", () => ({
       sync: () => [

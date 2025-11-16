@@ -1,11 +1,11 @@
 const fs = require("fs");
 
-export interface Patchable {
+interface Patchable {
   patch: () => void;
   path: string;
 }
 
-export interface FileUpdatable extends Patchable {
+interface FileUpdatable extends Patchable {
   contents: string;
   addBefore: (line: string | RegExp, add: string) => void;
   addAfter: (line: string | RegExp, add: string) => void;
@@ -15,7 +15,7 @@ export interface FileUpdatable extends Patchable {
   deleteLine: (line: string | RegExp) => void;
 }
 
-export const patchFiles = (
+const patchFiles = async (
   ...files: Array<() => Promise<Patchable>>
 ): Promise<void> => {
   return chainPromises(...files).then((patchables: Patchable[]) => {
@@ -26,29 +26,27 @@ export const patchFiles = (
 const chainPromises = (
   ...promises: Array<() => Promise<any>>
 ): Promise<any[]> =>
-  promises.reduce(
-    (prev: Promise<any>, cur: () => Promise<any>) =>
-      prev.then(prevRes => cur().then(curRes => [...prevRes, curRes])),
-    Promise.resolve([]),
-  );
+  promises.reduce(async (prev: Promise<any>, cur: () => Promise<any>) => {
+    return prev.then(prevRes => cur().then(curRes => [...prevRes, curRes]));
+  }, Promise.resolve([]));
 
-export const NoopFile = {
+const NoopFile = {
   path: "",
   contents: "",
   patch: (): void => {},
   hasLine: (_: string) => false,
-  getPaddingFromString: (searchString: string) => "",
-  getPaddingAfterStringToTheNextString: (searchString: RegExp) => "",
-  addBefore: (line: string, add: string) => {},
-  addAfter: (line: string, add: string) => {},
-  deleteLine: (line: string) => {},
+  getPaddingFromString: (_searchString: string) => "",
+  getPaddingAfterStringToTheNextString: (_searchString: RegExp) => "",
+  addBefore: (_line: string, _add: string) => {},
+  addAfter: (_line: string, _add: string) => {},
+  deleteLine: (_line: string) => {},
 };
 
 class FileContents implements FileUpdatable {
   public contents: string;
   public path: string;
 
-  constructor(path: string = "") {
+  constructor(path = "") {
     this.path = path;
     this.contents = fs.readFileSync(path, "utf8");
   }
@@ -74,6 +72,7 @@ class FileContents implements FileUpdatable {
     if (!match) {
       return "";
     }
+
     const index = match.index;
 
     const nextLineBreakIndex = this.contents.indexOf("\n", index);
@@ -97,6 +96,7 @@ class FileContents implements FileUpdatable {
     if (spacesBetween) {
       return spacesBetween[0];
     }
+
     return "";
   }
 
@@ -123,14 +123,17 @@ class FileContents implements FileUpdatable {
         if (matches.length === 0) {
           return;
         }
+
         // If regex starts with space matcher, use space.
         if (line.toString().match(/^\/\(\\s\+\)/)) {
           space = matches[1];
         }
+
         if (matches[0]) {
           replaceWith = matches[0];
         }
       }
+
       this.contents = this.contents.replace(
         line,
         `${replaceWith}${space}${add}`,
@@ -149,6 +152,12 @@ class FileContents implements FileUpdatable {
   }
 }
 
-export const getFileContents = (path: string): FileUpdatable => {
-  return new FileContents(path);
+const getFileContents = (path: string): FileUpdatable => new FileContents(path);
+
+export {
+  type Patchable,
+  type FileUpdatable,
+  patchFiles,
+  NoopFile,
+  getFileContents,
 };

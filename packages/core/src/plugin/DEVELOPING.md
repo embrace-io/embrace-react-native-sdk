@@ -13,8 +13,7 @@ npx create-expo <app-path> --no-install  --template ./templates/expo-rn74-prebui
 cd <app-path>
 ./test-plugin.sh <path>/embrace-react-native-sdk
 ```
-Use `../../integration-tests/expo-app-with-prebuild` to test
-the behaviour of the plugin in an actual app.
+Use `../../integration-tests/expo-app-with-prebuild` to test the behaviour of the plugin in an actual app.
 
 NOTE: because we end up with `package.json` in `lib/` when building this package the [resolver](https://github.com/expo/expo/blob/814867fd9d0adbd56580eb09be1e81134bb7466e/packages/%40expo/config-plugins/src/utils/plugin-resolver.ts)
 used by @expo/config-plugins gets confused and thinks that is the module root so we need to make sure `app.plugin.js`

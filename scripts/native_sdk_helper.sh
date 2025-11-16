@@ -28,28 +28,32 @@ fi
 
 if [[ $action == "set" ]]; then
   if [[ $(uname) == "Darwin" ]]; then
-    SED=gsed
+    SED="sed -i''"
   else
-    SED=sed
+    SED="sed -i"
   fi
 
   # Example: https://github.com/embrace-io/embrace-react-native-sdk/pull/535
   if [[ $platform == "android" ]]; then
-    $SED -i "s/androidVersion: \"[^\"]*\"/androidVersion: \"${version}\"/" yarn.config.cjs
+    $SED "s/androidVersion: \"[^\"]*\"/androidVersion: \"${version}\"/" yarn.config.cjs
   fi
 
   # Example: https://github.com/embrace-io/embrace-react-native-sdk/pull/474
   if [[ $platform == "apple" ]]; then
-    $SED -i "s/iosVersion: \"[^\"]*\"/iosVersion: \"${version}\"/" yarn.config.cjs
+    $SED "s/iosVersion: \"[^\"]*\"/iosVersion: \"${version}\"/" yarn.config.cjs
   fi
 
+  echo "::group::git diff" && git diff; echo "::endgroup::"
+
   # Update packages/*/package.json
-  corepack enable
-  yarn constraints --fix
-  yarn build
+  echo "::group::corepack enable" && corepack enable; echo "::endgroup::"
+  echo "::group::yarn install" && yarn install; echo "::endgroup::"
+  echo "::group::yarn constraints --fix" && yarn constraints --fix; echo "::endgroup::"
+  echo "::group::yarn build" && yarn build; echo "::endgroup::"
 
   # Update packages/*/*/*/Podfile.lock
   if [[ $platform == "apple" ]]; then
-    yarn ios:install
+    echo "::group::brew install cocoapods" && brew install cocoapods; echo "::endgroup::"
+    echo "::group::yarn ios:install" && yarn ios:install; echo "::endgroup::"
   fi
 fi
