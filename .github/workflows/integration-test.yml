@@ -14,16 +14,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [22.x]
-        jdk-version: ["17"]
-        test-app:
-          [expo-rn74, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
+        test-app: [expo-rn74, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
         platform: [android, ios]
 
-    runs-on: ${{ matrix.platform == 'ios' && 'macos-14' || 'ubuntu-latest' }}
-
-    env:
-      NO_FLIPPER: 1
+    runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
 
     steps:
       - name: Checkout code
@@ -31,10 +25,9 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install Node (${{ matrix.node-version }})
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: ".node-version"
           cache: "npm"
 
       - name: Enables corepack
@@ -43,11 +36,10 @@ jobs:
       - name: Install Root Node Modules
         run: yarn install
 
-      - name: Install JDK ${{ matrix.jdk-version }}
-        uses: actions/setup-java@v5
+      - uses: actions/setup-java@v5
         with:
           distribution: "adopt"
-          java-version: ${{ matrix.jdk-version }}
+          java-version-file: ".java-version"
         if: matrix.platform == 'android'
 
       - name: Install Integration Tests Node Modules

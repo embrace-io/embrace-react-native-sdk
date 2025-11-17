@@ -10,24 +10,17 @@ permissions:
   pull-requests: read
 
 jobs:
-  lint:
-    strategy:
-      matrix:
-        node-version: [18.x]
-        os: [macos-latest]
-
-    runs-on: ${{ matrix.os }}
-
+  build:
+    runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      - name: Install Node (${{ matrix.node-version }})
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: ".node-version"
           cache: "npm"
 
       - name: Enables corepack
@@ -53,23 +46,16 @@ jobs:
         if: steps.changed_files.outputs.ios == 'true'
 
   test-core:
-    strategy:
-      matrix:
-        node-version: [18.x]
-        os: [macos-latest]
-
-    runs-on: ${{ matrix.os }}
-
+    runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      - name: Install Node (${{ matrix.node-version }})
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: ".node-version"
           cache: "npm"
 
       - name: Enables corepack
@@ -137,23 +123,16 @@ jobs:
           du -sh ~/Library/Developer/Xcode/DerivedData || echo "DerivedData not found"
 
   test-tracer-provider:
-    strategy:
-      matrix:
-        node-version: [18.x]
-        os: [macos-latest]
-
-    runs-on: ${{ matrix.os }}
-
+    runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      - name: Install Node (${{ matrix.node-version }})
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: ".node-version"
           cache: "npm"
 
       - name: Enables corepack
@@ -225,23 +204,16 @@ jobs:
   # excessive build times and memory pressure on free CI runners. Code coverage can be collected
   # locally where hardware resources are better. See scripts/run-ios-tests-no-coverage.sh
   test-otlp:
-    strategy:
-      matrix:
-        node-version: [18.x]
-        os: [macos-latest]
-
-    runs-on: ${{ matrix.os }}
-
+    runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      - name: Install Node (${{ matrix.node-version }})
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: ".node-version"
           cache: "npm"
 
       - name: Enables corepack
