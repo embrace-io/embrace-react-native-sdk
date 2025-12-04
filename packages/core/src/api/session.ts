@@ -11,6 +11,7 @@
 
 import {SessionStatus} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
+import {handleSDKPromiseRejection} from "../utils/promiseHandler";
 
 /**
  * Adds a key-value property to the current session.
@@ -43,6 +44,16 @@ const addSessionProperty = (
   return EmbraceManagerModule.addSessionProperty(key, value, permanent);
 };
 
+const addSessionPropertyAsync = (
+  key: string,
+  value: string,
+  permanent: boolean,
+): void => {
+  void EmbraceManagerModule.addSessionProperty(key, value, permanent).catch((error: unknown) => {
+    handleSDKPromiseRejection("addSessionProperty", error);
+  });
+};
+
 /**
  * Removes a previously set session property.
  *
@@ -58,6 +69,12 @@ const addSessionProperty = (
  */
 const removeSessionProperty = (key: string) => {
   return EmbraceManagerModule.removeSessionProperty(key);
+};
+
+const removeSessionPropertyAsync = (key: string): void => {
+  void EmbraceManagerModule.removeSessionProperty(key).catch((error: unknown) => {
+    handleSDKPromiseRejection("removeSessionProperty", error);
+  });
 };
 
 /**
@@ -78,6 +95,12 @@ const removeSessionProperty = (key: string) => {
  */
 const endSession = () => {
   return EmbraceManagerModule.endSession();
+};
+
+const endSessionAsync = (): void => {
+  void EmbraceManagerModule.endSession().catch((error: unknown) => {
+    handleSDKPromiseRejection("endSession", error);
+  });
 };
 
 /**
@@ -155,8 +178,11 @@ const getDeviceId = (): Promise<string> => {
 
 export {
   addSessionProperty,
+  addSessionPropertyAsync,
   removeSessionProperty,
+  removeSessionPropertyAsync,
   endSession,
+  endSessionAsync,
   getCurrentSessionId,
   getLastRunEndState,
   getDeviceId,

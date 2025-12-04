@@ -11,6 +11,7 @@
 
 import {MethodType} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
+import {handleSDKPromiseRejection} from "../utils/promiseHandler";
 
 /**
  * Manually records a completed network request.
@@ -67,6 +68,28 @@ const recordNetworkRequest = (
   );
 };
 
+const recordNetworkRequestAsync = (
+  url: string,
+  httpMethod: MethodType,
+  startInMillis: number,
+  endInMillis: number,
+  bytesSent?: number,
+  bytesReceived?: number,
+  statusCode?: number,
+): void => {
+  void EmbraceManagerModule.logNetworkRequest(
+    url,
+    httpMethod,
+    startInMillis,
+    endInMillis,
+    bytesSent || -1,
+    bytesReceived || -1,
+    statusCode || -1,
+  ).catch((error: unknown) => {
+    handleSDKPromiseRejection("logNetworkRequest", error);
+  });
+};
+
 /**
  * Manually records a network request that failed due to a client-side error.
  *
@@ -118,4 +141,24 @@ const logNetworkClientError = (
   );
 };
 
-export {recordNetworkRequest, logNetworkClientError};
+const logNetworkClientErrorAsync = (
+  url: string,
+  httpMethod: MethodType,
+  startInMillis: number,
+  endInMillis: number,
+  errorType: string,
+  errorMessage: string,
+): void => {
+  void EmbraceManagerModule.logNetworkClientError(
+    url,
+    httpMethod,
+    startInMillis,
+    endInMillis,
+    errorType,
+    errorMessage,
+  ).catch((error: unknown) => {
+    handleSDKPromiseRejection("logNetworkClientError", error);
+  });
+};
+
+export {recordNetworkRequest, recordNetworkRequestAsync, logNetworkClientError, logNetworkClientErrorAsync};

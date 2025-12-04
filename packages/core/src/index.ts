@@ -153,4 +153,10 @@ export * from "./hooks/useEmbraceIsStarted";
 export * from "./hooks/useOrientationListener";
 export * from "./interfaces";
 
+export {
+  configurePromiseRejection,
+  getPromiseRejectionConfig,
+  type EmbracePromiseRejectionConfig,
+} from "./utils/promiseHandler";
+
 export {initialize};

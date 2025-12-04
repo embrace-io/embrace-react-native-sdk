@@ -11,6 +11,7 @@
 import {generateStackTrace} from "../utils/log";
 import {LogSeverity, LogProperties} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
+import {handleSDKPromiseRejection} from "../utils/promiseHandler";
 
 /**
  * Logs a message with the specified severity, optional properties, and optional stack trace.
@@ -63,6 +64,25 @@ const logMessage = (
   );
 };
 
+const logMessageAsync = (
+  message: string,
+  severity: LogSeverity = "error",
+  properties: LogProperties = {},
+  includeStacktrace = true,
+): void => {
+  const stackTrace = includeStacktrace && severity !== "info" ? generateStackTrace() : "";
+  void EmbraceManagerModule.logMessageWithSeverityAndProperties(
+    message,
+    severity,
+    properties,
+    stackTrace,
+    includeStacktrace,
+  )
+    .catch((error: unknown) => {
+      handleSDKPromiseRejection("logMessage", error);
+    });
+};
+
 /**
  * Logs an informational message.
  *
@@ -82,6 +102,10 @@ const logInfo = (message: string): Promise<boolean> => {
   // `"info"` logs are not supposed to send stack traces as per Product decision
   // this is also restricted in the Native layers
   return logMessage(message, "info", undefined, false);
+};
+
+const logInfoAsync = (message: string): void => {
+  void logMessageAsync(message, "info", undefined, false);
 };
 
 /**
@@ -105,6 +129,13 @@ const logWarning = (
   return logMessage(message, "warning", undefined, includeStacktrace);
 };
 
+const logWarningAsync = (
+  message: string,
+  includeStacktrace = true,
+): void => {
+  void logMessageAsync(message, "warning", undefined, includeStacktrace);
+};
+
 /**
  * Logs an error message with an optional stack trace.
  *
@@ -124,6 +155,13 @@ const logError = (
   includeStacktrace = true,
 ): Promise<boolean> => {
   return logMessage(message, "error", undefined, includeStacktrace);
+};
+
+const logErrorAsync = (
+  message: string,
+  includeStacktrace = true,
+): void => {
+  void logMessageAsync(message, "error", undefined, includeStacktrace);
 };
 
 /**
@@ -161,4 +199,13 @@ const logHandledError = (
   return Promise.resolve(false);
 };
 
-export {logInfo, logWarning, logError, logHandledError, logMessage};
+const logHandledErrorAsync = (
+  error: Error,
+  properties: LogProperties = {},
+): void => {
+  void logHandledError(error, properties).catch((err: unknown) => {
+    handleSDKPromiseRejection("logHandledError", err);
+  });
+};
+
+export {logInfo, logInfoAsync, logWarning, logWarningAsync, logError, logErrorAsync, logHandledError, logHandledErrorAsync, logMessage, logMessageAsync};
