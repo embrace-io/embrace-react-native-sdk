@@ -12,6 +12,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="async"
+        options={{
+          title: "async",
+          tabBarAccessibilityLabel: "ASYNC API TESTING",
+        }}
+      />
+      <Tabs.Screen
         name="span"
         options={{
           title: "span",
