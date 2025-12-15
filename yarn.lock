@@ -3418,7 +3418,7 @@ __metadata:
     "@opentelemetry/sdk-trace-base": "npm:^1.25.1"
     "@react-navigation/native": "npm:^7.0.15"
     "@testing-library/react-native": "npm:^13.0.1"
-    react-native-navigation: "npm:^7.40.3"
+    react-native-navigation: "npm:^8.6.1"
     typescript: "npm:^5.6.3"
   peerDependencies:
     "@react-navigation/native": "*"
@@ -10868,7 +10868,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:3.x.x":
+"hoist-non-react-statics@npm:3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -13055,7 +13055,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.x, lodash@npm:^4.17.21":
+"lodash@npm:4.17.21, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -15330,12 +15330,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-navigation@npm:^7.40.3":
-  version: 7.44.0
-  resolution: "react-native-navigation@npm:7.44.0"
+"react-native-navigation@npm:^8.6.1":
+  version: 8.6.1
+  resolution: "react-native-navigation@npm:8.6.1"
   dependencies:
-    hoist-non-react-statics: "npm:3.x.x"
-    lodash: "npm:4.17.x"
+    hoist-non-react-statics: "npm:3.3.2"
+    lodash: "npm:4.17.21"
     prop-types: "npm:15.x.x"
     react-lifecycles-compat: "npm:^3.0.4"
     tslib: "npm:1.9.3"
@@ -15348,7 +15348,7 @@ __metadata:
       optional: true
   bin:
     rnn-link: autolink/postlink/run.js
-  checksum: 10c0/f7f4d739b60f9852b3b8097cd64331aacf7a2a38c86f5b862c29a8f3a6ad849ef9dde30a975cf801a6e5a335e5ef2d5ebdbae0dbe2da538e5c8e6ba6eeedddde
+  checksum: 10c0/4012e3f252d5ee68f0450ffabb76f725f166401435f33428d0bde19c417bf1ed1dc759ecf0c39e0c8118dc04bd3ad9d71bc1719c88921b57e8b00441632ac89d
   languageName: node
   linkType: hard
 
