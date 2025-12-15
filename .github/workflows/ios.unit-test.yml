@@ -105,7 +105,7 @@ jobs:
 
       - name: Upload Test Results (xcresult bundle)
         if: always() && steps.changed_files.outputs.core == 'true'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ios-core-test-results
           path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceCoreTests-*/Logs/Test/*.xcresult
@@ -182,7 +182,7 @@ jobs:
 
       - name: Upload Test Results (xcresult bundle)
         if: always() && steps.changed_files.outputs.tracer-provider == 'true'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ios-tracer-provider-test-results
           path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceTracerProvider-*/Logs/Test/*.xcresult
@@ -263,7 +263,7 @@ jobs:
 
       - name: Upload Test Results (xcresult bundle)
         if: always() && steps.changed_files.outputs.otlp == 'true'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ios-otlp-test-results
           path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceOTLPTests-*/Logs/Test/*.xcresult
