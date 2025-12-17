@@ -10,7 +10,7 @@ const addSessionProperty = (
   return EmbraceManagerModule.addSessionProperty(key, value, permanent);
 };
 
-const addSessionPropertyAsync = (
+const addSessionPropertyFireAndForget = (
   key: string,
   value: string,
   permanent: boolean,
@@ -22,7 +22,7 @@ const removeSessionProperty = (key: string) => {
   return EmbraceManagerModule.removeSessionProperty(key);
 };
 
-const removeSessionPropertyAsync = (key: string): void => {
+const removeSessionPropertyFireAndForget = (key: string): void => {
   handleSDKPromiseRejection(removeSessionProperty(key), "removeSessionProperty");
 };
 
@@ -30,7 +30,7 @@ const endSession = () => {
   return EmbraceManagerModule.endSession();
 };
 
-const endSessionAsync = (): void => {
+const endSessionFireAndForget = (): void => {
   handleSDKPromiseRejection(endSession(), "endSession");
 };
 
@@ -48,11 +48,11 @@ const getDeviceId = (): Promise<string> => {
 
 export {
   addSessionProperty,
-  addSessionPropertyAsync,
+  addSessionPropertyFireAndForget,
   removeSessionProperty,
-  removeSessionPropertyAsync,
+  removeSessionPropertyFireAndForget,
   endSession,
-  endSessionAsync,
+  endSessionFireAndForget,
   getCurrentSessionId,
   getLastRunEndState,
   getDeviceId,

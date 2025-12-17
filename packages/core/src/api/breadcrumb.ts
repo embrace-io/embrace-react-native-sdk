@@ -5,8 +5,8 @@ const addBreadcrumb = (message: string): Promise<boolean> => {
   return EmbraceManagerModule.addBreadcrumb(message);
 };
 
-const addBreadcrumbAsync = (message: string): void => {
+const addBreadcrumbFireAndForget = (message: string): void => {
   handleSDKPromiseRejection(addBreadcrumb(message), "addBreadcrumb");
 };
 
-export { addBreadcrumb, addBreadcrumbAsync };
+export { addBreadcrumb, addBreadcrumbFireAndForget };
