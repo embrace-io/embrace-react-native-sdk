@@ -29,10 +29,34 @@ let rejectionConfig: EmbracePromiseRejectionConfig = {
     logToConsole: typeof __DEV__ !== 'undefined' ? __DEV__ : false,
 };
 
-export const handleSDKPromiseRejection = (
+export function handleSDKPromiseRejection<T>(
+    promise: Promise<T>,
+    methodName: string,
+): void;
+
+export function handleSDKPromiseRejection(
     methodName: string,
     error: unknown,
-): void => {
+): void;
+
+export function handleSDKPromiseRejection<T>(
+    methodNameOrPromise: string | Promise<T>,
+    errorOrMethodName: unknown | string,
+): void {
+
+    if (methodNameOrPromise instanceof Promise) {
+        const promise = methodNameOrPromise;
+        const methodName = errorOrMethodName as string;
+
+        promise.catch((error: unknown) => {
+            handleSDKPromiseRejection(methodName, error);
+        });
+        return;
+    }
+
+    const methodName = methodNameOrPromise;
+    const error = errorOrMethodName as unknown;
+
     if (!rejectionConfig.enabled) {
         return;
     }
