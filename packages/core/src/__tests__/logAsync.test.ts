@@ -15,15 +15,15 @@ jest.mock('../utils/log', () => ({
 
 import {
   logInfo,
-  logInfoAsync,
+  logInfoFireAndForget,
   logWarning,
-  logWarningAsync,
+  logWarningFireAndForget,
   logError,
-  logErrorAsync,
+  logErrorFireAndForget,
   logHandledError,
-  logHandledErrorAsync,
+  logHandledErrorFireAndForget,
   logMessage,
-  logMessageAsync,
+  logMessageFireAndForget,
 } from '../api/log';
 import { EmbraceManagerModule } from '../EmbraceManagerModule';
 import { handleSDKPromiseRejection } from '../utils/promiseHandler';
@@ -73,14 +73,14 @@ describe('Log API', () => {
     });
   });
 
-  describe('logInfoAsync - Void Version', () => {
+  describe('logInfoFireAndForget - Void Version', () => {
     it('should return void', () => {
-      const result = logInfoAsync('test');
+      const result = logInfoFireAndForget('test');
       expect(result).toBeUndefined();
     });
 
     it('should not include stack trace', () => {
-      logInfoAsync('test');
+      logInfoFireAndForget('test');
 
       // generateStackTrace should not be called for info logs
       expect(generateStackTrace).not.toHaveBeenCalled();
@@ -119,21 +119,21 @@ describe('Log API', () => {
     });
   });
 
-  describe('logWarningAsync - Void Version', () => {
+  describe('logWarningFireAndForget - Void Version', () => {
     it('should return void', () => {
-      const result = logWarningAsync('test');
+      const result = logWarningFireAndForget('test');
       expect(result).toBeUndefined();
     });
 
     it('should include stack trace by default', () => {
-      logWarningAsync('test');
+      logWarningFireAndForget('test');
       expect(generateStackTrace).toHaveBeenCalled();
     });
 
     it('should respect includeStacktrace parameter', () => {
       (generateStackTrace as jest.Mock).mockClear();
 
-      logWarningAsync('test', false);
+      logWarningFireAndForget('test', false);
 
       expect(generateStackTrace).not.toHaveBeenCalled();
     });
@@ -171,9 +171,9 @@ describe('Log API', () => {
     });
   });
 
-  describe('logErrorAsync - Void Version', () => {
+  describe('logErrorFireAndForget - Void Version', () => {
     it('should return void', () => {
-      const result = logErrorAsync('test');
+      const result = logErrorFireAndForget('test');
       expect(result).toBeUndefined();
     });
 
@@ -183,7 +183,7 @@ describe('Log API', () => {
         error,
       );
 
-      logErrorAsync('test');
+      logErrorFireAndForget('test');
 
       await new Promise(resolve => setImmediate(resolve));
 
@@ -251,15 +251,15 @@ describe('Log API', () => {
     });
   });
 
-  describe('logMessageAsync - Void Version', () => {
+  describe('logMessageFireAndForget - Void Version', () => {
     it('should return void', () => {
-      const result = logMessageAsync('test');
+      const result = logMessageFireAndForget('test');
       expect(result).toBeUndefined();
     });
 
     it('should call native module with same params as promise version', () => {
       const props = { key: 'value' };
-      logMessageAsync('test message', 'warning', props, true);
+      logMessageFireAndForget('test message', 'warning', props, true);
 
       expect(EmbraceManagerModule.logMessageWithSeverityAndProperties).toHaveBeenCalledWith(
         'test message',
@@ -273,7 +273,7 @@ describe('Log API', () => {
     it('should generate stack trace correctly', () => {
       (generateStackTrace as jest.Mock).mockClear();
 
-      logMessageAsync('test', 'error', {}, true);
+      logMessageFireAndForget('test', 'error', {}, true);
 
       expect(generateStackTrace).toHaveBeenCalled();
     });
@@ -281,7 +281,7 @@ describe('Log API', () => {
     it('should not generate stack trace for info', () => {
       (generateStackTrace as jest.Mock).mockClear();
 
-      logMessageAsync('test', 'info', {}, true);
+      logMessageFireAndForget('test', 'info', {}, true);
 
       expect(generateStackTrace).not.toHaveBeenCalled();
     });
@@ -342,10 +342,10 @@ describe('Log API', () => {
     });
   });
 
-  describe('logHandledErrorAsync - Void Version', () => {
+  describe('logHandledErrorFireAndForget - Void Version', () => {
     it('should return void', () => {
       const error = new Error('test');
-      const result = logHandledErrorAsync(error);
+      const result = logHandledErrorFireAndForget(error);
 
       expect(result).toBeUndefined();
     });
@@ -355,7 +355,7 @@ describe('Log API', () => {
       const nativeError = new Error('native error');
       (EmbraceManagerModule.logHandledError as jest.Mock).mockRejectedValue(nativeError);
 
-      logHandledErrorAsync(error);
+      logHandledErrorFireAndForget(error);
 
       await new Promise(resolve => setImmediate(resolve));
 
@@ -372,7 +372,7 @@ describe('Log API', () => {
       error.stack = 'stack';
       const props = { key: 'value' };
 
-      logHandledErrorAsync(error, props);
+      logHandledErrorFireAndForget(error, props);
 
       expect(EmbraceManagerModule.logHandledError).toHaveBeenCalledWith(
         'test',
@@ -384,9 +384,9 @@ describe('Log API', () => {
 
   describe('Fire and Forget Usage', () => {
     it('should allow rapid-fire logging without await', () => {
-      logInfoAsync('event 1');
-      logWarningAsync('event 2');
-      logErrorAsync('event 3');
+      logInfoFireAndForget('event 1');
+      logWarningFireAndForget('event 2');
+      logErrorFireAndForget('event 3');
 
       expect(EmbraceManagerModule.logMessageWithSeverityAndProperties).toHaveBeenCalledTimes(
         3,
@@ -395,7 +395,7 @@ describe('Log API', () => {
 
     it('should handle high-frequency logging', () => {
       for (let i = 0; i < 50; i++) {
-        logInfoAsync(`event ${i}`);
+        logInfoFireAndForget(`event ${i}`);
       }
 
       expect(EmbraceManagerModule.logMessageWithSeverityAndProperties).toHaveBeenCalledTimes(
@@ -411,7 +411,7 @@ describe('Log API', () => {
       );
 
       await logInfo('');
-      logInfoAsync('');
+      logInfoFireAndForget('');
 
       expect(EmbraceManagerModule.logMessageWithSeverityAndProperties).toHaveBeenCalledTimes(
         2,
@@ -425,7 +425,7 @@ describe('Log API', () => {
 
       const longMessage = 'a'.repeat(10000);
       await logError(longMessage);
-      logErrorAsync(longMessage);
+      logErrorFireAndForget(longMessage);
 
       expect(EmbraceManagerModule.logMessageWithSeverityAndProperties).toHaveBeenCalledWith(
         longMessage,
@@ -443,7 +443,7 @@ describe('Log API', () => {
 
       const specialMessage = '你好 🌍 \n\t\r special';
       await logWarning(specialMessage);
-      logWarningAsync(specialMessage);
+      logWarningFireAndForget(specialMessage);
 
       expect(EmbraceManagerModule.logMessageWithSeverityAndProperties).toHaveBeenCalledWith(
         specialMessage,

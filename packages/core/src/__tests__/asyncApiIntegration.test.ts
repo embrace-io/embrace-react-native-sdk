@@ -35,52 +35,52 @@ import {
   getPromiseRejectionConfig,
   // Breadcrumb
   addBreadcrumb,
-  addBreadcrumbAsync,
+  addBreadcrumbFireAndForget,
   // Logging
   logInfo,
-  logInfoAsync,
+  logInfoFireAndForget,
   logWarning,
-  logWarningAsync,
+  logWarningFireAndForget,
   logError,
-  logErrorAsync,
+  logErrorFireAndForget,
   logHandledError,
-  logHandledErrorAsync,
+  logHandledErrorFireAndForget,
   // Session
   addSessionProperty,
-  addSessionPropertyAsync,
+  addSessionPropertyFireAndForget,
   removeSessionProperty,
-  removeSessionPropertyAsync,
+  removeSessionPropertyFireAndForget,
   endSession,
-  endSessionAsync,
+  endSessionFireAndForget,
   // User
   setUserIdentifier,
-  setUserIdentifierAsync,
+  setUserIdentifierFireAndForget,
   setUsername,
-  setUsernameAsync,
+  setUsernameFireAndForget,
   setUserEmail,
-  setUserEmailAsync,
+  setUserEmailFireAndForget,
   clearUserIdentifier,
-  clearUserIdentifierAsync,
+  clearUserIdentifierFireAndForget,
   clearUsername,
-  clearUsernameAsync,
+  clearUsernameFireAndForget,
   clearUserEmail,
-  clearUserEmailAsync,
+  clearUserEmailFireAndForget,
   addUserPersona,
-  addUserPersonaAsync,
+  addUserPersonaFireAndForget,
   clearUserPersona,
-  clearUserPersonaAsync,
+  clearUserPersonaFireAndForget,
   clearAllUserPersonas,
-  clearAllUserPersonasAsync,
+  clearAllUserPersonasFireAndForget,
   // Network
   recordNetworkRequest,
-  recordNetworkRequestAsync,
+  recordNetworkRequestFireAndForget,
   logNetworkClientError,
-  logNetworkClientErrorAsync,
+  logNetworkClientErrorFireAndForget,
 } from '../index';
 
-import {EmbraceManagerModule} from '../EmbraceManagerModule';
+import { EmbraceManagerModule } from '../EmbraceManagerModule';
 
-describe('Async API Integration Tests', () => {
+describe('FireAndForget API Integration Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
@@ -116,21 +116,21 @@ describe('Async API Integration Tests', () => {
 
     it('should export breadcrumb functions', () => {
       expect(addBreadcrumb).toBeDefined();
-      expect(addBreadcrumbAsync).toBeDefined();
+      expect(addBreadcrumbFireAndForget).toBeDefined();
       expect(typeof addBreadcrumb).toBe('function');
-      expect(typeof addBreadcrumbAsync).toBe('function');
+      expect(typeof addBreadcrumbFireAndForget).toBe('function');
     });
 
     it('should export logging functions', () => {
       const logFunctions = [
         logInfo,
-        logInfoAsync,
+        logInfoFireAndForget,
         logWarning,
-        logWarningAsync,
+        logWarningFireAndForget,
         logError,
-        logErrorAsync,
+        logErrorFireAndForget,
         logHandledError,
-        logHandledErrorAsync,
+        logHandledErrorFireAndForget,
       ];
 
       logFunctions.forEach(fn => {
@@ -142,11 +142,11 @@ describe('Async API Integration Tests', () => {
     it('should export session functions', () => {
       const sessionFunctions = [
         addSessionProperty,
-        addSessionPropertyAsync,
+        addSessionPropertyFireAndForget,
         removeSessionProperty,
-        removeSessionPropertyAsync,
+        removeSessionPropertyFireAndForget,
         endSession,
-        endSessionAsync,
+        endSessionFireAndForget,
       ];
 
       sessionFunctions.forEach(fn => {
@@ -158,23 +158,23 @@ describe('Async API Integration Tests', () => {
     it('should export user functions', () => {
       const userFunctions = [
         setUserIdentifier,
-        setUserIdentifierAsync,
+        setUserIdentifierFireAndForget,
         setUsername,
-        setUsernameAsync,
+        setUsernameFireAndForget,
         setUserEmail,
-        setUserEmailAsync,
+        setUserEmailFireAndForget,
         clearUserIdentifier,
-        clearUserIdentifierAsync,
+        clearUserIdentifierFireAndForget,
         clearUsername,
-        clearUsernameAsync,
+        clearUsernameFireAndForget,
         clearUserEmail,
-        clearUserEmailAsync,
+        clearUserEmailFireAndForget,
         addUserPersona,
-        addUserPersonaAsync,
+        addUserPersonaFireAndForget,
         clearUserPersona,
-        clearUserPersonaAsync,
+        clearUserPersonaFireAndForget,
         clearAllUserPersonas,
-        clearAllUserPersonasAsync,
+        clearAllUserPersonasFireAndForget,
       ];
 
       userFunctions.forEach(fn => {
@@ -186,9 +186,9 @@ describe('Async API Integration Tests', () => {
     it('should export network functions', () => {
       const networkFunctions = [
         recordNetworkRequest,
-        recordNetworkRequestAsync,
+        recordNetworkRequestFireAndForget,
         logNetworkClientError,
-        logNetworkClientErrorAsync,
+        logNetworkClientErrorFireAndForget,
       ];
 
       networkFunctions.forEach(fn => {
@@ -201,17 +201,17 @@ describe('Async API Integration Tests', () => {
   describe('Fire and Forget Pattern', () => {
     it('should allow calling async methods without await', () => {
       expect(() => {
-        addBreadcrumbAsync('test');
-        logInfoAsync('test');
-        setUserIdentifierAsync('user123');
-        addSessionPropertyAsync('key', 'value', false);
+        addBreadcrumbFireAndForget('test');
+        logInfoFireAndForget('test');
+        setUserIdentifierFireAndForget('user123');
+        addSessionPropertyFireAndForget('key', 'value', false);
       }).not.toThrow();
     });
 
     it('should work in high-frequency loops', () => {
       expect(() => {
         for (let i = 0; i < 100; i++) {
-          addBreadcrumbAsync(`event_${i}`);
+          addBreadcrumbFireAndForget(`event_${i}`);
         }
       }).not.toThrow();
 
@@ -220,9 +220,9 @@ describe('Async API Integration Tests', () => {
 
     it('should handle mixed sync and async calls', () => {
       expect(() => {
-        addBreadcrumbAsync('async1');
+        addBreadcrumbFireAndForget('async1');
         addBreadcrumb('sync1');
-        logInfoAsync('async2');
+        logInfoFireAndForget('async2');
         logInfo('sync2');
       }).not.toThrow();
     });
@@ -235,15 +235,15 @@ describe('Async API Integration Tests', () => {
       expect(loginSuccess).toBe(true);
 
       // Fire-and-forget telemetry
-      setUsernameAsync('john_doe');
-      setUserEmailAsync('john@example.com');
-      addUserPersonaAsync('premium');
-      addBreadcrumbAsync('user_logged_in');
-      logInfoAsync('Login completed');
+      setUsernameFireAndForget('john_doe');
+      setUserEmailFireAndForget('john@example.com');
+      addUserPersonaFireAndForget('premium');
+      addBreadcrumbFireAndForget('user_logged_in');
+      logInfoFireAndForget('Login completed');
 
       // Set session properties
-      addSessionPropertyAsync('login_method', 'email', false);
-      addSessionPropertyAsync('device_type', 'mobile', true);
+      addSessionPropertyFireAndForget('login_method', 'email', false);
+      addSessionPropertyFireAndForget('device_type', 'mobile', true);
 
       expect(EmbraceManagerModule.setUserIdentifier).toHaveBeenCalled();
       expect(EmbraceManagerModule.setUsername).toHaveBeenCalled();
@@ -254,17 +254,17 @@ describe('Async API Integration Tests', () => {
 
     it('should handle e-commerce checkout flow', () => {
       // User adds items to cart (fire-and-forget tracking)
-      addBreadcrumbAsync('item_added_to_cart');
-      addSessionPropertyAsync('cart_items', '3', false);
-      logInfoAsync('User viewing cart');
+      addBreadcrumbFireAndForget('item_added_to_cart');
+      addSessionPropertyFireAndForget('cart_items', '3', false);
+      logInfoFireAndForget('User viewing cart');
 
       // User proceeds to checkout
-      addBreadcrumbAsync('checkout_started');
-      addSessionPropertyAsync('checkout_step', '1', false);
+      addBreadcrumbFireAndForget('checkout_started');
+      addSessionPropertyFireAndForget('checkout_step', '1', false);
 
       // Payment processing
-      addBreadcrumbAsync('payment_submitted');
-      logInfoAsync('Processing payment');
+      addBreadcrumbFireAndForget('payment_submitted');
+      logInfoFireAndForget('Processing payment');
 
       expect(EmbraceManagerModule.addBreadcrumb).toHaveBeenCalledTimes(3);
       expect(EmbraceManagerModule.addSessionProperty).toHaveBeenCalledTimes(2);
@@ -276,12 +276,12 @@ describe('Async API Integration Tests', () => {
         throw new Error('Payment processing failed');
       } catch (error) {
         // Log error with context (fire-and-forget)
-        logHandledErrorAsync(error as Error, {
+        logHandledErrorFireAndForget(error as Error, {
           context: 'payment',
           amount: '99.99',
         });
-        addBreadcrumbAsync('payment_error_occurred');
-        logErrorAsync('Payment failed: ' + (error as Error).message);
+        addBreadcrumbFireAndForget('payment_error_occurred');
+        logErrorFireAndForget('Payment failed: ' + (error as Error).message);
       }
 
       expect(EmbraceManagerModule.logHandledError).toHaveBeenCalled();
@@ -293,7 +293,7 @@ describe('Async API Integration Tests', () => {
       const endTime = startTime + 250;
 
       // Successful request
-      recordNetworkRequestAsync(
+      recordNetworkRequestFireAndForget(
         'https://api.example.com/users',
         'GET',
         startTime,
@@ -304,7 +304,7 @@ describe('Async API Integration Tests', () => {
       );
 
       // Failed request
-      logNetworkClientErrorAsync(
+      logNetworkClientErrorFireAndForget(
         'https://api.example.com/payment',
         'POST',
         startTime,
@@ -319,12 +319,12 @@ describe('Async API Integration Tests', () => {
 
     it('should handle user logout flow', () => {
       // Fire-and-forget cleanup
-      clearUserIdentifierAsync();
-      clearUsernameAsync();
-      clearUserEmailAsync();
-      clearAllUserPersonasAsync();
-      addBreadcrumbAsync('user_logged_out');
-      endSessionAsync();
+      clearUserIdentifierFireAndForget();
+      clearUsernameFireAndForget();
+      clearUserEmailFireAndForget();
+      clearAllUserPersonasFireAndForget();
+      addBreadcrumbFireAndForget('user_logged_out');
+      endSessionFireAndForget();
 
       expect(EmbraceManagerModule.clearUserIdentifier).toHaveBeenCalled();
       expect(EmbraceManagerModule.clearUsername).toHaveBeenCalled();
@@ -345,9 +345,9 @@ describe('Async API Integration Tests', () => {
       });
 
       // Use various async APIs
-      addBreadcrumbAsync('test1');
-      logInfoAsync('test2');
-      setUserIdentifierAsync('user123');
+      addBreadcrumbFireAndForget('test1');
+      logInfoFireAndForget('test2');
+      setUserIdentifierFireAndForget('user123');
 
       const config = getPromiseRejectionConfig();
       expect(config.enabled).toBe(true);
@@ -366,7 +366,7 @@ describe('Async API Integration Tests', () => {
       // Mock a rejection
       (EmbraceManagerModule.addBreadcrumb as jest.Mock).mockRejectedValue(testError);
 
-      addBreadcrumbAsync('test');
+      addBreadcrumbFireAndForget('test');
 
       // Wait for rejection to be handled
       await new Promise(resolve => setImmediate(resolve));
@@ -387,9 +387,9 @@ describe('Async API Integration Tests', () => {
     });
 
     it('should return void from async versions', () => {
-      const breadcrumbResult = addBreadcrumbAsync('test');
-      const logResult = logInfoAsync('test');
-      const userResult = setUserIdentifierAsync('user123');
+      const breadcrumbResult = addBreadcrumbFireAndForget('test');
+      const logResult = logInfoFireAndForget('test');
+      const userResult = setUserIdentifierFireAndForget('user123');
 
       expect(breadcrumbResult).toBeUndefined();
       expect(logResult).toBeUndefined();
@@ -407,9 +407,9 @@ describe('Async API Integration Tests', () => {
       expect(sessionSet).toBe(true);
 
       // Telemetry uses async version
-      addBreadcrumbAsync('subscription_activated');
-      logInfoAsync('User upgraded to premium');
-      setUsernameAsync('john_doe');
+      addBreadcrumbFireAndForget('subscription_activated');
+      logInfoFireAndForget('User upgraded to premium');
+      setUsernameFireAndForget('john_doe');
 
       expect(EmbraceManagerModule.setUserIdentifier).toHaveBeenCalled();
       expect(EmbraceManagerModule.addSessionProperty).toHaveBeenCalled();
@@ -433,7 +433,7 @@ describe('Async API Integration Tests', () => {
       const start = Date.now();
 
       for (let i = 0; i < 1000; i++) {
-        addBreadcrumbAsync(`event_${i}`);
+        addBreadcrumbFireAndForget(`event_${i}`);
       }
 
       const duration = Date.now() - start;
@@ -446,9 +446,9 @@ describe('Async API Integration Tests', () => {
     it('should not block main thread', () => {
       let completed = false;
 
-      addBreadcrumbAsync('test1');
-      logInfoAsync('test2');
-      setUserIdentifierAsync('user123');
+      addBreadcrumbFireAndForget('test1');
+      logInfoFireAndForget('test2');
+      setUserIdentifierFireAndForget('user123');
 
       // Code should continue immediately
       completed = true;
@@ -459,24 +459,24 @@ describe('Async API Integration Tests', () => {
 
   describe('Consistency Across APIs', () => {
     it('should use consistent naming pattern for all async functions', () => {
-      // All async functions should end with "Async"
-      expect(addBreadcrumbAsync.name).toBe('addBreadcrumbAsync');
-      expect(logInfoAsync.name).toBe('logInfoAsync');
-      expect(setUserIdentifierAsync.name).toBe('setUserIdentifierAsync');
-      expect(addSessionPropertyAsync.name).toBe('addSessionPropertyAsync');
-      expect(recordNetworkRequestAsync.name).toBe('recordNetworkRequestAsync');
+      // All async functions should end with "FireAndForget"
+      expect(addBreadcrumbFireAndForget.name).toBe('addBreadcrumbFireAndForget');
+      expect(logInfoFireAndForget.name).toBe('logInfoFireAndForget');
+      expect(setUserIdentifierFireAndForget.name).toBe('setUserIdentifierFireAndForget');
+      expect(addSessionPropertyFireAndForget.name).toBe('addSessionPropertyFireAndForget');
+      expect(recordNetworkRequestFireAndForget.name).toBe('recordNetworkRequestFireAndForget');
     });
 
     it('should maintain parameter consistency between promise and async versions', () => {
       // Both versions should accept same parameters
       addBreadcrumb('test');
-      addBreadcrumbAsync('test');
+      addBreadcrumbFireAndForget('test');
 
       logInfo('test');
-      logInfoAsync('test');
+      logInfoFireAndForget('test');
 
       setUserIdentifier('user123');
-      setUserIdentifierAsync('user123');
+      setUserIdentifierFireAndForget('user123');
 
       expect(EmbraceManagerModule.addBreadcrumb).toHaveBeenCalledWith('test');
       expect(EmbraceManagerModule.logMessageWithSeverityAndProperties).toHaveBeenCalled();
