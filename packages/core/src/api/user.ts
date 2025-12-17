@@ -37,9 +37,7 @@ const addUserPersona = (persona: string): Promise<boolean> => {
 };
 
 const addUserPersonaAsync = (persona: string): void => {
-  void EmbraceManagerModule.addUserPersona(persona).catch((error: unknown) => {
-    handleSDKPromiseRejection("addUserPersona", error);
-  });
+  handleSDKPromiseRejection(addUserPersona(persona), "addUserPersona");
 };
 
 /**
@@ -60,9 +58,7 @@ const clearUserPersona = (persona: string): Promise<boolean> => {
 };
 
 const clearUserPersonaAsync = (persona: string): void => {
-  void EmbraceManagerModule.clearUserPersona(persona).catch((error: unknown) => {
-    handleSDKPromiseRejection("clearUserPersona", error);
-  });
+  handleSDKPromiseRejection(clearUserPersona(persona), "clearUserPersona");
 };
 
 /**
@@ -82,9 +78,7 @@ const clearAllUserPersonas = (): Promise<boolean> => {
 };
 
 const clearAllUserPersonasAsync = (): void => {
-  void EmbraceManagerModule.clearAllUserPersonas().catch((error: unknown) => {
-    handleSDKPromiseRejection("clearAllUserPersonas", error);
-  });
+  handleSDKPromiseRejection(clearAllUserPersonas(), "clearAllUserPersonas");
 };
 
 /**
@@ -109,9 +103,7 @@ const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
 };
 
 const setUserIdentifierAsync = (userIdentifier: string): void => {
-  void EmbraceManagerModule.setUserIdentifier(userIdentifier).catch((error: unknown) => {
-    handleSDKPromiseRejection("setUserIdentifier", error);
-  });
+  handleSDKPromiseRejection(setUserIdentifier(userIdentifier), "setUserIdentifier");
 };
 
 /**
@@ -134,9 +126,7 @@ const clearUserIdentifier = (): Promise<boolean> => {
 };
 
 const clearUserIdentifierAsync = (): void => {
-  void EmbraceManagerModule.clearUserIdentifier().catch((error: unknown) => {
-    handleSDKPromiseRejection("clearUserIdentifier", error);
-  });
+  handleSDKPromiseRejection(clearUserIdentifier(), "clearUserIdentifier");
 };
 
 /**
@@ -164,9 +154,7 @@ const setUsername = (username: string): Promise<boolean> => {
 };
 
 const setUsernameAsync = (username: string): void => {
-  void EmbraceManagerModule.setUsername(username).catch((error: unknown) => {
-    handleSDKPromiseRejection("setUsername", error);
-  });
+  handleSDKPromiseRejection(setUsername(username), "setUsername");
 };
 
 /**
@@ -186,9 +174,7 @@ const clearUsername = (): Promise<boolean> => {
 };
 
 const clearUsernameAsync = (): void => {
-  void EmbraceManagerModule.clearUsername().catch((error: unknown) => {
-    handleSDKPromiseRejection("clearUsername", error);
-  });
+  handleSDKPromiseRejection(clearUsername(), "clearUsername");
 };
 
 /**
@@ -216,9 +202,7 @@ const setUserEmail = (userEmail: string): Promise<boolean> => {
 };
 
 const setUserEmailAsync = (userEmail: string): void => {
-  void EmbraceManagerModule.setUserEmail(userEmail).catch((error: unknown) => {
-    handleSDKPromiseRejection("setUserEmail", error);
-  });
+  handleSDKPromiseRejection(setUserEmail(userEmail), "setUserEmail");
 };
 
 /**
@@ -238,9 +222,7 @@ const clearUserEmail = (): Promise<boolean> => {
 };
 
 const clearUserEmailAsync = (): void => {
-  void EmbraceManagerModule.clearUserEmail().catch((error: unknown) => {
-    handleSDKPromiseRejection("clearUserEmail", error);
-  });
+  handleSDKPromiseRejection(clearUserEmail(), "clearUserEmail");
 };
 
 export {
