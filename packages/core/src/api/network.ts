@@ -68,7 +68,7 @@ const recordNetworkRequest = (
   );
 };
 
-const recordNetworkRequestAsync = (
+const recordNetworkRequestFireAndForget = (
   url: string,
   httpMethod: MethodType,
   startInMillis: number,
@@ -139,7 +139,7 @@ const logNetworkClientError = (
   );
 };
 
-const logNetworkClientErrorAsync = (
+const logNetworkClientErrorFireAndForget = (
   url: string,
   httpMethod: MethodType,
   startInMillis: number,
@@ -157,4 +157,4 @@ const logNetworkClientErrorAsync = (
   ), "logNetworkClientError");
 };
 
-export {recordNetworkRequest, recordNetworkRequestAsync, logNetworkClientError, logNetworkClientErrorAsync};
+export {recordNetworkRequest, recordNetworkRequestFireAndForget, logNetworkClientError, logNetworkClientErrorFireAndForget};

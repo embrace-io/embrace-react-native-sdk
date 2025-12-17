@@ -64,7 +64,7 @@ const logMessage = (
   );
 };
 
-const logMessageAsync = (
+const logMessageFireAndForget = (
   message: string,
   severity: LogSeverity = "error",
   properties: LogProperties = {},
@@ -94,8 +94,8 @@ const logInfo = (message: string): Promise<boolean> => {
   return logMessage(message, "info", undefined, false);
 };
 
-const logInfoAsync = (message: string): void => {
-  void logMessageAsync(message, "info", undefined, false);
+const logInfoFireAndForget = (message: string): void => {
+  void logMessageFireAndForget(message, "info", undefined, false);
 };
 
 /**
@@ -119,11 +119,11 @@ const logWarning = (
   return logMessage(message, "warning", undefined, includeStacktrace);
 };
 
-const logWarningAsync = (
+const logWarningFireAndForget = (
   message: string,
   includeStacktrace = true,
 ): void => {
-  void logMessageAsync(message, "warning", undefined, includeStacktrace);
+  void logMessageFireAndForget(message, "warning", undefined, includeStacktrace);
 };
 
 /**
@@ -147,11 +147,11 @@ const logError = (
   return logMessage(message, "error", undefined, includeStacktrace);
 };
 
-const logErrorAsync = (
+const logErrorFireAndForget = (
   message: string,
   includeStacktrace = true,
 ): void => {
-  void logMessageAsync(message, "error", undefined, includeStacktrace);
+  void logMessageFireAndForget(message, "error", undefined, includeStacktrace);
 };
 
 /**
@@ -189,11 +189,11 @@ const logHandledError = (
   return Promise.resolve(false);
 };
 
-const logHandledErrorAsync = (
+const logHandledErrorFireAndForget = (
   error: Error,
   properties: LogProperties = {},
 ): void => {
   handleSDKPromiseRejection(logHandledError(error, properties), "logHandledError");
 };
 
-export {logInfo, logInfoAsync, logWarning, logWarningAsync, logError, logErrorAsync, logHandledError, logHandledErrorAsync, logMessage, logMessageAsync};
+export {logInfo, logInfoFireAndForget, logWarning, logWarningFireAndForget, logError, logErrorFireAndForget, logHandledError, logHandledErrorFireAndForget, logMessage, logMessageFireAndForget};
