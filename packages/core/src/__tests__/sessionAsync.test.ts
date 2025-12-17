@@ -15,17 +15,17 @@ jest.mock('../utils/promiseHandler', () => ({
 
 import {
   addSessionProperty,
-  addSessionPropertyAsync,
+  addSessionPropertyFireAndForget,
   removeSessionProperty,
-  removeSessionPropertyAsync,
+  removeSessionPropertyFireAndForget,
   endSession,
-  endSessionAsync,
+  endSessionFireAndForget,
   getCurrentSessionId,
   getLastRunEndState,
   getDeviceId,
 } from '../api/session';
-import {EmbraceManagerModule} from '../EmbraceManagerModule';
-import {handleSDKPromiseRejection} from '../utils/promiseHandler';
+import { EmbraceManagerModule } from '../EmbraceManagerModule';
+import { handleSDKPromiseRejection } from '../utils/promiseHandler';
 
 describe('Session API', () => {
   beforeEach(() => {
@@ -49,7 +49,7 @@ describe('Session API', () => {
     it('should add session property without waiting', () => {
       (EmbraceManagerModule.addSessionProperty as jest.Mock).mockResolvedValue(true);
 
-      const result = addSessionPropertyAsync('key', 'value', true);
+      const result = addSessionPropertyFireAndForget('key', 'value', true);
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.addSessionProperty).toHaveBeenCalledWith(
@@ -83,7 +83,7 @@ describe('Session API', () => {
       const error = new Error('Native error');
       (EmbraceManagerModule.addSessionProperty as jest.Mock).mockRejectedValue(error);
 
-      addSessionPropertyAsync('key', 'value', false);
+      addSessionPropertyFireAndForget('key', 'value', false);
 
       await new Promise(resolve => setImmediate(resolve));
 
@@ -106,7 +106,7 @@ describe('Session API', () => {
     it('should remove session property without waiting', () => {
       (EmbraceManagerModule.removeSessionProperty as jest.Mock).mockResolvedValue(true);
 
-      const result = removeSessionPropertyAsync('key');
+      const result = removeSessionPropertyFireAndForget('key');
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.removeSessionProperty).toHaveBeenCalledWith('key');
@@ -118,7 +118,7 @@ describe('Session API', () => {
         error,
       );
 
-      removeSessionPropertyAsync('key');
+      removeSessionPropertyFireAndForget('key');
 
       await new Promise(resolve => setImmediate(resolve));
 
@@ -141,7 +141,7 @@ describe('Session API', () => {
     it('should end session without waiting', () => {
       (EmbraceManagerModule.endSession as jest.Mock).mockResolvedValue(true);
 
-      const result = endSessionAsync();
+      const result = endSessionFireAndForget();
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.endSession).toHaveBeenCalled();
@@ -151,7 +151,7 @@ describe('Session API', () => {
       const error = new Error('Native error');
       (EmbraceManagerModule.endSession as jest.Mock).mockRejectedValue(error);
 
-      endSessionAsync();
+      endSessionFireAndForget();
 
       await new Promise(resolve => setImmediate(resolve));
 
@@ -199,15 +199,15 @@ describe('Session API', () => {
       (EmbraceManagerModule.endSession as jest.Mock).mockResolvedValue(true);
 
       // Start session with properties (fire-and-forget)
-      addSessionPropertyAsync('app_version', '1.0.0', true);
-      addSessionPropertyAsync('user_type', 'premium', false);
+      addSessionPropertyFireAndForget('app_version', '1.0.0', true);
+      addSessionPropertyFireAndForget('user_type', 'premium', false);
 
       // Get session info (need result)
       const sessionId = await getCurrentSessionId();
       expect(sessionId).toBe('session-1');
 
       // End session (fire-and-forget)
-      endSessionAsync();
+      endSessionFireAndForget();
 
       expect(EmbraceManagerModule.addSessionProperty).toHaveBeenCalledTimes(2);
       expect(EmbraceManagerModule.endSession).toHaveBeenCalled();
@@ -218,17 +218,17 @@ describe('Session API', () => {
       (EmbraceManagerModule.removeSessionProperty as jest.Mock).mockResolvedValue(true);
 
       // User navigates through app
-      addSessionPropertyAsync('screen', 'home', false);
-      addSessionPropertyAsync('screen', 'products', false);
-      addSessionPropertyAsync('screen', 'checkout', false);
+      addSessionPropertyFireAndForget('screen', 'home', false);
+      addSessionPropertyFireAndForget('screen', 'products', false);
+      addSessionPropertyFireAndForget('screen', 'checkout', false);
 
       // User adds items to cart
-      addSessionPropertyAsync('cart_items', '1', false);
-      addSessionPropertyAsync('cart_items', '2', false);
-      addSessionPropertyAsync('cart_items', '3', false);
+      addSessionPropertyFireAndForget('cart_items', '1', false);
+      addSessionPropertyFireAndForget('cart_items', '2', false);
+      addSessionPropertyFireAndForget('cart_items', '3', false);
 
       // User removes item
-      removeSessionPropertyAsync('promo_code');
+      removeSessionPropertyFireAndForget('promo_code');
 
       expect(EmbraceManagerModule.addSessionProperty).toHaveBeenCalledTimes(6);
       expect(EmbraceManagerModule.removeSessionProperty).toHaveBeenCalledTimes(1);
@@ -240,7 +240,7 @@ describe('Session API', () => {
       (EmbraceManagerModule.addSessionProperty as jest.Mock).mockResolvedValue(true);
 
       await addSessionProperty('key', '', false);
-      addSessionPropertyAsync('key2', '', true);
+      addSessionPropertyFireAndForget('key2', '', true);
 
       expect(EmbraceManagerModule.addSessionProperty).toHaveBeenCalledWith(
         'key',
@@ -261,7 +261,7 @@ describe('Session API', () => {
       const specialValue = 'value!@#$%^&*()';
 
       await addSessionProperty(specialKey, specialValue, false);
-      addSessionPropertyAsync(specialKey, specialValue, true);
+      addSessionPropertyFireAndForget(specialKey, specialValue, true);
 
       expect(EmbraceManagerModule.addSessionProperty).toHaveBeenCalledWith(
         specialKey,
@@ -274,7 +274,7 @@ describe('Session API', () => {
       (EmbraceManagerModule.addSessionProperty as jest.Mock).mockResolvedValue(true);
 
       for (let i = 0; i < 50; i++) {
-        addSessionPropertyAsync(`key_${i}`, `value_${i}`, false);
+        addSessionPropertyFireAndForget(`key_${i}`, `value_${i}`, false);
       }
 
       expect(EmbraceManagerModule.addSessionProperty).toHaveBeenCalledTimes(50);

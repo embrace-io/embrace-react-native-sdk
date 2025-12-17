@@ -18,26 +18,26 @@ jest.mock('../utils/promiseHandler', () => ({
 
 import {
   setUserIdentifier,
-  setUserIdentifierAsync,
+  setUserIdentifierFireAndForget,
   clearUserIdentifier,
-  clearUserIdentifierAsync,
+  clearUserIdentifierFireAndForget,
   setUsername,
-  setUsernameAsync,
+  setUsernameFireAndForget,
   clearUsername,
-  clearUsernameAsync,
+  clearUsernameFireAndForget,
   setUserEmail,
-  setUserEmailAsync,
+  setUserEmailFireAndForget,
   clearUserEmail,
-  clearUserEmailAsync,
+  clearUserEmailFireAndForget,
   addUserPersona,
-  addUserPersonaAsync,
+  addUserPersonaFireAndForget,
   clearUserPersona,
-  clearUserPersonaAsync,
+  clearUserPersonaFireAndForget,
   clearAllUserPersonas,
-  clearAllUserPersonasAsync,
+  clearAllUserPersonasFireAndForget,
 } from '../api/user';
-import {EmbraceManagerModule} from '../EmbraceManagerModule';
-import {handleSDKPromiseRejection} from '../utils/promiseHandler';
+import { EmbraceManagerModule } from '../EmbraceManagerModule';
+import { handleSDKPromiseRejection } from '../utils/promiseHandler';
 
 describe('User API', () => {
   beforeEach(() => {
@@ -64,7 +64,7 @@ describe('User API', () => {
     });
 
     it('should set user identifier without waiting', () => {
-      const result = setUserIdentifierAsync('user456');
+      const result = setUserIdentifierFireAndForget('user456');
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.setUserIdentifier).toHaveBeenCalledWith('user456');
@@ -78,7 +78,7 @@ describe('User API', () => {
     });
 
     it('should clear user identifier without waiting', () => {
-      const result = clearUserIdentifierAsync();
+      const result = clearUserIdentifierFireAndForget();
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.clearUserIdentifier).toHaveBeenCalled();
@@ -88,7 +88,7 @@ describe('User API', () => {
       const error = new Error('Native error');
       (EmbraceManagerModule.setUserIdentifier as jest.Mock).mockRejectedValue(error);
 
-      setUserIdentifierAsync('user123');
+      setUserIdentifierFireAndForget('user123');
 
       await new Promise(resolve => setImmediate(resolve));
 
@@ -108,7 +108,7 @@ describe('User API', () => {
     });
 
     it('should set username without waiting', () => {
-      const result = setUsernameAsync('jane_doe');
+      const result = setUsernameFireAndForget('jane_doe');
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.setUsername).toHaveBeenCalledWith('jane_doe');
@@ -122,7 +122,7 @@ describe('User API', () => {
     });
 
     it('should clear username without waiting', () => {
-      const result = clearUsernameAsync();
+      const result = clearUsernameFireAndForget();
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.clearUsername).toHaveBeenCalled();
@@ -140,7 +140,7 @@ describe('User API', () => {
     });
 
     it('should set user email without waiting', () => {
-      const result = setUserEmailAsync('test@example.com');
+      const result = setUserEmailFireAndForget('test@example.com');
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.setUserEmail).toHaveBeenCalledWith('test@example.com');
@@ -154,7 +154,7 @@ describe('User API', () => {
     });
 
     it('should clear user email without waiting', () => {
-      const result = clearUserEmailAsync();
+      const result = clearUserEmailFireAndForget();
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.clearUserEmail).toHaveBeenCalled();
@@ -170,7 +170,7 @@ describe('User API', () => {
     });
 
     it('should add user persona without waiting', () => {
-      const result = addUserPersonaAsync('vip');
+      const result = addUserPersonaFireAndForget('vip');
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.addUserPersona).toHaveBeenCalledWith('vip');
@@ -184,7 +184,7 @@ describe('User API', () => {
     });
 
     it('should clear specific user persona without waiting', () => {
-      const result = clearUserPersonaAsync('vip');
+      const result = clearUserPersonaFireAndForget('vip');
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.clearUserPersona).toHaveBeenCalledWith('vip');
@@ -198,16 +198,16 @@ describe('User API', () => {
     });
 
     it('should clear all user personas without waiting', () => {
-      const result = clearAllUserPersonasAsync();
+      const result = clearAllUserPersonasFireAndForget();
 
       expect(result).toBeUndefined();
       expect(EmbraceManagerModule.clearAllUserPersonas).toHaveBeenCalled();
     });
 
     it('should handle multiple personas', () => {
-      addUserPersonaAsync('premium');
-      addUserPersonaAsync('early_adopter');
-      addUserPersonaAsync('beta_tester');
+      addUserPersonaFireAndForget('premium');
+      addUserPersonaFireAndForget('early_adopter');
+      addUserPersonaFireAndForget('beta_tester');
 
       expect(EmbraceManagerModule.addUserPersona).toHaveBeenCalledTimes(3);
       expect(EmbraceManagerModule.addUserPersona).toHaveBeenNthCalledWith(1, 'premium');
@@ -229,10 +229,10 @@ describe('User API', () => {
       expect(success).toBe(true);
 
       // Fire-and-forget: Set additional user info
-      setUsernameAsync('john_doe');
-      setUserEmailAsync('john@example.com');
-      addUserPersonaAsync('premium');
-      addUserPersonaAsync('verified');
+      setUsernameFireAndForget('john_doe');
+      setUserEmailFireAndForget('john@example.com');
+      addUserPersonaFireAndForget('premium');
+      addUserPersonaFireAndForget('verified');
 
       expect(EmbraceManagerModule.setUserIdentifier).toHaveBeenCalledWith('user_12345');
       expect(EmbraceManagerModule.setUsername).toHaveBeenCalledWith('john_doe');
@@ -242,10 +242,10 @@ describe('User API', () => {
 
     it('should handle user logout flow', () => {
       // Fire-and-forget: Clear all user data
-      clearUserIdentifierAsync();
-      clearUsernameAsync();
-      clearUserEmailAsync();
-      clearAllUserPersonasAsync();
+      clearUserIdentifierFireAndForget();
+      clearUsernameFireAndForget();
+      clearUserEmailFireAndForget();
+      clearAllUserPersonasFireAndForget();
 
       expect(EmbraceManagerModule.clearUserIdentifier).toHaveBeenCalled();
       expect(EmbraceManagerModule.clearUsername).toHaveBeenCalled();
@@ -259,7 +259,7 @@ describe('User API', () => {
       expect(usernameSet).toBe(true);
 
       // Update email (fire-and-forget)
-      setUserEmailAsync('newemail@example.com');
+      setUserEmailFireAndForget('newemail@example.com');
 
       expect(EmbraceManagerModule.setUsername).toHaveBeenCalledWith('new_username');
       expect(EmbraceManagerModule.setUserEmail).toHaveBeenCalledWith(
@@ -269,9 +269,9 @@ describe('User API', () => {
 
     it('should handle subscription upgrade', () => {
       // User upgrades subscription
-      clearUserPersonaAsync('free');
-      addUserPersonaAsync('premium');
-      addUserPersonaAsync('annual_subscriber');
+      clearUserPersonaFireAndForget('free');
+      addUserPersonaFireAndForget('premium');
+      addUserPersonaFireAndForget('annual_subscriber');
 
       expect(EmbraceManagerModule.clearUserPersona).toHaveBeenCalledWith('free');
       expect(EmbraceManagerModule.addUserPersona).toHaveBeenCalledWith('premium');
@@ -282,10 +282,10 @@ describe('User API', () => {
 
     it('should handle user data deletion', () => {
       // GDPR: User requests data deletion
-      clearUserIdentifierAsync();
-      clearUsernameAsync();
-      clearUserEmailAsync();
-      clearAllUserPersonasAsync();
+      clearUserIdentifierFireAndForget();
+      clearUsernameFireAndForget();
+      clearUserEmailFireAndForget();
+      clearAllUserPersonasFireAndForget();
 
       expect(EmbraceManagerModule.clearUserIdentifier).toHaveBeenCalled();
       expect(EmbraceManagerModule.clearUsername).toHaveBeenCalled();
@@ -299,7 +299,7 @@ describe('User API', () => {
       const error = new Error('Network error');
       (EmbraceManagerModule.setUserIdentifier as jest.Mock).mockRejectedValue(error);
 
-      setUserIdentifierAsync('user123');
+      setUserIdentifierFireAndForget('user123');
 
       await new Promise(resolve => setImmediate(resolve));
 
@@ -313,7 +313,7 @@ describe('User API', () => {
       const error = new Error('Native error');
       (EmbraceManagerModule.clearUserEmail as jest.Mock).mockRejectedValue(error);
 
-      clearUserEmailAsync();
+      clearUserEmailFireAndForget();
 
       await new Promise(resolve => setImmediate(resolve));
 
@@ -324,7 +324,7 @@ describe('User API', () => {
       const error = new Error('Invalid persona');
       (EmbraceManagerModule.addUserPersona as jest.Mock).mockRejectedValue(error);
 
-      addUserPersonaAsync('invalid');
+      addUserPersonaFireAndForget('invalid');
 
       await new Promise(resolve => setImmediate(resolve));
 
@@ -334,10 +334,10 @@ describe('User API', () => {
 
   describe('Edge Cases', () => {
     it('should handle empty strings', () => {
-      setUserIdentifierAsync('');
-      setUsernameAsync('');
-      setUserEmailAsync('');
-      addUserPersonaAsync('');
+      setUserIdentifierFireAndForget('');
+      setUsernameFireAndForget('');
+      setUserEmailFireAndForget('');
+      addUserPersonaFireAndForget('');
 
       expect(EmbraceManagerModule.setUserIdentifier).toHaveBeenCalledWith('');
       expect(EmbraceManagerModule.setUsername).toHaveBeenCalledWith('');
@@ -346,10 +346,10 @@ describe('User API', () => {
     });
 
     it('should handle special characters', () => {
-      setUserIdentifierAsync('user@123.com');
-      setUsernameAsync('user_name-123');
-      setUserEmailAsync('test+tag@example.com');
-      addUserPersonaAsync('premium-plus');
+      setUserIdentifierFireAndForget('user@123.com');
+      setUsernameFireAndForget('user_name-123');
+      setUserEmailFireAndForget('test+tag@example.com');
+      addUserPersonaFireAndForget('premium-plus');
 
       expect(EmbraceManagerModule.setUserIdentifier).toHaveBeenCalledWith(
         'user@123.com',
@@ -362,9 +362,9 @@ describe('User API', () => {
     });
 
     it('should handle unicode characters', () => {
-      setUsernameAsync('用户名');
-      setUserEmailAsync('пользователь@example.com');
-      addUserPersonaAsync('プレミアム');
+      setUsernameFireAndForget('用户名');
+      setUserEmailFireAndForget('пользователь@example.com');
+      addUserPersonaFireAndForget('プレミアム');
 
       expect(EmbraceManagerModule.setUsername).toHaveBeenCalledWith('用户名');
       expect(EmbraceManagerModule.setUserEmail).toHaveBeenCalledWith(
@@ -375,7 +375,7 @@ describe('User API', () => {
 
     it('should handle rapid updates', () => {
       for (let i = 0; i < 50; i++) {
-        setUserIdentifierAsync(`user_${i}`);
+        setUserIdentifierFireAndForget(`user_${i}`);
       }
 
       expect(EmbraceManagerModule.setUserIdentifier).toHaveBeenCalledTimes(50);
@@ -384,9 +384,9 @@ describe('User API', () => {
     it('should handle long strings', () => {
       const longString = 'a'.repeat(1000);
 
-      setUserIdentifierAsync(longString);
-      setUsernameAsync(longString);
-      setUserEmailAsync(`${longString}@example.com`);
+      setUserIdentifierFireAndForget(longString);
+      setUsernameFireAndForget(longString);
+      setUserEmailFireAndForget(`${longString}@example.com`);
 
       expect(EmbraceManagerModule.setUserIdentifier).toHaveBeenCalledWith(longString);
       expect(EmbraceManagerModule.setUsername).toHaveBeenCalledWith(longString);
@@ -397,32 +397,32 @@ describe('User API', () => {
     it('should have consistent parameter signatures', () => {
       // Single parameter functions
       setUserIdentifier('test');
-      setUserIdentifierAsync('test');
+      setUserIdentifierFireAndForget('test');
 
       setUsername('test');
-      setUsernameAsync('test');
+      setUsernameFireAndForget('test');
 
       setUserEmail('test');
-      setUserEmailAsync('test');
+      setUserEmailFireAndForget('test');
 
       addUserPersona('test');
-      addUserPersonaAsync('test');
+      addUserPersonaFireAndForget('test');
 
       clearUserPersona('test');
-      clearUserPersonaAsync('test');
+      clearUserPersonaFireAndForget('test');
 
       // No parameter functions
       clearUserIdentifier();
-      clearUserIdentifierAsync();
+      clearUserIdentifierFireAndForget();
 
       clearUsername();
-      clearUsernameAsync();
+      clearUsernameFireAndForget();
 
       clearUserEmail();
-      clearUserEmailAsync();
+      clearUserEmailFireAndForget();
 
       clearAllUserPersonas();
-      clearAllUserPersonasAsync();
+      clearAllUserPersonasFireAndForget();
 
       // All should be called correctly
       expect(EmbraceManagerModule.setUserIdentifier).toHaveBeenCalledWith('test');
@@ -439,10 +439,10 @@ describe('User API', () => {
       expect(p2).toBeInstanceOf(Promise);
       expect(p3).toBeInstanceOf(Promise);
 
-      // Async versions return void
-      const a1 = setUserIdentifierAsync('test');
-      const a2 = setUsernameAsync('test');
-      const a3 = addUserPersonaAsync('test');
+      // FireAndForget versions return void
+      const a1 = setUserIdentifierFireAndForget('test');
+      const a2 = setUsernameFireAndForget('test');
+      const a3 = addUserPersonaFireAndForget('test');
 
       expect(a1).toBeUndefined();
       expect(a2).toBeUndefined();
