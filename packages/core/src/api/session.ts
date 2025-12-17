@@ -15,9 +15,7 @@ const addSessionPropertyAsync = (
   value: string,
   permanent: boolean,
 ): void => {
-  void EmbraceManagerModule.addSessionProperty(key, value, permanent).catch((error: unknown) => {
-    handleSDKPromiseRejection("addSessionProperty", error);
-  });
+  handleSDKPromiseRejection(addSessionProperty(key, value, permanent), "addSessionProperty");
 };
 
 const removeSessionProperty = (key: string) => {
@@ -25,9 +23,7 @@ const removeSessionProperty = (key: string) => {
 };
 
 const removeSessionPropertyAsync = (key: string): void => {
-  void EmbraceManagerModule.removeSessionProperty(key).catch((error: unknown) => {
-    handleSDKPromiseRejection("removeSessionProperty", error);
-  });
+  handleSDKPromiseRejection(removeSessionProperty(key), "removeSessionProperty");
 };
 
 const endSession = () => {
@@ -35,15 +31,12 @@ const endSession = () => {
 };
 
 const endSessionAsync = (): void => {
-  void EmbraceManagerModule.endSession().catch((error: unknown) => {
-    handleSDKPromiseRejection("endSession", error);
-  });
+  handleSDKPromiseRejection(endSession(), "endSession");
 };
 
 const getCurrentSessionId = (): Promise<string> => {
   return EmbraceManagerModule.getCurrentSessionId();
 };
-
 
 const getLastRunEndState = (): Promise<SessionStatus> => {
   return EmbraceManagerModule.getLastRunEndState();

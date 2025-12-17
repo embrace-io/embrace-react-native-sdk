@@ -37,17 +37,7 @@ const logMessageAsync = (
   properties: LogProperties = {},
   includeStacktrace = true,
 ): void => {
-  const stackTrace = includeStacktrace && severity !== "info" ? generateStackTrace() : "";
-  void EmbraceManagerModule.logMessageWithSeverityAndProperties(
-    message,
-    severity,
-    properties,
-    stackTrace,
-    includeStacktrace
-  )
-    .catch((error: unknown) => {
-      handleSDKPromiseRejection("logMessage", error);
-    });
+  handleSDKPromiseRejection(logMessage(message, severity, properties, includeStacktrace), "logMessage");
 };
 
 const logInfo = (message: string): Promise<boolean> => {
@@ -104,9 +94,7 @@ const logHandledErrorAsync = (
   error: Error,
   properties: LogProperties = {},
 ): void => {
-  void logHandledError(error, properties).catch((err: unknown) => {
-    handleSDKPromiseRejection("logHandledError", err);
-  });
+  handleSDKPromiseRejection(logHandledError(error, properties), "logHandledError");
 }
 
 export { logInfo, logInfoAsync, logWarning, logWarningAsync, logError, logErrorAsync, logHandledError, logHandledErrorAsync, logMessage, logMessageAsync };
