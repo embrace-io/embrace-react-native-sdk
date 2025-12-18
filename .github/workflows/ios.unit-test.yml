@@ -73,7 +73,7 @@ jobs:
             - 'packages/core/test-project/ios/Podfile.lock'
 
       - name: Cache Derived Data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: Derived-Data-Core-${{ runner.os }}-${{ hashFiles('packages/core/**/*.xcodeproj/project.pbxproj', 'packages/core/test-project/ios/Podfile.lock') }}
@@ -150,7 +150,7 @@ jobs:
             - 'packages/react-native-tracer-provider/test-project/ios/Podfile.lock'
 
       - name: Cache Derived Data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: Derived-Data-TracerProvider-${{ runner.os }}-${{ hashFiles('packages/react-native-tracer-provider/**/*.xcodeproj/project.pbxproj', 'packages/react-native-tracer-provider/test-project/ios/Podfile.lock') }}
@@ -231,7 +231,7 @@ jobs:
             - 'packages/react-native-otlp/test-project/ios/Podfile.lock'
 
       - name: Cache Derived Data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: Derived-Data-OTLP-${{ runner.os }}-${{ hashFiles('packages/react-native-otlp/**/*.xcodeproj/project.pbxproj', 'packages/react-native-otlp/test-project/ios/Podfile.lock') }}
