@@ -46,6 +46,10 @@ jobs:
         working-directory: ./integration-tests
         run: npm install
 
+      - name: Select Xcode 16.2 for expo-rn74 iOS (Xcode 16.4 compatibility issue)
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+        if: matrix.test-app == 'expo-rn74' && matrix.platform == 'ios'
+
       - name: Build Test App
         working-directory: ./integration-tests
         run: ./build-test-app.sh ${{ matrix.test-app }} ${{ matrix.platform }} namespace-${{ matrix.test-app }}-${{ matrix.platform }}-${{ github.run_id }}
