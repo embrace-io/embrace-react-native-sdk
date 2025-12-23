@@ -517,40 +517,40 @@ class EmbraceManagerTests: XCTestCase {
 
         let exportedSpans = try await getExportedSpans()
 
-        guard exportedSpans.count == 3 else {
-            XCTFail("Expected 3 exported spans, got \(exportedSpans.count)")
+        guard exportedSpans.count == 6 else {
+            XCTFail("Expected 6 exported spans, got \(exportedSpans.count)")
             return
         }
 
-        XCTAssertEqual(exportedSpans[0].name, "emb-GET /v1/products")
-        XCTAssertEqual(exportedSpans[0].startTime, Date(timeIntervalSince1970: 1723221815.889))
-        XCTAssertEqual(exportedSpans[0].endTime, Date(timeIntervalSince1970: 1723221815.891))
-        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]?.description, "perf.network_request")
-        XCTAssertEqual(exportedSpans[0].attributes["url.full"]?.description, "https://otest.com/v1/products")
-        XCTAssertEqual(exportedSpans[0].attributes["http.request.method"]?.description, "GET")
-        XCTAssertEqual(exportedSpans[0].attributes["http.response.body.size"]?.description, "2000")
-        XCTAssertEqual(exportedSpans[0].attributes["http.request.body.size"]?.description, "1000")
-        XCTAssertEqual(exportedSpans[0].attributes["http.response.status_code"]?.description, "200")
-        XCTAssertNotNil(exportedSpans[0].attributes["emb.w3c_traceparent"])
-
-        XCTAssertEqual(exportedSpans[1].name, "emb-POST")
+        XCTAssertEqual(exportedSpans[1].name, "emb-GET /v1/products")
         XCTAssertEqual(exportedSpans[1].startTime, Date(timeIntervalSince1970: 1723221815.889))
         XCTAssertEqual(exportedSpans[1].endTime, Date(timeIntervalSince1970: 1723221815.891))
-        XCTAssertEqual(exportedSpans[1].attributes["url.full"]?.description, "https://otest.com/")
+        XCTAssertEqual(exportedSpans[1].attributes["emb.type"]?.description, "perf.network_request")
+        XCTAssertEqual(exportedSpans[1].attributes["url.full"]?.description, "https://otest.com/v1/products")
+        XCTAssertEqual(exportedSpans[1].attributes["http.request.method"]?.description, "GET")
+        XCTAssertEqual(exportedSpans[1].attributes["http.response.body.size"]?.description, "2000")
+        XCTAssertEqual(exportedSpans[1].attributes["http.request.body.size"]?.description, "1000")
+        XCTAssertEqual(exportedSpans[1].attributes["http.response.status_code"]?.description, "200")
         XCTAssertNotNil(exportedSpans[1].attributes["emb.w3c_traceparent"])
 
-        // negative values should not be added
-        XCTAssertNil(exportedSpans[1].attributes["http.response.body.size"])
-        XCTAssertNil(exportedSpans[1].attributes["http.request.body.size"])
-        XCTAssertNil(exportedSpans[1].attributes["http.response.status_code"])
+        XCTAssertEqual(exportedSpans[3].name, "emb-POST")
+        XCTAssertEqual(exportedSpans[3].startTime, Date(timeIntervalSince1970: 1723221815.889))
+        XCTAssertEqual(exportedSpans[3].endTime, Date(timeIntervalSince1970: 1723221815.891))
+        XCTAssertEqual(exportedSpans[3].attributes["url.full"]?.description, "https://otest.com/")
+        XCTAssertNotNil(exportedSpans[3].attributes["emb.w3c_traceparent"])
 
-        XCTAssertEqual(exportedSpans[2].name, "emb-POST /v2/error")
-        XCTAssertEqual(exportedSpans[2].startTime, Date(timeIntervalSince1970: 1723221815.889))
-        XCTAssertEqual(exportedSpans[2].endTime, Date(timeIntervalSince1970: 1723221815.891))
-        XCTAssertEqual(exportedSpans[2].attributes["url.full"]?.description, "https://otest.com/v2/error")
-        XCTAssertEqual(exportedSpans[2].attributes["http.response.status_code"]?.description, "500")
-        XCTAssertEqual(exportedSpans[2].status, Status.ok)
-        XCTAssertNotNil(exportedSpans[2].attributes["emb.w3c_traceparent"])
+        // negative values should not be added
+        XCTAssertNil(exportedSpans[3].attributes["http.response.body.size"])
+        XCTAssertNil(exportedSpans[3].attributes["http.request.body.size"])
+        XCTAssertNil(exportedSpans[3].attributes["http.response.status_code"])
+
+        XCTAssertEqual(exportedSpans[5].name, "emb-POST /v2/error")
+        XCTAssertEqual(exportedSpans[5].startTime, Date(timeIntervalSince1970: 1723221815.889))
+        XCTAssertEqual(exportedSpans[5].endTime, Date(timeIntervalSince1970: 1723221815.891))
+        XCTAssertEqual(exportedSpans[5].attributes["url.full"]?.description, "https://otest.com/v2/error")
+        XCTAssertEqual(exportedSpans[5].attributes["http.response.status_code"]?.description, "500")
+        XCTAssertEqual(exportedSpans[5].status, Status.ok)
+        XCTAssertNotNil(exportedSpans[5].attributes["emb.w3c_traceparent"])
     }
 
     func testLogNetworkClientError() async throws {
@@ -572,18 +572,18 @@ class EmbraceManagerTests: XCTestCase {
 
         let exportedSpans = try await getExportedSpans()
 
-        guard exportedSpans.count == 1 else {
+        guard exportedSpans.count == 2 else {
             XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
             return
         }
 
-        XCTAssertEqual(exportedSpans[0].name, "emb-GET /v1/products")
-        XCTAssertEqual(exportedSpans[0].attributes["emb.type"]?.description, "perf.network_request")
-        XCTAssertEqual(exportedSpans[0].attributes["url.full"]?.description, "https://otest.com/v1/products")
-        XCTAssertEqual(exportedSpans[0].attributes["http.request.method"]?.description, "GET")
-        XCTAssertEqual(exportedSpans[0].attributes["error.message"]?.description, "this is my error")
-        XCTAssertEqual(exportedSpans[0].attributes["error.type"]?.description, "custom error")
-        XCTAssertNotNil(exportedSpans[0].attributes["emb.w3c_traceparent"])
+        XCTAssertEqual(exportedSpans[1].name, "emb-GET /v1/products")
+        XCTAssertEqual(exportedSpans[1].attributes["emb.type"]?.description, "perf.network_request")
+        XCTAssertEqual(exportedSpans[1].attributes["url.full"]?.description, "https://otest.com/v1/products")
+        XCTAssertEqual(exportedSpans[1].attributes["http.request.method"]?.description, "GET")
+        XCTAssertEqual(exportedSpans[1].attributes["error.message"]?.description, "this is my error")
+        XCTAssertEqual(exportedSpans[1].attributes["error.type"]?.description, "custom error")
+        XCTAssertNotNil(exportedSpans[1].attributes["emb.w3c_traceparent"])
     }
 }
 
