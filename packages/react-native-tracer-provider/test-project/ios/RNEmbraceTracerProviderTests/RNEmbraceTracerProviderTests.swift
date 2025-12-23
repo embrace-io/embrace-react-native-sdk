@@ -28,6 +28,9 @@ class TestSpanExporter: SpanExporter {
     var exportedSpans: [SpanData] = []
 
     func export(spans: [SpanData], explicitTimeout: TimeInterval?) -> SpanExporterResultCode {
+        for span in spans {
+            print("CI_DEBUG: EXPORT '\(span.name)' (id: \(span.spanId.hexString)) status=\(span.status.description)")
+        }
         exportedSpans.append(contentsOf: spans)
         return SpanExporterResultCode.success
     }
@@ -95,10 +98,17 @@ class ReactNativeTracerProviderTests: XCTestCase {
       try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
       let allSpans = ReactNativeTracerProviderTests.exporter.exportedSpans
 
+      print("CI_DEBUG: Total spans before filter: \(allSpans.count)")
+      for (i, span) in allSpans.enumerated() {
+          let isFiltered = EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
+          print("CI_DEBUG: [\(i)] '\(span.name)' (id: \(span.spanId.hexString)) - \(isFiltered ? "FILTERED" : "NOT FILTERED")")
+      }
+
       let filtered = allSpans.filter { span in
           !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
       }
 
+      print("CI_DEBUG: Returning \(filtered.count) spans after filtering")
       return filtered
   }
 
