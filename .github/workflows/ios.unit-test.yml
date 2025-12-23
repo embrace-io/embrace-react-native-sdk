@@ -179,6 +179,8 @@ jobs:
       - name: Run Tracer Provider iOS Unit Tests
         run: yarn run ios:test:tracer-provider
         if: steps.changed_files.outputs.tracer-provider == 'true'
+        env:
+          IOS_TEST_WAIT_TIME: "10"
 
       - name: Upload Test Results (xcresult bundle)
         if: always() && steps.changed_files.outputs.tracer-provider == 'true'
