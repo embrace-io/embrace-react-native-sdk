@@ -90,6 +90,11 @@ class ReactNativeTracerProviderTests: XCTestCase {
   override func setUp() async throws {
       promise = Promise()
       module = ReactNativeTracerProviderModule()
+      // Flush any pending exports from previous test
+      _ = ReactNativeTracerProviderTests.exporter.flush(explicitTimeout: 5.0)
+      // Wait for async exports to complete
+      try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
+      // Now reset the exporter
       ReactNativeTracerProviderTests.exporter.reset(explicitTimeout: nil)
       module.setupTracer(name: "test", version: "v1", schemaUrl: "")
   }
