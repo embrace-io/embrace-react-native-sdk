@@ -93,16 +93,16 @@ class ReactNativeTracerProviderTests: XCTestCase {
       // Flush any pending exports from previous test
       _ = ReactNativeTracerProviderTests.exporter.flush(explicitTimeout: 5.0)
 
-      // Poll until no new spans arrive for 2 seconds (max 15 seconds total)
+      // Poll until no new spans arrive for 3 seconds (max 30 seconds total)
       var previousCount = ReactNativeTracerProviderTests.exporter.exportedSpans.count
       var stableCount = 0
-      for _ in 0..<15 {
+      for _ in 0..<30 {
           try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
           let currentCount = ReactNativeTracerProviderTests.exporter.exportedSpans.count
           if currentCount == previousCount {
               stableCount += 1
-              if stableCount >= 2 {
-                  break  // No new spans for 2 seconds, we're stable
+              if stableCount >= 3 {
+                  break  // No new spans for 3 seconds, we're stable
               }
           } else {
               stableCount = 0
