@@ -92,8 +92,24 @@ class ReactNativeTracerProviderTests: XCTestCase {
       module = ReactNativeTracerProviderModule()
       // Flush any pending exports from previous test
       _ = ReactNativeTracerProviderTests.exporter.flush(explicitTimeout: 5.0)
-      // Wait for async exports to complete
-      try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
+
+      // Poll until no new spans arrive for 2 seconds (max 15 seconds total)
+      var previousCount = ReactNativeTracerProviderTests.exporter.exportedSpans.count
+      var stableCount = 0
+      for _ in 0..<15 {
+          try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
+          let currentCount = ReactNativeTracerProviderTests.exporter.exportedSpans.count
+          if currentCount == previousCount {
+              stableCount += 1
+              if stableCount >= 2 {
+                  break  // No new spans for 2 seconds, we're stable
+              }
+          } else {
+              stableCount = 0
+              previousCount = currentCount
+          }
+      }
+
       // Now reset the exporter
       ReactNativeTracerProviderTests.exporter.reset(explicitTimeout: nil)
       module.setupTracer(name: "test", version: "v1", schemaUrl: "")
