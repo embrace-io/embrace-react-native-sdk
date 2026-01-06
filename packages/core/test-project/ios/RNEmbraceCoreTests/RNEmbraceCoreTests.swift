@@ -124,6 +124,30 @@ class EmbraceManagerTests: XCTestCase {
     override func setUp() async throws {
         promise = Promise()
         module = EmbraceManager()
+
+        // Initial wait to let Embrace SDK initialize (especially important for first test)
+        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+
+        // Poll until no new logs/spans arrive for 3 seconds (max 30 seconds total)
+        var previousLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
+        var previousSpanCount = EmbraceManagerTests.spanExporter.exportedSpans.count
+        var stableCount = 0
+        for _ in 0..<30 {
+            try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
+            let currentLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
+            let currentSpanCount = EmbraceManagerTests.spanExporter.exportedSpans.count
+            if currentLogCount == previousLogCount && currentSpanCount == previousSpanCount {
+                stableCount += 1
+                if stableCount >= 3 {
+                    break  // No new logs/spans for 3 seconds, we're stable
+                }
+            } else {
+                stableCount = 0
+                previousLogCount = currentLogCount
+                previousSpanCount = currentSpanCount
+            }
+        }
+
         // Track starting counts instead of clearing
         startingLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
         startingSpanCount = EmbraceManagerTests.spanExporter.exportedSpans.count
