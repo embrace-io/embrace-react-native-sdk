@@ -93,6 +93,9 @@ class ReactNativeTracerProviderTests: XCTestCase {
       // Flush any pending exports from previous test
       _ = ReactNativeTracerProviderTests.exporter.flush(explicitTimeout: 5.0)
 
+      // Initial wait to let Embrace SDK initialize (especially important for first test)
+      try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+
       // Poll until no new spans arrive for 3 seconds (max 30 seconds total)
       var previousCount = ReactNativeTracerProviderTests.exporter.exportedSpans.count
       var stableCount = 0

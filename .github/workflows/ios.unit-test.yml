@@ -195,6 +195,8 @@ jobs:
             -disable-concurrent-testing \
             -jobs 1 \
             2>&1 | tee ~/test-logs/tracer-provider-raw.log || true
+        env:
+          IOS_TEST_WAIT_TIME: "15"
 
       - name: Upload Raw Test Logs
         if: always() && steps.changed_files.outputs.tracer-provider == 'true'
