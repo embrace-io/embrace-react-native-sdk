@@ -1,6 +1,8 @@
-.github @embrace-io/opensource-devops
-
+# React Native SDK
 * @embrace-io/opensource-react-native
 
-# API surface owners
+# DevOps
+.github @embrace-io/opensource-devops @embrace-io/opensource-react-native
+
+# API Surface Owners
 src/embrace.ts @fractalwrench @fnewberg
