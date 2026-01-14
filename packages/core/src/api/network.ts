@@ -1,5 +1,6 @@
-import {MethodType} from "../interfaces";
-import {EmbraceManagerModule} from "../EmbraceManagerModule";
+import { MethodType } from "../interfaces";
+import { EmbraceManagerModule } from "../EmbraceManagerModule";
+import { handleSDKPromiseRejection } from "../utils/promiseHandler";
 
 const recordNetworkRequest = (
   url: string,
@@ -21,6 +22,26 @@ const recordNetworkRequest = (
   );
 };
 
+const recordNetworkRequestFireAndForget = (
+  url: string,
+  httpMethod: MethodType,
+  startInMillis: number,
+  endInMillis: number,
+  bytesSent?: number,
+  bytesReceived?: number,
+  statusCode?: number,
+): void => {
+  handleSDKPromiseRejection(recordNetworkRequest(
+    url,
+    httpMethod,
+    startInMillis,
+    endInMillis,
+    bytesSent,
+    bytesReceived,
+    statusCode,
+  ), "logNetworkRequest");
+};
+
 const logNetworkClientError = (
   url: string,
   httpMethod: MethodType,
@@ -39,4 +60,22 @@ const logNetworkClientError = (
   );
 };
 
-export {recordNetworkRequest, logNetworkClientError};
+const logNetworkClientErrorFireAndForget = (
+  url: string,
+  httpMethod: MethodType,
+  startInMillis: number,
+  endInMillis: number,
+  errorType: string,
+  errorMessage: string,
+): void => {
+  handleSDKPromiseRejection(logNetworkClientError(
+    url,
+    httpMethod,
+    startInMillis,
+    endInMillis,
+    errorType,
+    errorMessage,
+  ), "logNetworkClientError");
+};
+
+export { recordNetworkRequest, recordNetworkRequestFireAndForget, logNetworkClientError, logNetworkClientErrorFireAndForget };
