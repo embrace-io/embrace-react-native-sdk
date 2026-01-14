@@ -25,7 +25,7 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:RNEmbraceTracerProvider.xcodeproj",
         "identifier" : "6DED2F532CE514B200A9735A",

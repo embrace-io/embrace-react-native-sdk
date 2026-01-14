@@ -25,7 +25,7 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:RNEmbraceOTLPTests.xcodeproj",
         "identifier" : "6D2523202CC7F351000ECCEA",
