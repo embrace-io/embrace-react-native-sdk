@@ -38,7 +38,7 @@
     "@react-native-community/eslint-config": "^3.2.0",
     "@testing-library/react-native": "^13.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.11",
+    "@types/node": "^25.0.9",
     "@types/react-native": "^0.60.2",
     "@types/semver": "^7.1.0",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
