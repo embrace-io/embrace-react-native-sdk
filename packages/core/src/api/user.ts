@@ -149,7 +149,7 @@ const clearUsername = (): Promise<boolean> => {
  *
  * The email is displayed in the Embrace dashboard and can help identify users
  * when debugging issues or providing customer support.
- * 
+ *
  * Note: Be cautious when using personally identifiable information (PII) and consider
  * using a hashed email address and setUserIdentifier for better privacy.
  *
