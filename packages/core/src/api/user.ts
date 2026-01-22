@@ -113,6 +113,10 @@ const clearUserIdentifier = (): Promise<boolean> => {
  *
  * The username is displayed in the Embrace dashboard and can help identify users
  * when debugging issues.
+ * 
+ * Note: Be mindful of PII and privacy regulations when setting usernames.
+ * We strongly recommend using anonymized or pseudonymous usernames where possible in combination with
+ * setUserIdentifier for unique user identification.
  *
  * @param username - The username to associate with the current user
  * @returns A promise that resolves to `true` if the username was successfully set, `false` otherwise
@@ -150,8 +154,9 @@ const clearUsername = (): Promise<boolean> => {
  * The email is displayed in the Embrace dashboard and can help identify users
  * when debugging issues or providing customer support.
  *
- * Note: Be cautious when using personally identifiable information (PII) and consider
- * using a hashed email address and setUserIdentifier for better privacy.
+ * Note: Be mindful of PII and privacy regulations when setting user email addresses.
+ * We strongly recommend using hashed or anonymized emails where possible in combination with 
+ * setUserIdentifier for unique user identification.
  *
  * @param userEmail - The email address to associate with the current user
  * @returns A promise that resolves to `true` if the email was successfully set, `false` otherwise
