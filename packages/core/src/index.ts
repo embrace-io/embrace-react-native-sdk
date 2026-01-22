@@ -1,15 +1,15 @@
 "use strict";
 
-import {Platform} from "react-native";
+import { Platform } from "react-native";
 
-import {oltpGetStart} from "./utils/otlp";
-import {enableUnhandledRejectionTracking} from "./utils/error";
-import {setEmbracePackageVersion, setReactNativeVersion} from "./utils/bundle";
+import { oltpGetStart } from "./utils/otlp";
+import { enableUnhandledRejectionTracking } from "./utils/error";
+import { setEmbracePackageVersion, setReactNativeVersion } from "./utils/bundle";
 import EmbraceLogger from "./utils/EmbraceLogger";
-import {SDKConfig, EmbraceLoggerLevel} from "./interfaces";
-import {handleError, handleGlobalError} from "./api/error";
-import {setJavaScriptBundlePath, setJavaScriptPatch} from "./api/bundle";
-import {EmbraceManagerModule} from "./EmbraceManagerModule";
+import { SDKConfig, EmbraceLoggerLevel } from "./interfaces";
+import { handleError, handleGlobalError } from "./api/error";
+import { setJavaScriptBundlePath, setJavaScriptPatch } from "./api/bundle";
+import { EmbraceManagerModule } from "./EmbraceManagerModule";
 
 interface EmbraceInitArgs {
   patch?: string;
@@ -18,7 +18,7 @@ interface EmbraceInitArgs {
 }
 
 const initialize = async (
-  {sdkConfig, patch, logLevel}: EmbraceInitArgs = {logLevel: "info"},
+  { sdkConfig, patch, logLevel }: EmbraceInitArgs = { logLevel: "info" },
 ): Promise<boolean> => {
   const isIOS = Platform.OS === "ios";
   const logger = new EmbraceLogger(console, logLevel);
@@ -36,7 +36,7 @@ const initialize = async (
       return Promise.resolve(false);
     }
 
-    const {exporters: otlpExporters} = sdkConfig || {};
+    const { exporters: otlpExporters } = sdkConfig || {};
     const startSdkConfig = (isIOS && sdkConfig?.ios) || {};
 
     let isStarted;
@@ -61,9 +61,9 @@ const initialize = async (
       // if the otlp package throws or it is not available, the core package will work as usual printing the proper messages
       isStarted = otlpStart
         ? // if OTLP exporter package is available, use it
-          await otlpStart(startSdkConfig)
+        await otlpStart(startSdkConfig)
         : // otherwise, uses the core package
-          await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
+        await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
     } catch (e) {
       isStarted = false;
       logger.warn(`${e}`);
@@ -144,4 +144,10 @@ export * from "./hooks/useEmbraceIsStarted";
 export * from "./hooks/useOrientationListener";
 export * from "./interfaces";
 
-export {initialize};
+export {
+  configurePromiseRejection,
+  getPromiseRejectionConfig,
+  type EmbracePromiseRejectionConfig,
+} from "./utils/promiseHandler";
+
+export { initialize };

@@ -1,6 +1,7 @@
 export * from "./EmbraceTestHarness";
 export * from "./EmbraceWixTestHarness";
 
+export * from "./screens/AsyncTestingScreen";
 export * from "./screens/LogTestingScreen";
 export * from "./screens/UserTestingScreen";
 export * from "./screens/SpanTestingScreen";
