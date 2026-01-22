@@ -52,6 +52,7 @@ private let EMBRACE_INTERNAL_SPAN_NAMES = [
     "emb-session",
     "emb-sdk-start",
     "emb-setup",
+    "emb-thread-blockage",
     "POST /dev/null/v2/logs",
     "POST /dev/null/v2/spans"
 ]
@@ -86,15 +87,43 @@ class ReactNativeTracerProviderTests: XCTestCase {
   override func setUp() async throws {
       promise = Promise()
       module = ReactNativeTracerProviderModule()
+      // Flush any pending exports from previous test
+      _ = ReactNativeTracerProviderTests.exporter.flush(explicitTimeout: 5.0)
+
+      // Initial wait to let Embrace SDK initialize (especially important for first test)
+      try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+
+      // Poll until no new spans arrive for 3 seconds (max 30 seconds total)
+      var previousCount = ReactNativeTracerProviderTests.exporter.exportedSpans.count
+      var stableCount = 0
+      for _ in 0..<30 {
+          try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
+          let currentCount = ReactNativeTracerProviderTests.exporter.exportedSpans.count
+          if currentCount == previousCount {
+              stableCount += 1
+              if stableCount >= 3 {
+                  break  // No new spans for 3 seconds, we're stable
+              }
+          } else {
+              stableCount = 0
+              previousCount = currentCount
+          }
+      }
+
+      // Now reset the exporter
       ReactNativeTracerProviderTests.exporter.reset(explicitTimeout: nil)
       module.setupTracer(name: "test", version: "v1", schemaUrl: "")
   }
 
   func getExportedSpans() async throws -> [SpanData] {
       try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-      return ReactNativeTracerProviderTests.exporter.exportedSpans.filter { span in
+      let allSpans = ReactNativeTracerProviderTests.exporter.exportedSpans
+
+      let filtered = allSpans.filter { span in
           !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
       }
+
+      return filtered
   }
 
   func testBasicProvider() async throws {
@@ -108,14 +137,18 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 1 else {
-        XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
+    guard exportedSpans.count == 2 else {
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
         return
     }
-
-    XCTAssertEqual(exportedSpans.count, 1)
-    XCTAssertEqual(exportedSpans[0].name, "my-span")
-    XCTAssertTrue(exportedSpans[0].hasEnded)
+    
+    XCTAssertEqual(exportedSpans.count, 2)
+      
+    XCTAssertEqual(exportedSpans[0].events.count, 0)
+    XCTAssertEqual(exportedSpans[0].status.description, "Status{statusCode=unset}")
+    
+    XCTAssertEqual(exportedSpans[1].name, "my-span")
+    XCTAssertTrue(exportedSpans[1].hasEnded)
   }
 
   func testStartSpanSimple() async throws {
@@ -127,16 +160,20 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 1 else {
-        XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
+    guard exportedSpans.count == 2 else {
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans.count, 1)
-    XCTAssertEqual(exportedSpans[0].name, "my-span")
-    XCTAssertTrue(exportedSpans[0].hasEnded)
-    XCTAssertTrue(exportedSpans[0].spanId.isValid)
-    XCTAssertTrue(exportedSpans[0].traceId.isValid)
+    XCTAssertEqual(exportedSpans.count, 2)
+    
+    XCTAssertEqual(exportedSpans[0].events.count, 0)
+    XCTAssertEqual(exportedSpans[0].status.description, "Status{statusCode=unset}")
+    
+    XCTAssertEqual(exportedSpans[1].name, "my-span")
+    XCTAssertTrue(exportedSpans[1].hasEnded)
+    XCTAssertTrue(exportedSpans[1].spanId.isValid)
+    XCTAssertTrue(exportedSpans[1].traceId.isValid)
 
     guard promise.resolveCalls.count == 1 else {
         XCTFail("Expected 1 promise resolve call, got \(promise.resolveCalls.count)")
@@ -186,44 +223,44 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 1 else {
-        XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
+    guard exportedSpans.count == 2 else {
+        XCTFail("Expected 2 exported span, got \(exportedSpans.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans.count, 1)
-    XCTAssertEqual(exportedSpans[0].name, "my-span")
-    XCTAssertEqual(exportedSpans[0].kind, SpanKind.client)
-    XCTAssertEqual(exportedSpans[0].startTime, Date(timeIntervalSince1970: 1718386928.001))
+    XCTAssertEqual(exportedSpans.count, 2)
+    XCTAssertEqual(exportedSpans[1].name, "my-span")
+    XCTAssertEqual(exportedSpans[1].kind, SpanKind.client)
+    XCTAssertEqual(exportedSpans[1].startTime, Date(timeIntervalSince1970: 1718386928.001))
 
-    guard exportedSpans[0].attributes.count == 6 else {
-        XCTFail("Expected 6 attributes on span, got \(exportedSpans[0].attributes.count)")
+    guard exportedSpans[1].attributes.count == 7 else {
+        XCTFail("Expected 7 attributes on span, got \(exportedSpans[0].attributes.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans[0].attributes.count, 6)
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]?.description, "some-string")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]?.description, "true")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr3"]?.description, "344")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr4"]?.description, "[str1, str2]")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr5"]?.description, "[22, 44]")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr6"]?.description, "[true, false]")
+    XCTAssertEqual(exportedSpans[1].attributes.count, 7)
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr1"]?.description, "some-string")
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr2"]?.description, "true")
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr3"]?.description, "344")
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr4"]?.description, "[str1, str2]")
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr5"]?.description, "[22, 44]")
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr6"]?.description, "[true, false]")
 
-    guard exportedSpans[0].links.count == 2 else {
+    guard exportedSpans[1].links.count == 2 else {
         XCTFail("Expected 2 links on span, got \(exportedSpans[0].links.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans[0].links.count, 2)
-    XCTAssertEqual(exportedSpans[0].links[0].context.spanId.hexString, "1111000011110000")
-    XCTAssertEqual(exportedSpans[0].links[0].context.traceId.hexString, "22220000222200002222000022220000")
-    XCTAssertEqual(exportedSpans[0].links[0].attributes.count, 1)
-    XCTAssertEqual(exportedSpans[0].links[0].attributes["link-attr-1"]?.description, "my-link-attr")
-    XCTAssertEqual(exportedSpans[0].links[1].context.spanId.hexString, "6666000066660000")
-    XCTAssertEqual(exportedSpans[0].links[1].context.traceId.hexString, "77770000777700007777000077770000")
-    XCTAssertEqual(exportedSpans[0].links[1].attributes.count, 0)
+    XCTAssertEqual(exportedSpans[1].links.count, 2)
+    XCTAssertEqual(exportedSpans[1].links[0].context.spanId.hexString, "1111000011110000")
+    XCTAssertEqual(exportedSpans[1].links[0].context.traceId.hexString, "22220000222200002222000022220000")
+    XCTAssertEqual(exportedSpans[1].links[0].attributes.count, 1)
+    XCTAssertEqual(exportedSpans[1].links[0].attributes["link-attr-1"]?.description, "my-link-attr")
+    XCTAssertEqual(exportedSpans[1].links[1].context.spanId.hexString, "6666000066660000")
+    XCTAssertEqual(exportedSpans[1].links[1].context.traceId.hexString, "77770000777700007777000077770000")
+    XCTAssertEqual(exportedSpans[1].links[1].attributes.count, 0)
 
-    XCTAssertEqual(exportedSpans[0].endTime, Date(timeIntervalSince1970: 1728386928.001))
+    XCTAssertEqual(exportedSpans[1].endTime, Date(timeIntervalSince1970: 1728386928.001))
   }
 
   func testStartSpanWithParent() async throws {
@@ -240,15 +277,16 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+    guard exportedSpans.count == 4 else {
+        XCTFail("Expected 4 exported spans, got \(exportedSpans.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans.count, 2)
-    XCTAssertEqual(exportedSpans[0].name, "parent-span")
-    XCTAssertNil(exportedSpans[0].parentSpanId)
-    XCTAssertTrue(exportedSpans[0].traceId.isValid)
+    XCTAssertEqual(exportedSpans.count, 4)
+    // Check parent span (final ok status at index 2)
+    XCTAssertEqual(exportedSpans[2].name, "parent-span")
+    XCTAssertNil(exportedSpans[2].parentSpanId)
+    XCTAssertTrue(exportedSpans[2].traceId.isValid)
 
     guard promise.resolveCalls.count == 2 else {
         XCTFail("Expected 2 promise resolve calls, got \(promise.resolveCalls.count)")
@@ -259,9 +297,10 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let parentSpanId = (promise.resolveCalls[0] as? NSDictionary)?.object(forKey: "spanId") as? String
     let parentTraceId = (promise.resolveCalls[0] as? NSDictionary)?.object(forKey: "traceId") as? String
 
-    XCTAssertNotNil(exportedSpans[1].parentSpanId)
-    XCTAssertEqual(parentSpanId, exportedSpans[1].parentSpanId?.hexString)
-    XCTAssertEqual(parentTraceId, exportedSpans[1].traceId.hexString)
+    // Check child span (final ok status at index 3)
+    XCTAssertNotNil(exportedSpans[3].parentSpanId)
+    XCTAssertEqual(parentSpanId, exportedSpans[3].parentSpanId?.hexString)
+    XCTAssertEqual(parentTraceId, exportedSpans[3].traceId.hexString)
   }
 
   func testStartSpanWithEndedParent() async throws {
@@ -279,15 +318,23 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+    guard exportedSpans.count == 4 else {
+        XCTFail("Expected 4 exported spans, got \(exportedSpans.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans.count, 2)
-    XCTAssertEqual(exportedSpans[0].name, "parent-span")
-    XCTAssertNil(exportedSpans[0].parentSpanId)
-    XCTAssertTrue(exportedSpans[0].traceId.isValid)
+    XCTAssertEqual(exportedSpans.count, 4)
+
+    XCTAssertEqual(exportedSpans[0].events.count, 0)
+    XCTAssertEqual(exportedSpans[0].status.description, "Status{statusCode=unset}")
+
+    XCTAssertEqual(exportedSpans[2].events.count, 0)
+    XCTAssertEqual(exportedSpans[2].status.description, "Status{statusCode=unset}")
+
+    // Check parent span (final ok status at index 1)
+    XCTAssertEqual(exportedSpans[1].name, "parent-span")
+    XCTAssertNil(exportedSpans[1].parentSpanId)
+    XCTAssertTrue(exportedSpans[1].traceId.isValid)
 
     guard promise.resolveCalls.count == 2 else {
         XCTFail("Expected 2 promise resolve calls, got \(promise.resolveCalls.count)")
@@ -298,9 +345,10 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let parentSpanId = (promise.resolveCalls[0] as? NSDictionary)?.object(forKey: "spanId") as? String
     let parentTraceId = (promise.resolveCalls[0] as? NSDictionary)?.object(forKey: "traceId") as? String
 
-    XCTAssertNotNil(exportedSpans[1].parentSpanId)
-    XCTAssertEqual(parentSpanId, exportedSpans[1].parentSpanId?.hexString)
-    XCTAssertEqual(parentTraceId, exportedSpans[1].traceId.hexString)
+    // Check child span (final ok status at index 3)
+    XCTAssertNotNil(exportedSpans[3].parentSpanId)
+    XCTAssertEqual(parentSpanId, exportedSpans[3].parentSpanId?.hexString)
+    XCTAssertEqual(parentTraceId, exportedSpans[3].traceId.hexString)
   }
 
  func testStartSpanWithEndedParentAfterClear() async throws {
@@ -319,15 +367,16 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+    guard exportedSpans.count == 4 else {
+        XCTFail("Expected 4 exported spans, got \(exportedSpans.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans.count, 2)
-    XCTAssertEqual(exportedSpans[0].name, "parent-span")
-    XCTAssertNil(exportedSpans[0].parentSpanId)
-    XCTAssertTrue(exportedSpans[0].traceId.isValid)
+    XCTAssertEqual(exportedSpans.count, 4)
+    // Check parent span (final ok status at index 1)
+    XCTAssertEqual(exportedSpans[1].name, "parent-span")
+    XCTAssertNil(exportedSpans[1].parentSpanId)
+    XCTAssertTrue(exportedSpans[1].traceId.isValid)
 
     guard promise.resolveCalls.count == 2 else {
         XCTFail("Expected 2 promise resolve calls, got \(promise.resolveCalls.count)")
@@ -337,8 +386,9 @@ class ReactNativeTracerProviderTests: XCTestCase {
     XCTAssertEqual(promise.resolveCalls.count, 2)
     let parentTraceId = (promise.resolveCalls[0] as? NSDictionary)?.object(forKey: "traceId") as? String
 
-    XCTAssertNil(exportedSpans[1].parentSpanId)
-    XCTAssertNotEqual(parentTraceId, exportedSpans[1].traceId.hexString)
+    // Check child span (final ok status at index 3) - should have no parent since parent was cleared
+    XCTAssertNil(exportedSpans[3].parentSpanId)
+    XCTAssertNotEqual(parentTraceId, exportedSpans[3].traceId.hexString)
   }
 
   func testSetAttributes() async throws {
@@ -358,25 +408,29 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 1 else {
-        XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
+    guard exportedSpans.count == 2 else {
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
         return
     }
 
-    guard exportedSpans[0].attributes.count == 6 else {
-        XCTFail("Expected 6 attributes on span, got \(exportedSpans[0].attributes.count)")
+    guard exportedSpans[1].attributes.count == 7 else {
+        XCTFail("Expected 6 attributes on span, got \(exportedSpans[1].attributes.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans.count, 1)
-    XCTAssertEqual(exportedSpans[0].name, "my-span")
-    XCTAssertEqual(exportedSpans[0].attributes.count, 6)
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr1"]?.description, "some-string")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr2"]?.description, "true")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr3"]?.description, "344")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr4"]?.description, "[str1, str2]")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr5"]?.description, "[22, 44]")
-    XCTAssertEqual(exportedSpans[0].attributes["my-attr6"]?.description, "[true, false]")
+    XCTAssertEqual(exportedSpans.count, 2)
+      
+    XCTAssertEqual(exportedSpans[0].events.count, 0)
+    XCTAssertEqual(exportedSpans[0].status.description, "Status{statusCode=unset}")
+      
+    XCTAssertEqual(exportedSpans[1].name, "my-span")
+    XCTAssertEqual(exportedSpans[1].attributes.count, 7)
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr1"]?.description, "some-string")
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr2"]?.description, "true")
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr3"]?.description, "344")
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr4"]?.description, "[str1, str2]")
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr5"]?.description, "[22, 44]")
+    XCTAssertEqual(exportedSpans[1].attributes["my-attr6"]?.description, "[true, false]")
   }
 
   func testAddEvent() async throws {
@@ -397,23 +451,27 @@ class ReactNativeTracerProviderTests: XCTestCase {
     module.endSpan(spanBridgeId: "span_0", time: 0.0)
 
     let exportedSpans = try await getExportedSpans()
-    guard exportedSpans.count == 1 else {
-        XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
+    guard exportedSpans.count == 2 else {
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
         return
     }
-    guard exportedSpans[0].events.count == 2 else {
+    guard exportedSpans[1].events.count == 2 else {
         XCTFail("Expected 2 events on span, got \(exportedSpans[0].events.count)")
         return
     }
-    XCTAssertEqual(exportedSpans.count, 1)
-    XCTAssertEqual(exportedSpans[0].events.count, 2)
-    XCTAssertEqual(exportedSpans[0].events[0].name, "my-1st-event")
-    XCTAssertEqual(exportedSpans[0].events[0].attributes.count, 1)
-    XCTAssertEqual(exportedSpans[0].events[0].attributes["my-attr1"]?.description, "some-string")
-    XCTAssertEqual(exportedSpans[0].events[1].name, "my-2nd-event")
-    XCTAssertEqual(exportedSpans[0].events[1].attributes.count, 1)
-    XCTAssertEqual(exportedSpans[0].events[1].attributes["my-attr2"]?.description, "other-string")
-    XCTAssertEqual(exportedSpans[0].events[1].timestamp, Date(timeIntervalSince1970: 1518386928.052))
+    XCTAssertEqual(exportedSpans.count, 2)
+      
+    XCTAssertEqual(exportedSpans[0].events.count, 0)
+    XCTAssertEqual(exportedSpans[0].status.description, "Status{statusCode=unset}")
+    
+    XCTAssertEqual(exportedSpans[1].events.count, 2)
+    XCTAssertEqual(exportedSpans[1].events[0].name, "my-1st-event")
+    XCTAssertEqual(exportedSpans[1].events[0].attributes.count, 1)
+    XCTAssertEqual(exportedSpans[1].events[0].attributes["my-attr1"]?.description, "some-string")
+    XCTAssertEqual(exportedSpans[1].events[1].name, "my-2nd-event")
+    XCTAssertEqual(exportedSpans[1].events[1].attributes.count, 1)
+    XCTAssertEqual(exportedSpans[1].events[1].attributes["my-attr2"]?.description, "other-string")
+    XCTAssertEqual(exportedSpans[1].events[1].timestamp, Date(timeIntervalSince1970: 1518386928.052))
   }
 
   func testSetStatus() async throws {
@@ -434,14 +492,20 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 2 else {
+    guard exportedSpans.count == 4 else {
         XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans.count, 2)
-    XCTAssertEqual(exportedSpans[0].status.description, "Status{statusCode=ok}")
-    XCTAssertEqual(exportedSpans[1].status.description, "Status{statusCode=error, description=some message}")
+    XCTAssertEqual(exportedSpans.count, 4)
+      
+    XCTAssertEqual(exportedSpans[0].events.count, 0)
+    XCTAssertEqual(exportedSpans[0].status.description, "Status{statusCode=unset}")
+    XCTAssertEqual(exportedSpans[2].events.count, 0)
+    XCTAssertEqual(exportedSpans[2].status.description, "Status{statusCode=unset}")
+      
+    XCTAssertEqual(exportedSpans[1].status.description, "Status{statusCode=ok}")
+    XCTAssertEqual(exportedSpans[3].status.description, "Status{statusCode=error, description=some message}")
   }
 
   func testUpdateName() async throws {
@@ -454,13 +518,13 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 1 else {
-        XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
+    guard exportedSpans.count == 2 else {
+        XCTFail("Expected 2 exported span, got \(exportedSpans.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans.count, 1)
-    XCTAssertEqual(exportedSpans[0].name, "my-updated-span-name")
+    XCTAssertEqual(exportedSpans.count, 2)
+    XCTAssertEqual(exportedSpans[1].name, "my-updated-span-name")
   }
 
   func testStartSpanInvalidKind() async throws {
@@ -472,13 +536,17 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 1 else {
-        XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
+    guard exportedSpans.count == 2 else {
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
         return
     }
     
-    XCTAssertEqual(exportedSpans.count, 1)
-    XCTAssertEqual(exportedSpans[0].kind, SpanKind.internal)
+    XCTAssertEqual(exportedSpans.count, 2)
+    
+    XCTAssertEqual(exportedSpans[0].events.count, 0)
+    XCTAssertEqual(exportedSpans[0].status.description, "Status{statusCode=unset}")
+    
+    XCTAssertEqual(exportedSpans[1].kind, SpanKind.internal)
   }
 
   func testSetStatusInvalid() async throws {
@@ -491,13 +559,17 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 1 else {
-        XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
+    guard exportedSpans.count == 2 else {
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans.count, 1)
+    XCTAssertEqual(exportedSpans.count, 2)
+    
+    XCTAssertEqual(exportedSpans[0].events.count, 0)
     XCTAssertEqual(exportedSpans[0].status.description, "Status{statusCode=unset}")
+      
+    XCTAssertEqual(exportedSpans[1].status.description, "Status{statusCode=ok}")
   }
 
   func testStartSpanWithSchemaUrl() async throws {
@@ -523,14 +595,14 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     exportedSpans = try await getExportedSpans()
 
-    guard exportedSpans.count == 1 else {
-        XCTFail("Expected 1 exported span, got \(exportedSpans.count)")
+    guard exportedSpans.count == 2 else {
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
         return
     }
 
-    XCTAssertEqual(exportedSpans.count, 1)
-    XCTAssertEqual(exportedSpans[0].name, "my-span")
-    XCTAssertTrue(exportedSpans[0].hasEnded)
+    XCTAssertEqual(exportedSpans.count, 2)
+    XCTAssertEqual(exportedSpans[1].name, "my-span")
+    XCTAssertTrue(exportedSpans[1].hasEnded)
   }
 }
 

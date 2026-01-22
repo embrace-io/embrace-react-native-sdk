@@ -17,7 +17,7 @@ jobs:
         test-app: [expo-rn74, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
         platform: [android, ios]
 
-    runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
+    runs-on: ${{ matrix.test-app == 'expo-rn74' && matrix.platform == 'ios' && 'macos-14' || (matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest') }}
 
     steps:
       - name: Checkout code
@@ -45,6 +45,10 @@ jobs:
       - name: Install Integration Tests Node Modules
         working-directory: ./integration-tests
         run: npm install
+
+      - name: Select Xcode 15.4 for expo-rn74 iOS (Xcode 16.4 compatibility issue)
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+        if: matrix.test-app == 'expo-rn74' && matrix.platform == 'ios'
 
       - name: Build Test App
         working-directory: ./integration-tests
