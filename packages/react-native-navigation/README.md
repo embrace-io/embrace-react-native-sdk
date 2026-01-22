@@ -41,7 +41,7 @@ const App = () => {
 
   // The provider is something you need to configure and pass down as prop into the `<EmbraceNavigationTracker />` component 
   // If your choice is not to pass any custom tracer provider, the component will use the global one.
-  // In both cases you have to make sure a tracer provider is registered BEFORE you attempt to record the first span (otherwise somo initial telemetry can be missed).
+  // In both cases you have to make sure a tracer provider is registered BEFORE you attempt to record the first span (otherwise some initial telemetry can be missed).
   const {tracerProvider, isLoading: isLoadingTracerProvider} =
     useEmbraceNativeTracerProvider({}, isStarted);
 
