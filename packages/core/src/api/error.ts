@@ -1,10 +1,24 @@
+/**
+ * Error Handling API
+ *
+ * Provides the global error handler that the Embrace SDK installs to capture unhandled
+ * JavaScript exceptions and crashes. This module wraps React Native's `ErrorUtils` to
+ * intercept uncaught errors, log them to the Embrace backend, and then forward them
+ * to the previous error handler.
+ *
+ * This is set up automatically during SDK initialization and does not typically
+ * need to be called directly by consumers.
+ */
+
 import {Platform} from "react-native";
 
 import {logIfComponentError} from "./component";
 import {EmbraceManagerModule} from "./../EmbraceManagerModule";
 
+/** @internal */
 type ErrorHandler = (error: Error, callback: () => void) => void;
 
+/** @internal */
 type GlobalErrorHandler = (
   // initial handler, coming from React Native
   previousHandler: (error: Error, isFatal?: boolean) => void,
@@ -12,8 +26,22 @@ type GlobalErrorHandler = (
   handleError: ErrorHandler,
 ) => (error: Error, isFatal?: boolean) => void;
 
+/** Maximum number of stack trace lines to retain when logging exceptions. */
 const STACK_LIMIT = 200;
 
+/**
+ * Creates a composed error handler that logs errors to Embrace before forwarding
+ * to the previous global error handler.
+ *
+ * The previous handler is called after a short delay (150ms) to allow the Embrace
+ * logging to complete before React Native's default crash behavior takes effect.
+ *
+ * @param previousHandler - The existing global error handler to forward errors to
+ * @param handleError - The Embrace error handler that logs the exception
+ * @returns A new error handler function to be set as the global handler
+ *
+ * @internal
+ */
 const handleGlobalError: GlobalErrorHandler =
   (previousHandler, handleError) => (error, isFatal) => {
     const callback = () => {
@@ -24,7 +52,21 @@ const handleGlobalError: GlobalErrorHandler =
     handleError(error, callback);
   };
 
-// will cover unhandled errors, js crashes
+/**
+ * Processes an unhandled JavaScript error by logging it to the Embrace backend.
+ *
+ * This function:
+ * 1. Checks if the error includes a React component stack and logs it if present
+ * 2. Truncates the stack trace to {@link STACK_LIMIT} lines
+ * 3. Formats the stack trace for the current platform (JSON for iOS, plain text for Android)
+ * 4. Sends the exception details to the native SDK
+ * 5. Invokes the callback to forward to the previous error handler
+ *
+ * @param error - The unhandled Error object
+ * @param callback - A function to call after logging completes (typically forwards to the previous handler)
+ *
+ * @internal
+ */
 const handleError = async (error: Error, callback: () => void) => {
   if (!(error instanceof Error)) {
     console.warn("[Embrace] error must be of type Error");
