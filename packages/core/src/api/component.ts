@@ -1,8 +1,27 @@
+/**
+ * Component Error API
+ *
+ * Provides automatic logging of React component rendering errors that include
+ * a component stack trace. This is used internally by the SDK's global error
+ * handler to capture additional context about where in the React tree an error occurred.
+ *
+ * @see {@link https://embrace.io/docs/react-native/features/render-errors | Render Errors Documentation}
+ */
+
 import {ErrorInfo} from "react";
 
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
+/**
+ * An Error that includes React's `componentStack` property, indicating it originated
+ * from a React component rendering failure.
+ */
 type ComponentError = Error & ErrorInfo;
+
+/**
+ * Type guard that checks whether an error is a React component rendering error
+ * by looking for the presence of a `componentStack` property.
+ */
 const isJSXError = (error: Error): error is ComponentError => {
   return "componentStack" in error;
 };
