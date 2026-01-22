@@ -116,7 +116,7 @@ const App = () => {
     };
 
     initEmbrace();
-  });
+  }, []); // Empty array for mount only in example; you should only initialize the Embrace SDK once.
 
   // regular content of the application
   return (
