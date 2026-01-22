@@ -72,7 +72,7 @@ const clearAllUserPersonas = (): Promise<boolean> => {
  * Sets a unique identifier for the current user.
  *
  * This identifier is used to link sessions to a specific user and can be searched
- * for in the Embrace dashboard. All past and future sessions will be associated
+ * for in the Embrace dashboard. All future sessions will be associated
  * with this identifier once set.
  *
  * @param userIdentifier - A unique identifier for the user (e.g., internal user ID, hashed email)
