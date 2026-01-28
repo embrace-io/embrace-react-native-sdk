@@ -55,7 +55,7 @@
     "typescript": "^5.6.3"
   },
   "embrace": {
-    "iosVersion": "6.15.1",
+    "iosVersion": "6.16.0",
     "androidVersion": "7.9.2"
   }
 }
