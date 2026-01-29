@@ -14,8 +14,8 @@ const androidCapabilities = [
   },
   {
     "bstack:options": {
-      deviceName: "Samsung Galaxy Note 9",
-      platformVersion: "8.1",
+      deviceName: "Samsung Galaxy S10",
+      platformVersion: "9.0",
       platformName: "android",
     },
   },
