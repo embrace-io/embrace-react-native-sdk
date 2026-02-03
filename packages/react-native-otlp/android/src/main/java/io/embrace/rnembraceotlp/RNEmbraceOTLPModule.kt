@@ -14,6 +14,8 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 
 import io.embrace.android.embracesdk.Embrace
+import io.embrace.android.embracesdk.otel.java.addJavaSpanExporter
+import io.embrace.android.embracesdk.otel.java.addJavaLogRecordExporter
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
 import io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter
 
@@ -150,12 +152,12 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
 
         if (spanConfig != null && spanConfig.endpoint.isNotBlank()) {
             val spanCustomExporter = setOtlpHttpTraceExporter(spanConfig.endpoint, spanConfig.headers, spanConfig.timeout)
-            Embrace.getInstance().addSpanExporter(spanCustomExporter)
+            Embrace.getInstance().addJavaSpanExporter(spanCustomExporter)
         }
 
         if (logConfig != null && logConfig.endpoint.isNotBlank()) {
             val logCustomExporter = setOtlpHttpLogExporter(logConfig.endpoint, logConfig.headers, logConfig.timeout)
-            Embrace.getInstance().addLogRecordExporter(logCustomExporter)
+            Embrace.getInstance().addJavaLogRecordExporter(logCustomExporter)
         }
     }
 

@@ -89,7 +89,7 @@ const initialize = async (
     setJavaScriptPatch(patch);
   }
 
-  // On Android the Swazzler stores the computed bundle ID as part of the build process and the SDK is able to read it
+  // On Android the Gradle plugin stores the computed bundle ID as part of the build process and the SDK is able to read it
   // at run time. On iOS however we don't retain this value so for production builds try and get it from the default
   // bundle path.
   if (isIOS && !__DEV__) {

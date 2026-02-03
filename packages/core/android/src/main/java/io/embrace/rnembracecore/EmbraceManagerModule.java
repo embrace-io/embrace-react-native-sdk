@@ -280,7 +280,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void endSession(Promise promise) {
         try {
-            Embrace.getInstance().endSession();
+            Embrace.getInstance().endSession(false);
             promise.resolve(true);
         } catch(Exception e) {
             promise.resolve(false);
