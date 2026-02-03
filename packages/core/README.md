@@ -116,7 +116,7 @@ const App = () => {
     };
 
     initEmbrace();
-  });
+  }, []); // you should only initialize the Embrace SDK once.
 
   // regular content of the application
   return (

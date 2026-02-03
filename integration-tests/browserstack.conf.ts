@@ -2,7 +2,7 @@ import { get } from "https";
 
 // For capabilities choose a device that is close to the minimum required OS we support on both Android and iOS
 // as well as one that represents the latest supported OS.
-// See https://www.browserstack.com/list-of-browsers-and-platforms-page/app_automate
+// See https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
 
 const androidCapabilities = [
   {
@@ -14,8 +14,8 @@ const androidCapabilities = [
   },
   {
     "bstack:options": {
-      deviceName: "Samsung Galaxy Note 9",
-      platformVersion: "8.1",
+      deviceName: "Samsung Galaxy S10",
+      platformVersion: "9.0",
       platformName: "android",
     },
   },

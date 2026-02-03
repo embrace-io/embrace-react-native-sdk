@@ -1,19 +1,21 @@
 PODS:
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
-  - EmbraceIO (6.14.1):
-    - EmbraceIO/EmbraceIO (= 6.14.1)
-  - EmbraceIO/EmbraceCaptureService (6.14.1):
+  - EmbraceIO (6.15.1):
+    - EmbraceIO/EmbraceIO (= 6.15.1)
+  - EmbraceIO/EmbraceAtomicsShim (6.15.1)
+  - EmbraceIO/EmbraceCaptureService (6.15.1):
     - EmbraceIO/EmbraceConfiguration
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceCommonInternal (6.14.1):
+  - EmbraceIO/EmbraceCommonInternal (6.15.1):
+    - EmbraceIO/EmbraceAtomicsShim
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceConfigInternal (6.14.1):
+  - EmbraceIO/EmbraceConfigInternal (6.15.1):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfiguration
-  - EmbraceIO/EmbraceConfiguration (6.14.1)
-  - EmbraceIO/EmbraceCore (6.14.1):
+  - EmbraceIO/EmbraceConfiguration (6.15.1)
+  - EmbraceIO/EmbraceCore (6.15.1):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfigInternal
@@ -23,69 +25,72 @@ PODS:
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/EmbraceUploadInternal
-  - EmbraceIO/EmbraceCoreDataInternal (6.14.1):
+  - EmbraceIO/EmbraceCoreDataInternal (6.15.1):
     - EmbraceIO/EmbraceCommonInternal
-  - EmbraceIO/EmbraceCrash (6.14.1):
+    - EmbraceIO/EmbraceObjCUtilsInternal
+  - EmbraceIO/EmbraceCrash (6.15.1):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceKSCrash
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceIO (6.14.1):
+  - EmbraceIO/EmbraceIO (6.15.1):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCore
     - EmbraceIO/EmbraceCrash
     - EmbraceIO/EmbraceKSCrashBacktraceSupport
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceKSCrash (6.14.1):
-    - KSCrash (= 2.4.0)
-  - EmbraceIO/EmbraceKSCrashBacktraceSupport (6.14.1):
+  - EmbraceIO/EmbraceKSCrash (6.15.1):
+    - KSCrash (~> 2.4)
+  - EmbraceIO/EmbraceKSCrashBacktraceSupport (6.15.1):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceKSCrash
-  - EmbraceIO/EmbraceObjCUtilsInternal (6.14.1)
-  - EmbraceIO/EmbraceOTelInternal (6.14.1):
-    - EmbraceIO/EmbraceCommonInternal
-    - EmbraceIO/EmbraceSemantics
-    - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceSemantics (6.14.1):
-    - EmbraceIO/EmbraceCommonInternal
-    - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceStorageInternal (6.14.1):
+  - EmbraceIO/EmbraceObjCUtilsInternal (6.15.1)
+  - EmbraceIO/EmbraceOTelInternal (6.15.1):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCoreDataInternal
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceUploadInternal (6.14.1):
+    - EmbraceIO/EmbraceStorageInternal
+    - EmbraceIO/OpenTelemetrySdk
+  - EmbraceIO/EmbraceSemantics (6.15.1):
+    - EmbraceIO/EmbraceCommonInternal
+    - EmbraceIO/OpenTelemetrySdk
+  - EmbraceIO/EmbraceStorageInternal (6.15.1):
+    - EmbraceIO/EmbraceCommonInternal
+    - EmbraceIO/EmbraceCoreDataInternal
+    - EmbraceIO/EmbraceSemantics
+  - EmbraceIO/EmbraceUploadInternal (6.15.1):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCoreDataInternal
     - EmbraceIO/EmbraceOTelInternal
-  - EmbraceIO/OpenTelemetrySdk (6.14.1):
-    - OpenTelemetry-Swift-Sdk (= 2.1.1)
+  - EmbraceIO/OpenTelemetrySdk (6.15.1):
+    - OpenTelemetry-Swift-Sdk (~> 2.1)
   - FBLazyVector (0.75.4)
   - fmt (9.1.0)
   - glog (0.3.5)
   - hermes-engine (0.75.4):
     - hermes-engine/Pre-built (= 0.75.4)
   - hermes-engine/Pre-built (0.75.4)
-  - KSCrash (2.4.0):
-    - KSCrash/Installations (= 2.4.0)
-  - KSCrash/Core (2.4.0)
-  - KSCrash/DemangleFilter (2.4.0):
+  - KSCrash (2.5.0):
+    - KSCrash/Installations (= 2.5.0)
+  - KSCrash/Core (2.5.0)
+  - KSCrash/DemangleFilter (2.5.0):
     - KSCrash/Recording
-  - KSCrash/Filters (2.4.0):
+  - KSCrash/Filters (2.5.0):
     - KSCrash/Recording
     - KSCrash/RecordingCore
     - KSCrash/ReportingCore
-  - KSCrash/Installations (2.4.0):
+  - KSCrash/Installations (2.5.0):
     - KSCrash/DemangleFilter
     - KSCrash/Filters
     - KSCrash/Recording
     - KSCrash/Sinks
-  - KSCrash/Recording (2.4.0):
+  - KSCrash/Recording (2.5.0):
     - KSCrash/RecordingCore
-  - KSCrash/RecordingCore (2.4.0):
+  - KSCrash/RecordingCore (2.5.0):
     - KSCrash/Core
-  - KSCrash/ReportingCore (2.4.0):
+  - KSCrash/ReportingCore (2.5.0):
     - KSCrash/Core
-  - KSCrash/Sinks (2.4.0):
+  - KSCrash/Sinks (2.5.0):
     - KSCrash/Filters
     - KSCrash/Recording
   - OpenTelemetry-Swift-Api (2.1.1)
@@ -1590,9 +1595,9 @@ PODS:
     - React-logger (= 0.75.4)
     - React-perflogger (= 0.75.4)
     - React-utils (= 0.75.4)
-  - RNEmbraceOTLP (6.2.1):
+  - RNEmbraceOTLP (6.3.0):
     - DoubleConversion
-    - EmbraceIO (= 6.14.1)
+    - EmbraceIO (= 6.15.1)
     - glog
     - hermes-engine
     - OpenTelemetry-Swift-Protocol-Exporter-Http (= 2.1.0)
@@ -1828,12 +1833,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  EmbraceIO: 418095ff8d57db2bc82c5008f4ea7bcbc690c8c3
+  EmbraceIO: ac651cc68052a8c53638ea6007a0fb30615c8010
   FBLazyVector: 430e10366de01d1e3d57374500b1b150fe482e6d
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
   hermes-engine: ea92f60f37dba025e293cbe4b4a548fd26b610a0
-  KSCrash: 5d254a5fc1c5d133c53765fa46f7509028a3451e
+  KSCrash: 80e1e24eaefbe5134934ae11ca8d7746586bc2ed
   OpenTelemetry-Swift-Api: 2805fb676a622961994eaad5fd07ed0c5efa6999
   OpenTelemetry-Swift-Protocol-Exporter-Common: 2d8fee4b15d6ba7ba6694c92196f237f2f42ce46
   OpenTelemetry-Swift-Protocol-Exporter-Http: 5cd4be45bf0405ef2f3e6a7a1a343a6c6c683735
@@ -1893,7 +1898,7 @@ SPEC CHECKSUMS:
   React-utils: d1bae5ac6a5fb94a772ebfc7a7e1aba3a6706a3a
   ReactCodegen: 99b435b58bd874bb0626b3fb16437d2e8735d370
   ReactCommon: 1007c09a406a451ddbd874e51511aa541d6034f6
-  RNEmbraceOTLP: 3df8e8e426796be2c2fece7fbe628c35583ffdf3
+  RNEmbraceOTLP: c2d7a229da2e2ce99df8c6ad65b8f7fdfde021bd
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   SwiftProtobuf: e1b437c8e31a4c5577b643249a0bb62ed4f02153
   Yoga: b05994d1933f507b0a28ceaa4fdb968dc18da178
