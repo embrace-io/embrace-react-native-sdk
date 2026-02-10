@@ -6,8 +6,15 @@ const LINKING_ERROR =
   "- You rebuilt the app after installing the package\n" +
   "- You are not using Expo Go\n";
 
-const TracerProviderModule = NativeModules.ReactNativeTracerProviderModule
-  ? NativeModules.ReactNativeTracerProviderModule
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- standard React Native TurboModule detection
+const isTurboModuleEnabled = (global as any).__turboModuleProxy != null;
+
+const NativeModule = isTurboModuleEnabled
+  ? require("./NativeReactNativeTracerProviderModule").default
+  : NativeModules.ReactNativeTracerProviderModule;
+
+const TracerProviderModule = NativeModule
+  ? NativeModule
   : new Proxy(
       {},
       {

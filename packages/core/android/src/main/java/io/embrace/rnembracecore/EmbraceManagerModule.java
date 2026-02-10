@@ -3,7 +3,6 @@ package io.embrace.rnembracecore;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 
@@ -20,7 +19,8 @@ import io.embrace.android.embracesdk.Severity;
 import io.embrace.android.embracesdk.network.EmbraceNetworkRequest;
 import io.embrace.android.embracesdk.network.http.HttpMethod;
 
-public class EmbraceManagerModule extends ReactContextBaseJavaModule {
+public class EmbraceManagerModule extends EmbraceManagerSpec {
+    public static final String NAME = "EmbraceManager";
     private final ReactApplicationContext context;
 
     public EmbraceManagerModule(ReactApplicationContext reactContext) {
@@ -31,7 +31,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @Nonnull
     @Override
     public String getName() {
-        return "EmbraceManager";
+        return NAME;
     }
 
     @ReactMethod
@@ -313,6 +313,11 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         } catch(Exception e) {
             promise.resolve(false);
         }
+    }
+
+    @ReactMethod
+    public void getDefaultJavaScriptBundlePath(Promise promise) {
+        promise.resolve("");
     }
 
     @ReactMethod
