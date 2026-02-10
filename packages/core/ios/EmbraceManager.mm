@@ -1,5 +1,9 @@
 #import <React/RCTBridgeModule.h>
 
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <RNEmbraceCoreSpec/RNEmbraceCoreSpec.h>
+#endif
+
 @interface RCT_EXTERN_MODULE(EmbraceManager, NSObject)
 
 RCT_EXTERN_METHOD(setJavaScriptBundlePath:(NSString *)path
@@ -132,3 +136,13 @@ RCT_EXTERN_METHOD(logUnhandledJSException:(NSString *)name
 }
 
 @end
+
+#ifdef RCT_NEW_ARCH_ENABLED
+@implementation EmbraceManager (TurboModule)
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+    return std::make_shared<facebook::react::NativeEmbraceManagerSpecJSI>(params);
+}
+@end
+#endif
