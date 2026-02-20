@@ -7,9 +7,9 @@ import {enableUnhandledRejectionTracking} from "./utils/error";
 import {setEmbracePackageVersion, setReactNativeVersion} from "./utils/bundle";
 import EmbraceLogger from "./utils/EmbraceLogger";
 import {SDKConfig, EmbraceLoggerLevel} from "./interfaces";
-import {handleError, handleGlobalError} from "./api/error";
-import {setJavaScriptBundlePath, setJavaScriptPatch} from "./api/bundle";
 import {addBreadcrumb} from "./api/breadcrumb";
+import {setJavaScriptBundlePath, setJavaScriptPatch} from "./api/bundle";
+import {handleError, handleGlobalError} from "./api/error";
 import {logWarning} from "./api/log";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
 
