@@ -29,6 +29,8 @@ jest.mock("../EmbraceManagerModule", () => ({
     isStarted: jest.fn().mockResolvedValueOnce(false),
     setReactNativeSDKVersion: jest.fn(),
     setReactNativeVersion: jest.fn(),
+    addBreadcrumb: jest.fn().mockResolvedValue(true),
+    logMessageWithSeverityAndProperties: jest.fn().mockResolvedValue(true),
     getDefaultJavaScriptBundlePath: jest.fn(),
     setJavaScriptBundlePath: jest.fn(),
     setJavaScriptPatchNumber: jest.fn(patch =>
