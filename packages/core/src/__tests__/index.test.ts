@@ -22,7 +22,6 @@ const mockLogMessageWithSeverityAndProperties = jest.fn();
 const mockLogHandledError = jest.fn();
 const mockLogUnhandledJSException = jest.fn().mockResolvedValue(true);
 const mockSetJavaScriptBundlePath = jest.fn();
-const mockAddBreadcrumb = jest.fn().mockResolvedValue(true);
 const mockGetDefaultJavaScriptBundlePath = jest
   .fn()
   .mockResolvedValue("some/path");
@@ -65,7 +64,6 @@ jest.mock("../EmbraceManagerModule", () => ({
       mockLogHandledError(message, componentStack, params);
       return Promise.resolve(true);
     },
-    addBreadcrumb: (message: string) => mockAddBreadcrumb(message),
     getDefaultJavaScriptBundlePath: () => mockGetDefaultJavaScriptBundlePath(),
     setJavaScriptBundlePath: (path: string) =>
       mockSetJavaScriptBundlePath(path),
@@ -262,9 +260,6 @@ describe("SDK initialization", () => {
         expect(mockConsoleWarn).toHaveBeenCalledWith(
           "[Embrace] we were unable to setup tracking of unhandled promise rejections.",
         );
-        expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-          "[Embrace] we were unable to setup tracking of unhandled promise rejections. | Error: tracking setup failed",
-        );
         expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
           "we were unable to setup tracking of unhandled promise rejections. | Error: tracking setup failed",
           "warning",
@@ -342,9 +337,6 @@ describe("SDK initialization", () => {
           "[Embrace] an error ocurred when checking if `@embrace-io/react-native-otlp` was installed",
         );
         expect(isStarted).toBe(true);
-        expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-          "[Embrace] OTLP exporters were configured but `@embrace-io/react-native-otlp` could not be loaded. OTLP exporters won't be used.",
-        );
         expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
           "OTLP exporters were configured but `@embrace-io/react-native-otlp` could not be loaded. OTLP exporters won't be used.",
           "warning",
@@ -469,9 +461,6 @@ describe("SDK initialization", () => {
         expect(mockSetJavaScriptBundlePath).not.toHaveBeenCalled();
         expect(mockConsoleWarn).toHaveBeenCalledWith(
           "[Embrace] we were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle.",
-        );
-        expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-          "[Embrace] we were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle. | failed",
         );
         expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
           "we were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle. | failed",
