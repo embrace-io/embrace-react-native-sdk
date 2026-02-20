@@ -639,6 +639,18 @@ class ComputeBundleIDTests: XCTestCase {
        }
     }
 
+    func testNonexistentPath() {
+        let badPath = "/nonexistent/path/to/bundle.js"
+        XCTAssertThrowsError(try computeBundleID(path: badPath)) { error in
+            guard case ComputeBundleIDErrors.fileReadError(let path, _) = error else {
+                XCTFail("Expected fileReadError, got \(error)")
+                return
+            }
+            XCTAssertEqual(path, badPath)
+            XCTAssertTrue(error.localizedDescription.contains(badPath))
+        }
+    }
+
     func testNothingCached() throws {
         let fileURL = try writeTempFile(contents: "console.log('my js bundle');")
         let bundleID = try computeBundleID(path: fileURL.path())

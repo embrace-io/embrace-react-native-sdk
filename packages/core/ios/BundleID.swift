@@ -41,7 +41,7 @@ enum ComputeBundleIDErrors: Error, LocalizedError {
         case .fileReadError(let path, let underlying):
             return "Failed to read bundle at path '\(path)': \(underlying.localizedDescription)"
         default:
-            return "An unknown error occurred in ComputeBundleIDErrors"
+            return "An unexpected ComputeBundleIDErrors occurred: \(self)"
         }
     }
 }
