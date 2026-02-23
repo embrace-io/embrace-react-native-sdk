@@ -40,6 +40,8 @@ enum ComputeBundleIDErrors: Error, LocalizedError {
             return "Bundle path is empty"
         case .fileReadError(let path, let underlying):
             return "Failed to read bundle at path '\(path)': \(underlying.localizedDescription)"
+        default:
+            return "An unexpected ComputeBundleIDErrors occurred: \(self)"
         }
     }
 }
