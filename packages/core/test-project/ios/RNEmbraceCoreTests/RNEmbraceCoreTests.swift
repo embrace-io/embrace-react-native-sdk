@@ -635,8 +635,23 @@ class ComputeBundleIDTests: XCTestCase {
 
     func testEmptyPath() {
        XCTAssertThrowsError(try computeBundleID(path: "")) { error in
-           XCTAssertEqual(error as? ComputeBundleIDErrors, ComputeBundleIDErrors.emptyPath)
+           guard case ComputeBundleIDErrors.emptyPath = error else {
+               XCTFail("Expected emptyPath, got \(error)")
+               return
+           }
        }
+    }
+
+    func testNonexistentPath() {
+        let badPath = "/nonexistent/path/to/bundle.js"
+        XCTAssertThrowsError(try computeBundleID(path: badPath)) { error in
+            guard case ComputeBundleIDErrors.fileReadError(let path, _) = error else {
+                XCTFail("Expected fileReadError, got \(error)")
+                return
+            }
+            XCTAssertEqual(path, badPath)
+            XCTAssertTrue(error.localizedDescription.contains(badPath))
+        }
     }
 
     func testNothingCached() throws {
@@ -680,5 +695,18 @@ class ComputeBundleIDTests: XCTestCase {
         bundleID = try computeBundleID(path: sameURL.path())
         XCTAssertEqual(bundleID.id, "9a7ef24cdaf5cdb927eab12cb0bfd30d")
         XCTAssertFalse(bundleID.cached)
+    }
+
+    func testEmptyPathErrorDescription() {
+        let error = ComputeBundleIDErrors.emptyPath
+        XCTAssertEqual(error.errorDescription, "Bundle path is empty")
+        XCTAssertEqual(error.localizedDescription, "Bundle path is empty")
+    }
+
+    func testFileReadErrorDescription() {
+        let underlying = NSError(domain: "TestDomain", code: 42, userInfo: [NSLocalizedDescriptionKey: "test read failure"])
+        let error = ComputeBundleIDErrors.fileReadError(path: "/some/path/bundle.js", underlying: underlying)
+        XCTAssertEqual(error.errorDescription, "Failed to read bundle at path '/some/path/bundle.js': test read failure")
+        XCTAssertEqual(error.localizedDescription, "Failed to read bundle at path '/some/path/bundle.js': test read failure")
     }
 }

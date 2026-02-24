@@ -7,6 +7,7 @@ import {enableUnhandledRejectionTracking} from "./utils/error";
 import {setEmbracePackageVersion, setReactNativeVersion} from "./utils/bundle";
 import EmbraceLogger from "./utils/EmbraceLogger";
 import {SDKConfig, EmbraceLoggerLevel} from "./interfaces";
+import {logWarning} from "./api/log";
 import {handleError, handleGlobalError} from "./api/error";
 import {setJavaScriptBundlePath, setJavaScriptPatch} from "./api/bundle";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
@@ -78,6 +79,12 @@ const initialize = async (
     } else {
       logger.log("native SDK was started");
     }
+
+    if (otlpExporters && !otlpStart) {
+      const errorMessage =
+        "OTLP exporters were configured but `@embrace-io/react-native-otlp` could not be loaded. OTLP exporters won't be used.";
+      logWarning(errorMessage);
+    }
   }
 
   // setting version of React Native used by the app
@@ -101,9 +108,10 @@ const initialize = async (
         setJavaScriptBundlePath(bundleJs);
       }
     } catch (e) {
-      logger.warn(
-        "we were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle.",
-      );
+      const errorMessage =
+        "we were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle.";
+      logger.warn(errorMessage);
+      logWarning(`${errorMessage} | ${e}`);
     }
   }
 
@@ -122,9 +130,10 @@ const initialize = async (
     try {
       enableUnhandledRejectionTracking();
     } catch (e) {
-      logger.warn(
-        "we were unable to setup tracking of unhandled promise rejections.",
-      );
+      const errorMessage =
+        "we were unable to setup tracking of unhandled promise rejections.";
+      logger.warn(errorMessage);
+      logWarning(`${errorMessage} | ${e}`);
     }
   }
 

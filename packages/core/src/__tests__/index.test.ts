@@ -245,6 +245,30 @@ describe("SDK initialization", () => {
         });
       });
     });
+
+    test("handle when unhandled rejection tracking setup fails", async () => {
+      jest.spyOn(rejectionTracking, "enable").mockImplementation(() => {
+        throw new Error("tracking setup failed");
+      });
+
+      const isStarted = await initialize({
+        patch: "v1",
+        sdkConfig: {ios: {appId: "abc12"}, trackUnhandledRejections: true},
+      });
+      await waitFor(() => {
+        expect(isStarted).toBe(true);
+        expect(mockConsoleWarn).toHaveBeenCalledWith(
+          "[Embrace] we were unable to setup tracking of unhandled promise rejections.",
+        );
+        expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+          "we were unable to setup tracking of unhandled promise rejections. | Error: tracking setup failed",
+          "warning",
+          {},
+          expect.any(String),
+          true,
+        );
+      });
+    });
   });
 
   describe("Android: initialize", () => {
@@ -313,6 +337,13 @@ describe("SDK initialization", () => {
           "[Embrace] an error ocurred when checking if `@embrace-io/react-native-otlp` was installed",
         );
         expect(isStarted).toBe(true);
+        expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+          "OTLP exporters were configured but `@embrace-io/react-native-otlp` could not be loaded. OTLP exporters won't be used.",
+          "warning",
+          {},
+          expect.any(String),
+          true,
+        );
       });
     });
   });
@@ -430,6 +461,13 @@ describe("SDK initialization", () => {
         expect(mockSetJavaScriptBundlePath).not.toHaveBeenCalled();
         expect(mockConsoleWarn).toHaveBeenCalledWith(
           "[Embrace] we were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle.",
+        );
+        expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+          "we were unable to set the JSBundle path automatically. Please configure this manually to enable crash symbolication. For more information see https://embrace.io/docs/react-native/integration/upload-symbol-files/#pointing-the-embrace-sdk-to-the-javascript-bundle. | failed",
+          "warning",
+          {},
+          expect.any(String),
+          true,
         );
       });
     });

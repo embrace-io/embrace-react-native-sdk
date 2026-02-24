@@ -30,9 +30,20 @@ private struct LastBundleComputation: Codable {
     }
 }
 
-enum ComputeBundleIDErrors: Error {
+enum ComputeBundleIDErrors: Error, LocalizedError {
     case emptyPath
-    case parseError
+    case fileReadError(path: String, underlying: Error)
+
+    var errorDescription: String? {
+        switch self {
+        case .emptyPath:
+            return "Bundle path is empty"
+        case .fileReadError(let path, let underlying):
+            return "Failed to read bundle at path '\(path)': \(underlying.localizedDescription)"
+        default:
+            return "An unexpected ComputeBundleIDErrors occurred: \(self)"
+        }
+    }
 }
 
 struct BundleID {
@@ -71,7 +82,7 @@ func computeBundleID(path: String) throws -> BundleID {
         last.store()
 
     } catch {
-        throw ComputeBundleIDErrors.parseError
+        throw ComputeBundleIDErrors.fileReadError(path: path, underlying: error)
     }
 
     return BundleID(id: last.id, cached: false)
