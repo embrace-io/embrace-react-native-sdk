@@ -5,6 +5,10 @@ import EmbraceIO
 import OpenTelemetryApi
 import os
 
+#if RCT_NEW_ARCH_ENABLED
+import RNEmbraceTracerProviderSpec
+#endif
+
 /*
  NOTE: There's currently a bit of duplication between this and code in packages/core, particularly https://github.com/embrace-io/embrace-react-native-sdk/blob/7c54b59362adfc93f7f997db89db179950a50e8b/packages/core/ios/RNEmbraceCore/SpanRepository.swift
  
@@ -331,3 +335,7 @@ class ReactNativeTracerProviderModule: NSObject {
     }
   }
  }
+
+#if RCT_NEW_ARCH_ENABLED
+extension ReactNativeTracerProviderModule: NativeReactNativeTracerProviderModuleSpec {}
+#endif

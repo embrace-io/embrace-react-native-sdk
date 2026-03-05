@@ -1,18 +1,33 @@
 package io.embrace.rnembraceotlp
 
-import android.view.View
-import com.facebook.react.ReactPackage
+import com.facebook.react.TurboReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.uimanager.ReactShadowNode
-import com.facebook.react.uimanager.ViewManager
+import com.facebook.react.module.model.ReactModuleInfo
+import com.facebook.react.module.model.ReactModuleInfoProvider
 
-class RNEmbraceOTLPPackage : ReactPackage {
-    override fun createViewManagers(
-        reactContext: ReactApplicationContext
-    ): MutableList<ViewManager<View, ReactShadowNode<*>>> = mutableListOf()
+class RNEmbraceOTLPPackage : TurboReactPackage() {
+    override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
+        return if (name == RNEmbraceOTLPModule.NAME) {
+            RNEmbraceOTLPModule(reactContext)
+        } else {
+            null
+        }
+    }
 
-    override fun createNativeModules(
-        reactContext: ReactApplicationContext
-    ): MutableList<NativeModule> = listOf(RNEmbraceOTLPModule(reactContext)).toMutableList()
+    override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
+        return ReactModuleInfoProvider {
+            val isTurboModule = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
+            mapOf(
+                RNEmbraceOTLPModule.NAME to ReactModuleInfo(
+                    RNEmbraceOTLPModule.NAME,
+                    RNEmbraceOTLPModule.NAME,
+                    false, // canOverrideExistingModule
+                    false, // needsEagerInit
+                    false, // isCxxModule
+                    isTurboModule // isTurboModule
+                )
+            )
+        }
+    }
 }

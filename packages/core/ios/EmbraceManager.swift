@@ -4,6 +4,10 @@ import OSLog
 import EmbraceIO
 import OpenTelemetryApi
 
+#if RCT_NEW_ARCH_ENABLED
+import RNEmbraceCoreSpec
+#endif
+
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"
 private let HOSTED_PLATFORM_VERSION_RESOURCE_KEY = "hosted_platform_version"
 private let HOSTED_SDK_VERSION_RESOURCE_KEY = "hosted_sdk_version"
@@ -522,3 +526,7 @@ class EmbraceManager: NSObject {
         span.setAttribute(key: "emb.w3c_traceparent", value: W3C.traceparent(from: span.context))
     }
 }
+
+#if RCT_NEW_ARCH_ENABLED
+extension EmbraceManager: NativeEmbraceManagerSpec {}
+#endif
