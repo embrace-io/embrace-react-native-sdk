@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReadableType
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import io.embrace.android.embracesdk.Embrace
+import io.embrace.android.embracesdk.otel.java.getJavaOpenTelemetry
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.trace.Span
@@ -197,7 +198,7 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
                 return
             }
 
-            tracerProvider = Embrace.getInstance().getOpenTelemetry().tracerProvider
+            tracerProvider = Embrace.getInstance().getJavaOpenTelemetry().tracerProvider
         }
 
         val id = getTracerKey(name, version, schemaUrl)

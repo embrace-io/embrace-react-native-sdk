@@ -5,10 +5,10 @@ import {
 } from "@expo/config-plugins";
 
 import {
-  withAndroidEmbraceApplySwazzlerPlugin,
+  withAndroidEmbraceApplyGradlePlugin,
   withAndroidEmbraceJSONConfig,
   withAndroidEmbraceOnCreate,
-  withAndroidEmbraceSwazzlerDependency,
+  withAndroidEmbraceGradlePluginDependency,
 } from "../plugin/withAndroidEmbrace";
 
 import {getMockModConfig, readMockFile} from "./helpers/pluginTestUtils";
@@ -98,17 +98,17 @@ describe("Expo Config Plugin Android", () => {
     });
   });
 
-  describe("withAndroidEmbraceSwazzlerDependency", () => {
-    it("inserts the Swazzler dependency in a groovy project gradle file", async () => {
-      const beforeSwazzler = readMockFile("projectBuildWithoutSwazzler.gradle");
-      const afterSwazzler = readMockFile("projectBuildWithSwazzler.gradle");
+  describe("withAndroidEmbraceGradlePluginDependency", () => {
+    it("inserts the Gradle Plugin dependency in a groovy project gradle file", async () => {
+      const beforeGradlePlugin = readMockFile("projectBuildWithoutGradlePlugin.gradle");
+      const afterGradlePlugin = readMockFile("projectBuildWithGradlePlugin.gradle");
       const mockConfig = getMockModConfig({
         platform: "android",
         language: "groovy",
-        contents: beforeSwazzler,
+        contents: beforeGradlePlugin,
       });
 
-      withAndroidEmbraceSwazzlerDependency(mockConfig, {
+      withAndroidEmbraceGradlePluginDependency(mockConfig, {
         androidAppId: "",
         apiToken: "",
         iOSAppId: "",
@@ -121,27 +121,27 @@ describe("Expo Config Plugin Android", () => {
         mockConfig,
       )) as ExportedConfigWithProps;
 
-      expect(updatedConfig.modResults.contents).toEqual(afterSwazzler);
+      expect(updatedConfig.modResults.contents).toEqual(afterGradlePlugin);
 
       // Running again should not do any more modification
       const updatedAgainConfig = (await modFunc(
         updatedConfig,
       )) as ExportedConfigWithProps;
-      expect(updatedAgainConfig.modResults.contents).toEqual(afterSwazzler);
+      expect(updatedAgainConfig.modResults.contents).toEqual(afterGradlePlugin);
     });
 
-    it("inserts the Swazzler dependency in a kotlin project gradle file", async () => {
-      const beforeSwazzler = readMockFile(
-        "projectBuildWithoutSwazzler.gradle.kts",
+    it("inserts the Gradle Plugin dependency in a kotlin project gradle file", async () => {
+      const beforeGradlePlugin = readMockFile(
+        "projectBuildWithoutGradlePlugin.gradle.kts",
       );
-      const afterSwazzler = readMockFile("projectBuildWithSwazzler.gradle.kts");
+      const afterGradlePlugin = readMockFile("projectBuildWithGradlePlugin.gradle.kts");
       const mockConfig = getMockModConfig({
         platform: "android",
         language: "kt",
-        contents: beforeSwazzler,
+        contents: beforeGradlePlugin,
       });
 
-      withAndroidEmbraceSwazzlerDependency(mockConfig, {
+      withAndroidEmbraceGradlePluginDependency(mockConfig, {
         androidAppId: "",
         apiToken: "",
         iOSAppId: "",
@@ -154,27 +154,27 @@ describe("Expo Config Plugin Android", () => {
         mockConfig,
       )) as ExportedConfigWithProps;
 
-      expect(updatedConfig.modResults.contents).toEqual(afterSwazzler);
+      expect(updatedConfig.modResults.contents).toEqual(afterGradlePlugin);
 
       // Running again should not do any more modification
       const updatedAgainConfig = (await modFunc(
         updatedConfig,
       )) as ExportedConfigWithProps;
-      expect(updatedAgainConfig.modResults.contents).toEqual(afterSwazzler);
+      expect(updatedAgainConfig.modResults.contents).toEqual(afterGradlePlugin);
     });
   });
 
-  describe("withAndroidEmbraceApplySwazzlerPlugin", () => {
-    it("applies the Swazzler plugin in a groovy app gradle file", async () => {
-      const beforeSwazzler = readMockFile("appBuildWithoutSwazzler.gradle");
-      const afterSwazzler = readMockFile("appBuildWithSwazzler.gradle");
+  describe("withAndroidEmbraceApplyGradlePlugin", () => {
+    it("applies the Gradle plugin in a groovy app gradle file", async () => {
+      const beforeGradlePlugin = readMockFile("appBuildWithoutGradlePlugin.gradle");
+      const afterGradlePlugin = readMockFile("appBuildWithGradlePlugin.gradle");
       const mockConfig = getMockModConfig({
         platform: "android",
         language: "groovy",
-        contents: beforeSwazzler,
+        contents: beforeGradlePlugin,
       });
 
-      withAndroidEmbraceApplySwazzlerPlugin(mockConfig, {
+      withAndroidEmbraceApplyGradlePlugin(mockConfig, {
         androidAppId: "",
         apiToken: "",
         iOSAppId: "",
@@ -187,25 +187,25 @@ describe("Expo Config Plugin Android", () => {
         mockConfig,
       )) as ExportedConfigWithProps;
 
-      expect(updatedConfig.modResults.contents).toEqual(afterSwazzler);
+      expect(updatedConfig.modResults.contents).toEqual(afterGradlePlugin);
 
       // Running again should not do any more modification
       const updatedAgainConfig = (await modFunc(
         updatedConfig,
       )) as ExportedConfigWithProps;
-      expect(updatedAgainConfig.modResults.contents).toEqual(afterSwazzler);
+      expect(updatedAgainConfig.modResults.contents).toEqual(afterGradlePlugin);
     });
 
-    it("applies the Swazzler plugin in a kotlin app gradle file", async () => {
-      const beforeSwazzler = readMockFile("appBuildWithoutSwazzler.gradle.kts");
-      const afterSwazzler = readMockFile("appBuildWithSwazzler.gradle.kts");
+    it("applies the Gradle plugin in a kotlin app gradle file", async () => {
+      const beforeGradlePlugin = readMockFile("appBuildWithoutGradlePlugin.gradle.kts");
+      const afterGradlePlugin = readMockFile("appBuildWithGradlePlugin.gradle.kts");
       const mockConfig = getMockModConfig({
         platform: "android",
         language: "kt",
-        contents: beforeSwazzler,
+        contents: beforeGradlePlugin,
       });
 
-      withAndroidEmbraceApplySwazzlerPlugin(mockConfig, {
+      withAndroidEmbraceApplyGradlePlugin(mockConfig, {
         androidAppId: "",
         apiToken: "",
         iOSAppId: "",
@@ -218,13 +218,13 @@ describe("Expo Config Plugin Android", () => {
         mockConfig,
       )) as ExportedConfigWithProps;
 
-      expect(updatedConfig.modResults.contents).toEqual(afterSwazzler);
+      expect(updatedConfig.modResults.contents).toEqual(afterGradlePlugin);
 
       // Running again should not do any more modification
       const updatedAgainConfig = (await modFunc(
         updatedConfig,
       )) as ExportedConfigWithProps;
-      expect(updatedAgainConfig.modResults.contents).toEqual(afterSwazzler);
+      expect(updatedAgainConfig.modResults.contents).toEqual(afterGradlePlugin);
     });
   });
 

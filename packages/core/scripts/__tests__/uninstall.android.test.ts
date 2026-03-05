@@ -14,10 +14,10 @@ beforeEach(() => {
 });
 
 describe("Uninstall Script Android", () => {
-  test("Remove Android Swazzler Dependency", async () => {
+  test("Remove Android Gradle Plugin Dependency", async () => {
     jest.mock("path", () => ({
       join: () =>
-        "./packages/core/scripts/__tests__/__mocks__/android/buildWithSwazzler.gradle",
+        "./packages/core/scripts/__tests__/__mocks__/android/buildWithGradlePlugin.gradle",
     }));
     jest.mock(
       "../../../../../../package.json",
@@ -28,7 +28,7 @@ describe("Uninstall Script Android", () => {
     );
     const {removeEmbraceLinkFromFile} = require("../setup/uninstall");
 
-    const result = removeEmbraceLinkFromFile("swazzlerImport");
+    const result = removeEmbraceLinkFromFile("gradlePluginImport");
     expect(result).toBe(true);
 
     const wiz = new Wizard();
@@ -44,10 +44,10 @@ describe("Uninstall Script Android", () => {
     }
     expect(failed).toBe(0);
   });
-  test("Remove Android Swazzler Apply", async () => {
+  test("Remove Android Gradle Plugin Apply", async () => {
     jest.mock("path", () => ({
       join: () =>
-        "./packages/core/scripts/__tests__/__mocks__/android/appBuildWithSwazzler.gradle",
+        "./packages/core/scripts/__tests__/__mocks__/android/appBuildWithGradlePlugin.gradle",
     }));
     jest.mock(
       "../../../../../../package.json",
@@ -58,7 +58,7 @@ describe("Uninstall Script Android", () => {
     );
     const {removeEmbraceLinkFromFile} = require("../setup/uninstall");
 
-    const result = removeEmbraceLinkFromFile("swazzlerApply");
+    const result = removeEmbraceLinkFromFile("gradlePluginApply");
     expect(result).toBe(true);
     const flushPromises = () =>
       new Promise(resolve => process.nextTick(resolve));
@@ -67,7 +67,7 @@ describe("Uninstall Script Android", () => {
     const wiz = new Wizard();
     const {
       patchAppBuildGradle,
-      androidEmbraceSwazzlerPlugin,
+      androidEmbraceGradlePluginApply,
     } = require("../setup/android");
 
     const androidSteps = [patchAppBuildGradle];
@@ -82,7 +82,7 @@ describe("Uninstall Script Android", () => {
 
     const {buildAppGradlePatchable} = require("../util/android");
     const buildAppGradleFile = await buildAppGradlePatchable();
-    expect(buildAppGradleFile.hasLine(androidEmbraceSwazzlerPlugin)).toBe(true);
+    expect(buildAppGradleFile.hasLine(androidEmbraceGradlePluginApply)).toBe(true);
   });
   test("Remove Embrace Config File", async () => {
     jest.mock("path", () => ({

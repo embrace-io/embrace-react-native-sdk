@@ -1,6 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
-apply plugin: "embrace-swazzler"
+apply plugin: "io.embrace.gradle"
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -148,7 +148,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath "io.embrace:embrace-swazzler:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}"
+        classpath "io.embrace:embrace-gradle-plugin:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}"
     }
 }
 
