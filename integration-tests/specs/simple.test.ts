@@ -6,7 +6,7 @@ describe("Simple", () => {
     const tracerProviderScreen = await driver.$("~SPAN TESTING");
     await tracerProviderScreen.click();
     await new Promise(r => setTimeout(r, 1000));
-    // const response = await fetch("https://example.com");
-    // expect(response.ok).toBe(true);
+    const currentScreen = await driver.$("~SPAN TESTING");
+    expect(await currentScreen.isDisplayed()).toBe(true);
   });
 });
