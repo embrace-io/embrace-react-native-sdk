@@ -10,7 +10,7 @@ buildscript {
   dependencies {
     classpath "com.android.tools.build:gradle:7.4.2"
     // NOTE: to pull `emb_android_sdk` version from package.json instead in a future iteration
-    classpath "io.embrace:embrace-swazzler:$emb_android_sdk"
+    classpath "io.embrace:embrace-gradle-plugin:$emb_android_sdk"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
@@ -98,5 +98,5 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
-// adding Embrace + Swazzler
+// adding Embrace dependencies
 apply from: 'dependencies.gradle'

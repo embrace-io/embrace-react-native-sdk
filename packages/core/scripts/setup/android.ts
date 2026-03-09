@@ -20,19 +20,19 @@ const logger = new EmbraceLogger(console);
 const androidToolsBuildGradleRE =
   /(\s+)classpath(\(|\s)("|')com\.android\.tools\.build:gradle(?::\d+(?:\.\d+)*)?("|')\)/;
 
-export const androidEmbraceSwazzler =
-  /classpath(\(|\s)('|")io\.embrace:embrace-swazzler:.*('|")\)?/;
+export const androidEmbraceGradlePlugin =
+  /classpath(\(|\s)('|")io\.embrace:embrace-gradle-plugin:.*('|")\)?/;
 
 export const androidGenericVersion =
-  "classpath \"io.embrace:embrace-swazzler:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}\"";
+  "classpath \"io.embrace:embrace-gradle-plugin:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}\"";
 
 export const patchBuildGradle = {
   name: "patch build.gradle",
   run: (wizard: Wizard): Promise<any> => {
     return buildGradlePatchable().then(file => {
       if (file.hasLine(androidToolsBuildGradleRE)) {
-        if (file.hasLine(androidEmbraceSwazzler)) {
-          file.deleteLine(androidEmbraceSwazzler);
+        if (file.hasLine(androidEmbraceGradlePlugin)) {
+          file.deleteLine(androidEmbraceGradlePlugin);
         }
         logger.log("Patching build.gradle file");
         file.addAfter(androidToolsBuildGradleRE, androidGenericVersion);
@@ -49,20 +49,20 @@ export const patchBuildGradle = {
 };
 
 const androidPlugin = /apply plugin: ("|')com.android.application("|')/;
-export const androidEmbraceSwazzlerPluginRE =
-  /apply plugin: ('|")embrace-swazzler('|")/;
-export const androidEmbraceSwazzlerPlugin = "apply plugin: 'embrace-swazzler'";
+export const androidEmbraceGradlePluginRE =
+  /apply plugin: ('|")io\.embrace\.gradle('|")/;
+export const androidEmbraceGradlePluginApply = "apply plugin: 'io.embrace.gradle'";
 
 export const patchAppBuildGradle = {
   name: "patch app/build.gradle",
   run: (wizard: Wizard): Promise<any> => {
     return buildAppGradlePatchable().then(file => {
       if (file.hasLine(androidPlugin)) {
-        if (file.hasLine(androidEmbraceSwazzlerPluginRE)) {
-          logger.warn("already has Embrace Swazzler plugin");
+        if (file.hasLine(androidEmbraceGradlePluginRE)) {
+          logger.warn("already has Embrace Gradle plugin");
         } else {
           logger.log("patching app/build.gradle file");
-          file.addAfter(androidPlugin, "\n" + androidEmbraceSwazzlerPlugin);
+          file.addAfter(androidPlugin, "\n" + androidEmbraceGradlePluginApply);
         }
 
         file.patch();

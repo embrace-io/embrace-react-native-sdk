@@ -56,14 +56,14 @@ const withAndroidEmbraceJSONConfig: ConfigPlugin<EmbraceProps> = (
   ]);
 };
 
-const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
+const withAndroidEmbraceGradlePluginDependency: ConfigPlugin<
   EmbraceProps
 > = expoConfig => {
   return withProjectBuildGradle(expoConfig, async config => {
     const lines = config.modResults.contents.split("\n");
 
     // Don't insert the dependency again if it already has it
-    if (hasMatch(lines, "embrace-swazzler")) {
+    if (hasMatch(lines, "embrace-gradle-plugin")) {
       return config;
     }
 
@@ -73,12 +73,12 @@ const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
       // add our own dependency underneath
       androidBuildToolsRE,
       // https://developer.android.com/build/migrate-to-kotlin-dsl#convert-strings
-      `classpath("io.embrace:embrace-swazzler:\${findProject(':embrace-io_react-native').properties['emb_android_sdk']}")`,
+      `classpath("io.embrace:embrace-gradle-plugin:\${findProject(':embrace-io_react-native').properties['emb_android_sdk']}")`,
     );
 
     if (!success) {
       throw new Error(
-        "failed to insert a dependency for the Embrace Swazzler in the project's gradle file",
+        "failed to insert a dependency for the Embrace Gradle Plugin in the project's gradle file",
       );
     }
 
@@ -87,14 +87,14 @@ const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
   });
 };
 
-const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
+const withAndroidEmbraceApplyGradlePlugin: ConfigPlugin<
   EmbraceProps
 > = expoConfig => {
   return withAppBuildGradle(expoConfig, async config => {
     const lines = config.modResults.contents.split("\n");
 
     // Don't add the apply plugin line again if it's already there
-    if (hasMatch(lines, "embrace-swazzler")) {
+    if (hasMatch(lines, "io.embrace.gradle")) {
       return config;
     }
 
@@ -105,7 +105,7 @@ const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
     const addLegacyPlugin = addAfter(
       lines,
       androidLegacyPluginRE,
-      'apply plugin: "embrace-swazzler"',
+      'apply plugin: "io.embrace.gradle"',
     );
 
     if (addLegacyPlugin) {
@@ -116,12 +116,12 @@ const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
     const addPlugin = addAfter(
       lines,
       androidPluginRE,
-      'id("embrace-swazzler")',
+      'id("io.embrace.gradle")',
     );
 
     if (!addPlugin) {
       throw new Error(
-        "failed to apply the Embrace Swazzler plugin in the project's app gradle file",
+        "failed to apply the Embrace Gradle plugin in the project's app gradle file",
       );
     }
 
@@ -176,8 +176,8 @@ const withAndroidEmbraceOnCreate: ConfigPlugin<EmbraceProps> = expoConfig => {
 const withAndroidEmbrace: ConfigPlugin<EmbraceProps> = (config, props) => {
   try {
     config = withAndroidEmbraceJSONConfig(config, props);
-    config = withAndroidEmbraceSwazzlerDependency(config, props);
-    config = withAndroidEmbraceApplySwazzlerPlugin(config, props);
+    config = withAndroidEmbraceGradlePluginDependency(config, props);
+    config = withAndroidEmbraceApplyGradlePlugin(config, props);
     config = withAndroidEmbraceOnCreate(config, props);
   } catch (e) {
     WarningAggregator.addWarningAndroid(
@@ -193,7 +193,7 @@ const withAndroidEmbrace: ConfigPlugin<EmbraceProps> = (config, props) => {
 export default withAndroidEmbrace;
 export {
   withAndroidEmbraceJSONConfig,
-  withAndroidEmbraceSwazzlerDependency,
-  withAndroidEmbraceApplySwazzlerPlugin,
+  withAndroidEmbraceGradlePluginDependency,
+  withAndroidEmbraceApplyGradlePlugin,
   withAndroidEmbraceOnCreate,
 };
