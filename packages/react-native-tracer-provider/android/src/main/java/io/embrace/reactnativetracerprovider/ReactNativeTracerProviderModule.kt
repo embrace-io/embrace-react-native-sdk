@@ -2,7 +2,6 @@ package io.embrace.reactnativetracerprovider
 
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
@@ -49,7 +48,7 @@ private const val SPAN_STATUS_MESSAGE_KEY = "message"
 // Should not get hit under normal circumstances, add as a guard against misinstrumentation
 private const val MAX_STORED_SPANS = 10000
 
-class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : ReactNativeTracerProviderSpec(reactContext) {
     private val log = Logger.getLogger("[Embrace]")
     private val tracers = ConcurrentHashMap<String, Tracer>()
     private val activeSpans = ConcurrentHashMap<String, Span>()
@@ -57,7 +56,11 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
     private var tracerProvider: TracerProvider? = null
     private var writableMapBuilder: WritableMapBuilder
 
-    override fun getName() = "ReactNativeTracerProviderModule"
+    override fun getName() = NAME
+
+    companion object {
+        const val NAME = "ReactNativeTracerProviderModule"
+    }
 
     /**
      * Various deserializer helpers to go to and from the bridge Readable/Writable Array/Maps to
