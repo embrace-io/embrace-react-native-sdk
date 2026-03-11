@@ -88,6 +88,9 @@ RNTester/build
 /dist
 /packages/**/lib/
 
+# Claude Code
+.claude/
+
 # VS Code
 .vscode/
 
