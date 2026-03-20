@@ -11,6 +11,7 @@
 import {generateStackTrace} from "../utils/log";
 import {LogSeverity, LogProperties} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
+import {handleSDKPromiseRejection} from "../utils/promiseHandler";
 
 /**
  * Logs a message with the specified severity, optional properties, and optional stack trace.
@@ -63,6 +64,15 @@ const logMessage = (
   );
 };
 
+const logMessageFireAndForget = (
+  message: string,
+  severity: LogSeverity = "error",
+  properties: LogProperties = {},
+  includeStacktrace = true,
+): void => {
+  handleSDKPromiseRejection(logMessage(message, severity, properties, includeStacktrace), "logMessage");
+};
+
 /**
  * Logs an informational message.
  *
@@ -82,6 +92,10 @@ const logInfo = (message: string): Promise<boolean> => {
   // `"info"` logs are not supposed to send stack traces as per Product decision
   // this is also restricted in the Native layers
   return logMessage(message, "info", undefined, false);
+};
+
+const logInfoFireAndForget = (message: string): void => {
+  void logMessageFireAndForget(message, "info", undefined, false);
 };
 
 /**
@@ -105,6 +119,13 @@ const logWarning = (
   return logMessage(message, "warning", undefined, includeStacktrace);
 };
 
+const logWarningFireAndForget = (
+  message: string,
+  includeStacktrace = true,
+): void => {
+  void logMessageFireAndForget(message, "warning", undefined, includeStacktrace);
+};
+
 /**
  * Logs an error message with an optional stack trace.
  *
@@ -124,6 +145,13 @@ const logError = (
   includeStacktrace = true,
 ): Promise<boolean> => {
   return logMessage(message, "error", undefined, includeStacktrace);
+};
+
+const logErrorFireAndForget = (
+  message: string,
+  includeStacktrace = true,
+): void => {
+  void logMessageFireAndForget(message, "error", undefined, includeStacktrace);
 };
 
 /**
@@ -161,4 +189,11 @@ const logHandledError = (
   return Promise.resolve(false);
 };
 
-export {logInfo, logWarning, logError, logHandledError, logMessage};
+const logHandledErrorFireAndForget = (
+  error: Error,
+  properties: LogProperties = {},
+): void => {
+  handleSDKPromiseRejection(logHandledError(error, properties), "logHandledError");
+};
+
+export {logInfo, logInfoFireAndForget, logWarning, logWarningFireAndForget, logError, logErrorFireAndForget, logHandledError, logHandledErrorFireAndForget, logMessage, logMessageFireAndForget};
