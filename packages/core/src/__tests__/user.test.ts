@@ -24,16 +24,42 @@ const mockClearAllUserPersonas = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    setUserIdentifier: (userIdentifier: string) =>
-      mockSetUserIdentifier(userIdentifier),
-    clearUserIdentifier: () => mockClearUserIdentifier(),
-    setUsername: (username: string) => mockSetUsername(username),
-    clearUsername: () => mockClearUsername(),
-    setUserEmail: (userEmail: string) => mockSetUserEmail(userEmail),
-    clearUserEmail: () => mockClearUserEmail(),
-    addUserPersona: (persona: string) => mockAddUserPersona(persona),
-    clearUserPersona: (persona: string) => mockClearUserPersona(persona),
-    clearAllUserPersonas: () => mockClearAllUserPersonas(),
+    setUserIdentifier: (userIdentifier: string) => {
+      mockSetUserIdentifier(userIdentifier);
+      return Promise.resolve(true);
+    },
+    clearUserIdentifier: () => {
+      mockClearUserIdentifier();
+      return Promise.resolve(true);
+    },
+    setUsername: (username: string) => {
+      mockSetUsername(username);
+      return Promise.resolve(true);
+    },
+    clearUsername: () => {
+      mockClearUsername();
+      return Promise.resolve(true);
+    },
+    setUserEmail: (userEmail: string) => {
+      mockSetUserEmail(userEmail);
+      return Promise.resolve(true);
+    },
+    clearUserEmail: () => {
+      mockClearUserEmail();
+      return Promise.resolve(true);
+    },
+    addUserPersona: (persona: string) => {
+      mockAddUserPersona(persona);
+      return Promise.resolve(true);
+    },
+    clearUserPersona: (persona: string) => {
+      mockClearUserPersona(persona);
+      return Promise.resolve(true);
+    },
+    clearAllUserPersonas: () => {
+      mockClearAllUserPersonas();
+      return Promise.resolve(true);
+    },
   },
 }));
 

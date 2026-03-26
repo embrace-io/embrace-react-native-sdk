@@ -57,7 +57,7 @@ const recordNetworkRequest = (
   bytesReceived?: number,
   statusCode?: number,
 ): Promise<boolean> => {
-  return EmbraceManagerModule.logNetworkRequest(
+  const promise = EmbraceManagerModule.logNetworkRequest(
     url,
     httpMethod,
     startInMillis,
@@ -66,26 +66,8 @@ const recordNetworkRequest = (
     bytesReceived || -1,
     statusCode || -1,
   );
-};
-
-const recordNetworkRequestFireAndForget = (
-  url: string,
-  httpMethod: MethodType,
-  startInMillis: number,
-  endInMillis: number,
-  bytesSent?: number,
-  bytesReceived?: number,
-  statusCode?: number,
-): void => {
-  handleSDKPromiseRejection(recordNetworkRequest(
-    url,
-    httpMethod,
-    startInMillis,
-    endInMillis,
-    bytesSent,
-    bytesReceived,
-    statusCode,
-  ), "logNetworkRequest");
+  promise.catch((error: unknown) => handleSDKPromiseRejection("recordNetworkRequest", error));
+  return promise;
 };
 
 /**
@@ -129,7 +111,7 @@ const logNetworkClientError = (
   errorType: string,
   errorMessage: string,
 ): Promise<boolean> => {
-  return EmbraceManagerModule.logNetworkClientError(
+  const promise = EmbraceManagerModule.logNetworkClientError(
     url,
     httpMethod,
     startInMillis,
@@ -137,24 +119,8 @@ const logNetworkClientError = (
     errorType,
     errorMessage,
   );
+  promise.catch((error: unknown) => handleSDKPromiseRejection("logNetworkClientError", error));
+  return promise;
 };
 
-const logNetworkClientErrorFireAndForget = (
-  url: string,
-  httpMethod: MethodType,
-  startInMillis: number,
-  endInMillis: number,
-  errorType: string,
-  errorMessage: string,
-): void => {
-  handleSDKPromiseRejection(logNetworkClientError(
-    url,
-    httpMethod,
-    startInMillis,
-    endInMillis,
-    errorType,
-    errorMessage,
-  ), "logNetworkClientError");
-};
-
-export {recordNetworkRequest, recordNetworkRequestFireAndForget, logNetworkClientError, logNetworkClientErrorFireAndForget};
+export {recordNetworkRequest, logNetworkClientError};

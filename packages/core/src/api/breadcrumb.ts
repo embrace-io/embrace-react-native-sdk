@@ -35,11 +35,9 @@ import {handleSDKPromiseRejection} from "../utils/promiseHandler";
  * ```
  */
 const addBreadcrumb = (message: string): Promise<boolean> => {
-  return EmbraceManagerModule.addBreadcrumb(message);
+  const promise = EmbraceManagerModule.addBreadcrumb(message);
+  promise.catch((error: unknown) => handleSDKPromiseRejection("addBreadcrumb", error));
+  return promise;
 };
 
-const addBreadcrumbFireAndForget = (message: string): void => {
-  handleSDKPromiseRejection(addBreadcrumb(message), "addBreadcrumb");
-};
-
-export {addBreadcrumb, addBreadcrumbFireAndForget};
+export {addBreadcrumb};

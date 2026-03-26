@@ -11,7 +11,7 @@ export interface EmbracePromiseRejectionConfig {
      */
     logToConsole: boolean;
 
-    /** 
+    /**
      * Optional custom handler for unhandled promise rejections.
      * Use this to integrate with your own error tracking system.
      * @example
@@ -29,34 +29,10 @@ let rejectionConfig: EmbracePromiseRejectionConfig = {
     logToConsole: typeof __DEV__ !== 'undefined' ? __DEV__ : false,
 };
 
-export function handleSDKPromiseRejection<T>(
-    promise: Promise<T>,
-    methodName: string,
-): void;
-
-export function handleSDKPromiseRejection(
+export const handleSDKPromiseRejection = (
     methodName: string,
     error: unknown,
-): void;
-
-export function handleSDKPromiseRejection<T>(
-    methodNameOrPromise: string | Promise<T>,
-    errorOrMethodName: unknown | string,
-): void {
-
-    if (methodNameOrPromise instanceof Promise) {
-        const promise = methodNameOrPromise;
-        const methodName = errorOrMethodName as string;
-
-        promise.catch((error: unknown) => {
-            handleSDKPromiseRejection(methodName, error);
-        });
-        return;
-    }
-
-    const methodName = methodNameOrPromise;
-    const error = errorOrMethodName as unknown;
-
+): void => {
     if (!rejectionConfig.enabled) {
         return;
     }

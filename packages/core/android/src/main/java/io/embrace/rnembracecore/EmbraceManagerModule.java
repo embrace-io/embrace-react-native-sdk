@@ -40,7 +40,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Boolean success = Embrace.getInstance().isStarted();
             promise.resolve(success);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("IS_STARTED_ERROR", "Error checking if Embrace SDK is started", e);
         }
     }
 
@@ -51,7 +51,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().start(this.context.getApplicationContext());
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("START_SDK_ERROR", "Error starting Embrace SDK", e);
         }
     }
 
@@ -61,7 +61,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().setUserIdentifier(userIdentifier);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("SET_USER_IDENTIFIER_ERROR", "Error setting user identifier", e);
         }
     }
 
@@ -71,7 +71,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().setUsername(username);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("SET_USERNAME_ERROR", "Error setting username", e);
         }
     }
 
@@ -81,7 +81,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().setUserEmail(userEmail);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("SET_USER_EMAIL_ERROR", "Error setting user email", e);
         }
     }
 
@@ -91,7 +91,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().clearUserEmail();
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("CLEAR_USER_EMAIL_ERROR", "Error clearing user email", e);
         }
     }
 
@@ -101,7 +101,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().clearUserIdentifier();
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("CLEAR_USER_IDENTIFIER_ERROR", "Error clearing user identifier", e);
         }
     }
 
@@ -111,7 +111,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().clearUsername();
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("CLEAR_USERNAME_ERROR", "Error clearing username", e);
         }
     }
 
@@ -121,7 +121,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().addBreadcrumb(message);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("ADD_BREADCRUMB_ERROR", "Error adding breadcrumb", e);
         }
     }
 
@@ -131,7 +131,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().addUserPersona(persona);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("ADD_USER_PERSONA_ERROR", "Error adding user persona", e);
         }
     }
 
@@ -141,7 +141,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().clearUserPersona(persona);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("CLEAR_USER_PERSONA_ERROR", "Error clearing user persona", e);
         }
     }
 
@@ -151,7 +151,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().clearAllUserPersonas();
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("CLEAR_ALL_USER_PERSONAS_ERROR", "Error clearing all user personas", e);
         }
     }
 
@@ -174,7 +174,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             promise.resolve(true);
         } catch (Exception e) {
             Log.e("Embrace", "Error logging message", e);
-            promise.resolve(false);
+            promise.reject("LOG_MESSAGE_ERROR", "Error logging message", e);
         }
     }
 
@@ -203,7 +203,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().logMessage(message, Severity.ERROR, props);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("LOG_HANDLED_ERROR_ERROR", "Error logging handled error", e);
         }
     }
 
@@ -213,7 +213,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             EmbraceInternalApi.getInstance().getReactNativeInternalInterface().logUnhandledJsException(name, message, type, stacktrace);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error logging unhandled JS exception", e);
         }
     }
 
@@ -223,7 +223,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setJavaScriptPatchNumber(number);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("SET_JS_PATCH_ERROR", "Error setting JavaScript patch number", e);
         }
     }
 
@@ -233,7 +233,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setReactNativeSdkVersion(number);
             promise.resolve(true);
         } catch (Exception e) {
-            promise.resolve(false);
+            promise.reject("SET_RN_SDK_VERSION_ERROR", "Error setting React Native SDK version", e);
         }
     }
 
@@ -243,7 +243,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setReactNativeVersionNumber(version);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("SET_RN_VERSION_ERROR", "Error setting React Native version", e);
         }
     }
 
@@ -253,7 +253,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,path);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", e);
         }
     }
 
@@ -263,7 +263,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Boolean success = Embrace.getInstance().addSessionProperty(key, value, permanent);
             promise.resolve(success);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("ADD_SESSION_PROPERTY_ERROR", "Error adding session property", e);
         }
     }
 
@@ -273,7 +273,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().removeSessionProperty(key);
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("REMOVE_SESSION_PROPERTY_ERROR", "Error removing session property", e);
         }
     }
 
@@ -283,7 +283,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             Embrace.getInstance().endSession();
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("END_SESSION_ERROR", "Error ending session", e);
         }
     }
 
@@ -292,7 +292,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         try {
             promise.resolve(Embrace.getInstance().getDeviceId());
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("GET_DEVICE_ID_ERROR", "Error getting device ID", e);
         }
     }
 
@@ -302,7 +302,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             promise.resolve(Embrace.getInstance().getLastRunEndState().name());
         } catch(Exception e) {
             Log.e("Embrace", "Error getting the last run end state", e);
-            promise.resolve(false);
+            promise.reject("GET_LAST_RUN_END_STATE_ERROR", "Error getting last run end state", e);
         }
     }
 
@@ -311,7 +311,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         try {
             promise.resolve(Embrace.getInstance().getCurrentSessionId());
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("GET_CURRENT_SESSION_ID_ERROR", "Error getting current session ID", e);
         }
     }
 
@@ -329,8 +329,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
         HttpMethod parsedMethod = parseMethodFromString(httpMethod);
         if (parsedMethod == null) {
-            Log.e("Embrace", "Failed to log network requests. Unexpected http method: " + httpMethod);
-            promise.resolve(false);
+            promise.reject("LOG_NETWORK_REQUEST_ERROR", "Unexpected http method: " + httpMethod);
             return;
         }
 
@@ -350,7 +349,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("LOG_NETWORK_REQUEST_ERROR", "Error logging network request", e);
         }
     }
 
@@ -366,8 +365,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
 
         HttpMethod parsedMethod = parseMethodFromString(httpMethod);
         if (parsedMethod == null) {
-            Log.e("Embrace", "Failed to log network requests. Unexpected http method: " + httpMethod);
-            promise.resolve(false);
+            promise.reject("LOG_NETWORK_CLIENT_ERROR_ERROR", "Unexpected http method: " + httpMethod);
             return;
         }
 
@@ -385,7 +383,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
             ));
             promise.resolve(true);
         } catch(Exception e) {
-            promise.resolve(false);
+            promise.reject("LOG_NETWORK_CLIENT_ERROR_ERROR", "Error logging network client error", e);
         }
 
     }

@@ -55,22 +55,15 @@ const logMessage = (
     );
   }
 
-  return EmbraceManagerModule.logMessageWithSeverityAndProperties(
+  const promise = EmbraceManagerModule.logMessageWithSeverityAndProperties(
     message,
     severity,
     properties,
     stackTrace,
     includeStacktrace,
   );
-};
-
-const logMessageFireAndForget = (
-  message: string,
-  severity: LogSeverity = "error",
-  properties: LogProperties = {},
-  includeStacktrace = true,
-): void => {
-  handleSDKPromiseRejection(logMessage(message, severity, properties, includeStacktrace), "logMessage");
+  promise.catch((error: unknown) => handleSDKPromiseRejection("logMessage", error));
+  return promise;
 };
 
 /**
@@ -94,10 +87,6 @@ const logInfo = (message: string): Promise<boolean> => {
   return logMessage(message, "info", undefined, false);
 };
 
-const logInfoFireAndForget = (message: string): void => {
-  void logMessageFireAndForget(message, "info", undefined, false);
-};
-
 /**
  * Logs a warning message with an optional stack trace.
  *
@@ -119,13 +108,6 @@ const logWarning = (
   return logMessage(message, "warning", undefined, includeStacktrace);
 };
 
-const logWarningFireAndForget = (
-  message: string,
-  includeStacktrace = true,
-): void => {
-  void logMessageFireAndForget(message, "warning", undefined, includeStacktrace);
-};
-
 /**
  * Logs an error message with an optional stack trace.
  *
@@ -145,13 +127,6 @@ const logError = (
   includeStacktrace = true,
 ): Promise<boolean> => {
   return logMessage(message, "error", undefined, includeStacktrace);
-};
-
-const logErrorFireAndForget = (
-  message: string,
-  includeStacktrace = true,
-): void => {
-  void logMessageFireAndForget(message, "error", undefined, includeStacktrace);
 };
 
 /**
@@ -183,17 +158,12 @@ const logHandledError = (
 ): Promise<boolean> => {
   if (error instanceof Error) {
     const {stack, message} = error;
-    return EmbraceManagerModule.logHandledError(message, stack, properties);
+    const promise = EmbraceManagerModule.logHandledError(message, stack, properties);
+    promise.catch((err: unknown) => handleSDKPromiseRejection("logHandledError", err));
+    return promise;
   }
 
   return Promise.resolve(false);
 };
 
-const logHandledErrorFireAndForget = (
-  error: Error,
-  properties: LogProperties = {},
-): void => {
-  handleSDKPromiseRejection(logHandledError(error, properties), "logHandledError");
-};
-
-export {logInfo, logInfoFireAndForget, logWarning, logWarningFireAndForget, logError, logErrorFireAndForget, logHandledError, logHandledErrorFireAndForget, logMessage, logMessageFireAndForget};
+export {logInfo, logWarning, logError, logHandledError, logMessage};

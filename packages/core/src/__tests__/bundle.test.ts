@@ -4,8 +4,10 @@ const mockSetJavaScriptBundlePath = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    setJavaScriptBundlePath: (path: string) =>
-      mockSetJavaScriptBundlePath(path),
+    setJavaScriptBundlePath: (path: string) => {
+      mockSetJavaScriptBundlePath(path);
+      return Promise.resolve(true);
+    },
   },
 }));
 

@@ -9,6 +9,7 @@
  */
 
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
+import {handleSDKPromiseRejection} from "../utils/promiseHandler";
 
 /**
  * Sets a patch identifier for the current JavaScript bundle.
@@ -29,7 +30,9 @@ import {EmbraceManagerModule} from "../EmbraceManagerModule";
  * ```
  */
 const setJavaScriptPatch = (patch: string) => {
-  return EmbraceManagerModule.setJavaScriptPatchNumber(patch);
+  const promise = EmbraceManagerModule.setJavaScriptPatchNumber(patch);
+  promise.catch((error: unknown) => handleSDKPromiseRejection("setJavaScriptPatch", error));
+  return promise;
 };
 
 /**
@@ -52,7 +55,9 @@ const setJavaScriptPatch = (patch: string) => {
  * ```
  */
 const setJavaScriptBundlePath = (path: string) => {
-  return EmbraceManagerModule.setJavaScriptBundlePath(path);
+  const promise = EmbraceManagerModule.setJavaScriptBundlePath(path);
+  promise.catch((error: unknown) => handleSDKPromiseRejection("setJavaScriptBundlePath", error));
+  return promise;
 };
 
 export {setJavaScriptBundlePath, setJavaScriptPatch};

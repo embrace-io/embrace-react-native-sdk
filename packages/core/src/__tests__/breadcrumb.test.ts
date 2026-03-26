@@ -4,7 +4,10 @@ const mockAddBreadcrumb = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    addBreadcrumb: (message: string) => mockAddBreadcrumb(message),
+    addBreadcrumb: (message: string) => {
+      mockAddBreadcrumb(message);
+      return Promise.resolve(true);
+    },
   },
 }));
 

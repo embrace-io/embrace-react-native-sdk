@@ -14,7 +14,7 @@ jest.mock("../EmbraceManagerModule", () => ({
       bytesSent: number,
       bytesReceived: number,
       statusCode: number,
-    ) =>
+    ) => {
       mockLogNetworkRequest(
         url,
         httpMethod,
@@ -23,7 +23,9 @@ jest.mock("../EmbraceManagerModule", () => ({
         bytesSent,
         bytesReceived,
         statusCode,
-      ),
+      );
+      return Promise.resolve(true);
+    },
     logNetworkClientError: (
       url: string,
       httpMethod: MethodType,
@@ -31,7 +33,7 @@ jest.mock("../EmbraceManagerModule", () => ({
       endInMillis: number,
       errorType: string,
       errorMessage: string,
-    ) =>
+    ) => {
       mockLogNetworkClientError(
         url,
         httpMethod,
@@ -39,7 +41,9 @@ jest.mock("../EmbraceManagerModule", () => ({
         endInMillis,
         errorType,
         errorMessage,
-      ),
+      );
+      return Promise.resolve(true);
+    },
   },
 }));
 

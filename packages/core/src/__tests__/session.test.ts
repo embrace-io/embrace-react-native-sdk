@@ -14,12 +14,26 @@ const mockGetCurrentSessionId = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    addSessionProperty: (key: string, value: string, permanent: boolean) =>
-      mockAddSessionProperty(key, value, permanent),
-    removeSessionProperty: (key: string) => mockRemoveSessionProperty(key),
-    getLastRunEndState: () => mockGetLastRunEndState(),
-    getDeviceId: () => mockGetDeviceId(),
-    getCurrentSessionId: () => mockGetCurrentSessionId(),
+    addSessionProperty: (key: string, value: string, permanent: boolean) => {
+      mockAddSessionProperty(key, value, permanent);
+      return Promise.resolve(true);
+    },
+    removeSessionProperty: (key: string) => {
+      mockRemoveSessionProperty(key);
+      return Promise.resolve(true);
+    },
+    getLastRunEndState: () => {
+      mockGetLastRunEndState();
+      return Promise.resolve("CLEAN_EXIT");
+    },
+    getDeviceId: () => {
+      mockGetDeviceId();
+      return Promise.resolve("device-id");
+    },
+    getCurrentSessionId: () => {
+      mockGetCurrentSessionId();
+      return Promise.resolve("session-id");
+    },
   },
 }));
 

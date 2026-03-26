@@ -27,26 +27,34 @@ const mockGetDefaultJavaScriptBundlePath = jest
   .mockResolvedValue("some/path");
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    setReactNativeVersion: (version: string) =>
-      mockSetReactNativeVersion(version),
-    setJavaScriptPatchNumber: (patch: string) =>
-      mockSetJavaScriptPatchNumber(patch),
-    setReactNativeSDKVersion: (version: string) =>
-      mockSetReactNativeSDKVersion(version),
+    setReactNativeVersion: (version: string) => {
+      mockSetReactNativeVersion(version);
+      return Promise.resolve(true);
+    },
+    setJavaScriptPatchNumber: (patch: string) => {
+      mockSetJavaScriptPatchNumber(patch);
+      return Promise.resolve(true);
+    },
+    setReactNativeSDKVersion: (version: string) => {
+      mockSetReactNativeSDKVersion(version);
+      return Promise.resolve(true);
+    },
     logMessageWithSeverityAndProperties: (
       message: string,
       severity: string,
       properties: object,
       stacktrace: string,
       includeStacktrace: boolean,
-    ) =>
+    ) => {
       mockLogMessageWithSeverityAndProperties(
         message,
         severity,
         properties,
         stacktrace,
         includeStacktrace,
-      ),
+      );
+      return Promise.resolve(true);
+    },
     logUnhandledJSException: (
       name: string,
       message: string,
@@ -65,8 +73,10 @@ jest.mock("../EmbraceManagerModule", () => ({
       return Promise.resolve(true);
     },
     getDefaultJavaScriptBundlePath: () => mockGetDefaultJavaScriptBundlePath(),
-    setJavaScriptBundlePath: (path: string) =>
-      mockSetJavaScriptBundlePath(path),
+    setJavaScriptBundlePath: (path: string) => {
+      mockSetJavaScriptBundlePath(path);
+      return Promise.resolve(true);
+    },
   },
 }));
 

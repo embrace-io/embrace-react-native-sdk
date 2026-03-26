@@ -41,15 +41,9 @@ const addSessionProperty = (
   value: string,
   permanent: boolean,
 ): Promise<boolean> => {
-  return EmbraceManagerModule.addSessionProperty(key, value, permanent);
-};
-
-const addSessionPropertyFireAndForget = (
-  key: string,
-  value: string,
-  permanent: boolean,
-): void => {
-  handleSDKPromiseRejection(addSessionProperty(key, value, permanent), "addSessionProperty");
+  const promise = EmbraceManagerModule.addSessionProperty(key, value, permanent);
+  promise.catch((error: unknown) => handleSDKPromiseRejection("addSessionProperty", error));
+  return promise;
 };
 
 /**
@@ -66,11 +60,9 @@ const addSessionPropertyFireAndForget = (
  * ```
  */
 const removeSessionProperty = (key: string) => {
-  return EmbraceManagerModule.removeSessionProperty(key);
-};
-
-const removeSessionPropertyFireAndForget = (key: string): void => {
-  handleSDKPromiseRejection(removeSessionProperty(key), "removeSessionProperty");
+  const promise = EmbraceManagerModule.removeSessionProperty(key);
+  promise.catch((error: unknown) => handleSDKPromiseRejection("removeSessionProperty", error));
+  return promise;
 };
 
 /**
@@ -90,11 +82,9 @@ const removeSessionPropertyFireAndForget = (key: string): void => {
  * ```
  */
 const endSession = () => {
-  return EmbraceManagerModule.endSession();
-};
-
-const endSessionFireAndForget = (): void => {
-  handleSDKPromiseRejection(endSession(), "endSession");
+  const promise = EmbraceManagerModule.endSession();
+  promise.catch((error: unknown) => handleSDKPromiseRejection("endSession", error));
+  return promise;
 };
 
 /**
@@ -172,11 +162,8 @@ const getDeviceId = (): Promise<string> => {
 
 export {
   addSessionProperty,
-  addSessionPropertyFireAndForget,
   removeSessionProperty,
-  removeSessionPropertyFireAndForget,
   endSession,
-  endSessionFireAndForget,
   getCurrentSessionId,
   getLastRunEndState,
   getDeviceId,

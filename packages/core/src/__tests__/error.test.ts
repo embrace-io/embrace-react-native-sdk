@@ -12,7 +12,10 @@ jest.mock("../EmbraceManagerModule", () => ({
       message: string,
       stackTrace: string,
       properties: LogProperties,
-    ) => mockLogHandledError(message, stackTrace, properties),
+    ) => {
+      mockLogHandledError(message, stackTrace, properties);
+      return Promise.resolve(true);
+    },
     logMessageWithSeverityAndProperties: (
       message: string,
       severity: LogSeverity,

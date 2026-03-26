@@ -182,7 +182,7 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
             promise.resolve(true)
         } catch (e: Exception) {
             log.warning("Error starting Embrace SDK")
-            promise.resolve(false)
+            promise.reject("START_SDK_ERROR", "Error starting Embrace SDK with OTLP config", e)
         }
     }
 }
