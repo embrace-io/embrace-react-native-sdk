@@ -55,17 +55,16 @@ const logMessage = (
     );
   }
 
-  const promise = EmbraceManagerModule.logMessageWithSeverityAndProperties(
+  return EmbraceManagerModule.logMessageWithSeverityAndProperties(
     message,
     severity,
     properties,
     stackTrace,
     includeStacktrace,
-  );
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("logMessage", error),
-  );
-  return promise;
+  ).catch((error: unknown) => {
+    handleSDKPromiseRejection("logMessage", error);
+    return false;
+  });
 };
 
 /**
@@ -160,15 +159,12 @@ const logHandledError = (
 ): Promise<boolean> => {
   if (error instanceof Error) {
     const {stack, message} = error;
-    const promise = EmbraceManagerModule.logHandledError(
-      message,
-      stack,
-      properties,
+    return EmbraceManagerModule.logHandledError(message, stack, properties).catch(
+      (err: unknown) => {
+        handleSDKPromiseRejection("logHandledError", err);
+        return false;
+      },
     );
-    promise.catch((err: unknown) =>
-      handleSDKPromiseRejection("logHandledError", err),
-    );
-    return promise;
   }
 
   return Promise.resolve(false);

@@ -33,11 +33,10 @@ import {EmbraceManagerModule} from "../EmbraceManagerModule";
  * ```
  */
 const addUserPersona = (persona: string): Promise<boolean> => {
-  const promise = EmbraceManagerModule.addUserPersona(persona);
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("addUserPersona", error),
-  );
-  return promise;
+  return EmbraceManagerModule.addUserPersona(persona).catch((error: unknown) => {
+    handleSDKPromiseRejection("addUserPersona", error);
+    return false;
+  });
 };
 
 /**
@@ -54,11 +53,10 @@ const addUserPersona = (persona: string): Promise<boolean> => {
  * ```
  */
 const clearUserPersona = (persona: string): Promise<boolean> => {
-  const promise = EmbraceManagerModule.clearUserPersona(persona);
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("clearUserPersona", error),
-  );
-  return promise;
+  return EmbraceManagerModule.clearUserPersona(persona).catch((error: unknown) => {
+    handleSDKPromiseRejection("clearUserPersona", error);
+    return false;
+  });
 };
 
 /**
@@ -74,11 +72,10 @@ const clearUserPersona = (persona: string): Promise<boolean> => {
  * ```
  */
 const clearAllUserPersonas = (): Promise<boolean> => {
-  const promise = EmbraceManagerModule.clearAllUserPersonas();
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("clearAllUserPersonas", error),
-  );
-  return promise;
+  return EmbraceManagerModule.clearAllUserPersonas().catch((error: unknown) => {
+    handleSDKPromiseRejection("clearAllUserPersonas", error);
+    return false;
+  });
 };
 
 /**
@@ -99,11 +96,10 @@ const clearAllUserPersonas = (): Promise<boolean> => {
  * ```
  */
 const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
-  const promise = EmbraceManagerModule.setUserIdentifier(userIdentifier);
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("setUserIdentifier", error),
-  );
-  return promise;
+  return EmbraceManagerModule.setUserIdentifier(userIdentifier).catch((error: unknown) => {
+    handleSDKPromiseRejection("setUserIdentifier", error);
+    return false;
+  });
 };
 
 /**
@@ -122,11 +118,10 @@ const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
  * ```
  */
 const clearUserIdentifier = (): Promise<boolean> => {
-  const promise = EmbraceManagerModule.clearUserIdentifier();
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("clearUserIdentifier", error),
-  );
-  return promise;
+  return EmbraceManagerModule.clearUserIdentifier().catch((error: unknown) => {
+    handleSDKPromiseRejection("clearUserIdentifier", error);
+    return false;
+  });
 };
 
 /**
@@ -150,11 +145,10 @@ const clearUserIdentifier = (): Promise<boolean> => {
  * ```
  */
 const setUsername = (username: string): Promise<boolean> => {
-  const promise = EmbraceManagerModule.setUsername(username);
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("setUsername", error),
-  );
-  return promise;
+  return EmbraceManagerModule.setUsername(username).catch((error: unknown) => {
+    handleSDKPromiseRejection("setUsername", error);
+    return false;
+  });
 };
 
 /**
@@ -170,11 +164,10 @@ const setUsername = (username: string): Promise<boolean> => {
  * ```
  */
 const clearUsername = (): Promise<boolean> => {
-  const promise = EmbraceManagerModule.clearUsername();
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("clearUsername", error),
-  );
-  return promise;
+  return EmbraceManagerModule.clearUsername().catch((error: unknown) => {
+    handleSDKPromiseRejection("clearUsername", error);
+    return false;
+  });
 };
 
 /**
@@ -198,11 +191,10 @@ const clearUsername = (): Promise<boolean> => {
  * ```
  */
 const setUserEmail = (userEmail: string): Promise<boolean> => {
-  const promise = EmbraceManagerModule.setUserEmail(userEmail);
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("setUserEmail", error),
-  );
-  return promise;
+  return EmbraceManagerModule.setUserEmail(userEmail).catch((error: unknown) => {
+    handleSDKPromiseRejection("setUserEmail", error);
+    return false;
+  });
 };
 
 /**
@@ -218,11 +210,10 @@ const setUserEmail = (userEmail: string): Promise<boolean> => {
  * ```
  */
 const clearUserEmail = (): Promise<boolean> => {
-  const promise = EmbraceManagerModule.clearUserEmail();
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("clearUserEmail", error),
-  );
-  return promise;
+  return EmbraceManagerModule.clearUserEmail().catch((error: unknown) => {
+    handleSDKPromiseRejection("clearUserEmail", error);
+    return false;
+  });
 };
 
 export {

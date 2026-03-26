@@ -60,17 +60,16 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
   }
 
   const {message, componentStack} = error;
-  const promise = EmbraceManagerModule.logMessageWithSeverityAndProperties(
+  return EmbraceManagerModule.logMessageWithSeverityAndProperties(
     message,
     "error",
     {},
     componentStack,
     true,
-  );
-  promise.catch((err: unknown) =>
-    handleSDKPromiseRejection("logIfComponentError", err),
-  );
-  return promise;
+  ).catch((err: unknown) => {
+    handleSDKPromiseRejection("logIfComponentError", err);
+    return false;
+  });
 };
 
 export {logIfComponentError, ComponentError};

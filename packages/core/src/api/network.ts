@@ -57,7 +57,7 @@ const recordNetworkRequest = (
   bytesReceived?: number,
   statusCode?: number,
 ): Promise<boolean> => {
-  const promise = EmbraceManagerModule.logNetworkRequest(
+  return EmbraceManagerModule.logNetworkRequest(
     url,
     httpMethod,
     startInMillis,
@@ -65,11 +65,10 @@ const recordNetworkRequest = (
     bytesSent || -1,
     bytesReceived || -1,
     statusCode || -1,
-  );
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("recordNetworkRequest", error),
-  );
-  return promise;
+  ).catch((error: unknown) => {
+    handleSDKPromiseRejection("recordNetworkRequest", error);
+    return false;
+  });
 };
 
 /**
@@ -113,18 +112,17 @@ const logNetworkClientError = (
   errorType: string,
   errorMessage: string,
 ): Promise<boolean> => {
-  const promise = EmbraceManagerModule.logNetworkClientError(
+  return EmbraceManagerModule.logNetworkClientError(
     url,
     httpMethod,
     startInMillis,
     endInMillis,
     errorType,
     errorMessage,
-  );
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("logNetworkClientError", error),
-  );
-  return promise;
+  ).catch((error: unknown) => {
+    handleSDKPromiseRejection("logNetworkClientError", error);
+    return false;
+  });
 };
 
 export {recordNetworkRequest, logNetworkClientError};

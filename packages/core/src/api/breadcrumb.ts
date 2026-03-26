@@ -35,11 +35,10 @@ import {EmbraceManagerModule} from "../EmbraceManagerModule";
  * ```
  */
 const addBreadcrumb = (message: string): Promise<boolean> => {
-  const promise = EmbraceManagerModule.addBreadcrumb(message);
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("addBreadcrumb", error),
-  );
-  return promise;
+  return EmbraceManagerModule.addBreadcrumb(message).catch((error: unknown) => {
+    handleSDKPromiseRejection("addBreadcrumb", error);
+    return false;
+  });
 };
 
 export {addBreadcrumb};

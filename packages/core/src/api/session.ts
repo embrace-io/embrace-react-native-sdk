@@ -41,15 +41,12 @@ const addSessionProperty = (
   value: string,
   permanent: boolean,
 ): Promise<boolean> => {
-  const promise = EmbraceManagerModule.addSessionProperty(
-    key,
-    value,
-    permanent,
+  return EmbraceManagerModule.addSessionProperty(key, value, permanent).catch(
+    (error: unknown) => {
+      handleSDKPromiseRejection("addSessionProperty", error);
+      return false;
+    },
   );
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("addSessionProperty", error),
-  );
-  return promise;
 };
 
 /**
@@ -66,11 +63,10 @@ const addSessionProperty = (
  * ```
  */
 const removeSessionProperty = (key: string) => {
-  const promise = EmbraceManagerModule.removeSessionProperty(key);
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("removeSessionProperty", error),
-  );
-  return promise;
+  return EmbraceManagerModule.removeSessionProperty(key).catch((error: unknown) => {
+    handleSDKPromiseRejection("removeSessionProperty", error);
+    return false;
+  });
 };
 
 /**
@@ -90,11 +86,10 @@ const removeSessionProperty = (key: string) => {
  * ```
  */
 const endSession = () => {
-  const promise = EmbraceManagerModule.endSession();
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("endSession", error),
-  );
-  return promise;
+  return EmbraceManagerModule.endSession().catch((error: unknown) => {
+    handleSDKPromiseRejection("endSession", error);
+    return false;
+  });
 };
 
 /**

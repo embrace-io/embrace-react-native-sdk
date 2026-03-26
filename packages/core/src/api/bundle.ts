@@ -30,11 +30,12 @@ import {EmbraceManagerModule} from "../EmbraceManagerModule";
  * ```
  */
 const setJavaScriptPatch = (patch: string) => {
-  const promise = EmbraceManagerModule.setJavaScriptPatchNumber(patch);
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("setJavaScriptPatch", error),
+  return EmbraceManagerModule.setJavaScriptPatchNumber(patch).catch(
+    (error: unknown) => {
+      handleSDKPromiseRejection("setJavaScriptPatch", error);
+      return false;
+    },
   );
-  return promise;
 };
 
 /**
@@ -57,11 +58,12 @@ const setJavaScriptPatch = (patch: string) => {
  * ```
  */
 const setJavaScriptBundlePath = (path: string) => {
-  const promise = EmbraceManagerModule.setJavaScriptBundlePath(path);
-  promise.catch((error: unknown) =>
-    handleSDKPromiseRejection("setJavaScriptBundlePath", error),
+  return EmbraceManagerModule.setJavaScriptBundlePath(path).catch(
+    (error: unknown) => {
+      handleSDKPromiseRejection("setJavaScriptBundlePath", error);
+      return false;
+    },
   );
-  return promise;
 };
 
 export {setJavaScriptBundlePath, setJavaScriptPatch};
