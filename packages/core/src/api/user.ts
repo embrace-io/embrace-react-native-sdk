@@ -33,10 +33,12 @@ import {EmbraceManagerModule} from "../EmbraceManagerModule";
  * ```
  */
 const addUserPersona = (persona: string): Promise<boolean> => {
-  return EmbraceManagerModule.addUserPersona(persona).catch((error: unknown) => {
-    handleSDKPromiseRejection("addUserPersona", error);
-    return false;
-  });
+  return EmbraceManagerModule.addUserPersona(persona).catch(
+    (error: unknown) => {
+      handleSDKPromiseRejection("addUserPersona", error);
+      return false;
+    },
+  );
 };
 
 /**
@@ -53,10 +55,12 @@ const addUserPersona = (persona: string): Promise<boolean> => {
  * ```
  */
 const clearUserPersona = (persona: string): Promise<boolean> => {
-  return EmbraceManagerModule.clearUserPersona(persona).catch((error: unknown) => {
-    handleSDKPromiseRejection("clearUserPersona", error);
-    return false;
-  });
+  return EmbraceManagerModule.clearUserPersona(persona).catch(
+    (error: unknown) => {
+      handleSDKPromiseRejection("clearUserPersona", error);
+      return false;
+    },
+  );
 };
 
 /**
@@ -96,10 +100,12 @@ const clearAllUserPersonas = (): Promise<boolean> => {
  * ```
  */
 const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
-  return EmbraceManagerModule.setUserIdentifier(userIdentifier).catch((error: unknown) => {
-    handleSDKPromiseRejection("setUserIdentifier", error);
-    return false;
-  });
+  return EmbraceManagerModule.setUserIdentifier(userIdentifier).catch(
+    (error: unknown) => {
+      handleSDKPromiseRejection("setUserIdentifier", error);
+      return false;
+    },
+  );
 };
 
 /**
@@ -191,10 +197,12 @@ const clearUsername = (): Promise<boolean> => {
  * ```
  */
 const setUserEmail = (userEmail: string): Promise<boolean> => {
-  return EmbraceManagerModule.setUserEmail(userEmail).catch((error: unknown) => {
-    handleSDKPromiseRejection("setUserEmail", error);
-    return false;
-  });
+  return EmbraceManagerModule.setUserEmail(userEmail).catch(
+    (error: unknown) => {
+      handleSDKPromiseRejection("setUserEmail", error);
+      return false;
+    },
+  );
 };
 
 /**

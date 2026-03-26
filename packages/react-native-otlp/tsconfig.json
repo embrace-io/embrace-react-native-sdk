@@ -4,11 +4,5 @@
     "outDir": "./lib/src"
   },
   "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "ios",
-    "android",
-    "./dist",
-    "./src/__tests__",
-  ]
+  "exclude": ["node_modules", "ios", "android", "./dist", "./src/__tests__"]
 }

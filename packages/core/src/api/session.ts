@@ -63,10 +63,12 @@ const addSessionProperty = (
  * ```
  */
 const removeSessionProperty = (key: string) => {
-  return EmbraceManagerModule.removeSessionProperty(key).catch((error: unknown) => {
-    handleSDKPromiseRejection("removeSessionProperty", error);
-    return false;
-  });
+  return EmbraceManagerModule.removeSessionProperty(key).catch(
+    (error: unknown) => {
+      handleSDKPromiseRejection("removeSessionProperty", error);
+      return false;
+    },
+  );
 };
 
 /**

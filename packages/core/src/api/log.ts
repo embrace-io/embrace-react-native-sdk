@@ -159,12 +159,14 @@ const logHandledError = (
 ): Promise<boolean> => {
   if (error instanceof Error) {
     const {stack, message} = error;
-    return EmbraceManagerModule.logHandledError(message, stack, properties).catch(
-      (err: unknown) => {
-        handleSDKPromiseRejection("logHandledError", err);
-        return false;
-      },
-    );
+    return EmbraceManagerModule.logHandledError(
+      message,
+      stack,
+      properties,
+    ).catch((err: unknown) => {
+      handleSDKPromiseRejection("logHandledError", err);
+      return false;
+    });
   }
 
   return Promise.resolve(false);
