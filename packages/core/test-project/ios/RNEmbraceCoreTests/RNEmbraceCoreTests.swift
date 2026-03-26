@@ -106,6 +106,9 @@ class EmbraceManagerTests: XCTestCase {
                     appId: "myApp",
                     // Set a fake endpoint for unit tests otherwise we'll end up sending actual payloads to Embrace
                     endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null", configBaseURL: "http://localhost/dev/null"),
+                    captureServices: [],
+                    // Disable KSCrash in the test runner to prevent crashes in xctest
+                    crashReporter: nil,
                     export:
                         OpenTelemetryExport(
                             spanExporter: self.spanExporter,
