@@ -8,8 +8,8 @@
  * @see {@link https://embrace.io/docs/react-native/integration/upload-symbol-files | Upload Symbol Files Documentation}
  */
 
-import {EmbraceManagerModule} from "../EmbraceManagerModule";
 import {handleSDKPromiseRejection} from "../utils/promiseHandler";
+import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 /**
  * Sets a patch identifier for the current JavaScript bundle.
@@ -31,7 +31,9 @@ import {handleSDKPromiseRejection} from "../utils/promiseHandler";
  */
 const setJavaScriptPatch = (patch: string) => {
   const promise = EmbraceManagerModule.setJavaScriptPatchNumber(patch);
-  promise.catch((error: unknown) => handleSDKPromiseRejection("setJavaScriptPatch", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("setJavaScriptPatch", error),
+  );
   return promise;
 };
 
@@ -56,7 +58,9 @@ const setJavaScriptPatch = (patch: string) => {
  */
 const setJavaScriptBundlePath = (path: string) => {
   const promise = EmbraceManagerModule.setJavaScriptBundlePath(path);
-  promise.catch((error: unknown) => handleSDKPromiseRejection("setJavaScriptBundlePath", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("setJavaScriptBundlePath", error),
+  );
   return promise;
 };
 

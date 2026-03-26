@@ -9,9 +9,9 @@
  * @see {@link https://embrace.io/docs/react-native/features/session-metadata | Session Metadata Documentation}
  */
 
+import {handleSDKPromiseRejection} from "../utils/promiseHandler";
 import {SessionStatus} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
-import {handleSDKPromiseRejection} from "../utils/promiseHandler";
 
 /**
  * Adds a key-value property to the current session.
@@ -41,8 +41,14 @@ const addSessionProperty = (
   value: string,
   permanent: boolean,
 ): Promise<boolean> => {
-  const promise = EmbraceManagerModule.addSessionProperty(key, value, permanent);
-  promise.catch((error: unknown) => handleSDKPromiseRejection("addSessionProperty", error));
+  const promise = EmbraceManagerModule.addSessionProperty(
+    key,
+    value,
+    permanent,
+  );
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("addSessionProperty", error),
+  );
   return promise;
 };
 
@@ -61,7 +67,9 @@ const addSessionProperty = (
  */
 const removeSessionProperty = (key: string) => {
   const promise = EmbraceManagerModule.removeSessionProperty(key);
-  promise.catch((error: unknown) => handleSDKPromiseRejection("removeSessionProperty", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("removeSessionProperty", error),
+  );
   return promise;
 };
 
@@ -83,7 +91,9 @@ const removeSessionProperty = (key: string) => {
  */
 const endSession = () => {
   const promise = EmbraceManagerModule.endSession();
-  promise.catch((error: unknown) => handleSDKPromiseRejection("endSession", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("endSession", error),
+  );
   return promise;
 };
 

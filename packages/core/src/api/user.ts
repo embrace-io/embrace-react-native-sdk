@@ -12,8 +12,8 @@
  * @see {@link https://embrace.io/docs/react-native/features/identify-users | Identify Users Documentation}
  */
 
-import {EmbraceManagerModule} from "../EmbraceManagerModule";
 import {handleSDKPromiseRejection} from "../utils/promiseHandler";
+import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 /**
  * Adds a custom persona tag to the current user.
@@ -34,7 +34,9 @@ import {handleSDKPromiseRejection} from "../utils/promiseHandler";
  */
 const addUserPersona = (persona: string): Promise<boolean> => {
   const promise = EmbraceManagerModule.addUserPersona(persona);
-  promise.catch((error: unknown) => handleSDKPromiseRejection("addUserPersona", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("addUserPersona", error),
+  );
   return promise;
 };
 
@@ -53,7 +55,9 @@ const addUserPersona = (persona: string): Promise<boolean> => {
  */
 const clearUserPersona = (persona: string): Promise<boolean> => {
   const promise = EmbraceManagerModule.clearUserPersona(persona);
-  promise.catch((error: unknown) => handleSDKPromiseRejection("clearUserPersona", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("clearUserPersona", error),
+  );
   return promise;
 };
 
@@ -71,7 +75,9 @@ const clearUserPersona = (persona: string): Promise<boolean> => {
  */
 const clearAllUserPersonas = (): Promise<boolean> => {
   const promise = EmbraceManagerModule.clearAllUserPersonas();
-  promise.catch((error: unknown) => handleSDKPromiseRejection("clearAllUserPersonas", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("clearAllUserPersonas", error),
+  );
   return promise;
 };
 
@@ -94,7 +100,9 @@ const clearAllUserPersonas = (): Promise<boolean> => {
  */
 const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
   const promise = EmbraceManagerModule.setUserIdentifier(userIdentifier);
-  promise.catch((error: unknown) => handleSDKPromiseRejection("setUserIdentifier", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("setUserIdentifier", error),
+  );
   return promise;
 };
 
@@ -115,7 +123,9 @@ const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
  */
 const clearUserIdentifier = (): Promise<boolean> => {
   const promise = EmbraceManagerModule.clearUserIdentifier();
-  promise.catch((error: unknown) => handleSDKPromiseRejection("clearUserIdentifier", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("clearUserIdentifier", error),
+  );
   return promise;
 };
 
@@ -141,7 +151,9 @@ const clearUserIdentifier = (): Promise<boolean> => {
  */
 const setUsername = (username: string): Promise<boolean> => {
   const promise = EmbraceManagerModule.setUsername(username);
-  promise.catch((error: unknown) => handleSDKPromiseRejection("setUsername", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("setUsername", error),
+  );
   return promise;
 };
 
@@ -159,7 +171,9 @@ const setUsername = (username: string): Promise<boolean> => {
  */
 const clearUsername = (): Promise<boolean> => {
   const promise = EmbraceManagerModule.clearUsername();
-  promise.catch((error: unknown) => handleSDKPromiseRejection("clearUsername", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("clearUsername", error),
+  );
   return promise;
 };
 
@@ -185,7 +199,9 @@ const clearUsername = (): Promise<boolean> => {
  */
 const setUserEmail = (userEmail: string): Promise<boolean> => {
   const promise = EmbraceManagerModule.setUserEmail(userEmail);
-  promise.catch((error: unknown) => handleSDKPromiseRejection("setUserEmail", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("setUserEmail", error),
+  );
   return promise;
 };
 
@@ -203,7 +219,9 @@ const setUserEmail = (userEmail: string): Promise<boolean> => {
  */
 const clearUserEmail = (): Promise<boolean> => {
   const promise = EmbraceManagerModule.clearUserEmail();
-  promise.catch((error: unknown) => handleSDKPromiseRejection("clearUserEmail", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("clearUserEmail", error),
+  );
   return promise;
 };
 

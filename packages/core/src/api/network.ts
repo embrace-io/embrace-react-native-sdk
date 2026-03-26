@@ -9,9 +9,9 @@
  * @see {@link https://embrace.io/docs/react-native/faq/#my-network-calls-are-not-being-captured-what-could-be-going-wrong | Network FAQ}
  */
 
+import {handleSDKPromiseRejection} from "../utils/promiseHandler";
 import {MethodType} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
-import {handleSDKPromiseRejection} from "../utils/promiseHandler";
 
 /**
  * Manually records a completed network request.
@@ -66,7 +66,9 @@ const recordNetworkRequest = (
     bytesReceived || -1,
     statusCode || -1,
   );
-  promise.catch((error: unknown) => handleSDKPromiseRejection("recordNetworkRequest", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("recordNetworkRequest", error),
+  );
   return promise;
 };
 
@@ -119,7 +121,9 @@ const logNetworkClientError = (
     errorType,
     errorMessage,
   );
-  promise.catch((error: unknown) => handleSDKPromiseRejection("logNetworkClientError", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("logNetworkClientError", error),
+  );
   return promise;
 };
 

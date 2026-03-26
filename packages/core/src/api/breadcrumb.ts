@@ -7,8 +7,8 @@
  * @see {@link https://embrace.io/docs/react-native/integration/breadcrumbs | Breadcrumbs Documentation}
  */
 
-import {EmbraceManagerModule} from "../EmbraceManagerModule";
 import {handleSDKPromiseRejection} from "../utils/promiseHandler";
+import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 /**
  * Adds a breadcrumb event to the current session.
@@ -36,7 +36,9 @@ import {handleSDKPromiseRejection} from "../utils/promiseHandler";
  */
 const addBreadcrumb = (message: string): Promise<boolean> => {
   const promise = EmbraceManagerModule.addBreadcrumb(message);
-  promise.catch((error: unknown) => handleSDKPromiseRejection("addBreadcrumb", error));
+  promise.catch((error: unknown) =>
+    handleSDKPromiseRejection("addBreadcrumb", error),
+  );
   return promise;
 };
 

@@ -10,8 +10,8 @@
 
 import {ErrorInfo} from "react";
 
-import {EmbraceManagerModule} from "../EmbraceManagerModule";
 import {handleSDKPromiseRejection} from "../utils/promiseHandler";
+import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 /**
  * An Error that includes React's `componentStack` property, indicating it originated
@@ -67,7 +67,9 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
     componentStack,
     true,
   );
-  promise.catch((err: unknown) => handleSDKPromiseRejection("logIfComponentError", err));
+  promise.catch((err: unknown) =>
+    handleSDKPromiseRejection("logIfComponentError", err),
+  );
   return promise;
 };
 
