@@ -24,8 +24,9 @@ describe("promiseHandler", () => {
   });
 
   describe("Configuration", () => {
-    it("should have correct default config", () => {
+    it("should have correct default config after beforeEach override", () => {
       const config = getPromiseRejectionConfig();
+      // beforeEach sets enabled to true for testing; actual defaults are false
       expect(config.enabled).toBe(true);
       expect(config.logToConsole).toBe(false);
       expect(config.customHandler).toBeUndefined();

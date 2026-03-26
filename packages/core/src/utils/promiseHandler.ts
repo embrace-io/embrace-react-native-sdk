@@ -25,8 +25,8 @@ export interface EmbracePromiseRejectionConfig {
 }
 
 let rejectionConfig: EmbracePromiseRejectionConfig = {
-  enabled: true,
-  logToConsole: typeof __DEV__ !== "undefined" ? __DEV__ : false,
+  enabled: false,
+  logToConsole: false,
 };
 
 export const handleSDKPromiseRejection = (
