@@ -1,10 +1,11 @@
-import {LogSeverity, LogProperties} from "../interfaces";
 import {logError, logInfo, logMessage, logWarning} from "../api/log";
 
 const MOCK_STACKTRACE = "this is a fake stack trace";
 
-const mockLogMessageWithSeverityAndProperties = jest.fn();
-const mockLogHandledError = jest.fn();
+const mockLogMessageWithSeverityAndProperties = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockLogHandledError = jest.fn().mockReturnValue(Promise.resolve(true));
 
 beforeEach(() => {
   mockGenerateStackTrace.mockReturnValue(MOCK_STACKTRACE);
@@ -12,30 +13,9 @@ beforeEach(() => {
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    logMessageWithSeverityAndProperties: (
-      message: string,
-      severity: LogSeverity,
-      properties: LogProperties,
-      stacktrace: string,
-      includeStacktrace: boolean,
-    ) => {
-      mockLogMessageWithSeverityAndProperties(
-        message,
-        severity,
-        properties,
-        stacktrace,
-        includeStacktrace,
-      );
-      return Promise.resolve(true);
-    },
-    logHandledError: (
-      message: string,
-      stackTrace: string,
-      properties: LogProperties,
-    ) => {
-      mockLogHandledError(message, stackTrace, properties);
-      return Promise.resolve(true);
-    },
+    logMessageWithSeverityAndProperties: (...args: unknown[]) =>
+      mockLogMessageWithSeverityAndProperties(...args),
+    logHandledError: (...args: unknown[]) => mockLogHandledError(...args),
   },
 }));
 

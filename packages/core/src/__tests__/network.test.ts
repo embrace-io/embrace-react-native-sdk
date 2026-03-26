@@ -1,49 +1,17 @@
-import {MethodType} from "../interfaces";
 import {logNetworkClientError, recordNetworkRequest} from "../api/network";
 
-const mockLogNetworkClientError = jest.fn();
-const mockLogNetworkRequest = jest.fn();
+const mockLogNetworkClientError = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockLogNetworkRequest = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    logNetworkRequest: (
-      url: string,
-      httpMethod: MethodType,
-      startInMillis: number,
-      endInMillis: number,
-      bytesSent: number,
-      bytesReceived: number,
-      statusCode: number,
-    ) => {
-      mockLogNetworkRequest(
-        url,
-        httpMethod,
-        startInMillis,
-        endInMillis,
-        bytesSent,
-        bytesReceived,
-        statusCode,
-      );
-      return Promise.resolve(true);
-    },
-    logNetworkClientError: (
-      url: string,
-      httpMethod: MethodType,
-      startInMillis: number,
-      endInMillis: number,
-      errorType: string,
-      errorMessage: string,
-    ) => {
-      mockLogNetworkClientError(
-        url,
-        httpMethod,
-        startInMillis,
-        endInMillis,
-        errorType,
-        errorMessage,
-      );
-      return Promise.resolve(true);
-    },
+    logNetworkRequest: (...args: unknown[]) => mockLogNetworkRequest(...args),
+    logNetworkClientError: (...args: unknown[]) =>
+      mockLogNetworkClientError(...args),
   },
 }));
 

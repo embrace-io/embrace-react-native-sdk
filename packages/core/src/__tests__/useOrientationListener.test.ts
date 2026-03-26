@@ -9,16 +9,13 @@ const DIMENSIONS = {
   portrait: {width: 100, height: 200},
 };
 
-const mockBreadcrumb = jest.fn();
+const mockBreadcrumb = jest.fn().mockReturnValue(Promise.resolve(true));
 
 jest.mock("react-native", () => ({
   Platform: {select: jest.fn()},
   NativeModules: {
     EmbraceManager: {
-      addBreadcrumb: (m: string) => {
-        mockBreadcrumb(m);
-        return Promise.resolve(true);
-      },
+      addBreadcrumb: (...args: unknown[]) => mockBreadcrumb(...args),
     },
   },
   Dimensions: {

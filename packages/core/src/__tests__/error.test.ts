@@ -1,37 +1,17 @@
 import {trackUnhandledRejection} from "../utils/error";
 import {logHandledError} from "../api/log";
 import {ComponentError, logIfComponentError} from "../api/component";
-import {LogProperties, LogSeverity} from "../../src/interfaces";
 
-const mockLogHandledError = jest.fn();
-const mockLogMessageWithSeverityAndProperties = jest.fn();
+const mockLogHandledError = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockLogMessageWithSeverityAndProperties = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    logHandledError: (
-      message: string,
-      stackTrace: string,
-      properties: LogProperties,
-    ) => {
-      mockLogHandledError(message, stackTrace, properties);
-      return Promise.resolve(true);
-    },
-    logMessageWithSeverityAndProperties: (
-      message: string,
-      severity: LogSeverity,
-      properties: LogProperties,
-      stacktrace: string,
-      includeStacktrace: boolean,
-    ) => {
-      mockLogMessageWithSeverityAndProperties(
-        message,
-        severity,
-        properties,
-        stacktrace,
-        includeStacktrace,
-      );
-      return Promise.resolve(true);
-    },
+    logHandledError: (...args: unknown[]) => mockLogHandledError(...args),
+    logMessageWithSeverityAndProperties: (...args: unknown[]) =>
+      mockLogMessageWithSeverityAndProperties(...args),
   },
 }));
 
@@ -41,7 +21,7 @@ jest.mock("../utils/log", () => ({
 }));
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  jest.clearAllMocks();
 });
 
 describe("Component Error", () => {

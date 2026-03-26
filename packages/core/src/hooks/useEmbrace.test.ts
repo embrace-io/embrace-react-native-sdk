@@ -22,20 +22,24 @@ jest.mock("react-native", () => ({
   },
 }));
 
-const mockSetJavaScriptPatchNumber = jest.fn();
+const mockSetJavaScriptPatchNumber = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
     startNativeEmbraceSDK: () => mockStartNativeEmbraceSDK(),
     isStarted: jest.fn().mockResolvedValueOnce(false),
-    setReactNativeSDKVersion: jest.fn().mockResolvedValue(true),
-    setReactNativeVersion: jest.fn().mockResolvedValue(true),
-    logMessageWithSeverityAndProperties: jest.fn().mockResolvedValue(true),
+    setReactNativeSDKVersion: jest.fn().mockReturnValue(Promise.resolve(true)),
+    setReactNativeVersion: jest.fn().mockReturnValue(Promise.resolve(true)),
+    logMessageWithSeverityAndProperties: jest
+      .fn()
+      .mockReturnValue(Promise.resolve(true)),
     getDefaultJavaScriptBundlePath: jest.fn().mockResolvedValue(null),
-    setJavaScriptBundlePath: jest.fn().mockResolvedValue(true),
-    setJavaScriptPatchNumber: jest.fn(patch => {
-      mockSetJavaScriptPatchNumber(patch);
-      return Promise.resolve(true);
-    }),
+    setJavaScriptBundlePath: jest
+      .fn()
+      .mockReturnValue(Promise.resolve(true)),
+    setJavaScriptPatchNumber: (...args: unknown[]) =>
+      mockSetJavaScriptPatchNumber(...args),
   },
 }));
 

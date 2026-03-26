@@ -6,34 +6,33 @@ import {
   removeSessionProperty,
 } from "../api/session";
 
-const mockAddSessionProperty = jest.fn();
-const mockRemoveSessionProperty = jest.fn();
-const mockGetLastRunEndState = jest.fn();
-const mockGetDeviceId = jest.fn();
-const mockGetCurrentSessionId = jest.fn();
+const mockAddSessionProperty = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockRemoveSessionProperty = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockGetLastRunEndState = jest
+  .fn()
+  .mockReturnValue(Promise.resolve("CLEAN_EXIT"));
+const mockGetDeviceId = jest
+  .fn()
+  .mockReturnValue(Promise.resolve("device-id"));
+const mockGetCurrentSessionId = jest
+  .fn()
+  .mockReturnValue(Promise.resolve("session-id"));
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    addSessionProperty: (key: string, value: string, permanent: boolean) => {
-      mockAddSessionProperty(key, value, permanent);
-      return Promise.resolve(true);
-    },
-    removeSessionProperty: (key: string) => {
-      mockRemoveSessionProperty(key);
-      return Promise.resolve(true);
-    },
-    getLastRunEndState: () => {
-      mockGetLastRunEndState();
-      return Promise.resolve("CLEAN_EXIT");
-    },
-    getDeviceId: () => {
-      mockGetDeviceId();
-      return Promise.resolve("device-id");
-    },
-    getCurrentSessionId: () => {
-      mockGetCurrentSessionId();
-      return Promise.resolve("session-id");
-    },
+    addSessionProperty: (...args: unknown[]) =>
+      mockAddSessionProperty(...args),
+    removeSessionProperty: (...args: unknown[]) =>
+      mockRemoveSessionProperty(...args),
+    getLastRunEndState: (...args: unknown[]) =>
+      mockGetLastRunEndState(...args),
+    getDeviceId: (...args: unknown[]) => mockGetDeviceId(...args),
+    getCurrentSessionId: (...args: unknown[]) =>
+      mockGetCurrentSessionId(...args),
   },
 }));
 

@@ -13,70 +13,49 @@ const INIT_SDK_CONFIG = {
   sdkConfig: {ios: {appId: "abc12"}},
 };
 
-const mockSetReactNativeVersion = jest.fn();
-const mockSetJavaScriptPatchNumber = jest.fn();
+const mockSetReactNativeVersion = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockSetJavaScriptPatchNumber = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
 const mockIsStarted = jest.fn();
 const mockStart = jest.fn().mockResolvedValue(true);
-const mockSetReactNativeSDKVersion = jest.fn();
-const mockLogMessageWithSeverityAndProperties = jest.fn();
-const mockLogHandledError = jest.fn();
-const mockLogUnhandledJSException = jest.fn().mockResolvedValue(true);
-const mockSetJavaScriptBundlePath = jest.fn();
+const mockSetReactNativeSDKVersion = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockLogMessageWithSeverityAndProperties = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockLogHandledError = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockLogUnhandledJSException = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockSetJavaScriptBundlePath = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
 const mockGetDefaultJavaScriptBundlePath = jest
   .fn()
   .mockResolvedValue("some/path");
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    setReactNativeVersion: (version: string) => {
-      mockSetReactNativeVersion(version);
-      return Promise.resolve(true);
-    },
-    setJavaScriptPatchNumber: (patch: string) => {
-      mockSetJavaScriptPatchNumber(patch);
-      return Promise.resolve(true);
-    },
-    setReactNativeSDKVersion: (version: string) => {
-      mockSetReactNativeSDKVersion(version);
-      return Promise.resolve(true);
-    },
-    logMessageWithSeverityAndProperties: (
-      message: string,
-      severity: string,
-      properties: object,
-      stacktrace: string,
-      includeStacktrace: boolean,
-    ) => {
-      mockLogMessageWithSeverityAndProperties(
-        message,
-        severity,
-        properties,
-        stacktrace,
-        includeStacktrace,
-      );
-      return Promise.resolve(true);
-    },
-    logUnhandledJSException: (
-      name: string,
-      message: string,
-      errorType: string,
-      stacktrace: string,
-    ) => mockLogUnhandledJSException(name, message, errorType, stacktrace),
+    setReactNativeVersion: (...args: unknown[]) =>
+      mockSetReactNativeVersion(...args),
+    setJavaScriptPatchNumber: (...args: unknown[]) =>
+      mockSetJavaScriptPatchNumber(...args),
+    setReactNativeSDKVersion: (...args: unknown[]) =>
+      mockSetReactNativeSDKVersion(...args),
+    logMessageWithSeverityAndProperties: (...args: unknown[]) =>
+      mockLogMessageWithSeverityAndProperties(...args),
+    logUnhandledJSException: (...args: unknown[]) =>
+      mockLogUnhandledJSException(...args),
     isStarted: () => mockIsStarted(),
     startNativeEmbraceSDK: (sdkConfig: IOSConfig | AndroidConfig) =>
       mockStart(sdkConfig),
-    logHandledError: (
-      message: string,
-      componentStack: string,
-      params: object,
-    ) => {
-      mockLogHandledError(message, componentStack, params);
-      return Promise.resolve(true);
-    },
+    logHandledError: (...args: unknown[]) => mockLogHandledError(...args),
     getDefaultJavaScriptBundlePath: () => mockGetDefaultJavaScriptBundlePath(),
-    setJavaScriptBundlePath: (path: string) => {
-      mockSetJavaScriptBundlePath(path);
-      return Promise.resolve(true);
-    },
+    setJavaScriptBundlePath: (...args: unknown[]) =>
+      mockSetJavaScriptBundlePath(...args),
   },
 }));
 
