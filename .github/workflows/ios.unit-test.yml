@@ -14,11 +14,11 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version-file: ".node-version"
           cache: "npm"
@@ -26,7 +26,7 @@ jobs:
       - name: Enables corepack
         run: corepack enable
 
-      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+      - uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         id: changed_files
         with:
           list-files: shell
@@ -49,11 +49,11 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version-file: ".node-version"
           cache: "npm"
@@ -61,7 +61,7 @@ jobs:
       - name: Enables corepack
         run: corepack enable
 
-      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+      - uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         id: changed_files
         with:
           list-files: shell
@@ -73,7 +73,7 @@ jobs:
             - 'packages/core/test-project/ios/Podfile.lock'
 
       - name: Cache Derived Data
-        uses: actions/cache@v5
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: Derived-Data-Core-${{ runner.os }}-${{ hashFiles('packages/core/**/*.xcodeproj/project.pbxproj', 'packages/core/test-project/ios/Podfile.lock') }}
@@ -107,7 +107,7 @@ jobs:
 
       - name: Upload Test Results (xcresult bundle)
         if: always() && steps.changed_files.outputs.core == 'true'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ios-core-test-results
           path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceCoreTests-*/Logs/Test/*.xcresult
@@ -128,11 +128,11 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version-file: ".node-version"
           cache: "npm"
@@ -140,7 +140,7 @@ jobs:
       - name: Enables corepack
         run: corepack enable
 
-      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+      - uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         id: changed_files
         with:
           list-files: shell
@@ -152,7 +152,7 @@ jobs:
             - 'packages/react-native-tracer-provider/test-project/ios/Podfile.lock'
 
       - name: Cache Derived Data
-        uses: actions/cache@v5
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: Derived-Data-TracerProvider-${{ runner.os }}-${{ hashFiles('packages/react-native-tracer-provider/**/*.xcodeproj/project.pbxproj', 'packages/react-native-tracer-provider/test-project/ios/Podfile.lock') }}
@@ -186,7 +186,7 @@ jobs:
 
       - name: Upload Test Results (xcresult bundle)
         if: always() && steps.changed_files.outputs.tracer-provider == 'true'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ios-tracer-provider-test-results
           path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceTracerProvider-*/Logs/Test/*.xcresult
@@ -211,11 +211,11 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version-file: ".node-version"
           cache: "npm"
@@ -223,7 +223,7 @@ jobs:
       - name: Enables corepack
         run: corepack enable
 
-      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+      - uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         id: changed_files
         with:
           list-files: shell
@@ -235,7 +235,7 @@ jobs:
             - 'packages/react-native-otlp/test-project/ios/Podfile.lock'
 
       - name: Cache Derived Data
-        uses: actions/cache@v5
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: Derived-Data-OTLP-${{ runner.os }}-${{ hashFiles('packages/react-native-otlp/**/*.xcodeproj/project.pbxproj', 'packages/react-native-otlp/test-project/ios/Podfile.lock') }}
@@ -267,7 +267,7 @@ jobs:
 
       - name: Upload Test Results (xcresult bundle)
         if: always() && steps.changed_files.outputs.otlp == 'true'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ios-otlp-test-results
           path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceOTLPTests-*/Logs/Test/*.xcresult
