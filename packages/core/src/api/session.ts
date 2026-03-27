@@ -115,7 +115,10 @@ const endSession = () => {
  * ```
  */
 const getCurrentSessionId = (): Promise<string> => {
-  return EmbraceManagerModule.getCurrentSessionId();
+  return EmbraceManagerModule.getCurrentSessionId().catch((error: unknown) => {
+    handleSDKPromiseRejection("getCurrentSessionId", error);
+    return "";
+  });
 };
 
 /**
@@ -143,7 +146,10 @@ const getCurrentSessionId = (): Promise<string> => {
  * ```
  */
 const getLastRunEndState = (): Promise<SessionStatus> => {
-  return EmbraceManagerModule.getLastRunEndState();
+  return EmbraceManagerModule.getLastRunEndState().catch((error: unknown) => {
+    handleSDKPromiseRejection("getLastRunEndState", error);
+    return "INVALID" as SessionStatus;
+  });
 };
 
 /**
@@ -164,7 +170,10 @@ const getLastRunEndState = (): Promise<SessionStatus> => {
  * ```
  */
 const getDeviceId = (): Promise<string> => {
-  return EmbraceManagerModule.getDeviceId();
+  return EmbraceManagerModule.getDeviceId().catch((error: unknown) => {
+    handleSDKPromiseRejection("getDeviceId", error);
+    return "";
+  });
 };
 
 export {
