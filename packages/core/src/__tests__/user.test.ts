@@ -12,9 +12,7 @@ import {
 
 jest.useFakeTimers();
 
-const mockSetUserIdentifier = jest
-  .fn()
-  .mockReturnValue(Promise.resolve(true));
+const mockSetUserIdentifier = jest.fn().mockReturnValue(Promise.resolve(true));
 const mockClearUserIdentifier = jest
   .fn()
   .mockReturnValue(Promise.resolve(true));

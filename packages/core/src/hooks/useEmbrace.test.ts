@@ -35,9 +35,7 @@ jest.mock("../EmbraceManagerModule", () => ({
       .fn()
       .mockReturnValue(Promise.resolve(true)),
     getDefaultJavaScriptBundlePath: jest.fn().mockResolvedValue(null),
-    setJavaScriptBundlePath: jest
-      .fn()
-      .mockReturnValue(Promise.resolve(true)),
+    setJavaScriptBundlePath: jest.fn().mockReturnValue(Promise.resolve(true)),
     setJavaScriptPatchNumber: (patch: string) =>
       mockSetJavaScriptPatchNumber(patch),
   },

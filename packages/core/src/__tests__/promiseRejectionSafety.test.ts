@@ -40,7 +40,6 @@ jest.mock("../utils/log", () => ({
   generateStackTrace: () => "mock stack trace",
 }));
 
-import {addBreadcrumb} from "../api/breadcrumb";
 import {
   addUserPersona,
   clearUserPersona,
@@ -53,13 +52,6 @@ import {
   clearUserEmail,
 } from "../api/user";
 import {
-  logMessage,
-  logInfo,
-  logWarning,
-  logError,
-  logHandledError,
-} from "../api/log";
-import {
   addSessionProperty,
   removeSessionProperty,
   endSession,
@@ -68,8 +60,16 @@ import {
   getDeviceId,
 } from "../api/session";
 import {recordNetworkRequest, logNetworkClientError} from "../api/network";
-import {setJavaScriptPatch, setJavaScriptBundlePath} from "../api/bundle";
+import {
+  logMessage,
+  logInfo,
+  logWarning,
+  logError,
+  logHandledError,
+} from "../api/log";
 import {logIfComponentError, ComponentError} from "../api/component";
+import {setJavaScriptPatch, setJavaScriptBundlePath} from "../api/bundle";
+import {addBreadcrumb} from "../api/breadcrumb";
 
 describe("Promise rejection safety", () => {
   describe("breadcrumb", () => {

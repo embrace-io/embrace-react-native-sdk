@@ -3,9 +3,7 @@ import {logNetworkClientError, recordNetworkRequest} from "../api/network";
 const mockLogNetworkClientError = jest
   .fn()
   .mockReturnValue(Promise.resolve(true));
-const mockLogNetworkRequest = jest
-  .fn()
-  .mockReturnValue(Promise.resolve(true));
+const mockLogNetworkRequest = jest.fn().mockReturnValue(Promise.resolve(true));
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {

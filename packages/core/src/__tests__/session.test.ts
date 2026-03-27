@@ -6,18 +6,14 @@ import {
   removeSessionProperty,
 } from "../api/session";
 
-const mockAddSessionProperty = jest
-  .fn()
-  .mockReturnValue(Promise.resolve(true));
+const mockAddSessionProperty = jest.fn().mockReturnValue(Promise.resolve(true));
 const mockRemoveSessionProperty = jest
   .fn()
   .mockReturnValue(Promise.resolve(true));
 const mockGetLastRunEndState = jest
   .fn()
   .mockReturnValue(Promise.resolve("CLEAN_EXIT"));
-const mockGetDeviceId = jest
-  .fn()
-  .mockReturnValue(Promise.resolve("device-id"));
+const mockGetDeviceId = jest.fn().mockReturnValue(Promise.resolve("device-id"));
 const mockGetCurrentSessionId = jest
   .fn()
   .mockReturnValue(Promise.resolve("session-id"));
