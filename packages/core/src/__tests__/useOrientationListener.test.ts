@@ -15,7 +15,7 @@ jest.mock("react-native", () => ({
   Platform: {select: jest.fn()},
   NativeModules: {
     EmbraceManager: {
-      addBreadcrumb: (...args: unknown[]) => mockBreadcrumb(...args),
+      addBreadcrumb: (m: string) => mockBreadcrumb(m),
     },
   },
   Dimensions: {

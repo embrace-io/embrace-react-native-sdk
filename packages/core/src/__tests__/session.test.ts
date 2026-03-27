@@ -24,15 +24,12 @@ const mockGetCurrentSessionId = jest
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    addSessionProperty: (...args: unknown[]) =>
-      mockAddSessionProperty(...args),
-    removeSessionProperty: (...args: unknown[]) =>
-      mockRemoveSessionProperty(...args),
-    getLastRunEndState: (...args: unknown[]) =>
-      mockGetLastRunEndState(...args),
-    getDeviceId: (...args: unknown[]) => mockGetDeviceId(...args),
-    getCurrentSessionId: (...args: unknown[]) =>
-      mockGetCurrentSessionId(...args),
+    addSessionProperty: (key: string, value: string, permanent: boolean) =>
+      mockAddSessionProperty(key, value, permanent),
+    removeSessionProperty: (key: string) => mockRemoveSessionProperty(key),
+    getLastRunEndState: () => mockGetLastRunEndState(),
+    getDeviceId: () => mockGetDeviceId(),
+    getCurrentSessionId: () => mockGetCurrentSessionId(),
   },
 }));
 

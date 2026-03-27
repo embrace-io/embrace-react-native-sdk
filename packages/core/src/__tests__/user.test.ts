@@ -30,17 +30,16 @@ const mockClearAllUserPersonas = jest
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    setUserIdentifier: (...args: unknown[]) => mockSetUserIdentifier(...args),
-    clearUserIdentifier: (...args: unknown[]) =>
-      mockClearUserIdentifier(...args),
-    setUsername: (...args: unknown[]) => mockSetUsername(...args),
-    clearUsername: (...args: unknown[]) => mockClearUsername(...args),
-    setUserEmail: (...args: unknown[]) => mockSetUserEmail(...args),
-    clearUserEmail: (...args: unknown[]) => mockClearUserEmail(...args),
-    addUserPersona: (...args: unknown[]) => mockAddUserPersona(...args),
-    clearUserPersona: (...args: unknown[]) => mockClearUserPersona(...args),
-    clearAllUserPersonas: (...args: unknown[]) =>
-      mockClearAllUserPersonas(...args),
+    setUserIdentifier: (userIdentifier: string) =>
+      mockSetUserIdentifier(userIdentifier),
+    clearUserIdentifier: () => mockClearUserIdentifier(),
+    setUsername: (username: string) => mockSetUsername(username),
+    clearUsername: () => mockClearUsername(),
+    setUserEmail: (userEmail: string) => mockSetUserEmail(userEmail),
+    clearUserEmail: () => mockClearUserEmail(),
+    addUserPersona: (persona: string) => mockAddUserPersona(persona),
+    clearUserPersona: (persona: string) => mockClearUserPersona(persona),
+    clearAllUserPersonas: () => mockClearAllUserPersonas(),
   },
 }));
 

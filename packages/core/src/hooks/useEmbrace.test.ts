@@ -38,8 +38,8 @@ jest.mock("../EmbraceManagerModule", () => ({
     setJavaScriptBundlePath: jest
       .fn()
       .mockReturnValue(Promise.resolve(true)),
-    setJavaScriptPatchNumber: (...args: unknown[]) =>
-      mockSetJavaScriptPatchNumber(...args),
+    setJavaScriptPatchNumber: (patch: string) =>
+      mockSetJavaScriptPatchNumber(patch),
   },
 }));
 

@@ -6,8 +6,8 @@ const mockSetJavaScriptBundlePath = jest
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    setJavaScriptBundlePath: (...args: unknown[]) =>
-      mockSetJavaScriptBundlePath(...args),
+    setJavaScriptBundlePath: (path: string) =>
+      mockSetJavaScriptBundlePath(path),
   },
 }));
 

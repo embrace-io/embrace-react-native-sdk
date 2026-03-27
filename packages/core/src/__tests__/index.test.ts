@@ -39,23 +39,43 @@ const mockGetDefaultJavaScriptBundlePath = jest
   .mockResolvedValue("some/path");
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    setReactNativeVersion: (...args: unknown[]) =>
-      mockSetReactNativeVersion(...args),
-    setJavaScriptPatchNumber: (...args: unknown[]) =>
-      mockSetJavaScriptPatchNumber(...args),
-    setReactNativeSDKVersion: (...args: unknown[]) =>
-      mockSetReactNativeSDKVersion(...args),
-    logMessageWithSeverityAndProperties: (...args: unknown[]) =>
-      mockLogMessageWithSeverityAndProperties(...args),
-    logUnhandledJSException: (...args: unknown[]) =>
-      mockLogUnhandledJSException(...args),
+    setReactNativeVersion: (version: string) =>
+      mockSetReactNativeVersion(version),
+    setJavaScriptPatchNumber: (patch: string) =>
+      mockSetJavaScriptPatchNumber(patch),
+    setReactNativeSDKVersion: (version: string) =>
+      mockSetReactNativeSDKVersion(version),
+    logMessageWithSeverityAndProperties: (
+      message: string,
+      severity: string,
+      properties: object,
+      stacktrace: string,
+      includeStacktrace: boolean,
+    ) =>
+      mockLogMessageWithSeverityAndProperties(
+        message,
+        severity,
+        properties,
+        stacktrace,
+        includeStacktrace,
+      ),
+    logUnhandledJSException: (
+      name: string,
+      message: string,
+      errorType: string,
+      stacktrace: string,
+    ) => mockLogUnhandledJSException(name, message, errorType, stacktrace),
     isStarted: () => mockIsStarted(),
     startNativeEmbraceSDK: (sdkConfig: IOSConfig | AndroidConfig) =>
       mockStart(sdkConfig),
-    logHandledError: (...args: unknown[]) => mockLogHandledError(...args),
+    logHandledError: (
+      message: string,
+      componentStack: string,
+      params: object,
+    ) => mockLogHandledError(message, componentStack, params),
     getDefaultJavaScriptBundlePath: () => mockGetDefaultJavaScriptBundlePath(),
-    setJavaScriptBundlePath: (...args: unknown[]) =>
-      mockSetJavaScriptBundlePath(...args),
+    setJavaScriptBundlePath: (path: string) =>
+      mockSetJavaScriptBundlePath(path),
   },
 }));
 

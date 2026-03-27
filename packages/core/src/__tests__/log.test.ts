@@ -13,9 +13,25 @@ beforeEach(() => {
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    logMessageWithSeverityAndProperties: (...args: unknown[]) =>
-      mockLogMessageWithSeverityAndProperties(...args),
-    logHandledError: (...args: unknown[]) => mockLogHandledError(...args),
+    logMessageWithSeverityAndProperties: (
+      message: string,
+      severity: string,
+      properties: object,
+      stacktrace: string,
+      includeStacktrace: boolean,
+    ) =>
+      mockLogMessageWithSeverityAndProperties(
+        message,
+        severity,
+        properties,
+        stacktrace,
+        includeStacktrace,
+      ),
+    logHandledError: (
+      message: string,
+      stackTrace: string,
+      properties: object,
+    ) => mockLogHandledError(message, stackTrace, properties),
   },
 }));
 

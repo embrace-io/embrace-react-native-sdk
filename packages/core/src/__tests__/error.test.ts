@@ -9,9 +9,25 @@ const mockLogMessageWithSeverityAndProperties = jest
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    logHandledError: (...args: unknown[]) => mockLogHandledError(...args),
-    logMessageWithSeverityAndProperties: (...args: unknown[]) =>
-      mockLogMessageWithSeverityAndProperties(...args),
+    logHandledError: (
+      message: string,
+      stackTrace: string,
+      properties: object,
+    ) => mockLogHandledError(message, stackTrace, properties),
+    logMessageWithSeverityAndProperties: (
+      message: string,
+      severity: string,
+      properties: object,
+      stacktrace: string,
+      includeStacktrace: boolean,
+    ) =>
+      mockLogMessageWithSeverityAndProperties(
+        message,
+        severity,
+        properties,
+        stacktrace,
+        includeStacktrace,
+      ),
   },
 }));
 

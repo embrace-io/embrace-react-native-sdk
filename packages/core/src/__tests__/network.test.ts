@@ -9,9 +9,40 @@ const mockLogNetworkRequest = jest
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
-    logNetworkRequest: (...args: unknown[]) => mockLogNetworkRequest(...args),
-    logNetworkClientError: (...args: unknown[]) =>
-      mockLogNetworkClientError(...args),
+    logNetworkRequest: (
+      url: string,
+      httpMethod: string,
+      startInMillis: number,
+      endInMillis: number,
+      bytesSent: number,
+      bytesReceived: number,
+      statusCode: number,
+    ) =>
+      mockLogNetworkRequest(
+        url,
+        httpMethod,
+        startInMillis,
+        endInMillis,
+        bytesSent,
+        bytesReceived,
+        statusCode,
+      ),
+    logNetworkClientError: (
+      url: string,
+      httpMethod: string,
+      startInMillis: number,
+      endInMillis: number,
+      errorType: string,
+      errorMessage: string,
+    ) =>
+      mockLogNetworkClientError(
+        url,
+        httpMethod,
+        startInMillis,
+        endInMillis,
+        errorType,
+        errorMessage,
+      ),
   },
 }));
 
