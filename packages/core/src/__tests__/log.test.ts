@@ -1,3 +1,4 @@
+import {LogSeverity, LogProperties} from "../interfaces";
 import {logError, logInfo, logMessage, logWarning} from "../api/log";
 
 const MOCK_STACKTRACE = "this is a fake stack trace";
@@ -15,8 +16,8 @@ jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
     logMessageWithSeverityAndProperties: (
       message: string,
-      severity: string,
-      properties: object,
+      severity: LogSeverity,
+      properties: LogProperties,
       stacktrace: string,
       includeStacktrace: boolean,
     ) =>
@@ -30,7 +31,7 @@ jest.mock("../EmbraceManagerModule", () => ({
     logHandledError: (
       message: string,
       stackTrace: string,
-      properties: object,
+      properties: LogProperties,
     ) => mockLogHandledError(message, stackTrace, properties),
   },
 }));

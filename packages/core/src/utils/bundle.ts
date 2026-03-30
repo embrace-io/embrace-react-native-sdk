@@ -1,6 +1,7 @@
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
-import {handleSDKPromiseRejection} from "./promiseHandler";
 import * as embracePackage from "../../package.json";
+
+import {handleSDKPromiseRejection} from "./promiseHandler";
 
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
 

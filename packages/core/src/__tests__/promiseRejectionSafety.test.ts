@@ -1,7 +1,6 @@
 /**
  * Tests that all public API methods swallow native promise rejections
- * and never throw when awaited. This is critical for SDK safety — a failing
- * SDK call should never crash customer code.
+ * and never throw when awaited.
  */
 
 const NATIVE_ERROR = new Error("Native module error");

@@ -1,4 +1,5 @@
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
+
 import {handleSDKPromiseRejection} from "./promiseHandler";
 
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";

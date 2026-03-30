@@ -1,3 +1,4 @@
+import {MethodType} from "../interfaces";
 import {logNetworkClientError, recordNetworkRequest} from "../api/network";
 
 const mockLogNetworkClientError = jest
@@ -9,7 +10,7 @@ jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
     logNetworkRequest: (
       url: string,
-      httpMethod: string,
+      httpMethod: MethodType,
       startInMillis: number,
       endInMillis: number,
       bytesSent: number,
@@ -27,7 +28,7 @@ jest.mock("../EmbraceManagerModule", () => ({
       ),
     logNetworkClientError: (
       url: string,
-      httpMethod: string,
+      httpMethod: MethodType,
       startInMillis: number,
       endInMillis: number,
       errorType: string,

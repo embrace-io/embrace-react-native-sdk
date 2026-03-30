@@ -1,4 +1,5 @@
 import {trackUnhandledRejection} from "../utils/error";
+import {LogProperties, LogSeverity} from "../interfaces";
 import {logHandledError} from "../api/log";
 import {ComponentError, logIfComponentError} from "../api/component";
 
@@ -12,12 +13,12 @@ jest.mock("../EmbraceManagerModule", () => ({
     logHandledError: (
       message: string,
       stackTrace: string,
-      properties: object,
+      properties: LogProperties,
     ) => mockLogHandledError(message, stackTrace, properties),
     logMessageWithSeverityAndProperties: (
       message: string,
-      severity: string,
-      properties: object,
+      severity: LogSeverity,
+      properties: LogProperties,
       stacktrace: string,
       includeStacktrace: boolean,
     ) =>
