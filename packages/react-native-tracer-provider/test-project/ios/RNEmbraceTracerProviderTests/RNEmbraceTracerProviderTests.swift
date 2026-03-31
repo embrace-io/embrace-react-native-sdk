@@ -119,13 +119,9 @@ class ReactNativeTracerProviderTests: XCTestCase {
       try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
       let allSpans = ReactNativeTracerProviderTests.exporter.exportedSpans
 
-      NSLog("[DEBUG] All exported span names: %@", allSpans.map { $0.name }.description)
-
       let filtered = allSpans.filter { span in
           !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
       }
-
-      NSLog("[DEBUG] Filtered span names: %@", filtered.map { $0.name }.description)
 
       return filtered
   }
@@ -142,7 +138,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
     
@@ -165,7 +161,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
 
@@ -228,7 +224,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported span, got \(exportedSpans.count)")
+        XCTFail("Expected 2 exported span, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
 
@@ -282,7 +278,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 4 else {
-        XCTFail("Expected 4 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 4 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
 
@@ -323,7 +319,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 4 else {
-        XCTFail("Expected 4 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 4 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
 
@@ -372,7 +368,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 4 else {
-        XCTFail("Expected 4 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 4 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
 
@@ -413,7 +409,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
 
@@ -456,7 +452,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
     let exportedSpans = try await getExportedSpans()
     guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
     guard exportedSpans[1].events.count == 2 else {
@@ -497,7 +493,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 4 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
 
@@ -523,7 +519,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported span, got \(exportedSpans.count)")
+        XCTFail("Expected 2 exported span, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
 
@@ -541,7 +537,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
     
@@ -564,7 +560,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     let exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
 
@@ -600,7 +596,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
     exportedSpans = try await getExportedSpans()
 
     guard exportedSpans.count == 2 else {
-        XCTFail("Expected 2 exported spans, got \(exportedSpans.count)")
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
         return
     }
 
