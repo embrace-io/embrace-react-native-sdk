@@ -1,61 +1,61 @@
-export interface EmbracePromiseRejectionConfig {
+export interface SDKErrorLoggingConfig {
   /**
-   * Enable/disable internal unhandled promise rejection handling.
+   * Enable/disable internal SDK error logging.
    */
   enabled: boolean;
 
   /**
-   * Log unhandled promise rejections to the console.
+   * Log SDK errors to the console.
    * Recommend to set to true in development environments for easier debugging.
    * Recommend to set to false in production environments to avoid duplicate logging.
    */
   allowLogToConsole: boolean;
 
   /**
-   * Optional custom handler for unhandled promise rejections.
+   * Optional custom handler for SDK errors.
    * Use this to integrate with your own error tracking system.
    * @example
    * ```ts
    * customHandler: (method, error) => {
-   *   MyErrorTrackingService.logError(`Unhandled promise rejection in ${method}`, error);
+   *   MyErrorTrackingService.logError(`SDK error in ${method}`, error);
    * }
    * ```
    */
   customHandler?: (methodName: string, error: Error) => void;
 }
 
-let rejectionConfig: EmbracePromiseRejectionConfig = {
+let errorLoggingConfig: SDKErrorLoggingConfig = {
   enabled: false,
   allowLogToConsole: false,
 };
 
-export const handleSDKPromiseRejection = (
+export const handleSDKError = (
   methodName: string,
   error: unknown,
 ): void => {
-  if (!rejectionConfig.enabled) {
+  if (!errorLoggingConfig.enabled) {
     return;
   }
 
   const errorObj = error instanceof Error ? error : new Error(String(error));
   const errorMessage = errorObj.message || String(error);
 
-  if (rejectionConfig.customHandler) {
+  if (errorLoggingConfig.customHandler) {
     try {
-      rejectionConfig.customHandler(methodName, errorObj);
+      errorLoggingConfig.customHandler(methodName, errorObj);
     } catch (handlerError) {
-      if (rejectionConfig.allowLogToConsole) {
+      if (errorLoggingConfig.allowLogToConsole) {
         console.error(
-          `[Embrace RN SDK] Error in custom unhandled promise rejection handler for ${methodName}:`,
+          `[Embrace RN SDK] Error in custom error handler for ${methodName}:`,
           handlerError,
         );
       }
     }
   }
 
-  if (rejectionConfig.allowLogToConsole) {
+  if (errorLoggingConfig.allowLogToConsole) {
     console.error(
-      `[Embrace RN SDK] Unhandled promise rejection in ${methodName}: ${errorMessage}`,
+      `[Embrace RN SDK] SDK error in ${methodName}: ${errorMessage}`,
       errorObj,
     );
 
@@ -71,20 +71,20 @@ export const safePromise = <T>(
   fallback: T,
 ): Promise<T> =>
   promise.catch((error: unknown) => {
-    handleSDKPromiseRejection(methodName, error);
+    handleSDKError(methodName, error);
     return fallback;
   });
 
-export const configurePromiseRejection = (
-  config: Partial<EmbracePromiseRejectionConfig>,
+export const configureSDKErrorLogging = (
+  config: Partial<SDKErrorLoggingConfig>,
 ): void => {
-  rejectionConfig = {
-    ...rejectionConfig,
+  errorLoggingConfig = {
+    ...errorLoggingConfig,
     ...config,
   };
 };
 
-export const getPromiseRejectionConfig =
-  (): Readonly<EmbracePromiseRejectionConfig> => {
-    return {...rejectionConfig};
+export const getSDKErrorLoggingConfig =
+  (): Readonly<SDKErrorLoggingConfig> => {
+    return {...errorLoggingConfig};
   };

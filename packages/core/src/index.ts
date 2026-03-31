@@ -162,9 +162,9 @@ export * from "./hooks/useOrientationListener";
 export * from "./interfaces";
 
 export {
-  configurePromiseRejection,
-  getPromiseRejectionConfig,
-  type EmbracePromiseRejectionConfig,
+  configureSDKErrorLogging,
+  getSDKErrorLoggingConfig,
+  type SDKErrorLoggingConfig,
 } from "./utils/promiseHandler";
 
 export {initialize};

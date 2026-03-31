@@ -1,7 +1,7 @@
 import {
-  configurePromiseRejection,
-  getPromiseRejectionConfig,
-  handleSDKPromiseRejection,
+  configureSDKErrorLogging,
+  getSDKErrorLoggingConfig,
+  handleSDKError,
 } from "../utils/promiseHandler";
 
 describe("promiseHandler", () => {
@@ -12,7 +12,7 @@ describe("promiseHandler", () => {
     consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
     // Reset to defaults
-    configurePromiseRejection({
+    configureSDKErrorLogging({
       enabled: true,
       allowLogToConsole: false,
       customHandler: undefined,
@@ -25,7 +25,7 @@ describe("promiseHandler", () => {
 
   describe("Configuration", () => {
     it("should have correct default config after beforeEach override", () => {
-      const config = getPromiseRejectionConfig();
+      const config = getSDKErrorLoggingConfig();
       // beforeEach sets enabled to true for testing; actual defaults are false
       expect(config.enabled).toBe(true);
       expect(config.allowLogToConsole).toBe(false);
@@ -33,66 +33,66 @@ describe("promiseHandler", () => {
     });
 
     it("should allow partial configuration updates", () => {
-      configurePromiseRejection({enabled: false});
+      configureSDKErrorLogging({enabled: false});
 
-      const config = getPromiseRejectionConfig();
+      const config = getSDKErrorLoggingConfig();
       expect(config.enabled).toBe(false);
       expect(config.allowLogToConsole).toBe(false); // Should remain unchanged
     });
 
     it("should merge configuration correctly", () => {
-      configurePromiseRejection({
+      configureSDKErrorLogging({
         enabled: false,
         allowLogToConsole: true,
       });
 
-      const config = getPromiseRejectionConfig();
+      const config = getSDKErrorLoggingConfig();
       expect(config.enabled).toBe(false);
       expect(config.allowLogToConsole).toBe(true);
     });
 
     it("should return immutable config copy", () => {
-      const config1 = getPromiseRejectionConfig();
-      const config2 = getPromiseRejectionConfig();
+      const config1 = getSDKErrorLoggingConfig();
+      const config2 = getSDKErrorLoggingConfig();
 
       expect(config1).not.toBe(config2); // Different objects
       expect(config1).toEqual(config2); // Same values
     });
 
     it("should allow multiple reconfigurations", () => {
-      configurePromiseRejection({enabled: false});
-      expect(getPromiseRejectionConfig().enabled).toBe(false);
+      configureSDKErrorLogging({enabled: false});
+      expect(getSDKErrorLoggingConfig().enabled).toBe(false);
 
-      configurePromiseRejection({enabled: true});
-      expect(getPromiseRejectionConfig().enabled).toBe(true);
+      configureSDKErrorLogging({enabled: true});
+      expect(getSDKErrorLoggingConfig().enabled).toBe(true);
 
-      configurePromiseRejection({allowLogToConsole: true});
-      expect(getPromiseRejectionConfig().allowLogToConsole).toBe(true);
-      expect(getPromiseRejectionConfig().enabled).toBe(true); // Previous setting preserved
+      configureSDKErrorLogging({allowLogToConsole: true});
+      expect(getSDKErrorLoggingConfig().allowLogToConsole).toBe(true);
+      expect(getSDKErrorLoggingConfig().enabled).toBe(true); // Previous setting preserved
     });
   });
 
   describe("Error Handling - Enabled State", () => {
     it("should not log when disabled", () => {
-      configurePromiseRejection({enabled: false, allowLogToConsole: true});
+      configureSDKErrorLogging({enabled: false, allowLogToConsole: true});
 
-      handleSDKPromiseRejection("testMethod", new Error("test error"));
+      handleSDKError("testMethod", new Error("test error"));
 
       expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
 
     it("should handle when enabled but allowLogToConsole is false", () => {
-      configurePromiseRejection({enabled: true, allowLogToConsole: false});
+      configureSDKErrorLogging({enabled: true, allowLogToConsole: false});
 
-      handleSDKPromiseRejection("testMethod", new Error("test error"));
+      handleSDKError("testMethod", new Error("test error"));
 
       expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
 
     it("should log to console when both enabled and allowLogToConsole are true", () => {
-      configurePromiseRejection({enabled: true, allowLogToConsole: true});
+      configureSDKErrorLogging({enabled: true, allowLogToConsole: true});
 
-      handleSDKPromiseRejection("testMethod", new Error("test error"));
+      handleSDKError("testMethod", new Error("test error"));
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         expect.stringContaining("[Embrace RN SDK]"),
@@ -105,9 +105,9 @@ describe("promiseHandler", () => {
     });
 
     it("should include error message in log", () => {
-      configurePromiseRejection({enabled: true, allowLogToConsole: true});
+      configureSDKErrorLogging({enabled: true, allowLogToConsole: true});
 
-      handleSDKPromiseRejection(
+      handleSDKError(
         "testMethod",
         new Error("specific error message"),
       );
@@ -122,19 +122,19 @@ describe("promiseHandler", () => {
   describe("Error Normalization", () => {
     it("should handle Error objects", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({enabled: true, customHandler});
+      configureSDKErrorLogging({enabled: true, customHandler});
 
       const testError = new Error("test error");
-      handleSDKPromiseRejection("testMethod", testError);
+      handleSDKError("testMethod", testError);
 
       expect(customHandler).toHaveBeenCalledWith("testMethod", testError);
     });
 
     it("should convert strings to Error objects", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({enabled: true, customHandler});
+      configureSDKErrorLogging({enabled: true, customHandler});
 
-      handleSDKPromiseRejection("testMethod", "string error");
+      handleSDKError("testMethod", "string error");
 
       expect(customHandler).toHaveBeenCalledWith(
         "testMethod",
@@ -147,10 +147,10 @@ describe("promiseHandler", () => {
 
     it("should handle non-Error objects", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({enabled: true, customHandler});
+      configureSDKErrorLogging({enabled: true, customHandler});
 
       const errorObj = {code: 123, msg: "error"};
-      handleSDKPromiseRejection("testMethod", errorObj);
+      handleSDKError("testMethod", errorObj);
 
       expect(customHandler).toHaveBeenCalledWith(
         "testMethod",
@@ -161,9 +161,9 @@ describe("promiseHandler", () => {
 
     it("should handle null", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({enabled: true, customHandler});
+      configureSDKErrorLogging({enabled: true, customHandler});
 
-      handleSDKPromiseRejection("testMethod", null);
+      handleSDKError("testMethod", null);
 
       expect(customHandler).toHaveBeenCalledWith(
         "testMethod",
@@ -173,9 +173,9 @@ describe("promiseHandler", () => {
 
     it("should handle undefined", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({enabled: true, customHandler});
+      configureSDKErrorLogging({enabled: true, customHandler});
 
-      handleSDKPromiseRejection("testMethod", undefined);
+      handleSDKError("testMethod", undefined);
 
       expect(customHandler).toHaveBeenCalledWith(
         "testMethod",
@@ -185,9 +185,9 @@ describe("promiseHandler", () => {
 
     it("should handle numbers", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({enabled: true, customHandler});
+      configureSDKErrorLogging({enabled: true, customHandler});
 
-      handleSDKPromiseRejection("testMethod", 404);
+      handleSDKError("testMethod", 404);
 
       expect(customHandler).toHaveBeenCalledWith(
         "testMethod",
@@ -200,10 +200,10 @@ describe("promiseHandler", () => {
   describe("Custom Handler", () => {
     it("should call custom handler when provided", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({enabled: true, customHandler});
+      configureSDKErrorLogging({enabled: true, customHandler});
 
       const testError = new Error("test error");
-      handleSDKPromiseRejection("testMethod", testError);
+      handleSDKError("testMethod", testError);
 
       expect(customHandler).toHaveBeenCalledWith("testMethod", testError);
       expect(customHandler).toHaveBeenCalledTimes(1);
@@ -213,14 +213,14 @@ describe("promiseHandler", () => {
       const customHandler = jest.fn(() => {
         throw new Error("handler error");
       });
-      configurePromiseRejection({
+      configureSDKErrorLogging({
         enabled: true,
         customHandler,
         allowLogToConsole: true,
       });
 
       expect(() => {
-        handleSDKPromiseRejection("testMethod", new Error("test"));
+        handleSDKError("testMethod", new Error("test"));
       }).not.toThrow();
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
@@ -231,13 +231,13 @@ describe("promiseHandler", () => {
 
     it("should call both custom handler and console log", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({
+      configureSDKErrorLogging({
         enabled: true,
         customHandler,
         allowLogToConsole: true,
       });
 
-      handleSDKPromiseRejection("testMethod", new Error("test"));
+      handleSDKError("testMethod", new Error("test"));
 
       expect(customHandler).toHaveBeenCalled();
       expect(consoleErrorSpy).toHaveBeenCalled();
@@ -245,10 +245,10 @@ describe("promiseHandler", () => {
 
     it("should pass correct method name to handler", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({enabled: true, customHandler});
+      configureSDKErrorLogging({enabled: true, customHandler});
 
-      handleSDKPromiseRejection("addBreadcrumb", new Error("test"));
-      handleSDKPromiseRejection("logInfo", new Error("test"));
+      handleSDKError("addBreadcrumb", new Error("test"));
+      handleSDKError("logInfo", new Error("test"));
 
       expect(customHandler).toHaveBeenNthCalledWith(
         1,
@@ -264,19 +264,19 @@ describe("promiseHandler", () => {
 
     it("should continue if custom handler is removed", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({
+      configureSDKErrorLogging({
         enabled: true,
         customHandler,
         allowLogToConsole: true,
       });
 
-      handleSDKPromiseRejection("testMethod", new Error("test"));
+      handleSDKError("testMethod", new Error("test"));
       expect(customHandler).toHaveBeenCalledTimes(1);
 
       // Remove handler
-      configurePromiseRejection({customHandler: undefined});
+      configureSDKErrorLogging({customHandler: undefined});
 
-      handleSDKPromiseRejection("testMethod2", new Error("test2"));
+      handleSDKError("testMethod2", new Error("test2"));
       expect(customHandler).toHaveBeenCalledTimes(1); // Should not be called again
       expect(consoleErrorSpy).toHaveBeenCalled(); // But console should still work
     });
@@ -284,12 +284,12 @@ describe("promiseHandler", () => {
 
   describe("Stack Trace Logging", () => {
     it("should log stack trace when available", () => {
-      configurePromiseRejection({enabled: true, allowLogToConsole: true});
+      configureSDKErrorLogging({enabled: true, allowLogToConsole: true});
 
       const errorWithStack = new Error("test error");
       errorWithStack.stack = "Error: test\n  at line1\n  at line2";
 
-      handleSDKPromiseRejection("testMethod", errorWithStack);
+      handleSDKError("testMethod", errorWithStack);
 
       const calls = consoleErrorSpy.mock.calls.flat();
       const hasStackTrace = calls.some(
@@ -299,13 +299,13 @@ describe("promiseHandler", () => {
     });
 
     it("should handle errors without stack trace", () => {
-      configurePromiseRejection({enabled: true, allowLogToConsole: true});
+      configureSDKErrorLogging({enabled: true, allowLogToConsole: true});
 
       const errorWithoutStack = new Error("test error");
       delete errorWithoutStack.stack;
 
       expect(() => {
-        handleSDKPromiseRejection("testMethod", errorWithoutStack);
+        handleSDKError("testMethod", errorWithoutStack);
       }).not.toThrow();
 
       expect(consoleErrorSpy).toHaveBeenCalled();
@@ -313,7 +313,7 @@ describe("promiseHandler", () => {
 
     it("should include stack trace in custom handler even if logging disabled", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({
+      configureSDKErrorLogging({
         enabled: true,
         customHandler,
         allowLogToConsole: false,
@@ -322,7 +322,7 @@ describe("promiseHandler", () => {
       const errorWithStack = new Error("test error");
       errorWithStack.stack = "Error: test\n  at line1";
 
-      handleSDKPromiseRejection("testMethod", errorWithStack);
+      handleSDKError("testMethod", errorWithStack);
 
       expect(customHandler).toHaveBeenCalledWith("testMethod", errorWithStack);
       expect(customHandler.mock.calls[0][1].stack).toBe(
@@ -334,11 +334,11 @@ describe("promiseHandler", () => {
   describe("Multiple Error Handling", () => {
     it("should handle multiple errors in sequence", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({enabled: true, customHandler});
+      configureSDKErrorLogging({enabled: true, customHandler});
 
-      handleSDKPromiseRejection("method1", new Error("error1"));
-      handleSDKPromiseRejection("method2", new Error("error2"));
-      handleSDKPromiseRejection("method3", new Error("error3"));
+      handleSDKError("method1", new Error("error1"));
+      handleSDKError("method2", new Error("error2"));
+      handleSDKError("method3", new Error("error3"));
 
       expect(customHandler).toHaveBeenCalledTimes(3);
       expect(customHandler).toHaveBeenNthCalledWith(
@@ -360,14 +360,14 @@ describe("promiseHandler", () => {
 
     it("should not accumulate errors", () => {
       const customHandler = jest.fn();
-      configurePromiseRejection({enabled: true, customHandler});
+      configureSDKErrorLogging({enabled: true, customHandler});
 
-      handleSDKPromiseRejection("method1", new Error("error1"));
+      handleSDKError("method1", new Error("error1"));
       expect(customHandler).toHaveBeenCalledTimes(1);
 
       customHandler.mockClear();
 
-      handleSDKPromiseRejection("method2", new Error("error2"));
+      handleSDKError("method2", new Error("error2"));
       expect(customHandler).toHaveBeenCalledTimes(1); // Only new call
     });
   });
