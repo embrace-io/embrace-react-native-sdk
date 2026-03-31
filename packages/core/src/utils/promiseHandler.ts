@@ -29,10 +29,7 @@ let errorLoggingConfig: SDKErrorLoggingConfig = {
   allowLogToConsole: false,
 };
 
-export const handleSDKError = (
-  methodName: string,
-  error: unknown,
-): void => {
+export const handleSDKError = (methodName: string, error: unknown): void => {
   if (!errorLoggingConfig.enabled) {
     return;
   }
@@ -84,7 +81,6 @@ export const configureSDKErrorLogging = (
   };
 };
 
-export const getSDKErrorLoggingConfig =
-  (): Readonly<SDKErrorLoggingConfig> => {
-    return {...errorLoggingConfig};
-  };
+export const getSDKErrorLoggingConfig = (): Readonly<SDKErrorLoggingConfig> => {
+  return {...errorLoggingConfig};
+};

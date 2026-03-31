@@ -107,10 +107,7 @@ describe("promiseHandler", () => {
     it("should include error message in log", () => {
       configureSDKErrorLogging({enabled: true, allowLogToConsole: true});
 
-      handleSDKError(
-        "testMethod",
-        new Error("specific error message"),
-      );
+      handleSDKError("testMethod", new Error("specific error message"));
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         expect.stringContaining("specific error message"),
