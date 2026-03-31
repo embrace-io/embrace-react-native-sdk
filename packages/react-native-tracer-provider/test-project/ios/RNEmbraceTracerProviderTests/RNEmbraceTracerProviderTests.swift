@@ -119,9 +119,13 @@ class ReactNativeTracerProviderTests: XCTestCase {
       try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
       let allSpans = ReactNativeTracerProviderTests.exporter.exportedSpans
 
+      NSLog("[DEBUG] All exported span names: %@", allSpans.map { $0.name }.description)
+
       let filtered = allSpans.filter { span in
           !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
       }
+
+      NSLog("[DEBUG] Filtered span names: %@", filtered.map { $0.name }.description)
 
       return filtered
   }
