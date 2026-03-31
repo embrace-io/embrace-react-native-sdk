@@ -14,7 +14,7 @@ describe("promiseHandler", () => {
     // Reset to defaults
     configurePromiseRejection({
       enabled: true,
-      logToConsole: false,
+      allowLogToConsole: false,
       customHandler: undefined,
     });
   });
@@ -28,7 +28,7 @@ describe("promiseHandler", () => {
       const config = getPromiseRejectionConfig();
       // beforeEach sets enabled to true for testing; actual defaults are false
       expect(config.enabled).toBe(true);
-      expect(config.logToConsole).toBe(false);
+      expect(config.allowLogToConsole).toBe(false);
       expect(config.customHandler).toBeUndefined();
     });
 
@@ -37,18 +37,18 @@ describe("promiseHandler", () => {
 
       const config = getPromiseRejectionConfig();
       expect(config.enabled).toBe(false);
-      expect(config.logToConsole).toBe(false); // Should remain unchanged
+      expect(config.allowLogToConsole).toBe(false); // Should remain unchanged
     });
 
     it("should merge configuration correctly", () => {
       configurePromiseRejection({
         enabled: false,
-        logToConsole: true,
+        allowLogToConsole: true,
       });
 
       const config = getPromiseRejectionConfig();
       expect(config.enabled).toBe(false);
-      expect(config.logToConsole).toBe(true);
+      expect(config.allowLogToConsole).toBe(true);
     });
 
     it("should return immutable config copy", () => {
@@ -66,31 +66,31 @@ describe("promiseHandler", () => {
       configurePromiseRejection({enabled: true});
       expect(getPromiseRejectionConfig().enabled).toBe(true);
 
-      configurePromiseRejection({logToConsole: true});
-      expect(getPromiseRejectionConfig().logToConsole).toBe(true);
+      configurePromiseRejection({allowLogToConsole: true});
+      expect(getPromiseRejectionConfig().allowLogToConsole).toBe(true);
       expect(getPromiseRejectionConfig().enabled).toBe(true); // Previous setting preserved
     });
   });
 
   describe("Error Handling - Enabled State", () => {
     it("should not log when disabled", () => {
-      configurePromiseRejection({enabled: false, logToConsole: true});
+      configurePromiseRejection({enabled: false, allowLogToConsole: true});
 
       handleSDKPromiseRejection("testMethod", new Error("test error"));
 
       expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
 
-    it("should handle when enabled but logToConsole is false", () => {
-      configurePromiseRejection({enabled: true, logToConsole: false});
+    it("should handle when enabled but allowLogToConsole is false", () => {
+      configurePromiseRejection({enabled: true, allowLogToConsole: false});
 
       handleSDKPromiseRejection("testMethod", new Error("test error"));
 
       expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
 
-    it("should log to console when both enabled and logToConsole are true", () => {
-      configurePromiseRejection({enabled: true, logToConsole: true});
+    it("should log to console when both enabled and allowLogToConsole are true", () => {
+      configurePromiseRejection({enabled: true, allowLogToConsole: true});
 
       handleSDKPromiseRejection("testMethod", new Error("test error"));
 
@@ -105,7 +105,7 @@ describe("promiseHandler", () => {
     });
 
     it("should include error message in log", () => {
-      configurePromiseRejection({enabled: true, logToConsole: true});
+      configurePromiseRejection({enabled: true, allowLogToConsole: true});
 
       handleSDKPromiseRejection(
         "testMethod",
@@ -216,7 +216,7 @@ describe("promiseHandler", () => {
       configurePromiseRejection({
         enabled: true,
         customHandler,
-        logToConsole: true,
+        allowLogToConsole: true,
       });
 
       expect(() => {
@@ -234,7 +234,7 @@ describe("promiseHandler", () => {
       configurePromiseRejection({
         enabled: true,
         customHandler,
-        logToConsole: true,
+        allowLogToConsole: true,
       });
 
       handleSDKPromiseRejection("testMethod", new Error("test"));
@@ -267,7 +267,7 @@ describe("promiseHandler", () => {
       configurePromiseRejection({
         enabled: true,
         customHandler,
-        logToConsole: true,
+        allowLogToConsole: true,
       });
 
       handleSDKPromiseRejection("testMethod", new Error("test"));
@@ -284,7 +284,7 @@ describe("promiseHandler", () => {
 
   describe("Stack Trace Logging", () => {
     it("should log stack trace when available", () => {
-      configurePromiseRejection({enabled: true, logToConsole: true});
+      configurePromiseRejection({enabled: true, allowLogToConsole: true});
 
       const errorWithStack = new Error("test error");
       errorWithStack.stack = "Error: test\n  at line1\n  at line2";
@@ -299,7 +299,7 @@ describe("promiseHandler", () => {
     });
 
     it("should handle errors without stack trace", () => {
-      configurePromiseRejection({enabled: true, logToConsole: true});
+      configurePromiseRejection({enabled: true, allowLogToConsole: true});
 
       const errorWithoutStack = new Error("test error");
       delete errorWithoutStack.stack;
@@ -316,7 +316,7 @@ describe("promiseHandler", () => {
       configurePromiseRejection({
         enabled: true,
         customHandler,
-        logToConsole: false,
+        allowLogToConsole: false,
       });
 
       const errorWithStack = new Error("test error");

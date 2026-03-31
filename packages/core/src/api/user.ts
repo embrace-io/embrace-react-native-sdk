@@ -12,7 +12,7 @@
  * @see {@link https://embrace.io/docs/react-native/features/identify-users | Identify Users Documentation}
  */
 
-import {handleSDKPromiseRejection} from "../utils/promiseHandler";
+import {safePromise} from "../utils/promiseHandler";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 /**
@@ -32,14 +32,12 @@ import {EmbraceManagerModule} from "../EmbraceManagerModule";
  * await addUserPersona('high_value_cart');
  * ```
  */
-const addUserPersona = (persona: string): Promise<boolean> => {
-  return EmbraceManagerModule.addUserPersona(persona).catch(
-    (error: unknown) => {
-      handleSDKPromiseRejection("addUserPersona", error);
-      return false;
-    },
+const addUserPersona = (persona: string): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.addUserPersona(persona),
+    "addUserPersona",
+    false,
   );
-};
 
 /**
  * Removes a specific persona tag from the current user.
@@ -54,14 +52,12 @@ const addUserPersona = (persona: string): Promise<boolean> => {
  * await clearUserPersona('high_value_cart');
  * ```
  */
-const clearUserPersona = (persona: string): Promise<boolean> => {
-  return EmbraceManagerModule.clearUserPersona(persona).catch(
-    (error: unknown) => {
-      handleSDKPromiseRejection("clearUserPersona", error);
-      return false;
-    },
+const clearUserPersona = (persona: string): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.clearUserPersona(persona),
+    "clearUserPersona",
+    false,
   );
-};
 
 /**
  * Removes all persona tags from the current user.
@@ -75,12 +71,12 @@ const clearUserPersona = (persona: string): Promise<boolean> => {
  * await clearAllUserPersonas();
  * ```
  */
-const clearAllUserPersonas = (): Promise<boolean> => {
-  return EmbraceManagerModule.clearAllUserPersonas().catch((error: unknown) => {
-    handleSDKPromiseRejection("clearAllUserPersonas", error);
-    return false;
-  });
-};
+const clearAllUserPersonas = (): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.clearAllUserPersonas(),
+    "clearAllUserPersonas",
+    false,
+  );
 
 /**
  * Sets a unique identifier for the current user.
@@ -99,14 +95,12 @@ const clearAllUserPersonas = (): Promise<boolean> => {
  * await setUserIdentifier('user_12345');
  * ```
  */
-const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
-  return EmbraceManagerModule.setUserIdentifier(userIdentifier).catch(
-    (error: unknown) => {
-      handleSDKPromiseRejection("setUserIdentifier", error);
-      return false;
-    },
+const setUserIdentifier = (userIdentifier: string): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.setUserIdentifier(userIdentifier),
+    "setUserIdentifier",
+    false,
   );
-};
 
 /**
  * Clears the current user identifier.
@@ -123,12 +117,12 @@ const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
  * await clearUserIdentifier();
  * ```
  */
-const clearUserIdentifier = (): Promise<boolean> => {
-  return EmbraceManagerModule.clearUserIdentifier().catch((error: unknown) => {
-    handleSDKPromiseRejection("clearUserIdentifier", error);
-    return false;
-  });
-};
+const clearUserIdentifier = (): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.clearUserIdentifier(),
+    "clearUserIdentifier",
+    false,
+  );
 
 /**
  * Sets a username for the current user.
@@ -150,12 +144,8 @@ const clearUserIdentifier = (): Promise<boolean> => {
  * await setUsername('jane_doe');
  * ```
  */
-const setUsername = (username: string): Promise<boolean> => {
-  return EmbraceManagerModule.setUsername(username).catch((error: unknown) => {
-    handleSDKPromiseRejection("setUsername", error);
-    return false;
-  });
-};
+const setUsername = (username: string): Promise<boolean> =>
+  safePromise(EmbraceManagerModule.setUsername(username), "setUsername", false);
 
 /**
  * Clears the current user's username.
@@ -169,12 +159,8 @@ const setUsername = (username: string): Promise<boolean> => {
  * await clearUsername();
  * ```
  */
-const clearUsername = (): Promise<boolean> => {
-  return EmbraceManagerModule.clearUsername().catch((error: unknown) => {
-    handleSDKPromiseRejection("clearUsername", error);
-    return false;
-  });
-};
+const clearUsername = (): Promise<boolean> =>
+  safePromise(EmbraceManagerModule.clearUsername(), "clearUsername", false);
 
 /**
  * Sets an email address for the current user.
@@ -196,14 +182,12 @@ const clearUsername = (): Promise<boolean> => {
  * await setUserEmail('jane@example.com');
  * ```
  */
-const setUserEmail = (userEmail: string): Promise<boolean> => {
-  return EmbraceManagerModule.setUserEmail(userEmail).catch(
-    (error: unknown) => {
-      handleSDKPromiseRejection("setUserEmail", error);
-      return false;
-    },
+const setUserEmail = (userEmail: string): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.setUserEmail(userEmail),
+    "setUserEmail",
+    false,
   );
-};
 
 /**
  * Clears the current user's email address.
@@ -217,12 +201,8 @@ const setUserEmail = (userEmail: string): Promise<boolean> => {
  * await clearUserEmail();
  * ```
  */
-const clearUserEmail = (): Promise<boolean> => {
-  return EmbraceManagerModule.clearUserEmail().catch((error: unknown) => {
-    handleSDKPromiseRejection("clearUserEmail", error);
-    return false;
-  });
-};
+const clearUserEmail = (): Promise<boolean> =>
+  safePromise(EmbraceManagerModule.clearUserEmail(), "clearUserEmail", false);
 
 export {
   addUserPersona,

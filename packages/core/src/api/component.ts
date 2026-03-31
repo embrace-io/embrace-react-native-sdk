@@ -10,7 +10,7 @@
 
 import {ErrorInfo} from "react";
 
-import {handleSDKPromiseRejection} from "../utils/promiseHandler";
+import {safePromise} from "../utils/promiseHandler";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 /**
@@ -60,16 +60,17 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
   }
 
   const {message, componentStack} = error;
-  return EmbraceManagerModule.logMessageWithSeverityAndProperties(
-    message,
-    "error",
-    {},
-    componentStack,
-    true,
-  ).catch((err: unknown) => {
-    handleSDKPromiseRejection("logIfComponentError", err);
-    return false;
-  });
+  return safePromise(
+    EmbraceManagerModule.logMessageWithSeverityAndProperties(
+      message,
+      "error",
+      {},
+      componentStack,
+      true,
+    ),
+    "logIfComponentError",
+    false,
+  );
 };
 
 export {logIfComponentError, ComponentError};

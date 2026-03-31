@@ -8,7 +8,7 @@
  * @see {@link https://embrace.io/docs/react-native/integration/upload-symbol-files | Upload Symbol Files Documentation}
  */
 
-import {handleSDKPromiseRejection} from "../utils/promiseHandler";
+import {safePromise} from "../utils/promiseHandler";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 /**
@@ -29,14 +29,12 @@ import {EmbraceManagerModule} from "../EmbraceManagerModule";
  * setJavaScriptPatch('2025.01.15-fix');
  * ```
  */
-const setJavaScriptPatch = (patch: string) => {
-  return EmbraceManagerModule.setJavaScriptPatchNumber(patch).catch(
-    (error: unknown) => {
-      handleSDKPromiseRejection("setJavaScriptPatch", error);
-      return false;
-    },
+const setJavaScriptPatch = (patch: string) =>
+  safePromise(
+    EmbraceManagerModule.setJavaScriptPatchNumber(patch),
+    "setJavaScriptPatch",
+    false,
   );
-};
 
 /**
  * Sets the file path to the JavaScript bundle.
@@ -57,13 +55,11 @@ const setJavaScriptPatch = (patch: string) => {
  * setJavaScriptBundlePath('/path/to/custom/bundle.js');
  * ```
  */
-const setJavaScriptBundlePath = (path: string) => {
-  return EmbraceManagerModule.setJavaScriptBundlePath(path).catch(
-    (error: unknown) => {
-      handleSDKPromiseRejection("setJavaScriptBundlePath", error);
-      return false;
-    },
+const setJavaScriptBundlePath = (path: string) =>
+  safePromise(
+    EmbraceManagerModule.setJavaScriptBundlePath(path),
+    "setJavaScriptBundlePath",
+    false,
   );
-};
 
 export {setJavaScriptBundlePath, setJavaScriptPatch};

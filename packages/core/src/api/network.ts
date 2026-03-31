@@ -9,7 +9,7 @@
  * @see {@link https://embrace.io/docs/react-native/faq/#my-network-calls-are-not-being-captured-what-could-be-going-wrong | Network FAQ}
  */
 
-import {handleSDKPromiseRejection} from "../utils/promiseHandler";
+import {safePromise} from "../utils/promiseHandler";
 import {MethodType} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
@@ -56,20 +56,20 @@ const recordNetworkRequest = (
   bytesSent?: number,
   bytesReceived?: number,
   statusCode?: number,
-): Promise<boolean> => {
-  return EmbraceManagerModule.logNetworkRequest(
-    url,
-    httpMethod,
-    startInMillis,
-    endInMillis,
-    bytesSent || -1,
-    bytesReceived || -1,
-    statusCode || -1,
-  ).catch((error: unknown) => {
-    handleSDKPromiseRejection("recordNetworkRequest", error);
-    return false;
-  });
-};
+): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.logNetworkRequest(
+      url,
+      httpMethod,
+      startInMillis,
+      endInMillis,
+      bytesSent || -1,
+      bytesReceived || -1,
+      statusCode || -1,
+    ),
+    "recordNetworkRequest",
+    false,
+  );
 
 /**
  * Manually records a network request that failed due to a client-side error.
@@ -111,18 +111,18 @@ const logNetworkClientError = (
   endInMillis: number,
   errorType: string,
   errorMessage: string,
-): Promise<boolean> => {
-  return EmbraceManagerModule.logNetworkClientError(
-    url,
-    httpMethod,
-    startInMillis,
-    endInMillis,
-    errorType,
-    errorMessage,
-  ).catch((error: unknown) => {
-    handleSDKPromiseRejection("logNetworkClientError", error);
-    return false;
-  });
-};
+): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.logNetworkClientError(
+      url,
+      httpMethod,
+      startInMillis,
+      endInMillis,
+      errorType,
+      errorMessage,
+    ),
+    "logNetworkClientError",
+    false,
+  );
 
 export {recordNetworkRequest, logNetworkClientError};

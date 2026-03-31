@@ -26,7 +26,7 @@ export interface EmbracePromiseRejectionConfig {
 
 let rejectionConfig: EmbracePromiseRejectionConfig = {
   enabled: false,
-  logToConsole: false,
+  allowLogToConsole: false,
 };
 
 export const handleSDKPromiseRejection = (
@@ -44,7 +44,7 @@ export const handleSDKPromiseRejection = (
     try {
       rejectionConfig.customHandler(methodName, errorObj);
     } catch (handlerError) {
-      if (rejectionConfig.logToConsole) {
+      if (rejectionConfig.allowLogToConsole) {
         console.error(
           `[Embrace RN SDK] Error in custom unhandled promise rejection handler for ${methodName}:`,
           handlerError,
@@ -53,7 +53,7 @@ export const handleSDKPromiseRejection = (
     }
   }
 
-  if (rejectionConfig.logToConsole) {
+  if (rejectionConfig.allowLogToConsole) {
     console.error(
       `[Embrace RN SDK] Unhandled promise rejection in ${methodName}: ${errorMessage}`,
       errorObj,
@@ -64,6 +64,16 @@ export const handleSDKPromiseRejection = (
     }
   }
 };
+
+export const safePromise = <T>(
+  promise: Promise<T>,
+  methodName: string,
+  fallback: T,
+): Promise<T> =>
+  promise.catch((error: unknown) => {
+    handleSDKPromiseRejection(methodName, error);
+    return fallback;
+  });
 
 export const configurePromiseRejection = (
   config: Partial<EmbracePromiseRejectionConfig>,

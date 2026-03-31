@@ -7,7 +7,7 @@
  * @see {@link https://embrace.io/docs/react-native/integration/breadcrumbs | Breadcrumbs Documentation}
  */
 
-import {handleSDKPromiseRejection} from "../utils/promiseHandler";
+import {safePromise} from "../utils/promiseHandler";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 /**
@@ -34,11 +34,11 @@ import {EmbraceManagerModule} from "../EmbraceManagerModule";
  * addBreadcrumb('Cart loaded with 3 items');
  * ```
  */
-const addBreadcrumb = (message: string): Promise<boolean> => {
-  return EmbraceManagerModule.addBreadcrumb(message).catch((error: unknown) => {
-    handleSDKPromiseRejection("addBreadcrumb", error);
-    return false;
-  });
-};
+const addBreadcrumb = (message: string): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.addBreadcrumb(message),
+    "addBreadcrumb",
+    false,
+  );
 
 export {addBreadcrumb};

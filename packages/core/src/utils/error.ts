@@ -1,6 +1,6 @@
-import { EmbraceManagerModule } from "../EmbraceManagerModule";
+import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
-import { handleSDKPromiseRejection } from "./promiseHandler";
+import {safePromise} from "./promiseHandler";
 
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
 
@@ -13,22 +13,23 @@ const trackUnhandledRejection = (_: unknown, error: Error) => {
     stackTrace = error.stack || "";
   }
 
-  return EmbraceManagerModule.logMessageWithSeverityAndProperties(
-    message,
-    "error",
-    {},
-    stackTrace,
-    !!stackTrace,
-  ).catch((err: unknown) => {
-    handleSDKPromiseRejection("trackUnhandledRejection", err);
-    return false;
-  });
+  return safePromise(
+    EmbraceManagerModule.logMessageWithSeverityAndProperties(
+      message,
+      "error",
+      {},
+      stackTrace,
+      !!stackTrace,
+    ),
+    "trackUnhandledRejection",
+    false,
+  );
 };
 
 const REJECTION_TRACKING_CONFIG = {
   allRejections: true,
   onUnhandled: trackUnhandledRejection,
-  onHandled: () => { },
+  onHandled: () => {},
 };
 
 const enableUnhandledRejectionTracking = () => {
@@ -48,4 +49,4 @@ const enableUnhandledRejectionTracking = () => {
   }
 };
 
-export { enableUnhandledRejectionTracking, trackUnhandledRejection };
+export {enableUnhandledRejectionTracking, trackUnhandledRejection};
