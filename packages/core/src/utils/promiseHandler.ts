@@ -9,7 +9,7 @@ export interface EmbracePromiseRejectionConfig {
    * Recommend to set to true in development environments for easier debugging.
    * Recommend to set to false in production environments to avoid duplicate logging.
    */
-  logToConsole: boolean;
+  allowLogToConsole: boolean;
 
   /**
    * Optional custom handler for unhandled promise rejections.
