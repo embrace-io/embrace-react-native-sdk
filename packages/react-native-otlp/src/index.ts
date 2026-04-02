@@ -3,6 +3,12 @@ import {NativeModules} from "react-native";
 
 import {AndroidConfig, IOSConfig, OTLPExporterConfig} from "./interfaces";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- standard React Native TurboModule detection
+const isTurboModuleEnabled = (global as any).__turboModuleProxy != null;
+const RNEmbraceOTLPModule = isTurboModuleEnabled
+  ? require("./NativeRNEmbraceOTLP").default
+  : NativeModules.RNEmbraceOTLP;
+
 const noOp = async (_: IOSConfig | AndroidConfig) => {};
 
 const WARN_MESSAGES = {
@@ -70,7 +76,7 @@ const initialize = (otlpExporterConfig: OTLPExporterConfig) => {
     try {
       // @embrace-io/react-native (core) is still handling the start
       // if an error occurs, the main package will print the proper errors
-      return await NativeModules.RNEmbraceOTLP.startNativeEmbraceSDK(
+      return await RNEmbraceOTLPModule.startNativeEmbraceSDK(
         sdkConfig,
         otlpExporterConfig,
       );

@@ -8,7 +8,6 @@ import kotlin.time.toJavaDuration
 
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
@@ -33,8 +32,12 @@ data class OtlpExporterConfig (
     val logExporter: ExporterConfig? = null
 )
 
-class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-    override fun getName() = "RNEmbraceOTLP"
+class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : RNEmbraceOTLPSpec(reactContext) {
+    override fun getName() = NAME
+
+    companion object {
+        const val NAME = "RNEmbraceOTLP"
+    }
 
     private val context: ReactApplicationContext = reactContext
     private val log = Logger.getLogger("[Embrace]")
