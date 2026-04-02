@@ -100,5 +100,6 @@ module.exports = {
     "/examples/",
     "/integration-tests/",
     "/lib/",
+    "**/lib/",
   ],
 };

@@ -1595,7 +1595,7 @@ PODS:
     - React-logger (= 0.75.4)
     - React-perflogger (= 0.75.4)
     - React-utils (= 0.75.4)
-  - RNEmbraceOTLP (6.4.0):
+  - RNEmbraceOTLP (6.6.0):
     - DoubleConversion
     - EmbraceIO (= 6.16.2)
     - glog
@@ -1898,7 +1898,7 @@ SPEC CHECKSUMS:
   React-utils: 0dbea1179726ad65a1b13470a3f3c73da98f4496
   ReactCodegen: f961bc28110632dd4c8e8d95c1a80f5344022cd2
   ReactCommon: 23eed247b5c8e57b59a823ce209353883da61dd2
-  RNEmbraceOTLP: 6f108043365dd605e686e3a334d2d0fd18873771
+  RNEmbraceOTLP: 8a6ce48f0b2f609f58e8875e93cec5057d17664e
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   SwiftProtobuf: 4a92c845d4f5ee640b00f962df11222b625095ed
   Yoga: b05994d1933f507b0a28ceaa4fdb968dc18da178

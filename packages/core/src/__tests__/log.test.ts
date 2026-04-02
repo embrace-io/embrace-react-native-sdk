@@ -3,8 +3,10 @@ import {logError, logInfo, logMessage, logWarning} from "../api/log";
 
 const MOCK_STACKTRACE = "this is a fake stack trace";
 
-const mockLogMessageWithSeverityAndProperties = jest.fn();
-const mockLogHandledError = jest.fn();
+const mockLogMessageWithSeverityAndProperties = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockLogHandledError = jest.fn().mockReturnValue(Promise.resolve(true));
 
 beforeEach(() => {
   mockGenerateStackTrace.mockReturnValue(MOCK_STACKTRACE);

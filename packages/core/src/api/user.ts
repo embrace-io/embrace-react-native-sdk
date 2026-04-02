@@ -12,6 +12,7 @@
  * @see {@link https://embrace.io/docs/react-native/features/identify-users | Identify Users Documentation}
  */
 
+import {safePromise} from "../utils/promiseHandler";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 /**
@@ -31,9 +32,12 @@ import {EmbraceManagerModule} from "../EmbraceManagerModule";
  * await addUserPersona('high_value_cart');
  * ```
  */
-const addUserPersona = (persona: string): Promise<boolean> => {
-  return EmbraceManagerModule.addUserPersona(persona);
-};
+const addUserPersona = (persona: string): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.addUserPersona(persona),
+    "addUserPersona",
+    false,
+  );
 
 /**
  * Removes a specific persona tag from the current user.
@@ -48,9 +52,12 @@ const addUserPersona = (persona: string): Promise<boolean> => {
  * await clearUserPersona('high_value_cart');
  * ```
  */
-const clearUserPersona = (persona: string): Promise<boolean> => {
-  return EmbraceManagerModule.clearUserPersona(persona);
-};
+const clearUserPersona = (persona: string): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.clearUserPersona(persona),
+    "clearUserPersona",
+    false,
+  );
 
 /**
  * Removes all persona tags from the current user.
@@ -64,9 +71,12 @@ const clearUserPersona = (persona: string): Promise<boolean> => {
  * await clearAllUserPersonas();
  * ```
  */
-const clearAllUserPersonas = (): Promise<boolean> => {
-  return EmbraceManagerModule.clearAllUserPersonas();
-};
+const clearAllUserPersonas = (): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.clearAllUserPersonas(),
+    "clearAllUserPersonas",
+    false,
+  );
 
 /**
  * Sets a unique identifier for the current user.
@@ -85,9 +95,12 @@ const clearAllUserPersonas = (): Promise<boolean> => {
  * await setUserIdentifier('user_12345');
  * ```
  */
-const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
-  return EmbraceManagerModule.setUserIdentifier(userIdentifier);
-};
+const setUserIdentifier = (userIdentifier: string): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.setUserIdentifier(userIdentifier),
+    "setUserIdentifier",
+    false,
+  );
 
 /**
  * Clears the current user identifier.
@@ -104,9 +117,12 @@ const setUserIdentifier = (userIdentifier: string): Promise<boolean> => {
  * await clearUserIdentifier();
  * ```
  */
-const clearUserIdentifier = (): Promise<boolean> => {
-  return EmbraceManagerModule.clearUserIdentifier();
-};
+const clearUserIdentifier = (): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.clearUserIdentifier(),
+    "clearUserIdentifier",
+    false,
+  );
 
 /**
  * Sets a username for the current user.
@@ -128,9 +144,8 @@ const clearUserIdentifier = (): Promise<boolean> => {
  * await setUsername('jane_doe');
  * ```
  */
-const setUsername = (username: string): Promise<boolean> => {
-  return EmbraceManagerModule.setUsername(username);
-};
+const setUsername = (username: string): Promise<boolean> =>
+  safePromise(EmbraceManagerModule.setUsername(username), "setUsername", false);
 
 /**
  * Clears the current user's username.
@@ -144,9 +159,8 @@ const setUsername = (username: string): Promise<boolean> => {
  * await clearUsername();
  * ```
  */
-const clearUsername = (): Promise<boolean> => {
-  return EmbraceManagerModule.clearUsername();
-};
+const clearUsername = (): Promise<boolean> =>
+  safePromise(EmbraceManagerModule.clearUsername(), "clearUsername", false);
 
 /**
  * Sets an email address for the current user.
@@ -168,9 +182,12 @@ const clearUsername = (): Promise<boolean> => {
  * await setUserEmail('jane@example.com');
  * ```
  */
-const setUserEmail = (userEmail: string): Promise<boolean> => {
-  return EmbraceManagerModule.setUserEmail(userEmail);
-};
+const setUserEmail = (userEmail: string): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.setUserEmail(userEmail),
+    "setUserEmail",
+    false,
+  );
 
 /**
  * Clears the current user's email address.
@@ -184,9 +201,8 @@ const setUserEmail = (userEmail: string): Promise<boolean> => {
  * await clearUserEmail();
  * ```
  */
-const clearUserEmail = (): Promise<boolean> => {
-  return EmbraceManagerModule.clearUserEmail();
-};
+const clearUserEmail = (): Promise<boolean> =>
+  safePromise(EmbraceManagerModule.clearUserEmail(), "clearUserEmail", false);
 
 export {
   addUserPersona,

@@ -6,11 +6,17 @@ import {
   removeSessionProperty,
 } from "../api/session";
 
-const mockAddSessionProperty = jest.fn();
-const mockRemoveSessionProperty = jest.fn();
-const mockGetLastRunEndState = jest.fn();
-const mockGetDeviceId = jest.fn();
-const mockGetCurrentSessionId = jest.fn();
+const mockAddSessionProperty = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockRemoveSessionProperty = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockGetLastRunEndState = jest
+  .fn()
+  .mockReturnValue(Promise.resolve("CLEAN_EXIT"));
+const mockGetDeviceId = jest.fn().mockReturnValue(Promise.resolve("device-id"));
+const mockGetCurrentSessionId = jest
+  .fn()
+  .mockReturnValue(Promise.resolve("session-id"));
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {

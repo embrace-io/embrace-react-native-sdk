@@ -9,6 +9,7 @@
  * @see {@link https://embrace.io/docs/react-native/features/session-metadata | Session Metadata Documentation}
  */
 
+import {safePromise} from "../utils/promiseHandler";
 import {SessionStatus} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
@@ -39,9 +40,12 @@ const addSessionProperty = (
   key: string,
   value: string,
   permanent: boolean,
-): Promise<boolean> => {
-  return EmbraceManagerModule.addSessionProperty(key, value, permanent);
-};
+): Promise<boolean> =>
+  safePromise(
+    EmbraceManagerModule.addSessionProperty(key, value, permanent),
+    "addSessionProperty",
+    false,
+  );
 
 /**
  * Removes a previously set session property.
@@ -56,9 +60,12 @@ const addSessionProperty = (
  * removeSessionProperty('launch_type');
  * ```
  */
-const removeSessionProperty = (key: string) => {
-  return EmbraceManagerModule.removeSessionProperty(key);
-};
+const removeSessionProperty = (key: string) =>
+  safePromise(
+    EmbraceManagerModule.removeSessionProperty(key),
+    "removeSessionProperty",
+    false,
+  );
 
 /**
  * Manually ends the current session and starts a new one.
@@ -76,9 +83,8 @@ const removeSessionProperty = (key: string) => {
  * await endSession();
  * ```
  */
-const endSession = () => {
-  return EmbraceManagerModule.endSession();
-};
+const endSession = () =>
+  safePromise(EmbraceManagerModule.endSession(), "endSession", false);
 
 /**
  * Retrieves the ID of the currently active session.
@@ -100,9 +106,12 @@ const endSession = () => {
  * console.log('Current session:', sessionId);
  * ```
  */
-const getCurrentSessionId = (): Promise<string> => {
-  return EmbraceManagerModule.getCurrentSessionId();
-};
+const getCurrentSessionId = (): Promise<string> =>
+  safePromise(
+    EmbraceManagerModule.getCurrentSessionId(),
+    "getCurrentSessionId",
+    "",
+  );
 
 /**
  * Returns the end state of the previous app instance (cold launch).
@@ -128,9 +137,12 @@ const getCurrentSessionId = (): Promise<string> => {
  * }
  * ```
  */
-const getLastRunEndState = (): Promise<SessionStatus> => {
-  return EmbraceManagerModule.getLastRunEndState();
-};
+const getLastRunEndState = (): Promise<SessionStatus> =>
+  safePromise(
+    EmbraceManagerModule.getLastRunEndState(),
+    "getLastRunEndState",
+    "INVALID" as SessionStatus,
+  );
 
 /**
  * Retrieves the Embrace device ID.
@@ -149,9 +161,8 @@ const getLastRunEndState = (): Promise<SessionStatus> => {
  * console.log('Embrace Device ID:', deviceId);
  * ```
  */
-const getDeviceId = (): Promise<string> => {
-  return EmbraceManagerModule.getDeviceId();
-};
+const getDeviceId = (): Promise<string> =>
+  safePromise(EmbraceManagerModule.getDeviceId(), "getDeviceId", "");
 
 export {
   addSessionProperty,

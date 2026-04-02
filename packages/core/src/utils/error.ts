@@ -1,5 +1,7 @@
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
+import {safePromise} from "./promiseHandler";
+
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
 
 const trackUnhandledRejection = (_: unknown, error: Error) => {
@@ -11,12 +13,16 @@ const trackUnhandledRejection = (_: unknown, error: Error) => {
     stackTrace = error.stack || "";
   }
 
-  return EmbraceManagerModule.logMessageWithSeverityAndProperties(
-    message,
-    "error",
-    {},
-    stackTrace,
-    !!stackTrace,
+  return safePromise(
+    EmbraceManagerModule.logMessageWithSeverityAndProperties(
+      message,
+      "error",
+      {},
+      stackTrace,
+      !!stackTrace,
+    ),
+    "trackUnhandledRejection",
+    false,
   );
 };
 

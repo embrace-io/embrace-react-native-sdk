@@ -8,6 +8,7 @@
  * @see {@link https://embrace.io/docs/react-native/integration/log-message-api | Log Message API Documentation}
  */
 
+import {safePromise} from "../utils/promiseHandler";
 import {generateStackTrace} from "../utils/log";
 import {LogSeverity, LogProperties} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
@@ -54,12 +55,16 @@ const logMessage = (
     );
   }
 
-  return EmbraceManagerModule.logMessageWithSeverityAndProperties(
-    message,
-    severity,
-    properties,
-    stackTrace,
-    includeStacktrace,
+  return safePromise(
+    EmbraceManagerModule.logMessageWithSeverityAndProperties(
+      message,
+      severity,
+      properties,
+      stackTrace,
+      includeStacktrace,
+    ),
+    "logMessage",
+    false,
   );
 };
 
@@ -155,7 +160,11 @@ const logHandledError = (
 ): Promise<boolean> => {
   if (error instanceof Error) {
     const {stack, message} = error;
-    return EmbraceManagerModule.logHandledError(message, stack, properties);
+    return safePromise(
+      EmbraceManagerModule.logHandledError(message, stack, properties),
+      "logHandledError",
+      false,
+    );
   }
 
   return Promise.resolve(false);

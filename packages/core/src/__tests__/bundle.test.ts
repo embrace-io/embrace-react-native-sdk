@@ -1,6 +1,8 @@
 import {setJavaScriptBundlePath} from "../api/bundle";
 
-const mockSetJavaScriptBundlePath = jest.fn();
+const mockSetJavaScriptBundlePath = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {

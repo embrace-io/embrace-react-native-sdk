@@ -1,6 +1,8 @@
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 import * as embracePackage from "../../package.json";
 
+import {safePromise} from "./promiseHandler";
+
 const reactNativeVersion = require("react-native/Libraries/Core/ReactNativeVersion.js");
 
 const isObjectNonEmpty = (obj?: object): boolean =>
@@ -28,14 +30,22 @@ const buildPackageVersion = (reactNativeVersion: {
 const setEmbracePackageVersion = () => {
   if (embracePackage) {
     const {version} = embracePackage;
-    EmbraceManagerModule.setReactNativeSDKVersion(version);
+    safePromise(
+      EmbraceManagerModule.setReactNativeSDKVersion(version),
+      "setReactNativeSDKVersion",
+      false,
+    );
   }
 };
 
 const setReactNativeVersion = () => {
   const packageVersion = buildPackageVersion(reactNativeVersion);
   if (packageVersion) {
-    EmbraceManagerModule.setReactNativeVersion(packageVersion);
+    safePromise(
+      EmbraceManagerModule.setReactNativeVersion(packageVersion),
+      "setReactNativeVersion",
+      false,
+    );
   }
 };
 

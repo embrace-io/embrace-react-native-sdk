@@ -24,7 +24,15 @@ const initialize = async (
   const isIOS = Platform.OS === "ios";
   const logger = new EmbraceLogger(console, logLevel);
 
-  const hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
+  let hasNativeSDKStarted;
+  try {
+    hasNativeSDKStarted = await EmbraceManagerModule.isStarted();
+  } catch (e) {
+    logger.warn(
+      `Failed to check if Embrace SDK is started: ${e}. The native module may not be linked.`,
+    );
+    return false;
+  }
 
   // if the sdk started in the native side the follow condition doesn't take any effect.
   // neither iOS setup() nor start() will be overridden
@@ -152,5 +160,11 @@ export * from "./hooks/useEmbrace";
 export * from "./hooks/useEmbraceIsStarted";
 export * from "./hooks/useOrientationListener";
 export * from "./interfaces";
+
+export {
+  configureSDKErrorLogging,
+  getSDKErrorLoggingConfig,
+  type SDKErrorLoggingConfig,
+} from "./utils/promiseHandler";
 
 export {initialize};

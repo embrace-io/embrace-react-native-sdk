@@ -10,6 +10,7 @@
 
 import {ErrorInfo} from "react";
 
+import {safePromise} from "../utils/promiseHandler";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 /**
@@ -59,12 +60,16 @@ const logIfComponentError = (error: Error): Promise<boolean> => {
   }
 
   const {message, componentStack} = error;
-  return EmbraceManagerModule.logMessageWithSeverityAndProperties(
-    message,
-    "error",
-    {},
-    componentStack,
-    true,
+  return safePromise(
+    EmbraceManagerModule.logMessageWithSeverityAndProperties(
+      message,
+      "error",
+      {},
+      componentStack,
+      true,
+    ),
+    "logIfComponentError",
+    false,
   );
 };
 

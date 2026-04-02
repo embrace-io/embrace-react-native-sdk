@@ -86,6 +86,10 @@ class EmbraceManager: NSObject {
 
     @objc(setUserIdentifier:resolver:rejecter:)
     func setUserIdentifier(_ userIdentifier: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        guard Embrace.client != nil else {
+            reject("SET_USER_IDENTIFIER_ERROR", "Embrace SDK may not be initialized", nil)
+            return
+        }
         Embrace.client?.metadata.userIdentifier = userIdentifier
         resolve(true)
     }
@@ -142,12 +146,20 @@ class EmbraceManager: NSObject {
 
     @objc(setUsername:resolver:rejecter:)
     func setUsername(_ userName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        guard Embrace.client != nil else {
+            reject("SET_USERNAME_ERROR", "Embrace SDK may not be initialized", nil)
+            return
+        }
         Embrace.client?.metadata.userName = userName
         resolve(true)
     }
 
     @objc
     func clearUserEmail(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        guard Embrace.client != nil else {
+            reject("CLEAR_USER_EMAIL_ERROR", "Embrace SDK may not be initialized", nil)
+            return
+        }
         Embrace.client?.metadata.userEmail = nil
         resolve(true)
     }
@@ -164,18 +176,30 @@ class EmbraceManager: NSObject {
 
     @objc
     func clearUserIdentifier(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        guard Embrace.client != nil else {
+            reject("CLEAR_USER_IDENTIFIER_ERROR", "Embrace SDK may not be initialized", nil)
+            return
+        }
         Embrace.client?.metadata.userIdentifier = nil
         resolve(true)
     }
 
     @objc
     func clearUsername(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        guard Embrace.client != nil else {
+            reject("CLEAR_USERNAME_ERROR", "Embrace SDK may not be initialized", nil)
+            return
+        }
         Embrace.client?.metadata.userName = nil
         resolve(true)
     }
 
     @objc
     func endSession(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        guard Embrace.client != nil else {
+            reject("END_SESSION_ERROR", "Embrace SDK may not be initialized", nil)
+            return
+        }
         Embrace.client?.endCurrentSession()
         resolve(true)
     }
@@ -192,6 +216,10 @@ class EmbraceManager: NSObject {
 
     @objc
     func clearAllUserPersonas(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        guard Embrace.client != nil else {
+            reject("CLEAR_ALL_USER_PERSONAS_ERROR", "Embrace SDK may not be initialized", nil)
+            return
+        }
         Embrace.client?.metadata.removeAllPersonas()
         resolve(true)
     }
@@ -232,6 +260,10 @@ class EmbraceManager: NSObject {
 
     @objc(setUserEmail:resolver:rejecter:)
     func setUserEmail(_ userEmail: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        guard Embrace.client != nil else {
+            reject("SET_USER_EMAIL_ERROR", "Embrace SDK may not be initialized", nil)
+            return
+        }
         Embrace.client?.metadata.userEmail = userEmail
         resolve(true)
     }
@@ -263,6 +295,10 @@ class EmbraceManager: NSObject {
         resolver resolve: @escaping RCTPromiseResolveBlock,
         rejecter reject: @escaping RCTPromiseRejectBlock
     ) {
+        guard Embrace.client != nil else {
+            reject("LOG_MESSAGE_ERROR", "Embrace SDK may not be initialized", nil)
+            return
+        }
 
         let severityValue = self.severityFromString(from: severity)
         guard var attributes = properties as? [String: String] else {
@@ -355,7 +391,7 @@ class EmbraceManager: NSObject {
             span!.end(errorCode: nil, time: dateFrom(ms: endInMillis))
             resolve(true)
         } else {
-            resolve(false)
+            reject("LOG_NETWORK_REQUEST_ERROR", "Failed to create network span", nil)
         }
     }
 
@@ -403,7 +439,7 @@ class EmbraceManager: NSObject {
             span!.end(errorCode: SpanErrorCode.failure, time: dateFrom(ms: endInMillis))
             resolve(true)
         } else {
-            resolve(false)
+            reject("LOG_NETWORK_CLIENT_ERROR_ERROR", "Failed to create network client error span", nil)
         }
     }
 
@@ -511,11 +547,10 @@ class EmbraceManager: NSObject {
         do {
             // adding crash metadata
             try Embrace.client?.appendCrashInfo(key: EMB_EXC, value: jsExceptionUUID)
+            resolve(true)
         } catch let error {
             reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error adding metadata to Crash", error)
         }
-
-        resolve(true)
     }
 
     func injectW3cTraceparent(span: any Span) {

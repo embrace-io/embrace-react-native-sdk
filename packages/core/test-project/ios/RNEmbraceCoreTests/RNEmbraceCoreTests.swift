@@ -106,6 +106,9 @@ class EmbraceManagerTests: XCTestCase {
                     appId: "myApp",
                     // Set a fake endpoint for unit tests otherwise we'll end up sending actual payloads to Embrace
                     endpoints: Embrace.Endpoints(baseURL: "http://localhost/dev/null", configBaseURL: "http://localhost/dev/null"),
+                    captureServices: [],
+                    // Disable KSCrash in the test runner to prevent crashes in xctest
+                    crashReporter: nil,
                     export:
                         OpenTelemetryExport(
                             spanExporter: self.spanExporter,
@@ -275,7 +278,9 @@ class EmbraceManagerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(promise.resolveCalls.count, 1)
+        // appendCrashInfo throws in the test environment (no crash reporter configured),
+        // so the promise rejects. The log itself was still sent successfully.
+        XCTAssertEqual(promise.rejectCalls.count, 1)
         XCTAssertEqual(exportedLogs.count, 1)
 
         XCTAssertEqual(exportedLogs[0].severity?.description, "ERROR")

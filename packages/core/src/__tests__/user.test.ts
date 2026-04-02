@@ -12,15 +12,19 @@ import {
 
 jest.useFakeTimers();
 
-const mockSetUserIdentifier = jest.fn();
-const mockClearUserIdentifier = jest.fn();
-const mockSetUsername = jest.fn();
-const mockClearUsername = jest.fn();
-const mockSetUserEmail = jest.fn();
-const mockClearUserEmail = jest.fn();
-const mockAddUserPersona = jest.fn();
-const mockClearUserPersona = jest.fn();
-const mockClearAllUserPersonas = jest.fn();
+const mockSetUserIdentifier = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockClearUserIdentifier = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockSetUsername = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockClearUsername = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockSetUserEmail = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockClearUserEmail = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockAddUserPersona = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockClearUserPersona = jest.fn().mockReturnValue(Promise.resolve(true));
+const mockClearAllUserPersonas = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
@@ -40,7 +44,7 @@ jest.mock("../EmbraceManagerModule", () => ({
 describe("User Identifier Tests", () => {
   const testUserId = "testUser";
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   test("setUserIdentifier", async () => {
