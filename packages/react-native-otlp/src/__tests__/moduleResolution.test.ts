@@ -23,8 +23,7 @@ describe("OTLP module resolution", () => {
         default: {startNativeEmbraceSDK: jest.fn()},
       }));
 
-      const {initialize} =
-        require("../index") as typeof import("../index");
+      const {initialize} = require("../index") as typeof import("../index");
 
       const callback = initialize({
         logExporter: {endpoint: "https://example.com/logs/v1"},
@@ -53,8 +52,7 @@ describe("OTLP module resolution", () => {
         default: mockTurboModule,
       }));
 
-      const {initialize} =
-        require("../index") as typeof import("../index");
+      const {initialize} = require("../index") as typeof import("../index");
 
       const callback = initialize({
         logExporter: {endpoint: "https://example.com/logs/v1"},
