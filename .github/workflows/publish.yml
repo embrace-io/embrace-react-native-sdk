@@ -1,0 +1,102 @@
+name: Publish to npm
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: "Git ref (branch, tag, or SHA) to publish from"
+        required: true
+        type: string
+      version:
+        description: "Version to publish (e.g. 6.7.0)"
+        required: true
+        type: string
+      dist-tag:
+        description: "npm dist-tag (e.g. latest, next, beta)"
+        required: false
+        default: "latest"
+        type: string
+      publish:
+        description: "If true, publish to npm. Defaults to a dry run."
+        required: false
+        default: false
+        type: boolean
+    secrets:
+      NPM_TOKEN:
+        required: false
+
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g. 6.7.0)"
+        required: true
+        type: string
+      dist-tag:
+        description: "npm dist-tag (e.g. latest, next, beta)"
+        required: false
+        default: "latest"
+        type: string
+      publish:
+        description: "If true, publish to npm. Defaults to a dry run."
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".node-version"
+          registry-url: "https://registry.npmjs.org"
+
+      - run: corepack enable
+
+      - run: yarn
+
+      - name: Set version
+        run: npx lerna version ${{ inputs.version }} --yes --no-push
+
+      - run: yarn build
+
+      - run: yarn test --watchAll=false
+
+      - name: Dry run — pack all packages
+        if: ${{ inputs.publish != true }}
+        run: npx lerna exec -- npm pack --dry-run
+
+      - name: Publish packages
+        if: ${{ inputs.publish == true }}
+        run: npx lerna publish from-git --yes --dist-tag ${{ inputs.dist-tag }} --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Update GitHub release
+        if: ${{ inputs.publish == true }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v${{ inputs.version }}"
+
+          BODY="## Published to npm"$'\n'
+          for pkg in packages/*/package.json; do
+            name=$(node -p "require('./$pkg').name")
+            BODY+="- [$name@${{ inputs.version }}](https://www.npmjs.com/package/$name/v/${{ inputs.version }})"$'\n'
+          done
+
+          if gh release view "$TAG" &>/dev/null; then
+            gh release edit "$TAG" --notes "$BODY"
+          else
+            echo "No existing GitHub release found for tag $TAG, skipping."
+          fi
