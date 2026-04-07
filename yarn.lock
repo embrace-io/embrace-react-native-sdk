@@ -3383,11 +3383,11 @@ __metadata:
   linkType: hard
 
 "@dotenvx/dotenvx@npm:^1.48.3":
-  version: 1.48.3
-  resolution: "@dotenvx/dotenvx@npm:1.48.3"
+  version: 1.60.1
+  resolution: "@dotenvx/dotenvx@npm:1.60.1"
   dependencies:
     commander: "npm:^11.1.0"
-    dotenv: "npm:^16.4.5"
+    dotenv: "npm:^17.2.1"
     eciesjs: "npm:^0.4.10"
     execa: "npm:^5.1.1"
     fdir: "npm:^6.2.0"
@@ -3395,9 +3395,10 @@ __metadata:
     object-treeify: "npm:1.1.33"
     picomatch: "npm:^4.0.2"
     which: "npm:^4.0.0"
+    yocto-spinner: "npm:^1.1.0"
   bin:
     dotenvx: src/cli/dotenvx.js
-  checksum: 10c0/4415bb59b6beb128e0bb9fac4f8dd84b2f0296090645262a02c2cb5f22d432b21156a1dd06da51ea04626496385e447fcb6cad0ced3bac6a1a7f1c73b6a3823a
+  checksum: 10c0/850520ed0aa48d75b6bcf146a0dbde15c6737a57823d46c80772ff7392a4af9ad7fc4272d10f0f75efea38ae093c1b5324805504dfad5139619687c26912f6a4
   languageName: node
   linkType: hard
 
@@ -8782,10 +8783,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.4.5":
-  version: 16.6.1
-  resolution: "dotenv@npm:16.6.1"
-  checksum: 10c0/15ce56608326ea0d1d9414a5c8ee6dcf0fffc79d2c16422b4ac2268e7e2d76ff5a572d37ffe747c377de12005f14b3cc22361e79fc7f1061cce81f77d2c973dc
+"dotenv@npm:^17.2.1":
+  version: 17.4.1
+  resolution: "dotenv@npm:17.4.1"
+  checksum: 10c0/eb6ae592ee1e8f6b7f62e0f0c2827c4f27bbe9e00abe9d7910e06456e63dccd42f011de94da9450a63c07ccc52c318f527c1b56ad8e2c81a1a16314b53d4fd99
   languageName: node
   linkType: hard
 
@@ -18286,9 +18287,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"yocto-spinner@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "yocto-spinner@npm:1.1.0"
+  dependencies:
+    yoctocolors: "npm:^2.1.1"
+  checksum: 10c0/4aa515543da3ccde81eb1037ff194954926f86f442dcf3e3bc99e4393185979157cae1d636888e8df2fa959fa39fd4d0c4856dc09a2f96285b2197b9ee265e13
+  languageName: node
+  linkType: hard
+
 "yoctocolors-cjs@npm:^2.1.2":
   version: 2.1.2
   resolution: "yoctocolors-cjs@npm:2.1.2"
   checksum: 10c0/a0e36eb88fea2c7981eab22d1ba45e15d8d268626e6c4143305e2c1628fa17ebfaa40cd306161a8ce04c0a60ee0262058eab12567493d5eb1409780853454c6f
+  languageName: node
+  linkType: hard
+
+"yoctocolors@npm:^2.1.1":
+  version: 2.1.2
+  resolution: "yoctocolors@npm:2.1.2"
+  checksum: 10c0/b220f30f53ebc2167330c3adc86a3c7f158bcba0236f6c67e25644c3188e2571a6014ffc1321943bb619460259d3d27eb4c9cc58c2d884c1b195805883ec7066
   languageName: node
   linkType: hard
