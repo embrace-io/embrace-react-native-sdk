@@ -16,7 +16,11 @@
     "react-native": "0.78.2",
     "react-native-safe-area-context": "5.5.2",
     "react-native-screens": "4.9.2",
-    "expo-router": "3.5.14"
+    "expo-router": "3.5.14",
+    "expo-linking": "6.3.1",
+    "expo-constants": "16.0.2",
+    "expo-status-bar": "1.12.1",
+    "expo-modules-core": "1.12.26"
   },
   "devDependencies": {
     "@babel/core": "7.25.2",
