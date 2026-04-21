@@ -8,6 +8,10 @@ import OpenTelemetryProtocolExporterCommon
 import OpenTelemetryProtocolExporterHttp
 import OSLog
 
+#if RCT_NEW_ARCH_ENABLED
+import RNEmbraceOTLPSpec
+#endif
+
 @objc class RNExporterConfig: NSObject {
     var endpoint: String?
     var timeout: TimeInterval
@@ -154,3 +158,7 @@ class RNEmbraceOTLP: NSObject {
         }
     }
 }
+
+#if RCT_NEW_ARCH_ENABLED
+extension RNEmbraceOTLP: NativeRNEmbraceOTLPSpec {}
+#endif

@@ -24,7 +24,8 @@
     "android/gradle.properties",
     "android/dependencies.gradle",
     "ios",
-    "RNEmbraceCore.podspec"
+    "RNEmbraceCore.podspec",
+    "src/NativeEmbraceManager.ts"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
@@ -71,5 +72,13 @@
   "embrace": {
     "iosVersion": "6.16.2",
     "androidVersion": "7.9.2"
+  },
+  "codegenConfig": {
+    "name": "RNEmbraceCoreSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "io.embrace.rnembracecore"
+    }
   }
 }

@@ -1,5 +1,9 @@
 #import <React/RCTBridgeModule.h>
 
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <RNEmbraceTracerProviderSpec/RNEmbraceTracerProviderSpec.h>
+#endif
+
 @interface RCT_EXTERN_MODULE(ReactNativeTracerProviderModule, NSObject)
 
 RCT_EXTERN_METHOD(setupTracer:(NSString *)name version:(NSString *)version schemaUrl:(NSString *)schemaUrl)
@@ -26,3 +30,13 @@ RCT_EXTERN_METHOD(clearCompletedSpans)
 }
 
 @end
+
+#ifdef RCT_NEW_ARCH_ENABLED
+@implementation ReactNativeTracerProviderModule (TurboModule)
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+    return std::make_shared<facebook::react::NativeReactNativeTracerProviderModuleSpecJSI>(params);
+}
+@end
+#endif

@@ -12,7 +12,8 @@
     "android/gradle.properties",
     "android/dependencies.gradle",
     "ios",
-    "RNEmbraceTracerProvider.podspec"
+    "RNEmbraceTracerProvider.podspec",
+    "src/NativeReactNativeTracerProviderModule.ts"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
@@ -62,5 +63,13 @@
   "embrace": {
     "iosVersion": "6.16.2",
     "androidVersion": "7.9.2"
+  },
+  "codegenConfig": {
+    "name": "RNEmbraceTracerProviderSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "io.embrace.reactnativetracerprovider"
+    }
   }
 }
