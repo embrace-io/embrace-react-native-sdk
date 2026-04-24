@@ -33,7 +33,7 @@
   },
   "embrace": {
     "iosVersion": "6.16.2",
-    "androidVersion": "7.9.2"
+    "androidVersion": "8.3.0"
   },
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
