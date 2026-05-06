@@ -296,7 +296,10 @@ const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
     /*
     shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\" EMBRACE_ID=ios789 EMBRACE_TOKEN=apiToken456 \"${PODS_ROOT}/EmbraceIO/run.sh\"\nrm \"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\"";
      */
-    if (!findPhase(project, "EmbraceIO/run.sh") && !findPhase(project, "embrace-io/react-native/ios/scripts/run.sh")) {
+    if (
+      !findPhase(project, "EmbraceIO/run.sh") &&
+      !findPhase(project, "embrace-io/react-native/ios/scripts/run.sh")
+    ) {
       project.addBuildPhase(
         [],
         "PBXShellScriptBuildPhase",
