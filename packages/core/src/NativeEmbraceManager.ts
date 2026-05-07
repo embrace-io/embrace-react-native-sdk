@@ -33,14 +33,14 @@ export interface Spec extends TurboModule {
   logMessageWithSeverityAndProperties(
     message: string,
     severity: string,
-    properties: Object,
+    properties: {[key: string]: string},
     stacktrace: string,
     includeStacktrace: boolean,
   ): Promise<boolean>;
   logHandledError(
     message: string,
     stacktrace: string,
-    properties: Object,
+    properties: {[key: string]: string},
   ): Promise<boolean>;
   logUnhandledJSException(
     name: string,
