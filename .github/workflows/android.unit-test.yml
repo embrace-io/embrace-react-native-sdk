@@ -1,6 +1,13 @@
 name: Android Unit Tests
 
 on:
+  workflow_call:
+    inputs:
+      force:
+        description: "Run all tests regardless of changed files"
+        required: false
+        default: false
+        type: boolean
   push:
     branches: [main]
   pull_request:
@@ -39,16 +46,22 @@ jobs:
 
       - name: Install Root Node Modules
         run: yarn install
-        if: steps.changed_files.outputs.android == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.android == 'true' }}
 
       - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
-        if: steps.changed_files.outputs.android == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.android == 'true' }}
         with:
           distribution: "adopt"
           java-version-file: ".java-version"
 
       - name: Run Android Unit Tests
-        if: steps.changed_files.outputs.android == 'true'
-        run: yarn run android:test $(./scripts/scopes-from-file-changes.ts ${STEPS_CHANGED_FILES_OUTPUTS_ANDROID_FILES})
+        if: ${{ inputs.force || steps.changed_files.outputs.android == 'true' }}
         env:
-          STEPS_CHANGED_FILES_OUTPUTS_ANDROID_FILES: ${{ steps.changed_files.outputs.android_files }}
+          FORCE: ${{ inputs.force }}
+          ANDROID_FILES: ${{ steps.changed_files.outputs.android_files }}
+        run: |
+          if [ "$FORCE" = "true" ]; then
+            yarn run android:test
+          else
+            yarn run android:test $(./scripts/scopes-from-file-changes.ts "$ANDROID_FILES")
+          fi

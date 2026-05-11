@@ -1,0 +1,83 @@
+name: Release to npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g. 6.7.0)"
+        required: true
+        type: string
+      dist-tag:
+        description: "npm dist-tag (e.g. latest, next, beta)"
+        required: false
+        default: "latest"
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version-file: ".node-version"
+          registry-url: "https://registry.npmjs.org"
+
+      - run: corepack enable
+
+      - run: yarn
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version and create git tag
+        run: npx lerna version ${{ inputs.version }} --yes --no-push
+
+      - run: yarn build
+
+      - run: yarn test --watchAll=false
+
+      - name: Push version commit and tags to main
+        # Requires 'contents: write' and main branch protection configured to allow
+        # GitHub Actions pushes (or no branch protection requiring PRs).
+        run: git push --follow-tags
+
+      - name: Publish to npm
+        run: npx lerna publish from-git --yes --dist-tag ${{ inputs.dist-tag }} --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create or publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          TAG="v${VERSION}"
+
+          BODY="## Published to npm"$'\n'
+          for pkg in packages/*/package.json; do
+            NAME=$(node -p "require('./$pkg').name")
+            BODY+="- [$NAME@${VERSION}](https://www.npmjs.com/package/$NAME/v/${VERSION})"$'\n'
+          done
+
+          if gh release view "$TAG" --json isDraft 2>/dev/null | grep -q '"isDraft":true'; then
+            gh release edit "$TAG" --draft=false --notes "$BODY"
+          elif gh release view "$TAG" &>/dev/null; then
+            gh release edit "$TAG" --notes "$BODY"
+          else
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --notes "$BODY" \
+              --target main
+          fi

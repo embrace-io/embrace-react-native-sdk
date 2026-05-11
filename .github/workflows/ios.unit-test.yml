@@ -1,6 +1,13 @@
 name: iOS Unit Tests
 
 on:
+  workflow_call:
+    inputs:
+      force:
+        description: "Run all iOS tests regardless of changed files"
+        required: false
+        default: false
+        type: boolean
   push:
     branches: [main]
   pull_request:
@@ -39,11 +46,11 @@ jobs:
 
       - name: Install Root Node Modules
         run: yarn install
-        if: steps.changed_files.outputs.ios == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.ios == 'true' }}
 
       - name: Linting
         run: yarn run lint:swift
-        if: steps.changed_files.outputs.ios == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.ios == 'true' }}
 
   test-core:
     runs-on: macos-latest
@@ -79,18 +86,18 @@ jobs:
           key: Derived-Data-Core-${{ runner.os }}-${{ hashFiles('packages/core/**/*.xcodeproj/project.pbxproj', 'packages/core/test-project/ios/Podfile.lock') }}
           restore-keys: |
             Derived-Data-Core-${{ runner.os }}
-        if: steps.changed_files.outputs.core == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.core == 'true' }}
 
       - name: Install Root Node Modules
         run: yarn install
-        if: steps.changed_files.outputs.core == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.core == 'true' }}
 
       - name: Install Core Package Dependencies
         run: yarn run ios:install:core
-        if: steps.changed_files.outputs.core == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.core == 'true' }}
 
       - name: Check System Resources (Before Tests)
-        if: steps.changed_files.outputs.core == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.core == 'true' }}
         run: |
           echo "=== Disk Space ==="
           df -h
@@ -101,12 +108,12 @@ jobs:
 
       - name: Run Core iOS Unit Tests
         run: yarn run ios:test:core
-        if: steps.changed_files.outputs.core == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.core == 'true' }}
         env:
           IOS_TEST_WAIT_TIME: "15"
 
       - name: Upload Test Results (xcresult bundle)
-        if: always() && steps.changed_files.outputs.core == 'true'
+        if: always() && (inputs.force || steps.changed_files.outputs.core == 'true')
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ios-core-test-results
@@ -115,7 +122,7 @@ jobs:
           retention-days: 7
 
       - name: Check System Resources (After Tests)
-        if: always() && steps.changed_files.outputs.core == 'true'
+        if: always() && (inputs.force || steps.changed_files.outputs.core == 'true')
         run: |
           echo "=== Disk Space ==="
           df -h
@@ -158,18 +165,18 @@ jobs:
           key: Derived-Data-TracerProvider-${{ runner.os }}-${{ hashFiles('packages/react-native-tracer-provider/**/*.xcodeproj/project.pbxproj', 'packages/react-native-tracer-provider/test-project/ios/Podfile.lock') }}
           restore-keys: |
             Derived-Data-TracerProvider-${{ runner.os }}
-        if: steps.changed_files.outputs.tracer-provider == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.tracer-provider == 'true' }}
 
       - name: Install Root Node Modules
         run: yarn install
-        if: steps.changed_files.outputs.tracer-provider == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.tracer-provider == 'true' }}
 
       - name: Install Tracer Provider Package Dependencies
         run: yarn run ios:install:tracer-provider
-        if: steps.changed_files.outputs.tracer-provider == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.tracer-provider == 'true' }}
 
       - name: Check System Resources (Before Tests)
-        if: steps.changed_files.outputs.tracer-provider == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.tracer-provider == 'true' }}
         run: |
           echo "=== Disk Space ==="
           df -h
@@ -180,12 +187,12 @@ jobs:
 
       - name: Run Tracer Provider iOS Unit Tests
         run: yarn run ios:test:tracer-provider
-        if: steps.changed_files.outputs.tracer-provider == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.tracer-provider == 'true' }}
         env:
           IOS_TEST_WAIT_TIME: "15"
 
       - name: Upload Test Results (xcresult bundle)
-        if: always() && steps.changed_files.outputs.tracer-provider == 'true'
+        if: always() && (inputs.force || steps.changed_files.outputs.tracer-provider == 'true')
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ios-tracer-provider-test-results
@@ -194,7 +201,7 @@ jobs:
           retention-days: 7
 
       - name: Check System Resources (After Tests)
-        if: always() && steps.changed_files.outputs.tracer-provider == 'true'
+        if: always() && (inputs.force || steps.changed_files.outputs.tracer-provider == 'true')
         run: |
           echo "=== Disk Space ==="
           df -h
@@ -241,18 +248,18 @@ jobs:
           key: Derived-Data-OTLP-${{ runner.os }}-${{ hashFiles('packages/react-native-otlp/**/*.xcodeproj/project.pbxproj', 'packages/react-native-otlp/test-project/ios/Podfile.lock') }}
           restore-keys: |
             Derived-Data-OTLP-${{ runner.os }}
-        if: steps.changed_files.outputs.otlp == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.otlp == 'true' }}
 
       - name: Install Root Node Modules
         run: yarn install
-        if: steps.changed_files.outputs.otlp == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.otlp == 'true' }}
 
       - name: Install OTLP Package Dependencies
         run: yarn run ios:install:otlp
-        if: steps.changed_files.outputs.otlp == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.otlp == 'true' }}
 
       - name: Check System Resources (Before Tests)
-        if: steps.changed_files.outputs.otlp == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.otlp == 'true' }}
         run: |
           echo "=== Disk Space ==="
           df -h
@@ -263,10 +270,10 @@ jobs:
 
       - name: Run OTLP iOS Unit Tests
         run: yarn run ios:test:otlp
-        if: steps.changed_files.outputs.otlp == 'true'
+        if: ${{ inputs.force || steps.changed_files.outputs.otlp == 'true' }}
 
       - name: Upload Test Results (xcresult bundle)
-        if: always() && steps.changed_files.outputs.otlp == 'true'
+        if: always() && (inputs.force || steps.changed_files.outputs.otlp == 'true')
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ios-otlp-test-results
@@ -275,7 +282,7 @@ jobs:
           retention-days: 7
 
       - name: Check System Resources (After Tests)
-        if: always() && steps.changed_files.outputs.otlp == 'true'
+        if: always() && (inputs.force || steps.changed_files.outputs.otlp == 'true')
         run: |
           echo "=== Disk Space ==="
           df -h

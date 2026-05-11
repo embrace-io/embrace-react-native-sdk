@@ -1,0 +1,118 @@
+name: Post-Merge Main Pipeline
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  js-unit-tests:
+    uses: ./.github/workflows/node.js.yml
+
+  android-unit-tests:
+    uses: ./.github/workflows/android.unit-test.yml
+    with:
+      force: true
+
+  ios-unit-tests:
+    uses: ./.github/workflows/ios.unit-test.yml
+    with:
+      force: true
+
+  integration-tests:
+    needs: [js-unit-tests, android-unit-tests, ios-unit-tests]
+    uses: ./.github/workflows/integration-test.yml
+    secrets: inherit
+
+  dry-run-publish:
+    needs: [integration-tests]
+    runs-on: ubuntu-latest
+    outputs:
+      proposed-version: ${{ steps.version.outputs.proposed }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version-file: ".node-version"
+
+      - run: corepack enable
+
+      - run: yarn
+
+      - name: Compute proposed MINOR version
+        id: version
+        run: |
+          CURRENT=$(node -p "require('./lerna.json').version")
+          MAJOR=$(echo "$CURRENT" | cut -d. -f1)
+          MINOR=$(echo "$CURRENT" | cut -d. -f2)
+          echo "proposed=${MAJOR}.$((MINOR + 1)).0" >> "$GITHUB_OUTPUT"
+
+      - name: Set version (local only)
+        run: npx lerna version ${{ steps.version.outputs.proposed }} --yes --no-push
+
+      - run: yarn build
+
+      - run: yarn test --watchAll=false
+
+      - name: Dry run — pack all packages
+        run: npx lerna exec -- npm pack --dry-run
+
+  draft-release-candidate:
+    needs: [dry-run-publish]
+    runs-on: ubuntu-latest
+    env:
+      PROPOSED_VERSION: ${{ needs.dry-run-publish.outputs.proposed-version }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Generate release notes
+        env:
+          GH_REPO: ${{ github.repository }}
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            git log "${LAST_TAG}..HEAD" --no-merges --format="- %s" | head -50 > /tmp/commit-list.txt
+          else
+            git log --no-merges --format="- %s" -20 > /tmp/commit-list.txt
+          fi
+
+          WORKFLOW_URL="https://github.com/${GH_REPO}/actions/workflows/release-npm.yml"
+
+          cat > /tmp/release-notes.md << NOTES_EOF
+## Release Candidate v${PROPOSED_VERSION}
+
+### Changes since last release
+
+$(cat /tmp/commit-list.txt)
+
+---
+
+**To publish this release:**
+1. Go to [Actions → Release to npm](${WORKFLOW_URL})
+2. Click **Run workflow**
+3. Enter version \`${PROPOSED_VERSION}\` (or override with your preferred version)
+4. Click **Run workflow** — this publishes to npm with provenance and creates the GitHub release
+NOTES_EOF
+
+      - name: Create or update draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v${PROPOSED_VERSION}"
+          if gh release view "$TAG" --json isDraft 2>/dev/null | grep -q '"isDraft":true'; then
+            gh release edit "$TAG" \
+              --title "v${PROPOSED_VERSION}" \
+              --notes-file /tmp/release-notes.md
+          else
+            gh release create "$TAG" \
+              --draft \
+              --title "v${PROPOSED_VERSION}" \
+              --notes-file /tmp/release-notes.md \
+              --target main
+          fi
