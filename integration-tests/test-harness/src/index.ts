@@ -1,4 +1,4 @@
-export * from "./EmbraceTestHarness";
+export * from "./EmbraceReactNativeTestHarness";
 export * from "./EmbraceWixTestHarness";
 
 export * from "./screens/LogTestingScreen";

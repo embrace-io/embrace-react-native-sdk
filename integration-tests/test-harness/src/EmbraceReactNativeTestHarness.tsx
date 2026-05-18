@@ -1,6 +1,5 @@
 import * as React from "react";
-import {LogTestingScreen} from "./screens/LogTestingScreen";
-import {UserTestingScreen} from "./screens/UserTestingScreen";
+import {SDKConfig} from "@embrace-io/react-native";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {
   NavigationContainer,
@@ -8,26 +7,38 @@ import {
 } from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
+import {useEmbraceSDK} from "./useEmbraceSDK";
+import {EmbraceSDKStatus} from "./EmbraceSDKStatus";
+import {LogTestingScreen} from "./screens/LogTestingScreen";
+import {UserTestingScreen} from "./screens/UserTestingScreen";
 import {SpanTestingScreen} from "./screens/SpanTestingScreen";
-import FullScreenMessage from "./components/FullScreenMessage";
 import {NetworkTestingScreen} from "./screens/NetworkTestingScreen";
 import {ReduxTestingScreen} from "./screens/ReduxTestingScreen";
+import FullScreenMessage from "./components/FullScreenMessage";
+
+type Props = {
+  sdkConfig: SDKConfig;
+  allowCustomExport?: boolean;
+};
 
 const Tab = createBottomTabNavigator();
 
-export const EmbraceReactNativeTestHarness = () => {
+const EmbraceReactNativeTestHarness = ({sdkConfig, allowCustomExport = false}: Props) => {
+  const {isPending, isStarted} = useEmbraceSDK(sdkConfig, allowCustomExport);
   const navigationContainer = useNavigationContainerRef();
   const navigationContainerRef = React.useRef(navigationContainer);
-
   const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({});
+    useEmbraceNativeTracerProvider({}, isStarted);
+
+  if (isPending || !isStarted) {
+    return <EmbraceSDKStatus isPending={isPending} />;
+  }
 
   if (isLoadingTracerProvider || tracerProvider === null) {
     return <FullScreenMessage msg="Loading Tracer Provider" />;
   }
 
   return (
-    // `NavigationContainer` is waiting for what `useNavigationContainerRef` is returning (both exported from `@react-navigation/native`)
     <NavigationContainer ref={navigationContainer}>
       <EmbraceNavigationTracker
         ref={navigationContainerRef}
@@ -81,3 +92,5 @@ export const EmbraceReactNativeTestHarness = () => {
     </NavigationContainer>
   );
 };
+
+export {EmbraceReactNativeTestHarness};
