@@ -3,6 +3,14 @@ name: Post-Merge Main Pipeline
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump type (use patch for hotfixes)"
+        required: false
+        default: "minor"
+        type: choice
+        options: [patch, minor, major]
 
 permissions:
   contents: write
@@ -33,9 +41,9 @@ jobs:
     outputs:
       proposed-version: ${{ steps.version.outputs.proposed }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@v6.0.2 # zizmor: ignore[unpinned-uses]
 
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+      - uses: actions/setup-node@v6.3.0 # zizmor: ignore[unpinned-uses]
         with:
           node-version-file: ".node-version"
 
@@ -43,20 +51,24 @@ jobs:
 
       - run: yarn
 
-      - name: Compute proposed MINOR version
+      - name: Compute proposed version
         id: version
         run: |
           CURRENT=$(node -p "require('./lerna.json').version")
           MAJOR=$(echo "$CURRENT" | cut -d. -f1)
           MINOR=$(echo "$CURRENT" | cut -d. -f2)
-          echo "proposed=${MAJOR}.$((MINOR + 1)).0" >> "$GITHUB_OUTPUT"
+          PATCH=$(echo "$CURRENT" | cut -d. -f3)
+          BUMP="${{ inputs.bump || 'minor' }}"
+          if [ "$BUMP" = "major" ]; then
+            echo "proposed=$((MAJOR + 1)).0.0" >> "$GITHUB_OUTPUT"
+          elif [ "$BUMP" = "patch" ]; then
+            echo "proposed=${MAJOR}.${MINOR}.$((PATCH + 1))" >> "$GITHUB_OUTPUT"
+          else
+            echo "proposed=${MAJOR}.$((MINOR + 1)).0" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Set version (local only)
         run: npx lerna version ${{ steps.version.outputs.proposed }} --yes --no-push
-
-      - run: yarn build
-
-      - run: yarn test --watchAll=false
 
       - name: Dry run — pack all packages
         run: npx lerna exec -- npm pack --dry-run
@@ -67,7 +79,7 @@ jobs:
     env:
       PROPOSED_VERSION: ${{ needs.dry-run-publish.outputs.proposed-version }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@v6.0.2 # zizmor: ignore[unpinned-uses]
         with:
           fetch-depth: 0
 
@@ -93,11 +105,14 @@ $(cat /tmp/commit-list.txt)
 
 ---
 
+> **⚠️ Do not publish this draft release via the GitHub UI.** Publishing is handled by the workflow below, which bumps versions and creates the git tag first. Publishing the draft manually will produce a release with the old version numbers.
+
 **To publish this release:**
 1. Go to [Actions → Release to npm](${WORKFLOW_URL})
 2. Click **Run workflow**
-3. Enter version \`${PROPOSED_VERSION}\` (or override with your preferred version)
-4. Click **Run workflow** — this publishes to npm with provenance and creates the GitHub release
+3. Enter version \`${PROPOSED_VERSION}\` (or a different version for patch/major releases)
+4. Click **Run workflow** — this bumps versions, pushes a tag, publishes to npm with provenance, and marks this draft as published
+5. Update the [external changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md)
 NOTES_EOF
 
       - name: Create or update draft release

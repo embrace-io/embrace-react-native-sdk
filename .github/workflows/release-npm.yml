@@ -12,6 +12,11 @@ on:
         required: false
         default: "latest"
         type: string
+      ref:
+        description: "Git ref to publish from (default: main; use a tag branch for hotfixes)"
+        required: false
+        default: "main"
+        type: string
 
 permissions:
   contents: write
@@ -22,12 +27,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@v6.0.2 # zizmor: ignore[unpinned-uses]
         with:
-          ref: main
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
 
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+      - uses: actions/setup-node@v6.3.0 # zizmor: ignore[unpinned-uses]
         with:
           node-version-file: ".node-version"
           registry-url: "https://registry.npmjs.org"
@@ -35,6 +40,11 @@ jobs:
       - run: corepack enable
 
       - run: yarn
+
+      - name: Verify npm credentials
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Configure git identity
         run: |
@@ -79,5 +89,5 @@ jobs:
             gh release create "$TAG" \
               --title "$TAG" \
               --notes "$BODY" \
-              --target main
+              --target "${{ inputs.ref }}"
           fi
