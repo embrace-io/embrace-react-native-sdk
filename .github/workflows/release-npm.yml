@@ -17,6 +17,9 @@ on:
         required: false
         default: "main"
         type: string
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 permissions:
   contents: write
@@ -27,9 +30,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Resolve version and ref
+        id: params
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            TAG="${{ github.ref_name }}"
+            echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+            echo "ref=${TAG}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+            echo "ref=${{ inputs.ref }}" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          ref: ${{ inputs.ref }}
+          ref: ${{ steps.params.outputs.ref }}
           fetch-depth: 0
 
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
@@ -47,18 +62,21 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Configure git identity
+        if: github.event_name == 'workflow_dispatch'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Bump version and create git tag
-        run: npx lerna version ${{ inputs.version }} --yes --no-push
+        if: github.event_name == 'workflow_dispatch'
+        run: npx lerna version ${{ steps.params.outputs.version }} --yes --no-push
 
       - run: yarn build
 
       - run: yarn test --watchAll=false
 
-      - name: Push version commit and tags to main
+      - name: Push version commit and tags
+        if: github.event_name == 'workflow_dispatch'
         # Requires 'contents: write' and main branch protection configured to allow
         # GitHub Actions pushes (or no branch protection requiring PRs).
         run: git push --follow-tags
@@ -67,14 +85,14 @@ jobs:
       # (via update-embrace-packages.sh --version=<version>) to verify the tarball
       # consumers receive matches what passed CI. Tracked as a follow-up.
       - name: Publish to npm
-        run: npx lerna publish from-git --yes --dist-tag ${{ inputs.dist-tag }} --provenance
+        run: npx lerna publish from-git --yes --dist-tag ${{ inputs.dist-tag || 'latest' }} --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create or publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ inputs.version }}
+          VERSION: ${{ steps.params.outputs.version }}
         run: |
           TAG="v${VERSION}"
 
@@ -92,5 +110,5 @@ jobs:
             gh release create "$TAG" \
               --title "$TAG" \
               --notes "$BODY" \
-              --target "${{ inputs.ref }}"
+              --target "${{ steps.params.outputs.ref }}"
           fi

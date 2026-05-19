@@ -35,11 +35,9 @@ jobs:
     uses: ./.github/workflows/integration-test.yml
     secrets: inherit
 
-  dry-run-publish:
+  pack-artifacts:
     needs: [integration-tests]
     runs-on: ubuntu-latest
-    outputs:
-      proposed-version: ${{ steps.version.outputs.proposed }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -70,64 +68,15 @@ jobs:
       - name: Set version (local only)
         run: npx lerna version ${{ steps.version.outputs.proposed }} --yes --no-push
 
-      - name: Dry run — pack all packages
-        run: npx lerna exec -- npm pack --dry-run
+      - name: Pack all packages
+        run: |
+          PACK_DIR="$GITHUB_WORKSPACE/pack-output"
+          mkdir -p "$PACK_DIR"
+          npx lerna exec -- npm pack --pack-destination "$PACK_DIR"
 
-  draft-release-candidate:
-    needs: [dry-run-publish]
-    runs-on: ubuntu-latest
-    env:
-      PROPOSED_VERSION: ${{ needs.dry-run-publish.outputs.proposed-version }}
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Upload pack artifacts
+        uses: actions/upload-artifact@v4 # zizmor: ignore[unpinned-uses]
         with:
-          fetch-depth: 0
-
-      - name: Generate release notes
-        env:
-          GH_REPO: ${{ github.repository }}
-        run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          if [ -n "$LAST_TAG" ]; then
-            git log "${LAST_TAG}..HEAD" --no-merges --format="- %s" | head -50 > /tmp/commit-list.txt
-          else
-            git log --no-merges --format="- %s" -20 > /tmp/commit-list.txt
-          fi
-
-          WORKFLOW_URL="https://github.com/${GH_REPO}/actions/workflows/release-npm.yml"
-
-          cat > /tmp/release-notes.md << NOTES_EOF
-## Release Candidate v${PROPOSED_VERSION}
-
-### Changes since last release
-
-$(cat /tmp/commit-list.txt)
-
----
-
-> **⚠️ Do not publish this draft release via the GitHub UI.** Publishing is handled by the workflow below, which bumps versions and creates the git tag first. Publishing the draft manually will produce a release with the old version numbers.
-
-**To publish this release:**
-1. Go to [Actions → Release to npm](${WORKFLOW_URL})
-2. Click **Run workflow**
-3. Enter version \`${PROPOSED_VERSION}\` (or a different version for patch/major releases)
-4. Click **Run workflow** — this bumps versions, pushes a tag, publishes to npm with provenance, and marks this draft as published
-5. Update the [external changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md)
-NOTES_EOF
-
-      - name: Create or update draft release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          TAG="v${PROPOSED_VERSION}"
-          if gh release view "$TAG" --json isDraft 2>/dev/null | grep -q '"isDraft":true'; then
-            gh release edit "$TAG" \
-              --title "v${PROPOSED_VERSION}" \
-              --notes-file /tmp/release-notes.md
-          else
-            gh release create "$TAG" \
-              --draft \
-              --title "v${PROPOSED_VERSION}" \
-              --notes-file /tmp/release-notes.md \
-              --target main
-          fi
+          name: npm-pack-${{ steps.version.outputs.proposed }}
+          path: pack-output/
+          retention-days: 30
