@@ -63,6 +63,9 @@ jobs:
         # GitHub Actions pushes (or no branch protection requiring PRs).
         run: git push --follow-tags
 
+      # TODO: post-publish, re-run integration tests against the published npm artifact
+      # (via update-embrace-packages.sh --version=<version>) to verify the tarball
+      # consumers receive matches what passed CI. Tracked as a follow-up.
       - name: Publish to npm
         run: npx lerna publish from-git --yes --dist-tag ${{ inputs.dist-tag }} --provenance
         env:
