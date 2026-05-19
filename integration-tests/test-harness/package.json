@@ -23,6 +23,11 @@
     "react-native": "*",
     "react-native-navigation": "*"
   },
+  "peerDependenciesMeta": {
+    "expo-router": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@embrace-io/react-native": "file:../artifacts/embrace-io-react-native-local.tgz",
     "@embrace-io/react-native-navigation": "file:../artifacts/embrace-io-react-native-navigation-local.tgz",
@@ -35,6 +40,7 @@
     "react": "18.2.0",
     "react-native": "0.74.1",
     "react-native-navigation": "^7.40.3",
+    "react-native-screens": "3.34.0",
     "typescript": "~5.3.3"
   }
 }
