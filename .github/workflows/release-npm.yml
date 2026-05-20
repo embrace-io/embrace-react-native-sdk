@@ -32,25 +32,31 @@ jobs:
     steps:
       - name: Resolve version and ref
         id: params
+        env:
+          GH_EVENT: ${{ github.event_name }}
+          GH_REF_NAME: ${{ github.ref_name }}
+          INPUT_VERSION: ${{ inputs.version }}
+          INPUT_REF: ${{ inputs.ref }}
         run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
-            TAG="${{ github.ref_name }}"
-            echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
-            echo "ref=${TAG}" >> "$GITHUB_OUTPUT"
+          if [ "$GH_EVENT" = "push" ]; then
+            echo "version=${GH_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+            echo "ref=$GH_REF_NAME" >> "$GITHUB_OUTPUT"
           else
-            echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
-            echo "ref=${{ inputs.ref }}" >> "$GITHUB_OUTPUT"
+            echo "version=$INPUT_VERSION" >> "$GITHUB_OUTPUT"
+            echo "ref=$INPUT_REF" >> "$GITHUB_OUTPUT"
           fi
 
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ steps.params.outputs.ref }}
           fetch-depth: 0
+          persist-credentials: false
 
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version-file: ".node-version"
           registry-url: "https://registry.npmjs.org"
+          cache: ''
 
       - run: corepack enable
 
@@ -81,7 +87,9 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         # Requires 'contents: write' and main branch protection configured to allow
         # GitHub Actions pushes (or no branch protection requiring PRs).
-        run: git push --follow-tags
+        run: git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" --follow-tags
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       # TODO: post-publish, re-run integration tests against the published npm artifact
       # (via update-embrace-packages.sh --version=<version>) to verify the tarball
@@ -96,6 +104,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.params.outputs.version }}
+          TARGET_REF: ${{ steps.params.outputs.ref }}
         run: |
           TAG="v${VERSION}"
 
@@ -113,5 +122,5 @@ jobs:
             gh release create "$TAG" \
               --title "$TAG" \
               --notes "$BODY" \
-              --target "${{ steps.params.outputs.ref }}"
+              --target "$TARGET_REF"
           fi
