@@ -1,21 +1,21 @@
 PODS:
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
-  - EmbraceIO (6.16.2):
-    - EmbraceIO/EmbraceIO (= 6.16.2)
-  - EmbraceIO/EmbraceAtomicsShim (6.16.2)
-  - EmbraceIO/EmbraceCaptureService (6.16.2):
+  - EmbraceIO (6.19.0):
+    - EmbraceIO/EmbraceIO (= 6.19.0)
+  - EmbraceIO/EmbraceAtomicsShim (6.19.0)
+  - EmbraceIO/EmbraceCaptureService (6.19.0):
     - EmbraceIO/EmbraceConfiguration
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceCommonInternal (6.16.2):
+  - EmbraceIO/EmbraceCommonInternal (6.19.0):
     - EmbraceIO/EmbraceAtomicsShim
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceConfigInternal (6.16.2):
+  - EmbraceIO/EmbraceConfigInternal (6.19.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfiguration
-  - EmbraceIO/EmbraceConfiguration (6.16.2)
-  - EmbraceIO/EmbraceCore (6.16.2):
+  - EmbraceIO/EmbraceConfiguration (6.19.0)
+  - EmbraceIO/EmbraceCore (6.19.0):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfigInternal
@@ -25,44 +25,44 @@ PODS:
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/EmbraceUploadInternal
-  - EmbraceIO/EmbraceCoreDataInternal (6.16.2):
+  - EmbraceIO/EmbraceCoreDataInternal (6.19.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceObjCUtilsInternal
-  - EmbraceIO/EmbraceCrash (6.16.2):
+  - EmbraceIO/EmbraceCrash (6.19.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceKSCrash
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceIO (6.16.2):
+  - EmbraceIO/EmbraceIO (6.19.0):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCore
     - EmbraceIO/EmbraceCrash
     - EmbraceIO/EmbraceKSCrashBacktraceSupport
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceKSCrash (6.16.2):
+  - EmbraceIO/EmbraceKSCrash (6.19.0):
     - KSCrash (~> 2.5.1)
-  - EmbraceIO/EmbraceKSCrashBacktraceSupport (6.16.2):
+  - EmbraceIO/EmbraceKSCrashBacktraceSupport (6.19.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceKSCrash
-  - EmbraceIO/EmbraceObjCUtilsInternal (6.16.2)
-  - EmbraceIO/EmbraceOTelInternal (6.16.2):
+  - EmbraceIO/EmbraceObjCUtilsInternal (6.19.0)
+  - EmbraceIO/EmbraceOTelInternal (6.19.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCoreDataInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceSemantics (6.16.2):
+  - EmbraceIO/EmbraceSemantics (6.19.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceStorageInternal (6.16.2):
+  - EmbraceIO/EmbraceStorageInternal (6.19.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCoreDataInternal
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceUploadInternal (6.16.2):
+  - EmbraceIO/EmbraceUploadInternal (6.19.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCoreDataInternal
     - EmbraceIO/EmbraceOTelInternal
-  - EmbraceIO/OpenTelemetrySdk (6.16.2):
+  - EmbraceIO/OpenTelemetrySdk (6.19.0):
     - OpenTelemetry-Swift-Sdk (~> 2.1)
   - FBLazyVector (0.75.4)
   - fmt (9.1.0)
@@ -1588,7 +1588,7 @@ PODS:
     - React-utils (= 0.75.4)
   - RNEmbraceTracerProvider (6.6.0):
     - DoubleConversion
-    - EmbraceIO (= 6.16.2)
+    - EmbraceIO (= 6.19.0)
     - glog
     - hermes-engine
     - RCT-Folly (= 2024.01.01.00)
@@ -1819,7 +1819,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  EmbraceIO: 9467b3b2b5b9f011f14d71c5de982074d16d57b3
+  EmbraceIO: 52906fa14f40332a481dbd752df83d17d23b7ed6
   FBLazyVector: 430e10366de01d1e3d57374500b1b150fe482e6d
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
@@ -1882,7 +1882,7 @@ SPEC CHECKSUMS:
   React-utils: 0dbea1179726ad65a1b13470a3f3c73da98f4496
   ReactCodegen: f961bc28110632dd4c8e8d95c1a80f5344022cd2
   ReactCommon: 23eed247b5c8e57b59a823ce209353883da61dd2
-  RNEmbraceTracerProvider: e7db636c3c871997003b343632de188e1ba3e547
+  RNEmbraceTracerProvider: f08ab3a8db3e1c94d01dece6bdf7d4e4c39cdfaf
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: b05994d1933f507b0a28ceaa4fdb968dc18da178
 
