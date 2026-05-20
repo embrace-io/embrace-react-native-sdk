@@ -69,7 +69,9 @@ jobs:
 
       - name: Bump version and create git tag
         if: github.event_name == 'workflow_dispatch'
-        run: npx lerna version ${{ steps.params.outputs.version }} --yes --no-push
+        run: npx lerna version "$VERSION" --yes --no-push
+        env:
+          VERSION: ${{ steps.params.outputs.version }}
 
       - run: yarn build
 
@@ -85,9 +87,10 @@ jobs:
       # (via update-embrace-packages.sh --version=<version>) to verify the tarball
       # consumers receive matches what passed CI. Tracked as a follow-up.
       - name: Publish to npm
-        run: npx lerna publish from-git --yes --dist-tag ${{ inputs.dist-tag || 'latest' }} --provenance
+        run: npx lerna publish from-git --yes --dist-tag "$DIST_TAG" --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          DIST_TAG: ${{ inputs.dist-tag || 'latest' }}
 
       - name: Create or publish GitHub release
         env:
