@@ -22,7 +22,7 @@
     "ios:shared": "mkdir -p ./ios/common && cp -r ../../common/ios/* ./ios/common/",
     "build": "yarn run js:shared && yarn run ios:shared && tsc",
     "android:test": "cd test-project && yarn && cd android && ./gradlew :app:detek && ./gradlew :app:testDebugUnitTest && cd ../../",
-    "ios:install": "yarn run ios:shared && cd test-project && yarn install && cd ios && rm -rf ~/Library/Caches/CocoaPods && USE_FRAMEWORKS=dynamic pod install --repo-update && rm .xcode.env.local",
+    "ios:install": "yarn run ios:shared && cd test-project && yarn install && cd ios && rm -rf ~/Library/Caches/CocoaPods && rm Podfile.lock && USE_FRAMEWORKS=dynamic pod install --repo-update && rm .xcode.env.local",
     "ios:test": "yarn run ios:shared && ../../scripts/run-ios-tests-no-coverage.sh test-project/ios/RNEmbraceOTLPTests.xcworkspace RNEmbraceOTLPTests"
   },
   "peerDependencies": {
@@ -32,7 +32,7 @@
     "typescript": "^5.6.3"
   },
   "embrace": {
-    "iosVersion": "6.16.2",
+    "iosVersion": "6.19.0",
     "androidVersion": "7.9.2"
   },
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
