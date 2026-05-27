@@ -12,8 +12,8 @@
   "scripts": {
     "publish-modules": "npx lerna version && npx lerna run build && npx lerna publish from-git",
     "build": "npx lerna run build",
-    "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx && prettier \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints",
-    "lint:js:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
+    "lint:js": "eslint . && prettier \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints",
+    "lint:js:fix": "eslint . --fix && prettier --write \"packages/**/*.{js,jsx,ts,tsx,json}\" && yarn constraints --fix",
     "lint:clang": "./scripts/run-clang-format.sh",
     "lint:clang:fix": "./scripts/run-clang-format.sh --fix",
     "lint:swift": "./scripts/run-swiftlint.sh",
