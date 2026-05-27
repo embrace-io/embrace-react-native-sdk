@@ -56,9 +56,10 @@ jobs:
           fetch-depth: 1
 
       - name: Setup Node
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0 # zizmor: ignore[cache-poisoning]
         with:
           node-version-file: ".node-version"
+          cache: ''
 
       - name: Enable Corepack (Yarn 4)
         run: corepack enable
@@ -120,5 +121,10 @@ jobs:
               --body "Automated release PR opened by @$ACTOR (bump=\`$BUMP\`).
 
           Merging this PR triggers \`release.yml\`, which publishes \`@embrace-io/react-native@$VERSION\` and the four sibling packages to npm.
+
+          **Post-merge checklist:**
+          - [ ] Verify packages appear on https://www.npmjs.com/org/embrace-io
+          - [ ] Confirm the published package runs on the latest supported version of React Native
+          - [ ] Update the [external changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md)
 
           To abort: close this PR without merging."

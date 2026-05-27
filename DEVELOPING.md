@@ -62,22 +62,26 @@ See the [integration testing README](./integration-tests/README.md) for more det
 
 ## Branching strategy
 
-Generally all proposed changes should target the `main` branch and new releases are cut from there after QA. One exception
-is urgent patch fixes, in those cases a branch should be made from the latest released tag to isolate the fix from any
-unreleased changes on `main` and a patch release will be cut from that new branch.
+Generally all proposed changes should target the `main` branch and new releases are cut from there. For urgent patch
+fixes, use the `custom` bump type in the Prepare Release workflow (see below) and specify the patch version explicitly.
 
 ## Releasing
 
-1. Create a `release/` branch off of main with an empty commit: `git commit --allow-empty -m "starting the release process for vX.X.X"`.
-    Push it to origin and create a PR from it to kick-off the integration test workflow
-2. Verify that the integration test runs on [BrowserStack](https://app-automate.browserstack.com/dashboard/v2/builds) succeed for the release branch
-3. Make sure you are logged into the npmjs registry (`npm login`)
-4. Release to npm with `yarn publish-modules`, you will be prompted to choose the version number to update to
-5. Check https://www.npmjs.com/org/embrace-io, the latest versions should have been published
-6. Check https://github.com/embrace-io/embrace-react-native-sdk/tags, a vX.X.X tag should have been pushed
-7. The release branch PR should now include all the version updates, merge it back to `main`
-8. Use `integration-tests/update-embrace-package.sh <testApp> --version=<version>` to point a test app to the latest released packages to confirm basic behaviour
-9. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
+Releases are fully automated via two GitHub Actions workflows.
+
+### Step 1 — Prepare the release
+
+1. Go to [Actions → Prepare Release](https://github.com/embrace-io/embrace-react-native-sdk/actions/workflows/prepare-release.yml) and click **Run workflow**
+2. Choose a bump type: `patch`, `minor`, `major`, or `custom` (custom lets you specify any valid semver, e.g. `6.7.0-beta.1`)
+3. The workflow will bump versions, push a `release/vX.Y.Z` branch, and open a PR into `main` labeled `release`
+4. Verify that CI passes on the release PR, including integration tests on [BrowserStack](https://app-automate.browserstack.com/dashboard/v2/builds)
+
+### Step 2 — Publish
+
+5. Merge the release PR — the [Release workflow](https://github.com/embrace-io/embrace-react-native-sdk/actions/workflows/release.yml) triggers automatically on merge
+6. The workflow builds, publishes all packages to npm with provenance, pushes the `vX.Y.Z` git tag, and creates a GitHub release
+7. Verify at https://www.npmjs.com/org/embrace-io that the new versions are published
+8. Update and publish the [Changelog](https://github.com/embrace-io/embrace-docs/blob/main/docs/react-native/changelog.md) for the release
 
 NOTE: If you make a mistake while publishing you can remove the specific version w/ `npm unpublish <package-name>@<version>`, see [Unpublishing a single version of a package](https://docs.npmjs.com/unpublishing-packages-from-the-registry#unpublishing-a-single-version-of-a-package)
 
