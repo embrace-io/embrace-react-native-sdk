@@ -112,6 +112,23 @@ If you make a mistake you can undeprecate a package following [these steps](http
 
 ## Troubleshooting
 
+### Release workflow: publish succeeds but tag or GitHub release was not created
+
+The publish step uses `lerna publish from-package`, which is idempotent — it skips packages already at the current version in the registry. The tag push and GitHub release creation steps are also guarded against duplicates.
+
+However, if the npm publish succeeds but the workflow then fails on a later step (tag push or release creation), re-running the workflow will cause the publish step to exit non-zero because lerna finds nothing left to publish. This will prevent the remaining steps from running.
+
+To recover manually:
+
+```bash
+# Push the tag
+git tag "vX.Y.Z" <merge-commit-sha>
+git push origin "vX.Y.Z"
+
+# Create the GitHub release
+gh release create "vX.Y.Z" --target <merge-commit-sha> --title "vX.Y.Z" --generate-notes
+```
+
 ### Local iOS development issues
 
 Try closing any open simulators and clearing all derived data:
