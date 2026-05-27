@@ -96,20 +96,20 @@ class EmbraceNativeTracer implements Tracer {
     name: string,
     fn: F,
   ): ReturnType<F>;
-  // eslint-disable-next-line no-dupe-class-members
+
   public startActiveSpan<F extends (span: Span) => ReturnType<F>>(
     name: string,
     opts: SpanOptions,
     fn: F,
   ): ReturnType<F>;
-  // eslint-disable-next-line no-dupe-class-members
+
   public startActiveSpan<F extends (span: Span) => ReturnType<F>>(
     name: string,
     opts: SpanOptions,
     ctx: Context,
     fn: F,
   ): ReturnType<F>;
-  // eslint-disable-next-line no-dupe-class-members
+
   public startActiveSpan<F extends (span: Span) => ReturnType<F>>(
     name: string,
     arg2?: F | SpanOptions,

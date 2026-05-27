@@ -45,7 +45,7 @@ export default tseslint.config(
     settings: {
       // eslint-plugin-react@7.37.5 calls context.getFilename() (removed in ESLint 10)
       // when version is "detect". Hardcode the installed version to avoid the crash.
-      react: {version: "19.1.0"},
+      react: {version: "19.0"},
     },
     plugins: {
       "react-hooks": reactHooks,
@@ -99,6 +99,25 @@ export default tseslint.config(
       "no-prototype-builtins": "warn",
       "@typescript-eslint/no-explicit-any": "warn",
       "no-empty-pattern": "warn",
+      // KTLO: @typescript-eslint/no-require-imports has 92 violations across build/setup
+      // scripts and tests; the old config allowed CJS requires (no-var-requires: off).
+      // Migrate require() -> import in a dedicated refactor, then turn on.
+      "@typescript-eslint/no-require-imports": "off",
+      // KTLO: no-empty has 3 violations (intentional empty catch blocks in tests);
+      // turn on after team discussion / refactor.
+      "no-empty": "warn",
+      // KTLO: @typescript-eslint/no-unused-expressions has 5 violations (short-circuit
+      // `cond && sideEffect()` cleanup patterns in tests); turn on after refactor.
+      "@typescript-eslint/no-unused-expressions": "warn",
+      // KTLO: no-useless-assignment (new in v10) has 1 violation; the safe fix is
+      // non-trivial (would change the inferred type), so warn for now.
+      "no-useless-assignment": "warn",
+      // KTLO: preserve-caught-error (new in v10) has 1 violation; attaching a `cause`
+      // changes the rethrown error shape (runtime behavior), so warn for now.
+      "preserve-caught-error": "warn",
+      // KTLO: react/display-name has 1 violation in a generic forwardRef HOC;
+      // adding a correct displayName is non-obvious, so warn for now.
+      "react/display-name": "warn",
     },
   },
 
@@ -111,6 +130,20 @@ export default tseslint.config(
     },
   },
 
+  // CommonJS config/script files (e.g. yarn.config.cjs) — provide Node globals so
+  // `require`/`module` don't trip no-undef.
+  {
+    files: ["**/*.cjs"],
+    languageOptions: {
+      sourceType: "commonjs",
+      globals: {...globals.node},
+    },
+    rules: {
+      // require() is the correct idiom in CommonJS files.
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
+
   // Jest — scoped to test files (was extends: plugin:jest/recommended + overrides)
   {
     ...jest.configs["flat/recommended"],
@@ -118,9 +151,6 @@ export default tseslint.config(
   },
   {
     files: ["**/*.test.{js,jsx,ts,tsx}"],
-    languageOptions: {
-      globals: {...globals.jest},
-    },
     rules: {
       "jest/no-identical-title": "off",
       "jest/no-conditional-expect": "warn",

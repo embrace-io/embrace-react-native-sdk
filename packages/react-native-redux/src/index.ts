@@ -7,7 +7,7 @@ import {dispatchMiddleware} from "./instrumentation";
 
 interface UseActionTrackerReturn<RootState> {
   // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   middleware?: Middleware<{}, RootState>;
 }
 
@@ -43,7 +43,7 @@ const attributeTransform = (attrs: Attributes) => {
 const createEmbraceMiddleware = <RootState>(
   tracerProvider: TracerProvider,
   // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 ): Middleware<{}, RootState> =>
   dispatchMiddleware(tracerProvider, {
     attributeTransform,
@@ -53,7 +53,7 @@ const useEmbraceMiddleware = <RootState>(
   tracerProvider?: TracerProvider | null,
 ): UseActionTrackerReturn<RootState> => {
   // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   const [middleware, setMiddleware] = useState<Middleware<{}, RootState>>();
 
   useEffect(() => {

@@ -13,6 +13,7 @@ interface SDKConfig {
 
 // Today Android is not configurable through code,
 // this is a placeholder for future implementations.
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface AndroidConfig {}
 
 interface IOSConfig {
