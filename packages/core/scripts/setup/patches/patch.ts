@@ -194,7 +194,7 @@ const patch = (
   const result = textsToAdd.map(item => {
     const {order, searchText, breakingLine} = item;
 
-    let padding = "";
+    let padding;
     // If its a regex we take the spaces from the next breaking line to the next line
     if (searchText instanceof RegExp) {
       padding = file

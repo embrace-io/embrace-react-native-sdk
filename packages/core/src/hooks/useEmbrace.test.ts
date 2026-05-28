@@ -161,7 +161,9 @@ describe("useEmbrace", () => {
         try {
           // making `@embrace-io/react-native-otlp` throw
           throw new Error();
-        } catch {}
+        } catch {
+          // continue regardless of error
+        }
       });
 
     const {result} = renderHook(

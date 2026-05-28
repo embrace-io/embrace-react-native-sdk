@@ -39,7 +39,7 @@ describe("Uninstall Script Android", () => {
     let failed = 0;
     try {
       await wiz.processSteps();
-    } catch (e) {
+    } catch (_) {
       failed = 1;
     }
     expect(failed).toBe(0);
@@ -75,7 +75,7 @@ describe("Uninstall Script Android", () => {
     let failed = 0;
     try {
       await wiz.processSteps();
-    } catch (e) {
+    } catch (_) {
       failed = 1;
     }
     expect(failed).toBe(0);
@@ -101,7 +101,9 @@ describe("Uninstall Script Android", () => {
     );
     try {
       fs.closeSync(fs.openSync(p, "ax"));
-    } catch {}
+    } catch {
+      // continue regardless of error
+    }
 
     expect(fs.existsSync(p)).toBe(true);
 

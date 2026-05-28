@@ -149,7 +149,9 @@ describe("instrumentation/dispatch.ts", () => {
   it("should handle an action that fails", () => {
     try {
       getStore(exporter).dispatch(counterActions.decrease(42));
-    } catch (e) {}
+    } catch (_) {
+      // continue regardless of error
+    }
 
     verifySpans([
       {

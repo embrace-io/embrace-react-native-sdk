@@ -78,7 +78,14 @@ export default tseslint.config(
           "newlines-between": "always",
         },
       ],
-      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
       "react/function-component-definition": [
         "error",
         {
@@ -89,6 +96,10 @@ export default tseslint.config(
       "react/jsx-curly-brace-presence": [
         "error",
         {props: "never", children: "never"},
+      ],
+      "@typescript-eslint/no-unused-expressions": [
+        "warn",
+        {allowShortCircuit: true},
       ],
       // Previously provided by @react-native-community/eslint-config:
       "react-hooks/rules-of-hooks": "error",
@@ -109,15 +120,6 @@ export default tseslint.config(
       // KTLO: no-empty has 3 violations (intentional empty catch blocks in tests);
       // turn on after team discussion / refactor.
       "no-empty": "warn",
-      // KTLO: @typescript-eslint/no-unused-expressions has 5 violations (short-circuit
-      // `cond && sideEffect()` cleanup patterns in tests); turn on after refactor.
-      "@typescript-eslint/no-unused-expressions": "warn",
-      // KTLO: no-useless-assignment (new in v10) has 1 violation; the safe fix is
-      // non-trivial (would change the inferred type), so warn for now.
-      "no-useless-assignment": "warn",
-      // KTLO: preserve-caught-error (new in v10) has 1 violation; attaching a `cause`
-      // changes the rethrown error shape (runtime behavior), so warn for now.
-      "preserve-caught-error": "warn",
       // KTLO: react/display-name has 1 violation in a generic forwardRef HOC;
       // adding a correct displayName is non-obvious, so warn for now.
       "react/display-name": "warn",
@@ -159,6 +161,10 @@ export default tseslint.config(
       "jest/no-conditional-expect": "warn",
       "jest/valid-expect-in-promise": "warn",
       "jest/valid-expect": "off",
+      "jest/expect-expect": [
+        "warn",
+        {assertFunctionNames: ["expect", "verifySpans"]},
+      ],
     },
   },
 

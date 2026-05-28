@@ -162,7 +162,7 @@ describe("Uninstall Script iOS", () => {
     const crash = jest.fn();
     try {
       await removeEmbraceImportAndStartFromFile("objectivec");
-    } catch (e) {
+    } catch (_) {
       crash();
     }
 
@@ -186,7 +186,7 @@ describe("Uninstall Script iOS", () => {
     const crash = jest.fn();
     try {
       await removeEmbraceImportAndStartFromFile("swift");
-    } catch (e) {
+    } catch (_) {
       crash();
     }
 

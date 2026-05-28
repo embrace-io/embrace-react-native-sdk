@@ -28,7 +28,7 @@ export const androidGenericVersion =
 
 export const patchBuildGradle = {
   name: "patch build.gradle",
-  run: (wizard: Wizard): Promise<any> => {
+  run: (_wizard: Wizard): Promise<any> => {
     return buildGradlePatchable().then(file => {
       if (file.hasLine(androidToolsBuildGradleRE)) {
         if (file.hasLine(androidEmbraceSwazzler)) {
@@ -55,7 +55,7 @@ export const androidEmbraceSwazzlerPlugin = "apply plugin: 'embrace-swazzler'";
 
 export const patchAppBuildGradle = {
   name: "patch app/build.gradle",
-  run: (wizard: Wizard): Promise<any> => {
+  run: (_wizard: Wizard): Promise<any> => {
     return buildAppGradlePatchable().then(file => {
       if (file.hasLine(androidPlugin)) {
         if (file.hasLine(androidEmbraceSwazzlerPluginRE)) {
