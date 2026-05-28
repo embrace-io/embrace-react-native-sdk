@@ -105,7 +105,7 @@ function log_warning () {
 function run() {
     if [ -z "$EMBRACE_DEBUG_DSYM" ] ; then
         # we must redirect both stdout and stderr to /dev/null to have Xcode run this script in the background and move on to other build tasks
-	eval "$1 --log-path \"$BUILD_ROOT\"" > /dev/null 2>&1 &
+	eval "$1 --log-path $BUILD_ROOT" > /dev/null 2>&1 &
     else
         eval "$1"
     fi
@@ -190,7 +190,7 @@ function react_native_upload() {
     if [ -n "$react_args" ] ; then
         log "uploading react native resources with bundle at ${react_bundle_path} and map at ${react_map_path}"
         # shellcheck disable=2153
-        run "\"$UPLOAD_BIN_PATH\" --app \"$EMBRACE_ID\" --token \"$EMBRACE_TOKEN\" $react_args $host_arg --log-level $EMBRACE_LOG_LEVEL"
+        run "\"$UPLOAD_BIN_PATH\" --app $EMBRACE_ID --token $EMBRACE_TOKEN $react_args $host_arg --log-level $EMBRACE_LOG_LEVEL"
     fi
 }
 
@@ -270,7 +270,7 @@ function upload() {
         else
           icon_arg=""
         fi
-        run "\"$UPLOAD_BIN_PATH\" --app \"$EMBRACE_ID\" --token \"$EMBRACE_TOKEN\" $unity_args $icon_arg $app_version_arg $host_arg --dsym \"$app_dsym_file\" --log-level $EMBRACE_LOG_LEVEL"
+        run "\"$UPLOAD_BIN_PATH\" --app $EMBRACE_ID --token $EMBRACE_TOKEN $unity_args $icon_arg $app_version_arg $host_arg --dsym \"$app_dsym_file\" --log-level $EMBRACE_LOG_LEVEL"
     else
         log_warning "No app dSYM file was found under BUILD_ROOT ${BUILD_ROOT}. Skipping upload."
     fi
@@ -321,7 +321,7 @@ function upload() {
             log "Queueing framework dSYM for upload: $dsym_full_path"
         done
         IFS=$ORIG_IFS
-        run "\"$UPLOAD_BIN_PATH\" --app \"$EMBRACE_ID\" --token \"$EMBRACE_TOKEN\" $dsym_args $app_version_arg $host_arg --log-level $EMBRACE_LOG_LEVEL"
+        run "\"$UPLOAD_BIN_PATH\" --app $EMBRACE_ID --token $EMBRACE_TOKEN $dsym_args $app_version_arg $host_arg --log-level $EMBRACE_LOG_LEVEL"
     fi
 }
 
