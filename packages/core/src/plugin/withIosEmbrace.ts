@@ -294,7 +294,7 @@ const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
     }
 
     /*
-    shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\" EMBRACE_ID=ios789 EMBRACE_TOKEN=apiToken456 \"${PODS_ROOT}/EmbraceIO/run.sh\"\nrm \"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\"";
+    shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\" EMBRACE_ID=ios789 EMBRACE_TOKEN=apiToken456 \"${SRCROOT}/../node_modules/@embrace-io/react-native/ios/scripts/run.sh\"\nrm \"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\"";
      */
     if (
       !findPhase(project, "EmbraceIO/run.sh") &&
