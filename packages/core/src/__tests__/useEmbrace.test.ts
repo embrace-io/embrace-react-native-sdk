@@ -2,8 +2,7 @@ import {renderHook, waitFor} from "@testing-library/react-native";
 
 import {oltpGetStart} from "../utils/otlp";
 import {SDKConfig, EmbraceLoggerLevel} from "../interfaces";
-
-import {useEmbrace} from "./useEmbrace";
+import {useEmbrace} from "../hooks/useEmbrace";
 
 jest.mock("../utils/otlp", () => ({
   oltpGetStart: jest.fn(),
