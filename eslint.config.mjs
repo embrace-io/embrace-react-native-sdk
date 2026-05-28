@@ -24,7 +24,10 @@ export default tseslint.config(
   // Base presets
   js.configs.recommended,
   tseslint.configs.recommended,
-  react.configs.flat.recommended,
+  {
+    ...react.configs.flat.recommended,
+    files: ["**/*.{js,jsx,ts,tsx}"],
+  },
 
   // Main config — all source files
   {
