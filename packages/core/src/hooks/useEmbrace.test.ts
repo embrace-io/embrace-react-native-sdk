@@ -15,6 +15,11 @@ type EmbraceHook = {
   logLevel: EmbraceLoggerLevel | undefined;
 };
 
+type EmbraceHookResult = {
+  isPending: boolean;
+  isStarted: boolean;
+};
+
 const mockStartNativeEmbraceSDK = jest.fn().mockResolvedValue(true);
 jest.mock("react-native", () => ({
   Platform: {
@@ -50,7 +55,7 @@ describe("useEmbrace", () => {
   });
 
   it("should start the Embrace React Native SDK", async () => {
-    const {result, rerender} = renderHook(
+    const {result, rerender} = renderHook<EmbraceHookResult, EmbraceHook>(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
@@ -91,7 +96,7 @@ describe("useEmbrace", () => {
   it("should show a warning message if for some reason Embrace React Native SKD can't initialize", async () => {
     jest.mocked(mockStartNativeEmbraceSDK).mockResolvedValueOnce(false);
 
-    const {result} = renderHook(
+    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
@@ -127,7 +132,7 @@ describe("useEmbrace", () => {
       .mocked(oltpGetStart)
       .mockImplementation(() => mockRNEmbraceOTLPInit);
 
-    const {result} = renderHook(
+    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
@@ -164,7 +169,7 @@ describe("useEmbrace", () => {
         } catch {}
       });
 
-    const {result} = renderHook(
+    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
@@ -198,7 +203,7 @@ describe("useEmbrace", () => {
       .mocked(oltpGetStart)
       .mockImplementation(jest.fn().mockResolvedValue(false));
 
-    const {result} = renderHook(
+    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
