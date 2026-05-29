@@ -29,7 +29,8 @@ const sourceMapPath =
 const exportSourcemapLine = `export SOURCEMAP_FILE="${sourceMapPath}"`;
 const ksCrashConfig = `pod 'KSCrash', :modular_headers => true`;
 const embraceLegacyRunScriptPath = "EmbraceIO/run.sh";
-const embraceRunScriptPath = "${SRCROOT}/../node_modules/@embrace-io/react-native/ios/scripts/run.sh";
+const embraceRunScriptPath =
+  "${SRCROOT}/../node_modules/@embrace-io/react-native/ios/scripts/run.sh";
 
 const withIosEmbraceAddKSCrashPod: ConfigPlugin = expoConfig => {
   return withDangerousMod(expoConfig, [
