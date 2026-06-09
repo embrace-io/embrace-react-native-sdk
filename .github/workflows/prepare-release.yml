@@ -115,14 +115,14 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.version.outputs.value }}
           BUMP: ${{ inputs.bump }}
-          ACTOR: ${{ github.actor }}
         run: |
           gh pr create \
               --base main \
               --head "release/v$VERSION" \
               --title "release: v$VERSION" \
               --label "release" \
-              --body "Automated release PR opened by @$ACTOR (bump=\`$BUMP\`).
+              --assignee "$GITHUB_ACTOR" \
+              --body "Automated release PR opened by @$GITHUB_ACTOR (bump=\`$BUMP\`).
 
           Merging this PR triggers \`release.yml\`, which publishes \`@embrace-io/react-native@$VERSION\` and the four sibling packages to npm.
 
