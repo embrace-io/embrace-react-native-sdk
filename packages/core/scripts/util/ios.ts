@@ -16,7 +16,7 @@ const LOGGER = new EmbraceLogger(console);
 const UPLOAD_SYMBOLS_PHASE = "Embrace Symbol Uploads";
 const EMBRACE_INIT_OBJECTIVEC = "[EmbraceInitializer start];";
 const EMBR_RUN_SCRIPT =
-  '"$SRCROOT/../node_modules/@embrace-io/react-native/ios/scripts/run.sh"';
+  '"${SRCROOT}/../node_modules/@embrace-io/react-native/ios/scripts/run.sh"';
 const EMBR_NATIVE_POD = `pod 'EmbraceIO'`;
 const EMBR_KSCRASH_MODULAR_HEADER_POD = `
 # [Embrace] Make KSCrash modular so Swift can import it 

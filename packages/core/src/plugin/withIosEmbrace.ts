@@ -28,6 +28,9 @@ const sourceMapPath =
   "$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map";
 const exportSourcemapLine = `export SOURCEMAP_FILE="${sourceMapPath}"`;
 const ksCrashConfig = `pod 'KSCrash', :modular_headers => true`;
+const embraceLegacyRunScriptPath = "EmbraceIO/run.sh";
+const embraceRunScriptPath =
+  "${SRCROOT}/../node_modules/@embrace-io/react-native/ios/scripts/run.sh";
 
 const withIosEmbraceAddKSCrashPod: ConfigPlugin = expoConfig => {
   return withDangerousMod(expoConfig, [
@@ -294,9 +297,12 @@ const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
     }
 
     /*
-    shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\" EMBRACE_ID=ios789 EMBRACE_TOKEN=apiToken456 \"${PODS_ROOT}/EmbraceIO/run.sh\"\nrm \"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\"";
+    shellScript = "REACT_NATIVE_MAP_PATH=\"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\" EMBRACE_ID=ios789 EMBRACE_TOKEN=apiToken456 \"${SRCROOT}/../node_modules/@embrace-io/react-native/ios/scripts/run.sh\"\nrm \"$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map\"";
      */
-    if (!findPhase(project, "EmbraceIO/run.sh")) {
+    if (
+      !findPhase(project, embraceLegacyRunScriptPath) &&
+      !findPhase(project, embraceRunScriptPath)
+    ) {
       project.addBuildPhase(
         [],
         "PBXShellScriptBuildPhase",
@@ -304,7 +310,7 @@ const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
         null,
         {
           shellPath: "/bin/sh",
-          shellScript: `REACT_NATIVE_MAP_PATH="${sourceMapPath}" EMBRACE_ID=${props.iOSAppId} EMBRACE_TOKEN=${props.apiToken} "\${PODS_ROOT}/EmbraceIO/run.sh"`,
+          shellScript: `REACT_NATIVE_MAP_PATH="${sourceMapPath}" EMBRACE_ID=${props.iOSAppId} EMBRACE_TOKEN=${props.apiToken} "${embraceRunScriptPath}"`,
         },
       );
       modified = true;

@@ -112,8 +112,22 @@ function run() {
 }
 
 function createSourceMap() {
-  REACT_NATIVE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-  CLI_PATH="$REACT_NATIVE_DIR/node_modules/react-native/cli.js"
+  REACT_NATIVE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+
+  # Walk up the tree to find the app's react-native CLI
+  CLI_PATH=""
+  while [ "$REACT_NATIVE_DIR" != "/" ]; do
+    if [ -f "$REACT_NATIVE_DIR/node_modules/react-native/cli.js" ]; then
+      CLI_PATH="$REACT_NATIVE_DIR/node_modules/react-native/cli.js"
+      break
+    fi
+    REACT_NATIVE_DIR="$(dirname "$REACT_NATIVE_DIR")"
+  done
+
+  if [ -z "$CLI_PATH" ]; then
+    log_warning "Could not find react-native CLI above ${BASH_SOURCE[0]}. Skipping source map generation."
+    return
+  fi
 
   DEST=/dev/null
 
