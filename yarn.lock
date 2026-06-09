@@ -3314,12 +3314,13 @@ __metadata:
   linkType: hard
 
 "@dotenvx/dotenvx@npm:^1.48.3":
-  version: 1.66.0
-  resolution: "@dotenvx/dotenvx@npm:1.66.0"
+  version: 1.71.2
+  resolution: "@dotenvx/dotenvx@npm:1.71.2"
   dependencies:
     commander: "npm:^11.1.0"
     dotenv: "npm:^17.2.1"
     eciesjs: "npm:^0.4.10"
+    enquirer: "npm:^2.4.1"
     execa: "npm:^5.1.1"
     fdir: "npm:^6.2.0"
     ignore: "npm:^5.3.0"
@@ -3329,7 +3330,7 @@ __metadata:
     yocto-spinner: "npm:^1.1.0"
   bin:
     dotenvx: src/cli/dotenvx.js
-  checksum: 10c0/1e525ffe2ba2313542052976b33cb4e834579017b17ccce7f65c7379b5793a0f5dc93b929115f35a3b2f8fe6010cea325f7b88535cda186c8e2659ab59f72996
+  checksum: 10c0/897617c621a4329b0d0989dc595dac4c58b6f1da3d655b46fe64ac072de670f16ab652a6c7bf28014398dddea977fcb0d6d22b13aef31bcd7a419bb910d7a3d9
   languageName: node
   linkType: hard
 
@@ -9300,6 +9301,16 @@ __metadata:
   dependencies:
     ansi-colors: "npm:^4.1.1"
   checksum: 10c0/8e070e052c2c64326a2803db9084d21c8aaa8c688327f133bf65c4a712586beb126fd98c8a01cfb0433e82a4bd3b6262705c55a63e0f7fb91d06b9cedbde9a11
+  languageName: node
+  linkType: hard
+
+"enquirer@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "enquirer@npm:2.4.1"
+  dependencies:
+    ansi-colors: "npm:^4.1.1"
+    strip-ansi: "npm:^6.0.1"
+  checksum: 10c0/43850479d7a51d36a9c924b518dcdc6373b5a8ae3401097d336b7b7e258324749d0ad37a1fcaa5706f04799baa05585cd7af19ebdf7667673e7694435fcea918
   languageName: node
   linkType: hard
 
