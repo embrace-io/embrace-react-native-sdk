@@ -59,7 +59,6 @@ jobs:
         # are already published. If this step fails after a prior successful publish, recover
         # manually — see DEVELOPING.md § "Release workflow: publish succeeds but tag or GitHub release was not created"
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           DIST_TAG: ${{ steps.version.outputs.dist_tag }}
           NPM_CONFIG_PROVENANCE: "true"
         run: |
