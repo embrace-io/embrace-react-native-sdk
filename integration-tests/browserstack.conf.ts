@@ -14,8 +14,8 @@ const androidCapabilities = [
   },
   {
     "bstack:options": {
-      deviceName: "Samsung Galaxy S10",
-      platformVersion: "9.0",
+      deviceName: "Samsung Galaxy S20",
+      platformVersion: "10.0",
       platformName: "android",
     },
   },
