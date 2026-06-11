@@ -1,6 +1,6 @@
 import {renderHook, waitFor} from "@testing-library/react-native";
 
-import {useEmbraceIsStarted} from "./useEmbraceIsStarted";
+import {useEmbraceIsStarted} from "../hooks/useEmbraceIsStarted";
 
 const mockIsStarted = jest.fn();
 

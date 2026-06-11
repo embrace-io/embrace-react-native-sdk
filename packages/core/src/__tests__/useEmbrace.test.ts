@@ -2,8 +2,7 @@ import {renderHook, waitFor} from "@testing-library/react-native";
 
 import {oltpGetStart} from "../utils/otlp";
 import {SDKConfig, EmbraceLoggerLevel} from "../interfaces";
-
-import {useEmbrace} from "./useEmbrace";
+import {useEmbrace} from "../hooks/useEmbrace";
 
 jest.mock("../utils/otlp", () => ({
   oltpGetStart: jest.fn(),
@@ -13,6 +12,11 @@ type EmbraceHook = {
   sdkConfig: SDKConfig;
   patch: string | undefined;
   logLevel: EmbraceLoggerLevel | undefined;
+};
+
+type EmbraceHookResult = {
+  isPending: boolean;
+  isStarted: boolean;
 };
 
 const mockStartNativeEmbraceSDK = jest.fn().mockResolvedValue(true);
@@ -50,7 +54,7 @@ describe("useEmbrace", () => {
   });
 
   it("should start the Embrace React Native SDK", async () => {
-    const {result, rerender} = renderHook(
+    const {result, rerender} = renderHook<EmbraceHookResult, EmbraceHook>(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
@@ -91,7 +95,7 @@ describe("useEmbrace", () => {
   it("should show a warning message if for some reason Embrace React Native SKD can't initialize", async () => {
     jest.mocked(mockStartNativeEmbraceSDK).mockResolvedValueOnce(false);
 
-    const {result} = renderHook(
+    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
@@ -127,7 +131,7 @@ describe("useEmbrace", () => {
       .mocked(oltpGetStart)
       .mockImplementation(() => mockRNEmbraceOTLPInit);
 
-    const {result} = renderHook(
+    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
@@ -164,7 +168,7 @@ describe("useEmbrace", () => {
         } catch {}
       });
 
-    const {result} = renderHook(
+    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
@@ -198,7 +202,7 @@ describe("useEmbrace", () => {
       .mocked(oltpGetStart)
       .mockImplementation(jest.fn().mockResolvedValue(false));
 
-    const {result} = renderHook(
+    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
