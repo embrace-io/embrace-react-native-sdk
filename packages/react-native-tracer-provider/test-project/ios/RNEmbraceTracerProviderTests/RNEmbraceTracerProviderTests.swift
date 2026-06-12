@@ -87,8 +87,6 @@ class ReactNativeTracerProviderTests: XCTestCase {
   override func setUp() async throws {
       promise = Promise()
       module = ReactNativeTracerProviderModule()
-      // Flush any pending exports from previous test
-      _ = ReactNativeTracerProviderTests.exporter.flush(explicitTimeout: 5.0)
 
       // Initial wait to let Embrace SDK initialize (especially important for first test)
       try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
