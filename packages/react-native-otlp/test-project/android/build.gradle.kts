@@ -10,7 +10,7 @@ buildscript {
         set("minSdkVersion", 24)
         set("compileSdkVersion", 36)
         set("targetSdkVersion",36)
-        set("ndkVersion", "26.1.10909125")
+        set("ndkVersion", "27.3.13750724")
         set("kotlinVersion", "2.1.20")
     }
 
