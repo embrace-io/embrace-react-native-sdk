@@ -6,12 +6,12 @@ plugins {
 
 buildscript {
     extra.apply {
-        set("buildToolsVersion", "35.0.0")
+        set("buildToolsVersion", "36.0.0")
         set("minSdkVersion", 24)
-        set("compileSdkVersion", 35)
-        set("targetSdkVersion",34)
-        set("ndkVersion", "26.1.10909125")
-        set("kotlinVersion", "1.9.24")
+        set("compileSdkVersion", 36)
+        set("targetSdkVersion",36)
+        set("ndkVersion", "27.1.12297006")
+        set("kotlinVersion", "2.1.20")
     }
 
     repositories {
