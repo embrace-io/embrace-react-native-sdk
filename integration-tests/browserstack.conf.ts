@@ -85,7 +85,9 @@ exports.config = {
   screenshotPath: "./errorShots/",
   baseUrl: "",
   waitforTimeout: 10000,
-  connectionRetryTimeout: 90000,
+  // wdio v9 enforces this as a hard abort on session creation (got->fetch); a
+  // timed-out newSession is no longer retried, so give BrowserStack room to allocate.
+  connectionRetryTimeout: 300000,
   connectionRetryCount: 3,
 
   framework: "mocha",
