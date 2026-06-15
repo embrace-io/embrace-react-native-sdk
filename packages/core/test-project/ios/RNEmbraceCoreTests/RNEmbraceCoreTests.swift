@@ -6,10 +6,17 @@ import OpenTelemetrySdk
 @testable import RNEmbraceCore
 
 class TestSpanExporter: SpanExporter {
-    var exportedSpans: [SpanData] = []
+    private let queue = DispatchQueue(label: "TestSpanExporter")
+    private var _exportedSpans: [SpanData] = []
+
+    var exportedSpans: [SpanData] {
+        queue.sync { _exportedSpans }
+    }
 
     func export(spans: [SpanData], explicitTimeout: TimeInterval?) -> SpanExporterResultCode {
-        exportedSpans.append(contentsOf: spans)
+        queue.sync {
+            _exportedSpans.append(contentsOf: spans)
+        }
         return SpanExporterResultCode.success
     }
 
@@ -18,7 +25,7 @@ class TestSpanExporter: SpanExporter {
     }
 
     func reset(explicitTimeout: TimeInterval?) {
-        // Don't clear the array - the SDK might be holding references
+        queue.sync { _exportedSpans.removeAll() }
     }
 
     func shutdown(explicitTimeout: TimeInterval?) {}
@@ -93,7 +100,6 @@ class EmbraceManagerTests: XCTestCase {
     var module: EmbraceManager!
     var promise: Promise!
     var startingLogCount: Int = 0
-    var startingSpanCount: Int = 0
 
     override class func setUp() {
         super.setUp()
@@ -128,32 +134,44 @@ class EmbraceManagerTests: XCTestCase {
         promise = Promise()
         module = EmbraceManager()
 
-        // Initial wait to let Embrace SDK initialize (especially important for first test)
-        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
+        // Wait until the Embrace SDK reports it has started (especially important for first test)
+        for _ in 0..<30 {
+            if Embrace.client?.state == .started {
+                break
+            }
+            try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
+        }
 
-        // Poll until no new logs/spans arrive for 3 seconds (max 30 seconds total)
+        // Flush any pending exports and reset so each test starts from an empty span exporter
+        flushSpans()
+        EmbraceManagerTests.spanExporter.reset(explicitTimeout: nil)
+
+        // Logs have no synchronous drain, so poll until no new logs arrive for 3 seconds
+        // (max 30 seconds total), then snapshot a baseline; getExportedLogs returns only
+        // logs since this index.
         var previousLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
-        var previousSpanCount = EmbraceManagerTests.spanExporter.exportedSpans.count
         var stableCount = 0
         for _ in 0..<30 {
             try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
             let currentLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
-            let currentSpanCount = EmbraceManagerTests.spanExporter.exportedSpans.count
-            if currentLogCount == previousLogCount && currentSpanCount == previousSpanCount {
+            if currentLogCount == previousLogCount {
                 stableCount += 1
                 if stableCount >= 3 {
-                    break  // No new logs/spans for 3 seconds, we're stable
+                    break  // No new logs for 3 seconds, we're stable
                 }
             } else {
                 stableCount = 0
                 previousLogCount = currentLogCount
-                previousSpanCount = currentSpanCount
             }
         }
 
-        // Track starting counts instead of clearing
         startingLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
-        startingSpanCount = EmbraceManagerTests.spanExporter.exportedSpans.count
+    }
+
+    // The tracer provider's forceFlush drains its span processor, which exports spans
+    // asynchronously — so this blocks until every span created so far has been exported
+    private func flushSpans() {
+        (OpenTelemetry.instance.tracerProvider as? TracerProviderSdk)?.forceFlush(timeout: 5.0)
     }
 
     func getExportedLogs(expectedCount: Int? = nil, timeout: TimeInterval = 60.0) async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
@@ -186,12 +204,9 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func getExportedSpans() async throws -> [SpanData] {
-        try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-        // Only get spans since this test started
-        let allSpans = EmbraceManagerTests.spanExporter.exportedSpans
-        guard startingSpanCount < allSpans.count else { return [] }
-        let newSpans = Array(allSpans[startingSpanCount...])
-        return newSpans.filter { span in
+        // Make sure all of this test's spans have been exported before we read them
+        flushSpans()
+        return EmbraceManagerTests.spanExporter.exportedSpans.filter { span in
             !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
         }
     }
@@ -240,10 +255,6 @@ class EmbraceManagerTests: XCTestCase {
     }
 
     func testLogHandledError() async throws {
-        // This is the first test case that runs in alphabetical order, add an extra sleep to
-        // give the Embrace SDK a chance to startup before executing
-        try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-
         module.logHandledError("my handled error", stacktrace: "stacktrace as string", properties: NSDictionary(), resolver: promise.resolve, rejecter: promise.reject)
 
         let exportedLogs = try await getExportedLogs(expectedCount: 1)

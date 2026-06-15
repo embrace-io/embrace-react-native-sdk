@@ -25,10 +25,17 @@ class Promise {
 }
 
 class TestSpanExporter: SpanExporter {
-    var exportedSpans: [SpanData] = []
+    private let queue = DispatchQueue(label: "TestSpanExporter")
+    private var _exportedSpans: [SpanData] = []
+
+    var exportedSpans: [SpanData] {
+        queue.sync { _exportedSpans }
+    }
 
     func export(spans: [SpanData], explicitTimeout: TimeInterval?) -> SpanExporterResultCode {
-        exportedSpans.append(contentsOf: spans)
+        queue.sync {
+            _exportedSpans.append(contentsOf: spans)
+        }
         return SpanExporterResultCode.success
     }
 
@@ -37,7 +44,7 @@ class TestSpanExporter: SpanExporter {
     }
 
     func reset(explicitTimeout: TimeInterval?) {
-        exportedSpans.removeAll()
+        queue.sync { _exportedSpans.removeAll() }
     }
 
     func shutdown(explicitTimeout: TimeInterval?) {}
@@ -56,8 +63,6 @@ private let EMBRACE_INTERNAL_SPAN_NAMES = [
     "POST /dev/null/v2/logs",
     "POST /dev/null/v2/spans"
 ]
-
-private let DEFAULT_WAIT_TIME = Double(ProcessInfo.processInfo.environment["IOS_TEST_WAIT_TIME"] ?? "") ?? 5.0
 
 class ReactNativeTracerProviderTests: XCTestCase {
   static var exporter: TestSpanExporter!
@@ -88,33 +93,30 @@ class ReactNativeTracerProviderTests: XCTestCase {
       promise = Promise()
       module = ReactNativeTracerProviderModule()
 
-      // Initial wait to let Embrace SDK initialize (especially important for first test)
-      try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
-
-      // Poll until no new spans arrive for 3 seconds (max 30 seconds total)
-      var previousCount = ReactNativeTracerProviderTests.exporter.exportedSpans.count
-      var stableCount = 0
+      // Wait until the Embrace SDK reports it has started (especially important for first test)
       for _ in 0..<30 {
-          try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
-          let currentCount = ReactNativeTracerProviderTests.exporter.exportedSpans.count
-          if currentCount == previousCount {
-              stableCount += 1
-              if stableCount >= 3 {
-                  break  // No new spans for 3 seconds, we're stable
-              }
-          } else {
-              stableCount = 0
-              previousCount = currentCount
+          if Embrace.client?.state == .started {
+              break
           }
+          try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
       }
 
-      // Now reset the exporter
+      // Flush any pending exports and reset so each test starts from an empty span exporter
+      flushSpans()
       ReactNativeTracerProviderTests.exporter.reset(explicitTimeout: nil)
+
       module.setupTracer(name: "test", version: "v1", schemaUrl: "")
   }
 
+  // The tracer provider's forceFlush drains its span processor, which exports spans
+  // asynchronously — so this blocks until every span created so far has been exported
+  private func flushSpans() {
+      (OpenTelemetry.instance.tracerProvider as? TracerProviderSdk)?.forceFlush(timeout: 5.0)
+  }
+
   func getExportedSpans() async throws -> [SpanData] {
-      try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
+      // Make sure all of this test's spans have been exported before we read them
+      flushSpans()
       let allSpans = ReactNativeTracerProviderTests.exporter.exportedSpans
 
       let filtered = allSpans.filter { span in
@@ -432,10 +434,6 @@ class ReactNativeTracerProviderTests: XCTestCase {
   }
 
   func testAddEvent() async throws {
-    // This is the first test case that runs in alphabetical order, add an extra sleep to
-    // give the Embrace SDK a chance to startup before executing
-    try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-
     module.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
                      spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0,
                      attributes: NSDictionary(), links: NSArray(), parentId: "",
