@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- install steps match Wizard Step.run (Promise<any>) */
 import Wizard from "../util/wizard";
 import {NoopFile} from "../util/file";
 import {FileUpdatable} from "../util/file";

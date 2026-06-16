@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped xcode pbxproj graph */
 import {IOS_LANGUAGE, MAIN_CLASS_BY_LANGUAGE} from "../setup/patches/common";
 import EmbraceLogger from "../../src/utils/EmbraceLogger";
 

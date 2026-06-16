@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- generic promise-chain plumbing */
 const fs = require("fs");
 
 interface Patchable {

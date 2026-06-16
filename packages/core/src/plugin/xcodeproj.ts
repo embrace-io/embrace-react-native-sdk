@@ -5,6 +5,7 @@
  * This is a subset and duplicates some functionality from packages/core/scripts/util/ios.ts, once our automated install
  * script is fully replaced by our Expo Config plugin that file can be removed
  */
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped xcode pbxproj graph */
 import {type XcodeProject} from "@expo/config-plugins";
 
 import {hasMatch} from "./textUtils";

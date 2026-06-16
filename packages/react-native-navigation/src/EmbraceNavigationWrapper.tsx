@@ -27,8 +27,11 @@ const EmbraceNavigationWrapper = <TRef,>(
   NavigationComponent: ForwardRefExoticComponent<
     PropsWithoutRef<TrackerProps> & RefAttributes<TRef>
   >,
-) =>
-  forwardRef<TRef, EmbraceNavigationWrapperProps>((props, ref) => {
+) => {
+  const WrappedNavigationComponent = forwardRef<
+    TRef,
+    EmbraceNavigationWrapperProps
+  >((props, ref) => {
     const {
       children,
       tracerProvider,
@@ -62,6 +65,11 @@ const EmbraceNavigationWrapper = <TRef,>(
     );
   });
 
-EmbraceNavigationWrapper.displayName = "EmbraceNavigationWrapper";
+  // displayName goes on the forwardRef component (not the factory) so
+  // React DevTools and react/display-name can see it.
+  WrappedNavigationComponent.displayName = "EmbraceNavigationWrapper";
+
+  return WrappedNavigationComponent;
+};
 
 export {EmbraceNavigationWrapper, EmbraceNavigationWrapperProps};
