@@ -5,12 +5,6 @@
       "name" : "Test Scheme Action",
       "options" : {
         "diagnosticCollectionPolicy" : "Never",
-        "environmentVariableEntries" : [
-          {
-            "key" : "IOS_TEST_WAIT_TIME",
-            "value" : "$(IOS_TEST_WAIT_TIME)"
-          }
-        ],
         "targetForVariableExpansion" : {
           "containerPath" : "container:RNEmbraceTracerProvider.xcodeproj",
           "identifier" : "6DED2F532CE514B200A9735A",
