@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- install steps match Wizard Step.run (Promise<any>) */
 import Wizard from "../util/wizard";
 import {
   BUNDLE_PHASE_REGEXP,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- generic wizard step/field plumbing */
 import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 interface Field {

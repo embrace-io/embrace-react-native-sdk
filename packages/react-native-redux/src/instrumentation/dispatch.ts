@@ -23,7 +23,7 @@ const middleware = <RootState>(
   provider: TracerProvider | undefined,
   config?: MiddlewareConfig,
   // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 ): Middleware<{}, RootState> => {
   const {
     debug,
