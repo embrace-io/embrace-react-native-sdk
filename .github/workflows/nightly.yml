@@ -16,20 +16,21 @@ concurrency:
 jobs:
   js-unit:
     uses: ./.github/workflows/node.js.yml
-    secrets: inherit
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   android-unit:
     uses: ./.github/workflows/android.unit-test.yml
     with:
       run_all: true
-    secrets: inherit
 
   ios-unit:
     uses: ./.github/workflows/ios.unit-test.yml
     with:
       run_all: true
-    secrets: inherit
 
   integration:
     uses: ./.github/workflows/integration-test.yml
-    secrets: inherit
+    secrets:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}

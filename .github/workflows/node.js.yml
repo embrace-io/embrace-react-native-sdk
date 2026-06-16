@@ -5,6 +5,9 @@ name: Js Unit Tests
 
 on:
   workflow_call:
+    secrets:
+      CODECOV_TOKEN:
+        required: false
   push:
     branches: [main]
   pull_request:
