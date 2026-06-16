@@ -14,8 +14,7 @@ const writeIfNotExists = (
       // Don't try and overwrite the file if it already exists
       return false;
     } else {
-      // eslint-disable-next-line preserve-caught-error
-      throw new Error(`${caller} failed to write ${filePath}: ${e}`);
+      throw new Error(`${caller} failed to write ${filePath}`, {cause: e});
     }
   }
 
