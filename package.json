@@ -54,7 +54,6 @@
     "globals": "^16.0.0",
     "jest": "^30.0.4",
     "lerna": "^9.0.7",
-    "metro-react-native-babel-preset": "^0.77.0",
     "prettier": "^3.2.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
