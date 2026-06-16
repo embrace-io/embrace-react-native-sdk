@@ -1,0 +1,35 @@
+name: Nightly Tests
+
+on:
+  schedule:
+    - cron: "0 5 * * *" # 05:00 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: nightly-tests
+  cancel-in-progress: false
+
+jobs:
+  js-unit:
+    uses: ./.github/workflows/node.js.yml
+    secrets: inherit
+
+  android-unit:
+    uses: ./.github/workflows/android.unit-test.yml
+    with:
+      run_all: true
+    secrets: inherit
+
+  ios-unit:
+    uses: ./.github/workflows/ios.unit-test.yml
+    with:
+      run_all: true
+    secrets: inherit
+
+  integration:
+    uses: ./.github/workflows/integration-test.yml
+    secrets: inherit

@@ -4,6 +4,7 @@
 name: Js Unit Tests
 
 on:
+  workflow_call:
   push:
     branches: [main]
   pull_request:

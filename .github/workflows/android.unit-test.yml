@@ -1,6 +1,12 @@
 name: Android Unit Tests
 
 on:
+  workflow_call:
+    inputs:
+      run_all:
+        description: "Run tests for all packages, ignoring changed-file filters"
+        type: boolean
+        default: false
   push:
     branches: [main]
   pull_request:
@@ -28,6 +34,7 @@ jobs:
 
       - uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         id: changed_files
+        if: ${{ !inputs.run_all }}
         with:
           list-files: shell
           filters: |
@@ -39,16 +46,20 @@ jobs:
 
       - name: Install Root Node Modules
         run: yarn install
-        if: steps.changed_files.outputs.android == 'true'
+        if: ${{ inputs.run_all || steps.changed_files.outputs.android == 'true' }}
 
       - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
-        if: steps.changed_files.outputs.android == 'true'
+        if: ${{ inputs.run_all || steps.changed_files.outputs.android == 'true' }}
         with:
           distribution: "adopt"
           java-version-file: ".java-version"
 
-      - name: Run Android Unit Tests
-        if: steps.changed_files.outputs.android == 'true'
+      - name: Run Android Unit Tests (changed scopes)
+        if: ${{ !inputs.run_all && steps.changed_files.outputs.android == 'true' }}
         run: yarn run android:test $(./scripts/scopes-from-file-changes.ts ${STEPS_CHANGED_FILES_OUTPUTS_ANDROID_FILES})
         env:
           STEPS_CHANGED_FILES_OUTPUTS_ANDROID_FILES: ${{ steps.changed_files.outputs.android_files }}
+
+      - name: Run Android Unit Tests (all packages)
+        if: ${{ inputs.run_all }}
+        run: yarn run android:test
