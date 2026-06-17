@@ -6,7 +6,7 @@ const {defaults: tsjPreset} = require("ts-jest/presets");
 module.exports = {
   ...tsjPreset,
   clearMocks: true,
-  preset: "react-native",
+  preset: "@react-native/jest-preset",
   modulePathIgnorePatterns: [
     "<rootDir>/dist/",
     "<rootDir>/packages/.*/lib/",
