@@ -1,0 +1,36 @@
+name: Nightly Tests
+
+on:
+  schedule:
+    - cron: "0 5 * * *" # 05:00 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: nightly-tests
+  cancel-in-progress: false
+
+jobs:
+  js-unit:
+    uses: ./.github/workflows/node.js.yml
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  android-unit:
+    uses: ./.github/workflows/android.unit-test.yml
+    with:
+      run_all: true
+
+  ios-unit:
+    uses: ./.github/workflows/ios.unit-test.yml
+    with:
+      run_all: true
+
+  integration:
+    uses: ./.github/workflows/integration-test.yml
+    secrets:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
