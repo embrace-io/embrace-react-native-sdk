@@ -7,7 +7,7 @@ beforeEach(() => {
 });
 
 const androidEmbraceSwazzler = new RegExp(
-  /\s*classpath(\(|\s)('|")io\.embrace:embrace-swazzler:.*('|")\)?/,
+  /\s*classpath(\(|\s)('|")io\.embrace:embrace-gradle-plugin:.*('|")\)?/,
   "m",
 );
 

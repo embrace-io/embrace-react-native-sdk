@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'embrace-gradle-plugin'
 apply plugin: 'embrace-swazzler'
 
 import com.android.build.OutputFile
