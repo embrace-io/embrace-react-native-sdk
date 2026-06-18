@@ -56,7 +56,7 @@ const withAndroidEmbraceJSONConfig: ConfigPlugin<EmbraceProps> = (
   ]);
 };
 
-const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
+const withAndroidEmbraceGradlePluginDependency: ConfigPlugin<
   EmbraceProps
 > = expoConfig => {
   return withProjectBuildGradle(expoConfig, async config => {
@@ -91,7 +91,7 @@ const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
   });
 };
 
-const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
+const withAndroidEmbraceApplyGradlePlugin: ConfigPlugin<
   EmbraceProps
 > = expoConfig => {
   return withAppBuildGradle(expoConfig, async config => {
@@ -184,8 +184,8 @@ const withAndroidEmbraceOnCreate: ConfigPlugin<EmbraceProps> = expoConfig => {
 const withAndroidEmbrace: ConfigPlugin<EmbraceProps> = (config, props) => {
   try {
     config = withAndroidEmbraceJSONConfig(config, props);
-    config = withAndroidEmbraceSwazzlerDependency(config, props);
-    config = withAndroidEmbraceApplySwazzlerPlugin(config, props);
+    config = withAndroidEmbraceGradlePluginDependency(config, props);
+    config = withAndroidEmbraceApplyGradlePlugin(config, props);
     config = withAndroidEmbraceOnCreate(config, props);
   } catch (e) {
     WarningAggregator.addWarningAndroid(
@@ -201,7 +201,7 @@ const withAndroidEmbrace: ConfigPlugin<EmbraceProps> = (config, props) => {
 export default withAndroidEmbrace;
 export {
   withAndroidEmbraceJSONConfig,
-  withAndroidEmbraceSwazzlerDependency,
-  withAndroidEmbraceApplySwazzlerPlugin,
+  withAndroidEmbraceGradlePluginDependency,
+  withAndroidEmbraceApplyGradlePlugin,
   withAndroidEmbraceOnCreate,
 };

@@ -21,13 +21,13 @@ const logger = new EmbraceLogger(console);
 const androidToolsBuildGradleRE =
   /(\s+)classpath(\(|\s)("|')com\.android\.tools\.build:gradle(?::\d+(?:\.\d+)*)?("|')\)/;
 
-export const androidEmbraceSwazzler =
+export const androidEmbraceGradlePluginDependencyRE =
   /classpath(\(|\s)('|")io\.embrace:embrace-gradle-plugin:.*('|")\)?/;
 
 export const androidEmbraceLegacySwazzler =
   /classpath(\(|\s)('|")io\.embrace:embrace-swazzler:.*('|")\)?/;
 
-export const androidGenericVersion =
+export const androidEmbraceGradlePluginDependency =
   "classpath \"io.embrace:embrace-gradle-plugin:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}\"";
 
 export const patchBuildGradle = {
@@ -35,14 +35,17 @@ export const patchBuildGradle = {
   run: (_wizard: Wizard): Promise<any> => {
     return buildGradlePatchable().then(file => {
       if (file.hasLine(androidToolsBuildGradleRE)) {
-        if (file.hasLine(androidEmbraceSwazzler)) {
-          file.deleteLine(androidEmbraceSwazzler);
+        if (file.hasLine(androidEmbraceGradlePluginDependencyRE)) {
+          file.deleteLine(androidEmbraceGradlePluginDependencyRE);
         }
         if (file.hasLine(androidEmbraceLegacySwazzler)) {
           file.deleteLine(androidEmbraceLegacySwazzler);
         }
         logger.log("Patching build.gradle file");
-        file.addAfter(androidToolsBuildGradleRE, androidGenericVersion);
+        file.addAfter(
+          androidToolsBuildGradleRE,
+          androidEmbraceGradlePluginDependency,
+        );
         file.patch();
         return;
       }
@@ -56,29 +59,29 @@ export const patchBuildGradle = {
 };
 
 const androidPlugin = /apply plugin: ("|')com.android.application("|')/;
-export const androidEmbraceSwazzlerPluginRE =
+export const androidEmbraceGradlePluginApplyRE =
   /apply plugin: ('|")embrace-gradle-plugin('|")/;
-export const androidEmbraceSwazzlerPlugin =
+export const androidEmbraceGradlePluginApply =
   "apply plugin: 'embrace-gradle-plugin'";
 
 // Legacy apply line from before the rename. The id is no longer valid, so remove it on (re)install.
-export const androidEmbraceLegacyPluginRE =
+export const androidEmbraceLegacySwazzlerRE =
   /apply plugin: ('|")embrace-swazzler('|")/;
-export const androidEmbraceLegacyPlugin = "apply plugin: 'embrace-swazzler'";
+export const androidEmbraceLegacySwazzlerApply = "apply plugin: 'embrace-swazzler'";
 
 export const patchAppBuildGradle = {
   name: "patch app/build.gradle",
   run: (_wizard: Wizard): Promise<any> => {
     return buildAppGradlePatchable().then(file => {
       if (file.hasLine(androidPlugin)) {
-        if (file.hasLine(androidEmbraceLegacyPluginRE)) {
-          file.deleteLine(androidEmbraceLegacyPluginRE);
+        if (file.hasLine(androidEmbraceLegacySwazzlerRE)) {
+          file.deleteLine(androidEmbraceLegacySwazzlerRE);
         }
-        if (file.hasLine(androidEmbraceSwazzlerPluginRE)) {
+        if (file.hasLine(androidEmbraceGradlePluginApplyRE)) {
           logger.warn("already has Embrace Gradle plugin");
         } else {
           logger.log("patching app/build.gradle file");
-          file.addAfter(androidPlugin, "\n" + androidEmbraceSwazzlerPlugin);
+          file.addAfter(androidPlugin, "\n" + androidEmbraceGradlePluginApply);
         }
 
         file.patch();
