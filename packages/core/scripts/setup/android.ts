@@ -22,10 +22,10 @@ const androidToolsBuildGradleRE =
   /(\s+)classpath(\(|\s)("|')com\.android\.tools\.build:gradle(?::\d+(?:\.\d+)*)?("|')\)/;
 
 export const androidEmbraceGradlePluginDependencyRE =
-  /classpath(\(|\s)('|")io\.embrace:embrace-gradle-plugin:.*('|")\)?/;
+  /[ \t]*classpath(\(|\s)('|")io\.embrace:embrace-gradle-plugin:.*('|")\)?\n?/;
 
 export const androidEmbraceLegacySwazzler =
-  /classpath(\(|\s)('|")io\.embrace:embrace-swazzler:.*('|")\)?/;
+  /[ \t]*classpath(\(|\s)('|")io\.embrace:embrace-swazzler:.*('|")\)?\n?/;
 
 export const androidEmbraceGradlePluginDependency =
   "classpath \"io.embrace:embrace-gradle-plugin:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}\"";
@@ -35,17 +35,20 @@ export const patchBuildGradle = {
   run: (_wizard: Wizard): Promise<any> => {
     return buildGradlePatchable().then(file => {
       if (file.hasLine(androidToolsBuildGradleRE)) {
-        if (file.hasLine(androidEmbraceGradlePluginDependencyRE)) {
-          file.deleteLine(androidEmbraceGradlePluginDependencyRE);
-        }
         if (file.hasLine(androidEmbraceLegacySwazzler)) {
           file.deleteLine(androidEmbraceLegacySwazzler);
         }
-        logger.log("Patching build.gradle file");
-        file.addAfter(
-          androidToolsBuildGradleRE,
-          androidEmbraceGradlePluginDependency,
-        );
+
+        if (file.hasLine(androidEmbraceGradlePluginDependencyRE)) {
+          logger.warn("already has Embrace Gradle plugin");
+        } else {
+          logger.log("Patching build.gradle file");
+          file.addAfter(
+            androidToolsBuildGradleRE,
+            androidEmbraceGradlePluginDependency,
+          );
+        }
+
         file.patch();
         return;
       }
@@ -66,7 +69,7 @@ export const androidEmbraceGradlePluginApply =
 
 // Legacy apply line from before the rename. The id is no longer valid, so remove it on (re)install.
 export const androidEmbraceLegacySwazzlerRE =
-  /apply plugin: ('|")embrace-swazzler('|")/;
+  /[ \t]*apply plugin: ('|")embrace-swazzler('|")\n?/;
 export const androidEmbraceLegacySwazzlerApply = "apply plugin: 'embrace-swazzler'";
 
 export const patchAppBuildGradle = {

@@ -28,7 +28,7 @@ import {
   androidEmbraceLegacySwazzlerApply,
   androidEmbraceLegacySwazzler,
   androidEmbraceGradlePluginApply,
-  androidEmbraceGradlePluginDependency,
+  androidEmbraceGradlePluginDependencyRE,
 } from "./android";
 
 const fs = require("fs");
@@ -58,7 +58,7 @@ const UNINSTALL_ANDROID_GRADLE_PLUGIN_DEPENDENCY: IUnlinkEmbraceCode = {
   fileName: "android/build.gradle",
   textsToDelete: [
     {
-      ITextToDelete: `${androidEmbraceGradlePluginDependency}`,
+      ITextToDelete: androidEmbraceGradlePluginDependencyRE,
     },
     // Also remove the legacy embrace-swazzler classpath from projects set up before the rename
     {
