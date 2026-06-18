@@ -58,6 +58,12 @@ react {
     autolinkLibrariesWithApp()
 }
 
+kotlin {
+    compilerOptions {
+        optIn.add("io.opentelemetry.kotlin.ExperimentalApi")
+    }
+}
+
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
  */
@@ -119,7 +125,7 @@ dependencies {
     // using package locally
     implementation(project(":core"))
     implementation("com.facebook.react:react-android")
-    testImplementation("io.opentelemetry:opentelemetry-sdk")
+    testImplementation("io.opentelemetry.kotlin:core")
 
     testImplementation(libs.junit)
 
