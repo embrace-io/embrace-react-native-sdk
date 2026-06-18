@@ -63,7 +63,7 @@ const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
     const lines = config.modResults.contents.split("\n");
 
     // Don't insert the dependency again if it already has it
-    if (hasMatch(lines, "embrace-swazzler")) {
+    if (hasMatch(lines, "embrace-gradle-plugin")) {
       return config;
     }
 
@@ -73,7 +73,7 @@ const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
       // add our own dependency underneath
       androidBuildToolsRE,
       // https://developer.android.com/build/migrate-to-kotlin-dsl#convert-strings
-      `classpath("io.embrace:embrace-swazzler:\${findProject(':embrace-io_react-native').properties['emb_android_sdk']}")`,
+      `classpath("io.embrace:embrace-gradle-plugin:\${findProject(':embrace-io_react-native').properties['emb_android_sdk']}")`,
     );
 
     if (!success) {
