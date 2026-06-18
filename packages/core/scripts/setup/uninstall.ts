@@ -24,7 +24,12 @@ import {
 import {SUPPORTED_LANGUAGES} from "./patches/common";
 import {getIOSProjectName} from "./ios";
 import {iosProjectFolderName} from "./common";
-import {androidEmbraceSwazzlerPlugin, androidGenericVersion} from "./android";
+import {
+  androidEmbraceLegacyPlugin,
+  androidEmbraceLegacySwazzler,
+  androidEmbraceSwazzlerPlugin,
+  androidGenericVersion,
+} from "./android";
 
 const fs = require("fs");
 
@@ -55,6 +60,10 @@ const UNINSTALL_ANDROID_SWAZZLER_IMPORT: IUnlinkEmbraceCode = {
     {
       ITextToDelete: `${androidGenericVersion}`,
     },
+    // Also remove the legacy embrace-swazzler classpath from projects set up before the rename
+    {
+      ITextToDelete: androidEmbraceLegacySwazzler,
+    },
   ],
   findFileFunction: () => getBuildGradlePatchable(["android", "build.gradle"]),
   docUrl: "",
@@ -66,6 +75,10 @@ const UNINSTALL_ANDROID_SWAZZLER_APPLY: IUnlinkEmbraceCode = {
   textsToDelete: [
     {
       ITextToDelete: `${androidEmbraceSwazzlerPlugin}\n`,
+    },
+    // Also remove the legacy embrace-swazzler apply line from projects set up before the rename
+    {
+      ITextToDelete: `${androidEmbraceLegacyPlugin}\n`,
     },
   ],
   findFileFunction: () =>

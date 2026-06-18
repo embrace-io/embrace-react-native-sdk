@@ -111,3 +111,70 @@ describe("Patch Android", () => {
     expect(resultUnpatch).toBe(true);
   });
 });
+
+describe("Migrate legacy embrace-swazzler plugin name", () => {
+  test("Replaces the legacy embrace-swazzler classpath in build.gradle", async () => {
+    jest.mock("path", () => ({
+      join: () =>
+        "./packages/core/scripts/__tests__/__mocks__/android/buildWithLegacySwazzler.gradle",
+    }));
+    const androidUtil = require("../util/android");
+    const {
+      patchBuildGradle,
+      androidEmbraceLegacySwazzler,
+    } = require("../setup/android");
+
+    // Confirm the fixture starts with the legacy classpath
+    const originalFile = await androidUtil.buildGradlePatchable();
+    expect(originalFile.hasLine(androidEmbraceLegacySwazzler)).toBe(true);
+
+    const wiz = new Wizard();
+    [patchBuildGradle].map(step => wiz.registerStep(step));
+    await wiz.processSteps();
+
+    const fileUpdated = await androidUtil.buildGradlePatchable();
+    expect(fileUpdated.hasLine(androidEmbraceSwazzler)).toBe(true);
+    expect(fileUpdated.hasLine(androidEmbraceLegacySwazzler)).toBe(false);
+
+    // Restore the fixture to its legacy state
+    const restore = await androidUtil.buildGradlePatchable();
+    restore.contents = restore.contents.replace(
+      "embrace-gradle-plugin",
+      "embrace-swazzler",
+    );
+    restore.patch();
+  });
+
+  test("Replaces the legacy embrace-swazzler apply line in app/build.gradle", async () => {
+    jest.mock("path", () => ({
+      join: () =>
+        "./packages/core/scripts/__tests__/__mocks__/android/appBuildWithLegacySwazzler.gradle",
+    }));
+    const androidUtil = require("../util/android");
+    const {
+      patchAppBuildGradle,
+      androidEmbraceSwazzlerPluginRE,
+      androidEmbraceLegacyPluginRE,
+    } = require("../setup/android");
+
+    // Confirm the fixture starts with the legacy apply line
+    const originalFile = await androidUtil.buildAppGradlePatchable();
+    expect(originalFile.hasLine(androidEmbraceLegacyPluginRE)).toBe(true);
+
+    const wiz = new Wizard();
+    [patchAppBuildGradle].map(step => wiz.registerStep(step));
+    await wiz.processSteps();
+
+    const fileUpdated = await androidUtil.buildAppGradlePatchable();
+    expect(fileUpdated.hasLine(androidEmbraceSwazzlerPluginRE)).toBe(true);
+    expect(fileUpdated.hasLine(androidEmbraceLegacyPluginRE)).toBe(false);
+
+    // Restore the fixture to its legacy state
+    const restore = await androidUtil.buildAppGradlePatchable();
+    restore.contents = restore.contents.replace(
+      "embrace-gradle-plugin",
+      "embrace-swazzler",
+    );
+    restore.patch();
+  });
+});

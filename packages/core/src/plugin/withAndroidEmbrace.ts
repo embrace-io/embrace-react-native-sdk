@@ -60,10 +60,14 @@ const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
   EmbraceProps
 > = expoConfig => {
   return withProjectBuildGradle(expoConfig, async config => {
-    const lines = config.modResults.contents.split("\n");
+    // Remove the legacy embrace-swazzler classpath if present
+    const lines = config.modResults.contents
+      .split("\n")
+      .filter(line => !line.includes("io.embrace:embrace-swazzler"));
 
     // Don't insert the dependency again if it already has it
     if (hasMatch(lines, "embrace-gradle-plugin")) {
+      config.modResults.contents = lines.join("\n");
       return config;
     }
 
@@ -78,7 +82,7 @@ const withAndroidEmbraceSwazzlerDependency: ConfigPlugin<
 
     if (!success) {
       throw new Error(
-        "failed to insert a dependency for the Embrace Swazzler in the project's gradle file",
+        "failed to insert a dependency for the Embrace Gradle plugin in the project's gradle file",
       );
     }
 
@@ -91,10 +95,14 @@ const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
   EmbraceProps
 > = expoConfig => {
   return withAppBuildGradle(expoConfig, async config => {
-    const lines = config.modResults.contents.split("\n");
+    // Remove the legacy embrace-swazzler apply line if present
+    const lines = config.modResults.contents
+      .split("\n")
+      .filter(line => !line.includes("embrace-swazzler"));
 
     // Don't add the apply plugin line again if it's already there
-    if (hasMatch(lines, "embrace-swazzler")) {
+    if (hasMatch(lines, "embrace-gradle-plugin")) {
+      config.modResults.contents = lines.join("\n");
       return config;
     }
 
@@ -105,7 +113,7 @@ const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
     const addLegacyPlugin = addAfter(
       lines,
       androidLegacyPluginRE,
-      'apply plugin: "embrace-swazzler"',
+      'apply plugin: "embrace-gradle-plugin"',
     );
 
     if (addLegacyPlugin) {
@@ -116,12 +124,12 @@ const withAndroidEmbraceApplySwazzlerPlugin: ConfigPlugin<
     const addPlugin = addAfter(
       lines,
       androidPluginRE,
-      'id("embrace-swazzler")',
+      'id("embrace-gradle-plugin")',
     );
 
     if (!addPlugin) {
       throw new Error(
-        "failed to apply the Embrace Swazzler plugin in the project's app gradle file",
+        "failed to apply the Embrace Gradle plugin in the project's app gradle file",
       );
     }
 

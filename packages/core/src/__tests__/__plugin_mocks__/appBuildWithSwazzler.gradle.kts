@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-    id("embrace-swazzler")
+    id("embrace-gradle-plugin")
     id("org.jetbrains.kotlin.android")
     id("com.facebook.react")
 }

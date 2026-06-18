@@ -24,6 +24,9 @@ const androidToolsBuildGradleRE =
 export const androidEmbraceSwazzler =
   /classpath(\(|\s)('|")io\.embrace:embrace-gradle-plugin:.*('|")\)?/;
 
+export const androidEmbraceLegacySwazzler =
+  /classpath(\(|\s)('|")io\.embrace:embrace-swazzler:.*('|")\)?/;
+
 export const androidGenericVersion =
   "classpath \"io.embrace:embrace-gradle-plugin:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}\"";
 
@@ -34,6 +37,9 @@ export const patchBuildGradle = {
       if (file.hasLine(androidToolsBuildGradleRE)) {
         if (file.hasLine(androidEmbraceSwazzler)) {
           file.deleteLine(androidEmbraceSwazzler);
+        }
+        if (file.hasLine(androidEmbraceLegacySwazzler)) {
+          file.deleteLine(androidEmbraceLegacySwazzler);
         }
         logger.log("Patching build.gradle file");
         file.addAfter(androidToolsBuildGradleRE, androidGenericVersion);
@@ -52,13 +58,22 @@ export const patchBuildGradle = {
 const androidPlugin = /apply plugin: ("|')com.android.application("|')/;
 export const androidEmbraceSwazzlerPluginRE =
   /apply plugin: ('|")embrace-gradle-plugin('|")/;
-export const androidEmbraceSwazzlerPlugin = "apply plugin: 'embrace-gradle-plugin'";
+export const androidEmbraceSwazzlerPlugin =
+  "apply plugin: 'embrace-gradle-plugin'";
+
+// Legacy apply line from before the rename. The id is no longer valid, so remove it on (re)install.
+export const androidEmbraceLegacyPluginRE =
+  /apply plugin: ('|")embrace-swazzler('|")/;
+export const androidEmbraceLegacyPlugin = "apply plugin: 'embrace-swazzler'";
 
 export const patchAppBuildGradle = {
   name: "patch app/build.gradle",
   run: (_wizard: Wizard): Promise<any> => {
     return buildAppGradlePatchable().then(file => {
       if (file.hasLine(androidPlugin)) {
+        if (file.hasLine(androidEmbraceLegacyPluginRE)) {
+          file.deleteLine(androidEmbraceLegacyPluginRE);
+        }
         if (file.hasLine(androidEmbraceSwazzlerPluginRE)) {
           logger.warn("already has Embrace Gradle plugin");
         } else {

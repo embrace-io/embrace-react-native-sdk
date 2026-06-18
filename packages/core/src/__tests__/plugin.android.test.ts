@@ -162,6 +162,36 @@ describe("Expo Config Plugin Android", () => {
       )) as ExportedConfigWithProps;
       expect(updatedAgainConfig.modResults.contents).toEqual(afterSwazzler);
     });
+
+    it("migrates a legacy embrace-swazzler classpath to embrace-gradle-plugin", async () => {
+      const afterSwazzler = readMockFile("projectBuildWithSwazzler.gradle");
+      // Simulate a project that was set up before the plugin was renamed
+      const legacy = afterSwazzler.replace(
+        /embrace-gradle-plugin/g,
+        "embrace-swazzler",
+      );
+      const mockConfig = getMockModConfig({
+        platform: "android",
+        language: "groovy",
+        contents: legacy,
+      });
+
+      withAndroidEmbraceSwazzlerDependency(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "",
+      });
+
+      const modFunc = mockWithProjectBuildGradle.mock.lastCall[0];
+      const updatedConfig = (await modFunc(
+        mockConfig,
+      )) as ExportedConfigWithProps;
+
+      expect(updatedConfig.modResults.contents).not.toContain(
+        "embrace-swazzler",
+      );
+      expect(updatedConfig.modResults.contents).toEqual(afterSwazzler);
+    });
   });
 
   describe("withAndroidEmbraceApplySwazzlerPlugin", () => {
@@ -225,6 +255,66 @@ describe("Expo Config Plugin Android", () => {
         updatedConfig,
       )) as ExportedConfigWithProps;
       expect(updatedAgainConfig.modResults.contents).toEqual(afterSwazzler);
+    });
+
+    it("migrates a legacy embrace-swazzler apply line in a groovy app gradle file", async () => {
+      const afterSwazzler = readMockFile("appBuildWithSwazzler.gradle");
+      // Simulate a project that was set up before the plugin was renamed
+      const legacy = afterSwazzler.replace(
+        /embrace-gradle-plugin/g,
+        "embrace-swazzler",
+      );
+      const mockConfig = getMockModConfig({
+        platform: "android",
+        language: "groovy",
+        contents: legacy,
+      });
+
+      withAndroidEmbraceApplySwazzlerPlugin(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "",
+      });
+
+      const modFunc = mockWithAppBuildGradle.mock.lastCall[0];
+      const updatedConfig = (await modFunc(
+        mockConfig,
+      )) as ExportedConfigWithProps;
+
+      expect(updatedConfig.modResults.contents).not.toContain(
+        "embrace-swazzler",
+      );
+      expect(updatedConfig.modResults.contents).toEqual(afterSwazzler);
+    });
+
+    it("migrates a legacy embrace-swazzler apply line in a kotlin app gradle file", async () => {
+      const afterSwazzler = readMockFile("appBuildWithSwazzler.gradle.kts");
+      // Simulate a project that was set up before the plugin was renamed
+      const legacy = afterSwazzler.replace(
+        /embrace-gradle-plugin/g,
+        "embrace-swazzler",
+      );
+      const mockConfig = getMockModConfig({
+        platform: "android",
+        language: "kt",
+        contents: legacy,
+      });
+
+      withAndroidEmbraceApplySwazzlerPlugin(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "",
+      });
+
+      const modFunc = mockWithAppBuildGradle.mock.lastCall[0];
+      const updatedConfig = (await modFunc(
+        mockConfig,
+      )) as ExportedConfigWithProps;
+
+      expect(updatedConfig.modResults.contents).not.toContain(
+        "embrace-swazzler",
+      );
+      expect(updatedConfig.modResults.contents).toEqual(afterSwazzler);
     });
   });
 

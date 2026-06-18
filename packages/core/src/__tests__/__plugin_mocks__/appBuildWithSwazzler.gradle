@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-apply plugin: "embrace-swazzler"
+apply plugin: "embrace-gradle-plugin"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
