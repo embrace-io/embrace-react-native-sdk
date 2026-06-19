@@ -1,38 +1,24 @@
 package io.embrace.rnembracecoretest
 
-import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.os.Looper
-import android.preference.PreferenceManager
 import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
 import com.facebook.react.common.SystemClock.currentTimeMillis
 import io.embrace.android.embracesdk.Embrace
 import io.embrace.android.embracesdk.network.http.HttpMethod
 import io.embrace.rnembracecore.EmbraceManagerModule
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.opentelemetry.kotlin.export.OperationResultCode
 import io.opentelemetry.kotlin.logging.export.LogRecordExporter
 import io.opentelemetry.kotlin.logging.model.ReadableLogRecord
 import io.opentelemetry.kotlin.tracing.data.SpanData
 import io.opentelemetry.kotlin.tracing.export.SpanExporter
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test // `Test` should be imported from `jupiter` instead of `junit` for cases to be recognized
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.ArgumentMatchers.anyString
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
@@ -44,78 +30,39 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 class RNEmbraceCoreTest {
     companion object {
         private val embraceModuleSpy = Mockito.spy(EmbraceManagerModule(mock()))
 
-        private lateinit var spanExporter: SpanExporter
-        private lateinit var logExporter: LogRecordExporter
-        private lateinit var promise: Promise
-
-        @JvmStatic
-        fun startEmbraceSDK(spanExporter: SpanExporter, logExporter: LogRecordExporter) {
-            mockkStatic(PreferenceManager::class)
-            every { PreferenceManager.getDefaultSharedPreferences(any()) } returns mock<SharedPreferences> {
-                on { getBoolean(any(), any()) } doReturn false
-                on { edit() } doReturn mock<Editor>()
-            }
-
-            mockkStatic(Looper::class)
-            val looper = mockk<Looper> {
-                every { thread } returns Thread.currentThread()
-            }
-            every { Looper.getMainLooper() } returns looper
-
-            val mockResources = mock<Resources> {
-                on { getString(any()) } doReturn "my-resource"
-                on { getIdentifier(any(), any(), any()) } doReturn 0
-            }
-
-            val mockPackageInfo = PackageInfo()
-            mockPackageInfo.packageName = "mocked-package"
-
-            val mockPackageManager = mock<PackageManager> {
-                on { getPackageInfo(anyString(), anyInt()) } doReturn mockPackageInfo
-            }
-
-            val mockApplication: Application = mock {
-                on { packageName } doReturn "mocked-package"
-                on { applicationContext } doReturn mock<Context>()
-                on { resources } doReturn mockResources
-                on { applicationInfo } doReturn mock<ApplicationInfo>()
-                on { packageManager } doReturn mockPackageManager
-            }
-
-            // Start the Embrace SDK
-            Embrace.addSpanExporter(spanExporter)
-            Embrace.addLogRecordExporter(logExporter)
-            Embrace.start(mockApplication)
-            assertTrue(Embrace.isStarted)
-            return
+        private val spanExporter: SpanExporter = mock {
+            onBlocking { export(any()) } doReturn OperationResultCode.Success
         }
-
-        @JvmStatic
-        @BeforeAll
-        fun beforeAll() {
-            promise = mock()
-            spanExporter = mock {
-                onBlocking { export(any()) } doReturn OperationResultCode.Success
-            }
-
-            logExporter = mock {
-                onBlocking { export(any()) } doReturn OperationResultCode.Success
-            }
-
-            startEmbraceSDK(spanExporter, logExporter)
+        private val logExporter: LogRecordExporter = mock {
+            onBlocking { export(any()) } doReturn OperationResultCode.Success
         }
+        private val promise: Promise = mock()
+
+        private var sdkStarted = false
     }
 
-    @BeforeEach
-    fun beforeEach() {
-        clearInvocations(spanExporter)
-        clearInvocations(logExporter)
-        clearInvocations(promise)
+    @Before
+    fun setUp() {
+        if (!sdkStarted) {
+            Embrace.addSpanExporter(spanExporter)
+            Embrace.addLogRecordExporter(logExporter)
+            Embrace.start(RuntimeEnvironment.getApplication())
+            shadowOf(Looper.getMainLooper()).idle()
+            assertTrue(Embrace.isStarted)
+            sdkStarted = true
+        }
+        clearInvocations(spanExporter, logExporter, promise)
     }
 
     @Test
@@ -353,22 +300,16 @@ class RNEmbraceCoreTest {
             assertEquals("value.for-custom-property2", warningLog.attributes["custom.property2"])
             assertEquals("stacktrace as string", warningLog.attributes["emb.stacktrace.rn"])
             assertEquals("sys.log", warningLog.attributes["emb.type"])
-            assertEquals(6, warningLog.attributes.size)
+            assertEquals(8, warningLog.attributes.size)
             assertNotNull(warningLog.attributes["log.record.uid"])
 
             val warningLogNoStacktrace = allValues[1].asSequence().withIndex().elementAt(0).value
             assertEquals("WARNING", warningLogNoStacktrace.severityText)
             assertEquals("a nice warning message without stacktrace", warningLogNoStacktrace.body.toString())
-            assertEquals(
-                "value.for-custom-property1",
-                warningLogNoStacktrace.attributes["custom.property1"]
-            )
-            assertEquals(
-                "value.for-custom-property2",
-                warningLogNoStacktrace.attributes["custom.property2"]
-            )
+            assertEquals("value.for-custom-property1", warningLogNoStacktrace.attributes["custom.property1"])
+            assertEquals("value.for-custom-property2", warningLogNoStacktrace.attributes["custom.property2"])
             assertEquals("sys.log", warningLogNoStacktrace.attributes["emb.type"])
-            assertEquals(5, warningLogNoStacktrace.attributes.size)
+            assertEquals(7, warningLogNoStacktrace.attributes.size)
             assertNotNull(warningLogNoStacktrace.attributes["log.record.uid"])
             // no stacktrace if passing empty string
             assertNull(warningLogNoStacktrace.attributes["emb.stacktrace.rn"])
@@ -380,22 +321,16 @@ class RNEmbraceCoreTest {
             assertEquals("value.for-custom-property2", errorLog.attributes["custom.property2"])
             assertEquals("stacktrace as string", errorLog.attributes["emb.stacktrace.rn"])
             assertEquals("sys.log", errorLog.attributes["emb.type"])
-            assertEquals(6, errorLog.attributes.size)
+            assertEquals(8, errorLog.attributes.size)
             assertNotNull(errorLog.attributes["log.record.uid"])
 
             val errorLogNoStacktrace = allValues[3].asSequence().withIndex().elementAt(0).value
             assertEquals("ERROR", errorLogNoStacktrace.severityText)
             assertEquals("a nice error message without stacktrace", errorLogNoStacktrace.body.toString())
-            assertEquals(
-                "value.for-custom-property1",
-                errorLogNoStacktrace.attributes["custom.property1"]
-            )
-            assertEquals(
-                "value.for-custom-property2",
-                errorLogNoStacktrace.attributes["custom.property2"]
-            )
+            assertEquals("value.for-custom-property1", errorLogNoStacktrace.attributes["custom.property1"])
+            assertEquals("value.for-custom-property2", errorLogNoStacktrace.attributes["custom.property2"])
             assertEquals("sys.log", errorLogNoStacktrace.attributes["emb.type"])
-            assertEquals(5, errorLogNoStacktrace.attributes.size)
+            assertEquals(7, errorLogNoStacktrace.attributes.size)
             assertNotNull(errorLogNoStacktrace.attributes["log.record.uid"])
             // no stacktrace if passing empty string
             assertNull(errorLogNoStacktrace.attributes["emb.stacktrace.rn"])
@@ -406,7 +341,7 @@ class RNEmbraceCoreTest {
             assertEquals("value.for-custom-property1", infoLog.attributes["custom.property1"])
             assertEquals("value.for-custom-property2", infoLog.attributes["custom.property2"])
             assertEquals("sys.log", infoLog.attributes["emb.type"])
-            assertEquals(5, infoLog.attributes.size)
+            assertEquals(7, infoLog.attributes.size)
             assertNotNull(infoLog.attributes["log.record.uid"])
             // no stacktrace if passing a stacktrace as product's decision
             assertNull(infoLog.attributes["emb.stacktrace.rn"])
@@ -415,7 +350,7 @@ class RNEmbraceCoreTest {
             assertEquals("INFO", infoLogNoProperties.severityText)
             assertEquals("a nice info message without properties", infoLogNoProperties.body.toString())
             assertEquals("sys.log", infoLogNoProperties.attributes["emb.type"])
-            assertEquals(3, infoLogNoProperties.attributes.size)
+            assertEquals(5, infoLogNoProperties.attributes.size)
             assertNotNull(infoLogNoProperties.attributes["log.record.uid"])
             assertNull(infoLogNoProperties.attributes["emb.stacktrace.rn"])
 
@@ -423,7 +358,7 @@ class RNEmbraceCoreTest {
             assertEquals("ERROR", logWithNoSeverity.severityText)
             assertEquals("a message without severity", logWithNoSeverity.body.toString())
             assertEquals("sys.log", logWithNoSeverity.attributes["emb.type"])
-            assertEquals(4, logWithNoSeverity.attributes.size)
+            assertEquals(6, logWithNoSeverity.attributes.size)
             assertNotNull(logWithNoSeverity.attributes["log.record.uid"])
             assertEquals("stacktrace as string", logWithNoSeverity.attributes["emb.stacktrace.rn"])
         }
