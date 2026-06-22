@@ -302,6 +302,9 @@ class RNEmbraceCoreTest {
             assertEquals("sys.log", warningLog.attributes["emb.type"])
             assertEquals(8, warningLog.attributes.size)
             assertNotNull(warningLog.attributes["log.record.uid"])
+            assertNotNull(warningLog.attributes["emb.state"])
+            assertNotNull(warningLog.attributes["emb.state.network"])
+            assertNotNull(warningLog.attributes["emb.state.screen-automatic"])
 
             val warningLogNoStacktrace = allValues[1].asSequence().withIndex().elementAt(0).value
             assertEquals("WARNING", warningLogNoStacktrace.severityText)
@@ -311,6 +314,9 @@ class RNEmbraceCoreTest {
             assertEquals("sys.log", warningLogNoStacktrace.attributes["emb.type"])
             assertEquals(7, warningLogNoStacktrace.attributes.size)
             assertNotNull(warningLogNoStacktrace.attributes["log.record.uid"])
+            assertNotNull(warningLogNoStacktrace.attributes["emb.state"])
+            assertNotNull(warningLogNoStacktrace.attributes["emb.state.network"])
+            assertNotNull(warningLogNoStacktrace.attributes["emb.state.screen-automatic"])
             // no stacktrace if passing empty string
             assertNull(warningLogNoStacktrace.attributes["emb.stacktrace.rn"])
 
@@ -323,6 +329,9 @@ class RNEmbraceCoreTest {
             assertEquals("sys.log", errorLog.attributes["emb.type"])
             assertEquals(8, errorLog.attributes.size)
             assertNotNull(errorLog.attributes["log.record.uid"])
+            assertNotNull(errorLog.attributes["emb.state"])
+            assertNotNull(errorLog.attributes["emb.state.network"])
+            assertNotNull(errorLog.attributes["emb.state.screen-automatic"])
 
             val errorLogNoStacktrace = allValues[3].asSequence().withIndex().elementAt(0).value
             assertEquals("ERROR", errorLogNoStacktrace.severityText)
@@ -332,6 +341,9 @@ class RNEmbraceCoreTest {
             assertEquals("sys.log", errorLogNoStacktrace.attributes["emb.type"])
             assertEquals(7, errorLogNoStacktrace.attributes.size)
             assertNotNull(errorLogNoStacktrace.attributes["log.record.uid"])
+            assertNotNull(errorLogNoStacktrace.attributes["emb.state"])
+            assertNotNull(errorLogNoStacktrace.attributes["emb.state.network"])
+            assertNotNull(errorLogNoStacktrace.attributes["emb.state.screen-automatic"])
             // no stacktrace if passing empty string
             assertNull(errorLogNoStacktrace.attributes["emb.stacktrace.rn"])
 
@@ -343,6 +355,9 @@ class RNEmbraceCoreTest {
             assertEquals("sys.log", infoLog.attributes["emb.type"])
             assertEquals(7, infoLog.attributes.size)
             assertNotNull(infoLog.attributes["log.record.uid"])
+            assertNotNull(infoLog.attributes["emb.state"])
+            assertNotNull(infoLog.attributes["emb.state.network"])
+            assertNotNull(infoLog.attributes["emb.state.screen-automatic"])
             // no stacktrace if passing a stacktrace as product's decision
             assertNull(infoLog.attributes["emb.stacktrace.rn"])
 
@@ -352,6 +367,9 @@ class RNEmbraceCoreTest {
             assertEquals("sys.log", infoLogNoProperties.attributes["emb.type"])
             assertEquals(5, infoLogNoProperties.attributes.size)
             assertNotNull(infoLogNoProperties.attributes["log.record.uid"])
+            assertNotNull(infoLogNoProperties.attributes["emb.state"])
+            assertNotNull(infoLogNoProperties.attributes["emb.state.network"])
+            assertNotNull(infoLogNoProperties.attributes["emb.state.screen-automatic"])
             assertNull(infoLogNoProperties.attributes["emb.stacktrace.rn"])
 
             val logWithNoSeverity = allValues[6].asSequence().withIndex().elementAt(0).value
@@ -360,6 +378,9 @@ class RNEmbraceCoreTest {
             assertEquals("sys.log", logWithNoSeverity.attributes["emb.type"])
             assertEquals(6, logWithNoSeverity.attributes.size)
             assertNotNull(logWithNoSeverity.attributes["log.record.uid"])
+            assertNotNull(logWithNoSeverity.attributes["emb.state"])
+            assertNotNull(logWithNoSeverity.attributes["emb.state.network"])
+            assertNotNull(logWithNoSeverity.attributes["emb.state.screen-automatic"])
             assertEquals("stacktrace as string", logWithNoSeverity.attributes["emb.stacktrace.rn"])
         }
     }
