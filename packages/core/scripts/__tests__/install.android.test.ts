@@ -172,7 +172,7 @@ describe("Migrate legacy embrace-swazzler plugin name", () => {
     // Restore the fixture to its legacy state
     const restore = await androidUtil.buildAppGradlePatchable();
     restore.contents = restore.contents.replace(
-      "embrace-gradle-plugin",
+      "io.embrace.gradle",
       "embrace-swazzler",
     );
     restore.patch();

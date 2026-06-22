@@ -63,9 +63,9 @@ export const patchBuildGradle = {
 
 const androidPlugin = /apply plugin: ("|')com.android.application("|')/;
 export const androidEmbraceGradlePluginApplyRE =
-  /apply plugin: ('|")embrace-gradle-plugin('|")/;
+  /apply plugin: ('|")io\.embrace\.gradle('|")/;
 export const androidEmbraceGradlePluginApply =
-  "apply plugin: 'embrace-gradle-plugin'";
+  "apply plugin: 'io.embrace.gradle'";
 
 // Legacy apply line from before the rename. The id is no longer valid, so remove it on (re)install.
 export const androidEmbraceLegacySwazzlerRE =

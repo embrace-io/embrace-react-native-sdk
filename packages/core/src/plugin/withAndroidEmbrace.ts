@@ -101,7 +101,7 @@ const withAndroidEmbraceApplyGradlePlugin: ConfigPlugin<
       .filter(line => !line.includes("embrace-swazzler"));
 
     // Don't add the apply plugin line again if it's already there
-    if (hasMatch(lines, "embrace-gradle-plugin")) {
+    if (hasMatch(lines, "io.embrace.gradle")) {
       config.modResults.contents = lines.join("\n");
       return config;
     }
@@ -113,7 +113,7 @@ const withAndroidEmbraceApplyGradlePlugin: ConfigPlugin<
     const addLegacyPlugin = addAfter(
       lines,
       androidLegacyPluginRE,
-      'apply plugin: "embrace-gradle-plugin"',
+      'apply plugin: "io.embrace.gradle"',
     );
 
     if (addLegacyPlugin) {
@@ -124,7 +124,7 @@ const withAndroidEmbraceApplyGradlePlugin: ConfigPlugin<
     const addPlugin = addAfter(
       lines,
       androidPluginRE,
-      'id("embrace-gradle-plugin")',
+      'id("io.embrace.gradle")',
     );
 
     if (!addPlugin) {
