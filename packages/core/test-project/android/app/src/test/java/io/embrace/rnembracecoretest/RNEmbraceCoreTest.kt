@@ -1,39 +1,24 @@
 package io.embrace.rnembracecoretest
 
-import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.os.Looper
-import android.preference.PreferenceManager
 import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
 import com.facebook.react.common.SystemClock.currentTimeMillis
 import io.embrace.android.embracesdk.Embrace
 import io.embrace.android.embracesdk.network.http.HttpMethod
 import io.embrace.rnembracecore.EmbraceManagerModule
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.opentelemetry.api.common.AttributeKey
-import io.opentelemetry.sdk.common.CompletableResultCode
-import io.opentelemetry.sdk.logs.data.LogRecordData
-import io.opentelemetry.sdk.logs.export.LogRecordExporter
-import io.opentelemetry.sdk.trace.data.SpanData
-import io.opentelemetry.sdk.trace.export.SpanExporter
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test // `Test` should be imported from `jupiter` instead of `junit` for cases to be recognized
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.ArgumentMatchers.anyString
+import io.opentelemetry.kotlin.export.OperationResultCode
+import io.opentelemetry.kotlin.logging.export.LogRecordExporter
+import io.opentelemetry.kotlin.logging.model.ReadableLogRecord
+import io.opentelemetry.kotlin.tracing.data.SpanData
+import io.opentelemetry.kotlin.tracing.export.SpanExporter
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
@@ -43,81 +28,41 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.timeout
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 class RNEmbraceCoreTest {
     companion object {
         private val embraceModuleSpy = Mockito.spy(EmbraceManagerModule(mock()))
 
-        private lateinit var spanExporter: SpanExporter
-        private lateinit var logExporter: LogRecordExporter
-        private lateinit var promise: Promise
-        private lateinit var embraceInstance: Embrace
-
-        @JvmStatic
-        fun startEmbraceSDK(spanExporter: SpanExporter, logExporter: LogRecordExporter) {
-            mockkStatic(PreferenceManager::class)
-            every { PreferenceManager.getDefaultSharedPreferences(any()) } returns mock<SharedPreferences> {
-                on { getBoolean(any(), any()) } doReturn false
-                on { edit() } doReturn mock<Editor>()
-            }
-
-            mockkStatic(Looper::class)
-            val looper = mockk<Looper> {
-                every { thread } returns Thread.currentThread()
-            }
-            every { Looper.getMainLooper() } returns looper
-
-            val mockResources = mock<Resources> {
-                on { getString(any()) } doReturn "my-resource"
-                on { getIdentifier(any(), any(), any()) } doReturn 0
-            }
-
-            val mockPackageInfo = PackageInfo()
-            mockPackageInfo.packageName = "mocked-package"
-
-            val mockPackageManager = mock<PackageManager> {
-                on { getPackageInfo(anyString(), anyInt()) } doReturn mockPackageInfo
-            }
-
-            val mockApplication: Application = mock {
-                on { packageName } doReturn "mocked-package"
-                on { applicationContext } doReturn mock<Context>()
-                on { resources } doReturn mockResources
-                on { applicationInfo } doReturn mock<ApplicationInfo>()
-                on { packageManager } doReturn mockPackageManager
-            }
-
-            // Start the Embrace SDK
-            embraceInstance = Embrace.getInstance()
-            embraceInstance.addSpanExporter(spanExporter)
-            embraceInstance.addLogRecordExporter(logExporter)
-            embraceInstance.start(mockApplication)
-            assertTrue(Embrace.getInstance().isStarted)
-            return
+        private val spanExporter: SpanExporter = mock {
+            onBlocking { export(any()) } doReturn OperationResultCode.Success
         }
-
-        @JvmStatic
-        @BeforeAll
-        fun beforeAll() {
-            promise = mock()
-            spanExporter = mock {
-                on { export(any()) } doReturn CompletableResultCode.ofSuccess()
-            }
-
-            logExporter = mock {
-                on { export(any()) } doReturn CompletableResultCode.ofSuccess()
-            }
-
-            startEmbraceSDK(spanExporter, logExporter)
+        private val logExporter: LogRecordExporter = mock {
+            onBlocking { export(any()) } doReturn OperationResultCode.Success
         }
+        private val promise: Promise = mock()
+
+        private var sdkStarted = false
     }
 
-    @BeforeEach
-    fun beforeEach() {
-        clearInvocations(spanExporter)
-        clearInvocations(logExporter)
-        clearInvocations(promise)
+    @Before
+    fun setUp() {
+        if (!sdkStarted) {
+            Embrace.addSpanExporter(spanExporter)
+            Embrace.addLogRecordExporter(logExporter)
+            Embrace.start(RuntimeEnvironment.getApplication())
+            shadowOf(Looper.getMainLooper()).idle()
+            assertTrue(Embrace.isStarted)
+            sdkStarted = true
+        }
+        clearInvocations(spanExporter, logExporter, promise)
     }
 
     @Test
@@ -145,8 +90,8 @@ class RNEmbraceCoreTest {
         )
 
         // verify span created with emb.w3c_traceparent in place
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(spanExporter, times(1)).export(capture())
+        argumentCaptor<List<SpanData>>().apply {
+            verifyBlocking(spanExporter, times(1)) { export(capture()) }
             assertEquals(1, allValues.size)
 
             val spans = allValues[0].asSequence().withIndex()
@@ -155,17 +100,20 @@ class RNEmbraceCoreTest {
             assertEquals(1, spans.count())
             assertEquals(
                 "traceparent-log-network-request",
-                spanWithTraceparent.attributes.get(AttributeKey.stringKey("emb.w3c_traceparent"))
+                spanWithTraceparent.attributes["emb.w3c_traceparent"]
             )
             assertEquals(
                 "http://request.com/v1/log/network/request",
-                spanWithTraceparent.attributes.get(AttributeKey.stringKey("url.full"))
+                spanWithTraceparent.attributes["url.full"]
             )
-            assertEquals("200", spanWithTraceparent.attributes.get(AttributeKey.stringKey("http.response.status_code")))
-            assertEquals("perf.network_request", spanWithTraceparent.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals("12938", spanWithTraceparent.attributes.get(AttributeKey.stringKey("http.request.body.size")))
-            assertEquals(HttpMethod.GET.toString(), spanWithTraceparent.attributes.get(AttributeKey.stringKey("http.request.method")))
-            assertEquals("199", spanWithTraceparent.attributes.get(AttributeKey.stringKey("http.response.body.size")))
+            assertEquals("200", spanWithTraceparent.attributes["http.response.status_code"])
+            assertEquals("perf.network_request", spanWithTraceparent.attributes["emb.type"])
+            assertEquals("12938", spanWithTraceparent.attributes["http.request.body.size"])
+            assertEquals(
+                HttpMethod.GET.toString(),
+                spanWithTraceparent.attributes["http.request.method"]
+            )
+            assertEquals("199", spanWithTraceparent.attributes["http.response.body.size"])
         }
 
         verify(promise, times(1)).resolve(true)
@@ -183,15 +131,15 @@ class RNEmbraceCoreTest {
         )
 
         // `emb.w3c_traceparent` shouldn't be there
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(spanExporter, times(2)).export(capture())
+        argumentCaptor<List<SpanData>>().apply {
+            verifyBlocking(spanExporter, times(2)) { export(capture()) }
             assertEquals(2, allValues.size)
 
             val spans = allValues[1].asSequence().withIndex()
             val noTraceparentSpan = spans.elementAt(0).value
 
             assertEquals(1, spans.count())
-            assertNull(noTraceparentSpan.attributes.get(AttributeKey.stringKey("emb.w3c_traceparent")))
+            assertNull(noTraceparentSpan.attributes["emb.w3c_traceparent"])
         }
 
         verify(promise, times(2)).resolve(true)
@@ -220,8 +168,8 @@ class RNEmbraceCoreTest {
         )
 
         // verify span created with `emb.w3c_traceparent` in place
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(spanExporter, times(1)).export(capture())
+        argumentCaptor<List<SpanData>>().apply {
+            verifyBlocking(spanExporter, times(1)) { export(capture()) }
             assertEquals(1, allValues.size)
 
             val spans = allValues[0].asSequence().withIndex()
@@ -231,16 +179,16 @@ class RNEmbraceCoreTest {
             assertEquals("emb-POST /v1/log/network/client/error", spanWithTraceparent.name)
             assertEquals(
                 "traceparent-log-network-client-error",
-                spanWithTraceparent.attributes.get(AttributeKey.stringKey("emb.w3c_traceparent"))
+                spanWithTraceparent.attributes["emb.w3c_traceparent"]
             )
-            assertEquals("failure", spanWithTraceparent.attributes.get(AttributeKey.stringKey("emb.error_code")))
-            assertEquals("perf.network_request", spanWithTraceparent.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals("POST", spanWithTraceparent.attributes.get(AttributeKey.stringKey("http.request.method")))
-            assertEquals("Error message", spanWithTraceparent.attributes.get(AttributeKey.stringKey("exception.message")))
-            assertEquals("Bad Request", spanWithTraceparent.attributes.get(AttributeKey.stringKey("error.type")))
+            assertEquals("failure", spanWithTraceparent.attributes["emb.error_code"])
+            assertEquals("perf.network_request", spanWithTraceparent.attributes["emb.type"])
+            assertEquals("POST", spanWithTraceparent.attributes["http.request.method"])
+            assertEquals("Error message", spanWithTraceparent.attributes["exception.message"])
+            assertEquals("Bad Request", spanWithTraceparent.attributes["error.type"])
             assertEquals(
                 "http://request.com/v1/log/network/client/error",
-                spanWithTraceparent.attributes.get(AttributeKey.stringKey("url.full"))
+                spanWithTraceparent.attributes["url.full"]
             )
         }
 
@@ -258,15 +206,15 @@ class RNEmbraceCoreTest {
         )
 
         // `emb.w3c_traceparent` shouldn't be there
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(spanExporter, times(2)).export(capture())
+        argumentCaptor<List<SpanData>>().apply {
+            verifyBlocking(spanExporter, times(2)) { export(capture()) }
             assertEquals(2, allValues.size)
 
             val spans = allValues[1].asSequence().withIndex()
             val noTraceparentSpan = spans.elementAt(0).value
 
             assertEquals(1, spans.count())
-            assertNull(noTraceparentSpan.attributes.get(AttributeKey.stringKey("emb.w3c_traceparent")))
+            assertNull(noTraceparentSpan.attributes["emb.w3c_traceparent"])
         }
 
         verify(promise, times(2)).resolve(true)
@@ -341,78 +289,99 @@ class RNEmbraceCoreTest {
             promise
         )
 
-        argumentCaptor<Collection<LogRecordData>>().apply {
-            verify(logExporter, timeout(200).times(7)).export(capture())
+        argumentCaptor<List<ReadableLogRecord>>().apply {
+            verifyBlocking(logExporter, timeout(200).times(7)) { export(capture()) }
             assertEquals(7, allValues.size)
 
             val warningLog = allValues[0].asSequence().withIndex().elementAt(0).value
             assertEquals("WARNING", warningLog.severityText)
-            assertEquals("a nice warning message", warningLog.body.asString())
-            assertEquals("value.for-custom-property1", warningLog.attributes.get(AttributeKey.stringKey("custom.property1")))
-            assertEquals("value.for-custom-property2", warningLog.attributes.get(AttributeKey.stringKey("custom.property2")))
-            assertEquals("stacktrace as string", warningLog.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
-            assertEquals("sys.log", warningLog.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals(6, warningLog.attributes.size())
-            assertNotNull(warningLog.attributes.get(AttributeKey.stringKey("log.record.uid")))
+            assertEquals("a nice warning message", warningLog.body.toString())
+            assertEquals("value.for-custom-property1", warningLog.attributes["custom.property1"])
+            assertEquals("value.for-custom-property2", warningLog.attributes["custom.property2"])
+            assertEquals("stacktrace as string", warningLog.attributes["emb.stacktrace.rn"])
+            assertEquals("sys.log", warningLog.attributes["emb.type"])
+            assertEquals(8, warningLog.attributes.size)
+            assertNotNull(warningLog.attributes["log.record.uid"])
+            assertNotNull(warningLog.attributes["emb.state"])
+            assertNotNull(warningLog.attributes["emb.state.network"])
+            assertNotNull(warningLog.attributes["emb.state.screen-automatic"])
 
             val warningLogNoStacktrace = allValues[1].asSequence().withIndex().elementAt(0).value
             assertEquals("WARNING", warningLogNoStacktrace.severityText)
-            assertEquals("a nice warning message without stacktrace", warningLogNoStacktrace.body.asString())
-            assertEquals("value.for-custom-property1", warningLogNoStacktrace.attributes.get(AttributeKey.stringKey("custom.property1")))
-            assertEquals("value.for-custom-property2", warningLogNoStacktrace.attributes.get(AttributeKey.stringKey("custom.property2")))
-            assertEquals("sys.log", warningLogNoStacktrace.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals(5, warningLogNoStacktrace.attributes.size())
-            assertNotNull(warningLogNoStacktrace.attributes.get(AttributeKey.stringKey("log.record.uid")))
+            assertEquals("a nice warning message without stacktrace", warningLogNoStacktrace.body.toString())
+            assertEquals("value.for-custom-property1", warningLogNoStacktrace.attributes["custom.property1"])
+            assertEquals("value.for-custom-property2", warningLogNoStacktrace.attributes["custom.property2"])
+            assertEquals("sys.log", warningLogNoStacktrace.attributes["emb.type"])
+            assertEquals(7, warningLogNoStacktrace.attributes.size)
+            assertNotNull(warningLogNoStacktrace.attributes["log.record.uid"])
+            assertNotNull(warningLogNoStacktrace.attributes["emb.state"])
+            assertNotNull(warningLogNoStacktrace.attributes["emb.state.network"])
+            assertNotNull(warningLogNoStacktrace.attributes["emb.state.screen-automatic"])
             // no stacktrace if passing empty string
-            assertNull(warningLogNoStacktrace.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
+            assertNull(warningLogNoStacktrace.attributes["emb.stacktrace.rn"])
 
             val errorLog = allValues[2].asSequence().withIndex().elementAt(0).value
             assertEquals("ERROR", errorLog.severityText)
-            assertEquals("a nice error message", errorLog.body.asString())
-            assertEquals("value.for-custom-property1", errorLog.attributes.get(AttributeKey.stringKey("custom.property1")))
-            assertEquals("value.for-custom-property2", errorLog.attributes.get(AttributeKey.stringKey("custom.property2")))
-            assertEquals("stacktrace as string", errorLog.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
-            assertEquals("sys.log", errorLog.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals(6, errorLog.attributes.size())
-            assertNotNull(errorLog.attributes.get(AttributeKey.stringKey("log.record.uid")))
+            assertEquals("a nice error message", errorLog.body.toString())
+            assertEquals("value.for-custom-property1", errorLog.attributes["custom.property1"])
+            assertEquals("value.for-custom-property2", errorLog.attributes["custom.property2"])
+            assertEquals("stacktrace as string", errorLog.attributes["emb.stacktrace.rn"])
+            assertEquals("sys.log", errorLog.attributes["emb.type"])
+            assertEquals(8, errorLog.attributes.size)
+            assertNotNull(errorLog.attributes["log.record.uid"])
+            assertNotNull(errorLog.attributes["emb.state"])
+            assertNotNull(errorLog.attributes["emb.state.network"])
+            assertNotNull(errorLog.attributes["emb.state.screen-automatic"])
 
             val errorLogNoStacktrace = allValues[3].asSequence().withIndex().elementAt(0).value
             assertEquals("ERROR", errorLogNoStacktrace.severityText)
-            assertEquals("a nice error message without stacktrace", errorLogNoStacktrace.body.asString())
-            assertEquals("value.for-custom-property1", errorLogNoStacktrace.attributes.get(AttributeKey.stringKey("custom.property1")))
-            assertEquals("value.for-custom-property2", errorLogNoStacktrace.attributes.get(AttributeKey.stringKey("custom.property2")))
-            assertEquals("sys.log", errorLogNoStacktrace.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals(5, errorLogNoStacktrace.attributes.size())
-            assertNotNull(errorLogNoStacktrace.attributes.get(AttributeKey.stringKey("log.record.uid")))
+            assertEquals("a nice error message without stacktrace", errorLogNoStacktrace.body.toString())
+            assertEquals("value.for-custom-property1", errorLogNoStacktrace.attributes["custom.property1"])
+            assertEquals("value.for-custom-property2", errorLogNoStacktrace.attributes["custom.property2"])
+            assertEquals("sys.log", errorLogNoStacktrace.attributes["emb.type"])
+            assertEquals(7, errorLogNoStacktrace.attributes.size)
+            assertNotNull(errorLogNoStacktrace.attributes["log.record.uid"])
+            assertNotNull(errorLogNoStacktrace.attributes["emb.state"])
+            assertNotNull(errorLogNoStacktrace.attributes["emb.state.network"])
+            assertNotNull(errorLogNoStacktrace.attributes["emb.state.screen-automatic"])
             // no stacktrace if passing empty string
-            assertNull(errorLogNoStacktrace.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
+            assertNull(errorLogNoStacktrace.attributes["emb.stacktrace.rn"])
 
             val infoLog = allValues[4].asSequence().withIndex().elementAt(0).value
             assertEquals("INFO", infoLog.severityText)
-            assertEquals("a nice info message", infoLog.body.asString())
-            assertEquals("value.for-custom-property1", infoLog.attributes.get(AttributeKey.stringKey("custom.property1")))
-            assertEquals("value.for-custom-property2", infoLog.attributes.get(AttributeKey.stringKey("custom.property2")))
-            assertEquals("sys.log", infoLog.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals(5, infoLog.attributes.size())
-            assertNotNull(infoLog.attributes.get(AttributeKey.stringKey("log.record.uid")))
-            // no stacktrace if passing an stacktrace as product's decision
-            assertNull(infoLog.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
+            assertEquals("a nice info message", infoLog.body.toString())
+            assertEquals("value.for-custom-property1", infoLog.attributes["custom.property1"])
+            assertEquals("value.for-custom-property2", infoLog.attributes["custom.property2"])
+            assertEquals("sys.log", infoLog.attributes["emb.type"])
+            assertEquals(7, infoLog.attributes.size)
+            assertNotNull(infoLog.attributes["log.record.uid"])
+            assertNotNull(infoLog.attributes["emb.state"])
+            assertNotNull(infoLog.attributes["emb.state.network"])
+            assertNotNull(infoLog.attributes["emb.state.screen-automatic"])
+            // no stacktrace if passing a stacktrace as product's decision
+            assertNull(infoLog.attributes["emb.stacktrace.rn"])
 
             val infoLogNoProperties = allValues[5].asSequence().withIndex().elementAt(0).value
             assertEquals("INFO", infoLogNoProperties.severityText)
-            assertEquals("a nice info message without properties", infoLogNoProperties.body.asString())
-            assertEquals("sys.log", infoLogNoProperties.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals(3, infoLogNoProperties.attributes.size())
-            assertNotNull(infoLogNoProperties.attributes.get(AttributeKey.stringKey("log.record.uid")))
-            assertNull(infoLogNoProperties.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
+            assertEquals("a nice info message without properties", infoLogNoProperties.body.toString())
+            assertEquals("sys.log", infoLogNoProperties.attributes["emb.type"])
+            assertEquals(5, infoLogNoProperties.attributes.size)
+            assertNotNull(infoLogNoProperties.attributes["log.record.uid"])
+            assertNotNull(infoLogNoProperties.attributes["emb.state"])
+            assertNotNull(infoLogNoProperties.attributes["emb.state.network"])
+            assertNotNull(infoLogNoProperties.attributes["emb.state.screen-automatic"])
+            assertNull(infoLogNoProperties.attributes["emb.stacktrace.rn"])
 
             val logWithNoSeverity = allValues[6].asSequence().withIndex().elementAt(0).value
             assertEquals("ERROR", logWithNoSeverity.severityText)
-            assertEquals("a message without severity", logWithNoSeverity.body.asString())
-            assertEquals("sys.log", logWithNoSeverity.attributes.get(AttributeKey.stringKey("emb.type")))
-            assertEquals(4, logWithNoSeverity.attributes.size())
-            assertNotNull(logWithNoSeverity.attributes.get(AttributeKey.stringKey("log.record.uid")))
-            assertEquals("stacktrace as string", logWithNoSeverity.attributes.get(AttributeKey.stringKey("emb.stacktrace.rn")))
+            assertEquals("a message without severity", logWithNoSeverity.body.toString())
+            assertEquals("sys.log", logWithNoSeverity.attributes["emb.type"])
+            assertEquals(6, logWithNoSeverity.attributes.size)
+            assertNotNull(logWithNoSeverity.attributes["log.record.uid"])
+            assertNotNull(logWithNoSeverity.attributes["emb.state"])
+            assertNotNull(logWithNoSeverity.attributes["emb.state.network"])
+            assertNotNull(logWithNoSeverity.attributes["emb.state.screen-automatic"])
+            assertEquals("stacktrace as string", logWithNoSeverity.attributes["emb.stacktrace.rn"])
         }
     }
 }

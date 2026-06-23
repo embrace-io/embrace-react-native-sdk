@@ -167,7 +167,9 @@ const withAndroidEmbraceOnCreate: ConfigPlugin<EmbraceProps> = expoConfig => {
       // Want the Embrace SDK initialization to happen right after the super.OnCreate() call in the
       // Application.onCreate() method
       onCreateRE,
-      `Embrace.getInstance().start(this)${language === "java" ? ";" : ""}`,
+      language === "java"
+        ? "Embrace.INSTANCE.start(this);"
+        : "Embrace.start(this)",
     );
 
     if (!addedInit) {
