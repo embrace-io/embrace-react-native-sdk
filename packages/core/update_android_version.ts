@@ -1,5 +1,5 @@
 // to be removed once we pull this version from `package.json`
-// `build.gradle` file in `android` folder is using this version to download the proper Swazzler plugin
+// `build.gradle` file in `android` folder is using this version to download the proper Embrace Gradle plugin
 {
   const path = require("path");
   const fs = require("fs");
