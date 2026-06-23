@@ -24,7 +24,12 @@ import {
 import {SUPPORTED_LANGUAGES} from "./patches/common";
 import {getIOSProjectName} from "./ios";
 import {iosProjectFolderName} from "./common";
-import {androidEmbraceSwazzlerPlugin, androidGenericVersion} from "./android";
+import {
+  androidEmbraceLegacySwazzlerApply,
+  androidEmbraceLegacySwazzler,
+  androidEmbraceGradlePluginApply,
+  androidEmbraceGradlePluginDependencyRE,
+} from "./android";
 
 const fs = require("fs");
 
@@ -48,24 +53,32 @@ interface IUnlinkEmbraceCode {
   docUrl: string;
 }
 
-const UNINSTALL_ANDROID_SWAZZLER_IMPORT: IUnlinkEmbraceCode = {
+const UNINSTALL_ANDROID_GRADLE_PLUGIN_DEPENDENCY: IUnlinkEmbraceCode = {
   stepName: "Removing Embrace code in build.gradle",
   fileName: "android/build.gradle",
   textsToDelete: [
     {
-      ITextToDelete: `${androidGenericVersion}`,
+      ITextToDelete: androidEmbraceGradlePluginDependencyRE,
+    },
+    // Also remove the legacy embrace-swazzler classpath from projects set up before the rename
+    {
+      ITextToDelete: androidEmbraceLegacySwazzler,
     },
   ],
   findFileFunction: () => getBuildGradlePatchable(["android", "build.gradle"]),
   docUrl: "",
 };
 
-const UNINSTALL_ANDROID_SWAZZLER_APPLY: IUnlinkEmbraceCode = {
+const UNINSTALL_ANDROID_GRADLE_PLUGIN_APPLY: IUnlinkEmbraceCode = {
   stepName: "Removing Embrace code in app/build.gradle",
   fileName: "app/build.gradle",
   textsToDelete: [
     {
-      ITextToDelete: `${androidEmbraceSwazzlerPlugin}\n`,
+      ITextToDelete: `${androidEmbraceGradlePluginApply}\n`,
+    },
+    // Also remove the legacy embrace-swazzler apply line from projects set up before the rename
+    {
+      ITextToDelete: `${androidEmbraceLegacySwazzlerApply}\n`,
     },
   ],
   findFileFunction: () =>
@@ -98,8 +111,8 @@ const UNINSTALL_IOS_KSCRASH_PODFILE: IUnlinkEmbraceCode = {
 };
 
 type UNLINK_EMBRACE_CODE =
-  | "swazzlerImport"
-  | "swazzlerApply"
+  | "gradlePluginDependency"
+  | "gradlePluginApply"
   | "podFileImport"
   | "ksCrashPodImport";
 
@@ -108,8 +121,8 @@ type SupportedPatches = {
 };
 
 const UNLINK_EMBRACE_CODE: SupportedPatches = {
-  swazzlerImport: UNINSTALL_ANDROID_SWAZZLER_IMPORT,
-  swazzlerApply: UNINSTALL_ANDROID_SWAZZLER_APPLY,
+  gradlePluginDependency: UNINSTALL_ANDROID_GRADLE_PLUGIN_DEPENDENCY,
+  gradlePluginApply: UNINSTALL_ANDROID_GRADLE_PLUGIN_APPLY,
   podFileImport: UNINSTALL_IOS_PODFILE,
   ksCrashPodImport: UNINSTALL_IOS_KSCRASH_PODFILE,
 };
