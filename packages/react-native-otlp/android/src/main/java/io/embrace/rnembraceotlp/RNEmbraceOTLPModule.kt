@@ -14,6 +14,9 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 
 import io.embrace.android.embracesdk.Embrace
+import io.embrace.android.embracesdk.otel.java.addJavaLogRecordExporter
+import io.embrace.android.embracesdk.otel.java.addJavaSpanExporter
+
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
 import io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter
 
@@ -150,12 +153,12 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
 
         if (spanConfig != null && spanConfig.endpoint.isNotBlank()) {
             val spanCustomExporter = setOtlpHttpTraceExporter(spanConfig.endpoint, spanConfig.headers, spanConfig.timeout)
-            Embrace.getInstance().addSpanExporter(spanCustomExporter)
+            Embrace.addJavaSpanExporter(spanCustomExporter)
         }
 
         if (logConfig != null && logConfig.endpoint.isNotBlank()) {
             val logCustomExporter = setOtlpHttpLogExporter(logConfig.endpoint, logConfig.headers, logConfig.timeout)
-            Embrace.getInstance().addLogRecordExporter(logCustomExporter)
+            Embrace.addJavaLogRecordExporter(logCustomExporter)
         }
     }
 
@@ -177,7 +180,7 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
             }
 
             // 2) Embrace Start
-            Embrace.getInstance().start(this.context.getApplicationContext())
+            Embrace.start(this.context.getApplicationContext())
 
             promise.resolve(true)
         } catch (e: Exception) {

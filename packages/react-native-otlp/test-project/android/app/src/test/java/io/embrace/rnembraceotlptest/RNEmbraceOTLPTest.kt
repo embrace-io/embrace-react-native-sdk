@@ -10,7 +10,7 @@ import com.facebook.react.bridge.WritableMap
 import io.embrace.rnembraceotlp.RNEmbraceOTLPModule
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mockStatic
 import org.mockito.Mockito.`when`
