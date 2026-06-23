@@ -13,6 +13,7 @@ import {
   updateBuildProperty,
 } from "./xcodeproj";
 import {EmbraceProps} from "./types";
+import {ExporterConfig, OTLPExporterConfig} from "../interfaces";
 import {addAfter, hasMatch} from "./textUtils";
 import {writeIfNotExists} from "./fileUtils";
 
@@ -67,7 +68,132 @@ const withIosEmbraceAddKSCrashPod: ConfigPlugin = expoConfig => {
   ]);
 };
 
-const getEmbraceInitializerContents = (appId: string) => {
+const escapeSwift = (s: string) =>
+  s.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+
+// Emits Swift that builds a single OTLP HTTP exporter (trace or log) from config.
+const getHttpExporterSwift = (
+  varName: string,
+  typeName: "OtlpHttpTraceExporter" | "OtlpHttpLogExporter",
+  exporter: ExporterConfig,
+) => {
+  const headersLiteral = (exporter.headers || [])
+    .map(h => `("${escapeSwift(h.key)}", "${escapeSwift(h.token)}")`)
+    .join(", ");
+  const timeoutExpr =
+    typeof exporter.timeout === "number"
+      ? String(exporter.timeout)
+      : "OtlpConfiguration.DefaultTimeoutInterval";
+
+  return `        let ${varName}Headers: [(String, String)] = [${headersLiteral}]
+        let ${varName}URLConfig = URLSessionConfiguration.default
+        ${varName}URLConfig.httpAdditionalHeaders = Dictionary(uniqueKeysWithValues: ${varName}Headers)
+        let ${varName} = ${typeName}(
+            endpoint: URL(string: "${escapeSwift(exporter.endpoint)}")!,
+            config: OtlpConfiguration(timeout: ${timeoutExpr}, headers: ${varName}Headers),
+            httpClient: BaseHTTPClient(session: URLSession(configuration: ${varName}URLConfig)),
+            envVarHeaders: ${varName}Headers
+        )`;
+};
+
+// Initializer that wires custom OTLP exporters into the *native* Embrace start. The native start
+// pre-empts the JS `useEmbrace({exporters})` path on Expo iOS, so exporters must be attached here to
+// take effect (while keeping native crash capture). See issue #653.
+const getExportingInitializerContents = (
+  appId: string,
+  exporters: OTLPExporterConfig,
+) => {
+  const traceSetup = exporters.traceExporter
+    ? getHttpExporterSwift(
+        "spanExporter",
+        "OtlpHttpTraceExporter",
+        exporters.traceExporter,
+      )
+    : "";
+  const logSetup = exporters.logExporter
+    ? getHttpExporterSwift(
+        "logExporter",
+        "OtlpHttpLogExporter",
+        exporters.logExporter,
+      )
+    : "";
+  const spanArg = exporters.traceExporter ? "spanExporter" : "nil";
+  const logArg = exporters.logExporter ? "logExporter" : "nil";
+
+  // Hosts of the OTLP endpoints — excluded from URLSession capture so the exporter's own upload
+  // requests aren't instrumented into spans (which would feed back into the exporter). This is the
+  // native equivalent of the JS `iOSConfig.disabledUrlPatterns`.
+  const ignoredHosts = Array.from(
+    new Set(
+      [exporters.traceExporter, exporters.logExporter]
+        .filter((e): e is ExporterConfig => !!e)
+        .map(e => {
+          try {
+            return new URL(e.endpoint).host;
+          } catch {
+            return "";
+          }
+        })
+        .filter(Boolean),
+    ),
+  );
+  const ignoredURLsLiteral = ignoredHosts
+    .map(h => `"${escapeSwift(h)}"`)
+    .join(", ");
+
+  return `import Foundation
+import EmbraceIO
+import OpenTelemetrySdk
+import OpenTelemetryProtocolExporterCommon
+import OpenTelemetryProtocolExporterHttp
+
+@objcMembers class EmbraceInitializer: NSObject {
+    // Start the EmbraceSDK natively WITH custom OTLP exporters. Wiring exporters here (rather than via
+    // JS useEmbrace) is required on Expo iOS because the native start runs at launch and pre-empts the
+    // JS start. See https://github.com/embrace-io/embrace-react-native-sdk/issues/653
+    static func start() -> Void {
+${traceSetup}
+${logSetup}
+        let export = OpenTelemetryExport(spanExporter: ${spanArg}, logExporter: ${logArg})
+
+        let servicesBuilder = CaptureServiceBuilder()
+        servicesBuilder.add(.urlSession(options: URLSessionCaptureService.Options(
+            injectTracingHeader: true,
+            requestsDataSource: nil,
+            ignoredURLs: [${ignoredURLsLiteral}]
+        )))
+        servicesBuilder.addDefaults()
+
+        do {
+            try Embrace
+                .setup(
+                    options: Embrace.Options(
+                        appId: "${appId}",
+                        appGroupId: nil,
+                        platform: .reactNative,
+                        endpoints: nil,
+                        captureServices: servicesBuilder.build(),
+                        crashReporter: KSCrashReporter(),
+                        export: export
+                    )
+                )
+                .start()
+        } catch let e {
+            print("Error starting Embrace \\(e.localizedDescription)")
+        }
+    }
+}
+`;
+};
+
+const getEmbraceInitializerContents = (
+  appId: string,
+  exporters?: OTLPExporterConfig,
+) => {
+  if (exporters && (exporters.traceExporter || exporters.logExporter)) {
+    return getExportingInitializerContents(appId, exporters);
+  }
+
   return `import Foundation
 import EmbraceIO
 
@@ -115,7 +241,7 @@ const withIosEmbraceAddInitializer: ConfigPlugin<EmbraceProps> = (
 
     writeIfNotExists(
       filePath,
-      getEmbraceInitializerContents(props.iOSAppId),
+      getEmbraceInitializerContents(props.iOSAppId, props.iOSExporters),
       "withIosEmbraceAddInitializer",
     );
 
