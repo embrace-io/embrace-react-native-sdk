@@ -58,6 +58,12 @@ react {
     autolinkLibrariesWithApp()
 }
 
+kotlin {
+    compilerOptions {
+        optIn.add("io.opentelemetry.kotlin.ExperimentalApi")
+    }
+}
+
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
  */
@@ -71,6 +77,7 @@ android {
     testOptions {
         unitTests {
             isReturnDefaultValues = true
+            isIncludeAndroidResources = true
         }
     }
 
@@ -119,16 +126,15 @@ dependencies {
     // using package locally
     implementation(project(":core"))
     implementation("com.facebook.react:react-android")
-    testImplementation("io.opentelemetry:opentelemetry-sdk")
+    testImplementation("io.opentelemetry.kotlin:core")
 
     testImplementation(libs.junit)
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
-    testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
     testImplementation("io.mockk:mockk:1.13.11")
 
-    testImplementation("org.robolectric:robolectric:4.8")
+    testImplementation("org.robolectric:robolectric:4.15.1")
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -144,7 +150,7 @@ dependencies {
 }
 
 tasks.withType<Test> {
-    useJUnitPlatform()
+    useJUnit()
 
     filter {
         includeTestsMatching("*Test")

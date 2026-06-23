@@ -37,7 +37,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void isStarted(Promise promise) {
         try {
-            Boolean success = Embrace.getInstance().isStarted();
+            Boolean success = Embrace.INSTANCE.isStarted();
             promise.resolve(success);
         } catch(Exception e) {
             promise.reject("IS_STARTED_ERROR", "Error checking if Embrace SDK is started", e);
@@ -48,7 +48,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     public void startNativeEmbraceSDK(ReadableMap config, Promise promise) {
         // config for now is only used to setup the iOS SDK, the Android SDK reads its config from a file
         try {
-            Embrace.getInstance().start(this.context.getApplicationContext());
+            Embrace.INSTANCE.start(this.context.getApplicationContext());
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("START_SDK_ERROR", "Error starting Embrace SDK", e);
@@ -58,7 +58,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setUserIdentifier(String userIdentifier, Promise promise) {
         try {
-            Embrace.getInstance().setUserIdentifier(userIdentifier);
+            Embrace.INSTANCE.setUserIdentifier(userIdentifier);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("SET_USER_IDENTIFIER_ERROR", "Error setting user identifier", e);
@@ -68,7 +68,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setUsername(String username, Promise promise) {
         try {
-            Embrace.getInstance().setUsername(username);
+            Embrace.INSTANCE.setUsername(username);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("SET_USERNAME_ERROR", "Error setting username", e);
@@ -78,7 +78,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setUserEmail(String userEmail, Promise promise) {
         try {
-            Embrace.getInstance().setUserEmail(userEmail);
+            Embrace.INSTANCE.setUserEmail(userEmail);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("SET_USER_EMAIL_ERROR", "Error setting user email", e);
@@ -88,7 +88,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearUserEmail(Promise promise) {
         try {
-            Embrace.getInstance().clearUserEmail();
+            Embrace.INSTANCE.clearUserEmail();
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("CLEAR_USER_EMAIL_ERROR", "Error clearing user email", e);
@@ -98,7 +98,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearUserIdentifier(Promise promise) {
         try {
-            Embrace.getInstance().clearUserIdentifier();
+            Embrace.INSTANCE.clearUserIdentifier();
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("CLEAR_USER_IDENTIFIER_ERROR", "Error clearing user identifier", e);
@@ -108,7 +108,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearUsername(Promise promise) {
         try {
-            Embrace.getInstance().clearUsername();
+            Embrace.INSTANCE.clearUsername();
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("CLEAR_USERNAME_ERROR", "Error clearing username", e);
@@ -118,7 +118,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addBreadcrumb(String message, Promise promise) {
         try {
-            Embrace.getInstance().addBreadcrumb(message);
+            Embrace.INSTANCE.addBreadcrumb(message);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("ADD_BREADCRUMB_ERROR", "Error adding breadcrumb", e);
@@ -128,7 +128,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addUserPersona(String persona, Promise promise) {
         try {
-            Embrace.getInstance().addUserPersona(persona);
+            Embrace.INSTANCE.addUserPersona(persona);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("ADD_USER_PERSONA_ERROR", "Error adding user persona", e);
@@ -138,7 +138,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearUserPersona(String persona, Promise promise) {
         try {
-            Embrace.getInstance().clearUserPersona(persona);
+            Embrace.INSTANCE.clearUserPersona(persona);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("CLEAR_USER_PERSONA_ERROR", "Error clearing user persona", e);
@@ -148,7 +148,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearAllUserPersonas(Promise promise) {
         try {
-            Embrace.getInstance().clearAllUserPersonas();
+            Embrace.INSTANCE.clearAllUserPersonas();
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("CLEAR_ALL_USER_PERSONAS_ERROR", "Error clearing all user personas", e);
@@ -170,7 +170,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                 }
             }
 
-            Embrace.getInstance().logMessage(message, severityValue, propValue);
+            Embrace.INSTANCE.logMessage(message, severityValue, propValue);
             promise.resolve(true);
         } catch (Exception e) {
             Log.e("Embrace", "Error logging message", e);
@@ -200,7 +200,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
                 props.put("emb.stacktrace.rn", javascriptStackTrace);
             }
 
-            Embrace.getInstance().logMessage(message, Severity.ERROR, props);
+            Embrace.INSTANCE.logMessage(message, Severity.ERROR, props);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("LOG_HANDLED_ERROR_ERROR", "Error logging handled error", e);
@@ -210,7 +210,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void logUnhandledJSException(String name, String message, String type, String stacktrace, Promise promise) {
         try {
-            EmbraceInternalApi.getInstance().getReactNativeInternalInterface().logUnhandledJsException(name, message, type, stacktrace);
+            EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().logUnhandledJsException(name, message, type, stacktrace);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error logging unhandled JS exception", e);
@@ -220,7 +220,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setJavaScriptPatchNumber(String number, Promise promise) {
         try {
-            EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setJavaScriptPatchNumber(number);
+            EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().setJavaScriptPatchNumber(number);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("SET_JS_PATCH_ERROR", "Error setting JavaScript patch number", e);
@@ -230,7 +230,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setReactNativeSDKVersion(String number, Promise promise) {
         try {
-            EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setReactNativeSdkVersion(number);
+            EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().setReactNativeSdkVersion(number);
             promise.resolve(true);
         } catch (Exception e) {
             promise.reject("SET_RN_SDK_VERSION_ERROR", "Error setting React Native SDK version", e);
@@ -240,7 +240,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setReactNativeVersion(String version, Promise promise) {
         try {
-            EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setReactNativeVersionNumber(version);
+            EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().setReactNativeVersionNumber(version);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("SET_RN_VERSION_ERROR", "Error setting React Native version", e);
@@ -250,7 +250,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setJavaScriptBundlePath(String path, Promise promise) {
         try {
-            EmbraceInternalApi.getInstance().getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,path);
+            EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().setJavaScriptBundleUrl(getReactApplicationContext().getApplicationContext() ,path);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", e);
@@ -260,7 +260,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addSessionProperty(String key, String value, boolean permanent, Promise promise) {
         try {
-            Boolean success = Embrace.getInstance().addSessionProperty(key, value, permanent);
+            Boolean success = Embrace.INSTANCE.addSessionProperty(key, value, permanent);
             promise.resolve(success);
         } catch(Exception e) {
             promise.reject("ADD_SESSION_PROPERTY_ERROR", "Error adding session property", e);
@@ -270,7 +270,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void removeSessionProperty(String key, Promise promise) {
         try {
-            Embrace.getInstance().removeSessionProperty(key);
+            Embrace.INSTANCE.removeSessionProperty(key);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("REMOVE_SESSION_PROPERTY_ERROR", "Error removing session property", e);
@@ -280,7 +280,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void endSession(Promise promise) {
         try {
-            Embrace.getInstance().endSession();
+            Embrace.INSTANCE.endSession(false);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("END_SESSION_ERROR", "Error ending session", e);
@@ -290,7 +290,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod()
     public void getDeviceId(Promise promise) {
         try {
-            promise.resolve(Embrace.getInstance().getDeviceId());
+            promise.resolve(Embrace.INSTANCE.getDeviceId());
         } catch(Exception e) {
             promise.reject("GET_DEVICE_ID_ERROR", "Error getting device ID", e);
         }
@@ -299,7 +299,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod()
     public void getLastRunEndState(Promise promise) {
         try {
-            promise.resolve(Embrace.getInstance().getLastRunEndState().name());
+            promise.resolve(Embrace.INSTANCE.getLastRunEndState().name());
         } catch(Exception e) {
             Log.e("Embrace", "Error getting the last run end state", e);
             promise.reject("GET_LAST_RUN_END_STATE_ERROR", "Error getting last run end state", e);
@@ -309,7 +309,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod()
     public void getCurrentSessionId(Promise promise) {
         try {
-            promise.resolve(Embrace.getInstance().getCurrentSessionId());
+            promise.resolve(Embrace.INSTANCE.getCurrentSessionId());
         } catch(Exception e) {
             promise.reject("GET_CURRENT_SESSION_ID_ERROR", "Error getting current session ID", e);
         }
@@ -334,7 +334,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         }
 
         try {
-            Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromCompletedRequest(
+            Embrace.INSTANCE.recordNetworkRequest(EmbraceNetworkRequest.fromCompletedRequest(
                     url,
                     parsedMethod,
                     st,
@@ -370,7 +370,7 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         }
 
         try {
-            Embrace.getInstance().recordNetworkRequest(EmbraceNetworkRequest.fromIncompleteRequest(
+            Embrace.INSTANCE.recordNetworkRequest(EmbraceNetworkRequest.fromIncompleteRequest(
                     url,
                     parsedMethod,
                     st,
@@ -389,11 +389,11 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     public boolean isNetworkSpanForwardingEnabled() {
-        return EmbraceInternalApi.getInstance().getReactNativeInternalInterface().isNetworkSpanForwardingEnabled();
+        return EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().isNetworkSpanForwardingEnabled();
     }
 
     public String generateW3cTraceparent() {
-        return Embrace.getInstance().generateW3cTraceparent();
+        return Embrace.INSTANCE.generateW3cTraceparent();
     }
 
     private HttpMethod parseMethodFromString(String httpMethod) {
