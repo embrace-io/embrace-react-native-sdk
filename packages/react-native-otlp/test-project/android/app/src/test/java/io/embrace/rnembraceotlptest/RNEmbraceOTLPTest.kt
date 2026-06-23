@@ -8,9 +8,9 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.WritableMap
 import io.embrace.rnembraceotlp.RNEmbraceOTLPModule
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.assertEquals
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mockStatic
 import org.mockito.Mockito.`when`
