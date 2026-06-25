@@ -1,15 +1,6 @@
 package io.embrace.reactnativetracerprovidertest
 
-import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.os.Looper
-import android.preference.PreferenceManager
 import com.facebook.react.bridge.JavaOnlyArray
 import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
@@ -17,12 +8,13 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import io.embrace.android.embracesdk.Embrace
+import io.embrace.android.embracesdk.otel.java.addJavaSpanExporter
+import io.embrace.android.embracesdk.otel.java.getJavaOpenTelemetry
 import io.embrace.reactnativetracerprovider.ReactNativeTracerProviderModule
 import io.embrace.reactnativetracerprovider.WritableMapBuilder
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.mockkObject
-import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.trace.SpanId
 import io.opentelemetry.api.trace.SpanKind
@@ -34,16 +26,14 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider
 import io.opentelemetry.sdk.trace.data.SpanData
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 import io.opentelemetry.sdk.trace.export.SpanExporter
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Test // `Test` should be imported from `jupiter` instead of `junit` for cases to be recognized
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.ArgumentMatchers.anyString
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Ignore
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
@@ -51,6 +41,10 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
 
 class JavaOnlyMapMapBuilder : WritableMapBuilder {
     override fun build(): WritableMap {
@@ -58,65 +52,17 @@ class JavaOnlyMapMapBuilder : WritableMapBuilder {
     }
 }
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 class ReactNativeTracerProviderModuleTest {
     companion object {
         private lateinit var tracerProviderModule: ReactNativeTracerProviderModule
-        private lateinit var exporter: SpanExporter
-        private lateinit var promise: Promise
-        private lateinit var extraAttributes: List<String>
-
-        @JvmStatic
-        fun startEmbraceSDK(exporter: SpanExporter) {
-            /*
-             *  Mocks for static functions that the Embrace SDK ends up calling during `start`
-             */
-
-            mockkStatic(PreferenceManager::class)
-            every { PreferenceManager.getDefaultSharedPreferences(any()) } returns mock<SharedPreferences> {
-                on { getBoolean(any(), any()) } doReturn false
-                on { edit() } doReturn mock<Editor>()
-            }
-
-            mockkStatic(Looper::class)
-            val looper = mockk<Looper> {
-                every { thread } returns Thread.currentThread()
-            }
-            every { Looper.getMainLooper() } returns looper
-
-            /*
-             * Mock an Application to pass into `Embrace.start`
-             */
-
-            val mockResources = mock<Resources> {
-                on { getString(any()) } doReturn "my-resource"
-                on { getIdentifier(any(), any(), any()) } doReturn 0
-            }
-
-            val mockPackageInfo = PackageInfo()
-            mockPackageInfo.packageName = "mocked-package"
-
-            val mockPackageManager = mock<PackageManager> {
-                on { getPackageInfo(anyString(), anyInt()) } doReturn mockPackageInfo
-            }
-
-            val mockApplication: Application = mock {
-                on { packageName } doReturn "mocked-package"
-                on { applicationContext } doReturn mock<Context>()
-                on { resources } doReturn mockResources
-                on { applicationInfo } doReturn mock<ApplicationInfo>()
-                on { packageManager } doReturn mockPackageManager
-            }
-
-            // Start the Embrace SDK
-            val embraceInstance = Embrace.getInstance()
-            embraceInstance.addSpanExporter(exporter)
-            embraceInstance.start(mockApplication)
-            assertTrue(Embrace.getInstance().isStarted)
-
-            extraAttributes = listOf("emb.process_identifier", "emb.type", "emb.private.sequence_id", "session.id")
-
-            return
+        private val exporter: SpanExporter = mock {
+            on { export(any()) } doReturn CompletableResultCode.ofSuccess()
         }
+        private val promise: Promise = mock()
+        private var extraAttributes: List<String> = listOf()
+        private var sdkStarted = false
 
         @JvmStatic
         fun setupOTELTracerProvider(exporter: SpanExporter): TracerProvider {
@@ -126,35 +72,34 @@ class ReactNativeTracerProviderModuleTest {
                 .addSpanProcessor(SimpleSpanProcessor.create(exporter))
                 .build()
         }
+    }
 
-        @JvmStatic
-        @BeforeAll
-        fun beforeAll() {
+    @Before
+    fun setUp() {
+        if (!sdkStarted) {
             val context: ReactApplicationContext = mock()
-            promise = mock()
-            exporter = mock {
-                on { export(any()) } doReturn CompletableResultCode.ofSuccess()
-            }
 
             // Sometimes useful to test against the OTEL Tracer Provider to compare differences
             // val provider = setupOTELTracerProvider(exporter)
             // tracerProviderModule = ReactNativeTracerProviderModule(context, provider, JavaOnlyMapMapBuilder())
 
-            startEmbraceSDK(exporter)
+            Embrace.addJavaSpanExporter(exporter)
+            Embrace.start(RuntimeEnvironment.getApplication())
+            shadowOf(Looper.getMainLooper()).idle()
+            assertTrue(Embrace.isStarted)
+
             tracerProviderModule = ReactNativeTracerProviderModule(context, JavaOnlyMapMapBuilder())
             tracerProviderModule.setupTracer("test", "v1", "")
-        }
-    }
 
-    @BeforeEach
-    fun beforeEach() {
-        clearInvocations(exporter)
-        clearInvocations(promise)
+            extraAttributes = listOf("emb.process_identifier", "emb.type", "emb.private.sequence_id", "session.id")
+            sdkStarted = true
+        }
+        clearInvocations(exporter, promise)
     }
 
     @Test
     fun basicProviderExport() {
-        val provider = Embrace.getInstance().getOpenTelemetry().tracerProvider
+        val provider = Embrace.getJavaOpenTelemetry().tracerProvider
         val tracer = provider.get("basic-provider-export")
         val spanBuilder = tracer.spanBuilder("my-span")
         val span = spanBuilder.startSpan()
@@ -271,10 +216,10 @@ class ReactNativeTracerProviderModuleTest {
             assertEquals(listOf(22.0, 44.0), span1.attributes.get(AttributeKey.doubleArrayKey("my-attr6")))
              */
             assertEquals("true", span1.attributes.get(AttributeKey.stringKey("my-attr2")))
-            assertEquals("344.0", span1.attributes.get(AttributeKey.stringKey("my-attr3")))
+            assertEquals("344", span1.attributes.get(AttributeKey.stringKey("my-attr3")))
             assertEquals("[str1, str2]", span1.attributes.get(AttributeKey.stringKey("my-attr4")))
             assertEquals("[true, false]", span1.attributes.get(AttributeKey.stringKey("my-attr5")))
-            assertEquals("[22.0, 44.0]", span1.attributes.get(AttributeKey.stringKey("my-attr6")))
+            assertEquals("[22, 44]", span1.attributes.get(AttributeKey.stringKey("my-attr6")))
             for (attr in extraAttributes) {
                 assertNotNull(span1.attributes.get(AttributeKey.stringKey(attr)))
             }
@@ -501,7 +446,7 @@ class ReactNativeTracerProviderModuleTest {
         }
     }
 
-    @Disabled("links are not currently supported by the Embrace Tracer Provider")
+    @Ignore("links are not currently supported by the Embrace Tracer Provider")
     @Test
     fun addLinks() {
         tracerProviderModule.startSpan(
@@ -691,32 +636,33 @@ class ReactNativeTracerProviderModuleTest {
 
     @Test
     fun embraceSDKNotStarted() {
-        mockkObject(Embrace.Companion)
-        val embraceMock = mock<Embrace> {
-            on { isStarted } doReturn false
-        }
-        every { Embrace.getInstance() } returns embraceMock
-        val context: ReactApplicationContext = mock()
-        val module = ReactNativeTracerProviderModule(context)
+        mockkObject(Embrace)
+        try {
+            every { Embrace.isStarted } returns false
+            val context: ReactApplicationContext = mock()
+            val module = ReactNativeTracerProviderModule(context)
 
-        // Operations are noops that shouldn't error
-        module.setupTracer("test", "v1", "")
-        module.startSpan(
-            "test", "v1", "schema", "span_0",
-            "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
-            "", promise
-        )
-        verify(embraceMock, times(0)).getOpenTelemetry()
+            // Operations are noops that shouldn't error. With the SDK reported as not
+            // started, setupTracer registers no tracer, so startSpan rejects.
+            module.setupTracer("test", "v1", "")
+            module.startSpan(
+                "test", "v1", "schema", "span_0",
+                "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+                "", promise
+            )
 
-        argumentCaptor<WritableMap>().apply {
-            verify(promise, times(0)).resolve(capture())
-            assertEquals(0, allValues.size)
-        }
+            argumentCaptor<WritableMap>().apply {
+                verify(promise, times(0)).resolve(capture())
+                assertEquals(0, allValues.size)
+            }
 
-        argumentCaptor<String, String>().apply {
-            verify(promise, times(1)).reject(this.first.capture(), this.second.capture())
-            assertEquals(1, this.second.allValues.size)
-            assertEquals(this.second.allValues[0], "tracer not found")
+            argumentCaptor<String, String>().apply {
+                verify(promise, times(1)).reject(this.first.capture(), this.second.capture())
+                assertEquals(1, this.second.allValues.size)
+                assertEquals(this.second.allValues[0], "tracer not found")
+            }
+        } finally {
+            unmockkObject(Embrace)
         }
     }
 }

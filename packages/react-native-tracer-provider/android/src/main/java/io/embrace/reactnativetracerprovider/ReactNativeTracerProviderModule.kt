@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReadableType
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import io.embrace.android.embracesdk.Embrace
+import io.embrace.android.embracesdk.otel.java.getJavaOpenTelemetry
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.trace.Span
@@ -192,12 +193,12 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
     @ReactMethod
     fun setupTracer(name: String, version: String, schemaUrl: String) {
         if (tracerProvider == null) {
-            if (!Embrace.getInstance().isStarted) {
+            if (!Embrace.isStarted) {
                 log.warning("cannot access tracer provider, Embrace SDK has not been started")
                 return
             }
 
-            tracerProvider = Embrace.getInstance().getOpenTelemetry().tracerProvider
+            tracerProvider = Embrace.getJavaOpenTelemetry().tracerProvider
         }
 
         val id = getTracerKey(name, version, schemaUrl)
@@ -259,7 +260,8 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
 
         // Set time
         if (time != 0.0) {
-            spanBuilder.setStartTimestamp(time.toLong(), TimeUnit.MILLISECONDS)
+            // The SpanBuilder compat adapter ignores the TimeUnit param and assumes nanos, so convert to nanos upfront
+            spanBuilder.setStartTimestamp(TimeUnit.MILLISECONDS.toNanos(time.toLong()), TimeUnit.NANOSECONDS)
         }
 
         // Set attributes
