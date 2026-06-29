@@ -1,4 +1,4 @@
-import {OTLPExporterConfig} from "../interfaces";
+import {IOSConfig, OTLPExporterConfig} from "../interfaces";
 
 type EmbraceProps = {
   /**
@@ -30,15 +30,18 @@ type EmbraceProps = {
   productModuleName?: string;
 
   /**
-   * iOSExporters configures custom OTLP exporters that are wired into the *native* Embrace start on iOS
-   * (in the generated `EmbraceInitializer.swift`). This is required because the Expo plugin starts Embrace
-   * natively at launch (for early crash capture), which pre-empts the JS `useEmbrace({exporters})` path — so
-   * on Expo iOS, JS-supplied exporters are never attached (see issue #653). Providing them here injects them
-   * at the native start instead, keeping both crash capture and OTLP forwarding. The OTLP endpoint hosts are
-   * also excluded from URLSession capture so the exporter's own upload requests aren't instrumented (the
-   * native equivalent of `iOSConfig.disabledUrlPatterns`). Values are baked in at prebuild.
+   * iOSExporters configures custom OTLP exporters that are wired into the native Embrace start on iOS
+   * (in the generated `EmbraceInitializer.swift`).
    */
   iOSExporters?: OTLPExporterConfig;
+
+  /**
+   * iOSConfig mirrors the iOS-specific options from the JS `useEmbrace({ios})` path for the native
+   * start (the generated `EmbraceInitializer.swift`). Only applied alongside `iOSExporters`, since
+   * that's the only path that generates the native start. Currently `disableNetworkSpanForwarding`
+   * and `disabledUrlPatterns` are honored.
+   */
+  iOSConfig?: IOSConfig;
 };
 
 export {EmbraceProps};

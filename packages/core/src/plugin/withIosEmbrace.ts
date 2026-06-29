@@ -13,7 +13,7 @@ import {
   updateBuildProperty,
 } from "./xcodeproj";
 import {EmbraceProps} from "./types";
-import {ExporterConfig, OTLPExporterConfig} from "../interfaces";
+import {ExporterConfig, IOSConfig, OTLPExporterConfig} from "../interfaces";
 import {addAfter, hasMatch} from "./textUtils";
 import {writeIfNotExists} from "./fileUtils";
 
@@ -96,12 +96,11 @@ const getHttpExporterSwift = (
         )`;
 };
 
-// Initializer that wires custom OTLP exporters into the *native* Embrace start. The native start
-// pre-empts the JS `useEmbrace({exporters})` path on Expo iOS, so exporters must be attached here to
-// take effect (while keeping native crash capture). See issue #653.
+// Initializer that wires custom OTLP exporters into the *native* Embrace start.
 const getExportingInitializerContents = (
   appId: string,
   exporters: OTLPExporterConfig,
+  iosConfig: IOSConfig = {},
 ) => {
   const traceSetup = exporters.traceExporter
     ? getHttpExporterSwift(
@@ -120,25 +119,15 @@ const getExportingInitializerContents = (
   const spanArg = exporters.traceExporter ? "spanExporter" : "nil";
   const logArg = exporters.logExporter ? "logExporter" : "nil";
 
-  // Hosts of the OTLP endpoints — excluded from URLSession capture so the exporter's own upload
-  // requests aren't instrumented into spans (which would feed back into the exporter). This is the
-  // native equivalent of the JS `iOSConfig.disabledUrlPatterns`.
-  const ignoredHosts = Array.from(
-    new Set(
-      [exporters.traceExporter, exporters.logExporter]
-        .filter((e): e is ExporterConfig => !!e)
-        .map(e => {
-          try {
-            return new URL(e.endpoint).host;
-          } catch {
-            return "";
-          }
-        })
-        .filter(Boolean),
-    ),
-  );
-  const ignoredURLsLiteral = ignoredHosts
-    .map(h => `"${escapeSwift(h)}"`)
+  // Network span forwarding injects the w3c traceparent header into captured requests.
+  // Native equivalent of the JS `iOSConfig.disableNetworkSpanForwarding`.
+  const injectTracingHeader = !iosConfig.disableNetworkSpanForwarding;
+
+  // URL substrings excluded from URLSession capture. Native equivalent of the JS
+  // `iOSConfig.disabledUrlPatterns` — typically the OTLP endpoint(s) so the exporter's own
+  // upload requests aren't instrumented into spans (which would feed back into the exporter).
+  const ignoredURLsLiteral = (iosConfig.disabledUrlPatterns || [])
+    .map(p => `"${escapeSwift(p)}"`)
     .join(", ");
 
   return `import Foundation
@@ -148,9 +137,7 @@ import OpenTelemetryProtocolExporterCommon
 import OpenTelemetryProtocolExporterHttp
 
 @objcMembers class EmbraceInitializer: NSObject {
-    // Start the EmbraceSDK natively WITH custom OTLP exporters. Wiring exporters here (rather than via
-    // JS useEmbrace) is required on Expo iOS because the native start runs at launch and pre-empts the
-    // JS start. See https://github.com/embrace-io/embrace-react-native-sdk/issues/653
+    // Start the EmbraceSDK natively WITH custom OTLP exporters.
     static func start() -> Void {
 ${traceSetup}
 ${logSetup}
@@ -158,7 +145,7 @@ ${logSetup}
 
         let servicesBuilder = CaptureServiceBuilder()
         servicesBuilder.add(.urlSession(options: URLSessionCaptureService.Options(
-            injectTracingHeader: true,
+            injectTracingHeader: ${injectTracingHeader},
             requestsDataSource: nil,
             ignoredURLs: [${ignoredURLsLiteral}]
         )))
@@ -189,9 +176,10 @@ ${logSetup}
 const getEmbraceInitializerContents = (
   appId: string,
   exporters?: OTLPExporterConfig,
+  iosConfig?: IOSConfig,
 ) => {
   if (exporters && (exporters.traceExporter || exporters.logExporter)) {
-    return getExportingInitializerContents(appId, exporters);
+    return getExportingInitializerContents(appId, exporters, iosConfig);
   }
 
   return `import Foundation
@@ -241,7 +229,11 @@ const withIosEmbraceAddInitializer: ConfigPlugin<EmbraceProps> = (
 
     writeIfNotExists(
       filePath,
-      getEmbraceInitializerContents(props.iOSAppId, props.iOSExporters),
+      getEmbraceInitializerContents(
+        props.iOSAppId,
+        props.iOSExporters,
+        props.iOSConfig,
+      ),
       "withIosEmbraceAddInitializer",
     );
 
