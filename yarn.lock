@@ -4315,30 +4315,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*":
-  version: 15.7.12
-  resolution: "@types/prop-types@npm:15.7.12"
-  checksum: 10c0/1babcc7db6a1177779f8fde0ccc78d64d459906e6ef69a4ed4dd6339c920c2e05b074ee5a92120fe4e9d9f1a01c952f843ebd550bee2332fc2ef81d1706878f8
-  languageName: node
-  linkType: hard
-
-"@types/react-native@npm:^0.60.2":
-  version: 0.60.31
-  resolution: "@types/react-native@npm:0.60.31"
+"@types/react-native@npm:^0.66.16":
+  version: 0.66.16
+  resolution: "@types/react-native@npm:0.66.16"
   dependencies:
-    "@types/prop-types": "npm:*"
     "@types/react": "npm:*"
-  checksum: 10c0/ffdfe382f1e62f97410c64e245ca8bc7a2bd2f39c3e6ca3dd47c9cef3aee5dc424103ffca6a3c4f3725754c68934d5e8c36e14900aa393c06f6c550564f474b6
+  checksum: 10c0/9584cbda6c62f2b145960f759aec4caaa3cb9679ff777918f9efae0738007324126e10c4e838f20c9e917e3274048acdf88162e8a061d71e70a483dfa82ee7b7
   languageName: node
   linkType: hard
 
 "@types/react@npm:*":
-  version: 18.3.5
-  resolution: "@types/react@npm:18.3.5"
+  version: 19.2.17
+  resolution: "@types/react@npm:19.2.17"
   dependencies:
-    "@types/prop-types": "npm:*"
-    csstype: "npm:^3.0.2"
-  checksum: 10c0/548b1d3d7c2f0242fbfdbbd658731b4ce69a134be072fa83e6ab516f2840402a3f20e3e7f72e95133b23d4880ef24a6d864050dc8e1f7c68f39fa87ca8445917
+    csstype: "npm:^3.2.2"
+  checksum: 10c0/bc2c4af96b3e480604424de70d5ebda90c5f4b485df471858c0bc2d7d70364b606ec3c4d8579f94f01aa0c6c0591f56bcf14cba5689f5eea4b74250ccdc3a232
   languageName: node
   linkType: hard
 
@@ -6271,10 +6262,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^3.0.2":
-  version: 3.1.3
-  resolution: "csstype@npm:3.1.3"
-  checksum: 10c0/80c089d6f7e0c5b2bd83cf0539ab41474198579584fa10d86d0cafe0642202343cbc119e076a0b1aece191989477081415d66c9fefbf3c957fc2fc4b7009f248
+"csstype@npm:^3.2.2":
+  version: 3.2.3
+  resolution: "csstype@npm:3.2.3"
+  checksum: 10c0/cd29c51e70fa822f1cecd8641a1445bed7063697469d35633b516e60fe8c1bde04b08f6c5b6022136bb669b64c63d4173af54864510fbb4ee23281801841a3ce
   languageName: node
   linkType: hard
 
@@ -6648,7 +6639,7 @@ __metadata:
     "@testing-library/react-native": "npm:^13.0.1"
     "@types/jest": "npm:^30.0.0"
     "@types/node": "npm:^24.0.11"
-    "@types/react-native": "npm:^0.60.2"
+    "@types/react-native": "npm:^0.66.16"
     "@types/semver": "npm:^7.1.0"
     "@yarnpkg/types": "npm:^4.0.0"
     babel-jest: "npm:^30.0.4"
