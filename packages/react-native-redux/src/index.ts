@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {zip} from "gzip-js";
+import {gzipSync, strToU8} from "fflate";
 import {Middleware} from "@reduxjs/toolkit";
 import {Attributes, TracerProvider} from "@opentelemetry/api";
 
@@ -28,8 +28,8 @@ const attributeTransform = (attrs: Attributes) => {
   }
 
   if (attrs["action.payload"]) {
-    transformed.payload_size = zip(
-      attrs["action.payload"].toString(),
+    transformed.payload_size = gzipSync(
+      strToU8(attrs["action.payload"].toString()),
     ).length.toString();
   }
 

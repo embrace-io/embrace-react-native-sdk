@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
-    "gzip-js": "^0.3.2"
+    "fflate": "^0.8.3"
   },
   "peerDependencies": {
     "@reduxjs/toolkit": "*",
@@ -50,7 +50,6 @@
   "devDependencies": {
     "@opentelemetry/sdk-trace-base": "^1.25.1",
     "@reduxjs/toolkit": "^2.5.0",
-    "@types/gzip-js": "^0.3.5",
     "redux": "^5.0.1",
     "typescript": "^5.6.3"
   },
