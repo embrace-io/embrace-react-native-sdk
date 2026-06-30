@@ -1595,8 +1595,7 @@ __metadata:
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/sdk-trace-base": "npm:^1.25.1"
     "@reduxjs/toolkit": "npm:^2.5.0"
-    "@types/gzip-js": "npm:^0.3.5"
-    gzip-js: "npm:^0.3.2"
+    fflate: "npm:^0.8.3"
     redux: "npm:^5.0.1"
     typescript: "npm:^5.6.3"
   peerDependencies:
@@ -4234,15 +4233,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/gzip-js@npm:^0.3.5":
-  version: 0.3.5
-  resolution: "@types/gzip-js@npm:0.3.5"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/63fedcf1262e8d5fa0aac62114598967f39194b94f494a530f6e1eeafc2114211c6f7a31f2a4f68b73ff567036c54065f692d4718a13c99ef3268ca6a19ff24d
-  languageName: node
-  linkType: hard
-
 "@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.0, @types/istanbul-lib-coverage@npm:^2.0.1, @types/istanbul-lib-coverage@npm:^2.0.6":
   version: 2.0.6
   resolution: "@types/istanbul-lib-coverage@npm:2.0.6"
@@ -6242,15 +6232,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crc32@npm:>= 0.2.2":
-  version: 0.2.2
-  resolution: "crc32@npm:0.2.2"
-  bin:
-    crc32: ./bin/runner.js
-  checksum: 10c0/ed475a5618c948112010677751819a03ff2259c8e52d11f427c4a901d9c560d859a7c623c7885e84e811ebffc9e2c4d1aff4e685475647ab3bc2f423b86905fe
-  languageName: node
-  linkType: hard
-
 "cross-spawn@npm:^7.0.3, cross-spawn@npm:^7.0.6":
   version: 7.0.6
   resolution: "cross-spawn@npm:7.0.6"
@@ -6461,16 +6442,6 @@ __metadata:
     has-property-descriptors: "npm:^1.0.0"
     object-keys: "npm:^1.1.1"
   checksum: 10c0/88a152319ffe1396ccc6ded510a3896e77efac7a1bfbaa174a7b00414a1747377e0bb525d303794a47cf30e805c2ec84e575758512c6e44a993076d29fd4e6c3
-  languageName: node
-  linkType: hard
-
-"deflate-js@npm:>= 0.2.2":
-  version: 0.2.3
-  resolution: "deflate-js@npm:0.2.3"
-  bin:
-    deflate-js: ./bin/deflate.js
-    inflate-js: ./bin/inflate.js
-  checksum: 10c0/746b0907bb02061ca4d029e559d42cd304fc432c64eff4045da7921c27bfc87c4ad68e06ee4bb68f836abcfbd48b4c4499f2f68dd55fb361bd6251742b27c80c
   languageName: node
   linkType: hard
 
@@ -7563,6 +7534,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fflate@npm:^0.8.3":
+  version: 0.8.3
+  resolution: "fflate@npm:0.8.3"
+  checksum: 10c0/eab181ca37f5348ae76d4b6f840e0026e30220e33153289ac942222d8b9638237d486507dbcc09878d724095bd354993a2ee48bbee99c8f2c6440d4448719aa7
+  languageName: node
+  linkType: hard
+
 "figures@npm:3.2.0":
   version: 3.2.0
   resolution: "figures@npm:3.2.0"
@@ -8097,19 +8075,6 @@ __metadata:
   version: 4.2.11
   resolution: "graceful-fs@npm:4.2.11"
   checksum: 10c0/386d011a553e02bc594ac2ca0bd6d9e4c22d7fa8cfbfc448a6d148c59ea881b092db9dbe3547ae4b88e55f1b01f7c4a2ecc53b310c042793e63aa44cf6c257f2
-  languageName: node
-  linkType: hard
-
-"gzip-js@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "gzip-js@npm:0.3.2"
-  dependencies:
-    crc32: "npm:>= 0.2.2"
-    deflate-js: "npm:>= 0.2.2"
-  bin:
-    gunzip-js: ./bin/gunzip.js
-    gzip-js: ./bin/gzip.js
-  checksum: 10c0/bfcba31737cf3923d72486b04a6196429d63ebb35f5815ccea37b50b11cd247295625495f34ac36a4ab587542a67a380784022d439db28bfd6862f68791b1343
   languageName: node
   linkType: hard
 
