@@ -216,7 +216,7 @@
     const embracePluginIndex = appJSONConfig.expo.plugins.findIndex(
       plugin =>
         plugin.length &&
-        plugin[0] === "@embrace-io/react-native/lib/app.plugin.js",
+        plugin[0] === "@embrace-io/react-native",
     );
 
     // Remove the existing entry
@@ -226,11 +226,11 @@
 
     // Add the updated plugin entry
     appJSONConfig.expo.plugins.push([
-      "@embrace-io/react-native/lib/app.plugin.js",
+      "@embrace-io/react-native",
       {
         androidAppId: config.android_app_id,
         iOSAppId: config.ios_app_id,
-        apiToken: config.api_token,
+        apiToken: androidConfig.api_token,
         androidSDKConfig: androidConfig.sdk_config,
       },
     ]);
