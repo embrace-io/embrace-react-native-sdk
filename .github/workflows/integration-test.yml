@@ -61,6 +61,11 @@ jobs:
 
       - name: Build Test App
         working-directory: ./integration-tests
+        env:
+          # macos-26 runner images ship a MetalToolchain overlay alongside Xcode 26.x whose Swift stdlib is missing
+          # swiftCompatibility libs, resulting in linker errors on older RN versions - so we override TOOLCHAINS to force xcodebuild
+          # back onto the default Xcode toolchain (see https://github.com/actions/runner-images/issues/13135)
+          TOOLCHAINS: com.apple.dt.toolchain.XcodeDefault
         run: ./build-test-app.sh ${{ matrix.test-app }} ${{ matrix.platform }} namespace-${{ matrix.test-app }}-${{ matrix.platform }}-${{ github.run_id }}
 
       - name: Run Integration Tests
