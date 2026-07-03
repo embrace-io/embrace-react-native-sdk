@@ -7,6 +7,12 @@ on:
         description: "Run tests for all packages, ignoring changed-file filters"
         type: boolean
         default: false
+  workflow_dispatch:
+    inputs:
+      run_all:
+        description: "Run tests for all packages, ignoring changed-file filters"
+        type: boolean
+        default: true
   push:
     branches: [main]
   pull_request:
@@ -17,8 +23,14 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
+      - name: Select Xcode
+        # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app
+          xcodebuild -version
+      
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -53,8 +65,14 @@ jobs:
         if: ${{ inputs.run_all || steps.changed_files.outputs.ios == 'true' }}
 
   test-core:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
+      - name: Select Xcode
+        # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app
+          xcodebuild -version
+
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -133,8 +151,13 @@ jobs:
           du -sh ~/Library/Developer/Xcode/DerivedData || echo "DerivedData not found"
 
   test-tracer-provider:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
+      - name: Select Xcode
+        # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app
+          xcodebuild -version
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -215,8 +238,13 @@ jobs:
   # excessive build times and memory pressure on free CI runners. Code coverage can be collected
   # locally where hardware resources are better. See scripts/run-ios-tests-no-coverage.sh
   test-otlp:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
+      - name: Select Xcode
+        # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app
+          xcodebuild -version
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
