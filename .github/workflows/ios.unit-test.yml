@@ -22,7 +22,7 @@ permissions:
   pull-requests: read
 
 jobs:
-  build:
+  lint:
     runs-on: macos-26
     steps:
       - name: Select Xcode
@@ -55,6 +55,8 @@ jobs:
             - 'packages/**/*.m'
             - 'packages/**/*.h'
             - 'packages/**/test-project/ios/Podfile.lock'
+            - '.github/workflows/ios.unit-test.yml'
+            - 'scripts/run-swiftlint.sh'
 
       - name: Install Root Node Modules
         run: yarn install
@@ -97,6 +99,8 @@ jobs:
             - 'packages/core/**/*.m'
             - 'packages/core/**/*.h'
             - 'packages/core/test-project/ios/Podfile.lock'
+            - '.github/workflows/ios.unit-test.yml'
+            - 'scripts/run-ios-tests-no-coverage.sh'
 
       - name: Cache Derived Data
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -182,6 +186,8 @@ jobs:
             - 'packages/react-native-tracer-provider/**/*.m'
             - 'packages/react-native-tracer-provider/**/*.h'
             - 'packages/react-native-tracer-provider/test-project/ios/Podfile.lock'
+            - '.github/workflows/ios.unit-test.yml'
+            - 'scripts/run-ios-tests-no-coverage.sh'
 
       - name: Cache Derived Data
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -269,6 +275,8 @@ jobs:
             - 'packages/react-native-otlp/**/*.m'
             - 'packages/react-native-otlp/**/*.h'
             - 'packages/react-native-otlp/test-project/ios/Podfile.lock'
+            - '.github/workflows/ios.unit-test.yml'
+            - 'scripts/run-ios-tests-no-coverage.sh'
 
       - name: Cache Derived Data
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
