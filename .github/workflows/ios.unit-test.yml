@@ -7,6 +7,12 @@ on:
         description: "Run tests for all packages, ignoring changed-file filters"
         type: boolean
         default: false
+  workflow_dispatch:
+    inputs:
+      run_all:
+        description: "Run tests for all packages, ignoring changed-file filters"
+        type: boolean
+        default: true
   push:
     branches: [main]
   pull_request:
@@ -16,9 +22,15 @@ permissions:
   pull-requests: read
 
 jobs:
-  build:
-    runs-on: macos-latest
+  lint:
+    runs-on: macos-26
     steps:
+      - name: Select Xcode
+        # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app
+          xcodebuild -version
+      
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -43,6 +55,8 @@ jobs:
             - 'packages/**/*.m'
             - 'packages/**/*.h'
             - 'packages/**/test-project/ios/Podfile.lock'
+            - '.github/workflows/ios.unit-test.yml'
+            - 'scripts/run-swiftlint.sh'
 
       - name: Install Root Node Modules
         run: yarn install
@@ -53,8 +67,14 @@ jobs:
         if: ${{ inputs.run_all || steps.changed_files.outputs.ios == 'true' }}
 
   test-core:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
+      - name: Select Xcode
+        # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app
+          xcodebuild -version
+
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -79,6 +99,8 @@ jobs:
             - 'packages/core/**/*.m'
             - 'packages/core/**/*.h'
             - 'packages/core/test-project/ios/Podfile.lock'
+            - '.github/workflows/ios.unit-test.yml'
+            - 'scripts/run-ios-tests-no-coverage.sh'
 
       - name: Cache Derived Data
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -133,8 +155,13 @@ jobs:
           du -sh ~/Library/Developer/Xcode/DerivedData || echo "DerivedData not found"
 
   test-tracer-provider:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
+      - name: Select Xcode
+        # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app
+          xcodebuild -version
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -159,6 +186,8 @@ jobs:
             - 'packages/react-native-tracer-provider/**/*.m'
             - 'packages/react-native-tracer-provider/**/*.h'
             - 'packages/react-native-tracer-provider/test-project/ios/Podfile.lock'
+            - '.github/workflows/ios.unit-test.yml'
+            - 'scripts/run-ios-tests-no-coverage.sh'
 
       - name: Cache Derived Data
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -215,8 +244,13 @@ jobs:
   # excessive build times and memory pressure on free CI runners. Code coverage can be collected
   # locally where hardware resources are better. See scripts/run-ios-tests-no-coverage.sh
   test-otlp:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
+      - name: Select Xcode
+        # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app
+          xcodebuild -version
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -241,6 +275,8 @@ jobs:
             - 'packages/react-native-otlp/**/*.m'
             - 'packages/react-native-otlp/**/*.h'
             - 'packages/react-native-otlp/test-project/ios/Podfile.lock'
+            - '.github/workflows/ios.unit-test.yml'
+            - 'scripts/run-ios-tests-no-coverage.sh'
 
       - name: Cache Derived Data
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0

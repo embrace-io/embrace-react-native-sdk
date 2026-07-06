@@ -15,7 +15,7 @@ jobs:
           - platform: "android"
             runner: "ubuntu-latest"
           - platform: "apple"
-            runner: "macos-latest"
+            runner: "macos-26"
     permissions:
       contents: write
       pull-requests: write
