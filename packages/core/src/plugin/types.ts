@@ -1,3 +1,5 @@
+import {IOSConfig, OTLPExporterConfig} from "../interfaces";
+
 type EmbraceProps = {
   /**
    * androidAppId is your Embrace App ID for Android.
@@ -34,6 +36,20 @@ type EmbraceProps = {
    * Add the expo-build-properties plugin with `ios.useFrameworks: "dynamic"` alongside this one.
    */
   iOSUseSPM?: boolean;
+
+  /**
+   * iOSExporters configures custom OTLP exporters that are wired into the native Embrace start on iOS
+   * (in the generated `EmbraceInitializer.swift`).
+   */
+  iOSExporters?: OTLPExporterConfig;
+
+  /**
+   * iOSConfig mirrors the iOS-specific options from the JS `useEmbrace({ios})` path for the native
+   * start (the generated `EmbraceInitializer.swift`). Only applied alongside `iOSExporters`, since
+   * that's the only path that generates the native start. Currently `disableNetworkSpanForwarding`
+   * and `disabledUrlPatterns` are honored.
+   */
+  iOSConfig?: IOSConfig;
 };
 
 export {EmbraceProps};
