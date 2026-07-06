@@ -122,7 +122,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
     // Sometimes useful to test against the OTEL Tracer Provider to compare differences
-    testImplementation(platform("io.opentelemetry:opentelemetry-bom:1.51.0"))
+    testImplementation(platform("io.opentelemetry:opentelemetry-bom:1.62.0"))
     testImplementation("io.opentelemetry:opentelemetry-sdk")
     testImplementation("io.opentelemetry:opentelemetry-exporter-logging")
 
