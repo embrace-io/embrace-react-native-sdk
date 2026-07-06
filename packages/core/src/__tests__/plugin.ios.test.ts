@@ -8,7 +8,11 @@ import {
   withIosEmbraceInvokeInitializer,
 } from "../plugin/withIosEmbrace";
 
-import {getMockModConfig, readMockFile} from "./helpers/pluginTestUtils";
+import {
+  getMockModConfig,
+  mockFilePath,
+  readMockFile,
+} from "./helpers/pluginTestUtils";
 
 const path = require("path");
 const os = require("os");
@@ -120,6 +124,219 @@ describe("Expo Config Plugin iOS", () => {
       expect(fs.readFileSync(projectPath).toString()).toEqual(
         expectedAfterEmbrace,
       );
+    });
+
+    it("wires custom OTLP exporters into the generated EmbraceInitializer.swift", async () => {
+      const {pbx, tmp} = setupTempProjectFile(
+        "xcodeprojWithoutEmbrace.pbxproj",
+        ["FDCB4B30CE074D9DBF3488C0", "364FBCC5B81042249FAB62DD"],
+      );
+
+      const mockConfig = getMockModConfig({
+        platform: "ios",
+        platformProjectRoot: tmp,
+        projectName: "basictestapp",
+        modResults: pbx,
+      });
+
+      withIosEmbraceAddInitializer(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "ios789",
+        iOSExporters: {
+          traceExporter: {
+            endpoint: "https://otlp.example.com:4318/v1/traces",
+            headers: [{key: "Authorization", token: "Bearer test-token"}],
+            timeout: 15,
+          },
+          logExporter: {
+            endpoint: "https://otlp.example.com:4318/v1/logs",
+          },
+        },
+        iOSConfig: {
+          disabledUrlPatterns: ["otlp.example.com:4318"],
+        },
+      });
+
+      const modFunc = mockWithXcodeProject.mock.lastCall[0];
+      await modFunc(mockConfig);
+
+      const generated = fs
+        .readFileSync(
+          path.join(tmp, "basictestapp", "EmbraceInitializer.swift"),
+        )
+        .toString();
+
+      if (process.env.UPDATE_PLUGIN_FIXTURES) {
+        fs.writeFileSync(
+          mockFilePath("EmbraceInitializerWithExporters.swift"),
+          generated,
+        );
+      }
+
+      expect(generated).toEqual(
+        readMockFile("EmbraceInitializerWithExporters.swift"),
+      );
+    });
+
+    it("builds only the log exporter when no trace exporter is configured", async () => {
+      const {pbx, tmp} = setupTempProjectFile(
+        "xcodeprojWithoutEmbrace.pbxproj",
+        ["FDCB4B30CE074D9DBF3488C0", "364FBCC5B81042249FAB62DD"],
+      );
+
+      const mockConfig = getMockModConfig({
+        platform: "ios",
+        platformProjectRoot: tmp,
+        projectName: "basictestapp",
+        modResults: pbx,
+      });
+
+      withIosEmbraceAddInitializer(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "ios789",
+        iOSExporters: {
+          logExporter: {
+            endpoint: "https://otlp.example.com:4318/v1/logs",
+          },
+        },
+      });
+
+      const modFunc = mockWithXcodeProject.mock.lastCall[0];
+      await modFunc(mockConfig);
+
+      const generated = fs
+        .readFileSync(
+          path.join(tmp, "basictestapp", "EmbraceInitializer.swift"),
+        )
+        .toString();
+
+      // No trace exporter -> spanExporter is nil, only the log exporter is built.
+      expect(generated).toContain(
+        "let export = OpenTelemetryExport(spanExporter: nil, logExporter: logExporter)",
+      );
+      expect(generated).not.toContain("OtlpHttpTraceExporter");
+      expect(generated).toContain("OtlpHttpLogExporter");
+    });
+
+    it("uses explicit iOSConfig.disabledUrlPatterns for the URLSession ignoredURLs", async () => {
+      const {pbx, tmp} = setupTempProjectFile(
+        "xcodeprojWithoutEmbrace.pbxproj",
+        ["FDCB4B30CE074D9DBF3488C0", "364FBCC5B81042249FAB62DD"],
+      );
+
+      const mockConfig = getMockModConfig({
+        platform: "ios",
+        platformProjectRoot: tmp,
+        projectName: "basictestapp",
+        modResults: pbx,
+      });
+
+      withIosEmbraceAddInitializer(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "ios789",
+        iOSExporters: {
+          logExporter: {
+            endpoint: "https://otlp.example.com:4318/v1/logs",
+          },
+        },
+        iOSConfig: {
+          disabledUrlPatterns: ["otlp.example.com", "internal.metrics"],
+        },
+      });
+
+      const modFunc = mockWithXcodeProject.mock.lastCall[0];
+      await modFunc(mockConfig);
+
+      const generated = fs
+        .readFileSync(
+          path.join(tmp, "basictestapp", "EmbraceInitializer.swift"),
+        )
+        .toString();
+
+      // Explicit patterns are used verbatim (not inferred from the exporter endpoints).
+      expect(generated).toContain(
+        'ignoredURLs: ["otlp.example.com", "internal.metrics"]',
+      );
+      // Forwarding defaults to enabled.
+      expect(generated).toContain("injectTracingHeader: true");
+    });
+
+    it("defaults to an empty ignoredURLs list when no disabledUrlPatterns are provided", async () => {
+      const {pbx, tmp} = setupTempProjectFile(
+        "xcodeprojWithoutEmbrace.pbxproj",
+        ["FDCB4B30CE074D9DBF3488C0", "364FBCC5B81042249FAB62DD"],
+      );
+
+      const mockConfig = getMockModConfig({
+        platform: "ios",
+        platformProjectRoot: tmp,
+        projectName: "basictestapp",
+        modResults: pbx,
+      });
+
+      withIosEmbraceAddInitializer(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "ios789",
+        iOSExporters: {
+          logExporter: {
+            endpoint: "https://otlp.example.com:4318/v1/logs",
+          },
+        },
+      });
+
+      const modFunc = mockWithXcodeProject.mock.lastCall[0];
+      await modFunc(mockConfig);
+
+      const generated = fs
+        .readFileSync(
+          path.join(tmp, "basictestapp", "EmbraceInitializer.swift"),
+        )
+        .toString();
+
+      expect(generated).toContain("ignoredURLs: []");
+    });
+
+    it("disables network span forwarding when iOSConfig.disableNetworkSpanForwarding is set", async () => {
+      const {pbx, tmp} = setupTempProjectFile(
+        "xcodeprojWithoutEmbrace.pbxproj",
+        ["FDCB4B30CE074D9DBF3488C0", "364FBCC5B81042249FAB62DD"],
+      );
+
+      const mockConfig = getMockModConfig({
+        platform: "ios",
+        platformProjectRoot: tmp,
+        projectName: "basictestapp",
+        modResults: pbx,
+      });
+
+      withIosEmbraceAddInitializer(mockConfig, {
+        androidAppId: "",
+        apiToken: "",
+        iOSAppId: "ios789",
+        iOSExporters: {
+          logExporter: {
+            endpoint: "https://otlp.example.com:4318/v1/logs",
+          },
+        },
+        iOSConfig: {
+          disableNetworkSpanForwarding: true,
+        },
+      });
+
+      const modFunc = mockWithXcodeProject.mock.lastCall[0];
+      await modFunc(mockConfig);
+
+      const generated = fs
+        .readFileSync(
+          path.join(tmp, "basictestapp", "EmbraceInitializer.swift"),
+        )
+        .toString();
+
+      expect(generated).toContain("injectTracingHeader: false");
     });
   });
 
