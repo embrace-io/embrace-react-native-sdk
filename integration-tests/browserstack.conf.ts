@@ -74,7 +74,8 @@ exports.config = {
     },
   },
 
-  maxInstances: 10,
+  // Run workers sequentially
+  maxInstances: 1,
 
   updateJob: false,
   specs: ["./specs/simple.test.ts"], // TODO EMBR-4922 point to full test suite
@@ -87,7 +88,8 @@ exports.config = {
   waitforTimeout: 10000,
   // wdio v9 enforces this as a hard abort on session creation (got->fetch); a
   // timed-out newSession is no longer retried, so give BrowserStack room to allocate.
-  connectionRetryTimeout: 300000,
+  // 15 minutes to match browserstack's session timeout - this is the max time a session can be queued before it is aborted.
+  connectionRetryTimeout: 900000,
   connectionRetryCount: 3,
 
   framework: "mocha",
