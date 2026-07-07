@@ -15,24 +15,16 @@ permissions:
   pull-requests: read
 
 jobs:
-  build:
+  build-android:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'embrace-ci/') }}
     strategy:
       fail-fast: false
       matrix:
         test-app: [expo-rn74, rn82, rn81, rn80, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
-        platform: [android, ios]
 
-    runs-on: ${{ matrix.platform == 'ios' && 'macos-26' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Select Xcode
-        # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
-        if: matrix.platform == 'ios'
-        run: |
-          sudo xcode-select -s /Applications/Xcode_26.3.app
-          xcodebuild -version
-
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -53,7 +45,54 @@ jobs:
         with:
           distribution: "adopt"
           java-version-file: ".java-version"
-        if: matrix.platform == 'android'
+
+      - name: Install Integration Tests Node Modules
+        working-directory: ./integration-tests
+        run: npm install
+
+      - name: Build Test App
+        working-directory: ./integration-tests
+        run: ./build-test-app.sh ${{ matrix.test-app }} android namespace-${{ matrix.test-app }}-android-${{ github.run_id }}
+
+      - name: Upload app artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: app-${{ matrix.test-app }}-android
+          path: integration-tests/${{ matrix.test-app }}.apk
+          if-no-files-found: error
+          retention-days: 1
+
+  build-ios:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'embrace-ci/') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        test-app: [expo-rn74, rn82, rn81, rn80, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
+
+    runs-on: macos-26
+
+    steps:
+      - name: Select Xcode
+        # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app
+          xcodebuild -version
+
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: ".node-version"
+          cache: "npm"
+
+      - name: Enables corepack
+        run: corepack enable
+
+      - name: Install Root Node Modules
+        run: yarn install
 
       - name: Install Integration Tests Node Modules
         working-directory: ./integration-tests
@@ -66,29 +105,67 @@ jobs:
           # swiftCompatibility libs, resulting in linker errors on older RN versions - so we override TOOLCHAINS to force xcodebuild
           # back onto the default Xcode toolchain (see https://github.com/actions/runner-images/issues/13135)
           TOOLCHAINS: com.apple.dt.toolchain.XcodeDefault
-        run: ./build-test-app.sh ${{ matrix.test-app }} ${{ matrix.platform }} namespace-${{ matrix.test-app }}-${{ matrix.platform }}-${{ github.run_id }}
+        run: ./build-test-app.sh ${{ matrix.test-app }} ios namespace-${{ matrix.test-app }}-ios-${{ github.run_id }}
 
       - name: Upload app artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: app-${{ matrix.test-app }}-${{ matrix.platform }}
-          path: integration-tests/${{ matrix.test-app }}.${{ matrix.platform == 'ios' && 'ipa' || 'apk' }}
+          name: app-${{ matrix.test-app }}-ios
+          path: integration-tests/${{ matrix.test-app }}.ipa
           if-no-files-found: error
           retention-days: 1
 
-  # Builds above run fully in parallel, but our BrowserStack plan only allows 1
-  # parallel session, so the test phase is throttled to keep at most ~2 sessions
-  # in flight (max-parallel: 1 job x 2 devices). This keeps queue waits under
-  # connectionRetryTimeout and avoids BROWSERSTACK_QUEUE_SIZE_EXCEEDED.
-  test:
-    needs: build
+  test-android:
+    needs: build-android
     if: ${{ !cancelled() && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'embrace-ci/')) }}
     strategy:
       fail-fast: false
       max-parallel: 1
       matrix:
         test-app: [expo-rn74, rn82, rn81, rn80, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
-        platform: [android, ios]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: ".node-version"
+          cache: "npm"
+
+      - name: Install Integration Tests Node Modules
+        working-directory: ./integration-tests
+        run: npm install
+
+      - name: Download app artifact
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: app-${{ matrix.test-app }}-android
+          path: integration-tests/
+
+      - name: Run Integration Tests
+        working-directory: ./integration-tests
+        run: npm run test-remote
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          BROWSERSTACK_APP_NAME: ${{ matrix.test-app }}
+          BROWSERSTACK_PLATFORM: android
+          CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
+          CI_GIT_REF: ${{ github.ref_name }}
+
+  test-ios:
+    needs: build-ios
+    if: ${{ !cancelled() && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'embrace-ci/')) }}
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        test-app: [expo-rn74, rn82, rn81, rn80, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
 
     # The remote run only drives BrowserStack over HTTP, so no macOS is needed.
     runs-on: ubuntu-latest
@@ -111,7 +188,7 @@ jobs:
       - name: Download app artifact
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
-          name: app-${{ matrix.test-app }}-${{ matrix.platform }}
+          name: app-${{ matrix.test-app }}-ios
           path: integration-tests/
 
       - name: Run Integration Tests
@@ -121,6 +198,6 @@ jobs:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           BROWSERSTACK_APP_NAME: ${{ matrix.test-app }}
-          BROWSERSTACK_PLATFORM: ${{ matrix.platform }}
+          BROWSERSTACK_PLATFORM: ios
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
