@@ -8,6 +8,12 @@ on:
       BROWSERSTACK_ACCESS_KEY:
         required: true
   workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform(s) to test"
+        type: choice
+        options: [both, android, ios]
+        default: both
   pull_request:
 
 permissions:
@@ -15,8 +21,31 @@ permissions:
   pull-requests: read
 
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      android: ${{ steps.decide.outputs.android }}
+      ios: ${{ steps.decide.outputs.ios }}
+    steps:
+      - id: decide
+        env:
+          # empty for any trigger other than workflow_dispatch, which the default below treats as "both"
+          PLATFORM: ${{ inputs.platform }}
+        run: |
+          run=${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'embrace-ci/') }}
+          platform="${PLATFORM:-both}"
+          android=false
+          ios=false
+          if [ "$run" = "true" ]; then
+            if [ "$platform" = "both" ] || [ "$platform" = "android" ]; then android=true; fi
+            if [ "$platform" = "both" ] || [ "$platform" = "ios" ]; then ios=true; fi
+          fi
+          echo "android=$android" >> "$GITHUB_OUTPUT"
+          echo "ios=$ios" >> "$GITHUB_OUTPUT"
+
   build-android:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'embrace-ci/') }}
+    needs: gate
+    if: ${{ needs.gate.outputs.android == 'true' }}
     strategy:
       fail-fast: false
       matrix:
@@ -63,7 +92,8 @@ jobs:
           retention-days: 1
 
   build-ios:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'embrace-ci/') }}
+    needs: gate
+    if: ${{ needs.gate.outputs.ios == 'true' }}
     strategy:
       fail-fast: false
       matrix:
@@ -116,8 +146,8 @@ jobs:
           retention-days: 1
 
   test-android:
-    needs: build-android
-    if: ${{ !cancelled() && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'embrace-ci/')) }}
+    needs: [gate, build-android]
+    if: ${{ !cancelled() && needs.gate.outputs.android == 'true' }}
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -159,8 +189,8 @@ jobs:
           CI_GIT_REF: ${{ github.ref_name }}
 
   test-ios:
-    needs: build-ios
-    if: ${{ !cancelled() && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'embrace-ci/')) }}
+    needs: [gate, build-ios]
+    if: ${{ !cancelled() && needs.gate.outputs.ios == 'true' }}
     strategy:
       fail-fast: false
       max-parallel: 1
