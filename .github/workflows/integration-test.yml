@@ -21,11 +21,12 @@ permissions:
   pull-requests: read
 
 jobs:
-  gate:
+  prepare:
     runs-on: ubuntu-latest
     outputs:
       android: ${{ steps.decide.outputs.android }}
       ios: ${{ steps.decide.outputs.ios }}
+      matrix: ${{ steps.decide.outputs.matrix }}
     steps:
       - id: decide
         env:
@@ -42,14 +43,15 @@ jobs:
           fi
           echo "android=$android" >> "$GITHUB_OUTPUT"
           echo "ios=$ios" >> "$GITHUB_OUTPUT"
+          echo 'matrix=["expo-rn74","rn82","rn81","rn80","rn79","rn78","rn77","rn76","rn75","rn74","rn73","rn72","rn71"]' >> "$GITHUB_OUTPUT"
 
   build-android:
-    needs: gate
-    if: ${{ needs.gate.outputs.android == 'true' }}
+    needs: prepare
+    if: ${{ needs.prepare.outputs.android == 'true' }}
     strategy:
       fail-fast: false
       matrix:
-        test-app: [expo-rn74, rn82, rn81, rn80, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
+        test-app: ${{ fromJSON(needs.prepare.outputs.matrix) }}
 
     runs-on: ubuntu-latest
 
@@ -92,12 +94,12 @@ jobs:
           retention-days: 1
 
   build-ios:
-    needs: gate
-    if: ${{ needs.gate.outputs.ios == 'true' }}
+    needs: prepare
+    if: ${{ needs.prepare.outputs.ios == 'true' }}
     strategy:
       fail-fast: false
       matrix:
-        test-app: [expo-rn74, rn82, rn81, rn80, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
+        test-app: ${{ fromJSON(needs.prepare.outputs.matrix) }}
 
     runs-on: macos-26
 
@@ -146,13 +148,13 @@ jobs:
           retention-days: 1
 
   test-android:
-    needs: [gate, build-android]
-    if: ${{ !cancelled() && needs.gate.outputs.android == 'true' }}
+    needs: [prepare, build-android]
+    if: ${{ !cancelled() && needs.prepare.outputs.android == 'true' }}
     strategy:
       fail-fast: false
       max-parallel: 1
       matrix:
-        test-app: [expo-rn74, rn82, rn81, rn80, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
+        test-app: ${{ fromJSON(needs.prepare.outputs.matrix) }}
 
     runs-on: ubuntu-latest
 
@@ -189,13 +191,13 @@ jobs:
           CI_GIT_REF: ${{ github.ref_name }}
 
   test-ios:
-    needs: [gate, build-ios]
-    if: ${{ !cancelled() && needs.gate.outputs.ios == 'true' }}
+    needs: [prepare, build-ios]
+    if: ${{ !cancelled() && needs.prepare.outputs.ios == 'true' }}
     strategy:
       fail-fast: false
       max-parallel: 1
       matrix:
-        test-app: [expo-rn74, rn82, rn81, rn80, rn79, rn78, rn77, rn76, rn75, rn74, rn73, rn72, rn71]
+        test-app: ${{ fromJSON(needs.prepare.outputs.matrix) }}
 
     # The remote run only drives BrowserStack over HTTP, so no macOS is needed.
     runs-on: ubuntu-latest
