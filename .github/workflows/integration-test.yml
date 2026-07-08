@@ -83,7 +83,10 @@ jobs:
 
       - name: Build Test App
         working-directory: ./integration-tests
-        run: ./build-test-app.sh ${{ matrix.test-app }} android namespace-${{ matrix.test-app }}-android-${{ github.run_id }}
+        env:
+          TEST_APP: ${{ matrix.test-app }}
+          RUN_ID: ${{ github.run_id }}
+        run: ./build-test-app.sh "$TEST_APP" android "namespace-$TEST_APP-android-$RUN_ID"
 
       - name: Upload app artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -137,7 +140,9 @@ jobs:
           # swiftCompatibility libs, resulting in linker errors on older RN versions - so we override TOOLCHAINS to force xcodebuild
           # back onto the default Xcode toolchain (see https://github.com/actions/runner-images/issues/13135)
           TOOLCHAINS: com.apple.dt.toolchain.XcodeDefault
-        run: ./build-test-app.sh ${{ matrix.test-app }} ios namespace-${{ matrix.test-app }}-ios-${{ github.run_id }}
+          TEST_APP: ${{ matrix.test-app }}
+          RUN_ID: ${{ github.run_id }}
+        run: ./build-test-app.sh "$TEST_APP" ios "namespace-$TEST_APP-ios-$RUN_ID"
 
       - name: Upload app artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
