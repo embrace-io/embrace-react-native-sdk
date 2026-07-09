@@ -1,19 +1,19 @@
 PODS:
-  - EmbraceIO (6.19.0):
-    - EmbraceIO/EmbraceIO (= 6.19.0)
-  - EmbraceIO/EmbraceAtomicsShim (6.19.0)
-  - EmbraceIO/EmbraceCaptureService (6.19.0):
+  - EmbraceIO (6.21.0):
+    - EmbraceIO/EmbraceIO (= 6.21.0)
+  - EmbraceIO/EmbraceAtomicsShim (6.21.0)
+  - EmbraceIO/EmbraceCaptureService (6.21.0):
     - EmbraceIO/EmbraceConfiguration
     - EmbraceIO/EmbraceOTelInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceCommonInternal (6.19.0):
+  - EmbraceIO/EmbraceCommonInternal (6.21.0):
     - EmbraceIO/EmbraceAtomicsShim
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceConfigInternal (6.19.0):
+  - EmbraceIO/EmbraceConfigInternal (6.21.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfiguration
-  - EmbraceIO/EmbraceConfiguration (6.19.0)
-  - EmbraceIO/EmbraceCore (6.19.0):
+  - EmbraceIO/EmbraceConfiguration (6.21.0)
+  - EmbraceIO/EmbraceCore (6.21.0):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceConfigInternal
@@ -23,44 +23,44 @@ PODS:
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/EmbraceUploadInternal
-  - EmbraceIO/EmbraceCoreDataInternal (6.19.0):
+  - EmbraceIO/EmbraceCoreDataInternal (6.21.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceObjCUtilsInternal
-  - EmbraceIO/EmbraceCrash (6.19.0):
+  - EmbraceIO/EmbraceCrash (6.21.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceKSCrash
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceIO (6.19.0):
+  - EmbraceIO/EmbraceIO (6.21.0):
     - EmbraceIO/EmbraceCaptureService
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCore
     - EmbraceIO/EmbraceCrash
     - EmbraceIO/EmbraceKSCrashBacktraceSupport
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceKSCrash (6.19.0):
+  - EmbraceIO/EmbraceKSCrash (6.21.0):
     - KSCrash (~> 2.5.1)
-  - EmbraceIO/EmbraceKSCrashBacktraceSupport (6.19.0):
+  - EmbraceIO/EmbraceKSCrashBacktraceSupport (6.21.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceKSCrash
-  - EmbraceIO/EmbraceObjCUtilsInternal (6.19.0)
-  - EmbraceIO/EmbraceOTelInternal (6.19.0):
+  - EmbraceIO/EmbraceObjCUtilsInternal (6.21.0)
+  - EmbraceIO/EmbraceOTelInternal (6.21.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCoreDataInternal
     - EmbraceIO/EmbraceSemantics
     - EmbraceIO/EmbraceStorageInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceSemantics (6.19.0):
+  - EmbraceIO/EmbraceSemantics (6.21.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/OpenTelemetrySdk
-  - EmbraceIO/EmbraceStorageInternal (6.19.0):
+  - EmbraceIO/EmbraceStorageInternal (6.21.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCoreDataInternal
     - EmbraceIO/EmbraceSemantics
-  - EmbraceIO/EmbraceUploadInternal (6.19.0):
+  - EmbraceIO/EmbraceUploadInternal (6.21.0):
     - EmbraceIO/EmbraceCommonInternal
     - EmbraceIO/EmbraceCoreDataInternal
     - EmbraceIO/EmbraceOTelInternal
-  - EmbraceIO/OpenTelemetrySdk (6.19.0):
+  - EmbraceIO/OpenTelemetrySdk (6.21.0):
     - OpenTelemetry-Swift-Sdk (~> 2.1)
   - FBLazyVector (0.85.3)
   - hermes-engine (250829098.0.10):
@@ -89,9 +89,9 @@ PODS:
   - KSCrash/Sinks (2.5.1):
     - KSCrash/Filters
     - KSCrash/Recording
-  - OpenTelemetry-Swift-Api (2.5.0)
-  - OpenTelemetry-Swift-Sdk (2.5.0):
-    - OpenTelemetry-Swift-Api (= 2.5.0)
+  - OpenTelemetry-Swift-Api (2.5.1)
+  - OpenTelemetry-Swift-Sdk (2.5.1):
+    - OpenTelemetry-Swift-Api (= 2.5.1)
   - RCTDeprecation (0.85.3)
   - RCTRequired (0.85.3)
   - RCTSwiftUI (0.85.3)
@@ -1876,8 +1876,8 @@ PODS:
     - React-utils (= 0.85.3)
     - ReactNativeDependencies
   - ReactNativeDependencies (0.85.3)
-  - RNEmbraceTracerProvider (6.7.0):
-    - EmbraceIO (= 6.19.0)
+  - RNEmbraceTracerProvider (6.7.1):
+    - EmbraceIO (= 6.21.0)
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2141,12 +2141,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  EmbraceIO: 52906fa14f40332a481dbd752df83d17d23b7ed6
+  EmbraceIO: 918f64992642466ff49ba549d2c17b6d060ee5a3
   FBLazyVector: 24e62c765683b8d89006a88a2c8f5cf019f0074d
-  hermes-engine: dbfc266ff39a2b082812506c5b959841400385f5
+  hermes-engine: 5ffd02e75d1312e336c46fede83bacdaeb1d2972
   KSCrash: 8c4464fd5da7de520f2ce4a00fdf63f169a80f18
-  OpenTelemetry-Swift-Api: a77f3ae175b7e4d3b8899a02a47cebef955e1ddd
-  OpenTelemetry-Swift-Sdk: e92929a1e4280334d631b07fa9f785b8107c919c
+  OpenTelemetry-Swift-Api: 3be9043f6288eb4ac3cbe7548b5bd45fb4ed5849
+  OpenTelemetry-Swift-Sdk: d9fa7bc839350f5a81467a5e877f727a8a77712d
   RCTDeprecation: a4c521821fab57cbb125b36effe84d897d0dfa12
   RCTRequired: 9f3a7e5645d4bc3f551593de7550bb66ab6e42bc
   RCTSwiftUI: 239ed2eb9e73de5a6f518810630f0c95e01c8702
@@ -2155,7 +2155,7 @@ SPEC CHECKSUMS:
   React: e2dc35338068bbd299c66f043ae0d7f25de8499e
   React-callinvoker: 28b25d21b124c26cebaea713ba7d801b9351dc48
   React-Core: 02ed7d2ffb70437bdf2aba074a13078a7b0b9ff0
-  React-Core-prebuilt: f5b44d87be10bad5287a297184264eff707b7bc5
+  React-Core-prebuilt: 123513283891fbeb63ef9f690355fbfbe3409e0a
   React-CoreModules: b3a5a42dadcde3b5d47b325bd912eb2ced89e146
   React-cxxreact: fe8f88dda044e5905e99a00f41b7a874c3908716
   React-debug: 9af1e96a6069c996e3d9f1e493603e74bc9f1593
@@ -2217,8 +2217,8 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 25c9c516839be2c5e3d3344f95dc7da5f7e63fc2
   ReactCodegen: 7016a2114079361a2f1536b3c91a15ceb8eb7ca4
   ReactCommon: 7dfc3250793bf36cf221096ff59e1179e13eef7f
-  ReactNativeDependencies: 243f5c1bf640d8b3e71284a0b845e079ddd1db1c
-  RNEmbraceTracerProvider: 2be8f0b7f2fba0277ab33b1dc7c7750308291ad3
+  ReactNativeDependencies: 3ba71b5df6cceaab558c6a5a460462fc3c6e0c99
+  RNEmbraceTracerProvider: 5ee96a6eb1679d01a84bb5993d848f730fb25fc5
   Yoga: e240fec777ff1f21ef42ccebbb44b6d262125855
 
 PODFILE CHECKSUM: fb374774adf815a27bf94c2941c4aaade1a07cd2
