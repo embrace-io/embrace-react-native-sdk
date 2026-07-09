@@ -40,7 +40,7 @@ export const patchBuildGradle = {
         }
 
         if (file.hasLine(androidEmbraceGradlePluginDependencyRE)) {
-          logger.warn("already has Embrace Gradle plugin");
+          logger.warn("Already has Embrace Gradle plugin");
         } else {
           logger.log("Patching build.gradle file");
           file.addAfter(
@@ -82,9 +82,9 @@ export const patchAppBuildGradle = {
           file.deleteLine(androidEmbraceLegacySwazzlerRE);
         }
         if (file.hasLine(androidEmbraceGradlePluginApplyRE)) {
-          logger.warn("already has Embrace Gradle plugin");
+          logger.warn("Already has Embrace Gradle plugin");
         } else {
-          logger.log("patching app/build.gradle file");
+          logger.log("Patching app/build.gradle file");
           file.addAfter(androidPlugin, "\n" + androidEmbraceGradlePluginApply);
         }
 
@@ -116,7 +116,7 @@ export const createEmbraceJSON = {
         return resolve(embraceJSON());
       } catch (e) {
         if (e instanceof Error && e.message.includes("EEXIST")) {
-          logger.log("already has embrace-config.json file");
+          logger.log("Already has embrace-config.json file");
           return resolve(NoopFile);
         } else {
           throw e;
@@ -134,7 +134,7 @@ export const createEmbraceJSON = {
           return file.patch();
         })
         .then(() => {
-          logger.log("adding embrace-config.json file in android/app/src/main");
+          logger.log("Adding embrace-config.json file in android/app/src/main");
         });
     });
   },
