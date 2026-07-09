@@ -74,7 +74,8 @@ exports.config = {
     },
   },
 
-  maxInstances: 10,
+  // Run workers sequentially
+  maxInstances: 1,
 
   updateJob: false,
   specs: ["./specs/simple.test.ts"], // TODO EMBR-4922 point to full test suite
@@ -87,7 +88,8 @@ exports.config = {
   waitforTimeout: 10000,
   // wdio v9 enforces this as a hard abort on session creation (got->fetch); a
   // timed-out newSession is no longer retried, so give BrowserStack room to allocate.
-  connectionRetryTimeout: 300000,
+  // 15 minutes to match browserstack's session timeout - this is the max time a session can be queued before it is aborted.
+  connectionRetryTimeout: 900000,
   connectionRetryCount: 3,
 
   framework: "mocha",
@@ -103,20 +105,12 @@ exports.config.capabilities.forEach(function (caps) {
     caps[key] = { ...caps[key], ...exports.config.commonCapabilities[key] };
 });
 
-/*
-  Dealing w/ BrowserStack throwing BROWSERSTACK_QUEUE_SIZE_EXCEEDED. Per our plan we are only allowed a certain
-  number of tests running in parallel + waiting in queue to be run. If we exceed this browserstack responds with an
-  error when the session is trying to be setup and the suite fails.
-  To help mitigate:
-     1) Before spinning up a new worker check how many are already queued and wait if we're at the max
-     2) Up specFileRetries + specFileRetriesDelay in case we still get a collision on the last slot
- */
-
 // The number of times to retry the entire specfile when it fails as a whole
 exports.config.specFileRetries = 2;
 
-// Delay in seconds between the spec file retry attempts
-exports.config.specFileRetriesDelay = 60;
+// Delay in seconds between the spec file retry attempts.
+// Low on purpose as wdio also applies it as a pre-start sleep before spawning workers
+exports.config.specFileRetriesDelay = 5;
 
 // https://www.browserstack.com/docs/app-automate/api-reference/appium/plan#get-plan-details
 interface BrowserStackPlanDetails {
@@ -130,7 +124,6 @@ const browserStackBasicAuth = Buffer.from(
 
 const QUEUE_FULL_DELAY_SECONDS = 180;
 const QUEUE_FULL_RETRIES = 5;
-const QUEUE_JITTER_SECONDS = 10;
 
 /**
  * Gets executed before a worker process is spawned and can be used to initialize specific service
@@ -142,13 +135,11 @@ const QUEUE_JITTER_SECONDS = 10;
  * @param  {object} execArgv list of string arguments passed to the worker process
  */
 exports.config.onWorkerStart = async () => {
+  // Dealing w/ BrowserStack throwing BROWSERSTACK_QUEUE_SIZE_EXCEEDED. Per our plan we are only allowed a certain
+  // number of tests running in parallel + waiting in queue to be run. If we exceed this browserstack responds with an
+  // error when the session is trying to be setup and the suite fails.
+  // To help mitigate, before spinning up a new worker check how many are already queued and wait if we're at the max
   let retries = 0;
-
-  // Add some randomness around checking the queue size to deal with multiple workers claiming the same slot
-  await new Promise(r =>
-    setTimeout(r, QUEUE_JITTER_SECONDS * 1000 * Math.random()),
-  );
-
   while (true) {
     const queueSlots = await getQueueSlots();
     if (queueSlots > 0) {
