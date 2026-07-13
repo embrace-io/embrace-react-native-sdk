@@ -1,7 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-apply plugin: "embrace-swazzler"
+apply plugin: "io.embrace.gradle"
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -109,16 +109,6 @@ android {
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        force("io.opentelemetry:opentelemetry-bom:1.51.0")
-        force("io.opentelemetry:opentelemetry-api:1.51.0")
-        force("io.opentelemetry:opentelemetry-sdk:1.51.0")
-        force("io.opentelemetry:opentelemetry-context:1.51.0")
-        force("io.opentelemetry:opentelemetry-exporter-otlp:1.51.0")
-    }
-}
-
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
@@ -140,7 +130,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath "io.embrace:embrace-swazzler:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}"
+        classpath "io.embrace:embrace-gradle-plugin:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}"
     }
 }
 

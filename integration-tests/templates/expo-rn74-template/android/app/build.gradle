@@ -1,7 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-apply plugin: "embrace-swazzler"
+apply plugin: "io.embrace.gradle"
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 
@@ -129,22 +129,6 @@ android {
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        force("io.opentelemetry:opentelemetry-bom:1.51.0")
-        force("io.opentelemetry:opentelemetry-api:1.51.0")
-        force("io.opentelemetry:opentelemetry-sdk:1.51.0")
-        force("io.opentelemetry:opentelemetry-context:1.51.0")
-        force("io.opentelemetry:opentelemetry-exporter-otlp:1.51.0")
-        // Force Kotlin stdlib version to match compiler (1.9.23) to avoid metadata version conflicts
-        force("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.23")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23")
-        // Force okio version compatible with Kotlin 1.9.x (3.9.0 is last version built with Kotlin 1.9.x)
-        force("com.squareup.okio:okio:3.9.0")
-    }
-}
-
 // Apply static values from `gradle.properties` to the `android.packagingOptions`
 // Accepts values in comma delimited lists, example:
 // android.packagingOptions.pickFirsts=/LICENSE,**/picasa.ini
@@ -203,7 +187,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath "io.embrace:embrace-swazzler:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}"
+        classpath "io.embrace:embrace-gradle-plugin:${findProject(':embrace-io_react-native').properties['emb_android_sdk']}"
     }
 }
 

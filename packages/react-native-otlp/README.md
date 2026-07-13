@@ -153,10 +153,17 @@ let GRAFANA_LOGS_ENDPOINT = "https://otlp-gateway-prod-us-central-0.grafana.net/
 Similar to iOS, if you already ran the install script you will see the following line already in place in your `MainApplication` file:
 
 ```
-Embrace.getInstance().start(this)
+Embrace.start(this)
 ```
 
 Tweak the `onCreate` method using the following snippet to initialize the exporters with the minimum configuration needed.
+
+Embrace exposes two pairs of methods for registering custom exporters, depending on which OpenTelemetry API your exporters are built with:
+
+- `Embrace.addSpanExporter` / `Embrace.addLogRecordExporter` accept OpenTelemetry Kotlin exporters.
+- `Embrace.addJavaSpanExporter` / `Embrace.addJavaLogRecordExporter` accept OpenTelemetry Java exporters.
+
+The example below uses the OpenTelemetry Java exporters.
 
 Add the following imports:
 
@@ -178,11 +185,11 @@ val logExporter = OtlpHttpLogRecordExporter.builder()
                                 .setEndpoint("https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/logs")
                                 .addHeader("Authorization", "Basic __YOUR TOKEN__")
 
-Embrace.getInstance().addSpanExporter(spanExporter.build())
-Embrace.getInstance().addLogRecordExporter(logExporter.build())
+Embrace.addJavaSpanExporter(spanExporter.build())
+Embrace.addJavaLogRecordExporter(logExporter.build())
 
 // This is the line already added by the install script
-Embrace.getInstance().start(this)
+Embrace.start(this)
 ```
 
 ## Disable tracing for the OTLP export network requests

@@ -10,6 +10,7 @@ buildscript {
         minSdkVersion = 24
         compileSdkVersion = 34
         targetSdkVersion = 34
+        kotlinVersion = "2.0.21" // Minimum Kotlin version for Embrace Android SDK v8
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
@@ -19,7 +20,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.3.0") // Minimum AGP version to avoid desugaring issues
+        // Minimum AGP version to avoid desugaring issues is 8.3.0, but some transitive deps of Embrace Android SDK carry kotlin 2.1 metadata, 
+        // so we use AGP 8.6 to avoid metadata version conflict warnings
+        classpath("com.android.tools.build:gradle:8.6.0")
         classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }

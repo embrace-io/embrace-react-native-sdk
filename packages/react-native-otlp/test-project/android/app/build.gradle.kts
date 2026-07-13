@@ -92,16 +92,6 @@ android {
     useLibrary("android.test.mock")
 }
 
-configurations.all {
-    resolutionStrategy {
-        force("io.opentelemetry:opentelemetry-bom:1.51.0")
-        force("io.opentelemetry:opentelemetry-api:1.51.0")
-        force("io.opentelemetry:opentelemetry-sdk:1.51.0")
-        force("io.opentelemetry:opentelemetry-context:1.51.0")
-        force("io.opentelemetry:opentelemetry-exporter-otlp:1.51.0")
-    }
-}
-
 /**
  * The preferred build flavor of JavaScriptCore (JSC)
  *
@@ -126,12 +116,11 @@ dependencies {
 
     testImplementation(libs.junit)
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
-    testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
     testImplementation("io.mockk:mockk:1.13.11")
 
-    testImplementation("org.robolectric:robolectric:4.8")
+    testImplementation("org.robolectric:robolectric:4.15.1")
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

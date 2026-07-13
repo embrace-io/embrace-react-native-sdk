@@ -7,16 +7,25 @@ def packageJsonFile = file("$packageJsonPath/package.json")
 def packageJson = json.parse(packageJsonFile)
 
 def embrace = "io.embrace:embrace-android-sdk:$packageJson.embrace.androidVersion"
-def opentelemetry = "io.opentelemetry:opentelemetry-exporter-otlp:1.43.0"
+def embraceOtelJava = "io.embrace:embrace-android-otel-java:$packageJson.embrace.androidVersion"
+def opentelemetry = "io.opentelemetry:opentelemetry-exporter-otlp:1.62.0"
 
 // covering custom dependencies specific to Embrace and OpenTelemetry
 dependencies {
   // if it is an app use `implementation` otherwise use the `api` annotation
   if (plugins.hasPlugin('com.android.application')) {
     implementation embrace
-    implementation opentelemetry
+    implementation embraceOtelJava
+    implementation(opentelemetry) {
+      // OTel's okhttp sender pulls okhttp 5, , so we exclude it here to use the app's resolved okhttp 4 instead.
+      // See https://github.com/open-telemetry/opentelemetry-java/issues/8001
+      exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+    }
   } else if (plugins.hasPlugin('com.android.library')) {
     api embrace
-    api opentelemetry
+    api embraceOtelJava
+    api(opentelemetry) {
+      exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+    }
   }
 }
