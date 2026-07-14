@@ -40,7 +40,7 @@
     "@react-native/jest-preset": "^0.86.0",
     "@testing-library/react-native": "^13.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.11",
+    "@types/node": "^26.1.0",
     "@types/react-native": "^0.60.2",
     "@types/semver": "^7.1.0",
     "@yarnpkg/types": "^4.0.0",
