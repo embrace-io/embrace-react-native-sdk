@@ -1562,7 +1562,7 @@ __metadata:
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/sdk-trace-base": "npm:^1.25.1"
     "@react-navigation/native": "npm:^7.0.15"
-    "@testing-library/react-native": "npm:^13.0.1"
+    "@testing-library/react-native": "npm:^14.0.1"
     react-native-navigation: "npm:^7.40.3"
     typescript: "npm:^5.6.3"
   peerDependencies:
@@ -4090,23 +4090,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-native@npm:^13.0.1":
-  version: 13.3.3
-  resolution: "@testing-library/react-native@npm:13.3.3"
+"@testing-library/react-native@npm:^14.0.1":
+  version: 14.0.1
+  resolution: "@testing-library/react-native@npm:14.0.1"
   dependencies:
-    jest-matcher-utils: "npm:^30.0.5"
+    jest-matcher-utils: "npm:^30.4.1"
     picocolors: "npm:^1.1.1"
-    pretty-format: "npm:^30.0.5"
+    pretty-format: "npm:^30.4.1"
     redent: "npm:^3.0.0"
   peerDependencies:
     jest: ">=29.0.0"
-    react: ">=18.2.0"
-    react-native: ">=0.71"
-    react-test-renderer: ">=18.2.0"
+    react: ">=19.0.0"
+    react-native: ">=0.78"
+    test-renderer: ^1.0.0
   peerDependenciesMeta:
     jest:
       optional: true
-  checksum: 10c0/ba13066536d5b2c0b625220d4320c6ad1e390c3df4f4b614d859ef467c4974ad52aa79269ae98efdba8f5a074644e3d11583a5485312df5a64387976ecf4225a
+  checksum: 10c0/339b3cbb4823384c1661dada540935107fd4e0c4e61b705a3516a2efbbd0bb03cd3f21584b769a34583409a83eef797048ae1e603f7e43fb5b669568d8f9f2f8
   languageName: node
   linkType: hard
 
@@ -6663,7 +6663,7 @@ __metadata:
     "@eslint/js": "npm:^10.0.0"
     "@react-native/babel-preset": "npm:^0.86.0"
     "@react-native/jest-preset": "npm:^0.86.0"
-    "@testing-library/react-native": "npm:^13.0.1"
+    "@testing-library/react-native": "npm:^14.0.1"
     "@types/jest": "npm:^30.0.0"
     "@types/node": "npm:^24.0.11"
     "@types/react-native": "npm:^0.60.2"
@@ -9337,7 +9337,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-matcher-utils@npm:30.4.1, jest-matcher-utils@npm:^30.0.5":
+"jest-matcher-utils@npm:30.4.1, jest-matcher-utils@npm:^30.4.1":
   version: 30.4.1
   resolution: "jest-matcher-utils@npm:30.4.1"
   dependencies:
@@ -12263,7 +12263,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-format@npm:30.4.1, pretty-format@npm:^30.0.0, pretty-format@npm:^30.0.5":
+"pretty-format@npm:30.4.1, pretty-format@npm:^30.0.0, pretty-format@npm:^30.4.1":
   version: 30.4.1
   resolution: "pretty-format@npm:30.4.1"
   dependencies:
