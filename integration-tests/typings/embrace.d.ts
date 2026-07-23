@@ -15,16 +15,24 @@ interface EmbraceSpanEvent {
   attributes: EmbraceSpanAttribute[];
 }
 
+interface EmbraceSpanLink {
+  span_id: string;
+  trace_id: string;
+  attributes: EmbraceSpanAttribute[];
+  is_remote?: boolean;
+}
+
 interface EmbraceSpanData {
   trace_id: string;
   span_id: string;
-  parent_span_id: string;
+  parent_span_id?: string;
   name: string;
   start_time_unix_nano: number;
   end_time_unix_nano: number;
-  status: "Unset" | "Ok" | "Error";
+  status: string;
   events: EmbraceSpanEvent[];
   attributes: EmbraceSpanAttribute[];
+  links?: EmbraceSpanLink[];
 }
 
 interface EmbracePayloadSpans {
@@ -40,16 +48,6 @@ interface EmbracePayloadMetadata {
   // TODO
 }
 
-interface ParsedSpanPayload {
-  sessionSpan: EmbraceSpanData;
-  spanSnapshots: EmbraceSpanData[];
-  privateSpans: EmbraceSpanData[];
-  networkSpans: EmbraceSpanData[];
-  viewSpans: EmbraceSpanData[];
-  perfSpans: EmbraceSpanData[];
-  perfSpanSnapshots: EmbraceSpanData[];
-}
-
 interface EmbracePayload {
   json: {
     resource: EmbracePayloadResource;
@@ -60,11 +58,57 @@ interface EmbracePayload {
   };
 }
 
+interface EmbraceLogRecord {
+  body: string;
+  severity_number: number;
+  severity_text: string;
+  time_unix_nano: number;
+  attributes: EmbraceSpanAttribute[];
+}
+
+interface EmbracePayloadLogs {
+  logs: EmbraceLogRecord[];
+}
+
+interface EmbraceSpanEnvelope {
+  resource: EmbracePayloadResource;
+  metadata: EmbracePayloadMetadata;
+  version: string;
+  type: string;
+  data: EmbracePayloadSpans;
+}
+
+interface EmbraceLogEnvelope {
+  resource: EmbracePayloadResource;
+  metadata: EmbracePayloadMetadata;
+  version: string;
+  type: string;
+  data: EmbracePayloadLogs;
+}
+
+interface NormalizedPayloads {
+  sessionSpans: EmbraceSpanData[];
+  viewSpans: EmbraceSpanData[];
+  perfSpans: EmbraceSpanData[];
+  networkSpans: EmbraceSpanData[];
+  spanSnapshots: EmbraceSpanData[];
+  logs: EmbraceLogRecord[];
+  ignored: EmbraceSpanData[];
+}
+
+type Platform = "android" | "ios";
+
 export type {
   EmbracePayload,
   EmbracePayloadSpans,
   EmbraceSpanData,
   EmbraceSpanAttribute,
   EmbraceSpanEvent,
-  ParsedSpanPayload,
+  EmbraceSpanLink,
+  EmbraceLogRecord,
+  EmbracePayloadLogs,
+  EmbraceSpanEnvelope,
+  EmbraceLogEnvelope,
+  NormalizedPayloads,
+  Platform,
 };

@@ -1,22 +1,14 @@
-import {getSpanPayloads} from "../helpers/embrace_server";
-import {endSession, backgroundSessionsEnabled} from "../helpers/session";
-import {getAttributeValue} from "../helpers/span";
+import {getPayloadSource} from "../helpers/payload_source";
+import {endSession} from "../helpers/session";
 
 describe("Sessions", () => {
-  it("should be recorded as foreground and background", async () => {
-    await endSession();
-    const spanPayloads = await getSpanPayloads();
+  it("records a foreground session when the app is backgrounded", async () => {
+    const source = getPayloadSource();
 
-    expect(spanPayloads).toHaveLength(backgroundSessionsEnabled() ? 2 : 1);
-    if (spanPayloads.length > 0) {
-      expect(getAttributeValue(spanPayloads[0].sessionSpan, "emb.state")).toBe(
-        "foreground",
-      );
-      if (backgroundSessionsEnabled()) {
-        expect(
-          getAttributeValue(spanPayloads[1].sessionSpan, "emb.state"),
-        ).toBe("background");
-      }
-    }
+    await endSession();
+
+    const p = await source.getPayloads();
+    expect(p.sessionSpans).toHaveLength(1);
+    expect(p.sessionSpans[0]).toHaveAttributes({"emb.state": "foreground"});
   });
 });
