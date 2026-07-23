@@ -1,6 +1,8 @@
 import type {Options} from "@wdio/types";
-import {clearServer, startServer, stopServer} from "./helpers/embrace_server";
+import {startServer, stopServer} from "./helpers/embrace_server";
 import {firstAvailableDevice} from "./helpers/ios";
+import {registerMatchers} from "./helpers/matchers";
+import {getPayloadSource} from "./helpers/payload_source";
 import {Command} from "commander";
 
 interface CLIOptions {
@@ -57,13 +59,9 @@ export const config: Options.Testrunner = {
   // ====================
   // WebdriverIO supports running e2e tests as well as unit and component tests.
   runner: "local",
-  autoCompileOpts: {
-    autoCompile: true,
-    tsNodeOpts: {
-      project: "./tsconfig.json",
-      transpileOnly: true,
-    },
-  },
+  //
+  // TSX custom TSConfig path
+  tsConfigPath: "./tsconfig.json",
 
   port: 4723,
   //
@@ -210,8 +208,8 @@ export const config: Options.Testrunner = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  onPrepare() {
-    startServer(false);
+  async onPrepare() {
+    await startServer(false);
   },
   /**
    * Gets executed before a worker process is spawned and can be used to initialize specific service
@@ -250,8 +248,9 @@ export const config: Options.Testrunner = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  // before: function (capabilities, specs) {
-  // },
+  before() {
+    registerMatchers();
+  },
   /**
    * Runs before a WebdriverIO command gets executed.
    * @param {string} commandName hook command name
@@ -268,8 +267,8 @@ export const config: Options.Testrunner = {
   /**
    * Function to be executed before a test (in Mocha/Jasmine) starts.
    */
-  beforeTest() {
-    clearServer();
+  async beforeTest() {
+    await getPayloadSource().clear();
   },
   /**
    * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
