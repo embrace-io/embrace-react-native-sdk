@@ -1,14 +1,9 @@
 import {start_mockserver, stop_mockserver} from "mockserver-node";
-import {EmbracePayload, ParsedSpanPayload} from "../typings/embrace";
-import {parseSpanPayload} from "./span";
-
-import {mockServerClient} from "mockserver-client";
-
-const PORT = 8877;
+import {LOCAL_MOCK_PORT, localMockClient} from "./local_mock";
 
 const startServer = async (trace: boolean) => {
   start_mockserver({
-    serverPort: PORT,
+    serverPort: LOCAL_MOCK_PORT,
     trace,
   });
 
@@ -16,8 +11,7 @@ const startServer = async (trace: boolean) => {
   await new Promise(r => setTimeout(r, 5000));
 
   try {
-    const client = mockServerClient("localhost", PORT);
-    await client.mockAnyResponse({
+    await localMockClient().mockAnyResponse({
       httpResponse: {
         body: "{}",
         statusCode: 200,
@@ -36,38 +30,12 @@ const startServer = async (trace: boolean) => {
   } catch (error) {
     console.log(error);
   }
-
-  return await new Promise(() => {});
 };
 
 const stopServer = () => {
   stop_mockserver({
-    serverPort: PORT,
+    serverPort: LOCAL_MOCK_PORT,
   });
 };
 
-const clearServer = async () => {
-  return await mockServerClient("localhost", PORT).clear({}, "LOG");
-};
-
-const getSpanPayloads = async (delay = 5000): Promise<ParsedSpanPayload[]> => {
-  if (delay) {
-    console.log(`waiting ${delay}ms before checking for span payloads`);
-    await new Promise(r => setTimeout(r, delay));
-  }
-
-  const requests = await mockServerClient(
-    "localhost",
-    PORT,
-  ).retrieveRecordedRequests({
-    path: "/v2/spans",
-    method: "POST",
-  });
-
-  return requests.map(r => {
-    const body = r.body as EmbracePayload;
-    return parseSpanPayload(body.json.data);
-  });
-};
-
-export {startServer, stopServer, clearServer, getSpanPayloads};
+export {startServer, stopServer};
