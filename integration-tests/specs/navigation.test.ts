@@ -3,7 +3,9 @@ import {getPayloadSource} from "../helpers/payload_source";
 import {endSession} from "../helpers/session";
 import {EmbraceSpanData} from "../typings/embrace";
 
-// On iOS backgrounding surfaces as the transitional "inactive" state (see EMISSION-MODEL.md).
+// On iOS we get the "inactive" state which represents a transition between foreground and background instead of
+// "background" due to how our integration tests run
+// See https://reactnative.dev/docs/appstate#app-states
 const backgroundViewState = () => (driver.isAndroid ? "background" : "inactive");
 
 const lastByStart = (spans: EmbraceSpanData[]) =>
