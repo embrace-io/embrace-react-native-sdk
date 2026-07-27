@@ -12,7 +12,6 @@ fi
 
 # 1) Paths to formart
 SOURCE_DIRS=(
-    "$(pwd)/integration-tests/basic-test-app/ios/basictestapp"
     "$(pwd)/packages"
     "$(pwd)/packages/core/test-project"
     "$(pwd)/packages/react-native-tracer-provider/native-src"

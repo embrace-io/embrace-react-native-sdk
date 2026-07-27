@@ -67,8 +67,7 @@ Complete the installation of npm packages in the app with:
 ```
 
 For one-off testing the created app can just be removed afterward. If the app represents a particular setup that we
-will need to test in the future it can be committed to the repo. For example the `basic-test-app` is useful to keep in
-the repo for quickly testing a basic app setup from React Native's [getting started guide](https://reactnative.dev/docs/environment-setup#start-a-new-react-native-project-with-expo).
+will need to test in the future, consider folding this into a new test case in the test harness
 
 ## Running Applications
 

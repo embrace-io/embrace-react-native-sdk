@@ -3,7 +3,7 @@
   /*
   Takes a JSON defining a set of Embrace config options and applies them to a given test app, running:
 
-    ./set-embrace-config.js basic-test-app embrace-configs/my-config.json
+    ./set-embrace-config.js rn82 embrace-configs/my-config.json
 
   Where `embrace-configs/my-config.json` contains:
 
@@ -17,7 +17,7 @@
       "disabled_url_patterns": ["*.api.com"]
     }
 
-  Would produce `basic-test-app/android/app/src/main/embrace-config.json`:
+  Would produce `rn82/android/app/src/main/embrace-config.json`:
 
     {
       "app_id": "abcdf",
@@ -38,7 +38,7 @@
       }
     }
 
-  And `basic-test-app/app/embrace-sdk-config.json`:
+  And `rn82/app/embrace-sdk-config.json`:
     {
       "ios": {
         "appId": "abcdf",
