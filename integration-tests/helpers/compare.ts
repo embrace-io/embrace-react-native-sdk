@@ -51,7 +51,7 @@ export const compareAttributes = (
     }
   }
   for (const key of actualMap.keys()) {
-    if (!expectedMap.has(key) && !VOLATILE_ATTR_KEYS.has(key)) {
+    if (!expectedMap.has(key)) {
       errors.push(`unexpected attribute "${key}"`);
     }
   }
