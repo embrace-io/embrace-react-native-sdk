@@ -7,18 +7,21 @@ import {
 } from "../typings/embrace";
 import { currentPlatform } from "./platform";
 
+// Internal view spans the SDK emits automatically (native screen tracking); not user navigation.
+const INTERNAL_VIEW_SPAN_NAMES = new Set(["emb-screen-view", "emb-sdk-start"]);
+
 // Read a value from a {key,value}[] attribute list (spans and logs share this shape).
 export const getAttribute = (
   item: {attributes?: {key: string; value: string}[]},
   key: string,
 ): string => item.attributes?.find(a => a.key === key)?.value ?? "";
 
-// Internal view spans the SDK emits automatically (native screen tracking); not user navigation.
-const INTERNAL_VIEW_SPAN_NAMES = new Set(["emb-screen-view", "emb-sdk-start"]);
+// Get the span's emb.type attribute, e.g. view/perf/network/user.
+const getEmbType = (span: EmbraceSpanData): string => getAttribute(span, "emb.type");
 
 // A user-created tracer span/snapshot, distinguished from SDK auto-instrumentation.
 const isUserPerf = (span: EmbraceSpanData): boolean => {
-  const type = getAttribute(span, "emb.type");
+  const type = getEmbType(span);
   if (currentPlatform() === "android") {
     // Android tags user spans with emb.type=perf; the internal emb-sdk-init span
     // shares that type but is marked emb.private=true.
@@ -46,13 +49,13 @@ export const normalizePayloads = (
     (env.data?.spans ?? []).forEach(span => {
       if (span.name === "emb-session") {
         out.sessionSpans.push(span);
-      } else if (getAttribute(span, "emb.type") === "ux.view") {
+      } else if (getEmbType(span) === "ux.view") {
         if (INTERNAL_VIEW_SPAN_NAMES.has(span.name)) {
           out.ignored.push(span);
         } else {
           out.viewSpans.push(span);
         }
-      } else if (getAttribute(span, "emb.type") === "perf.network_request") {
+      } else if (getEmbType(span) === "perf.network_request") {
         out.networkSpans.push(span);
       } else if (isUserPerf(span)) {
         out.perfSpans.push(span);
