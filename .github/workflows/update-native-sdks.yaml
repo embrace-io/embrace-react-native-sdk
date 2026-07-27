@@ -46,6 +46,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SDK: embrace-${{ matrix.platform }}-sdk
         run: |
+          if [[ ${LATEST%%.*} != ${CURRENT%%.*} ]]; then
+            echo "Updating ${SDK} from ${CURRENT} to ${LATEST} is a major version bump and should be done manually, exiting"
+            exit 0
+          fi
+
           open_prs=$(gh pr list --label $SDK --state open --json number,title)
 
           if echo $open_prs | grep $SDK | grep "to ${LATEST}"; then
