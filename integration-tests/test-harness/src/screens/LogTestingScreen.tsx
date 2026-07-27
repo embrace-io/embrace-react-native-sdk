@@ -1,7 +1,8 @@
 import * as React from "react";
-import {Button, View, Text} from "react-native";
+import {View, Text} from "react-native";
 import {useCallback} from "react";
 import {styles} from "../helpers/styles";
+import TestButton from "../components/TestButton";
 import {
   logHandledError,
   logError,
@@ -82,16 +83,16 @@ const LogTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Logs</Text>
-        <Button
+        <TestButton
           onPress={triggerLogs}
           title="Info / Warning / Error / Message"
         />
-        <Button onPress={triggerErrorLog} title="Handled Exception" />
+        <TestButton onPress={triggerErrorLog} title="Handled Exception" />
       </View>
 
       <View style={styles.section}>
         <Text style={styles.title}>Logs (no Stack Traces)</Text>
-        <Button
+        <TestButton
           onPress={triggerNoStacktraceLogs}
           title="Warning / Error / Message"
         />
@@ -99,13 +100,13 @@ const LogTestingScreen = () => {
 
       <View style={styles.section}>
         <Text style={styles.title}>Errors</Text>
-        <Button onPress={triggerAnonymousCrash} title="Anonymous Crash" />
-        <Button onPress={triggerCrash} title="Crash" />
-        <Button
+        <TestButton onPress={triggerAnonymousCrash} title="Anonymous Crash" />
+        <TestButton onPress={triggerCrash} title="Crash" />
+        <TestButton
           onPress={triggerUnhandledPromiseRejection}
           title="Trigger an Unhandled Promise rejection"
         />
-        <Button onPress={triggerRenderError} title="Trigger a Render error" />
+        <TestButton onPress={triggerRenderError} title="Trigger a Render error" />
         {isError && <ErrorComponent />}
       </View>
     </View>

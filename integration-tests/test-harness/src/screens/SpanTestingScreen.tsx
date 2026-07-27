@@ -1,7 +1,8 @@
 import * as React from "react";
-import {Button, View, Text} from "react-native";
+import {View, Text} from "react-native";
 import {useCallback, useMemo} from "react";
 import {styles} from "../helpers/styles";
+import TestButton from "../components/TestButton";
 import {
   generateBasicSpan,
   generateNestedSpans,
@@ -95,27 +96,27 @@ const SpanTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Spans</Text>
-        <Button
+        <TestButton
           onPress={() => generateBasicSpan(tracer!)}
           title={"GENERATE BASIC SPAN"}
         />
-        <Button
+        <TestButton
           onPress={() => generateTestSpans(tracer!)}
           title={"GENERATE TEST SPANS"}
         />
-        <Button
+        <TestButton
           onPress={() => generateNestedSpans(tracer!)}
           title={"GENERATE NESTED SPANS"}
         />
-        <Button onPress={recordViewHandler} title="Record View" />
-        <Button
+        <TestButton onPress={recordViewHandler} title="Record View" />
+        <TestButton
           onPress={recordCompletedSpanHandler}
           title="Record Completed Span"
         />
       </View>
       <View style={styles.section}>
         <Text style={styles.title}>Span Events</Text>
-        <Button onPress={addBreadcrumbHandler} title="Add Breadcrumb" />
+        <TestButton onPress={addBreadcrumbHandler} title="Add Breadcrumb" />
       </View>
     </View>
   );

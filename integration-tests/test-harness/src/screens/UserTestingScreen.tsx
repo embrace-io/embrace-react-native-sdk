@@ -1,7 +1,8 @@
 import * as React from "react";
-import {Button, View, Text} from "react-native";
+import {View, Text} from "react-native";
 import {useCallback} from "react";
 import {styles} from "../helpers/styles";
+import TestButton from "../components/TestButton";
 import {
   setUserIdentifier,
   clearUserIdentifier,
@@ -91,21 +92,21 @@ const UserTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>User Properties</Text>
-        <Button onPress={setUserProperties} title="Set User Properties" />
-        <Button onPress={clearUserProperties} title="Clear User Properties" />
-        <Button onPress={clearPersonas} title="Clear All User Personas" />
+        <TestButton onPress={setUserProperties} title="Set User Properties" />
+        <TestButton onPress={clearUserProperties} title="Clear User Properties" />
+        <TestButton onPress={clearPersonas} title="Clear All User Personas" />
       </View>
       <View style={styles.section}>
         <Text style={styles.title}>Session Properties</Text>
-        <Button onPress={setSessionProperties} title="Set Session Properties" />
-        <Button
+        <TestButton onPress={setSessionProperties} title="Set Session Properties" />
+        <TestButton
           onPress={clearSessionProperties}
           title="Clear Session Properties"
         />
       </View>
       <View style={styles.section}>
         <Text style={styles.title}>Retrieval</Text>
-        <Button onPress={getMetadata} title="Retrieve Metadata" />
+        <TestButton onPress={getMetadata} title="Retrieve Metadata" />
       </View>
     </View>
   );

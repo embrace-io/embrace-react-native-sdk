@@ -1,7 +1,8 @@
 import * as React from "react";
-import {Button, View, Text} from "react-native";
+import {View, Text} from "react-native";
 import {useCallback} from "react";
 import {styles} from "../helpers/styles";
+import TestButton from "../components/TestButton";
 import {
   logNetworkClientError,
   recordNetworkRequest,
@@ -55,17 +56,17 @@ const NetworkTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Regular Network Call</Text>
-        <Button onPress={handleAuto200NetworkCall} title="200 Request" />
-        <Button onPress={handleAuto404NetworkCall} title="404 Request" />
+        <TestButton onPress={handleAuto200NetworkCall} title="200 Request" />
+        <TestButton onPress={handleAuto404NetworkCall} title="404 Request" />
       </View>
 
       <View style={styles.section}>
         <Text style={styles.title}>Manual Record (no API call)</Text>
-        <Button
+        <TestButton
           onPress={handleRecordNetworkRequest}
           title="Record Network Request"
         />
-        <Button
+        <TestButton
           onPress={handleLogNetworkClientError}
           title="Log Network Client Error"
         />
