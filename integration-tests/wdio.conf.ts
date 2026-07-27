@@ -182,8 +182,7 @@ export const config: Options.Testrunner = {
     [
       "spec",
       {
-        realTimeReporting: true,
-        
+        realTimeReporting: true
       }
     ]
   ],
