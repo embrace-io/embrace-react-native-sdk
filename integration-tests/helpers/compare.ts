@@ -23,7 +23,10 @@ const VOLATILE_ATTR_KEYS = new Set([
   "emb.state.network", // Android only: wifi / cellular / unknown
   "emb.state.screen-automatic", // Android only: whichever screen is current
   // network
-  "emb.w3c_traceparent", // contains trace/span ids
+  "http.request.body.size",
+  "http.response.body.size",
+  "user_agent.version",
+  "emb.w3c_traceparent",
 ]);
 
 // ---- shared types ----
