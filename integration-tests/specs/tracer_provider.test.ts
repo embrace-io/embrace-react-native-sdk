@@ -1,6 +1,13 @@
 import {driver} from "@wdio/globals";
+import {idToNameMap, projectSpan} from "../helpers/compare";
+import {loadGoldenFile} from "../helpers/golden";
+import {getAttribute} from "../helpers/normalize";
 import {getPayloadSource} from "../helpers/payload_source";
 import {endSession} from "../helpers/session";
+import {EmbraceSpanData} from "../typings/embrace";
+
+const byViewName = (spans: EmbraceSpanData[], name: string) =>
+  spans.find(s => getAttribute(s, "view.name") === name)!;
 
 describe("Tracer Provider", () => {
   const source = getPayloadSource();
@@ -40,5 +47,27 @@ describe("Tracer Provider", () => {
 
     const p = await source.getPayloads();
     expect(p.perfSpans).toMatchGoldenFile("tracer-nested-spans", "perfSpans");
+  });
+
+  it("records a view span via startView", async () => {
+    await driver.$("~Record View").click();
+    await endSession();
+
+    const p = await source.getPayloads();
+    // startView names its span emb-screen-view and identifies the view via view.name.
+    // viewSpans also holds incidental tab-navigation views whose composition depends on run
+    // order, so compare only this span against its counterpart in the golden.
+    const golden = loadGoldenFile("span-record-view").viewSpans;
+    expect(byViewName(p.viewSpans, "my-view")).toMatchSpan(
+      projectSpan(byViewName(golden, "my-view"), idToNameMap(golden)),
+    );
+  });
+
+  it("records completed spans with attributes, events and a parent", async () => {
+    await driver.$("~Record Completed Span").click();
+    await endSession();
+
+    const p = await source.getPayloads();
+    expect(p.perfSpans).toMatchGoldenFile("span-record-completed", "perfSpans");
   });
 });
