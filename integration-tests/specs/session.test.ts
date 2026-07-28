@@ -4,30 +4,36 @@ import {getPayloadSource} from "../helpers/payload_source";
 import {endSession} from "../helpers/session";
 
 describe("Sessions", () => {
-  it("records a foreground session when the app is backgrounded", async () => {
-    const source = getPayloadSource();
+  const payloadSource = getPayloadSource();
 
+  it("records a foreground session when the app is backgrounded", async () => {
     await endSession();
 
-    const p = await source.getPayloads();
-    expect(p.sessionSpans).toHaveLength(1);
-    expect(p.sessionSpans[0]).toHaveAttributes({"emb.state": "foreground"});
+    const payloads = await payloadSource.getPayloads();
+    expect(payloads.sessionSpans).toHaveLength(1);
+    expect(payloads.sessionSpans[0]).toHaveAttributes({"emb.state": "foreground"});
   });
 
   it("records a breadcrumb as a session span event", async () => {
-    const source = getPayloadSource();
-
+    await new Promise(r => setTimeout(r, 500));
     await driver.$("~SPAN TESTING").click();
     await new Promise(r => setTimeout(r, 500));
     await driver.$("~Add Breadcrumb").click();
+    await new Promise(r => setTimeout(r, 500));
     await endSession();
 
-    const p = await source.getPayloads();
     // The event list isn't comparable exactly: both platforms add an automatic
     // "The App started in portrait mode" breadcrumb, and iOS adds an emb-ui-tap per tap.
-    const messages = p.sessionSpans[0].events
-      .filter(e => e.name === "emb-breadcrumb")
-      .map(e => getAttribute(e, "message"));
-    expect(messages).toContain("my-breadcrumb");
+    const payloads = await payloadSource.getPayloads();
+    const userBreadcrumb = payloads.sessionSpans
+      .flatMap(span => span.events)
+      .find(event => getAttribute(event, "message") === "my-breadcrumb");
+    
+    expect(userBreadcrumb).not.toBeUndefined()
+    expect(userBreadcrumb.name).toBe("emb-breadcrumb")
+    expect(userBreadcrumb).toHaveAttributes({
+      "emb.type": "sys.breadcrumb",
+      "message": "my-breadcrumb",
+    })
   });
 });

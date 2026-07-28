@@ -1,13 +1,8 @@
 import {driver} from "@wdio/globals";
 import {getAttribute} from "../helpers/normalize";
 import {getPayloadSource} from "../helpers/payload_source";
+import {currentPlatform} from "../helpers/platform";
 import {endSession} from "../helpers/session";
-import {EmbraceSpanData} from "../typings/embrace";
-
-// Auto-captured spans can't be selected by url.full or name: iOS reports the 200's url as
-// "https://example.com" where Android adds a trailing slash, and iOS omits the "emb-" name prefix.
-const byStatusCode = (spans: EmbraceSpanData[], code: string) =>
-  spans.find(s => getAttribute(s, "http.response.status_code") === code)!;
 
 describe("Network", () => {
   const source = getPayloadSource();
@@ -24,15 +19,23 @@ describe("Network", () => {
     await new Promise(r => setTimeout(r, 2000));
     await endSession();
 
-    const p = await source.getPayloads();
-    // These hit the real example.com, so response size and span status are not asserted:
-    // iOS reports the 404 as status "ok" where Android reports "Error", and the body sizes differ.
-    expect(p.networkSpans).toHaveLength(2);
-    expect(byStatusCode(p.networkSpans, "200")).toHaveAttributes({
+    const payload = await source.getPayloads();
+    expect(payload.networkSpans).toHaveLength(2);
+
+    const successSpanName = currentPlatform() === "android" ? "emb-GET /" : "GET "
+    const successSpan = payload.networkSpans.find(span => span.name === successSpanName)
+    // The 200 request carries a cache-busting query param, so match the host rather than the url.
+    expect(getAttribute(successSpan, "url.full")).toContain("example.com");
+    expect(successSpan).toHaveAttributes({
       "http.request.method": "GET",
+      "http.response.status_code": "200"
     });
-    expect(byStatusCode(p.networkSpans, "404")).toHaveAttributes({
+
+    const badRequestSpanName = currentPlatform() === "android" ? "emb-GET /sdk/auto/interception" : "GET /sdk/auto/interception"
+    const badRequestSpan = payload.networkSpans.find(span => span.name === badRequestSpanName)
+    expect(badRequestSpan).toHaveAttributes({
       "http.request.method": "GET",
+      "http.response.status_code": "404",
       "url.full": "https://example.com/sdk/auto/interception",
     });
   });

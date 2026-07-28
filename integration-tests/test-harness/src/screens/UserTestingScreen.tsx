@@ -1,5 +1,5 @@
 import * as React from "react";
-import {View, Text} from "react-native";
+import {Platform, View, Text} from "react-native";
 import {useCallback} from "react";
 import {styles} from "../helpers/styles";
 import TestButton from "../components/TestButton";
@@ -19,6 +19,11 @@ import {
   getCurrentSessionId,
   getLastRunEndState,
 } from "@embrace-io/react-native";
+
+// Workaround for appium issue with Text components on iOS - if an accessibilityLabel 
+// is set, element.getText() returns the accessibilityLabel rather than the actual content,
+// so we use testID on iOS and accessibilityLabel on Android
+const testId = (id: string) => Platform.OS === "android" ? {accessibilityLabel: id} : {testID: id}
 
 const UserTestingScreen = () => {
   const setUserProperties = useCallback(async () => {
@@ -113,24 +118,14 @@ const UserTestingScreen = () => {
         <Text style={styles.title}>Retrieval</Text>
         <TestButton onPress={getMetadata} title="Retrieve Metadata" />
         {/* These getters return values in-app rather than sending a payload, so render them
-            for Appium to read. testID gives iOS its accessibility id, accessibilityLabel
-            gives Android its content-desc, so `~metadata-*` resolves on both platforms. */}
-        <Text
-          style={styles.text}
-          testID="metadata-device-id"
-          accessibilityLabel="metadata-device-id">
+            for Appium to read. */}
+        <Text style={styles.text} {...testId("metadata-device-id")}>
           {metadata.deviceId}
         </Text>
-        <Text
-          style={styles.text}
-          testID="metadata-session-id"
-          accessibilityLabel="metadata-session-id">
+        <Text style={styles.text} {...testId("metadata-session-id")}>
           {metadata.sessionId}
         </Text>
-        <Text
-          style={styles.text}
-          testID="metadata-last-run-end-state"
-          accessibilityLabel="metadata-last-run-end-state">
+        <Text style={styles.text} {...testId("metadata-last-run-end-state")}>
           {metadata.lastRunEndState}
         </Text>
       </View>

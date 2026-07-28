@@ -11,7 +11,9 @@ import {
 const NetworkTestingScreen = () => {
   const handleAuto200NetworkCall = useCallback(async () => {
     try {
-      await fetch("https://example.com");
+      // Unique URL per tap: example.com sends Cache-Control: max-age=604800, and a cache hit
+      // does no network I/O so the SDK has nothing to instrument.
+      await fetch(`https://example.com?cacheBust=${Date.now()}`);
     } catch (error) {
       console.log("Error fetching...", error);
     }
