@@ -3,13 +3,14 @@ import {
   EmbraceSpanAttribute,
   EmbraceSpanData,
   EmbraceSpanEvent,
+  PayloadSection
 } from "./embrace";
-import {EventProjection, PayloadCategory, SpanProjection} from "../helpers/compare";
+import {EventProjection, SpanProjection} from "../helpers/compare";
 
 declare global {
   namespace ExpectWebdriverIO {
     interface Matchers<R extends void | Promise<void>, T> {
-      toMatchGoldenFile(scenario: string, category: PayloadCategory): R;
+      toMatchGoldenFile(scenario: string, section: PayloadSection): R;
       toMatchSpan(expected: SpanProjection, within?: EmbraceSpanData[]): R;
       toMatchAttributes(expected: EmbraceSpanAttribute[]): R;
       toMatchEvents(expected: EventProjection[]): R;

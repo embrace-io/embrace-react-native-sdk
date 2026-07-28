@@ -42,13 +42,6 @@ export type LogProjection = {
   attributes: EmbraceSpanAttribute[];
 };
 export type CompareResult = {pass: boolean; message: string};
-export type SpanCategory =
-  | "sessionSpans"
-  | "viewSpans"
-  | "perfSpans"
-  | "networkSpans"
-  | "spanSnapshots";
-export type PayloadCategory = SpanCategory | "logs";
 
 // ---- attribute comparison ----
 export const compareAttributes = (
@@ -184,9 +177,9 @@ export const compareSpan = (
   };
 };
 
-// Compare two categories (span arrays) by name. Assumes unique names within the category
+// Compare two span arrays by name. Assumes unique names within the category
 // (true for perfSpans / spanSnapshots in the tracer scenarios).
-export const compareCategory = (
+export const compareSpans = (
   actual: EmbraceSpanData[] = [],
   expected: EmbraceSpanData[] = [],
 ): CompareResult => {
@@ -197,15 +190,15 @@ export const compareCategory = (
 
   // A duplicate name would be silently collapsed by actualByName; report it instead.
   const seen = new Set<string>();
-  for (const s of actual) {
-    if (seen.has(s.name)) {
-      errors.push(`duplicate span "${s.name}"`);
+  for (const span of actual) {
+    if (seen.has(span.name)) {
+      errors.push(`duplicate span "${span.name}"`);
     }
-    seen.add(s.name);
+    seen.add(span.name);
   }
 
   const expectedProjections = expected
-    .map(s => projectSpan(s, expectedIds))
+    .map(span => projectSpan(span, expectedIds))
     .sort((a, b) => a.name.localeCompare(b.name));
   const expectedNames = new Set(expectedProjections.map(p => p.name));
 
@@ -214,15 +207,15 @@ export const compareCategory = (
       errors.push(`unexpected span "${name}"`);
     }
   }
-  for (const exp of expectedProjections) {
-    const act = actualByName.get(exp.name);
-    if (!act) {
-      errors.push(`missing span "${exp.name}"`);
+  for (const expected of expectedProjections) {
+    const actual = actualByName.get(expected.name);
+    if (!actual) {
+      errors.push(`missing span "${expected.name}"`);
       continue;
     }
-    const r = compareSpan(act, exp, actualIds);
-    if (!r.pass) {
-      errors.push(r.message);
+    const result = compareSpan(actual, expected, actualIds);
+    if (!result.pass) {
+      errors.push(result.message);
     }
   }
   return {pass: errors.length === 0, message: errors.join("\n")};
@@ -246,11 +239,11 @@ export const compareLogs = (
   const actualByBody = new Map(actual.map(l => [l.body, l]));
 
   const seen = new Set<string>();
-  for (const l of actual) {
-    if (seen.has(l.body)) {
-      errors.push(`duplicate log "${l.body}"`);
+  for (const log of actual) {
+    if (seen.has(log.body)) {
+      errors.push(`duplicate log "${log.body}"`);
     }
-    seen.add(l.body);
+    seen.add(log.body);
   }
 
   const expectedProjections = expected
@@ -264,28 +257,28 @@ export const compareLogs = (
     }
   }
 
-  for (const exp of expectedProjections) {
-    const act = actualByBody.get(exp.body);
-    if (!act) {
-      errors.push(`missing log "${exp.body}"`);
+  for (const expected of expectedProjections) {
+    const actual = actualByBody.get(expected.body);
+    if (!actual) {
+      errors.push(`missing log "${expected.body}"`);
       continue;
     }
     const logErrors: string[] = [];
-    if (act.severity_text !== exp.severityText) {
-      logErrors.push(`severity_text expected "${exp.severityText}", got "${act.severity_text}"`);
+    if (actual.severity_text !== expected.severityText) {
+      logErrors.push(`severity_text expected "${expected.severityText}", got "${actual.severity_text}"`);
     }
-    if (act.severity_number !== exp.severityNumber) {
-      logErrors.push(`severity_number expected ${exp.severityNumber}, got ${act.severity_number}`);
+    if (actual.severity_number !== expected.severityNumber) {
+      logErrors.push(`severity_number expected ${expected.severityNumber}, got ${actual.severity_number}`);
     }
-    if (!isPresent(act.time_unix_nano)) {
+    if (!isPresent(actual.time_unix_nano)) {
       logErrors.push('missing field "time_unix_nano"');
     }
-    const attrs = compareAttributes(act.attributes, exp.attributes);
+    const attrs = compareAttributes(actual.attributes, expected.attributes);
     if (!attrs.pass) {
       logErrors.push(attrs.message);
     }
     if (logErrors.length) {
-      errors.push(`log "${exp.body}": ${logErrors.join("; ")}`);
+      errors.push(`log "${expected.body}": ${logErrors.join("; ")}`);
     }
   }
 

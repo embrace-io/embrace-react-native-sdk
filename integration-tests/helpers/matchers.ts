@@ -5,13 +5,13 @@ import {
   EmbraceSpanAttribute,
   EmbraceSpanData,
   EmbraceSpanEvent,
+  PayloadSection
 } from "../typings/embrace";
 import {
   EventProjection,
-  PayloadCategory,
   SpanProjection,
   compareAttributes,
-  compareCategory,
+  compareSpans,
   compareEvents,
   compareLogs,
   compareSpan,
@@ -32,13 +32,13 @@ export const registerMatchers = (): void =>
     toMatchGoldenFile(
       received: EmbraceSpanData[] | EmbraceLogRecord[],
       scenario: string,
-      category: PayloadCategory,
+      section: PayloadSection,
     ) {
       const golden = loadGoldenFile(scenario);
-      if (category === "logs") {
+      if (section === "logs") {
         return wrap(compareLogs(received as EmbraceLogRecord[], golden.logs));
       }
-      return wrap(compareCategory(received as EmbraceSpanData[], golden[category]));
+      return wrap(compareSpans(received as EmbraceSpanData[], golden[section]));
     },
     toMatchSpan(received: EmbraceSpanData, expected: SpanProjection, within: EmbraceSpanData[] = [received]) {
       return wrap(compareSpan(received, expected, idToNameMap(within)));

@@ -105,6 +105,14 @@ interface NormalizedPayloads {
   ignored: EmbraceSpanData[];
 }
 
+type PayloadSection =
+  | "sessionSpans"
+  | "viewSpans"
+  | "perfSpans"
+  | "networkSpans"
+  | "spanSnapshots"
+  | "logs";
+
 type Platform = "android" | "ios";
 
 export type {
@@ -120,5 +128,6 @@ export type {
   EmbraceSpanEnvelope,
   EmbraceLogEnvelope,
   NormalizedPayloads,
+  PayloadSection,
   Platform,
 };
