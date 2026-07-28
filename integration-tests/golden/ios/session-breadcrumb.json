@@ -7,20 +7,6 @@
             "status": "ok",
             "events": [
               {
-                "name": "emb-breadcrumb",
-                "time_unix_nano": 1785237173303031000,
-                "attributes": [
-                  {
-                    "key": "message",
-                    "value": "The App started in portrait mode"
-                  },
-                  {
-                    "key": "emb.type",
-                    "value": "sys.breadcrumb"
-                  }
-                ]
-              },
-              {
                 "name": "emb-ui-tap",
                 "time_unix_nano": 1785237175513761000,
                 "attributes": [

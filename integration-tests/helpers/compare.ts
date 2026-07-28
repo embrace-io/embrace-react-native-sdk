@@ -14,8 +14,15 @@ const isPresent = (v: unknown): boolean =>
 // and exempt from the unexpected-key check.
 const VOLATILE_ATTR_KEYS = new Set([
   "session.id",
+  "emb.cold_start",
+  "emb.session_number",
+  "emb.startup_duration",
   "emb.private.sequence_id",
   "emb.process_identifier",
+  "emb.clock_network_drift",
+  "emb.disk_free_bytes",
+  "emb.heartbeat_time_unix_nano",
+  "tap.coords",
   // logs
   "log.record.uid", // per-record uuid
   "emb.stacktrace.rn", // JS stack: bundle paths and line numbers
@@ -28,6 +35,15 @@ const VOLATILE_ATTR_KEYS = new Set([
   "user_agent.version",
   "emb.w3c_traceparent",
 ]);
+
+// Same treatment, matched by prefix: every key under these namespaces is volatile.
+const VOLATILE_ATTR_PREFIXES = [
+  "emb.usage.", // per-API call counters: which keys appear, and their counts, both vary
+];
+
+const isVolatileKey = (key: string): boolean =>
+  VOLATILE_ATTR_KEYS.has(key) ||
+  VOLATILE_ATTR_PREFIXES.some(prefix => key.startsWith(prefix));
 
 // ---- shared types ----
 export type EventProjection = {name: string; attributes: EmbraceSpanAttribute[]};
@@ -56,7 +72,7 @@ export const compareAttributes = (
   const expectedMap = new Map(expected.map(a => [a.key, a.value]));
 
   for (const [key, value] of expectedMap) {
-    if (VOLATILE_ATTR_KEYS.has(key)) {
+    if (isVolatileKey(key)) {
       if (!isPresent(actualMap.get(key))) {
         errors.push(`missing volatile attribute "${key}"`);
       }
