@@ -22,9 +22,9 @@ describe("User", () => {
     await tap("Set User Properties", 500);
     await endSession();
 
-    const p = await source.getPayloads();
+    const payload = await source.getPayloads();
     // personas is a contains check: Android also carries the SDK-injected "first_day".
-    expect(p.sessionMetadata).toHaveMetadata({
+    expect(payload.sessionMetadata).toHaveMetadata({
       user_id: "user-identifier",
       username: "user-name",
       email: "user@test.com",
@@ -37,20 +37,20 @@ describe("User", () => {
     await tap("Clear User Properties", 500);
     await endSession();
 
-    const p = await source.getPayloads();
+    const payload = await source.getPayloads();
     // Cleared fields are omitted from the metadata rather than sent empty.
-    expect(p.sessionMetadata.user_id).toBeUndefined();
-    expect(p.sessionMetadata.username).toBeUndefined();
-    expect(p.sessionMetadata.email).toBeUndefined();
-    expect(p.sessionMetadata.personas ?? []).not.toContain("persona1");
+    expect(payload.sessionMetadata.user_id).toBeUndefined();
+    expect(payload.sessionMetadata.username).toBeUndefined();
+    expect(payload.sessionMetadata.email).toBeUndefined();
+    expect(payload.sessionMetadata.personas ?? []).not.toContain("persona1");
   });
 
   it("clears all user personas", async () => {
     await tap("Clear All User Personas", 500);
     await endSession();
 
-    const p = await source.getPayloads();
-    const personas = p.sessionMetadata.personas ?? [];
+    const payload = await source.getPayloads();
+    const personas = payload.sessionMetadata.personas ?? [];
     expect(personas).not.toContain("all-personas1");
     expect(personas).not.toContain("all-personas2");
   });
@@ -60,8 +60,8 @@ describe("User", () => {
     await endSession();
     await endSession(); // second session, same app instance
 
-    const p = await source.getPayloads();
-    const [first, second] = [...p.sessionSpans].sort(
+    const payload = await source.getPayloads();
+    const [first, second] = [...payload.sessionSpans].sort(
       (a, b) => a.start_time_unix_nano - b.start_time_unix_nano,
     );
     expect(first).toHaveAttributes({
@@ -86,7 +86,7 @@ describe("User", () => {
 
     // The id the SDK reported must be the one that lands on the flushed session span.
     await endSession();
-    const p = await source.getPayloads();
-    expect(p.sessionSpans[0]).toHaveAttributes({"session.id": sessionId});
+    const payload = await source.getPayloads();
+    expect(payload.sessionSpans[0]).toHaveAttributes({"session.id": sessionId});
   });
 });

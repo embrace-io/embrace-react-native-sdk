@@ -14,23 +14,23 @@ describe("Logs", () => {
     await tap("Info / Warning / Error / Message");
     await endSession();
 
-    const p = await source.getPayloads();
-    expect(p.logs).toMatchGoldenFile("logs-basic", "logs");
+    const payload = await source.getPayloads();
+    expect(payload.logs).toMatchGoldenFile("logs-basic", "logs");
   });
 
   it("records logs without stack traces", async () => {
     await tap("Warning / Error / Message");
     await endSession();
 
-    const p = await source.getPayloads();
-    expect(p.logs).toMatchGoldenFile("logs-no-stacktrace", "logs");
+    const payload = await source.getPayloads();
+    expect(payload.logs).toMatchGoldenFile("logs-no-stacktrace", "logs");
   });
 
   it("records a handled exception", async () => {
     await tap("Handled Exception");
     await endSession();
 
-    const p = await source.getPayloads();
-    expect(p.logs).toMatchGoldenFile("logs-handled-exception", "logs");
+    const payload = await source.getPayloads();
+    expect(payload.logs).toMatchGoldenFile("logs-handled-exception", "logs");
   });
 });

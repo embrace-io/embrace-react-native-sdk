@@ -22,8 +22,8 @@ describe("Navigation", () => {
   it("records the rendered screen as a view span", async () => {
     await endSession();
 
-    const p = await payloadSource.getPayloads();
-    expect(lastByStart(p.viewSpans)).toHaveAttributes({
+    const payload = await payloadSource.getPayloads();
+    expect(lastByStart(payload.viewSpans)).toHaveAttributes({
       "view.name": "log",
       "view.state.end": backgroundViewState(),
     });
@@ -34,9 +34,9 @@ describe("Navigation", () => {
     await tap("LOG TESTING", 500);
     await endSession();
 
-    const p = await payloadSource.getPayloads();
-    expect(p.viewSpans).toHaveSpanNames(["log", "span", "log"]);
-    expect(lastByStart(p.viewSpans)).toHaveAttributes({
+    const payload = await payloadSource.getPayloads();
+    expect(payload.viewSpans).toHaveSpanNames(["log", "span", "log"]);
+    expect(lastByStart(payload.viewSpans)).toHaveAttributes({
       "view.state.end": backgroundViewState(),
     });
   });

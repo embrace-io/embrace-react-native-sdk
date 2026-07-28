@@ -10,8 +10,7 @@ const isPresent = (v: unknown): boolean =>
   v !== undefined && v !== null && v !== "";
 // future: isHex = v => /^[0-9a-f]+$/.test(String(v)); isPositiveNumber = v => typeof v === "number" && v > 0;
 
-// Attribute keys whose value varies run-to-run: presence-checked, value ignored,
-// and exempt from the unexpected-key check.
+// Attribute keys whose value varies run-to-run: presence-checked, value ignored
 const VOLATILE_ATTR_KEYS = new Set([
   "session.id",
   "emb.cold_start",
@@ -37,13 +36,13 @@ const VOLATILE_ATTR_KEYS = new Set([
 ]);
 
 // Same treatment, matched by prefix: every key under these namespaces is volatile.
-const VOLATILE_ATTR_PREFIXES = [
+const VOLATILE_ATTR_NAMESPACES = [
   "emb.usage.", // per-API call counters: which keys appear, and their counts, both vary
 ];
 
 const isVolatileKey = (key: string): boolean =>
   VOLATILE_ATTR_KEYS.has(key) ||
-  VOLATILE_ATTR_PREFIXES.some(prefix => key.startsWith(prefix));
+  VOLATILE_ATTR_NAMESPACES.some(prefix => key.startsWith(prefix));
 
 // ---- shared types ----
 export type EventProjection = {name: string; attributes: EmbraceSpanAttribute[]};
