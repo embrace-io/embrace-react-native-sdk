@@ -44,8 +44,16 @@ interface EmbracePayloadResource {
   // TODO
 }
 
+// Envelope-level metadata. User identity lands here rather than on span attributes.
+// Android always adds locale/timezone_description and an SDK-injected "first_day" persona;
+// iOS sends neither, so specs assert subsets rather than the whole object.
 interface EmbracePayloadMetadata {
-  // TODO
+  user_id?: string;
+  email?: string;
+  username?: string;
+  personas?: string[];
+  timezone_description?: string;
+  locale?: string;
 }
 
 interface EmbracePayload {
@@ -93,6 +101,7 @@ interface NormalizedPayloads {
   networkSpans: EmbraceSpanData[];
   spanSnapshots: EmbraceSpanData[];
   logs: EmbraceLogRecord[];
+  sessionMetadata: EmbracePayloadMetadata;
   ignored: EmbraceSpanData[];
 }
 
@@ -100,6 +109,7 @@ type Platform = "android" | "ios";
 
 export type {
   EmbracePayload,
+  EmbracePayloadMetadata,
   EmbracePayloadSpans,
   EmbraceSpanData,
   EmbraceSpanAttribute,
