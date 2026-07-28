@@ -75,14 +75,19 @@ const UserTestingScreen = () => {
     }
   }, []);
 
+  const [metadata, setMetadata] = React.useState({
+    deviceId: "",
+    sessionId: "",
+    lastRunEndState: "",
+  });
+
   const getMetadata = useCallback(async () => {
     try {
-      const deviceId = await getDeviceId();
-      const sessionId = await getCurrentSessionId();
-      const lastRunEndState = await getLastRunEndState();
-      console.log("deviceId: ", deviceId);
-      console.log("sessionId: ", sessionId);
-      console.log("lastRunEndState: ", lastRunEndState);
+      setMetadata({
+        deviceId: await getDeviceId(),
+        sessionId: await getCurrentSessionId(),
+        lastRunEndState: await getLastRunEndState(),
+      });
     } catch (e) {
       console.log("failed to get metadata from the SDK");
     }
@@ -107,6 +112,27 @@ const UserTestingScreen = () => {
       <View style={styles.section}>
         <Text style={styles.title}>Retrieval</Text>
         <TestButton onPress={getMetadata} title="Retrieve Metadata" />
+        {/* These getters return values in-app rather than sending a payload, so render them
+            for Appium to read. testID gives iOS its accessibility id, accessibilityLabel
+            gives Android its content-desc, so `~metadata-*` resolves on both platforms. */}
+        <Text
+          style={styles.text}
+          testID="metadata-device-id"
+          accessibilityLabel="metadata-device-id">
+          {metadata.deviceId}
+        </Text>
+        <Text
+          style={styles.text}
+          testID="metadata-session-id"
+          accessibilityLabel="metadata-session-id">
+          {metadata.sessionId}
+        </Text>
+        <Text
+          style={styles.text}
+          testID="metadata-last-run-end-state"
+          accessibilityLabel="metadata-last-run-end-state">
+          {metadata.lastRunEndState}
+        </Text>
       </View>
     </View>
   );

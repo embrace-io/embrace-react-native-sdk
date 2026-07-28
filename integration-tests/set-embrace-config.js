@@ -14,7 +14,7 @@
       "disable_view_capture": true,
       "endpoint": "http://localhost:8989",
       "enable_network_span_forwarding": true,
-      "disabled_url_patterns": ["*.api.com"]
+      "disabled_url_patterns": ["*.api.com", "localhost:8989"]
     }
 
   Would produce `rn82/android/app/src/main/embrace-config.json`:
@@ -32,7 +32,7 @@
           "enable_automatic_activity_capture": false
         },
         "networking": {
-          "disabled_url_patterns": ["*.api.com"],
+          "disabled_url_patterns": ["*.api.com", "10.0.2.2:8989"],
           "enable_network_span_forwarding": true
         }
       }
@@ -42,10 +42,10 @@
     {
       "ios": {
         "appId": "abcdf",
-        "endpointBaseUrl": "http://localhost:8877",
+        "endpointBaseUrl": "http://localhost:8989",
         "disableAutomaticViewCapture": true,
         "disableNetworkSpanForwarding": false,
-        "disabledUrlPatterns": ["*.api.com"]
+        "disabledUrlPatterns": ["*.api.com", "localhost:8989"]
       }
     }
    */
@@ -141,7 +141,11 @@
       if (config.disabled_url_patterns) {
         androidConfig.sdk_config.networking = {
           ...androidConfig.sdk_config.networking,
-          disabled_url_patterns: config.disabled_url_patterns,
+          // the emulator reaches the host machine on 10.0.2.2, so patterns aimed at a local
+          // server need the same rewrite base_urls gets below
+          disabled_url_patterns: config.disabled_url_patterns.map(pattern =>
+            pattern.replace("localhost", "10.0.2.2"),
+          ),
         };
       }
     }
