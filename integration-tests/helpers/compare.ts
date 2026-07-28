@@ -1,4 +1,9 @@
-import {EmbraceSpanAttribute, EmbraceSpanData, EmbraceSpanEvent} from "../typings/embrace";
+import {
+  EmbraceLogRecord,
+  EmbraceSpanAttribute,
+  EmbraceSpanData,
+  EmbraceSpanEvent,
+} from "../typings/embrace";
 
 // ---- volatile config (assert presence, not value) ----
 const isPresent = (v: unknown): boolean =>
@@ -11,6 +16,14 @@ const VOLATILE_ATTR_KEYS = new Set([
   "session.id",
   "emb.private.sequence_id",
   "emb.process_identifier",
+  // logs
+  "log.record.uid", // per-record uuid
+  "emb.stacktrace.rn", // JS stack: bundle paths and line numbers
+  "emb.stacktrace.ios", // base64 native stack with absolute paths
+  "emb.state.network", // Android only: wifi / cellular / unknown
+  "emb.state.screen-automatic", // Android only: whichever screen is current
+  // network
+  "emb.w3c_traceparent", // contains trace/span ids
 ]);
 
 // ---- shared types ----
@@ -22,6 +35,12 @@ export type SpanProjection = {
   attributes: EmbraceSpanAttribute[];
   events: EventProjection[];
 };
+export type LogProjection = {
+  body: string;
+  severityText: string;
+  severityNumber: number;
+  attributes: EmbraceSpanAttribute[];
+};
 export type CompareResult = {pass: boolean; message: string};
 export type SpanCategory =
   | "sessionSpans"
@@ -29,6 +48,7 @@ export type SpanCategory =
   | "perfSpans"
   | "networkSpans"
   | "spanSnapshots";
+export type PayloadCategory = SpanCategory | "logs";
 
 // ---- attribute comparison ----
 export const compareAttributes = (
@@ -205,5 +225,69 @@ export const compareCategory = (
       errors.push(r.message);
     }
   }
+  return {pass: errors.length === 0, message: errors.join("\n")};
+};
+
+// ---- log comparison ----
+export const projectLog = (log: EmbraceLogRecord): LogProjection => ({
+  body: log.body,
+  severityText: log.severity_text,
+  severityNumber: log.severity_number,
+  attributes: log.attributes ?? [],
+});
+
+// Compare log records by body. Bodies are unique within every scenario the specs assert;
+// a batch split across several envelopes compares the same either way.
+export const compareLogs = (
+  actual: EmbraceLogRecord[] = [],
+  expected: EmbraceLogRecord[] = [],
+): CompareResult => {
+  const errors: string[] = [];
+  const actualByBody = new Map(actual.map(l => [l.body, l]));
+
+  const seen = new Set<string>();
+  for (const l of actual) {
+    if (seen.has(l.body)) {
+      errors.push(`duplicate log "${l.body}"`);
+    }
+    seen.add(l.body);
+  }
+
+  const expectedProjections = expected
+    .map(projectLog)
+    .sort((a, b) => a.body.localeCompare(b.body));
+  const expectedBodies = new Set(expectedProjections.map(p => p.body));
+
+  for (const body of actualByBody.keys()) {
+    if (!expectedBodies.has(body)) {
+      errors.push(`unexpected log "${body}"`);
+    }
+  }
+
+  for (const exp of expectedProjections) {
+    const act = actualByBody.get(exp.body);
+    if (!act) {
+      errors.push(`missing log "${exp.body}"`);
+      continue;
+    }
+    const logErrors: string[] = [];
+    if (act.severity_text !== exp.severityText) {
+      logErrors.push(`severity_text expected "${exp.severityText}", got "${act.severity_text}"`);
+    }
+    if (act.severity_number !== exp.severityNumber) {
+      logErrors.push(`severity_number expected ${exp.severityNumber}, got ${act.severity_number}`);
+    }
+    if (!isPresent(act.time_unix_nano)) {
+      logErrors.push('missing field "time_unix_nano"');
+    }
+    const attrs = compareAttributes(act.attributes, exp.attributes);
+    if (!attrs.pass) {
+      logErrors.push(attrs.message);
+    }
+    if (logErrors.length) {
+      errors.push(`log "${exp.body}": ${logErrors.join("; ")}`);
+    }
+  }
+
   return {pass: errors.length === 0, message: errors.join("\n")};
 };
