@@ -1,6 +1,5 @@
-import {driver} from "@wdio/globals";
+import {endSession, tap} from "../helpers/app";
 import {getPayloadSource} from "../helpers/payload_source";
-import {endSession} from "../helpers/session";
 
 // Logs are batched rather than sent immediately (iOS flushes on a ~20s timer of its own), but
 // backgrounding forces the batch out, so these use the same endSession() flush as every other spec.
@@ -8,12 +7,11 @@ describe("Logs", () => {
   const source = getPayloadSource();
 
   beforeEach(async () => {
-    await driver.$("~LOG TESTING").click();
-    await new Promise(r => setTimeout(r, 500));
+    await tap("LOG TESTING", 500);
   });
 
   it("records info, warning, error and message logs", async () => {
-    await driver.$("~Info / Warning / Error / Message").click();
+    await tap("Info / Warning / Error / Message");
     await endSession();
 
     const p = await source.getPayloads();
@@ -21,7 +19,7 @@ describe("Logs", () => {
   });
 
   it("records logs without stack traces", async () => {
-    await driver.$("~Warning / Error / Message").click();
+    await tap("Warning / Error / Message");
     await endSession();
 
     const p = await source.getPayloads();
@@ -29,7 +27,7 @@ describe("Logs", () => {
   });
 
   it("records a handled exception", async () => {
-    await driver.$("~Handled Exception").click();
+    await tap("Handled Exception");
     await endSession();
 
     const p = await source.getPayloads();

@@ -1,7 +1,6 @@
-import {driver} from "@wdio/globals";
+import {endSession, tap} from "../helpers/app";
 import {getAttribute} from "../helpers/normalize";
 import {getPayloadSource} from "../helpers/payload_source";
-import {endSession} from "../helpers/session";
 
 describe("Sessions", () => {
   const payloadSource = getPayloadSource();
@@ -16,10 +15,8 @@ describe("Sessions", () => {
 
   it("records a breadcrumb as a session span event", async () => {
     await new Promise(r => setTimeout(r, 500));
-    await driver.$("~SPAN TESTING").click();
-    await new Promise(r => setTimeout(r, 500));
-    await driver.$("~Add Breadcrumb").click();
-    await new Promise(r => setTimeout(r, 500));
+    await tap("SPAN TESTING", 500);
+    await tap("Add Breadcrumb", 500);
     await endSession();
 
     // The event list isn't comparable exactly: both platforms add an automatic

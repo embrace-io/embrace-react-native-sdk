@@ -1,22 +1,18 @@
-import {driver} from "@wdio/globals";
+import {endSession, tap} from "../helpers/app";
 import {getAttribute} from "../helpers/normalize";
 import {getPayloadSource} from "../helpers/payload_source";
 import {currentPlatform} from "../helpers/platform";
-import {endSession} from "../helpers/session";
 
 describe("Network", () => {
   const source = getPayloadSource();
 
   beforeEach(async () => {
-    await driver.$("~NETWORK TESTING").click();
-    await new Promise(r => setTimeout(r, 500));
+    await tap("NETWORK TESTING", 500);
   });
 
   it("intercepts automatic fetch requests", async () => {
-    await driver.$("~200 Request").click();
-    await new Promise(r => setTimeout(r, 2000));
-    await driver.$("~404 Request").click();
-    await new Promise(r => setTimeout(r, 2000));
+    await tap("200 Request", 2000);
+    await tap("404 Request", 2000);
     await endSession();
 
     const payload = await source.getPayloads();
@@ -41,8 +37,8 @@ describe("Network", () => {
   });
 
   it("records manually reported requests and client errors", async () => {
-    await driver.$("~Record Network Request").click();
-    await driver.$("~Log Network Client Error").click();
+    await tap("Record Network Request");
+    await tap("Log Network Client Error");
     await endSession();
 
     const p = await source.getPayloads();

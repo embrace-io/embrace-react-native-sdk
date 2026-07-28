@@ -2,8 +2,8 @@ import {driver} from "@wdio/globals";
 import {idToNameMap, projectSpan} from "../helpers/compare";
 import {loadGoldenFile} from "../helpers/golden";
 import {getAttribute} from "../helpers/normalize";
+import {endSession, tap} from "../helpers/app";
 import {getPayloadSource} from "../helpers/payload_source";
-import {endSession} from "../helpers/session";
 import {EmbraceSpanData} from "../typings/embrace";
 
 const byViewName = (spans: EmbraceSpanData[], name: string) =>
@@ -20,12 +20,11 @@ describe("Tracer Provider", () => {
   });
 
   beforeEach(async () => {
-    await driver.$("~SPAN TESTING").click();
-    await new Promise(r => setTimeout(r, 1000));
+    await tap("SPAN TESTING", 1000);
   });
 
   it("records a basic span", async () => {
-    await driver.$("~GENERATE BASIC SPAN").click();
+    await tap("GENERATE BASIC SPAN");
     await endSession();
 
     const p = await source.getPayloads();
@@ -33,7 +32,7 @@ describe("Tracer Provider", () => {
   });
 
   it("records test spans and an unfinished-span snapshot", async () => {
-    await driver.$("~GENERATE TEST SPANS").click();
+    await tap("GENERATE TEST SPANS");
     await endSession();
 
     const p = await source.getPayloads();
@@ -42,7 +41,7 @@ describe("Tracer Provider", () => {
   });
 
   it("records nested spans with correct parent relationships", async () => {
-    await driver.$("~GENERATE NESTED SPANS").click();
+    await tap("GENERATE NESTED SPANS");
     await endSession();
 
     const p = await source.getPayloads();
@@ -50,7 +49,7 @@ describe("Tracer Provider", () => {
   });
 
   it("records a view span via startView", async () => {
-    await driver.$("~Record View").click();
+    await tap("Record View");
     await endSession();
 
     const p = await source.getPayloads();
@@ -64,7 +63,7 @@ describe("Tracer Provider", () => {
   });
 
   it("records completed spans with attributes, events and a parent", async () => {
-    await driver.$("~Record Completed Span").click();
+    await tap("Record Completed Span");
     await endSession();
 
     const p = await source.getPayloads();

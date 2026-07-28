@@ -1,31 +1,25 @@
 import {driver} from "@wdio/globals";
+import {endSession, tap} from "../helpers/app";
 import {getAttribute} from "../helpers/normalize";
 import {getPayloadSource} from "../helpers/payload_source";
-import {endSession} from "../helpers/session";
-
-const tap = async (label: string) => {
-  await driver.$(`~${label}`).click();
-  await new Promise(r => setTimeout(r, 500));
-};
 
 describe("User", () => {
   const source = getPayloadSource();
 
   beforeEach(async () => {
-    await driver.$("~USER TESTING").click();
-    await new Promise(r => setTimeout(r, 500));
+    await tap("USER TESTING", 500);
   });
 
   // User identity and permanent session properties survive the session end and `noReset: true`,
   // so undo them or they leak into later tests and later specs.
   afterEach(async () => {
-    await driver.$("~USER TESTING").click();
-    await tap("Clear User Properties");
-    await tap("Clear Session Properties");
+    await tap("USER TESTING");
+    await tap("Clear User Properties", 500);
+    await tap("Clear Session Properties", 500);
   });
 
   it("attaches user identity to the session payload", async () => {
-    await tap("Set User Properties");
+    await tap("Set User Properties", 500);
     await endSession();
 
     const p = await source.getPayloads();
@@ -39,8 +33,8 @@ describe("User", () => {
   });
 
   it("clears user identity", async () => {
-    await tap("Set User Properties");
-    await tap("Clear User Properties");
+    await tap("Set User Properties", 500);
+    await tap("Clear User Properties", 500);
     await endSession();
 
     const p = await source.getPayloads();
@@ -52,7 +46,7 @@ describe("User", () => {
   });
 
   it("clears all user personas", async () => {
-    await tap("Clear All User Personas");
+    await tap("Clear All User Personas", 500);
     await endSession();
 
     const p = await source.getPayloads();
@@ -62,7 +56,7 @@ describe("User", () => {
   });
 
   it("keeps permanent session properties across sessions and drops temporary ones", async () => {
-    await tap("Set Session Properties");
+    await tap("Set Session Properties", 500);
     await endSession();
     await endSession(); // second session, same app instance
 
@@ -81,7 +75,7 @@ describe("User", () => {
   });
 
   it("returns device, session and last-run metadata", async () => {
-    await tap("Retrieve Metadata");
+    await tap("Retrieve Metadata", 500);
 
     const deviceId = await driver.$("~metadata-device-id").getText();
     const sessionId = await driver.$("~metadata-session-id").getText();
