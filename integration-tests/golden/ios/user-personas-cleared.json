@@ -1,0 +1,434 @@
+{
+  "spans": [
+    {
+      "version": "1.0",
+      "type": "spans",
+      "metadata": {
+        "personas": []
+      },
+      "data": {
+        "spans": [
+          {
+            "events": [
+              {
+                "time_unix_nano": 1785235308647161900,
+                "name": "emb-breadcrumb",
+                "attributes": [
+                  {
+                    "key": "emb.type",
+                    "value": "sys.breadcrumb"
+                  },
+                  {
+                    "key": "message",
+                    "value": "The App started in portrait mode"
+                  }
+                ]
+              },
+              {
+                "time_unix_nano": 1785235310387039000,
+                "name": "emb-ui-tap",
+                "attributes": [
+                  {
+                    "key": "view.name",
+                    "value": "RCTParagraphComponentView"
+                  },
+                  {
+                    "key": "emb.type",
+                    "value": "ux.tap"
+                  },
+                  {
+                    "key": "tap.coords",
+                    "value": "208,824"
+                  }
+                ]
+              },
+              {
+                "time_unix_nano": 1785235312531252700,
+                "name": "emb-ui-tap",
+                "attributes": [
+                  {
+                    "value": "ux.tap",
+                    "key": "emb.type"
+                  },
+                  {
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
+                  },
+                  {
+                    "value": "192,343",
+                    "key": "tap.coords"
+                  }
+                ]
+              }
+            ],
+            "status": "ok",
+            "links": [],
+            "span_id": "c8e1a8551b9bf35c",
+            "name": "emb-session",
+            "end_time_unix_nano": 1785235321724531200,
+            "start_time_unix_nano": 1785235308636214000,
+            "trace_id": "54443f57c92e64eda9513adbc342fa3e",
+            "attributes": [
+              {
+                "value": "ux.session",
+                "key": "emb.type"
+              },
+              {
+                "value": "6B0AD610F76C44BAAD5F0955BF38AEDC",
+                "key": "session.id"
+              },
+              {
+                "value": "foreground",
+                "key": "emb.state"
+              },
+              {
+                "value": "true",
+                "key": "emb.cold_start"
+              },
+              {
+                "value": "false",
+                "key": "emb.terminated"
+              },
+              {
+                "value": "true",
+                "key": "emb.clean_exit"
+              },
+              {
+                "value": "1785235318639576064",
+                "key": "emb.heartbeat_time_unix_nano"
+              },
+              {
+                "value": "19",
+                "key": "emb.session_number"
+              }
+            ]
+          },
+          {
+            "events": [],
+            "status": "ok",
+            "links": [],
+            "span_id": "828bb96a7ab937e0",
+            "start_time_unix_nano": 1785235308243559000,
+            "end_time_unix_nano": 1785235308671251000,
+            "name": "emb-app-startup-warm",
+            "trace_id": "4dad74582df1b5e8458c35954c70a286",
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "sys.startup"
+              },
+              {
+                "key": "isPrewarmed",
+                "value": "false"
+              }
+            ]
+          },
+          {
+            "events": [],
+            "status": "ok",
+            "parent_span_id": "828bb96a7ab937e0",
+            "links": [],
+            "span_id": "29fec5922eb6a9e7",
+            "start_time_unix_nano": 1785235308243559000,
+            "name": "emb-app-pre-main-init",
+            "end_time_unix_nano": 1785235308554841000,
+            "trace_id": "4dad74582df1b5e8458c35954c70a286",
+            "attributes": [
+              {
+                "value": "sys.startup",
+                "key": "emb.type"
+              },
+              {
+                "value": "false",
+                "key": "isPrewarmed"
+              }
+            ]
+          },
+          {
+            "events": [],
+            "status": "ok",
+            "parent_span_id": "828bb96a7ab937e0",
+            "links": [],
+            "span_id": "8576d4e41a103441",
+            "start_time_unix_nano": 1785235308554841000,
+            "name": "emb-app-first-frame-rendered",
+            "end_time_unix_nano": 1785235308671251000,
+            "trace_id": "4dad74582df1b5e8458c35954c70a286",
+            "attributes": [
+              {
+                "value": "sys.startup",
+                "key": "emb.type"
+              },
+              {
+                "value": "false",
+                "key": "isPrewarmed"
+              }
+            ]
+          },
+          {
+            "events": [],
+            "status": "ok",
+            "parent_span_id": "85d55b6dffb49988",
+            "links": [],
+            "span_id": "a7a8e669087af122",
+            "start_time_unix_nano": 1785235308634703000,
+            "name": "emb-sdk-start-process",
+            "end_time_unix_nano": 1785235308646386200,
+            "trace_id": "5b1b20286ad22e221288e2e20ed5243f",
+            "attributes": [
+              {
+                "value": "perf",
+                "key": "emb.type"
+              }
+            ]
+          },
+          {
+            "events": [],
+            "status": "ok",
+            "links": [],
+            "span_id": "85d55b6dffb49988",
+            "start_time_unix_nano": 1785235308243559000,
+            "end_time_unix_nano": 1785235308646396200,
+            "name": "emb-process-launch",
+            "trace_id": "5b1b20286ad22e221288e2e20ed5243f",
+            "attributes": [
+              {
+                "key": "emb.private",
+                "value": "true"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf"
+              }
+            ]
+          },
+          {
+            "events": [],
+            "status": "ok",
+            "links": [],
+            "span_id": "a511da9b7a7625f7",
+            "start_time_unix_nano": 1785235308662960000,
+            "end_time_unix_nano": 1785235310478548000,
+            "name": "log",
+            "trace_id": "d47ef85c7db3b207a8fff4c10e408ec0",
+            "attributes": [
+              {
+                "key": "view.launch",
+                "value": "true"
+              },
+              {
+                "key": "session.id",
+                "value": "6B0AD610F76C44BAAD5F0955BF38AEDC"
+              },
+              {
+                "key": "emb.type",
+                "value": "ux.view"
+              },
+              {
+                "key": "view.state.end",
+                "value": "active"
+              },
+              {
+                "key": "package",
+                "value": "@react-navigation/native"
+              },
+              {
+                "key": "view.name",
+                "value": "log"
+              },
+              {
+                "key": "test.attr",
+                "value": "654321"
+              }
+            ]
+          },
+          {
+            "events": [],
+            "status": "ok",
+            "links": [],
+            "span_id": "d05bf76d33c8afbd",
+            "start_time_unix_nano": 1785235310478680000,
+            "end_time_unix_nano": 1785235321122930200,
+            "name": "user",
+            "trace_id": "ec10fe72058db227c27ab5a624649235",
+            "attributes": [
+              {
+                "key": "view.launch",
+                "value": "false"
+              },
+              {
+                "key": "session.id",
+                "value": "6B0AD610F76C44BAAD5F0955BF38AEDC"
+              },
+              {
+                "key": "emb.type",
+                "value": "ux.view"
+              },
+              {
+                "key": "view.state.end",
+                "value": "inactive"
+              },
+              {
+                "key": "package",
+                "value": "@react-navigation/native"
+              },
+              {
+                "key": "view.name",
+                "value": "user"
+              },
+              {
+                "key": "test.attr",
+                "value": "654321"
+              }
+            ]
+          }
+        ],
+        "span_snapshots": []
+      },
+      "resource": {
+        "build": "1",
+        "os_version": "26.3.1",
+        "sdk_version": "6.19.0",
+        "os_build": "25F84",
+        "react_native_bundle_id": "5c48358f8e021827e4951ed37552576e",
+        "device_architecture": "arm64e",
+        "environment_detail": "si",
+        "process_pre_warm": false,
+        "hosted_platform_version": "0.82.1",
+        "app_bundle_id": "io.embrace.rn82",
+        "os_alternate_type": "iOS",
+        "process_identifier": "373640B7FE6C4D25B2D846A2994D7F86",
+        "os_name": "ios",
+        "hosted_sdk_version": "7.0.0",
+        "screen_resolution": null,
+        "app_framework": 2,
+        "process_start_time": 1785235308243559000,
+        "app_version": "1.0",
+        "jailbroken": false,
+        "build_id": "AD5113005A6E31619111DEC7C9919059",
+        "os_type": "darwin",
+        "launch_count": null,
+        "device_manufacturer": "Apple",
+        "disk_total_capacity": 994610155520,
+        "environment": "dev",
+        "sdk_platform": "ios",
+        "device_model": "arm64"
+      }
+    }
+  ],
+  "logs": [
+    {
+      "type": "logs",
+      "version": "1.0",
+      "resource": {
+        "screen_resolution": null,
+        "environment": null,
+        "process_identifier": null,
+        "os_name": "ios",
+        "launch_count": null,
+        "os_build": null,
+        "build": null,
+        "process_start_time": null,
+        "build_id": null,
+        "environment_detail": null,
+        "app_bundle_id": "io.embrace.rn82",
+        "jailbroken": null,
+        "device_model": null,
+        "disk_total_capacity": null,
+        "sdk_platform": "ios",
+        "device_architecture": null,
+        "os_version": null,
+        "os_type": null,
+        "app_version": null,
+        "device_manufacturer": "Apple",
+        "sdk_version": "6.19.0",
+        "process_pre_warm": null,
+        "app_framework": null,
+        "os_alternate_type": null
+      },
+      "data": {
+        "logs": [
+          {
+            "time_unix_nano": "1785235308618386944",
+            "attributes": [
+              {
+                "value": "30904A2B930946A7A796518E27D914AC",
+                "key": "log.record.uid"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.internal"
+              }
+            ],
+            "severity_number": 24,
+            "severity_text": "FATAL",
+            "body": "[2026-07-28T10:39:07.859Z] Warning: performBlockAndWait on main thread can easily deadlock! Proceeding with caution.\n"
+          }
+        ]
+      },
+      "metadata": {
+        "personas": []
+      }
+    },
+    {
+      "data": {
+        "logs": [
+          {
+            "severity_text": "ERROR",
+            "severity_number": 17,
+            "body": "Embrace SDK should be started before the app is launched and becomes active. This is required for the startup instrumentation to work.",
+            "time_unix_nano": "1785235308631561984",
+            "attributes": [
+              {
+                "key": "emb.stacktrace.ios",
+                "value": "W3sidSI6IkFENTExMzAwNUE2RTMxNjE5MTExREVDN0M5OTE5MDU5IiwibSI6InJuODIiLCJvIjo2MzA0MzIsImEiOiIweDAwMDAwMDAxMDIwY2RlYTAiLCJzbyI6MTUzNiwicyI6IiRzOUVtYnJhY2VJTzEzTG9nQ29udHJvbGxlckMwNmNyZWF0ZUMwXzhzZXZlcml0eTR0eXBlOXRpbWVzdGFtcDEwYXR0YWNobWVudDBJMklkMEkzVXJsMTBhdHRyaWJ1dGVzMThzdGFja1RyYWNlQmVoYXZpb3I1cXVldWV5U1NfQUEwQzhTZXZlcml0eU9BQTBDNFR5cGVWMTBGb3VuZGF0aW9uNERhdGVWQVI0RGF0YVZTZ1NTU2dBUjNVUkxWU2dTRHlTMlNHQUEwNVN0YWNrbk8wT1NvMDEyT1NfZGlzcGF0Y2hfUDBDdEYiLCJwIjoiXC9Vc2Vyc1wvYWhtZWRhaG1lZFwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9EZXZpY2VzXC8wN0MxMjY2OS03OUYwLTQwQkMtQjhCOS1BODYzMTFGQzgwMUZcL2RhdGFcL0NvbnRhaW5lcnNcL0J1bmRsZVwvQXBwbGljYXRpb25cL0I2MzdFNUZBLTRDMUMtNDU1Ri04OTIyLTZEOTcyM0UyMkMwNlwvcm44Mi5hcHBcL3JuODIifSx7ImEiOiIweDAwMDAwMDAxMDIwNzAzZTgiLCJ1IjoiQUQ1MTEzMDA1QTZFMzE2MTkxMTFERUM3Qzk5MTkwNTkiLCJtIjoicm44MiIsInAiOiJcL1VzZXJzXC9haG1lZGFobWVkXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL0RldmljZXNcLzA3QzEyNjY5LTc5RjAtNDBCQy1COEI5LUE4NjMxMUZDODAxRlwvZGF0YVwvQ29udGFpbmVyc1wvQnVuZGxlXC9BcHBsaWNhdGlvblwvQjYzN0U1RkEtNEMxQy00NTVGLTg5MjItNkQ5NzIzRTIyQzA2XC9ybjgyLmFwcFwvcm44MiIsIm8iOjI0Njc2MCwicyI6IiRzOUVtYnJhY2VJTzBBMEMzbG9nXzhzZXZlcml0eTR0eXBlMTBhdHRyaWJ1dGVzMThzdGFja1RyYWNlQmVoYXZpb3J5U1NfQUExMUxvZ1NldmVyaXR5T0FBMEo0VHlwZVZTRHlTMlNHQUEwNVN0YWNraEkwT3RGIiwic28iOjI4NH0seyJzIjoiJHM5RW1icmFjZUlPMThCYXNlSW50ZXJuYWxMb2dnZXJDMTFzZW5kT1RlbExvZzMzXzcxNTk5QjZCMEM2MUJGRDY0MDhBNjVDRkM5Q0RFNDg1TEw1bGV2ZWw3bWVzc2FnZTEwYXR0cmlidXRlc3lBQTBINUxldmVsT19TU1NEeVMyU0d0RiIsInUiOiJBRDUxMTMwMDVBNkUzMTYxOTExMURFQzdDOTkxOTA1OSIsImEiOiIweDAwMDAwMDAxMDIwNDgwZjAiLCJzbyI6NTUyLCJwIjoiXC9Vc2Vyc1wvYWhtZWRhaG1lZFwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9EZXZpY2VzXC8wN0MxMjY2OS03OUYwLTQwQkMtQjhCOS1BODYzMTFGQzgwMUZcL2RhdGFcL0NvbnRhaW5lcnNcL0J1bmRsZVwvQXBwbGljYXRpb25cL0I2MzdFNUZBLTRDMUMtNDU1Ri04OTIyLTZEOTcyM0UyMkMwNlwvcm44Mi5hcHBcL3JuODIiLCJtIjoicm44MiIsIm8iOjgyMTYwfSx7Im8iOjIxNjQ5Niwic28iOjEwMDgsIm0iOiJybjgyIiwidSI6IkFENTExMzAwNUE2RTMxNjE5MTExREVDN0M5OTE5MDU5IiwiYSI6IjB4MDAwMDAwMDEwMjA2OGRiMCIsInAiOiJcL1VzZXJzXC9haG1lZGFobWVkXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL0RldmljZXNcLzA3QzEyNjY5LTc5RjAtNDBCQy1COEI5LUE4NjMxMUZDODAxRlwvZGF0YVwvQ29udGFpbmVyc1wvQnVuZGxlXC9BcHBsaWNhdGlvblwvQjYzN0U1RkEtNEMxQy00NTVGLTg5MjItNkQ5NzIzRTIyQzA2XC9ybjgyLmFwcFwvcm44MiIsInMiOiIkczlFbWJyYWNlSU8wQTBDNXN0YXJ0QUN5S0YifSx7Im0iOiJybjgyIiwibyI6MjQxMjE1Niwic28iOjE2MCwiYSI6IjB4MDAwMDAwMDEwMjI4MGU3YyIsInAiOiJcL1VzZXJzXC9haG1lZGFobWVkXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL0RldmljZXNcLzA3QzEyNjY5LTc5RjAtNDBCQy1COEI5LUE4NjMxMUZDODAxRlwvZGF0YVwvQ29udGFpbmVyc1wvQnVuZGxlXC9BcHBsaWNhdGlvblwvQjYzN0U1RkEtNEMxQy00NTVGLTg5MjItNkQ5NzIzRTIyQzA2XC9ybjgyLmFwcFwvcm44MiIsInUiOiJBRDUxMTMwMDVBNkUzMTYxOTExMURFQzdDOTkxOTA1OSIsInMiOiIkczEzUk5FbWJyYWNlQ29yZTE0RW1icmFjZU1hbmFnZXJDMDExc3RhcnROYXRpdmVDM1NESzEwY29uZmlnRGljdDdyZXNvbHZlOHJlamVjdGVyeVNvMTJOU0RpY3Rpb25hcnlDX3l5cFNnY3lTU1NnX0FLczVFcnJvcl9wU2d0Y3RGeXlTY01ZY2NmVV8ifSx7InUiOiJBRDUxMTMwMDVBNkUzMTYxOTExMURFQzdDOTkxOTA1OSIsIm8iOjEyNzQwOCwibSI6InJuODIiLCJzIjoiJHNJZWdfSWV5Ql9UUiIsImEiOiIweDAwMDAwMDAxMDIwNTMxYjAiLCJzbyI6MjgsInAiOiJcL1VzZXJzXC9haG1lZGFobWVkXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL0RldmljZXNcLzA3QzEyNjY5LTc5RjAtNDBCQy1COEI5LUE4NjMxMUZDODAxRlwvZGF0YVwvQ29udGFpbmVyc1wvQnVuZGxlXC9BcHBsaWNhdGlvblwvQjYzN0U1RkEtNEMxQy00NTVGLTg5MjItNkQ5NzIzRTIyQzA2XC9ybjgyLmFwcFwvcm44MiJ9LHsidSI6IjlGREVBMzJCNTkxMDM3ODc4NzM4RDRGOEExRUE5OUY4IiwicyI6Il9kaXNwYXRjaF9jYWxsX2Jsb2NrX2FuZF9yZWxlYXNlIiwic28iOjI0LCJhIjoiMHgwMDAwMDAwMTgwMWMwN2E4IiwicCI6IlwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Wb2x1bWVzXC9pT1NfMjNEODEzM1wvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Qcm9maWxlc1wvUnVudGltZXNcL2lPUyAyNi4zLnNpbXJ1bnRpbWVcL0NvbnRlbnRzXC9SZXNvdXJjZXNcL1J1bnRpbWVSb290XC91c3JcL2xpYlwvc3lzdGVtXC9saWJkaXNwYXRjaC5keWxpYiIsIm8iOjYwNTYsIm0iOiJsaWJkaXNwYXRjaC5keWxpYiJ9LHsibyI6MTE1ODg4LCJhIjoiMHgwMDAwMDAwMTgwMWRiNGIwIiwicCI6IlwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Wb2x1bWVzXC9pT1NfMjNEODEzM1wvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Qcm9maWxlc1wvUnVudGltZXNcL2lPUyAyNi4zLnNpbXJ1bnRpbWVcL0NvbnRlbnRzXC9SZXNvdXJjZXNcL1J1bnRpbWVSb290XC91c3JcL2xpYlwvc3lzdGVtXC9saWJkaXNwYXRjaC5keWxpYiIsInNvIjoxMiwidSI6IjlGREVBMzJCNTkxMDM3ODc4NzM4RDRGOEExRUE5OUY4IiwicyI6Il9kaXNwYXRjaF9jbGllbnRfY2FsbG91dCIsIm0iOiJsaWJkaXNwYXRjaC5keWxpYiJ9LHsicyI6Il9kaXNwYXRjaF9tYWluX3F1ZXVlX2RyYWluLmNvbGQuNyIsIm0iOiJsaWJkaXNwYXRjaC5keWxpYiIsIm8iOjIzMDU2MCwicCI6IlwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Wb2x1bWVzXC9pT1NfMjNEODEzM1wvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Qcm9maWxlc1wvUnVudGltZXNcL2lPUyAyNi4zLnNpbXJ1bnRpbWVcL0NvbnRlbnRzXC9SZXNvdXJjZXNcL1J1bnRpbWVSb290XC91c3JcL2xpYlwvc3lzdGVtXC9saWJkaXNwYXRjaC5keWxpYiIsInNvIjoyNCwiYSI6IjB4MDAwMDAwMDE4MDFmNzRhMCIsInUiOiI5RkRFQTMyQjU5MTAzNzg3ODczOEQ0RjhBMUVBOTlGOCJ9LHsibSI6ImxpYmRpc3BhdGNoLmR5bGliIiwibyI6NzA0MjgsImEiOiIweDAwMDAwMDAxODAxZDAzMWMiLCJzIjoiX2Rpc3BhdGNoX21haW5fcXVldWVfZHJhaW4iLCJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL3VzclwvbGliXC9zeXN0ZW1cL2xpYmRpc3BhdGNoLmR5bGliIiwidSI6IjlGREVBMzJCNTkxMDM3ODc4NzM4RDRGOEExRUE5OUY4Iiwic28iOjExODR9LHsiYSI6IjB4MDAwMDAwMDE4MDFjZmU2YyIsIm8iOjY5MjI4LCJtIjoibGliZGlzcGF0Y2guZHlsaWIiLCJ1IjoiOUZERUEzMkI1OTEwMzc4Nzg3MzhENEY4QTFFQTk5RjgiLCJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL3VzclwvbGliXC9zeXN0ZW1cL2xpYmRpc3BhdGNoLmR5bGliIiwic28iOjQwLCJzIjoiX2Rpc3BhdGNoX21haW5fcXVldWVfY2FsbGJhY2tfNENGIn0seyJzbyI6MTIsIm0iOiJDb3JlRm91bmRhdGlvbiIsIm8iOjYwMjAyNCwidSI6IjE2MUVCMzcxM0VDNzMxOTZBQjUzM0I3RTA5ODMxOEY1IiwiYSI6IjB4MDAwMDAwMDE4MDQ1NWZhOCIsInAiOiJcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvVm9sdW1lc1wvaU9TXzIzRDgxMzNcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvUHJvZmlsZXNcL1J1bnRpbWVzXC9pT1MgMjYuMy5zaW1ydW50aW1lXC9Db250ZW50c1wvUmVzb3VyY2VzXC9SdW50aW1lUm9vdFwvU3lzdGVtXC9MaWJyYXJ5XC9GcmFtZXdvcmtzXC9Db3JlRm91bmRhdGlvbi5mcmFtZXdvcmtcL0NvcmVGb3VuZGF0aW9uIiwicyI6Il9fQ0ZSVU5MT09QX0lTX1NFUlZJQ0lOR19USEVfTUFJTl9ESVNQQVRDSF9RVUVVRV9fIn0seyJ1IjoiMTYxRUIzNzEzRUM3MzE5NkFCNTMzQjdFMDk4MzE4RjUiLCJzbyI6MTg4NCwiYSI6IjB4MDAwMDAwMDE4MDQ1NTE4MCIsIm0iOiJDb3JlRm91bmRhdGlvbiIsInAiOiJcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvVm9sdW1lc1wvaU9TXzIzRDgxMzNcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvUHJvZmlsZXNcL1J1bnRpbWVzXC9pT1MgMjYuMy5zaW1ydW50aW1lXC9Db250ZW50c1wvUmVzb3VyY2VzXC9SdW50aW1lUm9vdFwvU3lzdGVtXC9MaWJyYXJ5XC9GcmFtZXdvcmtzXC9Db3JlRm91bmRhdGlvbi5mcmFtZXdvcmtcL0NvcmVGb3VuZGF0aW9uIiwibyI6NTk4NDAwLCJzIjoiX19DRlJ1bkxvb3BSdW4ifSx7ImEiOiIweDAwMDAwMDAxODA0NGZkYmMiLCJvIjo1NzY5NTYsInAiOiJcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvVm9sdW1lc1wvaU9TXzIzRDgxMzNcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvUHJvZmlsZXNcL1J1bnRpbWVzXC9pT1MgMjYuMy5zaW1ydW50aW1lXC9Db250ZW50c1wvUmVzb3VyY2VzXC9SdW50aW1lUm9vdFwvU3lzdGVtXC9MaWJyYXJ5XC9GcmFtZXdvcmtzXC9Db3JlRm91bmRhdGlvbi5mcmFtZXdvcmtcL0NvcmVGb3VuZGF0aW9uIiwicyI6Il9DRlJ1bkxvb3BSdW5TcGVjaWZpY1dpdGhPcHRpb25zIiwibSI6IkNvcmVGb3VuZGF0aW9uIiwidSI6IjE2MUVCMzcxM0VDNzMxOTZBQjUzM0I3RTA5ODMxOEY1Iiwic28iOjQ5Nn0seyJhIjoiMHgwMDAwMDAwMTkyYjgwOWJjIiwibSI6IkdyYXBoaWNzU2VydmljZXMiLCJzbyI6MTE2LCJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL1N5c3RlbVwvTGlicmFyeVwvUHJpdmF0ZUZyYW1ld29ya3NcL0dyYXBoaWNzU2VydmljZXMuZnJhbWV3b3JrXC9HcmFwaGljc1NlcnZpY2VzIiwibyI6MTA2ODQsInUiOiJENTI5QTJBOEFEQUUzNzI1QkRBODYzMzZEQjEwOEExNSIsInMiOiJHU0V2ZW50UnVuTW9kYWwifSx7InNvIjo3NzIsImEiOiIweDAwMDAwMDAxODY0MGEyMDQiLCJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL1N5c3RlbVwvTGlicmFyeVwvUHJpdmF0ZUZyYW1ld29ya3NcL1VJS2l0Q29yZS5mcmFtZXdvcmtcL1VJS2l0Q29yZSIsInUiOiJGMzA1QkFFOUQzNTMzMzE1QjQ5NUZGODM2MDY2RDE2OSIsInMiOiItW1VJQXBwbGljYXRpb24gX3J1bl0iLCJvIjoxODUzMDgyMCwibSI6IlVJS2l0Q29yZSJ9LHsicyI6IlVJQXBwbGljYXRpb25NYWluIiwidSI6IkYzMDVCQUU5RDM1MzMzMTVCNDk1RkY4MzYwNjZEMTY5IiwicCI6IlwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Wb2x1bWVzXC9pT1NfMjNEODEzM1wvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Qcm9maWxlc1wvUnVudGltZXNcL2lPUyAyNi4zLnNpbXJ1bnRpbWVcL0NvbnRlbnRzXC9SZXNvdXJjZXNcL1J1bnRpbWVSb290XC9TeXN0ZW1cL0xpYnJhcnlcL1ByaXZhdGVGcmFtZXdvcmtzXC9VSUtpdENvcmUuZnJhbWV3b3JrXC9VSUtpdENvcmUiLCJtIjoiVUlLaXRDb3JlIiwiYSI6IjB4MDAwMDAwMDE4NjQwZTQyYyIsIm8iOjE4NTQ3NzU2LCJzbyI6MTI0fSx7InUiOiJGMzA1QkFFOUQzNTMzMzE1QjQ5NUZGODM2MDY2RDE2OSIsInAiOiJcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvVm9sdW1lc1wvaU9TXzIzRDgxMzNcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvUHJvZmlsZXNcL1J1bnRpbWVzXC9pT1MgMjYuMy5zaW1ydW50aW1lXC9Db250ZW50c1wvUmVzb3VyY2VzXC9SdW50aW1lUm9vdFwvU3lzdGVtXC9MaWJyYXJ5XC9Qcml2YXRlRnJhbWV3b3Jrc1wvVUlLaXRDb3JlLmZyYW1ld29ya1wvVUlLaXRDb3JlIiwic28iOjUxNTIsIm8iOjQwNjkwNDgsIm0iOiJVSUtpdENvcmUiLCJhIjoiMHgwMDAwMDAwMTg1NjNmNmI4IiwicyI6ImJsb2NrX2Rlc3Ryb3lfaGVscGVyLjE1In0seyJzIjoibWFpbiIsInUiOiJBRDUxMTMwMDVBNkUzMTYxOTExMURFQzdDOTkxOTA1OSIsInNvIjoxMjAsImEiOiIweDAwMDAwMDAxMDIwMzcyMDAiLCJvIjoxMjgwMCwicCI6IlwvVXNlcnNcL2FobWVkYWhtZWRcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvRGV2aWNlc1wvMDdDMTI2NjktNzlGMC00MEJDLUI4QjktQTg2MzExRkM4MDFGXC9kYXRhXC9Db250YWluZXJzXC9CdW5kbGVcL0FwcGxpY2F0aW9uXC9CNjM3RTVGQS00QzFDLTQ1NUYtODkyMi02RDk3MjNFMjJDMDZcL3JuODIuYXBwXC9ybjgyIiwibSI6InJuODIifSx7InMiOiJzdGFydF9zaW0iLCJvIjo0MzU2OTM2NjU2LCJwIjoiIiwiYSI6IjB4MDAwMDAwMDEwM2IxOTNkMCIsIm0iOiJkeWxkIiwic28iOjIwLCJ1IjoiIn0seyJhIjoiMHgwMDAwMDAwMTAzOWY3ZTAwIiwicyI6IjB4MCIsIm8iOjQzNTU3NTE0MjQsInUiOiIiLCJwIjoiIiwic28iOjIxNDc0ODM2NDcsIm0iOiI/Pz8ifV0="
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.internal"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "7B1EE36EE26A44EF88794CF7FFCFB70D"
+              }
+            ]
+          }
+        ]
+      },
+      "type": "logs",
+      "metadata": {
+        "personas": []
+      },
+      "version": "1.0",
+      "resource": {
+        "os_alternate_type": "iOS",
+        "sdk_platform": "ios",
+        "process_identifier": "373640B7FE6C4D25B2D846A2994D7F86",
+        "os_build": "25F84",
+        "os_version": "26.3.1",
+        "environment_detail": "si",
+        "app_version": "1.0",
+        "process_pre_warm": false,
+        "device_architecture": "arm64e",
+        "process_start_time": 1785235308243559000,
+        "os_type": "darwin",
+        "app_bundle_id": "io.embrace.rn82",
+        "app_framework": 2,
+        "disk_total_capacity": 994610155520,
+        "jailbroken": false,
+        "build_id": "AD5113005A6E31619111DEC7C9919059",
+        "hosted_sdk_version": "7.0.0",
+        "os_name": "ios",
+        "hosted_platform_version": "0.82.1",
+        "build": "1",
+        "launch_count": null,
+        "environment": "dev",
+        "react_native_bundle_id": "5c48358f8e021827e4951ed37552576e",
+        "device_model": "arm64",
+        "sdk_version": "6.19.0",
+        "screen_resolution": null,
+        "device_manufacturer": "Apple"
+      }
+    }
+  ]
+}
