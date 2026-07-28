@@ -48,7 +48,7 @@ if (options.platform === "ios" || options.platform === "both") {
     platformName: "iOS",
     "appium:automationName": "XCUITest",
     "appium:udid": firstAvailableDevice(),
-    "appium:appPackage": options.package,
+    "appium:bundleId": options.package,
   });
 }
 
