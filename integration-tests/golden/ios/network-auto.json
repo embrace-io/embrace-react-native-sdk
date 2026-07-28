@@ -320,7 +320,7 @@
                 "key": "http.response.status_code"
               },
               {
-                "value": "https://example.com",
+                "value": "https://example.com?cacheBust=1785259125717",
                 "key": "url.full"
               },
               {
