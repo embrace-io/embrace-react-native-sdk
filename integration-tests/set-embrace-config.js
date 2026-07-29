@@ -14,7 +14,7 @@
       "disable_view_capture": true,
       "endpoint": "http://localhost:8989",
       "enable_network_span_forwarding": true,
-      "disabled_url_patterns": ["*.api.com", "localhost:8989"]
+      "disabled_url_patterns": ["*.api.com"]
     }
 
   Would produce `rn82/android/app/src/main/embrace-config.json`:
@@ -32,7 +32,7 @@
           "enable_automatic_activity_capture": false
         },
         "networking": {
-          "disabled_url_patterns": ["*.api.com", "10.0.2.2:8989"],
+          "disabled_url_patterns": ["*.api.com"],
           "enable_network_span_forwarding": true
         }
       }
@@ -45,7 +45,7 @@
         "endpointBaseUrl": "http://localhost:8989",
         "disableAutomaticViewCapture": true,
         "disableNetworkSpanForwarding": false,
-        "disabledUrlPatterns": ["*.api.com", "localhost:8989"]
+        "disabledUrlPatterns": ["*.api.com"]
       }
     }
    */
