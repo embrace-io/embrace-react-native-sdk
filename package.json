@@ -66,6 +66,7 @@
   },
   "resolutions": {
     "@react-native/jest-preset/jest-environment-node": "^30.4.1",
+    "axios": "^1.18.0",
     "lodash": "^4.18.0",
     "tar": "^7.5.19"
   }
