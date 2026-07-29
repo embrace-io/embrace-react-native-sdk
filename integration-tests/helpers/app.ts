@@ -4,7 +4,9 @@ import {driver} from "@wdio/globals";
 // where the tap starts work the app has to finish before the next step: a screen transition, or
 // a bridge call that would otherwise race the session flush.
 const tap = async (label: string, waitMs = 0) => {
-  await driver.$(`~${label}`).click();
+  const element = driver.$(`~${label}`);
+  await element.waitForDisplayed({ timeout: 1000 })
+  await element.click();
 
   if (waitMs > 0) {
     await new Promise(resolve => setTimeout(resolve, waitMs));

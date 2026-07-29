@@ -13,7 +13,6 @@ describe("Sessions", () => {
   });
 
   it("records a breadcrumb as a session span event", async () => {
-    await new Promise(r => setTimeout(r, 500));
     await tap("SPAN TESTING", 500);
     await tap("Add Breadcrumb", 500);
     await endSession();
