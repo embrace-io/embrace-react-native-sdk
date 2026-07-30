@@ -16,7 +16,7 @@ export interface StoredEntry {
 const storedUrl = (namespace: string): string =>
   `${process.env.MOCK_API_URL ?? DEFAULT_MOCK_API_URL}/namespace/${namespace}/stored`;
 
-const RETRIES = 2;
+const RETRIES = 5;
 const RETRY_DELAY_MS = 500;
 
 // Retry so a transient network blip does not become a spec failure. fetch rejects with a bare
