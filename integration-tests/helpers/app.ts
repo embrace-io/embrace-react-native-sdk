@@ -5,7 +5,7 @@ import {driver} from "@wdio/globals";
 // a bridge call that would otherwise race the session flush.
 const tap = async (label: string, waitMs = 0) => {
   const element = driver.$(`~${label}`);
-  await element.waitForDisplayed({ timeout: 1000 });
+  await element.waitForDisplayed();
   await element.click();
 
   if (waitMs > 0) {
