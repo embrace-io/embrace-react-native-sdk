@@ -156,6 +156,15 @@ export const config: WebdriverIO.Config = {
     timeout: 180000,
   },
 
+  reporters: [
+    [
+      "spec",
+      {
+        realTimeReporting: true
+      }
+    ]
+  ],
+
   before() {
     registerMatchers();
 
