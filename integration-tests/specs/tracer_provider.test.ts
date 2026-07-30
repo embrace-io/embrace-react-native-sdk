@@ -1,7 +1,8 @@
+import {driver} from "@wdio/globals";
 import {idToNameMap, projectSpan} from "../helpers/compare";
 import {loadGoldenFile} from "../helpers/golden";
 import {getAttribute} from "../helpers/normalize";
-import {endSession, relaunchApp, tap} from "../helpers/app";
+import {endSession, tap} from "../helpers/app";
 import {getPayloadSource} from "../helpers/payload_source";
 import {EmbraceSpanData} from "../typings/embrace";
 
@@ -14,7 +15,7 @@ describe("Tracer Provider", () => {
   after(async () => {
     // Snapshots (e.g. the unfinished test-5) persist across sessions; relaunching the app
     // flushes them so each run starts clean.
-    await relaunchApp();
+    await driver.relaunchActiveApp();
     await new Promise(r => setTimeout(r, 1000));
   });
 

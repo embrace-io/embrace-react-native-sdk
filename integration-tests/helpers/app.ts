@@ -16,26 +16,9 @@ const tap = async (label: string, waitMs = 0) => {
 // End the current session by backgrounding the app (the SDK flushes the session payload on background).
 // Backgrounding also foregrounds the app again and begins a new session, so we add a short delay 
 // before handing control back to the spec to avoid races.
-// driver.background() rather than execute("mobile: backgroundApp"): the mobile command is a newer
-// alias that BrowserStack's older XCUITest driver does not have, and background() falls back to the
-// long-standing /appium/app/background endpoint when a driver reports it as an unknown command.
 const endSession = async () => {
   await driver.background(5);
   await new Promise(resolve => setTimeout(resolve, 250));
 };
 
-// Restart the app. driver.relaunchActiveApp() would be the one-liner, but it drives the whole
-// relaunch through `mobile:` execute methods, and BrowserStack's Android driver has none of them
-// (its supported list has no getCurrentPackage, terminateApp or activateApp). terminate_app and
-// activate_app are base-driver routes instead, so every driver has them; only reading the running
-// app's id needs a per-platform call.
-const relaunchApp = async () => {
-  const appId = driver.isAndroid
-    ? await driver.appiumGetCurrentPackage()
-    : (await driver.execute<{bundleId: string}, []>("mobile: activeAppInfo")).bundleId;
-
-  await driver.terminateApp(appId);
-  await driver.activateApp(appId);
-};
-
-export {tap, endSession, relaunchApp};
+export {tap, endSession};
