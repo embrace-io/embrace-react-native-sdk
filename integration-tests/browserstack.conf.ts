@@ -16,6 +16,7 @@ const androidCapabilities = [
       deviceName: "Google Pixel 6 Pro",
       platformVersion: "15.0",
       platformName: "android",
+      appiumVersion: "2.15.0"
     },
   },
   {
@@ -23,6 +24,7 @@ const androidCapabilities = [
       deviceName: "Samsung Galaxy S20",
       platformVersion: "10.0",
       platformName: "android",
+      appiumVersion: "2.15.0"
     },
   },
 ];
@@ -33,6 +35,7 @@ const iosCapabilities = [
       deviceName: "iPhone 16 Pro",
       platformVersion: "18",
       platformName: "ios",
+      appiumVersion: "2.15.0"
     },
   },
   {
@@ -40,6 +43,7 @@ const iosCapabilities = [
       deviceName: "iPhone 14",
       platformVersion: "16",
       platformName: "ios",
+      appiumVersion: "2.15.0"
     },
   },
 ];
