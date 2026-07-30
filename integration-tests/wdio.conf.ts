@@ -1,4 +1,3 @@
-import type {Options} from "@wdio/types";
 import {startServer, stopServer} from "./helpers/embrace_server";
 import {firstAvailableDevice} from "./helpers/ios";
 import {registerMatchers} from "./helpers/matchers";
@@ -52,7 +51,7 @@ if (options.platform === "ios" || options.platform === "both") {
   });
 }
 
-export const config: Options.Testrunner = {
+export const config: WebdriverIO.Config = {
   //
   // ====================
   // Runner Configuration
@@ -204,11 +203,13 @@ export const config: Options.Testrunner = {
   // resolved to continue.
   /**
    * Gets executed once before all workers get launched.
-   * @param {object} config wdio configuration object
-   * @param {Array.<Object>} capabilities list of capabilities details
    */
   async onPrepare() {
-    await startServer(false);
+    // A namespace means the app under test reports to the hosted mock-api, so there is no local
+    // server to start. Lets a local device run against the remote backend for debugging.
+    if (!process.env.MOCK_API_NAMESPACE) {
+      await startServer(false);
+    }
   },
   /**
    * Gets executed before a worker process is spawned and can be used to initialize specific service
@@ -243,9 +244,6 @@ export const config: Options.Testrunner = {
   /**
    * Gets executed before test execution begins. At this point you can access to all global
    * variables like `browser`. It is the perfect place to define custom commands.
-   * @param {Array.<Object>} capabilities list of capabilities details
-   * @param {Array.<String>} specs        List of spec file paths that are to be run
-   * @param {object}         browser      instance of created browser/device session
    */
   before() {
     registerMatchers();
@@ -339,13 +337,11 @@ export const config: Options.Testrunner = {
   /**
    * Gets executed after all workers got shut down and the process is about to exit. An error
    * thrown in the onComplete hook will result in the test run failing.
-   * @param {object} exitCode 0 - success, 1 - fail
-   * @param {object} config wdio configuration object
-   * @param {Array.<Object>} capabilities list of capabilities details
-   * @param {<Object>} results object containing test results
    */
   onComplete() {
-    stopServer();
+    if (!process.env.MOCK_API_NAMESPACE) {
+      stopServer();
+    }
   },
   /**
    * Gets executed when a refresh happens.
