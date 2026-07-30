@@ -16,9 +16,32 @@ export interface StoredEntry {
 const storedUrl = (namespace: string): string =>
   `${process.env.MOCK_API_URL ?? DEFAULT_MOCK_API_URL}/namespace/${namespace}/stored`;
 
+const RETRIES = 2;
+const RETRY_DELAY_MS = 500;
+
+// Retry so a transient network blip does not become a spec failure. fetch rejects with a bare
+// "fetch failed" and puts the real reason on `cause`, so report that too.
+const request = async (url: string, init?: RequestInit): Promise<Response> => {
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= RETRIES; attempt++) {
+    try {
+      return await fetch(url, init);
+    } catch (e) {
+      lastError = e;
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS));
+    }
+  }
+
+  const {message, cause} = lastError as Error;
+  throw new Error(
+    `mock-api request to ${url} failed after ${RETRIES + 1} attempts: ${message} (cause: ${cause})`,
+  );
+};
+
 // Every request the namespace holds, oldest first, across all buckets.
 export const retrieveStored = async (namespace: string): Promise<StoredEntry[]> => {
-  const response = await fetch(storedUrl(namespace));
+  const response = await request(storedUrl(namespace));
 
   // 404 = nothing has been sent to this namespace yet, an expected state.
   if (response.status === 404) {
@@ -38,7 +61,7 @@ export const retrieveStored = async (namespace: string): Promise<StoredEntry[]> 
 };
 
 export const clearStored = async (namespace: string): Promise<void> => {
-  const response = await fetch(storedUrl(namespace), {method: "DELETE"});
+  const response = await request(storedUrl(namespace), {method: "DELETE"});
 
   // 404 = the namespace is already empty, which is what clearing is for.
   if (!response.ok && response.status !== 404) {
