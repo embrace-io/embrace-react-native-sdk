@@ -43,7 +43,9 @@ jobs:
           fi
           echo "android=$android" >> "$GITHUB_OUTPUT"
           echo "ios=$ios" >> "$GITHUB_OUTPUT"
-          echo 'matrix=["expo-rn74","rn82","rn81","rn80","rn79","rn78","rn77","rn76","rn75","rn74","rn73","rn72","rn71"]' >> "$GITHUB_OUTPUT"
+          # TODO EMBR-13384 restore the full matrix once the full suite is stable on rn82:
+          # ["expo-rn74","rn82","rn81","rn80","rn79","rn78","rn77","rn76","rn75","rn74","rn73","rn72","rn71"]
+          echo 'matrix=["rn82"]' >> "$GITHUB_OUTPUT"
 
   build-android:
     needs: prepare
@@ -192,6 +194,9 @@ jobs:
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           BROWSERSTACK_APP_NAME: ${{ matrix.test-app }}
           BROWSERSTACK_PLATFORM: android
+          # Must match the namespace build-test-app.sh baked into the app. Both sides use
+          # github.run_id because it is stable across job re-runs, unlike run_attempt.
+          MOCK_API_NAMESPACE: namespace-${{ matrix.test-app }}-android-${{ github.run_id }}
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
 
@@ -236,5 +241,8 @@ jobs:
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           BROWSERSTACK_APP_NAME: ${{ matrix.test-app }}
           BROWSERSTACK_PLATFORM: ios
+          # Must match the namespace build-test-app.sh baked into the app. Both sides use
+          # github.run_id because it is stable across job re-runs, unlike run_attempt.
+          MOCK_API_NAMESPACE: namespace-${{ matrix.test-app }}-ios-${{ github.run_id }}
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
