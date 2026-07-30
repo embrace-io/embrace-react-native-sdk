@@ -16,8 +16,11 @@ const tap = async (label: string, waitMs = 0) => {
 // End the current session by backgrounding the app (the SDK flushes the session payload on background).
 // Backgrounding also foregrounds the app again and begins a new session, so we add a short delay 
 // before handing control back to the spec to avoid races.
+// driver.background() rather than execute("mobile: backgroundApp"): the mobile command is a newer
+// alias that BrowserStack's older XCUITest driver does not have, and background() falls back to the
+// long-standing /appium/app/background endpoint when a driver reports it as an unknown command.
 const endSession = async () => {
-  await driver.execute("mobile: backgroundApp", {seconds: 5});
+  await driver.background(5);
   await new Promise(resolve => setTimeout(resolve, 250));
 };
 
