@@ -108,3 +108,4 @@ nx.json
 CoreTestsFailing/
 RNEmbraceCoreTests-*/
 logs.txt
+integration-tests/errorPayloads/

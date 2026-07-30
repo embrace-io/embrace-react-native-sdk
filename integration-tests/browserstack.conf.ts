@@ -1,5 +1,7 @@
 import { get } from "https";
+import { mkdirSync, writeFileSync } from "fs";
 import { registerMatchers } from "./helpers/matchers";
+import { retrieveStored } from "./helpers/mock_api";
 import { getPayloadSource } from "./helpers/payload_source";
 import { currentPlatform } from "./helpers/platform";
 
@@ -57,6 +59,9 @@ if (!namespace) {
     "MOCK_API_NAMESPACE is required for remote runs and must match the namespace the app was built with",
   );
 }
+
+// Raw payloads behind failed assertions, uploaded as a CI artifact.
+const PAYLOAD_DUMP_DIR = "./errorPayloads";
 
 const commonOptions = {
   projectName: "Embrace React Native SDK",
@@ -160,6 +165,28 @@ export const config: WebdriverIO.Config = {
 
   async beforeTest() {
     await getPayloadSource().clear();
+  },
+
+  // A remote failure cannot be reproduced locally - the device is gone and the next beforeTest
+  // clears the namespace - so keep what the assertion actually saw. Dumped as the raw /stored
+  // response, matching golden/remote-response.json, which keeps the arrival timestamps that tell
+  // a delivery problem from a behaviour difference.
+  async afterTest(test, _context, {passed}) {
+    if (passed) {
+      return;
+    }
+
+    try {
+      const file = `${test.parent} ${test.title}`.replace(/[^\w-]+/g, "_");
+      mkdirSync(PAYLOAD_DUMP_DIR, {recursive: true});
+      writeFileSync(
+        `${PAYLOAD_DUMP_DIR}/${file}.json`,
+        JSON.stringify(await retrieveStored(namespace), undefined, 2),
+      );
+    } catch (e) {
+      // Never let diagnostics mask the failure they are diagnosing.
+      console.log(`could not dump payloads for "${test.title}": ${e}`);
+    }
   },
 
   /**

@@ -200,6 +200,15 @@ jobs:
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
 
+      - name: Upload payload dumps
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: payloads-${{ matrix.test-app }}-android
+          path: integration-tests/errorPayloads/
+          if-no-files-found: ignore
+          retention-days: 7
+
   test-ios:
     needs: [prepare, build-ios]
     if: ${{ !cancelled() && needs.prepare.outputs.ios == 'true' }}
@@ -246,3 +255,12 @@ jobs:
           MOCK_API_NAMESPACE: namespace-${{ matrix.test-app }}-ios-${{ github.run_id }}
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
+
+      - name: Upload payload dumps
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: payloads-${{ matrix.test-app }}-ios
+          path: integration-tests/errorPayloads/
+          if-no-files-found: ignore
+          retention-days: 7
