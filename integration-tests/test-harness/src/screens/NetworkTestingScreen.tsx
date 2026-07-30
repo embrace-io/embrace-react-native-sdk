@@ -11,7 +11,7 @@ import {
 const NetworkTestingScreen = () => {
   const handleAuto200NetworkCall = useCallback(async () => {
     try {
-      // example.com sends a Cache-C-ntrol header, and a cache hit
+      // example.com sends a Cache-Control header, and a cache hit
       // does no network I/O so the SDK has nothing to instrument.
       await fetch(`https://example.com`, {
         headers: { "Cache-Control": "no-cache" }
