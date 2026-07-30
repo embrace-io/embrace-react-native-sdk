@@ -24,4 +24,18 @@ const endSession = async () => {
   await new Promise(resolve => setTimeout(resolve, 250));
 };
 
-export {tap, endSession};
+// Restart the app. driver.relaunchActiveApp() would be the one-liner, but it drives the whole
+// relaunch through `mobile:` execute methods, and BrowserStack's Android driver has none of them
+// (its supported list has no getCurrentPackage, terminateApp or activateApp). terminate_app and
+// activate_app are base-driver routes instead, so every driver has them; only reading the running
+// app's id needs a per-platform call.
+const relaunchApp = async () => {
+  const appId = driver.isAndroid
+    ? await driver.appiumGetCurrentPackage()
+    : (await driver.execute<{bundleId: string}, []>("mobile: activeAppInfo")).bundleId;
+
+  await driver.terminateApp(appId);
+  await driver.activateApp(appId);
+};
+
+export {tap, endSession, relaunchApp};

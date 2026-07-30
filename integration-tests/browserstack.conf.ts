@@ -1,5 +1,6 @@
 import { get } from "https";
 import { mkdirSync, writeFileSync } from "fs";
+import { driver } from "@wdio/globals";
 import { registerMatchers } from "./helpers/matchers";
 import { retrieveStored } from "./helpers/mock_api";
 import { getPayloadSource } from "./helpers/payload_source";
@@ -153,6 +154,11 @@ export const config: WebdriverIO.Config = {
 
   before() {
     registerMatchers();
+
+    // BrowserStack provisions the Appium server and its drivers, so `mobile:` execute methods can
+    // be missing here while present locally. Log what we were actually given, since the alternative
+    // is inferring the driver version from which commands its errors list as supported.
+    console.log(`session capabilities: ${JSON.stringify(driver.capabilities)}`);
 
     // Golden files are per-platform, so a misresolved platform would surface as a wall of
     // unrelated mismatches rather than as the configuration problem it is.
