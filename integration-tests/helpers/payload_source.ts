@@ -1,4 +1,5 @@
 import {
+  EmbraceEnvelope,
   EmbraceLogEnvelope,
   EmbraceSpanEnvelope,
   NormalizedPayloads,
@@ -34,8 +35,6 @@ export class LocalMockServerSource implements PayloadSource {
   }
 }
 
-type EmbraceEnvelope = EmbraceSpanEnvelope | EmbraceLogEnvelope;
-
 // Dispatch on the payload's own shape rather than the /stored bucket it came from: `Spans` is
 // confirmed to hold span envelopes, but where log envelopes land has not been observed.
 const isSpanEnvelope = (envelope: EmbraceEnvelope): envelope is EmbraceSpanEnvelope =>
@@ -57,9 +56,7 @@ export class RemoteMockApiSource implements PayloadSource {
   constructor(private readonly namespace: string) {}
 
   async getPayloads(): Promise<NormalizedPayloads> {
-    const envelopes = (await this.settledEntries()).map(
-      entry => JSON.parse(entry.Body) as EmbraceEnvelope,
-    );
+    const envelopes = (await this.settledEntries()).map(entry => entry.Body);
     return normalizePayloads(
       envelopes.filter(isSpanEnvelope),
       envelopes.filter(isLogEnvelope),

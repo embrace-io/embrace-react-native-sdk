@@ -186,9 +186,8 @@ export const config: WebdriverIO.Config = {
   },
 
   // A remote failure cannot be reproduced locally - the device is gone and the next beforeTest
-  // clears the namespace - so keep what the assertion actually saw. Dumped as the raw /stored
-  // response, matching golden/remote-response.json, which keeps the arrival timestamps that tell
-  // a delivery problem from a behaviour difference.
+  // clears the namespace - so keep what the assertion actually saw. Dumped as the /stored entries,
+  // which keep the arrival timestamps that tell a delivery problem from a behaviour difference.
   async afterTest(test, _context, {passed}) {
     if (passed) {
       return;
