@@ -117,16 +117,16 @@ export const config: WebdriverIO.Config = {
   //    fetch and it would arrive as an unexpected network span
   //  - tracer_provider.test.ts last, since its after() hook relaunches the app and so produces a
   //    second cold start for whatever follows it
-  specs: [
-    [
-      "./specs/session.test.ts",
-      "./specs/logs.test.ts",
-      "./specs/navigation.test.ts",
-      "./specs/network.test.ts",
-      "./specs/redux.test.ts",
-      "./specs/user.test.ts",
-      "./specs/tracer_provider.test.ts",
-    ],
+  specs: [ "./specs/**/*.ts"
+    // [
+    //   "./specs/session.test.ts",
+    //   "./specs/logs.test.ts",
+    //   "./specs/navigation.test.ts",
+    //   "./specs/network.test.ts",
+    //   "./specs/redux.test.ts",
+    //   "./specs/user.test.ts",
+    //   "./specs/tracer_provider.test.ts",
+    // ],
   ],
   exclude: [],
 
