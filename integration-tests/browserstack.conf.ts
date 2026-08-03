@@ -109,25 +109,8 @@ export const config: WebdriverIO.Config = {
   // Run workers sequentially
   maxInstances: 1,
 
-  // Nested so the whole suite runs in a single worker, and so a single BrowserStack session with
-  // one app install - the same shape as a local full-suite run. That makes the order load-bearing:
-  //  - session.test.ts first, so the run's one cold start lands on its most tolerant assertion
-  //    while its golden-compared breadcrumb test (captured warm) stays the second `it`
-  //  - network.test.ts not first, since Android instruments the SDK's own cold-start /v2/config
-  //    fetch and it would arrive as an unexpected network span
-  //  - tracer_provider.test.ts last, since its after() hook relaunches the app and so produces a
-  //    second cold start for whatever follows it
-  specs: [ "./specs/**/*.ts"
-    // [
-    //   "./specs/session.test.ts",
-    //   "./specs/logs.test.ts",
-    //   "./specs/navigation.test.ts",
-    //   "./specs/network.test.ts",
-    //   "./specs/redux.test.ts",
-    //   "./specs/user.test.ts",
-    //   "./specs/tracer_provider.test.ts",
-    // ],
-  ],
+  // Nested so the whole suite runs in a single worker and BrowserStack session
+  specs: [ ["./specs/**/*.ts" ] ],
   exclude: [],
 
   logLevel: "info",
