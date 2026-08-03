@@ -159,7 +159,7 @@ export const config: WebdriverIO.Config = {
     [
       "spec",
       {
-        realTimeReporting: true
+        realtimeReporting: true
       }
     ]
   ],
