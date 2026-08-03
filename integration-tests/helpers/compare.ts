@@ -21,6 +21,7 @@ const VOLATILE_ATTR_KEYS = new Set([
   "emb.clock_network_drift",
   "emb.disk_free_bytes",
   "emb.heartbeat_time_unix_nano",
+  "emb.is_emulator",
   "tap.coords",
   // logs
   "log.record.uid", // per-record uuid
