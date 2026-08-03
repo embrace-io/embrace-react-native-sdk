@@ -46,13 +46,13 @@ const androidCapabilities = [
       platformName: "android",
     },
   },
-  {
-    "bstack:options": {
-      deviceName: "Samsung Galaxy S20",
-      platformVersion: "10.0",
-      platformName: "android",
-    },
-  },
+  // {
+  //   "bstack:options": {
+  //     deviceName: "Samsung Galaxy S20",
+  //     platformVersion: "10.0",
+  //     platformName: "android",
+  //   },
+  // },
 ];
 
 const iosCapabilities = [
@@ -63,13 +63,13 @@ const iosCapabilities = [
       platformName: "ios",
     },
   },
-  {
-    "bstack:options": {
-      deviceName: "iPhone 14",
-      platformVersion: "16",
-      platformName: "ios",
-    },
-  },
+  // {
+  //   "bstack:options": {
+  //     deviceName: "iPhone 14",
+  //     platformVersion: "16",
+  //     platformName: "ios",
+  //   },
+  // },
 ];
 
 const capabilities = platform === "ios" ? iosCapabilities : androidCapabilities;
