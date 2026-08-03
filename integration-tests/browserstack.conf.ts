@@ -65,7 +65,7 @@ if (!namespace) {
 }
 
 // Raw payloads behind failed assertions, uploaded as a CI artifact.
-const PAYLOAD_DUMP_DIR = "./errorPayloads";
+const PAYLOAD_DUMP_DIR = "./output/failed-payloads";
 
 const commonOptions = {
   projectName: "Embrace React Native SDK",
@@ -131,6 +131,11 @@ export const config: WebdriverIO.Config = {
   exclude: [],
 
   logLevel: "info",
+
+  // Sends the info-level webdriver logs to <outputDir>/<spec>-<cid>.log
+  // These are uploaded as a CI artifact on failure so the logs can be inspected when a test run fails.
+  outputDir: "./output/logs",
+
   baseUrl: "",
   waitforTimeout: 10000,
   // wdio v9 enforces this as a hard abort on session creation (got->fetch); a

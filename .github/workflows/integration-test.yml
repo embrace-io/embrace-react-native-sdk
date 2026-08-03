@@ -200,14 +200,15 @@ jobs:
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
 
-      - name: Upload payload dumps
+      # Upload test runner logs and payloads for failed runs
+      - name: Upload diagnostics
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: payloads-${{ matrix.test-app }}-android
-          path: integration-tests/errorPayloads/
+          name: diagnostics-${{ matrix.test-app }}-android
+          path: integration-tests/output/
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: 1
 
   test-ios:
     needs: [prepare, build-ios]
@@ -256,11 +257,12 @@ jobs:
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
 
-      - name: Upload payload dumps
+      # Upload test runner logs and payloads for failed runs
+      - name: Upload diagnostics
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: payloads-${{ matrix.test-app }}-ios
-          path: integration-tests/errorPayloads/
+          name: diagnostics-${{ matrix.test-app }}-ios
+          path: integration-tests/output/
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: 1
