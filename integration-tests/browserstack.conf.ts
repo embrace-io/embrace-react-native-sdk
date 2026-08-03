@@ -5,48 +5,6 @@ import { retrieveStored } from "./helpers/mock_api";
 import { getPayloadSource } from "./helpers/payload_source";
 import { currentPlatform } from "./helpers/platform";
 
-// For capabilities choose a device that is close to the minimum required OS we support on both Android and iOS
-// as well as one that represents the latest supported OS.
-// See https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
-
-const androidCapabilities = [
-  {
-    "bstack:options": {
-      deviceName: "Google Pixel 6 Pro",
-      platformVersion: "15.0",
-      platformName: "android",
-      appiumVersion: "2.15.0"
-    },
-  },
-  {
-    "bstack:options": {
-      deviceName: "Samsung Galaxy S20",
-      platformVersion: "10.0",
-      platformName: "android",
-      appiumVersion: "2.15.0"
-    },
-  },
-];
-
-const iosCapabilities = [
-  {
-    "bstack:options": {
-      deviceName: "iPhone 16 Pro",
-      platformVersion: "18",
-      platformName: "ios",
-      appiumVersion: "2.15.0"
-    },
-  },
-  {
-    "bstack:options": {
-      deviceName: "iPhone 14",
-      platformVersion: "16",
-      platformName: "ios",
-      appiumVersion: "2.15.0"
-    },
-  },
-];
-
 const runID = process.env.CI_RUN_ID || "local";
 const gitRef = process.env.CI_GIT_REF || "local";
 const appName = process.env.BROWSERSTACK_APP_NAME;
@@ -55,8 +13,7 @@ const appPath =
   process.env.BROWSERSTACK_APP_PATH ||
   `${appName}.${platform === "ios" ? "ipa" : "apk"}`;
 
-// The app under test was built to report to this namespace, so the run has to be told the same
-// value. Without it the specs would read an empty local mockserver and fail as a whole.
+// Thbis must be set for remote runs, and must match the namespace the app was built with
 const namespace = process.env.MOCK_API_NAMESPACE;
 if (!namespace) {
   throw new Error(
@@ -67,23 +24,61 @@ if (!namespace) {
 // Raw payloads behind failed assertions, uploaded as a CI artifact.
 const PAYLOAD_DUMP_DIR = "./output/failed-payloads";
 
-const commonOptions = {
-  projectName: "Embrace React Native SDK",
-  buildIdentifier: gitRef,
-  buildName: runID,
-  debug: true,
-  networkLogs: true,
-  // getPayloads() polls the hosted mock-api for up to 30s with no Appium command in flight,
-  // and BrowserStack's default idle timeout is 60s.
-  idleTimeout: 300,
-};
+const commonCapabilities = {
+  "bstack:options": {
+    projectName: "Embrace React Native SDK",
+    buildIdentifier: gitRef,
+    buildName: runID,
+    debug: true,
+    networkLogs: true,
+    appiumVersion: "2.15.0"
+  },
+}
 
-const capabilities = (platform === "ios" ? iosCapabilities : androidCapabilities)
-  // TODO EMBR-13384 restore the second device per platform once the suite is stable on rn82
-  .slice(0, 1)
-  .map(capability => ({
-    "bstack:options": { ...capability["bstack:options"], ...commonOptions },
-  }));
+// For capabilities choose a device that is close to the minimum required OS we support on both Android and iOS
+// as well as one that represents the latest supported OS.
+// See https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
+const androidCapabilities = [
+  {
+    "bstack:options": {
+      deviceName: "Google Pixel 6 Pro",
+      platformVersion: "15.0",
+      platformName: "android",
+    },
+  },
+  {
+    "bstack:options": {
+      deviceName: "Samsung Galaxy S20",
+      platformVersion: "10.0",
+      platformName: "android",
+    },
+  },
+];
+
+const iosCapabilities = [
+  {
+    "bstack:options": {
+      deviceName: "iPhone 16 Pro",
+      platformVersion: "18",
+      platformName: "ios",
+    },
+  },
+  {
+    "bstack:options": {
+      deviceName: "iPhone 14",
+      platformVersion: "16",
+      platformName: "ios",
+    },
+  },
+];
+
+const capabilities = platform === "ios" ? iosCapabilities : androidCapabilities;
+
+// Code to support common capabilities
+capabilities.forEach(function (caps) {
+  for (let key in commonCapabilities)
+    caps[key] = { ...caps[key], ...commonCapabilities[key] };
+});
 
 export const config: WebdriverIO.Config = {
   user: process.env.BROWSERSTACK_USERNAME,
