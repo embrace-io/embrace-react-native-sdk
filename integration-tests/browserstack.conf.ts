@@ -105,7 +105,7 @@ export const config: WebdriverIO.Config = {
   maxInstances: 1,
 
   // Nested so the whole suite runs in a single worker and BrowserStack session
-  specs: [ ["./specs/**/*.ts" ] ],
+  specs: [["./specs/**/*.ts" ]],
   exclude: [],
 
   logLevel: "info",
@@ -122,10 +122,6 @@ export const config: WebdriverIO.Config = {
   connectionRetryTimeout: 900000,
   connectionRetryCount: 3,
 
-  // The number of times to retry the entire specfile when it fails as a whole. One grouped worker
-  // means a retry re-runs every spec, so keep the worst case at two passes.
-  specFileRetries: 1,
-
   // Delay in seconds between the spec file retry attempts.
   // Low on purpose as wdio also applies it as a pre-start sleep before spawning workers
   specFileRetriesDelay: 5,
@@ -133,9 +129,8 @@ export const config: WebdriverIO.Config = {
   framework: "mocha",
   mochaOpts: {
     ui: "bdd",
-    // user.test.ts's session-properties test is two endSession() flushes (5.25s each) plus four
-    // taps plus a payload fetch, all over BrowserStack round trips.
-    timeout: 180000,
+    timeout: 60000,
+    retries: 2,
   },
 
   reporters: [
