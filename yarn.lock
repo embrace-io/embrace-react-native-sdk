@@ -1522,29 +1522,29 @@ __metadata:
   linkType: hard
 
 "@dotenvx/dotenvx@npm:^2.1.5":
-  version: 2.15.1
-  resolution: "@dotenvx/dotenvx@npm:2.15.1"
+  version: 2.19.2
+  resolution: "@dotenvx/dotenvx@npm:2.19.2"
   dependencies:
-    "@dotenvx/primitives": "npm:^2.1.0"
-    "@dotenvx/tooling": "npm:^1.0.2"
+    "@dotenvx/primitives": "npm:^2.1.1"
+    "@dotenvx/tooling": "npm:^1.0.3"
     yocto-spinner: "npm:^1.2.1"
   bin:
     dotenvx: src/cli/dotenvx.js
-  checksum: 10c0/76474548afd073cab0852c55ed11e2aed8bd67ba2a59b556521c6be519fcdffce1accd1441250296e03897a3614ee35868a95bbea1500ed467db0ff5208fb0ba
+  checksum: 10c0/80460be7cdc47c73d4eee32cefb7df23b55354e7af17a9b553f7e19eddfb5f4d6accaa6afaa241ef2b1c731766901334636d9c9f7bfcc3c4e2de9c18929d00d2
   languageName: node
   linkType: hard
 
-"@dotenvx/primitives@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@dotenvx/primitives@npm:2.1.0"
-  checksum: 10c0/2e6d66cfd34cd017e5dfd8a78fbfb2fc89e37e279e5e1a8ddfbc3a0b36fbab5873d962cb4998e20f163a057666ac64c363452fcd5e5f4afe35169cc9909bc81d
+"@dotenvx/primitives@npm:^2.1.1":
+  version: 2.1.2
+  resolution: "@dotenvx/primitives@npm:2.1.2"
+  checksum: 10c0/7f545525bef2aac8154d6df477c54469d03b5e527ae22bb1122a6ccc5a71f2c7582f9b551da5d24192f16d2d5ae41b6fb99fea2341c36e4ad415a8070a7f0efa
   languageName: node
   linkType: hard
 
-"@dotenvx/tooling@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@dotenvx/tooling@npm:1.0.2"
-  checksum: 10c0/1ed874b544434e707c9940ed1f3c0f200d81cb743f20528228f876cbdb53a09801c082ae1072f6068fcb282bf1eacfb293377bd7b6abe93f99bfef525d1076d6
+"@dotenvx/tooling@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@dotenvx/tooling@npm:1.0.3"
+  checksum: 10c0/30ef129090715b69184f6489f2affba7e08c700913407edd6ccd27e989c5335b4434bf7ec8a955773ced37ec1e5d1ef4ca9cdc711cad091d00655b652bfc45ff
   languageName: node
   linkType: hard
 
