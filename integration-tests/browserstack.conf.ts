@@ -1,8 +1,7 @@
 import { get } from "https";
 import { mkdirSync, writeFileSync } from "fs";
 import { registerMatchers } from "./helpers/matchers";
-import { retrieveStoredRequests } from "./helpers/mock_api";
-import { getPayloadSource } from "./helpers/payload_source";
+import { retrieveStoredRequests, clearStoredRequests } from "./helpers/mock_api";
 
 const runID = process.env.CI_RUN_ID || "local";
 const gitRef = process.env.CI_GIT_REF || "local";
@@ -12,7 +11,7 @@ const appPath =
   process.env.BROWSERSTACK_APP_PATH ||
   `${appName}.${platform === "ios" ? "ipa" : "apk"}`;
 
-// Thbis must be set for remote runs, and must match the namespace the app was built with
+// This must be set for remote runs, and must match the namespace the app was built with
 const namespace = process.env.MOCK_API_NAMESPACE;
 if (!namespace) {
   throw new Error(
@@ -141,29 +140,24 @@ export const config: WebdriverIO.Config = {
     registerMatchers();
   },
 
-  async beforeTest() {
-    await getPayloadSource().clear();
-  },
-
-  // A remote failure cannot be reproduced locally - the device is gone and the next beforeTest
-  // clears the namespace - so keep what the assertion actually saw. Dumped as the /stored entries,
-  // which keep the arrival timestamps that tell a delivery problem from a behaviour difference.
   async afterTest(test, _context, {passed}) {
-    if (passed) {
-      return;
+    // If the test failed, dump the failing payloads to a file so they can be uploaded as a CI artifact.
+    if (!passed) {
+      try {
+        const file = `${process.env.WDIO_WORKER_ID} ${test.parent} ${test.title}`.replace(/[^\w-]+/g, "_");
+        mkdirSync(PAYLOAD_DUMP_DIR, {recursive: true});
+        writeFileSync(
+          `${PAYLOAD_DUMP_DIR}/${file}.json`,
+          JSON.stringify(await retrieveStoredRequests(namespace), undefined, 2),
+        );
+      } catch (e) {
+        // If the payload dump fails, log the error and move on.
+        console.log(`could not dump payloads for "${test.title}": ${e}`);
+      }
     }
 
-    try {
-      const file = `${process.env.WDIO_WORKER_ID} ${test.parent} ${test.title}`.replace(/[^\w-]+/g, "_");
-      mkdirSync(PAYLOAD_DUMP_DIR, {recursive: true});
-      writeFileSync(
-        `${PAYLOAD_DUMP_DIR}/${file}.json`,
-        JSON.stringify(await retrieveStoredRequests(namespace), undefined, 2),
-      );
-    } catch (e) {
-      // Never let diagnostics mask the failure they are diagnosing.
-      console.log(`could not dump payloads for "${test.title}": ${e}`);
-    }
+    // clear the namespace so the next test starts with a clean slate.
+    await clearStoredRequests(namespace);
   },
 
   /**
