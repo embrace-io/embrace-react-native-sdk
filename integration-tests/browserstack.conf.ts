@@ -109,10 +109,6 @@ export const config: WebdriverIO.Config = {
 
   logLevel: "info",
 
-  // Sends the info-level webdriver logs to <outputDir>/<spec>-<cid>.log
-  // These are uploaded as a CI artifact on failure so the logs can be inspected when a test run fails.
-  outputDir: "./output/logs",
-
   baseUrl: "",
   waitforTimeout: 10000,
   // wdio v9 enforces this as a hard abort on session creation (got->fetch); a
@@ -158,7 +154,7 @@ export const config: WebdriverIO.Config = {
     }
 
     try {
-      const file = `${test.parent} ${test.title}`.replace(/[^\w-]+/g, "_");
+      const file = `${process.env.WDIO_WORKER_ID} ${test.parent} ${test.title}`.replace(/[^\w-]+/g, "_");
       mkdirSync(PAYLOAD_DUMP_DIR, {recursive: true});
       writeFileSync(
         `${PAYLOAD_DUMP_DIR}/${file}.json`,
