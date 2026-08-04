@@ -94,8 +94,6 @@ interface EmbraceLogEnvelope {
   data: EmbracePayloadLogs;
 }
 
-type EmbraceEnvelope = EmbraceSpanEnvelope | EmbraceLogEnvelope;
-
 interface NormalizedPayloads {
   sessionSpans: EmbraceSpanData[];
   viewSpans: EmbraceSpanData[];
@@ -129,7 +127,6 @@ export type {
   EmbracePayloadLogs,
   EmbraceSpanEnvelope,
   EmbraceLogEnvelope,
-  EmbraceEnvelope,
   NormalizedPayloads,
   PayloadSection,
   Platform,

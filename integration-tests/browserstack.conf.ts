@@ -1,7 +1,7 @@
 import { get } from "https";
 import { mkdirSync, writeFileSync } from "fs";
 import { registerMatchers } from "./helpers/matchers";
-import { retrieveStored } from "./helpers/mock_api";
+import { retrieveStoredRequests } from "./helpers/mock_api";
 import { getPayloadSource } from "./helpers/payload_source";
 import { currentPlatform } from "./helpers/platform";
 
@@ -171,7 +171,7 @@ export const config: WebdriverIO.Config = {
       mkdirSync(PAYLOAD_DUMP_DIR, {recursive: true});
       writeFileSync(
         `${PAYLOAD_DUMP_DIR}/${file}.json`,
-        JSON.stringify(await retrieveStored(namespace), undefined, 2),
+        JSON.stringify(await retrieveStoredRequests(namespace), undefined, 2),
       );
     } catch (e) {
       // Never let diagnostics mask the failure they are diagnosing.

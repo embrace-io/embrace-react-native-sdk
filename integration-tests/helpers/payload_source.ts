@@ -1,11 +1,14 @@
 import {
-  EmbraceEnvelope,
   EmbraceLogEnvelope,
   EmbraceSpanEnvelope,
   NormalizedPayloads,
 } from "../typings/embrace";
 import {localMockClient} from "./local_mock";
-import {StoredEntry, clearStored, retrieveStored} from "./mock_api";
+import {
+  MockApiResponse,
+  clearStoredRequests,
+  retrieveStoredRequests,
+} from "./mock_api";
 import {normalizePayloads} from "./normalize";
 export interface PayloadSource {
   getPayloads(): Promise<NormalizedPayloads>;
@@ -35,14 +38,6 @@ export class LocalMockServerSource implements PayloadSource {
   }
 }
 
-// Dispatch on the payload's own shape rather than the /stored bucket it came from: `Spans` is
-// confirmed to hold span envelopes, but where log envelopes land has not been observed.
-const isSpanEnvelope = (envelope: EmbraceEnvelope): envelope is EmbraceSpanEnvelope =>
-  "spans" in (envelope.data ?? {}) || "span_snapshots" in (envelope.data ?? {});
-
-const isLogEnvelope = (envelope: EmbraceEnvelope): envelope is EmbraceLogEnvelope =>
-  "logs" in (envelope.data ?? {});
-
 // How long to wait for a flushed payload to reach the hosted service, and how often to re-check.
 // Locally the payload is on the server ~1s after backgrounding; remotely it is a device -> service
 // round trip, so wait for delivery to finish rather than assuming it has.
@@ -56,50 +51,46 @@ export class RemoteMockApiSource implements PayloadSource {
   constructor(private readonly namespace: string) {}
 
   async getPayloads(): Promise<NormalizedPayloads> {
-    const envelopes = (await this.settledEntries()).map(entry => entry.Body);
+    const stored = await this.settledResponse();
+    // The service buckets by endpoint, so Spans holds /v2/spans envelopes and Logs /v2/logs.
     return normalizePayloads(
-      envelopes.filter(isSpanEnvelope),
-      envelopes.filter(isLogEnvelope),
+      stored.Spans.map(entry => entry.Body as EmbraceSpanEnvelope),
+      stored.Logs.map(entry => entry.Body as EmbraceLogEnvelope),
     );
   }
 
   async clear(): Promise<void> {
-    await clearStored(this.namespace);
+    await clearStoredRequests(this.namespace);
   }
 
   // Return once the stored set holds steady across two polls. On timeout return whatever arrived
   // so the assertion reports the real mismatch ("missing span ...") rather than a bare timeout.
-  private async settledEntries(): Promise<StoredEntry[]> {
+  private async settledResponse(): Promise<MockApiResponse> {
     const deadline = Date.now() + SETTLE_TIMEOUT_MS;
-    let entries = await retrieveStored(this.namespace);
+    let stored = await retrieveStoredRequests(this.namespace);
+    let storedCount = stored.Logs.length + stored.Spans.length;
 
     while (Date.now() < deadline) {
       await sleep(SETTLE_INTERVAL_MS);
-      const next = await retrieveStored(this.namespace);
-      if (next.length > 0 && next.length === entries.length) {
+      const next = await retrieveStoredRequests(this.namespace);
+      const count = next.Spans.length + next.Logs.length;
+      if (count > 0 && count === storedCount) {
         return next;
       }
-      entries = next;
+      stored = next;
+      storedCount = count;
     }
 
     console.warn(
       `mock-api namespace "${this.namespace}" did not settle in ${SETTLE_TIMEOUT_MS}ms ` +
-        `(${entries.length} request(s) stored)`,
+        `(${storedCount} request(s) stored)`,
     );
-    return entries;
+    return stored;
   }
 }
 
-const localSource = new LocalMockServerSource();
-let remoteSource: RemoteMockApiSource | undefined;
+// If the namespace is set, the test is running against the mock-api service. Unset means the local mockserver.
+let payloadSource = process.env.MOCK_API_NAMESPACE ? new RemoteMockApiSource(process.env.MOCK_API_NAMESPACE) : new LocalMockServerSource();
 
-// The namespace is baked into the app under test at build time, so a run that has one is by
-// definition reporting to the hosted mock-api. Unset means the local mockserver.
-export const getPayloadSource = (): PayloadSource => {
-  const namespace = process.env.MOCK_API_NAMESPACE;
-  if (!namespace) {
-    return localSource;
-  }
-  remoteSource ??= new RemoteMockApiSource(namespace);
-  return remoteSource;
-};
+
+export const getPayloadSource = (): PayloadSource => payloadSource;
