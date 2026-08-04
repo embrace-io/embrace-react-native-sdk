@@ -39,12 +39,12 @@
       "data": {
         "spans": [
           {
-            "trace_id": "f1a4fc8f3d1cd4a8d64f68b3da159f5b",
-            "span_id": "399d5ed413bc397b",
+            "trace_id": "071380f6c5f3702c0fb416a7d7bb332e",
+            "span_id": "f37c62611922f4a8",
             "parent_span_id": "0000000000000000",
             "name": "emb-sdk-init",
-            "start_time_unix_nano": 1785238418897000000,
-            "end_time_unix_nano": 1785238418917000000,
+            "start_time_unix_nano": 1785239064015000000,
+            "end_time_unix_nano": 1785239064029000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -58,7 +58,7 @@
               },
               {
                 "key": "emb.process_identifier",
-                "value": "e954afeb89df50bd"
+                "value": "d73007450b4e79b8"
               },
               {
                 "key": "emb.type",
@@ -70,7 +70,7 @@
               },
               {
                 "key": "session.id",
-                "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
+                "value": "635BC436D90B497DBA1282D0826A7821"
               },
               {
                 "key": "thread-name",
@@ -79,8 +79,8 @@
             ],
             "links": [
               {
-                "span_id": "015ea8339ad68f61",
-                "trace_id": "b8a854b75d4e852207ab7801490d3906",
+                "span_id": "c34e2ee4ebc1e06e",
+                "trace_id": "063ad2463032caeba0f34acf2564e369",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -88,7 +88,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
+                    "value": "635BC436D90B497DBA1282D0826A7821"
                   }
                 ],
                 "is_remote": false
@@ -96,12 +96,12 @@
             ]
           },
           {
-            "trace_id": "6c0e57d1f15e95fcfb95875e0d21e86f",
-            "span_id": "39b33efbea484a1d",
+            "trace_id": "7d39b8b109a58e52ea3f8f7428962db8",
+            "span_id": "e8777a2f0d252d0d",
             "parent_span_id": "0000000000000000",
             "name": "log",
-            "start_time_unix_nano": 1785238418935000000,
-            "end_time_unix_nano": 1785238420606000000,
+            "start_time_unix_nano": 1785239064048000000,
+            "end_time_unix_nano": 1785239071679000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -111,7 +111,7 @@
               },
               {
                 "key": "emb.process_identifier",
-                "value": "e954afeb89df50bd"
+                "value": "d73007450b4e79b8"
               },
               {
                 "key": "emb.type",
@@ -123,7 +123,7 @@
               },
               {
                 "key": "session.id",
-                "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
+                "value": "635BC436D90B497DBA1282D0826A7821"
               },
               {
                 "key": "test.attr",
@@ -132,136 +132,6 @@
               {
                 "key": "view.launch",
                 "value": "true"
-              },
-              {
-                "key": "view.name",
-                "value": "log"
-              },
-              {
-                "key": "view.state.end",
-                "value": "active"
-              }
-            ],
-            "links": [
-              {
-                "span_id": "015ea8339ad68f61",
-                "trace_id": "b8a854b75d4e852207ab7801490d3906",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "END_SESSION"
-                  },
-                  {
-                    "key": "session.id",
-                    "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
-                  }
-                ],
-                "is_remote": false
-              }
-            ]
-          },
-          {
-            "trace_id": "4033004de641603ed499fd31f99ed3fd",
-            "span_id": "8f7b82871d5c2b4e",
-            "parent_span_id": "0000000000000000",
-            "name": "span",
-            "start_time_unix_nano": 1785238420606000000,
-            "end_time_unix_nano": 1785238422537000000,
-            "status": "Unset",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.private.sequence_id",
-                "value": "8"
-              },
-              {
-                "key": "emb.process_identifier",
-                "value": "e954afeb89df50bd"
-              },
-              {
-                "key": "emb.type",
-                "value": "ux.view"
-              },
-              {
-                "key": "package",
-                "value": "@react-navigation/native"
-              },
-              {
-                "key": "session.id",
-                "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
-              },
-              {
-                "key": "test.attr",
-                "value": "654321"
-              },
-              {
-                "key": "view.launch",
-                "value": "false"
-              },
-              {
-                "key": "view.name",
-                "value": "span"
-              },
-              {
-                "key": "view.state.end",
-                "value": "active"
-              }
-            ],
-            "links": [
-              {
-                "span_id": "015ea8339ad68f61",
-                "trace_id": "b8a854b75d4e852207ab7801490d3906",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "END_SESSION"
-                  },
-                  {
-                    "key": "session.id",
-                    "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
-                  }
-                ],
-                "is_remote": false
-              }
-            ]
-          },
-          {
-            "trace_id": "7dd53bf41c245baf120d583cc14ab7b3",
-            "span_id": "6116775cf64421dd",
-            "parent_span_id": "0000000000000000",
-            "name": "log",
-            "start_time_unix_nano": 1785238422538000000,
-            "end_time_unix_nano": 1785238424861000000,
-            "status": "Unset",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.private.sequence_id",
-                "value": "9"
-              },
-              {
-                "key": "emb.process_identifier",
-                "value": "e954afeb89df50bd"
-              },
-              {
-                "key": "emb.type",
-                "value": "ux.view"
-              },
-              {
-                "key": "package",
-                "value": "@react-navigation/native"
-              },
-              {
-                "key": "session.id",
-                "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
-              },
-              {
-                "key": "test.attr",
-                "value": "654321"
-              },
-              {
-                "key": "view.launch",
-                "value": "false"
               },
               {
                 "key": "view.name",
@@ -274,8 +144,8 @@
             ],
             "links": [
               {
-                "span_id": "015ea8339ad68f61",
-                "trace_id": "b8a854b75d4e852207ab7801490d3906",
+                "span_id": "c34e2ee4ebc1e06e",
+                "trace_id": "063ad2463032caeba0f34acf2564e369",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -283,7 +153,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
+                    "value": "635BC436D90B497DBA1282D0826A7821"
                   }
                 ],
                 "is_remote": false
@@ -291,17 +161,17 @@
             ]
           },
           {
-            "trace_id": "dd83ea18b86bf0db07f9c8c0da233cac",
-            "span_id": "34d51eabbdc0d3ae",
+            "trace_id": "2adc961684f495f86f1e2475715a9ecc",
+            "span_id": "8e776cf2fb56055c",
             "parent_span_id": "0000000000000000",
             "name": "emb-state-screen-automatic",
-            "start_time_unix_nano": 1785238418915000000,
-            "end_time_unix_nano": 1785238425560000000,
+            "start_time_unix_nano": 1785239064028000000,
+            "end_time_unix_nano": 1785239072376000000,
             "status": "Unset",
             "events": [
               {
                 "name": "transition",
-                "time_unix_nano": 1785238425560000000,
+                "time_unix_nano": 1785239072376000000,
                 "attributes": [
                   {
                     "key": "emb.state.new_value",
@@ -321,7 +191,7 @@
               },
               {
                 "key": "emb.process_identifier",
-                "value": "e954afeb89df50bd"
+                "value": "d73007450b4e79b8"
               },
               {
                 "key": "emb.state.initial_value",
@@ -337,13 +207,13 @@
               },
               {
                 "key": "session.id",
-                "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
+                "value": "635BC436D90B497DBA1282D0826A7821"
               }
             ],
             "links": [
               {
-                "span_id": "015ea8339ad68f61",
-                "trace_id": "b8a854b75d4e852207ab7801490d3906",
+                "span_id": "c34e2ee4ebc1e06e",
+                "trace_id": "063ad2463032caeba0f34acf2564e369",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -351,7 +221,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
+                    "value": "635BC436D90B497DBA1282D0826A7821"
                   }
                 ],
                 "is_remote": false
@@ -359,17 +229,17 @@
             ]
           },
           {
-            "trace_id": "06ab3a1c873dafb7e5a26e4dad0bcc0e",
-            "span_id": "56afa0ae684335b5",
+            "trace_id": "616bc58eff13fd7e1bfdd2c3976cd026",
+            "span_id": "cbd9b69340b18d5f",
             "parent_span_id": "0000000000000000",
             "name": "emb-state-network",
-            "start_time_unix_nano": 1785238418915000000,
-            "end_time_unix_nano": 1785238425560000000,
+            "start_time_unix_nano": 1785239064028000000,
+            "end_time_unix_nano": 1785239072377000000,
             "status": "Unset",
             "events": [
               {
                 "name": "transition",
-                "time_unix_nano": 1785238418917000000,
+                "time_unix_nano": 1785239064029000000,
                 "attributes": [
                   {
                     "key": "emb.state.new_value",
@@ -389,7 +259,7 @@
               },
               {
                 "key": "emb.process_identifier",
-                "value": "e954afeb89df50bd"
+                "value": "d73007450b4e79b8"
               },
               {
                 "key": "emb.state.initial_value",
@@ -405,13 +275,13 @@
               },
               {
                 "key": "session.id",
-                "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
+                "value": "635BC436D90B497DBA1282D0826A7821"
               }
             ],
             "links": [
               {
-                "span_id": "015ea8339ad68f61",
-                "trace_id": "b8a854b75d4e852207ab7801490d3906",
+                "span_id": "c34e2ee4ebc1e06e",
+                "trace_id": "063ad2463032caeba0f34acf2564e369",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -419,7 +289,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
+                    "value": "635BC436D90B497DBA1282D0826A7821"
                   }
                 ],
                 "is_remote": false
@@ -427,17 +297,17 @@
             ]
           },
           {
-            "trace_id": "b8a854b75d4e852207ab7801490d3906",
-            "span_id": "015ea8339ad68f61",
+            "trace_id": "063ad2463032caeba0f34acf2564e369",
+            "span_id": "c34e2ee4ebc1e06e",
             "parent_span_id": "0000000000000000",
             "name": "emb-session",
-            "start_time_unix_nano": 1785238418897000000,
-            "end_time_unix_nano": 1785238425561000000,
+            "start_time_unix_nano": 1785239064015000000,
+            "end_time_unix_nano": 1785239072377000000,
             "status": "Unset",
             "events": [
               {
                 "name": "emb-breadcrumb",
-                "time_unix_nano": 1785238418920000000,
+                "time_unix_nano": 1785239064035000000,
                 "attributes": [
                   {
                     "key": "emb.type",
@@ -465,15 +335,15 @@
               },
               {
                 "key": "emb.disk_free_bytes",
-                "value": "4470734848"
+                "value": "4470763520"
               },
               {
                 "key": "emb.error_log_count",
-                "value": "0"
+                "value": "1"
               },
               {
                 "key": "emb.heartbeat_time_unix_nano",
-                "value": "1785238424918000000"
+                "value": "1785239072031000000"
               },
               {
                 "key": "emb.is_emulator",
@@ -497,7 +367,7 @@
               },
               {
                 "key": "emb.process_identifier",
-                "value": "e954afeb89df50bd"
+                "value": "d73007450b4e79b8"
               },
               {
                 "key": "emb.session_end_type",
@@ -505,7 +375,7 @@
               },
               {
                 "key": "emb.session_number",
-                "value": "51"
+                "value": "55"
               },
               {
                 "key": "emb.session_start_type",
@@ -513,7 +383,7 @@
               },
               {
                 "key": "emb.startup_duration",
-                "value": "20"
+                "value": "14"
               },
               {
                 "key": "emb.state",
@@ -536,14 +406,18 @@
                 "value": "1"
               },
               {
+                "key": "emb.usage.log_message",
+                "value": "4"
+              },
+              {
                 "key": "session.id",
-                "value": "5B07E8F3CA1841909DDBCC7C371DF6A8"
+                "value": "635BC436D90B497DBA1282D0826A7821"
               }
             ],
             "links": [
               {
-                "span_id": "399d5ed413bc397b",
-                "trace_id": "f1a4fc8f3d1cd4a8d64f68b3da159f5b",
+                "span_id": "f37c62611922f4a8",
+                "trace_id": "071380f6c5f3702c0fb416a7d7bb332e",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -553,8 +427,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "39b33efbea484a1d",
-                "trace_id": "6c0e57d1f15e95fcfb95875e0d21e86f",
+                "span_id": "e8777a2f0d252d0d",
+                "trace_id": "7d39b8b109a58e52ea3f8f7428962db8",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -564,8 +438,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "8f7b82871d5c2b4e",
-                "trace_id": "4033004de641603ed499fd31f99ed3fd",
+                "span_id": "8e776cf2fb56055c",
+                "trace_id": "2adc961684f495f86f1e2475715a9ecc",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -575,30 +449,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "6116775cf64421dd",
-                "trace_id": "7dd53bf41c245baf120d583cc14ab7b3",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "ENDED_IN"
-                  }
-                ],
-                "is_remote": false
-              },
-              {
-                "span_id": "34d51eabbdc0d3ae",
-                "trace_id": "dd83ea18b86bf0db07f9c8c0da233cac",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "ENDED_IN"
-                  }
-                ],
-                "is_remote": false
-              },
-              {
-                "span_id": "34d51eabbdc0d3ae",
-                "trace_id": "dd83ea18b86bf0db07f9c8c0da233cac",
+                "span_id": "8e776cf2fb56055c",
+                "trace_id": "2adc961684f495f86f1e2475715a9ecc",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -608,8 +460,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "56afa0ae684335b5",
-                "trace_id": "06ab3a1c873dafb7e5a26e4dad0bcc0e",
+                "span_id": "cbd9b69340b18d5f",
+                "trace_id": "616bc58eff13fd7e1bfdd2c3976cd026",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -619,8 +471,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "56afa0ae684335b5",
-                "trace_id": "06ab3a1c873dafb7e5a26e4dad0bcc0e",
+                "span_id": "cbd9b69340b18d5f",
+                "trace_id": "616bc58eff13fd7e1bfdd2c3976cd026",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -634,31 +486,11 @@
         ],
         "span_snapshots": [
           {
-            "trace_id": "af4e5615be9b04387baf8739ff95f6a3",
-            "span_id": "8b99e12b45ebec6f",
-            "parent_span_id": "0000000000000000",
-            "name": "emb-thermal-state",
-            "start_time_unix_nano": 1785238418918000000,
-            "status": "Unset",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.type",
-                "value": "perf.thermal_state"
-              },
-              {
-                "key": "status",
-                "value": "0"
-              }
-            ],
-            "links": []
-          },
-          {
-            "trace_id": "4c255587a138eed3281eeb4fb6e10b7b",
-            "span_id": "3c59df0e178cf80b",
+            "trace_id": "281ee76ae5123e203069931dd29712c8",
+            "span_id": "644ba894af98a731",
             "parent_span_id": "0000000000000000",
             "name": "emb-network-status",
-            "start_time_unix_nano": 1785238418916000000,
+            "start_time_unix_nano": 1785239064028000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -669,6 +501,26 @@
               {
                 "key": "network",
                 "value": "wifi"
+              }
+            ],
+            "links": []
+          },
+          {
+            "trace_id": "da09ddbc7d7383f171214d5dc00c2837",
+            "span_id": "2eba885a3d9f8a71",
+            "parent_span_id": "0000000000000000",
+            "name": "emb-thermal-state",
+            "start_time_unix_nano": 1785239064033000000,
+            "status": "Unset",
+            "events": [],
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "perf.thermal_state"
+              },
+              {
+                "key": "status",
+                "value": "0"
               }
             ],
             "links": []
@@ -693,5 +545,195 @@
       }
     }
   ],
-  "logs": []
+  "logs": [
+    {
+      "resource": {
+        "app_version": "1.0",
+        "app_framework": 2,
+        "build_id": "4E6AC275A6F94E8AAFDEE1AFE11DEB97",
+        "app_ecosystem_id": "io.embrace.rn82",
+        "build_type": "release",
+        "build_flavor": "",
+        "environment": "prod",
+        "bundle_version": "1",
+        "sdk_version": "8.4.0",
+        "sdk_simple_version": 53,
+        "react_native_bundle_id": "DB444A45425049D713907741BE53E572",
+        "hosted_platform_version": "0.82.1",
+        "hosted_sdk_version": "7.0.0",
+        "device_manufacturer": "Google",
+        "device_model": "sdk_gphone64_arm64",
+        "device_architecture": "arm64-v8a",
+        "jailbroken": false,
+        "disk_total_capacity": 6228115456,
+        "os_type": "linux",
+        "os_name": "android",
+        "os_version": "14",
+        "os_code": "34",
+        "screen_resolution": "1080x2209",
+        "num_cores": 4
+      },
+      "metadata": {
+        "personas": [
+          "first_day"
+        ],
+        "timezone_description": "Europe/London",
+        "locale": "en_US"
+      },
+      "version": "0.1.0",
+      "type": "logs",
+      "data": {
+        "logs": [
+          {
+            "time_unix_nano": 1785239068220000000,
+            "severity_number": 13,
+            "severity_text": "WARNING",
+            "body": "This is a Warning log",
+            "attributes": [
+              {
+                "key": "emb.stacktrace.rn",
+                "value": "Error\n    at generateStackTrace (address at index.android.bundle:1:912862)\n    at logMessage (address at index.android.bundle:1:912374)\n    at logWarning (address at index.android.bundle:1:912569)\n    at anonymous (address at index.android.bundle:1:957940)\n    at _performTransitionSideEffects (address at index.android.bundle:1:463963)\n    at _receiveSignal (address at index.android.bundle:1:463567)\n    at onResponderRelease (address at index.android.bundle:1:462404)\n    at executeDispatch (address at index.android.bundle:1:129397)\n    at executeDispatchesAndReleaseTopLevel (address at index.android.bundle:1:134949)\n    at forEach (native)\n    at forEachAccumulated (address at index.android.bundle:1:130910)\n    at anonymous (address at index.android.bundle:1:135407)\n    at batchedUpdatesImpl (address at index.android.bundle:1:205262)\n    at batchedUpdates$1 (address at index.android.bundle:1:134875)\n    at dispatchEvent (address at index.android.bundle:1:135153)"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "emb.state.network",
+                "value": "wifi"
+              },
+              {
+                "key": "emb.state.screen-automatic",
+                "value": "Initializing"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.log"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "BFE165C8D9CA4FE0A886923DBA06FC4E"
+              },
+              {
+                "key": "session.id",
+                "value": "635BC436D90B497DBA1282D0826A7821"
+              }
+            ]
+          },
+          {
+            "time_unix_nano": 1785239068252000000,
+            "severity_number": 9,
+            "severity_text": "INFO",
+            "body": "This is a Info log",
+            "attributes": [
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "emb.state.network",
+                "value": "wifi"
+              },
+              {
+                "key": "emb.state.screen-automatic",
+                "value": "Initializing"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.log"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "348CB1DED1E34AA9A8B57BD57AAD67C4"
+              },
+              {
+                "key": "session.id",
+                "value": "635BC436D90B497DBA1282D0826A7821"
+              }
+            ]
+          },
+          {
+            "time_unix_nano": 1785239068253000000,
+            "severity_number": 17,
+            "severity_text": "ERROR",
+            "body": "This is a Error log",
+            "attributes": [
+              {
+                "key": "emb.stacktrace.rn",
+                "value": "Error\n    at generateStackTrace (address at index.android.bundle:1:912862)\n    at logMessage (address at index.android.bundle:1:912374)\n    at logError (address at index.android.bundle:1:912629)\n    at anonymous (address at index.android.bundle:1:957988)\n    at _performTransitionSideEffects (address at index.android.bundle:1:463963)\n    at _receiveSignal (address at index.android.bundle:1:463567)\n    at onResponderRelease (address at index.android.bundle:1:462404)\n    at executeDispatch (address at index.android.bundle:1:129397)\n    at executeDispatchesAndReleaseTopLevel (address at index.android.bundle:1:134949)\n    at forEach (native)\n    at forEachAccumulated (address at index.android.bundle:1:130910)\n    at anonymous (address at index.android.bundle:1:135407)\n    at batchedUpdatesImpl (address at index.android.bundle:1:205262)\n    at batchedUpdates$1 (address at index.android.bundle:1:134875)\n    at dispatchEvent (address at index.android.bundle:1:135153)"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "emb.state.network",
+                "value": "wifi"
+              },
+              {
+                "key": "emb.state.screen-automatic",
+                "value": "Initializing"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.log"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "960F2D0B3D4247C9B4F5AFBE7A0A7F63"
+              },
+              {
+                "key": "session.id",
+                "value": "635BC436D90B497DBA1282D0826A7821"
+              }
+            ]
+          },
+          {
+            "time_unix_nano": 1785239068253000000,
+            "severity_number": 13,
+            "severity_text": "WARNING",
+            "body": "This is a Message (log)",
+            "attributes": [
+              {
+                "key": "another.property",
+                "value": "efghy-jklmn-opqrs-tuvwx-yz"
+              },
+              {
+                "key": "emb.stacktrace.rn",
+                "value": "Error\n    at generateStackTrace (address at index.android.bundle:1:912862)\n    at logMessage (address at index.android.bundle:1:912374)\n    at anonymous (address at index.android.bundle:1:958026)\n    at _performTransitionSideEffects (address at index.android.bundle:1:463963)\n    at _receiveSignal (address at index.android.bundle:1:463567)\n    at onResponderRelease (address at index.android.bundle:1:462404)\n    at executeDispatch (address at index.android.bundle:1:129397)\n    at executeDispatchesAndReleaseTopLevel (address at index.android.bundle:1:134949)\n    at forEach (native)\n    at forEachAccumulated (address at index.android.bundle:1:130910)\n    at anonymous (address at index.android.bundle:1:135407)\n    at batchedUpdatesImpl (address at index.android.bundle:1:205262)\n    at batchedUpdates$1 (address at index.android.bundle:1:134875)\n    at dispatchEvent (address at index.android.bundle:1:135153)"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "emb.state.network",
+                "value": "wifi"
+              },
+              {
+                "key": "emb.state.screen-automatic",
+                "value": "Initializing"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.log"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "FADDFCF6F38D44C08A99E878ABC2A300"
+              },
+              {
+                "key": "property.test",
+                "value": "abcd"
+              },
+              {
+                "key": "session.id",
+                "value": "635BC436D90B497DBA1282D0826A7821"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

@@ -1,7 +1,8 @@
 import * as React from "react";
-import {Button, View, Text} from "react-native";
+import {View, Text} from "react-native";
 import {useCallback, useEffect, useState} from "react";
 import {styles} from "../../helpers/styles";
+import TestButton from "../../components/TestButton";
 import {EnhancedStore, configureStore, Tuple} from "@reduxjs/toolkit";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import FullScreenMessage from "../../components/FullScreenMessage";
@@ -58,8 +59,8 @@ const ReduxTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Actions</Text>
-        <Button onPress={increaseActionHandler} title="Increase" />
-        <Button onPress={decreaseActionHandler} title="Decrease" />
+        <TestButton onPress={increaseActionHandler} title="Increase" />
+        <TestButton onPress={decreaseActionHandler} title="Decrease" />
       </View>
     </View>
   );

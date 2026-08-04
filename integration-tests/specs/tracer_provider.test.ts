@@ -1,6 +1,13 @@
 import {driver} from "@wdio/globals";
+import {idToNameMap, projectSpan} from "../helpers/compare";
+import {loadGoldenFile} from "../helpers/golden";
+import {getAttribute} from "../helpers/normalize";
+import {endSession, tap} from "../helpers/app";
 import {getPayloadSource} from "../helpers/payload_source";
-import {endSession} from "../helpers/session";
+import {EmbraceSpanData} from "../typings/embrace";
+
+const byViewName = (spans: EmbraceSpanData[], name: string) =>
+  spans.find(s => getAttribute(s, "view.name") === name)!;
 
 describe("Tracer Provider", () => {
   const source = getPayloadSource();
@@ -13,12 +20,11 @@ describe("Tracer Provider", () => {
   });
 
   beforeEach(async () => {
-    await driver.$("~SPAN TESTING").click();
-    await new Promise(r => setTimeout(r, 1000));
+    await tap("SPAN TESTING", 1000);
   });
 
   it("records a basic span", async () => {
-    await driver.$("~GENERATE BASIC SPAN").click();
+    await tap("GENERATE BASIC SPAN");
     await endSession();
 
     const p = await source.getPayloads();
@@ -26,7 +32,7 @@ describe("Tracer Provider", () => {
   });
 
   it("records test spans and an unfinished-span snapshot", async () => {
-    await driver.$("~GENERATE TEST SPANS").click();
+    await tap("GENERATE TEST SPANS");
     await endSession();
 
     const p = await source.getPayloads();
@@ -35,10 +41,32 @@ describe("Tracer Provider", () => {
   });
 
   it("records nested spans with correct parent relationships", async () => {
-    await driver.$("~GENERATE NESTED SPANS").click();
+    await tap("GENERATE NESTED SPANS");
     await endSession();
 
     const p = await source.getPayloads();
     expect(p.perfSpans).toMatchGoldenFile("tracer-nested-spans", "perfSpans");
+  });
+
+  it("records a view span via startView", async () => {
+    await tap("Record View");
+    await endSession();
+
+    const p = await source.getPayloads();
+    // startView names its span emb-screen-view and identifies the view via view.name.
+    // viewSpans also holds incidental tab-navigation views whose composition depends on run
+    // order, so compare only this span against its counterpart in the golden.
+    const golden = loadGoldenFile("span-record-view").viewSpans;
+    expect(byViewName(p.viewSpans, "my-view")).toMatchSpan(
+      projectSpan(byViewName(golden, "my-view"), idToNameMap(golden)),
+    );
+  });
+
+  it("records completed spans with attributes, events and a parent", async () => {
+    await tap("Record Completed Span");
+    await endSession();
+
+    const p = await source.getPayloads();
+    expect(p.perfSpans).toMatchGoldenFile("span-record-completed", "perfSpans");
   });
 });

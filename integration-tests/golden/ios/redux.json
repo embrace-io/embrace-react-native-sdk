@@ -1,0 +1,297 @@
+{
+  "spans": [
+    {
+      "data": {
+        "span_snapshots": [],
+        "spans": [
+          {
+            "name": "emb-session",
+            "start_time_unix_nano": 1785328894874033000,
+            "span_id": "5ae4f48a2d2af600",
+            "links": [],
+            "trace_id": "acc866e575dd9c7b4d6b10b5e69bcc05",
+            "attributes": [
+              {
+                "value": "ux.session",
+                "key": "emb.type"
+              },
+              {
+                "value": "D6E108C9A2D141BF9535A37FFF965280",
+                "key": "session.id"
+              },
+              {
+                "value": "foreground",
+                "key": "emb.state"
+              },
+              {
+                "value": "false",
+                "key": "emb.cold_start"
+              },
+              {
+                "value": "false",
+                "key": "emb.terminated"
+              },
+              {
+                "value": "true",
+                "key": "emb.clean_exit"
+              },
+              {
+                "value": "1785328899879318016",
+                "key": "emb.heartbeat_time_unix_nano"
+              },
+              {
+                "value": "9",
+                "key": "emb.session_number"
+              }
+            ],
+            "events": [
+              {
+                "name": "emb-ui-tap",
+                "time_unix_nano": 1785328896329384000,
+                "attributes": [
+                  {
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
+                  },
+                  {
+                    "value": "371,823",
+                    "key": "tap.coords"
+                  },
+                  {
+                    "value": "ux.tap",
+                    "key": "emb.type"
+                  }
+                ]
+              },
+              {
+                "name": "emb-ui-tap",
+                "time_unix_nano": 1785328897811530200,
+                "attributes": [
+                  {
+                    "value": "ux.tap",
+                    "key": "emb.type"
+                  },
+                  {
+                    "value": "199,432",
+                    "key": "tap.coords"
+                  },
+                  {
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
+                  }
+                ]
+              },
+              {
+                "name": "emb-ui-tap",
+                "time_unix_nano": 1785328899315294000,
+                "attributes": [
+                  {
+                    "value": "189,479",
+                    "key": "tap.coords"
+                  },
+                  {
+                    "value": "ux.tap",
+                    "key": "emb.type"
+                  },
+                  {
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
+                  }
+                ]
+              }
+            ],
+            "status": "ok",
+            "end_time_unix_nano": 1785328903806169000
+          },
+          {
+            "events": [],
+            "links": [],
+            "status": "ok",
+            "start_time_unix_nano": 1785328894878645000,
+            "end_time_unix_nano": 1785328896402855000,
+            "trace_id": "2af2ff6d22b4d7d927457bd0a1534455",
+            "attributes": [
+              {
+                "value": "active",
+                "key": "view.state.end"
+              },
+              {
+                "value": "@react-navigation/native",
+                "key": "package"
+              },
+              {
+                "value": "654321",
+                "key": "test.attr"
+              },
+              {
+                "value": "log",
+                "key": "view.name"
+              },
+              {
+                "value": "ux.view",
+                "key": "emb.type"
+              },
+              {
+                "value": "false",
+                "key": "view.launch"
+              },
+              {
+                "value": "D6E108C9A2D141BF9535A37FFF965280",
+                "key": "session.id"
+              }
+            ],
+            "name": "log",
+            "span_id": "815fef3a61bf7077"
+          },
+          {
+            "name": "redux",
+            "end_time_unix_nano": 1785328903187299800,
+            "span_id": "4847a496ae1ad0ff",
+            "events": [],
+            "links": [],
+            "status": "ok",
+            "trace_id": "58933e031c4f519b0ccea356df43cc47",
+            "attributes": [
+              {
+                "value": "inactive",
+                "key": "view.state.end"
+              },
+              {
+                "key": "package",
+                "value": "@react-navigation/native"
+              },
+              {
+                "key": "test.attr",
+                "value": "654321"
+              },
+              {
+                "key": "view.name",
+                "value": "redux"
+              },
+              {
+                "key": "emb.type",
+                "value": "ux.view"
+              },
+              {
+                "key": "view.launch",
+                "value": "false"
+              },
+              {
+                "key": "session.id",
+                "value": "D6E108C9A2D141BF9535A37FFF965280"
+              }
+            ],
+            "start_time_unix_nano": 1785328896402965000
+          },
+          {
+            "name": "action",
+            "end_time_unix_nano": 1785328897975516000,
+            "status": "ok",
+            "start_time_unix_nano": 1785328897962152000,
+            "attributes": [
+              {
+                "key": "payload_size",
+                "value": "31"
+              },
+              {
+                "key": "outcome",
+                "value": "success"
+              },
+              {
+                "key": "action.state",
+                "value": "active"
+              },
+              {
+                "key": "name",
+                "value": "COUNTER_INCREASE:slow"
+              },
+              {
+                "key": "session.id",
+                "value": "D6E108C9A2D141BF9535A37FFF965280"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.rn_action"
+              }
+            ],
+            "links": [],
+            "span_id": "1b2da200b87efdbc",
+            "events": [],
+            "trace_id": "fad5318f3ea0392daae2e8ba279513c8"
+          },
+          {
+            "status": "ok",
+            "name": "action",
+            "span_id": "3df271f1e2185e88",
+            "events": [],
+            "links": [],
+            "trace_id": "4aaafcf48cfcbd3169e7b8b3f2d2cfa7",
+            "attributes": [
+              {
+                "key": "payload_size",
+                "value": "31"
+              },
+              {
+                "key": "name",
+                "value": "COUNTER_DECREASE:normal"
+              },
+              {
+                "key": "outcome",
+                "value": "success"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.rn_action"
+              },
+              {
+                "key": "session.id",
+                "value": "D6E108C9A2D141BF9535A37FFF965280"
+              },
+              {
+                "key": "action.state",
+                "value": "active"
+              }
+            ],
+            "end_time_unix_nano": 1785328899449901000,
+            "start_time_unix_nano": 1785328899449709000
+          }
+        ]
+      },
+      "type": "spans",
+      "version": "1.0",
+      "metadata": {
+        "personas": []
+      },
+      "resource": {
+        "app_version": "1.0",
+        "os_alternate_type": "iOS",
+        "os_type": "darwin",
+        "os_name": "ios",
+        "react_native_bundle_id": "4d96f96b57ea5d867d68cc290abb11aa",
+        "sdk_version": "6.19.0",
+        "build_id": "907D8BC09FF6364FB724CFB5BDC97E7A",
+        "environment_detail": "si",
+        "process_pre_warm": false,
+        "screen_resolution": null,
+        "hosted_sdk_version": "7.0.0",
+        "os_build": "25F84",
+        "environment": "dev",
+        "disk_total_capacity": 994610155520,
+        "device_manufacturer": "Apple",
+        "process_start_time": 1785328877026288000,
+        "sdk_platform": "ios",
+        "device_model": "arm64",
+        "process_identifier": "4624DAE6966749CB9CB8840042B4225E",
+        "app_framework": 2,
+        "app_bundle_id": "io.embrace.rn82",
+        "launch_count": null,
+        "os_version": "26.3.1",
+        "build": "1",
+        "hosted_platform_version": "0.82.1",
+        "jailbroken": false,
+        "device_architecture": "arm64e"
+      }
+    }
+  ],
+  "logs": []
+}

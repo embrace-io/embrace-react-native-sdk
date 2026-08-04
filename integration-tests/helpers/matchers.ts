@@ -1,12 +1,19 @@
 import {expect} from "@wdio/globals";
-import {EmbraceSpanAttribute, EmbraceSpanData, EmbraceSpanEvent} from "../typings/embrace";
+import {
+  EmbraceLogRecord,
+  EmbracePayloadMetadata,
+  EmbraceSpanAttribute,
+  EmbraceSpanData,
+  EmbraceSpanEvent,
+  PayloadSection
+} from "../typings/embrace";
 import {
   EventProjection,
-  SpanCategory,
   SpanProjection,
   compareAttributes,
-  compareCategory,
+  compareSpans,
   compareEvents,
+  compareLogs,
   compareSpan,
   idToNameMap,
   parentNameOf,
@@ -22,9 +29,16 @@ const wrap = ({pass, message}: {pass: boolean; message: string}) => ({
 
 export const registerMatchers = (): void =>
   expect.extend({
-    toMatchGoldenFile(received: EmbraceSpanData[], scenario: string, category: SpanCategory) {
-      const golden = loadGoldenFile(scenario)[category];
-      return wrap(compareCategory(received, golden));
+    toMatchGoldenFile(
+      received: EmbraceSpanData[] | EmbraceLogRecord[],
+      scenario: string,
+      section: PayloadSection,
+    ) {
+      const golden = loadGoldenFile(scenario);
+      if (section === "logs") {
+        return wrap(compareLogs(received as EmbraceLogRecord[], golden.logs));
+      }
+      return wrap(compareSpans(received as EmbraceSpanData[], golden[section]));
     },
     toMatchSpan(received: EmbraceSpanData, expected: SpanProjection, within: EmbraceSpanData[] = [received]) {
       return wrap(compareSpan(received, expected, idToNameMap(within)));
@@ -43,6 +57,26 @@ export const registerMatchers = (): void =>
         pass: errors.length === 0,
         message: `span "${received?.name}": ${errors.join("; ")}`,
       });
+    },
+    // Scalar keys compare by value; personas is a "contains" check, because the SDK injects its
+    // own personas (Android carries "first_day", and clearAllUserPersonas does not remove it).
+    toHaveMetadata(
+      received: EmbracePayloadMetadata,
+      subset: Partial<EmbracePayloadMetadata>,
+    ) {
+      const errors = Object.entries(subset).flatMap(([key, expected]) => {
+        const actual = received?.[key as keyof EmbracePayloadMetadata];
+        if (key === "personas") {
+          const have = (actual as string[]) ?? [];
+          return (expected as string[])
+            .filter(p => !have.includes(p))
+            .map(p => `metadata personas missing "${p}" (got [${have.join(", ")}])`);
+        }
+        return actual === expected
+          ? []
+          : [`metadata "${key}" expected "${expected}", got "${actual ?? "<missing>"}"`];
+      });
+      return wrap({pass: errors.length === 0, message: errors.join("; ")});
     },
     toHaveParentSpan(
       received: EmbraceSpanData,

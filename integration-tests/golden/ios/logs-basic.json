@@ -1,0 +1,492 @@
+{
+  "spans": [
+    {
+      "resource": {
+        "jailbroken": false,
+        "os_name": "ios",
+        "os_alternate_type": "iOS",
+        "os_version": "26.3.1",
+        "build_id": "AD5113005A6E31619111DEC7C9919059",
+        "sdk_platform": "ios",
+        "hosted_sdk_version": "7.0.0",
+        "sdk_version": "6.19.0",
+        "device_manufacturer": "Apple",
+        "build": "1",
+        "process_identifier": "2B8B87A299454D2699AB62B7B6150C93",
+        "app_bundle_id": "io.embrace.rn82",
+        "react_native_bundle_id": "5c48358f8e021827e4951ed37552576e",
+        "process_pre_warm": false,
+        "device_model": "arm64",
+        "environment": "dev",
+        "environment_detail": "si",
+        "device_architecture": "arm64e",
+        "disk_total_capacity": 994610155520,
+        "launch_count": null,
+        "hosted_platform_version": "0.82.1",
+        "process_start_time": 1785234055843217000,
+        "os_build": "25F84",
+        "os_type": "darwin",
+        "app_version": "1.0",
+        "screen_resolution": null,
+        "app_framework": 2
+      },
+      "metadata": {
+        "personas": []
+      },
+      "version": "1.0",
+      "type": "spans",
+      "data": {
+        "spans": [
+          {
+            "links": [],
+            "end_time_unix_nano": 1785234063054729000,
+            "status": "ok",
+            "span_id": "7140e1a06fe351b1",
+            "events": [
+              {
+                "time_unix_nano": 1785234056240501800,
+                "attributes": [
+                  {
+                    "key": "message",
+                    "value": "The App started in portrait mode"
+                  },
+                  {
+                    "key": "emb.type",
+                    "value": "sys.breadcrumb"
+                  }
+                ],
+                "name": "emb-breadcrumb"
+              },
+              {
+                "time_unix_nano": 1785234058923657000,
+                "attributes": [
+                  {
+                    "key": "emb.type",
+                    "value": "ux.tap"
+                  },
+                  {
+                    "key": "tap.coords",
+                    "value": "216,268"
+                  },
+                  {
+                    "key": "view.name",
+                    "value": "RCTParagraphComponentView"
+                  }
+                ],
+                "name": "emb-ui-tap"
+              }
+            ],
+            "trace_id": "44ea536c24c5778b54aa73e3bfe62b28",
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "ux.session"
+              },
+              {
+                "key": "session.id",
+                "value": "A2C40E8141FF4CA59FFBB389360CA898"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "emb.cold_start",
+                "value": "true"
+              },
+              {
+                "key": "emb.terminated",
+                "value": "false"
+              },
+              {
+                "key": "emb.clean_exit",
+                "value": "true"
+              },
+              {
+                "key": "emb.heartbeat_time_unix_nano",
+                "value": "1785234061232781056"
+              },
+              {
+                "key": "emb.session_number",
+                "value": "10"
+              }
+            ],
+            "name": "emb-session",
+            "start_time_unix_nano": 1785234056230002000
+          },
+          {
+            "links": [],
+            "end_time_unix_nano": 1785234056197660000,
+            "status": "ok",
+            "span_id": "547e877515c87480",
+            "events": [],
+            "trace_id": "fbfe8222cfcc7eafa94674702b76c7aa",
+            "attributes": [
+              {
+                "value": "sys.startup",
+                "key": "emb.type"
+              },
+              {
+                "value": "false",
+                "key": "isPrewarmed"
+              }
+            ],
+            "name": "emb-app-startup-warm",
+            "start_time_unix_nano": 1785234055843217000
+          },
+          {
+            "links": [],
+            "parent_span_id": "547e877515c87480",
+            "span_id": "8709079e9a8a69b8",
+            "status": "ok",
+            "end_time_unix_nano": 1785234056152723000,
+            "events": [],
+            "trace_id": "fbfe8222cfcc7eafa94674702b76c7aa",
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "sys.startup"
+              },
+              {
+                "key": "isPrewarmed",
+                "value": "false"
+              }
+            ],
+            "name": "emb-app-pre-main-init",
+            "start_time_unix_nano": 1785234055843217000
+          },
+          {
+            "links": [],
+            "parent_span_id": "547e877515c87480",
+            "span_id": "9251f0cd6a2010da",
+            "status": "ok",
+            "end_time_unix_nano": 1785234056197660000,
+            "events": [],
+            "trace_id": "fbfe8222cfcc7eafa94674702b76c7aa",
+            "attributes": [
+              {
+                "key": "isPrewarmed",
+                "value": "false"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.startup"
+              }
+            ],
+            "name": "emb-app-first-frame-rendered",
+            "start_time_unix_nano": 1785234056152723000
+          },
+          {
+            "links": [],
+            "parent_span_id": "385edb23baedb052",
+            "span_id": "f1ea2623e7007e78",
+            "status": "ok",
+            "end_time_unix_nano": 1785234056239672000,
+            "events": [],
+            "trace_id": "7aaf1822751550291869d4c9b7c4af4c",
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "perf"
+              }
+            ],
+            "name": "emb-sdk-start-process",
+            "start_time_unix_nano": 1785234056228498000
+          },
+          {
+            "links": [],
+            "end_time_unix_nano": 1785234056239681000,
+            "status": "ok",
+            "span_id": "385edb23baedb052",
+            "events": [],
+            "trace_id": "7aaf1822751550291869d4c9b7c4af4c",
+            "attributes": [
+              {
+                "value": "true",
+                "key": "emb.private"
+              },
+              {
+                "value": "perf",
+                "key": "emb.type"
+              }
+            ],
+            "name": "emb-process-launch",
+            "start_time_unix_nano": 1785234055843217000
+          },
+          {
+            "links": [],
+            "end_time_unix_nano": 1785234062443727000,
+            "status": "ok",
+            "span_id": "f7267bb8b1209d39",
+            "events": [],
+            "trace_id": "a6ac4a0c85cf92cb2c7be733c9e26f5c",
+            "attributes": [
+              {
+                "value": "@react-navigation/native",
+                "key": "package"
+              },
+              {
+                "value": "log",
+                "key": "view.name"
+              },
+              {
+                "value": "inactive",
+                "key": "view.state.end"
+              },
+              {
+                "value": "ux.view",
+                "key": "emb.type"
+              },
+              {
+                "value": "654321",
+                "key": "test.attr"
+              },
+              {
+                "value": "true",
+                "key": "view.launch"
+              },
+              {
+                "value": "A2C40E8141FF4CA59FFBB389360CA898",
+                "key": "session.id"
+              }
+            ],
+            "name": "log",
+            "start_time_unix_nano": 1785234056255634000
+          }
+        ],
+        "span_snapshots": []
+      }
+    }
+  ],
+  "logs": [
+    {
+      "resource": {
+        "launch_count": null,
+        "device_architecture": null,
+        "sdk_platform": "ios",
+        "process_identifier": null,
+        "os_alternate_type": null,
+        "process_start_time": null,
+        "build_id": null,
+        "app_bundle_id": "io.embrace.rn82",
+        "app_framework": null,
+        "os_build": null,
+        "build": null,
+        "process_pre_warm": null,
+        "os_name": "ios",
+        "device_manufacturer": "Apple",
+        "disk_total_capacity": null,
+        "app_version": null,
+        "screen_resolution": null,
+        "os_type": null,
+        "jailbroken": null,
+        "device_model": null,
+        "environment": null,
+        "environment_detail": null,
+        "sdk_version": "6.19.0",
+        "os_version": null
+      },
+      "type": "logs",
+      "data": {
+        "logs": [
+          {
+            "body": "[2026-07-28T10:20:02.242Z] Warning: performBlockAndWait on main thread can easily deadlock! Proceeding with caution.\n",
+            "severity_text": "FATAL",
+            "severity_number": 24,
+            "time_unix_nano": "1785234056213412096",
+            "attributes": [
+              {
+                "key": "log.record.uid",
+                "value": "AD64AAF412CD4A288E71EF0C652B897A"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.internal"
+              }
+            ]
+          }
+        ]
+      },
+      "metadata": {
+        "personas": []
+      },
+      "version": "1.0"
+    },
+    {
+      "version": "1.0",
+      "resource": {
+        "app_framework": 2,
+        "os_alternate_type": "iOS",
+        "process_start_time": 1785234055843217000,
+        "app_bundle_id": "io.embrace.rn82",
+        "os_type": "darwin",
+        "build_id": "AD5113005A6E31619111DEC7C9919059",
+        "os_name": "ios",
+        "os_build": "25F84",
+        "os_version": "26.3.1",
+        "process_identifier": "2B8B87A299454D2699AB62B7B6150C93",
+        "hosted_platform_version": "0.82.1",
+        "process_pre_warm": false,
+        "react_native_bundle_id": "5c48358f8e021827e4951ed37552576e",
+        "device_model": "arm64",
+        "build": "1",
+        "device_architecture": "arm64e",
+        "hosted_sdk_version": "7.0.0",
+        "sdk_version": "6.19.0",
+        "device_manufacturer": "Apple",
+        "environment_detail": "si",
+        "environment": "dev",
+        "screen_resolution": null,
+        "sdk_platform": "ios",
+        "app_version": "1.0",
+        "launch_count": null,
+        "jailbroken": false,
+        "disk_total_capacity": 994610155520
+      },
+      "metadata": {
+        "personas": []
+      },
+      "type": "logs",
+      "data": {
+        "logs": [
+          {
+            "time_unix_nano": "1785234056225101824",
+            "severity_number": 17,
+            "severity_text": "ERROR",
+            "attributes": [
+              {
+                "key": "emb.stacktrace.ios",
+                "value": "W3siYSI6IjB4MDAwMDAwMDEwMjdkOWVhMCIsInUiOiJBRDUxMTMwMDVBNkUzMTYxOTExMURFQzdDOTkxOTA1OSIsIm8iOjYzMDQzMiwibSI6InJuODIiLCJwIjoiXC9Vc2Vyc1wvYWhtZWRhaG1lZFwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9EZXZpY2VzXC8wN0MxMjY2OS03OUYwLTQwQkMtQjhCOS1BODYzMTFGQzgwMUZcL2RhdGFcL0NvbnRhaW5lcnNcL0J1bmRsZVwvQXBwbGljYXRpb25cL0I2MzdFNUZBLTRDMUMtNDU1Ri04OTIyLTZEOTcyM0UyMkMwNlwvcm44Mi5hcHBcL3JuODIiLCJzIjoiJHM5RW1icmFjZUlPMTNMb2dDb250cm9sbGVyQzA2Y3JlYXRlQzBfOHNldmVyaXR5NHR5cGU5dGltZXN0YW1wMTBhdHRhY2htZW50MEkySWQwSTNVcmwxMGF0dHJpYnV0ZXMxOHN0YWNrVHJhY2VCZWhhdmlvcjVxdWV1ZXlTU19BQTBDOFNldmVyaXR5T0FBMEM0VHlwZVYxMEZvdW5kYXRpb240RGF0ZVZBUjREYXRhVlNnU1NTZ0FSM1VSTFZTZ1NEeVMyU0dBQTA1U3RhY2tuTzBPU28wMTJPU19kaXNwYXRjaF9QMEN0RiIsInNvIjoxNTM2fSx7InUiOiJBRDUxMTMwMDVBNkUzMTYxOTExMURFQzdDOTkxOTA1OSIsInMiOiIkczlFbWJyYWNlSU8wQTBDM2xvZ184c2V2ZXJpdHk0dHlwZTEwYXR0cmlidXRlczE4c3RhY2tUcmFjZUJlaGF2aW9yeVNTX0FBMTFMb2dTZXZlcml0eU9BQTBKNFR5cGVWU0R5UzJTR0FBMDVTdGFja2hJME90RiIsImEiOiIweDAwMDAwMDAxMDI3N2MzZTgiLCJvIjoyNDY3NjAsIm0iOiJybjgyIiwic28iOjI4NCwicCI6IlwvVXNlcnNcL2FobWVkYWhtZWRcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvRGV2aWNlc1wvMDdDMTI2NjktNzlGMC00MEJDLUI4QjktQTg2MzExRkM4MDFGXC9kYXRhXC9Db250YWluZXJzXC9CdW5kbGVcL0FwcGxpY2F0aW9uXC9CNjM3RTVGQS00QzFDLTQ1NUYtODkyMi02RDk3MjNFMjJDMDZcL3JuODIuYXBwXC9ybjgyIn0seyJtIjoicm44MiIsInAiOiJcL1VzZXJzXC9haG1lZGFobWVkXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL0RldmljZXNcLzA3QzEyNjY5LTc5RjAtNDBCQy1COEI5LUE4NjMxMUZDODAxRlwvZGF0YVwvQ29udGFpbmVyc1wvQnVuZGxlXC9BcHBsaWNhdGlvblwvQjYzN0U1RkEtNEMxQy00NTVGLTg5MjItNkQ5NzIzRTIyQzA2XC9ybjgyLmFwcFwvcm44MiIsIm8iOjgyMTYwLCJhIjoiMHgwMDAwMDAwMTAyNzU0MGYwIiwicyI6IiRzOUVtYnJhY2VJTzE4QmFzZUludGVybmFsTG9nZ2VyQzExc2VuZE9UZWxMb2czM183MTU5OUI2QjBDNjFCRkQ2NDA4QTY1Q0ZDOUNERTQ4NUxMNWxldmVsN21lc3NhZ2UxMGF0dHJpYnV0ZXN5QUEwSDVMZXZlbE9fU1NTRHlTMlNHdEYiLCJ1IjoiQUQ1MTEzMDA1QTZFMzE2MTkxMTFERUM3Qzk5MTkwNTkiLCJzbyI6NTUyfSx7InAiOiJcL1VzZXJzXC9haG1lZGFobWVkXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL0RldmljZXNcLzA3QzEyNjY5LTc5RjAtNDBCQy1COEI5LUE4NjMxMUZDODAxRlwvZGF0YVwvQ29udGFpbmVyc1wvQnVuZGxlXC9BcHBsaWNhdGlvblwvQjYzN0U1RkEtNEMxQy00NTVGLTg5MjItNkQ5NzIzRTIyQzA2XC9ybjgyLmFwcFwvcm44MiIsIm0iOiJybjgyIiwibyI6MjE2NDk2LCJ1IjoiQUQ1MTEzMDA1QTZFMzE2MTkxMTFERUM3Qzk5MTkwNTkiLCJzbyI6MTAwOCwicyI6IiRzOUVtYnJhY2VJTzBBMEM1c3RhcnRBQ3lLRiIsImEiOiIweDAwMDAwMDAxMDI3NzRkYjAifSx7InNvIjoxNjAsInUiOiJBRDUxMTMwMDVBNkUzMTYxOTExMURFQzdDOTkxOTA1OSIsIm0iOiJybjgyIiwiYSI6IjB4MDAwMDAwMDEwMjk4Y2U3YyIsInMiOiIkczEzUk5FbWJyYWNlQ29yZTE0RW1icmFjZU1hbmFnZXJDMDExc3RhcnROYXRpdmVDM1NESzEwY29uZmlnRGljdDdyZXNvbHZlOHJlamVjdGVyeVNvMTJOU0RpY3Rpb25hcnlDX3l5cFNnY3lTU1NnX0FLczVFcnJvcl9wU2d0Y3RGeXlTY01ZY2NmVV8iLCJwIjoiXC9Vc2Vyc1wvYWhtZWRhaG1lZFwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9EZXZpY2VzXC8wN0MxMjY2OS03OUYwLTQwQkMtQjhCOS1BODYzMTFGQzgwMUZcL2RhdGFcL0NvbnRhaW5lcnNcL0J1bmRsZVwvQXBwbGljYXRpb25cL0I2MzdFNUZBLTRDMUMtNDU1Ri04OTIyLTZEOTcyM0UyMkMwNlwvcm44Mi5hcHBcL3JuODIiLCJvIjoyNDEyMTU2fSx7InMiOiIkc0llZ19JZXlCX1RSIiwic28iOjI4LCJwIjoiXC9Vc2Vyc1wvYWhtZWRhaG1lZFwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9EZXZpY2VzXC8wN0MxMjY2OS03OUYwLTQwQkMtQjhCOS1BODYzMTFGQzgwMUZcL2RhdGFcL0NvbnRhaW5lcnNcL0J1bmRsZVwvQXBwbGljYXRpb25cL0I2MzdFNUZBLTRDMUMtNDU1Ri04OTIyLTZEOTcyM0UyMkMwNlwvcm44Mi5hcHBcL3JuODIiLCJ1IjoiQUQ1MTEzMDA1QTZFMzE2MTkxMTFERUM3Qzk5MTkwNTkiLCJvIjoxMjc0MDgsImEiOiIweDAwMDAwMDAxMDI3NWYxYjAiLCJtIjoicm44MiJ9LHsibSI6ImxpYmRpc3BhdGNoLmR5bGliIiwicyI6Il9kaXNwYXRjaF9jYWxsX2Jsb2NrX2FuZF9yZWxlYXNlIiwiYSI6IjB4MDAwMDAwMDE4MDFjMDdhOCIsIm8iOjYwNTYsInUiOiI5RkRFQTMyQjU5MTAzNzg3ODczOEQ0RjhBMUVBOTlGOCIsInAiOiJcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvVm9sdW1lc1wvaU9TXzIzRDgxMzNcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvUHJvZmlsZXNcL1J1bnRpbWVzXC9pT1MgMjYuMy5zaW1ydW50aW1lXC9Db250ZW50c1wvUmVzb3VyY2VzXC9SdW50aW1lUm9vdFwvdXNyXC9saWJcL3N5c3RlbVwvbGliZGlzcGF0Y2guZHlsaWIiLCJzbyI6MjR9LHsibSI6ImxpYmRpc3BhdGNoLmR5bGliIiwicyI6Il9kaXNwYXRjaF9jbGllbnRfY2FsbG91dCIsInNvIjoxMiwibyI6MTE1ODg4LCJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL3VzclwvbGliXC9zeXN0ZW1cL2xpYmRpc3BhdGNoLmR5bGliIiwiYSI6IjB4MDAwMDAwMDE4MDFkYjRiMCIsInUiOiI5RkRFQTMyQjU5MTAzNzg3ODczOEQ0RjhBMUVBOTlGOCJ9LHsibyI6MjMwNTYwLCJzbyI6MjQsInUiOiI5RkRFQTMyQjU5MTAzNzg3ODczOEQ0RjhBMUVBOTlGOCIsInMiOiJfZGlzcGF0Y2hfbWFpbl9xdWV1ZV9kcmFpbi5jb2xkLjciLCJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL3VzclwvbGliXC9zeXN0ZW1cL2xpYmRpc3BhdGNoLmR5bGliIiwibSI6ImxpYmRpc3BhdGNoLmR5bGliIiwiYSI6IjB4MDAwMDAwMDE4MDFmNzRhMCJ9LHsibSI6ImxpYmRpc3BhdGNoLmR5bGliIiwibyI6NzA0MjgsInNvIjoxMTg0LCJ1IjoiOUZERUEzMkI1OTEwMzc4Nzg3MzhENEY4QTFFQTk5RjgiLCJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL3VzclwvbGliXC9zeXN0ZW1cL2xpYmRpc3BhdGNoLmR5bGliIiwiYSI6IjB4MDAwMDAwMDE4MDFkMDMxYyIsInMiOiJfZGlzcGF0Y2hfbWFpbl9xdWV1ZV9kcmFpbiJ9LHsic28iOjQwLCJhIjoiMHgwMDAwMDAwMTgwMWNmZTZjIiwidSI6IjlGREVBMzJCNTkxMDM3ODc4NzM4RDRGOEExRUE5OUY4IiwicyI6Il9kaXNwYXRjaF9tYWluX3F1ZXVlX2NhbGxiYWNrXzRDRiIsIm8iOjY5MjI4LCJtIjoibGliZGlzcGF0Y2guZHlsaWIiLCJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL3VzclwvbGliXC9zeXN0ZW1cL2xpYmRpc3BhdGNoLmR5bGliIn0seyJvIjo2MDIwMjQsInNvIjoxMiwicCI6IlwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Wb2x1bWVzXC9pT1NfMjNEODEzM1wvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Qcm9maWxlc1wvUnVudGltZXNcL2lPUyAyNi4zLnNpbXJ1bnRpbWVcL0NvbnRlbnRzXC9SZXNvdXJjZXNcL1J1bnRpbWVSb290XC9TeXN0ZW1cL0xpYnJhcnlcL0ZyYW1ld29ya3NcL0NvcmVGb3VuZGF0aW9uLmZyYW1ld29ya1wvQ29yZUZvdW5kYXRpb24iLCJ1IjoiMTYxRUIzNzEzRUM3MzE5NkFCNTMzQjdFMDk4MzE4RjUiLCJtIjoiQ29yZUZvdW5kYXRpb24iLCJhIjoiMHgwMDAwMDAwMTgwNDU1ZmE4IiwicyI6Il9fQ0ZSVU5MT09QX0lTX1NFUlZJQ0lOR19USEVfTUFJTl9ESVNQQVRDSF9RVUVVRV9fIn0seyJvIjo1OTg0MDAsImEiOiIweDAwMDAwMDAxODA0NTUxODAiLCJtIjoiQ29yZUZvdW5kYXRpb24iLCJzbyI6MTg4NCwidSI6IjE2MUVCMzcxM0VDNzMxOTZBQjUzM0I3RTA5ODMxOEY1IiwicyI6Il9fQ0ZSdW5Mb29wUnVuIiwicCI6IlwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Wb2x1bWVzXC9pT1NfMjNEODEzM1wvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Qcm9maWxlc1wvUnVudGltZXNcL2lPUyAyNi4zLnNpbXJ1bnRpbWVcL0NvbnRlbnRzXC9SZXNvdXJjZXNcL1J1bnRpbWVSb290XC9TeXN0ZW1cL0xpYnJhcnlcL0ZyYW1ld29ya3NcL0NvcmVGb3VuZGF0aW9uLmZyYW1ld29ya1wvQ29yZUZvdW5kYXRpb24ifSx7InNvIjo0OTYsInMiOiJfQ0ZSdW5Mb29wUnVuU3BlY2lmaWNXaXRoT3B0aW9ucyIsIm8iOjU3Njk1NiwicCI6IlwvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Wb2x1bWVzXC9pT1NfMjNEODEzM1wvTGlicmFyeVwvRGV2ZWxvcGVyXC9Db3JlU2ltdWxhdG9yXC9Qcm9maWxlc1wvUnVudGltZXNcL2lPUyAyNi4zLnNpbXJ1bnRpbWVcL0NvbnRlbnRzXC9SZXNvdXJjZXNcL1J1bnRpbWVSb290XC9TeXN0ZW1cL0xpYnJhcnlcL0ZyYW1ld29ya3NcL0NvcmVGb3VuZGF0aW9uLmZyYW1ld29ya1wvQ29yZUZvdW5kYXRpb24iLCJtIjoiQ29yZUZvdW5kYXRpb24iLCJhIjoiMHgwMDAwMDAwMTgwNDRmZGJjIiwidSI6IjE2MUVCMzcxM0VDNzMxOTZBQjUzM0I3RTA5ODMxOEY1In0seyJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL1N5c3RlbVwvTGlicmFyeVwvUHJpdmF0ZUZyYW1ld29ya3NcL0dyYXBoaWNzU2VydmljZXMuZnJhbWV3b3JrXC9HcmFwaGljc1NlcnZpY2VzIiwiYSI6IjB4MDAwMDAwMDE5MmI4MDliYyIsInNvIjoxMTYsIm0iOiJHcmFwaGljc1NlcnZpY2VzIiwicyI6IkdTRXZlbnRSdW5Nb2RhbCIsInUiOiJENTI5QTJBOEFEQUUzNzI1QkRBODYzMzZEQjEwOEExNSIsIm8iOjEwNjg0fSx7Im0iOiJVSUtpdENvcmUiLCJzIjoiLVtVSUFwcGxpY2F0aW9uIF9ydW5dIiwiYSI6IjB4MDAwMDAwMDE4NjQwYTIwNCIsInNvIjo3NzIsInAiOiJcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvVm9sdW1lc1wvaU9TXzIzRDgxMzNcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvUHJvZmlsZXNcL1J1bnRpbWVzXC9pT1MgMjYuMy5zaW1ydW50aW1lXC9Db250ZW50c1wvUmVzb3VyY2VzXC9SdW50aW1lUm9vdFwvU3lzdGVtXC9MaWJyYXJ5XC9Qcml2YXRlRnJhbWV3b3Jrc1wvVUlLaXRDb3JlLmZyYW1ld29ya1wvVUlLaXRDb3JlIiwibyI6MTg1MzA4MjAsInUiOiJGMzA1QkFFOUQzNTMzMzE1QjQ5NUZGODM2MDY2RDE2OSJ9LHsiYSI6IjB4MDAwMDAwMDE4NjQwZTQyYyIsInNvIjoxMjQsIm8iOjE4NTQ3NzU2LCJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL1N5c3RlbVwvTGlicmFyeVwvUHJpdmF0ZUZyYW1ld29ya3NcL1VJS2l0Q29yZS5mcmFtZXdvcmtcL1VJS2l0Q29yZSIsInUiOiJGMzA1QkFFOUQzNTMzMzE1QjQ5NUZGODM2MDY2RDE2OSIsInMiOiJVSUFwcGxpY2F0aW9uTWFpbiIsIm0iOiJVSUtpdENvcmUifSx7Im8iOjQwNjkwNDgsInMiOiJibG9ja19kZXN0cm95X2hlbHBlci4xNSIsIm0iOiJVSUtpdENvcmUiLCJwIjoiXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1ZvbHVtZXNcL2lPU18yM0Q4MTMzXC9MaWJyYXJ5XC9EZXZlbG9wZXJcL0NvcmVTaW11bGF0b3JcL1Byb2ZpbGVzXC9SdW50aW1lc1wvaU9TIDI2LjMuc2ltcnVudGltZVwvQ29udGVudHNcL1Jlc291cmNlc1wvUnVudGltZVJvb3RcL1N5c3RlbVwvTGlicmFyeVwvUHJpdmF0ZUZyYW1ld29ya3NcL1VJS2l0Q29yZS5mcmFtZXdvcmtcL1VJS2l0Q29yZSIsInUiOiJGMzA1QkFFOUQzNTMzMzE1QjQ5NUZGODM2MDY2RDE2OSIsImEiOiIweDAwMDAwMDAxODU2M2Y2YjgiLCJzbyI6NTE1Mn0seyJvIjoxMjgwMCwidSI6IkFENTExMzAwNUE2RTMxNjE5MTExREVDN0M5OTE5MDU5Iiwic28iOjEyMCwiYSI6IjB4MDAwMDAwMDEwMjc0MzIwMCIsIm0iOiJybjgyIiwicCI6IlwvVXNlcnNcL2FobWVkYWhtZWRcL0xpYnJhcnlcL0RldmVsb3BlclwvQ29yZVNpbXVsYXRvclwvRGV2aWNlc1wvMDdDMTI2NjktNzlGMC00MEJDLUI4QjktQTg2MzExRkM4MDFGXC9kYXRhXC9Db250YWluZXJzXC9CdW5kbGVcL0FwcGxpY2F0aW9uXC9CNjM3RTVGQS00QzFDLTQ1NUYtODkyMi02RDk3MjNFMjJDMDZcL3JuODIuYXBwXC9ybjgyIiwicyI6Im1haW4ifSx7InUiOiIiLCJvIjo0MzYyODAyMTI4LCJhIjoiMHgwMDAwMDAwMTA0MGIxM2QwIiwibSI6ImR5bGQiLCJwIjoiIiwicyI6InN0YXJ0X3NpbSIsInNvIjoyMH0seyJtIjoiPz8/IiwidSI6IiIsInAiOiIiLCJhIjoiMHgwMDAwMDAwMTA0NDFiZTAwIiwicyI6IjB4MCIsIm8iOjQzNjYzODQ2NDAsInNvIjoyMTQ3NDgzNjQ3fV0="
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.internal"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "73104F74C09C4FC494C82687B7E5A827"
+              }
+            ],
+            "body": "Embrace SDK should be started before the app is launched and becomes active. This is required for the startup instrumentation to work."
+          },
+          {
+            "time_unix_nano": "1785234059116434944",
+            "severity_number": 13,
+            "severity_text": "WARN",
+            "attributes": [
+              {
+                "key": "session.id",
+                "value": "A2C40E8141FF4CA59FFBB389360CA898"
+              },
+              {
+                "key": "emb.stacktrace.rn",
+                "value": "Error\n    at generateStackTrace (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:64276:24)\n    at logMessage (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:64168:102)\n    at logWarning (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:64212:22)\n    at anonymous (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:69366:53)\n    at _performTransitionSideEffects (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:32948:22)\n    at _receiveSignal (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:32904:45)\n    at onResponderRelease (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:32772:34)\n    at executeDispatch (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:7465:15)\n    at executeDispatchesAndReleaseTopLevel (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8059:227)\n    at forEach (native)\n    at forEachAccumulated (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:7655:37)\n    at anonymous (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8088:27)\n    at batchedUpdatesImpl (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:13317:16)\n    at batchedUpdates$1 (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8049:32)\n    at dispatchEvent (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8071:21)"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.log"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "591B78C4782843CA9D98C07036D05D7C"
+              }
+            ],
+            "body": "This is a Warning log"
+          },
+          {
+            "time_unix_nano": "1785234059116485120",
+            "severity_number": 9,
+            "severity_text": "INFO",
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "sys.log"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "session.id",
+                "value": "A2C40E8141FF4CA59FFBB389360CA898"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "A3B3ED4DB1CB40448190DBA9D33B959E"
+              }
+            ],
+            "body": "This is a Info log"
+          },
+          {
+            "time_unix_nano": "1785234059116526080",
+            "severity_number": 17,
+            "severity_text": "ERROR",
+            "attributes": [
+              {
+                "value": "Error\n    at generateStackTrace (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:64276:24)\n    at logMessage (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:64168:102)\n    at logError (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:64231:22)\n    at anonymous (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:69368:51)\n    at _performTransitionSideEffects (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:32948:22)\n    at _receiveSignal (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:32904:45)\n    at onResponderRelease (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:32772:34)\n    at executeDispatch (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:7465:15)\n    at executeDispatchesAndReleaseTopLevel (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8059:227)\n    at forEach (native)\n    at forEachAccumulated (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:7655:37)\n    at anonymous (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8088:27)\n    at batchedUpdatesImpl (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:13317:16)\n    at batchedUpdates$1 (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8049:32)\n    at dispatchEvent (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8071:21)",
+                "key": "emb.stacktrace.rn"
+              },
+              {
+                "value": "sys.log",
+                "key": "emb.type"
+              },
+              {
+                "value": "A2C40E8141FF4CA59FFBB389360CA898",
+                "key": "session.id"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "E729A64897C24E6099EBDE8141FBC1CF"
+              }
+            ],
+            "body": "This is a Error log"
+          },
+          {
+            "time_unix_nano": "1785234059116619008",
+            "severity_number": 13,
+            "severity_text": "WARN",
+            "attributes": [
+              {
+                "key": "session.id",
+                "value": "A2C40E8141FF4CA59FFBB389360CA898"
+              },
+              {
+                "key": "property.test",
+                "value": "abcd"
+              },
+              {
+                "key": "another.property",
+                "value": "efghy-jklmn-opqrs-tuvwx-yz"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "emb.stacktrace.rn",
+                "value": "Error\n    at generateStackTrace (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:64276:24)\n    at logMessage (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:64168:102)\n    at anonymous (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:69369:53)\n    at _performTransitionSideEffects (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:32948:22)\n    at _receiveSignal (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:32904:45)\n    at onResponderRelease (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:32772:34)\n    at executeDispatch (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:7465:15)\n    at executeDispatchesAndReleaseTopLevel (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8059:227)\n    at forEach (native)\n    at forEachAccumulated (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:7655:37)\n    at anonymous (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8088:27)\n    at batchedUpdatesImpl (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:13317:16)\n    at batchedUpdates$1 (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8049:32)\n    at dispatchEvent (/Users/ahmedahmed/Library/Developer/Xcode/DerivedData/rn82-ezywbpgilpyjuzazhblmrhdxusqi/Build/Products/Release-iphonesimulator/main.jsbundle:8071:21)"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.log"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "224B57B4D1F94D0E8248385CD89B1692"
+              }
+            ],
+            "body": "This is a Message (log)"
+          }
+        ]
+      }
+    }
+  ]
+}

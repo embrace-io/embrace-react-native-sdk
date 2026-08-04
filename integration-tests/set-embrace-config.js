@@ -42,7 +42,7 @@
     {
       "ios": {
         "appId": "abcdf",
-        "endpointBaseUrl": "http://localhost:8877",
+        "endpointBaseUrl": "http://localhost:8989",
         "disableAutomaticViewCapture": true,
         "disableNetworkSpanForwarding": false,
         "disabledUrlPatterns": ["*.api.com"]
@@ -141,7 +141,11 @@
       if (config.disabled_url_patterns) {
         androidConfig.sdk_config.networking = {
           ...androidConfig.sdk_config.networking,
-          disabled_url_patterns: config.disabled_url_patterns,
+          // the emulator reaches the host machine on 10.0.2.2, so patterns aimed at a local
+          // server need the same rewrite base_urls gets below
+          disabled_url_patterns: config.disabled_url_patterns.map(pattern =>
+            pattern.replace("localhost", "10.0.2.2"),
+          ),
         };
       }
     }

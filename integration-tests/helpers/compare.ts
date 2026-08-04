@@ -1,17 +1,48 @@
-import {EmbraceSpanAttribute, EmbraceSpanData, EmbraceSpanEvent} from "../typings/embrace";
+import {
+  EmbraceLogRecord,
+  EmbraceSpanAttribute,
+  EmbraceSpanData,
+  EmbraceSpanEvent,
+} from "../typings/embrace";
 
 // ---- volatile config (assert presence, not value) ----
 const isPresent = (v: unknown): boolean =>
   v !== undefined && v !== null && v !== "";
 // future: isHex = v => /^[0-9a-f]+$/.test(String(v)); isPositiveNumber = v => typeof v === "number" && v > 0;
 
-// Attribute keys whose value varies run-to-run: presence-checked, value ignored,
-// and exempt from the unexpected-key check.
+// Attribute keys whose value varies run-to-run: presence-checked, value ignored
 const VOLATILE_ATTR_KEYS = new Set([
   "session.id",
+  "emb.cold_start",
+  "emb.session_number",
+  "emb.startup_duration",
   "emb.private.sequence_id",
   "emb.process_identifier",
+  "emb.clock_network_drift",
+  "emb.disk_free_bytes",
+  "emb.heartbeat_time_unix_nano",
+  "tap.coords",
+  // logs
+  "log.record.uid", // per-record uuid
+  "emb.stacktrace.rn", // JS stack: bundle paths and line numbers
+  "emb.stacktrace.ios", // base64 native stack with absolute paths
+  "emb.state.network", // Android only: wifi / cellular / unknown
+  "emb.state.screen-automatic", // Android only: whichever screen is current
+  // network
+  "http.request.body.size",
+  "http.response.body.size",
+  "user_agent.version",
+  "emb.w3c_traceparent",
 ]);
+
+// Same treatment, matched by prefix: every key under these namespaces is volatile.
+const VOLATILE_ATTR_NAMESPACES = [
+  "emb.usage.", // per-API call counters: which keys appear, and their counts, both vary
+];
+
+const isVolatileKey = (key: string): boolean =>
+  VOLATILE_ATTR_KEYS.has(key) ||
+  VOLATILE_ATTR_NAMESPACES.some(prefix => key.startsWith(prefix));
 
 // ---- shared types ----
 export type EventProjection = {name: string; attributes: EmbraceSpanAttribute[]};
@@ -22,13 +53,13 @@ export type SpanProjection = {
   attributes: EmbraceSpanAttribute[];
   events: EventProjection[];
 };
+export type LogProjection = {
+  body: string;
+  severityText: string;
+  severityNumber: number;
+  attributes: EmbraceSpanAttribute[];
+};
 export type CompareResult = {pass: boolean; message: string};
-export type SpanCategory =
-  | "sessionSpans"
-  | "viewSpans"
-  | "perfSpans"
-  | "networkSpans"
-  | "spanSnapshots";
 
 // ---- attribute comparison ----
 export const compareAttributes = (
@@ -40,7 +71,7 @@ export const compareAttributes = (
   const expectedMap = new Map(expected.map(a => [a.key, a.value]));
 
   for (const [key, value] of expectedMap) {
-    if (VOLATILE_ATTR_KEYS.has(key)) {
+    if (isVolatileKey(key)) {
       if (!isPresent(actualMap.get(key))) {
         errors.push(`missing volatile attribute "${key}"`);
       }
@@ -164,9 +195,9 @@ export const compareSpan = (
   };
 };
 
-// Compare two categories (span arrays) by name. Assumes unique names within the category
+// Compare two span arrays by name. Assumes unique names within the category
 // (true for perfSpans / spanSnapshots in the tracer scenarios).
-export const compareCategory = (
+export const compareSpans = (
   actual: EmbraceSpanData[] = [],
   expected: EmbraceSpanData[] = [],
 ): CompareResult => {
@@ -177,15 +208,15 @@ export const compareCategory = (
 
   // A duplicate name would be silently collapsed by actualByName; report it instead.
   const seen = new Set<string>();
-  for (const s of actual) {
-    if (seen.has(s.name)) {
-      errors.push(`duplicate span "${s.name}"`);
+  for (const span of actual) {
+    if (seen.has(span.name)) {
+      errors.push(`duplicate span "${span.name}"`);
     }
-    seen.add(s.name);
+    seen.add(span.name);
   }
 
   const expectedProjections = expected
-    .map(s => projectSpan(s, expectedIds))
+    .map(span => projectSpan(span, expectedIds))
     .sort((a, b) => a.name.localeCompare(b.name));
   const expectedNames = new Set(expectedProjections.map(p => p.name));
 
@@ -194,16 +225,80 @@ export const compareCategory = (
       errors.push(`unexpected span "${name}"`);
     }
   }
-  for (const exp of expectedProjections) {
-    const act = actualByName.get(exp.name);
-    if (!act) {
-      errors.push(`missing span "${exp.name}"`);
+  for (const expected of expectedProjections) {
+    const actual = actualByName.get(expected.name);
+    if (!actual) {
+      errors.push(`missing span "${expected.name}"`);
       continue;
     }
-    const r = compareSpan(act, exp, actualIds);
-    if (!r.pass) {
-      errors.push(r.message);
+    const result = compareSpan(actual, expected, actualIds);
+    if (!result.pass) {
+      errors.push(result.message);
     }
   }
+  return {pass: errors.length === 0, message: errors.join("\n")};
+};
+
+// ---- log comparison ----
+export const projectLog = (log: EmbraceLogRecord): LogProjection => ({
+  body: log.body,
+  severityText: log.severity_text,
+  severityNumber: log.severity_number,
+  attributes: log.attributes ?? [],
+});
+
+// Compare log records by body. Bodies are unique within every scenario the specs assert;
+// a batch split across several envelopes compares the same either way.
+export const compareLogs = (
+  actual: EmbraceLogRecord[] = [],
+  expected: EmbraceLogRecord[] = [],
+): CompareResult => {
+  const errors: string[] = [];
+  const actualByBody = new Map(actual.map(l => [l.body, l]));
+
+  const seen = new Set<string>();
+  for (const log of actual) {
+    if (seen.has(log.body)) {
+      errors.push(`duplicate log "${log.body}"`);
+    }
+    seen.add(log.body);
+  }
+
+  const expectedProjections = expected
+    .map(projectLog)
+    .sort((a, b) => a.body.localeCompare(b.body));
+  const expectedBodies = new Set(expectedProjections.map(p => p.body));
+
+  for (const body of actualByBody.keys()) {
+    if (!expectedBodies.has(body)) {
+      errors.push(`unexpected log "${body}"`);
+    }
+  }
+
+  for (const expected of expectedProjections) {
+    const actual = actualByBody.get(expected.body);
+    if (!actual) {
+      errors.push(`missing log "${expected.body}"`);
+      continue;
+    }
+    const logErrors: string[] = [];
+    if (actual.severity_text !== expected.severityText) {
+      logErrors.push(`severity_text expected "${expected.severityText}", got "${actual.severity_text}"`);
+    }
+    if (actual.severity_number !== expected.severityNumber) {
+      logErrors.push(`severity_number expected ${expected.severityNumber}, got ${actual.severity_number}`);
+    }
+    if (!isPresent(actual.time_unix_nano)) {
+      logErrors.push('missing field "time_unix_nano"');
+    }
+    const attrs = compareAttributes(actual.attributes, expected.attributes);
+    if (!attrs.pass) {
+      logErrors.push(attrs.message);
+    }
+    if (logErrors.length) {
+      errors.push(`log "${expected.body}": ${logErrors.join("; ")}`);
+    }
+  }
+
   return {pass: errors.length === 0, message: errors.join("\n")};
 };

@@ -1,7 +1,8 @@
 import * as React from "react";
-import {Button, View, Text} from "react-native";
+import {Platform, View, Text} from "react-native";
 import {useCallback} from "react";
 import {styles} from "../helpers/styles";
+import TestButton from "../components/TestButton";
 import {
   setUserIdentifier,
   clearUserIdentifier,
@@ -18,6 +19,11 @@ import {
   getCurrentSessionId,
   getLastRunEndState,
 } from "@embrace-io/react-native";
+
+// Workaround for appium issue with Text components on iOS - if an accessibilityLabel 
+// is set, element.getText() returns the accessibilityLabel rather than the actual content,
+// so we use testID on iOS and accessibilityLabel on Android
+const testId = (id: string) => Platform.OS === "android" ? {accessibilityLabel: id} : {testID: id}
 
 const UserTestingScreen = () => {
   const setUserProperties = useCallback(async () => {
@@ -74,14 +80,19 @@ const UserTestingScreen = () => {
     }
   }, []);
 
+  const [metadata, setMetadata] = React.useState({
+    deviceId: "",
+    sessionId: "",
+    lastRunEndState: "",
+  });
+
   const getMetadata = useCallback(async () => {
     try {
-      const deviceId = await getDeviceId();
-      const sessionId = await getCurrentSessionId();
-      const lastRunEndState = await getLastRunEndState();
-      console.log("deviceId: ", deviceId);
-      console.log("sessionId: ", sessionId);
-      console.log("lastRunEndState: ", lastRunEndState);
+      setMetadata({
+        deviceId: await getDeviceId(),
+        sessionId: await getCurrentSessionId(),
+        lastRunEndState: await getLastRunEndState(),
+      });
     } catch (e) {
       console.log("failed to get metadata from the SDK");
     }
@@ -91,21 +102,32 @@ const UserTestingScreen = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>User Properties</Text>
-        <Button onPress={setUserProperties} title="Set User Properties" />
-        <Button onPress={clearUserProperties} title="Clear User Properties" />
-        <Button onPress={clearPersonas} title="Clear All User Personas" />
+        <TestButton onPress={setUserProperties} title="Set User Properties" />
+        <TestButton onPress={clearUserProperties} title="Clear User Properties" />
+        <TestButton onPress={clearPersonas} title="Clear All User Personas" />
       </View>
       <View style={styles.section}>
         <Text style={styles.title}>Session Properties</Text>
-        <Button onPress={setSessionProperties} title="Set Session Properties" />
-        <Button
+        <TestButton onPress={setSessionProperties} title="Set Session Properties" />
+        <TestButton
           onPress={clearSessionProperties}
           title="Clear Session Properties"
         />
       </View>
       <View style={styles.section}>
         <Text style={styles.title}>Retrieval</Text>
-        <Button onPress={getMetadata} title="Retrieve Metadata" />
+        <TestButton onPress={getMetadata} title="Retrieve Metadata" />
+        {/* These getters return values in-app rather than sending a payload, so render them
+            for Appium to read. */}
+        <Text style={styles.text} {...testId("metadata-device-id")}>
+          {metadata.deviceId}
+        </Text>
+        <Text style={styles.text} {...testId("metadata-session-id")}>
+          {metadata.sessionId}
+        </Text>
+        <Text style={styles.text} {...testId("metadata-last-run-end-state")}>
+          {metadata.lastRunEndState}
+        </Text>
       </View>
     </View>
   );

@@ -4,7 +4,7 @@
       "resource": {
         "app_version": "1.0",
         "app_framework": 2,
-        "build_id": "54A5B5137F3C4769B34A08552BD3484A",
+        "build_id": "4E6AC275A6F94E8AAFDEE1AFE11DEB97",
         "app_ecosystem_id": "io.embrace.rn82",
         "build_type": "release",
         "build_flavor": "",
@@ -12,9 +12,9 @@
         "bundle_version": "1",
         "sdk_version": "8.4.0",
         "sdk_simple_version": 53,
-        "react_native_bundle_id": "8324506FE15F9C7F8850D62A4F000DCA",
+        "react_native_bundle_id": "DB444A45425049D713907741BE53E572",
         "hosted_platform_version": "0.82.1",
-        "hosted_sdk_version": "6.7.1",
+        "hosted_sdk_version": "7.0.0",
         "device_manufacturer": "Google",
         "device_model": "sdk_gphone64_arm64",
         "device_architecture": "arm64-v8a",
@@ -39,12 +39,12 @@
       "data": {
         "spans": [
           {
-            "trace_id": "d0807663638d0443b4670b52c43e4c0d",
-            "span_id": "670b285377fab8ed",
+            "trace_id": "5263b10445c2fe382896c95660ced53a",
+            "span_id": "9f1cefc14fb47044",
             "parent_span_id": "0000000000000000",
             "name": "emb-sdk-init",
-            "start_time_unix_nano": 1783936409813000000,
-            "end_time_unix_nano": 1783936409828000000,
+            "start_time_unix_nano": 1785238486260000000,
+            "end_time_unix_nano": 1785238486278000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -58,7 +58,7 @@
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.type",
@@ -70,7 +70,7 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               },
               {
                 "key": "thread-name",
@@ -79,8 +79,8 @@
             ],
             "links": [
               {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
+                "span_id": "62e141fb8d2151f4",
+                "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -88,7 +88,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                    "value": "DD586E27BF254383962BFF43C1BD2579"
                   }
                 ],
                 "is_remote": false
@@ -96,85 +96,12 @@
             ]
           },
           {
-            "trace_id": "16162ec5d1551bcf880c3940dc217a94",
-            "span_id": "187e68295ab6ee7f",
-            "parent_span_id": "0000000000000000",
-            "name": "emb-GET /v2/config",
-            "start_time_unix_nano": 1783936410094000000,
-            "end_time_unix_nano": 1783936410595000000,
-            "status": "Unset",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.private.sequence_id",
-                "value": "8"
-              },
-              {
-                "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
-              },
-              {
-                "key": "emb.type",
-                "value": "perf.network_request"
-              },
-              {
-                "key": "http.request.body.size",
-                "value": "0"
-              },
-              {
-                "key": "http.request.method",
-                "value": "GET"
-              },
-              {
-                "key": "http.response.body.size",
-                "value": "2"
-              },
-              {
-                "key": "http.response.status_code",
-                "value": "200"
-              },
-              {
-                "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
-              },
-              {
-                "key": "url.full",
-                "value": "http://10.0.2.2:8877/v2/config"
-              },
-              {
-                "key": "user_agent.name",
-                "value": "okhttp"
-              },
-              {
-                "key": "user_agent.version",
-                "value": "4.12.0"
-              }
-            ],
-            "links": [
-              {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "END_SESSION"
-                  },
-                  {
-                    "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
-                  }
-                ],
-                "is_remote": false
-              }
-            ]
-          },
-          {
-            "trace_id": "5aa788a9198f8ce57250e646216b6b10",
-            "span_id": "fa1634ae4e5b0470",
+            "trace_id": "1f937c11b729f8efb4217b8eca230069",
+            "span_id": "c59fb4c12c2117b5",
             "parent_span_id": "0000000000000000",
             "name": "log",
-            "start_time_unix_nano": 1783936409843000000,
-            "end_time_unix_nano": 1783936413364000000,
+            "start_time_unix_nano": 1785238486295000000,
+            "end_time_unix_nano": 1785238487724000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -184,7 +111,7 @@
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.type",
@@ -196,7 +123,7 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               },
               {
                 "key": "test.attr",
@@ -217,8 +144,8 @@
             ],
             "links": [
               {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
+                "span_id": "62e141fb8d2151f4",
+                "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -226,7 +153,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                    "value": "DD586E27BF254383962BFF43C1BD2579"
                   }
                 ],
                 "is_remote": false
@@ -234,22 +161,22 @@
             ]
           },
           {
-            "trace_id": "d461fddc5f5b572b89b48c34a0aa093d",
-            "span_id": "20d0aae78df36f00",
+            "trace_id": "87613d14949552946d11d7e303bf91ba",
+            "span_id": "dd0386889dc2b8dd",
             "parent_span_id": "0000000000000000",
             "name": "test-4",
-            "start_time_unix_nano": 1783936416889000000,
+            "start_time_unix_nano": 1785238488898000000,
             "end_time_unix_nano": 1709424000000000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
                 "key": "emb.private.sequence_id",
-                "value": "13"
+                "value": "12"
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.type",
@@ -257,13 +184,13 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               }
             ],
             "links": [
               {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
+                "span_id": "62e141fb8d2151f4",
+                "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -271,7 +198,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                    "value": "DD586E27BF254383962BFF43C1BD2579"
                   }
                 ],
                 "is_remote": false
@@ -279,12 +206,12 @@
             ]
           },
           {
-            "trace_id": "8f6bc497f3e06e790929df84fd9c62cc",
-            "span_id": "12a909dc9d2cfcda",
+            "trace_id": "f67784eff9f4a59b114432991a5f6b3f",
+            "span_id": "773adf84323c27d3",
             "parent_span_id": "0000000000000000",
             "name": "test-1-updated",
-            "start_time_unix_nano": 1783936416888000000,
-            "end_time_unix_nano": 1783936416890000000,
+            "start_time_unix_nano": 1785238488897000000,
+            "end_time_unix_nano": 1785238488899000000,
             "status": "Ok",
             "events": [],
             "attributes": [
@@ -294,11 +221,11 @@
               },
               {
                 "key": "emb.private.sequence_id",
-                "value": "10"
+                "value": "9"
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.type",
@@ -310,7 +237,7 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               },
               {
                 "key": "string-attr",
@@ -319,8 +246,8 @@
             ],
             "links": [
               {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
+                "span_id": "62e141fb8d2151f4",
+                "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -328,7 +255,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                    "value": "DD586E27BF254383962BFF43C1BD2579"
                   }
                 ],
                 "is_remote": false
@@ -336,17 +263,17 @@
             ]
           },
           {
-            "trace_id": "d2b128b7b8aabb4552fabc69e6f00c79",
-            "span_id": "75f47842c861b567",
+            "trace_id": "da6a3e28b1827443bb96d60b2d401003",
+            "span_id": "f4f9e612c71a4359",
             "parent_span_id": "0000000000000000",
             "name": "test-2",
-            "start_time_unix_nano": 1783936416889000000,
+            "start_time_unix_nano": 1785238488898000000,
             "end_time_unix_nano": 4070908800000000000,
             "status": "Unset",
             "events": [
               {
                 "name": "test-2-event-1",
-                "time_unix_nano": 1783936416890000000,
+                "time_unix_nano": 1785238488899000000,
                 "attributes": []
               },
               {
@@ -368,11 +295,11 @@
             "attributes": [
               {
                 "key": "emb.private.sequence_id",
-                "value": "11"
+                "value": "10"
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.type",
@@ -380,13 +307,13 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               }
             ],
             "links": [
               {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
+                "span_id": "62e141fb8d2151f4",
+                "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -394,7 +321,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                    "value": "DD586E27BF254383962BFF43C1BD2579"
                   }
                 ],
                 "is_remote": false
@@ -402,17 +329,17 @@
             ]
           },
           {
-            "trace_id": "976ea181d529f579c6985304356f734a",
-            "span_id": "774d0d49e67c38b3",
+            "trace_id": "eeb8c2d177aeab6a9590ed7ee8f606f4",
+            "span_id": "3f510b21e934eafc",
             "parent_span_id": "0000000000000000",
             "name": "test-3",
-            "start_time_unix_nano": 1783936416889000000,
-            "end_time_unix_nano": 1783936416891000000,
+            "start_time_unix_nano": 1785238488898000000,
+            "end_time_unix_nano": 1785238488899000000,
             "status": "Unset",
             "events": [
               {
                 "name": "exception",
-                "time_unix_nano": 1783936416891000000,
+                "time_unix_nano": 1785238488899000000,
                 "attributes": [
                   {
                     "key": "exception.message",
@@ -424,11 +351,11 @@
             "attributes": [
               {
                 "key": "emb.private.sequence_id",
-                "value": "12"
+                "value": "11"
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.type",
@@ -436,13 +363,13 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               }
             ],
             "links": [
               {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
+                "span_id": "62e141fb8d2151f4",
+                "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -450,20 +377,20 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                    "value": "DD586E27BF254383962BFF43C1BD2579"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "12a909dc9d2cfcda",
-                "trace_id": "8f6bc497f3e06e790929df84fd9c62cc",
+                "span_id": "773adf84323c27d3",
+                "trace_id": "f67784eff9f4a59b114432991a5f6b3f",
                 "attributes": [],
                 "is_remote": false
               },
               {
-                "span_id": "75f47842c861b567",
-                "trace_id": "d2b128b7b8aabb4552fabc69e6f00c79",
+                "span_id": "f4f9e612c71a4359",
+                "trace_id": "da6a3e28b1827443bb96d60b2d401003",
                 "attributes": [
                   {
                     "key": "test-3-link-attr",
@@ -475,12 +402,12 @@
             ]
           },
           {
-            "trace_id": "b364d873eb2bd667e321a210a654c0bf",
-            "span_id": "7429e2dc75e7b2ca",
+            "trace_id": "87aad1d5d1c2da0a534b84390be9e2b6",
+            "span_id": "1ec3c3241ef771c2",
             "parent_span_id": "0000000000000000",
             "name": "test-with-endAsFailed",
-            "start_time_unix_nano": 1783936416891000000,
-            "end_time_unix_nano": 1783936416891000000,
+            "start_time_unix_nano": 1785238488900000000,
+            "end_time_unix_nano": 1785238488900000000,
             "status": "Error",
             "events": [],
             "attributes": [
@@ -490,11 +417,11 @@
               },
               {
                 "key": "emb.private.sequence_id",
-                "value": "15"
+                "value": "14"
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.type",
@@ -502,13 +429,13 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               }
             ],
             "links": [
               {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
+                "span_id": "62e141fb8d2151f4",
+                "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -516,7 +443,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                    "value": "DD586E27BF254383962BFF43C1BD2579"
                   }
                 ],
                 "is_remote": false
@@ -524,22 +451,22 @@
             ]
           },
           {
-            "trace_id": "b25858f15377a8e1610ab3cc34d12233",
-            "span_id": "d08b4440e6105720",
+            "trace_id": "7a481288944a5d17025bbeaed11d2921",
+            "span_id": "49f141814b0a8e58",
             "parent_span_id": "0000000000000000",
             "name": "span",
-            "start_time_unix_nano": 1783936413364000000,
-            "end_time_unix_nano": 1783936420289000000,
+            "start_time_unix_nano": 1785238487724000000,
+            "end_time_unix_nano": 1785238490986000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
                 "key": "emb.private.sequence_id",
-                "value": "9"
+                "value": "8"
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.type",
@@ -551,7 +478,7 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               },
               {
                 "key": "test.attr",
@@ -572,8 +499,8 @@
             ],
             "links": [
               {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
+                "span_id": "62e141fb8d2151f4",
+                "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -581,7 +508,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                    "value": "DD586E27BF254383962BFF43C1BD2579"
                   }
                 ],
                 "is_remote": false
@@ -589,17 +516,17 @@
             ]
           },
           {
-            "trace_id": "ea1bf462fbd4c4768984bc0dabdd2057",
-            "span_id": "88f6e909c5fd6ee9",
+            "trace_id": "7eb59c08c5b6190ff51c70b47817a2d7",
+            "span_id": "9bffdd7e12401c4e",
             "parent_span_id": "0000000000000000",
             "name": "emb-state-screen-automatic",
-            "start_time_unix_nano": 1783936409827000000,
-            "end_time_unix_nano": 1783936421004000000,
+            "start_time_unix_nano": 1785238486277000000,
+            "end_time_unix_nano": 1785238491716000000,
             "status": "Unset",
             "events": [
               {
                 "name": "transition",
-                "time_unix_nano": 1783936421004000000,
+                "time_unix_nano": 1785238491716000000,
                 "attributes": [
                   {
                     "key": "emb.state.new_value",
@@ -619,7 +546,7 @@
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.state.initial_value",
@@ -635,13 +562,13 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               }
             ],
             "links": [
               {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
+                "span_id": "62e141fb8d2151f4",
+                "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -649,7 +576,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                    "value": "DD586E27BF254383962BFF43C1BD2579"
                   }
                 ],
                 "is_remote": false
@@ -657,17 +584,17 @@
             ]
           },
           {
-            "trace_id": "57e5cc62e85f799334d52e046771d833",
-            "span_id": "88b68eba8eb8b1f8",
+            "trace_id": "2fef8c7924ec5a836a009a7b957aa217",
+            "span_id": "a3d39e405dfbe150",
             "parent_span_id": "0000000000000000",
             "name": "emb-state-network",
-            "start_time_unix_nano": 1783936409827000000,
-            "end_time_unix_nano": 1783936421004000000,
+            "start_time_unix_nano": 1785238486278000000,
+            "end_time_unix_nano": 1785238491717000000,
             "status": "Unset",
             "events": [
               {
                 "name": "transition",
-                "time_unix_nano": 1783936409828000000,
+                "time_unix_nano": 1785238486278000000,
                 "attributes": [
                   {
                     "key": "emb.state.new_value",
@@ -687,7 +614,7 @@
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.state.initial_value",
@@ -703,13 +630,13 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               }
             ],
             "links": [
               {
-                "span_id": "694caf375c47436c",
-                "trace_id": "955769560a096ae0b841e043b01bbc8a",
+                "span_id": "62e141fb8d2151f4",
+                "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -717,7 +644,7 @@
                   },
                   {
                     "key": "session.id",
-                    "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                    "value": "DD586E27BF254383962BFF43C1BD2579"
                   }
                 ],
                 "is_remote": false
@@ -725,17 +652,17 @@
             ]
           },
           {
-            "trace_id": "955769560a096ae0b841e043b01bbc8a",
-            "span_id": "694caf375c47436c",
+            "trace_id": "b9ea3762c08e7addac07b5936f8b346a",
+            "span_id": "62e141fb8d2151f4",
             "parent_span_id": "0000000000000000",
             "name": "emb-session",
-            "start_time_unix_nano": 1783936409813000000,
-            "end_time_unix_nano": 1783936421005000000,
+            "start_time_unix_nano": 1785238486260000000,
+            "end_time_unix_nano": 1785238491717000000,
             "status": "Unset",
             "events": [
               {
                 "name": "emb-breadcrumb",
-                "time_unix_nano": 1783936409830000000,
+                "time_unix_nano": 1785238486282000000,
                 "attributes": [
                   {
                     "key": "emb.type",
@@ -755,7 +682,7 @@
               },
               {
                 "key": "emb.clock_network_drift",
-                "value": "606041806"
+                "value": "-759"
               },
               {
                 "key": "emb.cold_start",
@@ -763,7 +690,7 @@
               },
               {
                 "key": "emb.disk_free_bytes",
-                "value": "4549627904"
+                "value": "4470718464"
               },
               {
                 "key": "emb.error_log_count",
@@ -771,7 +698,7 @@
               },
               {
                 "key": "emb.heartbeat_time_unix_nano",
-                "value": "1783936419834000000"
+                "value": "1785238490281000000"
               },
               {
                 "key": "emb.is_emulator",
@@ -795,7 +722,7 @@
               },
               {
                 "key": "emb.process_identifier",
-                "value": "ddcb576b199f7398"
+                "value": "3cd3d3b0af786355"
               },
               {
                 "key": "emb.session_end_type",
@@ -803,7 +730,7 @@
               },
               {
                 "key": "emb.session_number",
-                "value": "8"
+                "value": "53"
               },
               {
                 "key": "emb.session_start_type",
@@ -811,7 +738,7 @@
               },
               {
                 "key": "emb.startup_duration",
-                "value": "15"
+                "value": "18"
               },
               {
                 "key": "emb.state",
@@ -835,13 +762,13 @@
               },
               {
                 "key": "session.id",
-                "value": "5A93A999154F4F12A4C3DD57333D6DD1"
+                "value": "DD586E27BF254383962BFF43C1BD2579"
               }
             ],
             "links": [
               {
-                "span_id": "670b285377fab8ed",
-                "trace_id": "d0807663638d0443b4670b52c43e4c0d",
+                "span_id": "9f1cefc14fb47044",
+                "trace_id": "5263b10445c2fe382896c95660ced53a",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -851,8 +778,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "187e68295ab6ee7f",
-                "trace_id": "16162ec5d1551bcf880c3940dc217a94",
+                "span_id": "c59fb4c12c2117b5",
+                "trace_id": "1f937c11b729f8efb4217b8eca230069",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -862,8 +789,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "fa1634ae4e5b0470",
-                "trace_id": "5aa788a9198f8ce57250e646216b6b10",
+                "span_id": "dd0386889dc2b8dd",
+                "trace_id": "87613d14949552946d11d7e303bf91ba",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -873,8 +800,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "20d0aae78df36f00",
-                "trace_id": "d461fddc5f5b572b89b48c34a0aa093d",
+                "span_id": "773adf84323c27d3",
+                "trace_id": "f67784eff9f4a59b114432991a5f6b3f",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -884,8 +811,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "12a909dc9d2cfcda",
-                "trace_id": "8f6bc497f3e06e790929df84fd9c62cc",
+                "span_id": "f4f9e612c71a4359",
+                "trace_id": "da6a3e28b1827443bb96d60b2d401003",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -895,8 +822,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "75f47842c861b567",
-                "trace_id": "d2b128b7b8aabb4552fabc69e6f00c79",
+                "span_id": "3f510b21e934eafc",
+                "trace_id": "eeb8c2d177aeab6a9590ed7ee8f606f4",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -906,8 +833,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "774d0d49e67c38b3",
-                "trace_id": "976ea181d529f579c6985304356f734a",
+                "span_id": "1ec3c3241ef771c2",
+                "trace_id": "87aad1d5d1c2da0a534b84390be9e2b6",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -917,8 +844,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "7429e2dc75e7b2ca",
-                "trace_id": "b364d873eb2bd667e321a210a654c0bf",
+                "span_id": "49f141814b0a8e58",
+                "trace_id": "7a481288944a5d17025bbeaed11d2921",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -928,8 +855,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "d08b4440e6105720",
-                "trace_id": "b25858f15377a8e1610ab3cc34d12233",
+                "span_id": "9bffdd7e12401c4e",
+                "trace_id": "7eb59c08c5b6190ff51c70b47817a2d7",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -939,19 +866,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "88f6e909c5fd6ee9",
-                "trace_id": "ea1bf462fbd4c4768984bc0dabdd2057",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "ENDED_IN"
-                  }
-                ],
-                "is_remote": false
-              },
-              {
-                "span_id": "88f6e909c5fd6ee9",
-                "trace_id": "ea1bf462fbd4c4768984bc0dabdd2057",
+                "span_id": "9bffdd7e12401c4e",
+                "trace_id": "7eb59c08c5b6190ff51c70b47817a2d7",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -961,8 +877,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "88b68eba8eb8b1f8",
-                "trace_id": "57e5cc62e85f799334d52e046771d833",
+                "span_id": "a3d39e405dfbe150",
+                "trace_id": "2fef8c7924ec5a836a009a7b957aa217",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -972,8 +888,8 @@
                 "is_remote": false
               },
               {
-                "span_id": "88b68eba8eb8b1f8",
-                "trace_id": "57e5cc62e85f799334d52e046771d833",
+                "span_id": "a3d39e405dfbe150",
+                "trace_id": "2fef8c7924ec5a836a009a7b957aa217",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -987,11 +903,11 @@
         ],
         "span_snapshots": [
           {
-            "trace_id": "20d2cc5a69de0be52733ca54acc81b7a",
-            "span_id": "a023bf1c2e3167b9",
+            "trace_id": "490eb221f761983f225c5bd0a10aff40",
+            "span_id": "5e12733e7b497d68",
             "parent_span_id": "0000000000000000",
             "name": "emb-network-status",
-            "start_time_unix_nano": 1783936409828000000,
+            "start_time_unix_nano": 1785238486278000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -1007,27 +923,11 @@
             "links": []
           },
           {
-            "trace_id": "9d21e7d744ff02f563ea6987e9475b6f",
-            "span_id": "29323f64983b50c2",
-            "parent_span_id": "0000000000000000",
-            "name": "test-5",
-            "start_time_unix_nano": 1783936416889000000,
-            "status": "Unset",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.type",
-                "value": "perf"
-              }
-            ],
-            "links": []
-          },
-          {
-            "trace_id": "cc36211dc177f4f182f24378f06d56d9",
-            "span_id": "7bb1be4be02bd99f",
+            "trace_id": "c93302cac11d7b00be93ce2bd3f0ca43",
+            "span_id": "d2e1278d64c4ed08",
             "parent_span_id": "0000000000000000",
             "name": "emb-thermal-state",
-            "start_time_unix_nano": 1783936409828000000,
+            "start_time_unix_nano": 1785238486279000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -1038,6 +938,22 @@
               {
                 "key": "status",
                 "value": "0"
+              }
+            ],
+            "links": []
+          },
+          {
+            "trace_id": "00eedcc3f6820d47c0b628a8a059a03e",
+            "span_id": "722f568ae517b1d6",
+            "parent_span_id": "0000000000000000",
+            "name": "test-5",
+            "start_time_unix_nano": 1785238488898000000,
+            "status": "Unset",
+            "events": [],
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "perf"
               }
             ],
             "links": []
