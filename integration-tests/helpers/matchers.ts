@@ -58,6 +58,31 @@ export const registerMatchers = (): void =>
         message: `span "${received?.name}": ${errors.join("; ")}`,
       });
     },
+    toHaveEvents(received: EmbraceSpanData, subset: EventProjection[]) {
+      const events = received?.events ?? [];
+      const errors = subset
+        .filter(
+          expected =>
+            !events.some(
+              event =>
+                event.name === expected.name &&
+                expected.attributes.every(a => getAttribute(event, a.key) === a.value),
+            ),
+        )
+        .map(expected => {
+          const attributes = expected.attributes
+            .map(a => `${a.key}="${a.value}"`)
+            .join(", ");
+          return `missing event "${expected.name}" {${attributes}}`;
+        });
+
+      return wrap({
+        pass: errors.length === 0,
+        message: `span "${received?.name}": ${errors.join("; ")} (has events [${events
+          .map(e => e.name)
+          .join(", ")}])`,
+      });
+    },
     // Scalar keys compare by value; personas is a "contains" check, because the SDK injects its
     // own personas (Android carries "first_day", and clearAllUserPersonas does not remove it).
     toHaveMetadata(
