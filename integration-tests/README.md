@@ -146,6 +146,25 @@ Run the integration tests specifying the package name of app being tested
 npm run test-local -- --package=foobar --platform=android # ios, both
 ```
 
+### Running locally against the hosted mock-api
+
+The specs can also read payloads from the hosted mock-api while still driving an app on a local emulator, which is
+useful for debugging the remote setup without going through Browserstack. Point the app at the mock-api using a
+namespace of your own and rebuild it:
+
+```bash
+./set-embrace-config.js <test-app> embrace-configs/remote-mock-api.json --namespace=firstname.lastname
+```
+
+Then run the tests with that same namespace, which is what tells the specs to read from the mock-api rather than the
+local mock server:
+
+```bash
+MOCK_API_NAMESPACE=firstname.lastname npm run test-local -- --package=foobar --platform=android
+```
+
+Run one platform at a time, as both would report into the same namespace.
+
 ### Running in CI
 
 The [integration testing workflow](../.github/workflows/integration-test.yml) will trigger automatically on any PRs
@@ -164,8 +183,11 @@ app bundle to use for the test:
 Then run the tests, make sure to set the required environment variables:
 
 ```bash
-BROWSERSTACK_USERNAME=user BROWSERSTACK_ACCESS_KEY=key BROWSERSTACK_APP_NAME=expo-rn74 BROWSERSTACK_PLATFORM=android npm run test-remote
+BROWSERSTACK_USERNAME=user BROWSERSTACK_ACCESS_KEY=key BROWSERSTACK_APP_NAME=expo-rn74 BROWSERSTACK_PLATFORM=android MOCK_API_NAMESPACE=some-namespace-id npm run test-remote
 ```
+
+`MOCK_API_NAMESPACE` is the mock-api namespace the specs read payloads from, so it has to match the namespace the app
+was built with, i.e. the third argument to `build-test-app.sh` above.
 
 The values for `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` can be found for your own user on this
 [BrowserStack settings page](https://www.browserstack.com/accounts/settings/product) under "Local Testing".
