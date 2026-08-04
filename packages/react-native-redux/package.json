@@ -51,7 +51,7 @@
     "@opentelemetry/sdk-trace-base": "^1.25.1",
     "@reduxjs/toolkit": "^2.5.0",
     "redux": "^5.0.1",
-    "typescript": "^5.6.3"
+    "typescript": "^7.0.2"
   },
   "embrace": {
     "iosVersion": "6.19.0",
