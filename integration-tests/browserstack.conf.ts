@@ -3,7 +3,6 @@ import { mkdirSync, writeFileSync } from "fs";
 import { registerMatchers } from "./helpers/matchers";
 import { retrieveStoredRequests } from "./helpers/mock_api";
 import { getPayloadSource } from "./helpers/payload_source";
-import { currentPlatform } from "./helpers/platform";
 
 const runID = process.env.CI_RUN_ID || "local";
 const gitRef = process.env.CI_GIT_REF || "local";
@@ -46,13 +45,13 @@ const androidCapabilities = [
       platformName: "android",
     },
   },
-  // {
-  //   "bstack:options": {
-  //     deviceName: "Samsung Galaxy S20",
-  //     platformVersion: "10.0",
-  //     platformName: "android",
-  //   },
-  // },
+  {
+    "bstack:options": {
+      deviceName: "Samsung Galaxy S20",
+      platformVersion: "10.0",
+      platformName: "android",
+    },
+  },
 ];
 
 const iosCapabilities = [
@@ -63,13 +62,13 @@ const iosCapabilities = [
       platformName: "ios",
     },
   },
-  // {
-  //   "bstack:options": {
-  //     deviceName: "iPhone 14",
-  //     platformVersion: "16",
-  //     platformName: "ios",
-  //   },
-  // },
+  {
+    "bstack:options": {
+      deviceName: "iPhone 14",
+      platformVersion: "16",
+      platformName: "ios",
+    },
+  },
 ];
 
 const capabilities = platform === "ios" ? iosCapabilities : androidCapabilities;
@@ -144,14 +143,6 @@ export const config: WebdriverIO.Config = {
 
   before() {
     registerMatchers();
-
-    // Golden files are per-platform, so a misresolved platform would surface as a wall of
-    // unrelated mismatches rather than as the configuration problem it is.
-    if (currentPlatform() !== platform) {
-      throw new Error(
-        `platform mismatch: driver resolved "${currentPlatform()}", expected "${platform}"`,
-      );
-    }
   },
 
   async beforeTest() {
