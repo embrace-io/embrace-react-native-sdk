@@ -1,4 +1,3 @@
-import { get } from "https";
 import { mkdirSync, writeFileSync } from "fs";
 import { registerMatchers } from "./helpers/matchers";
 import { retrieveStoredRequests, clearStoredRequests } from "./helpers/mock_api";
@@ -164,28 +163,39 @@ export const config: WebdriverIO.Config = {
    * Gets executed before a worker process is spawned and can be used to initialize specific service
    * for that worker as well as modify runtime environments in an async fashion.
    */
-  async onWorkerStart() {
-    // Dealing w/ BrowserStack throwing BROWSERSTACK_QUEUE_SIZE_EXCEEDED. Per our plan we are only allowed a certain
-    // number of tests running in parallel + waiting in queue to be run. If we exceed this browserstack responds with an
-    // error when the session is trying to be setup and the suite fails.
-    // To help mitigate, before spinning up a new worker check how many are already queued and wait if we're at the max
-    let retries = 0;
-    while (true) {
-      const queueSlots = await getQueueSlots();
-      if (queueSlots > 0) {
-        break;
+  async onWorkerStart(cid) {
+    // Our plan allows a single parallel session, so a worker spawned while another session is
+    // already queued waits behind it and can hit BrowserStack's 15 minute session-creation timeout
+    // (or BROWSERSTACK_QUEUE_SIZE_EXCEEDED). Wait for an empty queue so we are at worst next in line.
+    for (let attempt = 0; attempt <= QUEUE_WAIT_RETRIES; attempt++) {
+      let plan: BrowserStackPlanDetails;
+      try {
+        plan = await getPlanDetails();
+      } catch (e) {
+        // Best effort: if the plan cannot be read, start and let the session queue.
+        console.log(
+          `could not read the BrowserStack plan, starting worker ${cid} anyway: ${e}`,
+        );
+        return;
       }
 
-      retries += 1;
-      if (retries > QUEUE_FULL_RETRIES) {
-        break;
+      // allow one queued session at a time
+      if (plan.queued_sessions === 0) {
+        return;
       }
 
       console.log(
-        `No available slots in BrowserStack queue, waiting ${QUEUE_FULL_DELAY_SECONDS} seconds`,
+        `BrowserStack busy (${plan.parallel_sessions_running} running, ${plan.queued_sessions} queued ` +
+          `of max ${plan.queued_sessions_max_allowed}), waiting ${QUEUE_WAIT_DELAY_SECONDS}s ` +
+          `before starting worker ${cid}`,
       );
-      await new Promise(r => setTimeout(r, QUEUE_FULL_DELAY_SECONDS * 1000));
+      await new Promise(r => setTimeout(r, QUEUE_WAIT_DELAY_SECONDS * 1000));
     }
+
+    console.log(
+      `BrowserStack still busy after ${(QUEUE_WAIT_RETRIES * QUEUE_WAIT_DELAY_SECONDS) / 60} minutes, ` +
+        `starting worker ${cid} and letting its session queue`,
+    );
   },
 };
 
@@ -193,40 +203,34 @@ export const config: WebdriverIO.Config = {
 interface BrowserStackPlanDetails {
   queued_sessions: number;
   queued_sessions_max_allowed: number;
+  parallel_sessions_running: number;
+  team_parallel_sessions_max_allowed: number;
 }
 
 const browserStackBasicAuth = Buffer.from(
   `${process.env.BROWSERSTACK_USERNAME}:${process.env.BROWSERSTACK_ACCESS_KEY}`,
 ).toString("base64");
 
-const QUEUE_FULL_DELAY_SECONDS = 180;
-const QUEUE_FULL_RETRIES = 5;
+// Poll often enough that we start soon after the queue drains, with a budget that covers the whole
+// matrix running sequentially (4 workers at ~5 minutes each).
+const QUEUE_WAIT_DELAY_SECONDS = 30;
+const QUEUE_WAIT_RETRIES = 40;
 
-const getQueueSlots = async (): Promise<number> => {
-  return new Promise<number>((resolve, reject) => {
-    get(
-      "https://api-cloud.browserstack.com/app-automate/plan.json",
-      {
-        headers: {
-          Authorization: `Basic ${browserStackBasicAuth}`,
-        },
+const getPlanDetails = async (): Promise<BrowserStackPlanDetails> => {
+  const response = await fetch(
+    "https://api-cloud.browserstack.com/app-automate/plan.json",
+    {
+      headers: {
+        Authorization: `Basic ${browserStackBasicAuth}`,
       },
-      res => {
-        let data = "";
-        res.on("data", chunk => {
-          data += chunk;
-        });
-        res.on("end", () => {
-          try {
-            const parsed: BrowserStackPlanDetails = JSON.parse(data);
-            resolve(
-              parsed.queued_sessions_max_allowed - parsed.queued_sessions,
-            );
-          } catch (e) {
-            reject(e);
-          }
-        });
-      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `plan.json failed: ${response.status} ${await response.text()}`,
     );
-  });
+  }
+
+  return (await response.json()) as BrowserStackPlanDetails;
 };
