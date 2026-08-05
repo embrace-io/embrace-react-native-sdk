@@ -18,6 +18,21 @@ describe("Sessions", () => {
     await endSession();
 
     const payload = await payloadSource.getPayloads();
-    expect(payload.sessionSpans).toMatchGoldenFile("session-breadcrumb", "sessionSpans");
+    expect(payload.sessionSpans).toHaveLength(1);
+    expect(payload.sessionSpans[0]).toHaveEvents([
+      {
+        name: "emb-breadcrumb",
+        attributes: [
+          {
+            key: "emb.type",
+            value: "sys.breadcrumb"
+          },
+          {
+            key: "message",
+            value: "my-breadcrumb"
+          }
+        ]
+      }
+    ]);
   });
 });

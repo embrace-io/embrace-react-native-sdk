@@ -5,7 +5,7 @@ import {driver} from "@wdio/globals";
 // a bridge call that would otherwise race the session flush.
 const tap = async (label: string, waitMs = 0) => {
   const element = driver.$(`~${label}`);
-  await element.waitForDisplayed({ timeout: 1000 });
+  await element.waitForDisplayed();
   await element.click();
 
   if (waitMs > 0) {
@@ -17,7 +17,7 @@ const tap = async (label: string, waitMs = 0) => {
 // Backgrounding also foregrounds the app again and begins a new session, so we add a short delay 
 // before handing control back to the spec to avoid races.
 const endSession = async () => {
-  await driver.execute("mobile: backgroundApp", {seconds: 5});
+  await driver.background(5);
   await new Promise(resolve => setTimeout(resolve, 250));
 };
 

@@ -192,8 +192,21 @@ jobs:
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           BROWSERSTACK_APP_NAME: ${{ matrix.test-app }}
           BROWSERSTACK_PLATFORM: android
+          # Must match the namespace build-test-app.sh baked into the app. Both sides use
+          # github.run_id because it is stable across job re-runs, unlike run_attempt.
+          MOCK_API_NAMESPACE: namespace-${{ matrix.test-app }}-android-${{ github.run_id }}
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
+
+      # Upload test runner logs and payloads for failed runs
+      - name: Upload diagnostics
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: diagnostics-${{ matrix.test-app }}-android
+          path: integration-tests/output/
+          if-no-files-found: ignore
+          retention-days: 1
 
   test-ios:
     needs: [prepare, build-ios]
@@ -236,5 +249,18 @@ jobs:
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           BROWSERSTACK_APP_NAME: ${{ matrix.test-app }}
           BROWSERSTACK_PLATFORM: ios
+          # Must match the namespace build-test-app.sh baked into the app. Both sides use
+          # github.run_id because it is stable across job re-runs, unlike run_attempt.
+          MOCK_API_NAMESPACE: namespace-${{ matrix.test-app }}-ios-${{ github.run_id }}
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
+
+      # Upload test runner logs and payloads for failed runs
+      - name: Upload diagnostics
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: diagnostics-${{ matrix.test-app }}-ios
+          path: integration-tests/output/
+          if-no-files-found: ignore
+          retention-days: 1
