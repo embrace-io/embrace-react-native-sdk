@@ -1,5 +1,5 @@
 import {driver} from "@wdio/globals";
-import {endSession, tap} from "../helpers/app";
+import {endSession, tap, isExpo} from "../helpers/app";
 import {getPayloadSource} from "../helpers/payload_source";
 import {EmbraceSpanData} from "../typings/embrace";
 
@@ -10,6 +10,11 @@ const backgroundViewState = () => (driver.isAndroid ? "background" : "inactive")
 
 const lastByStart = (spans: EmbraceSpanData[]) =>
   [...spans].sort((a, b) => a.start_time_unix_nano - b.start_time_unix_nano).at(-1)!;
+
+// In Expo router the initial route (log screen) is named "index"
+const logViewName = () => isExpo() ? "index" : "log";
+
+const navigationPackageName = () => isExpo() ? "expo-router" : "@react-navigation/native";
 
 describe("Navigation", () => {
   const payloadSource = getPayloadSource();
@@ -24,8 +29,9 @@ describe("Navigation", () => {
 
     const payload = await payloadSource.getPayloads();
     expect(lastByStart(payload.viewSpans)).toHaveAttributes({
-      "view.name": "log",
+      "view.name": logViewName(),
       "view.state.end": backgroundViewState(),
+      "package": navigationPackageName(),
     });
   });
 
@@ -35,9 +41,10 @@ describe("Navigation", () => {
     await endSession();
 
     const payload = await payloadSource.getPayloads();
-    expect(payload.viewSpans).toHaveSpanNames(["log", "span", "log"]);
+    expect(payload.viewSpans).toHaveSpanNames([logViewName(), "span", logViewName()]);
     expect(lastByStart(payload.viewSpans)).toHaveAttributes({
       "view.state.end": backgroundViewState(),
+      "package": navigationPackageName(),
     });
   });
 });

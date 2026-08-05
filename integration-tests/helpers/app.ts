@@ -21,4 +21,16 @@ const endSession = async () => {
   await new Promise(resolve => setTimeout(resolve, 250));
 };
 
-export {tap, endSession};
+// The current fixture under test, e.g. "rn82"
+const currentFixture = (): string => {
+  // local runs set the app package/bundle id in the session caps (e.g. io.embrace.<fixture>),
+  // CI runs set the BROWSERSTACK_APP_NAME environment variable
+  const caps = driver.requestedCapabilities as Record<string, string | undefined>;
+  const appId = caps["appium:appPackage"] ?? caps["appium:bundleId"] ?? "";
+  return appId.replace(/^io\.embrace\./, "") || process.env.BROWSERSTACK_APP_NAME || "";
+};
+
+
+const isExpo = (): boolean => currentFixture().startsWith("expo");
+
+export {tap, endSession, currentFixture, isExpo};
