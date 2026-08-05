@@ -43,7 +43,7 @@ jobs:
           fi
           echo "android=$android" >> "$GITHUB_OUTPUT"
           echo "ios=$ios" >> "$GITHUB_OUTPUT"
-          echo 'matrix=["expo-rn74","rn82","rn81","rn80","rn79","rn78","rn77","rn76","rn75","rn74","rn73","rn72","rn71"]' >> "$GITHUB_OUTPUT"
+          echo 'matrix=["expo51","rn82","rn81","rn80","rn79","rn78","rn77","rn76","rn75","rn74","rn73","rn72","rn71"]' >> "$GITHUB_OUTPUT"
 
   build-android:
     needs: prepare
