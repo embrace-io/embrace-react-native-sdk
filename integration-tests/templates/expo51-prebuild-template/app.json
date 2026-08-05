@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "expo51",
+    "slug": "expo-51-prebuild-template",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "io.embrace.expo51"
+    },
+    "android": {
+      "package": "io.embrace.expo51"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26,
+            "kotlinVersion": "2.0.21"
+          }
+        }
+      ],
+      [
+        "@embrace-io/react-native",
+        {
+          "androidAppId": "REPLACE_ME",
+          "apiToken": "REPLACE_ME",
+          "iOSAppId": "REPLACE_ME"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
