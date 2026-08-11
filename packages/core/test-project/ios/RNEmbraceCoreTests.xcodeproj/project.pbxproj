@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B049C9AF0F54632CA1146CD /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F98325A136A321D325263B /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework */; };
+		10F424A657B0F437BD247309 /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70771DAB84A0B92776D63ED7 /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework */; };
+		25BB4D9E437210EDD6420521 /* Pods_RNEmbraceCorePlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41C9D5E1581CF997B7F14BF /* Pods_RNEmbraceCorePlaceholder.framework */; };
 		30DFDA6A2C486677009F2ECC /* RNEmbraceCorePlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30DFDA622C486677009F2ECC /* RNEmbraceCorePlaceholder.framework */; };
 		30DFDA6F2C486677009F2ECC /* RNEmbraceCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFDA6E2C486677009F2ECC /* RNEmbraceCoreTests.swift */; };
-		4F4B65E21CF44FE7CE7B3587 /* Pods_RNEmbraceCorePlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F52F8D5B44CBF5C1116C71E3 /* Pods_RNEmbraceCorePlaceholder.framework */; };
 		6DE4471B2E5604BA0036CFBB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DE4471A2E5604BA0036CFBB /* AudioToolbox.framework */; };
 		6DE4471D2E5604C90036CFBB /* AVFAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DE4471C2E5604C90036CFBB /* AVFAudio.framework */; };
 /* End PBXBuildFile section */
@@ -33,10 +33,10 @@
 		45892F0D2BCD200EADB05154 /* Pods-RNEmbraceCorePlaceholder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceCorePlaceholder.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceCorePlaceholder/Pods-RNEmbraceCorePlaceholder.debug.xcconfig"; sourceTree = "<group>"; };
 		6DE4471A2E5604BA0036CFBB /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
 		6DE4471C2E5604C90036CFBB /* AVFAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFAudio.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk/System/Library/Frameworks/AVFAudio.framework; sourceTree = DEVELOPER_DIR; };
+		70771DAB84A0B92776D63ED7 /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D444774AB9A34C8CF34510A /* Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.release.xcconfig"; sourceTree = "<group>"; };
-		91F98325A136A321D325263B /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C21EEE78D206AE6693E5AFEC /* Pods-RNEmbraceCorePlaceholder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceCorePlaceholder.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceCorePlaceholder/Pods-RNEmbraceCorePlaceholder.release.xcconfig"; sourceTree = "<group>"; };
-		F52F8D5B44CBF5C1116C71E3 /* Pods_RNEmbraceCorePlaceholder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceCorePlaceholder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D41C9D5E1581CF997B7F14BF /* Pods_RNEmbraceCorePlaceholder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceCorePlaceholder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +46,7 @@
 			files = (
 				6DE4471D2E5604C90036CFBB /* AVFAudio.framework in Frameworks */,
 				6DE4471B2E5604BA0036CFBB /* AudioToolbox.framework in Frameworks */,
-				4F4B65E21CF44FE7CE7B3587 /* Pods_RNEmbraceCorePlaceholder.framework in Frameworks */,
+				25BB4D9E437210EDD6420521 /* Pods_RNEmbraceCorePlaceholder.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,7 +55,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				30DFDA6A2C486677009F2ECC /* RNEmbraceCorePlaceholder.framework in Frameworks */,
-				1B049C9AF0F54632CA1146CD /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework in Frameworks */,
+				10F424A657B0F437BD247309 /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,8 +105,8 @@
 			children = (
 				6DE4471C2E5604C90036CFBB /* AVFAudio.framework */,
 				6DE4471A2E5604BA0036CFBB /* AudioToolbox.framework */,
-				F52F8D5B44CBF5C1116C71E3 /* Pods_RNEmbraceCorePlaceholder.framework */,
-				91F98325A136A321D325263B /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework */,
+				D41C9D5E1581CF997B7F14BF /* Pods_RNEmbraceCorePlaceholder.framework */,
+				70771DAB84A0B92776D63ED7 /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

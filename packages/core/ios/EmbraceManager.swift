@@ -2,6 +2,8 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
+import EmbraceCommonInternal
+import EmbraceSemantics
 import OpenTelemetryApi
 
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"

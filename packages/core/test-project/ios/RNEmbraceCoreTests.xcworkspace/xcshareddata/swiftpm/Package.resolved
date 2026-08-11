@@ -1,5 +1,5 @@
 {
-  "originHash" : "6c1a4a3f54ef43da5a8d8456bd59881c72f0c0d05830ab761770aa9ffd4f205f",
+  "originHash" : "75f198f774b66983d4645830c749a071f78e0c045ddb275e3ce9b6bdd6250bf0",
   "pins" : [
     {
       "identity" : "embrace-apple-sdk",
@@ -22,7 +22,7 @@
     {
       "identity" : "opentelemetry-swift-core",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/open-telemetry/opentelemetry-swift-core.git",
+      "location" : "https://github.com/open-telemetry/opentelemetry-swift-core",
       "state" : {
         "revision" : "06f8a460a66f813758d22f09025d85df45450a63",
         "version" : "2.5.1"

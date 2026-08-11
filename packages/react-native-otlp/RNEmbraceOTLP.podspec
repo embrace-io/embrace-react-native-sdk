@@ -1,6 +1,7 @@
 require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+embrace_ios_sdk_version = package["embrace"]["iosVersion"]
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
 Pod::Spec.new do |s|
@@ -18,6 +19,10 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '13.0'
   s.swift_version = '5.0'
 
+  # Xcode 16+ Explicitly Built Modules can't resolve SPM package-framework modules via
+  # CocoaPods. Set before install_modules_dependencies so it merges instead of clobbering.
+  s.pod_target_xcconfig = { 'SWIFT_ENABLE_EXPLICIT_MODULES' => 'NO' }
+
   # Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.
   # See https://github.com/facebook/react-native/blob/febf6b7f33fdb4904669f99d795eba4c0f95d7bf/scripts/cocoapods/new_architecture.rb#L79.
   if respond_to?(:install_modules_dependencies, true)
@@ -31,7 +36,8 @@ Pod::Spec.new do |s|
       s.pod_target_xcconfig    = {
           "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
           "OTHER_CPLUSPLUSFLAGS" => "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1",
-          "CLANG_CXX_LANGUAGE_STANDARD" => "c++17"
+          "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
+          'SWIFT_ENABLE_EXPLICIT_MODULES' => 'NO'
       }
       s.dependency "React-Codegen"
       s.dependency "RCT-Folly"
@@ -41,6 +47,22 @@ Pod::Spec.new do |s|
     end
   end
 
-  s.dependency 'EmbraceIO', package["embrace"]["iosVersion"]
-  s.dependency 'OpenTelemetry-Swift-Protocol-Exporter-Http', '2.1.0'
+  spm_dependency(s,
+    url: 'https://github.com/embrace-io/embrace-apple-sdk.git',
+    requirement: {kind: 'exactVersion', version: embrace_ios_sdk_version},
+    products: ['EmbraceIO', 'EmbraceCrash', 'EmbraceSemantics']
+  )
+
+  spm_dependency(s,
+    url: 'https://github.com/open-telemetry/opentelemetry-swift.git',
+    requirement: {kind: 'upToNextMajorVersion', minimumVersion: '2.1.1'},
+    products: ['OpenTelemetryProtocolExporterHTTP']
+  )
+
+  spm_dependency(s,
+    url: 'https://github.com/open-telemetry/opentelemetry-swift-core.git',
+    requirement: {kind: 'upToNextMajorVersion', minimumVersion: '2.1.1'},
+    products: ['OpenTelemetryApi', 'OpenTelemetrySdk']
+  )
+
 end

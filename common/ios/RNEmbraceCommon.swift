@@ -2,7 +2,8 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
-import OpenTelemetryApi
+import EmbraceCommonInternal
+import EmbraceCrash
 
 class SDKConfig: NSObject {
     public let appId: String?
