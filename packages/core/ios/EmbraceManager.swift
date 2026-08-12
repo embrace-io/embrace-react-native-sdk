@@ -2,8 +2,14 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
+// CocoaPods merges every embrace-apple-sdk subspec into a single EmbraceIO module,
+// whereas SPM keeps them as separate modules that have to be imported on their own.
+#if canImport(EmbraceCommonInternal)
 import EmbraceCommonInternal
+#endif
+#if canImport(EmbraceSemantics)
 import EmbraceSemantics
+#endif
 import OpenTelemetryApi
 
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"

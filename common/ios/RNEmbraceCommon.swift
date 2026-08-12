@@ -2,8 +2,14 @@ import Foundation
 import React
 import OSLog
 import EmbraceIO
+// CocoaPods merges every embrace-apple-sdk subspec into a single EmbraceIO module,
+// whereas SPM keeps them as separate modules that have to be imported on their own.
+#if canImport(EmbraceCommonInternal)
 import EmbraceCommonInternal
+#endif
+#if canImport(EmbraceCrash)
 import EmbraceCrash
+#endif
 
 class SDKConfig: NSObject {
     public let appId: String?
