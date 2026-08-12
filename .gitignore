@@ -103,6 +103,11 @@ nx.json
 
 .env.*
 
+# Dependency snapshots for ios test projects: ios:install regenerates these on every
+# run and their contents depend on EMBRACE_USE_SPM.
+packages/*/test-project/ios/Podfile.lock
+packages/*/test-project/ios/**/Package.resolved
+
 # Test diagnostics and artifacts
 *_Diagnostics/
 CoreTestsFailing/
