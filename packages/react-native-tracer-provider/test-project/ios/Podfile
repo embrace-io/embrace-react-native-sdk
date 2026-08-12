@@ -14,7 +14,8 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-if ENV['EMBRACE_USE_SPM'] == nil
+# Same truthy test as the podspecs, so EMBRACE_USE_SPM=0 or "" still means CocoaPods
+unless %w[1 true yes].include?(ENV['EMBRACE_USE_SPM'].to_s.downcase)
   # Make KSCrash modular so Swift can import it
   pod 'KSCrash', :modular_headers => true
 end

@@ -68,6 +68,13 @@ jobs:
 
   test-core:
     runs-on: macos-26
+    strategy:
+      # One leg per Embrace SDK source: the CocoaPods pod and the SPM package
+      fail-fast: false
+      matrix:
+        mode: [pods, spm]
+    env:
+      EMBRACE_USE_SPM: ${{ matrix.mode == 'spm' && '1' || '' }}
     steps:
       - name: Select Xcode
         # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
@@ -108,10 +115,10 @@ jobs:
       - name: Cache Derived Data
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: Derived-Data-Core-${{ runner.os }}-${{ hashFiles('packages/core/**/*.xcodeproj/project.pbxproj', 'packages/core/test-project/ios/Podfile.lock') }}
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceCoreTests-${{ matrix.mode }}
+          key: Derived-Data-Core-${{ matrix.mode }}-${{ runner.os }}-${{ hashFiles('packages/core/**/*.xcodeproj/project.pbxproj', 'packages/core/test-project/ios/Podfile', 'packages/core/RNEmbraceCore.podspec', 'packages/core/package.json') }}
           restore-keys: |
-            Derived-Data-Core-${{ runner.os }}
+            Derived-Data-Core-${{ matrix.mode }}-${{ runner.os }}
         if: ${{ inputs.run_all || steps.changed_files.outputs.core == 'true' }}
 
       - name: Install Root Node Modules
@@ -142,8 +149,8 @@ jobs:
         if: ${{ always() && (inputs.run_all || steps.changed_files.outputs.core == 'true') }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: ios-core-test-results
-          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceCoreTests-*/Logs/Test/*.xcresult
+          name: ios-core-test-results-${{ matrix.mode }}
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceCoreTests-${{ matrix.mode }}/Logs/Test/*.xcresult
           if-no-files-found: warn
           retention-days: 7
 
@@ -159,6 +166,13 @@ jobs:
 
   test-tracer-provider:
     runs-on: macos-26
+    strategy:
+      # One leg per Embrace SDK source: the CocoaPods pod and the SPM package
+      fail-fast: false
+      matrix:
+        mode: [pods, spm]
+    env:
+      EMBRACE_USE_SPM: ${{ matrix.mode == 'spm' && '1' || '' }}
     steps:
       - name: Select Xcode
         # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
@@ -198,10 +212,10 @@ jobs:
       - name: Cache Derived Data
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: Derived-Data-TracerProvider-${{ runner.os }}-${{ hashFiles('packages/react-native-tracer-provider/**/*.xcodeproj/project.pbxproj', 'packages/react-native-tracer-provider/test-project/ios/Podfile.lock') }}
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceTracerProvider-${{ matrix.mode }}
+          key: Derived-Data-TracerProvider-${{ matrix.mode }}-${{ runner.os }}-${{ hashFiles('packages/react-native-tracer-provider/**/*.xcodeproj/project.pbxproj', 'packages/react-native-tracer-provider/test-project/ios/Podfile', 'packages/react-native-tracer-provider/RNEmbraceTracerProvider.podspec', 'packages/react-native-tracer-provider/package.json') }}
           restore-keys: |
-            Derived-Data-TracerProvider-${{ runner.os }}
+            Derived-Data-TracerProvider-${{ matrix.mode }}-${{ runner.os }}
         if: ${{ inputs.run_all || steps.changed_files.outputs.tracer-provider == 'true' }}
 
       - name: Install Root Node Modules
@@ -230,8 +244,8 @@ jobs:
         if: ${{ always() && (inputs.run_all || steps.changed_files.outputs.tracer-provider == 'true') }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: ios-tracer-provider-test-results
-          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceTracerProvider-*/Logs/Test/*.xcresult
+          name: ios-tracer-provider-test-results-${{ matrix.mode }}
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceTracerProvider-${{ matrix.mode }}/Logs/Test/*.xcresult
           if-no-files-found: warn
           retention-days: 7
 
@@ -251,6 +265,13 @@ jobs:
   # locally where hardware resources are better. See scripts/run-ios-tests-no-coverage.sh
   test-otlp:
     runs-on: macos-26
+    strategy:
+      # One leg per Embrace SDK source: the CocoaPods pod and the SPM package
+      fail-fast: false
+      matrix:
+        mode: [pods, spm]
+    env:
+      EMBRACE_USE_SPM: ${{ matrix.mode == 'spm' && '1' || '' }}
     steps:
       - name: Select Xcode
         # See https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md
@@ -290,10 +311,10 @@ jobs:
       - name: Cache Derived Data
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: Derived-Data-OTLP-${{ runner.os }}-${{ hashFiles('packages/react-native-otlp/**/*.xcodeproj/project.pbxproj', 'packages/react-native-otlp/test-project/ios/Podfile.lock') }}
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceOTLPTests-${{ matrix.mode }}
+          key: Derived-Data-OTLP-${{ matrix.mode }}-${{ runner.os }}-${{ hashFiles('packages/react-native-otlp/**/*.xcodeproj/project.pbxproj', 'packages/react-native-otlp/test-project/ios/Podfile', 'packages/react-native-otlp/RNEmbraceOTLP.podspec', 'packages/react-native-otlp/package.json') }}
           restore-keys: |
-            Derived-Data-OTLP-${{ runner.os }}
+            Derived-Data-OTLP-${{ matrix.mode }}-${{ runner.os }}
         if: ${{ inputs.run_all || steps.changed_files.outputs.otlp == 'true' }}
 
       - name: Install Root Node Modules
@@ -322,8 +343,8 @@ jobs:
         if: ${{ always() && (inputs.run_all || steps.changed_files.outputs.otlp == 'true') }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: ios-otlp-test-results
-          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceOTLPTests-*/Logs/Test/*.xcresult
+          name: ios-otlp-test-results-${{ matrix.mode }}
+          path: ~/Library/Developer/Xcode/DerivedData/RNEmbraceOTLPTests-${{ matrix.mode }}/Logs/Test/*.xcresult
           if-no-files-found: warn
           retention-days: 7
 
