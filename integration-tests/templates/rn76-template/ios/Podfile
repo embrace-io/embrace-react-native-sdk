@@ -10,7 +10,9 @@ prepare_react_native_project!
 
 # NOTE: needed since iOS 6.13.0
 # Make KSCrash modular so Swift can import it
-pod 'KSCrash', :modular_headers => true
+unless %w[1 true yes].include?(ENV['EMBRACE_USE_SPM'].to_s.downcase)
+  pod 'KSCrash', :modular_headers => true
+end
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
