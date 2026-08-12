@@ -80,7 +80,7 @@ else
 
   echo "Installing pods for $name"
   pushd $app_path/ios
-  pod install
+  USE_FRAMEWORKS=dynamic pod install
   popd
 
   # Browserstack will re-sign the .ipa before running it on their test devices so produce an unsigned one
