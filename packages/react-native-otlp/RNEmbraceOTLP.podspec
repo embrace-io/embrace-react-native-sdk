@@ -46,7 +46,12 @@ Pod::Spec.new do |s|
     )
 
     # Xcode 16+ Explicitly Built Modules can't resolve SPM package-framework modules via CocoaPods.
-    s.pod_target_xcconfig = { 'SWIFT_ENABLE_EXPLICIT_MODULES' => 'NO' }
+    # SPM products promoted to dynamic frameworks land in the shared products dir, not the
+    # per-pod one CocoaPods points BUILT_PRODUCTS_DIR at, so add it to the search paths.
+    s.pod_target_xcconfig = {
+      'SWIFT_ENABLE_EXPLICIT_MODULES' => 'NO',
+      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "$(PODS_CONFIGURATION_BUILD_DIR)/PackageFrameworks"'
+    }
   else
     s.dependency 'EmbraceIO', embrace_ios_sdk_version
     s.dependency 'OpenTelemetry-Swift-Protocol-Exporter-Http', '2.1.0'
