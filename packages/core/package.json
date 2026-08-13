@@ -24,7 +24,8 @@
     "android/gradle.properties",
     "android/dependencies.gradle",
     "ios",
-    "RNEmbraceCore.podspec"
+    "RNEmbraceCore.podspec",
+    "scripts/embrace_spm.rb"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
