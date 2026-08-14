@@ -4,7 +4,7 @@ import OSLog
 import EmbraceIO
 // CocoaPods merges every embrace-apple-sdk subspec into a single EmbraceIO module,
 // whereas SPM keeps them as separate modules that have to be imported on their own.
-#if canImport(EmbraceCrash)
+#if EMBRACE_USE_SPM
 import EmbraceCrash
 #endif
 
