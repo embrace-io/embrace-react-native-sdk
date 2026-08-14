@@ -140,7 +140,7 @@ class ReactNativeTracerProviderModule: NSObject {
   @objc(setupTracer:version:schemaUrl:)
   func setupTracer(name: String, version: String, schemaUrl: String) {
     if tracerProvider == nil {
-        if let state = Embrace.client?.state as? EmbraceSDKState,
+        if let state = EmbraceIO.shared.state as? EmbraceSDKState,
            state == .started {
             tracerProvider = OpenTelemetry.instance.tracerProvider
         } else {

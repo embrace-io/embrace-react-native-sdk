@@ -144,8 +144,8 @@ class RNEmbraceOTLP: NSObject {
                 }
 
                 // injecting exporters to helper
-                try Embrace.setup(options: initEmbraceOptions(config: sdkConfig, exporters: exportConfig))
-                    .start()
+                try EmbraceIO.setup(options: initEmbraceOptions(config: sdkConfig, exporters: exportConfig))
+                try EmbraceIO.shared.start()
 
                 resolve(true)
             } catch let error {

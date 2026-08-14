@@ -1,8 +1,5 @@
 import Foundation
-import React
-import OSLog
 import EmbraceIO
-import OpenTelemetryApi
 
 class SDKConfig: NSObject {
     public let appId: String?
@@ -11,10 +8,10 @@ class SDKConfig: NSObject {
     public let disableAutomaticViewCapture: Bool
     public let endpointBaseUrl: String?
     public let disableNetworkSpanForwarding: Bool
-    public let ignoredURLs: [String]?
-    
+    public let ignoredURLs: [String]
+
     public init(from: NSDictionary) {
-        self.appId = from["appId"] as? String ?? nil
+        self.appId = from["appId"] as? String
         self.appGroupId = from["appGroupId"] as? String
         self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
         self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
@@ -24,55 +21,53 @@ class SDKConfig: NSObject {
     }
 }
 
-func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> Embrace.Options {
-    var embraceOptions: Embrace.Options {
-        var crashReporter: CrashReporter?
-        crashReporter = config.disableCrashReporter ? nil : KSCrashReporter()
-        
-        let servicesBuilder = CaptureServiceBuilder()
-        
-        let urlSessionServiceOptions = URLSessionCaptureService.Options(
-            // allowing to enable/disable NSF by code
-            injectTracingHeader: !config.disableNetworkSpanForwarding,
-            requestsDataSource: nil,
-            // disabling tracking for ignored urls
-            ignoredURLs: config.ignoredURLs ?? []
-        )
-        // manually adding the URLSessionCaptureService
-        servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
-        
-        // adding defaults
-        servicesBuilder.addDefaults()
-        
-        if config.disableAutomaticViewCapture {
-            // removing service depending on code configuration
-            servicesBuilder.remove(ofType: ViewCaptureService.self)
-        }
-        
-        var endpoints: Embrace.Endpoints?
-        if config.endpointBaseUrl != nil {
-            endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!, configBaseURL: config.endpointBaseUrl!)
-        }
-                
-        if (config.appId == nil && exporters != nil) {
-            return .init(
-                export: exporters!,
-                captureServices: servicesBuilder.build(),
-                crashReporter: crashReporter,
-                logLevel: .default
-            )
-        }
+/// Builds the `EmbraceIO.Options` used to setup the SDK.
+///
+/// Starts from the SDK defaults and only overrides what the JS layer asked for through `SDKConfig`.
+func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> EmbraceIO.Options {
+    let captureServices = captureServicesOptions(config: config)
+    let crashReporter = config.disableCrashReporter ? nil : KSCrashReporter()
+    let otel = exporters.map {
+        EmbraceIO.OTelOptions(spanExporter: $0.spanExporter, logExporter: $0.logExporter)
+    }
 
-        return .init(
-            appId: config.appId ?? "",
-            appGroupId: config.appGroupId,
+    // Without an `appId` the SDK can only run in export-only mode, driven by a local configuration.
+    if config.appId == nil, let otel = otel {
+        return .withLocalConfiguration(
             platform: .reactNative,
-            endpoints: endpoints,
-            captureServices: servicesBuilder.build(),
+            captureServices: captureServices,
             crashReporter: crashReporter,
-            export: exporters
+            otel: otel
         )
     }
-        
-    return embraceOptions
+
+    return .withAppId(
+        config.appId ?? "",
+        platform: .reactNative,
+        endpoints: config.endpointBaseUrl.map { Embrace.Endpoints(baseURL: $0, configBaseURL: $0) },
+        captureServices: captureServices,
+        crashReporter: crashReporter,
+        otel: otel
+    )
+}
+
+/// The default set of capture services, adjusted for the options the JS layer exposes.
+private func captureServicesOptions(config: SDKConfig) -> EmbraceIO.CaptureServicesOptions {
+    let builder = CaptureServicesOptionsBuilder()
+        .addDefaults()
+        .addUrlSessionCaptureService(
+            withOptions: .init(
+                // allowing to enable/disable NSF by code
+                injectTracingHeader: !config.disableNetworkSpanForwarding,
+                requestsDataSource: nil,
+                // disabling tracking for ignored urls
+                ignoredURLs: config.ignoredURLs
+            )
+        )
+
+    if config.disableAutomaticViewCapture {
+        builder.remove(embraceType: .view)
+    }
+
+    return builder.build()
 }
