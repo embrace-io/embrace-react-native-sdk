@@ -4,9 +4,6 @@ import OSLog
 import EmbraceIO
 // CocoaPods merges every embrace-apple-sdk subspec into a single EmbraceIO module,
 // whereas SPM keeps them as separate modules that have to be imported on their own.
-#if canImport(EmbraceCommonInternal)
-import EmbraceCommonInternal
-#endif
 #if canImport(EmbraceCrash)
 import EmbraceCrash
 #endif
@@ -33,9 +30,8 @@ class SDKConfig: NSObject {
 
 func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> Embrace.Options {
     var embraceOptions: Embrace.Options {
-        var crashReporter: CrashReporter?
-        crashReporter = config.disableCrashReporter ? nil : KSCrashReporter()
-        
+        var crashReporter = config.disableCrashReporter ? nil : KSCrashReporter()
+
         let servicesBuilder = CaptureServiceBuilder()
         
         let urlSessionServiceOptions = URLSessionCaptureService.Options(
