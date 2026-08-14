@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
     spm_dependency(s,
       url: 'https://github.com/open-telemetry/opentelemetry-swift-core.git',
       requirement: {kind: 'upToNextMajorVersion', minimumVersion: '2.1.1'},
-      products: ['OpenTelemetryApi', 'OpenTelemetrySdk']
+      products: ['OpenTelemetryApi']
     )
 
     # Xcode 16+ Explicitly Built Modules can't resolve SPM package-framework modules via CocoaPods.
