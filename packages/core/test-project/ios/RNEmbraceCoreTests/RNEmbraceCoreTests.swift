@@ -228,7 +228,6 @@ class EmbraceManagerTests: XCTestCase {
     func testParseSDKConfig() {
         let config = SDKConfig(from: NSDictionary(dictionary: [
             "appId": "myApp",
-            "appGroupId": "myAppGroup",
             "disableCrashReporter": true,
             "disableAutomaticViewCapture": true,
             "disableNetworkSpanForwarding": true,
@@ -236,7 +235,6 @@ class EmbraceManagerTests: XCTestCase {
         ]))
 
         XCTAssertEqual(config.appId, "myApp")
-        XCTAssertEqual(config.appGroupId, "myAppGroup")
         XCTAssertTrue(config.disableCrashReporter)
         XCTAssertTrue(config.disableAutomaticViewCapture)
         XCTAssertTrue(config.disableNetworkSpanForwarding)
@@ -247,7 +245,6 @@ class EmbraceManagerTests: XCTestCase {
         let config = SDKConfig(from: NSDictionary(dictionary: ["appId": "myApp"]))
 
         XCTAssertEqual(config.appId, "myApp")
-        XCTAssertNil(config.appGroupId)
         XCTAssertFalse(config.disableCrashReporter)
         XCTAssertFalse(config.disableAutomaticViewCapture)
         XCTAssertFalse(config.disableNetworkSpanForwarding)

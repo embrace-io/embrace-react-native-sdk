@@ -18,7 +18,6 @@ interface AndroidConfig {}
 
 interface IOSConfig {
   appId?: string;
-  appGroupId?: string;
   disableCrashReporter?: boolean;
   disableAutomaticViewCapture?: boolean;
   disableNetworkSpanForwarding?: boolean;

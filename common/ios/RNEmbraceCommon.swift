@@ -3,7 +3,6 @@ import EmbraceIO
 
 class SDKConfig: NSObject {
     public let appId: String?
-    public let appGroupId: String?
     public let disableCrashReporter: Bool
     public let disableAutomaticViewCapture: Bool
     public let endpointBaseUrl: String?
@@ -12,7 +11,6 @@ class SDKConfig: NSObject {
 
     public init(from: NSDictionary) {
         self.appId = from["appId"] as? String
-        self.appGroupId = from["appGroupId"] as? String
         self.disableCrashReporter = from["disableCrashReporter"] as? Bool ?? false
         self.disableAutomaticViewCapture = from["disableAutomaticViewCapture"] as? Bool ?? false
         self.endpointBaseUrl = from["endpointBaseUrl"] as? String
