@@ -26,8 +26,16 @@ jobs:
     outputs:
       android: ${{ steps.decide.outputs.android }}
       ios: ${{ steps.decide.outputs.ios }}
-      matrix: ${{ steps.decide.outputs.matrix }}
+      # We run the build for all RN versions, but only run the full test suite for a subset.
+      # See .github/matrices/integration-tests.json
+      build_matrix: ${{ steps.decide.outputs.build_matrix }}
+      test_matrix: ${{ steps.decide.outputs.test_matrix }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
       - id: decide
         env:
           # empty for any trigger other than workflow_dispatch, which the default below treats as "both"
@@ -41,17 +49,21 @@ jobs:
             if [ "$platform" = "both" ] || [ "$platform" = "android" ]; then android=true; fi
             if [ "$platform" = "both" ] || [ "$platform" = "ios" ]; then ios=true; fi
           fi
-          echo "android=$android" >> "$GITHUB_OUTPUT"
-          echo "ios=$ios" >> "$GITHUB_OUTPUT"
-          echo 'matrix=["expo51","rn82","rn81","rn80","rn79","rn78","rn77","rn76","rn75","rn74","rn73","rn72","rn71"]' >> "$GITHUB_OUTPUT"
+          # jq -c because $GITHUB_OUTPUT truncates multi-line values at the first newline
+          matrix_file=.github/matrices/integration-tests.json
+          {
+            echo "android=$android"
+            echo "ios=$ios"
+            echo "build_matrix=$(jq -c '.build' "$matrix_file")"
+            echo "test_matrix=$(jq -c '.test' "$matrix_file")"
+          } >> "$GITHUB_OUTPUT"
 
   build-android:
     needs: prepare
     if: ${{ needs.prepare.outputs.android == 'true' }}
     strategy:
       fail-fast: false
-      matrix:
-        test-app: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.prepare.outputs.build_matrix) }}
 
     runs-on: ubuntu-latest
 
@@ -101,8 +113,7 @@ jobs:
     if: ${{ needs.prepare.outputs.ios == 'true' }}
     strategy:
       fail-fast: false
-      matrix:
-        test-app: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.prepare.outputs.build_matrix) }}
 
     runs-on: macos-26
 
@@ -158,8 +169,7 @@ jobs:
     strategy:
       fail-fast: false
       max-parallel: 1
-      matrix:
-        test-app: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.prepare.outputs.test_matrix) }}
 
     runs-on: ubuntu-latest
 
@@ -214,8 +224,7 @@ jobs:
     strategy:
       fail-fast: false
       max-parallel: 1
-      matrix:
-        test-app: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.prepare.outputs.test_matrix) }}
 
     # The remote run only drives BrowserStack over HTTP, so no macOS is needed.
     runs-on: ubuntu-latest
