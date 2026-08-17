@@ -45,7 +45,7 @@ end
 
 def embrace_spm_package?(package)
   package.is_a?(Xcodeproj::Project::Object::XCRemoteSwiftPackageReference) &&
-    package.repositoryURL.to_s.sub(/\.git\z/, "") == EMBRACE_SPM_URL.sub(/\.git\z/, "")
+    package.repositoryURL.to_s == EMBRACE_SPM_URL
 end
 
 # A requirement read back from a project file has string keys; ours has symbols
