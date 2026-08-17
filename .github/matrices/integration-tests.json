@@ -1,0 +1,34 @@
+{
+  "build": {
+    "include": [
+      {"test-app": "expo51"},
+      {"test-app": "rn87"},
+      {"test-app": "rn86"},
+      {"test-app": "rn85"},
+      {"test-app": "rn84"},
+      {"test-app": "rn83"},
+      {"test-app": "rn82"},
+      {"test-app": "rn81"},
+      {"test-app": "rn80"},
+      {"test-app": "rn79"},
+      {"test-app": "rn78"},
+      {"test-app": "rn77"},
+      {"test-app": "rn76"},
+      {"test-app": "rn75"},
+      {"test-app": "rn74"},
+      {"test-app": "rn73"},
+      {"test-app": "rn72"},
+      {"test-app": "rn71"}
+    ]
+  },
+  "test": {
+    "include": [
+      {"test-app": "expo51"},
+      {"test-app": "rn87"},
+      {"test-app": "rn82"},
+      {"test-app": "rn76"},
+      {"test-app": "rn75"},
+      {"test-app": "rn71"}
+    ]
+  }
+}
