@@ -265,6 +265,7 @@ jobs:
           MOCK_API_NAMESPACE: namespace-${{ matrix.test-app }}-ios-${{ github.run_id }}
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
+          EMBRACE_USE_SPM: ${{ matrix.ios-mode == 'spm' && '1' || '' }}
 
       # Upload test runner logs and payloads for failed runs
       - name: Upload diagnostics
