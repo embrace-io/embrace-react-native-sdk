@@ -14,7 +14,7 @@ require "json"
 #
 #   require Pod::Executable.execute_command('node', ['-p',
 #     'require.resolve(
-#       "@embrace-io/react-native/scripts/embrace_spm.rb",
+#       "@embrace-io/react-native/ios/scripts/embrace_spm.rb",
 #       {paths: [process.argv[1]]},
 #     )', __dir__]).strip
 #
@@ -35,7 +35,7 @@ end
 
 # Pinned in the same package.json the podspec reads, so the app and the pod can't disagree
 def embrace_spm_version
-  package = JSON.parse(File.read(File.join(__dir__, "..", "package.json")))
+  package = JSON.parse(File.read(File.join(__dir__, "..", "..", "package.json")))
   package["embrace"]["iosVersion"]
 end
 
