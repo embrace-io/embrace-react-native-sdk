@@ -31,6 +31,11 @@ if [[ $name == *"expo"* ]]; then
   is_expo=true
 fi
 
+# SPM only links against dynamic frameworks, static drops consumer-only Swift symbols
+if [ -n "${EMBRACE_USE_SPM:-}" ]; then
+  export USE_FRAMEWORKS=dynamic
+fi
+
 # RUNNER_TEMP is set by github runners: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
 # add a default in case we're not running in CI
 apps_directory="${RUNNER_TEMP:-/tmp}/rn-apps"
@@ -80,7 +85,7 @@ else
 
   echo "Installing pods for $name"
   pushd $app_path/ios
-  USE_FRAMEWORKS=dynamic pod install
+  pod install
   popd
 
   # Browserstack will re-sign the .ipa before running it on their test devices so produce an unsigned one
