@@ -30,10 +30,10 @@
     "ios:test:otlp": "npx lerna run ios:test --scope=@embrace-io/react-native-otlp"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
-    "@babel/preset-react": "^7.24.7",
-    "@babel/preset-typescript": "^7.24.7",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/preset-react": "^8.0.1",
+    "@babel/preset-typescript": "^8.0.1",
     "@dotenvx/dotenvx": "^2.1.5",
     "@eslint/js": "^10.0.0",
     "@react-native/babel-preset": "^0.86.0",
