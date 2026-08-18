@@ -35,8 +35,17 @@ end
 
 # Pinned in the same package.json the podspec reads, so the app and the pod can't disagree
 def embrace_spm_version
-  package = JSON.parse(File.read(File.join(__dir__, "..", "..", "package.json")))
-  package["embrace"]["iosVersion"]
+  path = File.expand_path("../../package.json", __dir__)
+
+  version = begin
+    JSON.parse(File.read(path)).dig("embrace", "iosVersion")
+  rescue Errno::ENOENT, JSON::ParserError => e
+    raise "[Embrace/SPM] couldn't read the Embrace iOS SDK version from #{path}: #{e.message}"
+  end
+
+  raise "[Embrace/SPM] no embrace.iosVersion in #{path}" if version.to_s.empty?
+
+  version
 end
 
 def embrace_spm_requirement
