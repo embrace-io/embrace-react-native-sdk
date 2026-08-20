@@ -14,13 +14,15 @@ require "json"
 #
 #   require Pod::Executable.execute_command('node', ['-p',
 #     'require.resolve(
-#       "@embrace-io/react-native/ios/scripts/embrace_spm.rb",
+#       "@embrace-io/react-native/ios/scripts/embrace_post_install.rb",
 #       {paths: [process.argv[1]]},
 #     )', __dir__]).strip
 #
 #   post_install do |installer|
-#     embrace_spm_app_dependency(installer)
+#     embrace_post_install(installer)
 #   end
+#
+# Call it unconditionally: with EMBRACE_USE_SPM unset it removes what an earlier run added.
 
 EMBRACE_SPM_URL = "https://github.com/embrace-io/embrace-apple-sdk.git".freeze
 EMBRACE_SPM_PRODUCT = "EmbraceIO".freeze
@@ -30,7 +32,7 @@ def embrace_spm_log(msg)
 end
 
 def embrace_spm_enabled?
-  %w[1 true yes].include?(ENV["EMBRACE_USE_SPM"].to_s.downcase)
+  ENV["EMBRACE_USE_SPM"] == "1"
 end
 
 # Pinned in the same package.json the podspec reads, so the app and the pod can't disagree
@@ -140,7 +142,7 @@ def embrace_spm_remove(project, targets)
   changed
 end
 
-def embrace_spm_app_dependency(installer)
+def embrace_post_install(installer)
   installer.aggregate_targets.each do |aggregate_target|
     project = aggregate_target.user_project
     next if project.nil?

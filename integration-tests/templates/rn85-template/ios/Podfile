@@ -5,10 +5,10 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-# Resolve the Embrace SPM helper with node to allow for hoisting
+# Resolve the Embrace post_install helper with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
-    "@embrace-io/react-native/ios/scripts/embrace_spm.rb",
+    "@embrace-io/react-native/ios/scripts/embrace_post_install.rb",
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
@@ -38,7 +38,7 @@ target 'ProjectName' do
       # :ccache_enabled => true
     )
 
-    # Mirror the pods' Embrace SPM products onto the app target so Xcode embeds them
-    embrace_spm_app_dependency(installer)
+    # Adds/removes the app target's Embrace SPM dependencies based on the EMBRACE_USE_SPM flag
+    embrace_post_install(installer)
   end
 end
