@@ -1,34 +1,12 @@
 {
   "build": {
     "include": [
-      {"test-app": "expo51", "ios-mode": "cocoapods"},
-      {"test-app": "rn87", "ios-mode": "spm"},
-      {"test-app": "rn86", "ios-mode": "cocoapods"},
-      {"test-app": "rn85", "ios-mode": "cocoapods"},
-      {"test-app": "rn84", "ios-mode": "cocoapods"},
-      {"test-app": "rn83", "ios-mode": "cocoapods"},
-      {"test-app": "rn82", "ios-mode": "cocoapods"},
-      {"test-app": "rn81", "ios-mode": "cocoapods"},
-      {"test-app": "rn80", "ios-mode": "cocoapods"},
-      {"test-app": "rn79", "ios-mode": "cocoapods"},
-      {"test-app": "rn78", "ios-mode": "cocoapods"},
-      {"test-app": "rn77", "ios-mode": "cocoapods"},
-      {"test-app": "rn76", "ios-mode": "cocoapods"},
-      {"test-app": "rn75", "ios-mode": "spm"},
-      {"test-app": "rn74", "ios-mode": "cocoapods"},
-      {"test-app": "rn73", "ios-mode": "cocoapods"},
-      {"test-app": "rn72", "ios-mode": "cocoapods"},
-      {"test-app": "rn71", "ios-mode": "cocoapods"}
+      {"test-app": "rn75", "ios-mode": "spm"}
     ]
   },
   "test": {
     "include": [
-      {"test-app": "expo51", "ios-mode": "cocoapods"},
-      {"test-app": "rn87", "ios-mode": "spm"},
-      {"test-app": "rn82", "ios-mode": "cocoapods"},
-      {"test-app": "rn76", "ios-mode": "cocoapods"},
-      {"test-app": "rn75", "ios-mode": "spm"},
-      {"test-app": "rn71", "ios-mode": "cocoapods"}
+      {"test-app": "rn75", "ios-mode": "spm"}
     ]
   }
 }
