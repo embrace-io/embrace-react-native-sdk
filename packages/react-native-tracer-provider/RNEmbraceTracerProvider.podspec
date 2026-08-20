@@ -2,6 +2,7 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 embrace_ios_sdk_version = package["embrace"]["iosVersion"]
+otel_swift_version = package["embrace"]["otelSwiftVersion"]
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
 # Sourcing the Embrace iOS SDK from SPM is opt-in: EMBRACE_USE_SPM=1.
@@ -35,7 +36,7 @@ Pod::Spec.new do |s|
 
     spm_dependency(s,
       url: 'https://github.com/open-telemetry/opentelemetry-swift-core.git',
-      requirement: {kind: 'upToNextMajorVersion', minimumVersion: '2.1.1'},
+      requirement: {kind: 'upToNextMajorVersion', minimumVersion: otel_swift_version},
       products: ['OpenTelemetryApi']
     )
 

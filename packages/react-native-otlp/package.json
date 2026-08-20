@@ -33,7 +33,8 @@
   },
   "embrace": {
     "iosVersion": "6.19.0",
-    "androidVersion": "8.4.0"
+    "androidVersion": "8.4.0",
+    "otelSwiftVersion": "2.1.1"
   },
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
