@@ -8,8 +8,7 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-# Same truthy test as the podspecs, so EMBRACE_USE_SPM=0 or "" still means CocoaPods
-unless %w[1 true yes].include?(ENV['EMBRACE_USE_SPM'].to_s.downcase)
+unless ENV['EMBRACE_USE_SPM'] == '1'
   # Make KSCrash modular so Swift can import it
   pod 'KSCrash', :modular_headers => true
 end

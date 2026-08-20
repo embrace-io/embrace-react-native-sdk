@@ -6,7 +6,7 @@ otel_swift_version = package["embrace"]["otelSwiftVersion"]
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
 # Sourcing the Embrace iOS SDK from SPM is opt-in: EMBRACE_USE_SPM=1.
-embrace_use_spm = %w[1 true yes].include?(ENV['EMBRACE_USE_SPM'].to_s.downcase)
+embrace_use_spm = ENV['EMBRACE_USE_SPM'] == '1'
 
 Pod::Spec.new do |s|
   s.name = "RNEmbraceTracerProvider"

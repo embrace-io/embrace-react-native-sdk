@@ -32,7 +32,7 @@ if [[ $name == *"expo"* ]]; then
 fi
 
 # SPM only links against dynamic frameworks, static drops consumer-only Swift symbols
-if [ -n "${EMBRACE_USE_SPM:-}" ]; then
+if [ "${EMBRACE_USE_SPM:-}" = "1" ]; then
   export USE_FRAMEWORKS=dynamic
 fi
 

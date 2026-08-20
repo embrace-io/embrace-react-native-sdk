@@ -5,10 +5,11 @@ embrace_ios_sdk_version = package["embrace"]["iosVersion"]
 otel_swift_version = package["embrace"]["otelSwiftVersion"]
 # Exporters ship from opentelemetry-swift which is versioned separately
 otel_swift_exporter_version = '2.1.0'
-folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
 # Sourcing the Embrace iOS SDK from SPM is opt-in: EMBRACE_USE_SPM=1.
-embrace_use_spm = %w[1 true yes].include?(ENV['EMBRACE_USE_SPM'].to_s.downcase)
+embrace_use_spm = ENV['EMBRACE_USE_SPM'] == '1'
+
+folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
 Pod::Spec.new do |s|
   s.name = "RNEmbraceOTLP"
@@ -31,7 +32,7 @@ Pod::Spec.new do |s|
     end
 
     spm_dependency(s,
-      url: 'https://github.com/embrace-io/embrace-apple-sdk.git',
+      url: 'https://github.com/embrace-io/embrace-apple-sdk.git', 
       requirement: {kind: 'exactVersion', version: embrace_ios_sdk_version},
       products: ['EmbraceIO', 'EmbraceCrash', 'EmbraceSemantics']
     )

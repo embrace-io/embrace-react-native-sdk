@@ -4,10 +4,10 @@ SCHEME=$2
 
 # CocoaPods merges the Embrace modules into one EmbraceIO while SPM keeps them separate, so a
 # shared products dir lets one mode's leftover swiftmodule shadow the other's framework.
-case "$(echo "$EMBRACE_USE_SPM" | tr '[:upper:]' '[:lower:]')" in
-  1 | true | yes) MODE="spm" ;;
-  *) MODE="pods" ;;
-esac
+MODE="pods"
+if [ "${EMBRACE_USE_SPM:-}" = "1" ]; then
+  MODE="spm"
+fi
 # Workspace-based name, matching the paths CI's cache and upload steps reference
 DERIVED_DATA="$HOME/Library/Developer/Xcode/DerivedData/$(basename "$WORKSPACE" .xcworkspace)-$MODE"
 
