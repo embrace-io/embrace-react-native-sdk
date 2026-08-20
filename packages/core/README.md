@@ -61,6 +61,9 @@ If you are using Expo's `prebuild` system to manage your native files you can ma
 
 Refer to [EmbraceProps](./src/plugin//types.ts) for the full set properties available to configure the plugin.
 
+To source the Embrace iOS SDK from Swift Package Manager instead of CocoaPods, set the `iOSUseSPM` property. See
+[Sourcing the Embrace iOS SDK from SPM](#sourcing-the-embrace-ios-sdk-from-spm) below.
+
 The next time you run `npx expo prebuild` the native Android and iOS files should be updated with the changes required
 by the Embrace SDK. Note that there are other customizations and advanced features of the SDK such as [OTLP Export](https://embrace.io/docs/react-native/features/otlp/#initializing-in-the-native-layer)
 which will still require manual editing of native files, at the moment the config plugin only covers this initial SDK
@@ -82,6 +85,20 @@ node node_modules/@embrace-io/react-native/lib/scripts/setup/installIos.js
 ### Manually
 
 To run the native setup steps manually refer to [this section of our guide](https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually)
+
+## Sourcing the Embrace iOS SDK from SPM
+
+By default the Embrace iOS SDK is installed as a CocoaPods dependency, but can be configured to source the iOS SDK from Swift Package Manager instead. SPM mode uses React Native's `spm_dependency` helper, which requires React Native >= 0.75 and `USE_FRAMEWORKS=dynamic`.
+
+If you are using the Expo config plugin, set the `iOSUseSPM` property and add
+[expo-build-properties](https://docs.expo.dev/versions/latest/sdk/build-properties/) with `ios.useFrameworks: "dynamic"`,
+see [the plugin's README](./src/plugin/README.md#sourcing-the-embrace-ios-sdk-from-spm) for a full example.
+
+Otherwise opt in when installing pods:
+
+```shell
+EMBRACE_USE_SPM=1 USE_FRAMEWORKS=dynamic pod install
+```
 
 ## Initialize the Embrace SDK
 
