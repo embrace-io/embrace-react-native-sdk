@@ -3,7 +3,10 @@ import {
   WarningAggregator,
   withAppDelegate,
   withXcodeProject,
+  withDangerousMod,
 } from "@expo/config-plugins";
+
+import {applyEmbracePatches} from "../../scripts/util/podfile";
 
 import {
   addFile,
@@ -29,6 +32,48 @@ const exportSourcemapLine = `export SOURCEMAP_FILE="${sourceMapPath}"`;
 const embraceLegacyRunScriptPath = "EmbraceIO/run.sh";
 const embraceRunScriptPath =
   "${SRCROOT}/../node_modules/@embrace-io/react-native/ios/scripts/run.sh";
+
+// Pins the dependency manager in the Podfile so it doesn't depend on the shell environment reaching
+// `pod install`. `||=` leaves an explicit EMBRACE_USE_SPM in charge either way.
+const spmEnvBlock = `# Source the Embrace iOS SDK from SPM instead of CocoaPods.
+# SPM only links against dynamic frameworks, see https://embrace.io/docs/react-native/integration/add-embrace-sdk/
+ENV['EMBRACE_USE_SPM'] ||= '1'
+
+`;
+
+const withIosEmbracePodfile: ConfigPlugin<EmbraceProps> = (
+  expoConfig,
+  props,
+) => {
+  return withDangerousMod(expoConfig, [
+    "ios",
+    async config => {
+      const podfilePath = path.join(
+        config.modRequest.platformProjectRoot,
+        "Podfile",
+      );
+      const original = fs.readFileSync(podfilePath, "utf8");
+
+      const patch = applyEmbracePatches(original);
+
+      if (patch.error) {
+        throw new Error(patch.error);
+      }
+
+      let contents = patch.contents.replace(spmEnvBlock, "");
+
+      if (props.iOSUseSPM) {
+        contents = spmEnvBlock + contents;
+      }
+
+      if (contents !== original) {
+        fs.writeFileSync(podfilePath, contents);
+      }
+
+      return config;
+    },
+  ]);
+};
 
 const getEmbraceInitializerContents = (appId: string) => {
   return `import Foundation
@@ -289,6 +334,7 @@ const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
 
 const withIosEmbrace: ConfigPlugin<EmbraceProps> = (config, props) => {
   try {
+    config = withIosEmbracePodfile(config, props);
     config = withIosEmbraceAddInitializer(config, props);
     config = withIosEmbraceInvokeInitializer(config, props);
     config = withIosEmbraceAddBridgingHeader(config, props);
@@ -307,6 +353,7 @@ const withIosEmbrace: ConfigPlugin<EmbraceProps> = (config, props) => {
 export default withIosEmbrace;
 
 export {
+  withIosEmbracePodfile,
   withIosEmbraceAddInitializer,
   withIosEmbraceInvokeInitializer,
   withIosEmbraceAddBridgingHeader,
