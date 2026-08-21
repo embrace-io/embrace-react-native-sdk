@@ -3,7 +3,6 @@ import {
   WarningAggregator,
   withAppDelegate,
   withXcodeProject,
-  withDangerousMod,
 } from "@expo/config-plugins";
 
 import {
@@ -27,45 +26,9 @@ const rnBundleScript = "react-native-xcode.sh";
 const sourceMapPath =
   "$CONFIGURATION_BUILD_DIR/embrace-assets/main.jsbundle.map";
 const exportSourcemapLine = `export SOURCEMAP_FILE="${sourceMapPath}"`;
-const ksCrashConfig = `pod 'KSCrash', :modular_headers => true`;
 const embraceLegacyRunScriptPath = "EmbraceIO/run.sh";
 const embraceRunScriptPath =
   "${SRCROOT}/../node_modules/@embrace-io/react-native/ios/scripts/run.sh";
-
-const withIosEmbraceAddKSCrashPod: ConfigPlugin = expoConfig => {
-  return withDangerousMod(expoConfig, [
-    "ios",
-    async config => {
-      const podfilePath = path.join(
-        config.modRequest.platformProjectRoot,
-        "Podfile",
-      );
-      const contents = fs.readFileSync(podfilePath, "utf8");
-
-      // do nothing if already present
-      if (contents.includes(ksCrashConfig)) {
-        return config;
-      }
-
-      // Find first "target '...' do"
-      const targetRe = /^\s*target\s+'[^']+'\s+do/m;
-      const match = contents.match(targetRe);
-      if (!match || match.index == null) {
-        throw new Error("Could not find a `target '...' do` block in Podfile.");
-      }
-
-      const insertAt = match.index;
-      const before = contents.slice(0, insertAt).replace(/\s*$/, "\n");
-      const after = contents.slice(insertAt);
-
-      const comment = "# [Embrace] Make KSCrash modular so Swift can import it";
-      const injected = `${before}${comment} \n${ksCrashConfig}\n\n${after}`;
-
-      fs.writeFileSync(podfilePath, injected);
-      return config;
-    },
-  ]);
-};
 
 const getEmbraceInitializerContents = (appId: string) => {
   return `import Foundation
@@ -326,7 +289,6 @@ const withIosEmbraceAddUploadPhase: ConfigPlugin<EmbraceProps> = (
 
 const withIosEmbrace: ConfigPlugin<EmbraceProps> = (config, props) => {
   try {
-    config = withIosEmbraceAddKSCrashPod(config);
     config = withIosEmbraceAddInitializer(config, props);
     config = withIosEmbraceInvokeInitializer(config, props);
     config = withIosEmbraceAddBridgingHeader(config, props);
