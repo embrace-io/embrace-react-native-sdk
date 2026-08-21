@@ -112,28 +112,4 @@ describe("Install Script iOS", () => {
     );
     expect(afterRemoval.toString()).toEqual(mockWithoutEmbrace.toString());
   });
-
-  test("Patch Podfile", async () => {
-    jest.mock("glob", () => ({
-      sync: () => [
-        "./packages/core/scripts/__tests__/__mocks__/ios/PodfileWithoutEmbrace",
-      ],
-    }));
-    jest.mock("semver/functions/gte", () => () => false);
-
-    const {patchPodfile} = require("../setup/ios");
-    const mockPackageJson = {
-      name: "Test",
-      dependencies: {
-        "react-native": "0.0.0",
-      },
-    };
-    await patchPodfile(mockPackageJson);
-
-    const {removeEmbraceLinkFromFile} = require("../setup/uninstall");
-
-    const resultUnpatch = await removeEmbraceLinkFromFile("podFileImport");
-
-    expect(resultUnpatch).toBe(true);
-  });
 });

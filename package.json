@@ -42,7 +42,6 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.11",
     "@types/react-native": "^0.60.2",
-    "@types/semver": "^7.1.0",
     "@yarnpkg/types": "^4.0.0",
     "babel-jest": "^30.0.4",
     "eslint": "^10.5.0",
