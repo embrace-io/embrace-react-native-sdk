@@ -1,7 +1,7 @@
 import Wizard, {Step} from "../util/wizard";
+import {EMBRACE_BLOCKS} from "../util/podfile";
 import {
   BUNDLE_PHASE_REGEXP,
-  EMBR_KSCRASH_MODULAR_HEADER_POD,
   EMBR_RUN_SCRIPT,
   embracePlistPatchable,
   EXPORT_SOURCEMAP_RN_VAR,
@@ -85,21 +85,16 @@ const UNINSTALL_ANDROID_GRADLE_PLUGIN_APPLY: IUnlinkEmbraceCode = {
   docUrl: "",
 };
 
-// Only applies to projects patched by a version that still added this pod
-const UNINSTALL_IOS_KSCRASH_PODFILE: IUnlinkEmbraceCode = {
-  stepName: "Removing KSCrash pod from Podfile",
+const UNINSTALL_IOS_PODFILE: IUnlinkEmbraceCode = {
+  stepName: "Removing Embrace code in Podfile",
   fileName: "Podfile",
-  textsToDelete: [
-    {
-      ITextToDelete: `${EMBR_KSCRASH_MODULAR_HEADER_POD}\n`,
-    },
-  ],
+  textsToDelete: EMBRACE_BLOCKS.map(ITextToDelete => ({ITextToDelete})),
   findFileFunction: getPodFile,
   docUrl: "",
 };
 
 type UNLINK_EMBRACE_CODE =
-  "gradlePluginDependency" | "gradlePluginApply" | "ksCrashPodImport";
+  "gradlePluginDependency" | "gradlePluginApply" | "podfilePatches";
 
 type SupportedPatches = {
   [key in UNLINK_EMBRACE_CODE]: IUnlinkEmbraceCode;
@@ -108,7 +103,7 @@ type SupportedPatches = {
 const UNLINK_EMBRACE_CODE: SupportedPatches = {
   gradlePluginDependency: UNINSTALL_ANDROID_GRADLE_PLUGIN_DEPENDENCY,
   gradlePluginApply: UNINSTALL_ANDROID_GRADLE_PLUGIN_APPLY,
-  ksCrashPodImport: UNINSTALL_IOS_KSCRASH_PODFILE,
+  podfilePatches: UNINSTALL_IOS_PODFILE,
 };
 
 export const removeEmbraceLinkFromFile = (
@@ -129,17 +124,14 @@ export const removeEmbraceLinkFromFile = (
     return false;
   }
 
-  const result = textsToDelete.map(item => {
-    const {ITextToDelete} = item;
-    LOGGER.log(`Deleting ${ITextToDelete} from ${fileName}`);
-    file.deleteLine(ITextToDelete);
+  const original = file.contents;
 
-    return ITextToDelete;
-  });
+  textsToDelete.forEach(({ITextToDelete}) => file.deleteLine(ITextToDelete));
 
-  const hasToPatch = result.some(item => item);
+  const hasToPatch = file.contents !== original;
 
   if (hasToPatch) {
+    LOGGER.log(`Removing Embrace code from ${fileName}`);
     file.patch();
   }
 

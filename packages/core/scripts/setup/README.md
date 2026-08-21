@@ -12,9 +12,10 @@ That `run` function will register `iosAppID`, `apiToken` and `iosProjectFolderNa
 
 The setup script for iOS includes:
 - `addEmbraceInitializerSwift`: Adds `EmbraceInitializer.swift` to the project which includes the code for setting up and starting the iOS SDK.
-- `iosInitializeEmbrace`: It patches the AppDelegate m|mm or swift to call the start method from `EmbraceInitializer.swift`.
-- `patchXcodeBundlePhase`: It patches the `Bundle React Native code and images` created by React Native, adding a line to export the sourcemap to a desired path.
-- `addUploadBuildPhase`: It adds the `Upload Debug Symbols to Embrace` to the build phase.
+- `iosInitializeEmbrace`: Patches the AppDelegate m|mm or swift to call the start method from `EmbraceInitializer.swift`.
+- `patchPodfile`: Patches the Podfile, adding the `embrace_post_install` hook that manages the Embrace SPM dependency.
+- `patchXcodeBundlePhase`: Patches the `Bundle React Native code and images` created by React Native, adding a line to export the sourcemap to a desired path.
+- `addUploadBuildPhase`: Adds the `Upload Debug Symbols to Embrace` to the build phase.
 
 ## Android
 

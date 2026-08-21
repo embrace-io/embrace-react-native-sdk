@@ -1,3 +1,5 @@
+import Wizard, {type Step} from "../util/wizard";
+
 const fs = require("fs");
 
 jest.useFakeTimers();
@@ -13,14 +15,35 @@ beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
 
-const copyMock = (from: string, to: string) => {
-  const dir = "./packages/core/scripts/__tests__/tmp/";
+const TMP = "./packages/core/scripts/__tests__/tmp";
+const MOCKS = "./packages/core/scripts/__tests__/__mocks__/ios";
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
+const ensureTmp = () => {
+  if (!fs.existsSync(TMP)) {
+    fs.mkdirSync(TMP);
   }
+};
 
-  fs.copyFile(from, to, () => {});
+const copyMock = (from: string, to: string) => {
+  ensureTmp();
+
+  fs.copyFileSync(from, to);
+};
+
+const writeTmp = (name: string, contents: string) => {
+  ensureTmp();
+
+  fs.writeFileSync(`${TMP}/${name}`, contents);
+};
+
+const readTmp = (name: string) => fs.readFileSync(`${TMP}/${name}`).toString();
+
+// Runs a step the way the wizard does, so the step's own wiring is covered too
+const runStep = (step: Step) => {
+  const wizard = new Wizard();
+  wizard.registerStep(step);
+
+  return wizard.processSteps();
 };
 
 describe("Install Script iOS", () => {
@@ -111,5 +134,46 @@ describe("Install Script iOS", () => {
       "./packages/core/scripts/__tests__/__mocks__/ios/AppDelegateWithoutEmbrace.swift",
     );
     expect(afterRemoval.toString()).toEqual(mockWithoutEmbrace.toString());
+  });
+
+  test("Patch Podfile", async () => {
+    copyMock(`${MOCKS}/PodfileWithoutEmbrace`, `${TMP}/PatchPodfileEmbrace`);
+
+    jest.mock("glob", () => ({
+      sync: () => ["./packages/core/scripts/__tests__/tmp/PatchPodfileEmbrace"],
+    }));
+
+    const {patchPodfile} = require("../setup/ios");
+
+    await runStep(patchPodfile);
+
+    const expected = fs.readFileSync(`${MOCKS}/PodfileWithEmbrace`).toString();
+    expect(readTmp("PatchPodfileEmbrace")).toEqual(expected);
+
+    // Re-running the wizard shouldn't duplicate any of it
+    await runStep(patchPodfile);
+
+    expect(readTmp("PatchPodfileEmbrace")).toEqual(expected);
+  });
+
+  test("Patch Podfile that has nowhere to patch", async () => {
+    const contents = "source 'https://cdn.cocoapods.org/'\n";
+    writeTmp("PatchPodfileNoAnchors", contents);
+
+    jest.mock("glob", () => ({
+      sync: () => [
+        "./packages/core/scripts/__tests__/tmp/PatchPodfileNoAnchors",
+      ],
+    }));
+
+    const {patchPodfile} = require("../setup/ios");
+
+    await runStep(patchPodfile);
+
+    // The wizard reports and moves on rather than throwing, and leaves the Podfile alone
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining("Could not patch the Podfile"),
+    );
+    expect(readTmp("PatchPodfileNoAnchors")).toEqual(contents);
   });
 });
