@@ -1,34 +1,34 @@
 {
   "build": {
     "include": [
-      {"test-app": "expo51"},
-      {"test-app": "rn87"},
-      {"test-app": "rn86"},
-      {"test-app": "rn85"},
-      {"test-app": "rn84"},
-      {"test-app": "rn83"},
-      {"test-app": "rn82"},
-      {"test-app": "rn81"},
-      {"test-app": "rn80"},
-      {"test-app": "rn79"},
-      {"test-app": "rn78"},
-      {"test-app": "rn77"},
-      {"test-app": "rn76"},
-      {"test-app": "rn75"},
-      {"test-app": "rn74"},
-      {"test-app": "rn73"},
-      {"test-app": "rn72"},
-      {"test-app": "rn71"}
+      {"test-app": "expo51", "ios-mode": "cocoapods"},
+      {"test-app": "rn87", "ios-mode": "spm"},
+      {"test-app": "rn86", "ios-mode": "cocoapods"},
+      {"test-app": "rn85", "ios-mode": "cocoapods"},
+      {"test-app": "rn84", "ios-mode": "cocoapods"},
+      {"test-app": "rn83", "ios-mode": "cocoapods"},
+      {"test-app": "rn82", "ios-mode": "cocoapods"},
+      {"test-app": "rn81", "ios-mode": "cocoapods"},
+      {"test-app": "rn80", "ios-mode": "cocoapods"},
+      {"test-app": "rn79", "ios-mode": "cocoapods"},
+      {"test-app": "rn78", "ios-mode": "cocoapods"},
+      {"test-app": "rn77", "ios-mode": "cocoapods"},
+      {"test-app": "rn76", "ios-mode": "cocoapods"},
+      {"test-app": "rn75", "ios-mode": "spm"},
+      {"test-app": "rn74", "ios-mode": "cocoapods"},
+      {"test-app": "rn73", "ios-mode": "cocoapods"},
+      {"test-app": "rn72", "ios-mode": "cocoapods"},
+      {"test-app": "rn71", "ios-mode": "cocoapods"}
     ]
   },
   "test": {
     "include": [
-      {"test-app": "expo51"},
-      {"test-app": "rn87"},
-      {"test-app": "rn82"},
-      {"test-app": "rn76"},
-      {"test-app": "rn75"},
-      {"test-app": "rn71"}
+      {"test-app": "expo51", "ios-mode": "cocoapods"},
+      {"test-app": "rn87", "ios-mode": "spm"},
+      {"test-app": "rn82", "ios-mode": "cocoapods"},
+      {"test-app": "rn76", "ios-mode": "cocoapods"},
+      {"test-app": "rn75", "ios-mode": "spm"},
+      {"test-app": "rn71", "ios-mode": "cocoapods"}
     ]
   }
 }

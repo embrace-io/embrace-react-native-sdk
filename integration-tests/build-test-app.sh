@@ -31,6 +31,11 @@ if [[ $name == *"expo"* ]]; then
   is_expo=true
 fi
 
+# SPM only links against dynamic frameworks, static drops consumer-only Swift symbols
+if [ "${EMBRACE_USE_SPM:-}" = "1" ]; then
+  export USE_FRAMEWORKS=dynamic
+fi
+
 # RUNNER_TEMP is set by github runners: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
 # add a default in case we're not running in CI
 apps_directory="${RUNNER_TEMP:-/tmp}/rn-apps"

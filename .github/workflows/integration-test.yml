@@ -153,6 +153,8 @@ jobs:
           TOOLCHAINS: com.apple.dt.toolchain.XcodeDefault
           TEST_APP: ${{ matrix.test-app }}
           RUN_ID: ${{ github.run_id }}
+          # Source the Embrace iOS SDK from SPM instead of the CocoaPods pod, per .github/matrices
+          EMBRACE_USE_SPM: ${{ matrix.ios-mode == 'spm' && '1' || '' }}
         run: ./build-test-app.sh "$TEST_APP" ios "namespace-$TEST_APP-ios-$RUN_ID"
 
       - name: Upload app artifact
@@ -263,6 +265,7 @@ jobs:
           MOCK_API_NAMESPACE: namespace-${{ matrix.test-app }}-ios-${{ github.run_id }}
           CI_RUN_ID: ${{ github.ref_name }}.${{ github.sha }}
           CI_GIT_REF: ${{ github.ref_name }}
+          EMBRACE_USE_SPM: ${{ matrix.ios-mode == 'spm' && '1' || '' }}
 
       # Upload test runner logs and payloads for failed runs
       - name: Upload diagnostics

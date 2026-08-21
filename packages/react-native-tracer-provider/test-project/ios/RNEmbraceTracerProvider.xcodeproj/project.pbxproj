@@ -184,9 +184,6 @@
 				Base,
 			);
 			mainGroup = 6DED2F422CE514B200A9735A;
-			packageReferences = (
-				6D1FCC2A2E5D356000F87549 /* XCRemoteSwiftPackageReference "opentelemetry-swift" */,
-			);
 			productRefGroup = 6DED2F4D2CE514B200A9735A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -687,17 +684,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		6D1FCC2A2E5D356000F87549 /* XCRemoteSwiftPackageReference "opentelemetry-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/open-telemetry/opentelemetry-swift";
-			requirement = {
-				kind = exactVersion;
-				version = 2.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 6DED2F432CE514B200A9735A /* Project object */;
 }
