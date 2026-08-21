@@ -98,6 +98,7 @@ const UNINSTALL_IOS_PODFILE: IUnlinkEmbraceCode = {
   docUrl: "",
 };
 
+// Only applies to projects patched by a version that still added this pod
 const UNINSTALL_IOS_KSCRASH_PODFILE: IUnlinkEmbraceCode = {
   stepName: "Removing KSCrash pod from Podfile",
   fileName: "Podfile",

@@ -32,7 +32,7 @@ const copyMock = (from: string, to: string) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
-  fs.copyFile(from, to, () => {});
+  fs.copyFileSync(from, to);
 };
 
 describe("Uninstall Script iOS", () => {
@@ -71,8 +71,14 @@ describe("Uninstall Script iOS", () => {
   });
 
   test("Remove KSCrash from Podfile", async () => {
+    const podfile = "./packages/core/scripts/__tests__/tmp/PodfileKSCrash";
+    copyMock(
+      "./packages/core/scripts/__tests__/__mocks__/ios/Podfile",
+      podfile,
+    );
+
     jest.mock("glob", () => ({
-      sync: () => ["./packages/core/scripts/__tests__/__mocks__/ios/Podfile"],
+      sync: () => ["./packages/core/scripts/__tests__/tmp/PodfileKSCrash"],
     }));
 
     jest.mock("semver/functions/gte", () => () => false);
@@ -87,9 +93,7 @@ describe("Uninstall Script iOS", () => {
 
     const shouldUnpatch = await removeEmbraceLinkFromFile("ksCrashPodImport");
     expect(shouldUnpatch).toBe(true);
-
-    const {patchPodFileWithKSCrash} = require("../setup/ios");
-    await patchPodFileWithKSCrash();
+    expect(fs.readFileSync(podfile).toString()).not.toContain("KSCrash");
   });
 
   test("Remove Embrace From Xcode", async () => {
