@@ -1614,7 +1614,6 @@ __metadata:
     expo: "npm:^56.0.9"
     glob: "npm:^13.0.6"
     inquirer: "npm:^12.0.0"
-    semver: "npm:^7.1.3"
     typescript: "npm:^5.6.3"
     xcode: "npm:^3.0.1"
   peerDependencies:
@@ -4308,13 +4307,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7.1.0":
-  version: 7.7.0
-  resolution: "@types/semver@npm:7.7.0"
-  checksum: 10c0/6b5f65f647474338abbd6ee91a6bbab434662ddb8fe39464edcbcfc96484d388baad9eb506dff217b6fc1727a88894930eb1f308617161ac0f376fe06be4e1ee
-  languageName: node
-  linkType: hard
-
 "@types/stack-utils@npm:^2.0.3":
   version: 2.0.3
   resolution: "@types/stack-utils@npm:2.0.3"
@@ -6596,7 +6588,6 @@ __metadata:
     "@types/jest": "npm:^30.0.0"
     "@types/node": "npm:^24.0.11"
     "@types/react-native": "npm:^0.60.2"
-    "@types/semver": "npm:^7.1.0"
     "@yarnpkg/types": "npm:^4.0.0"
     babel-jest: "npm:^30.0.4"
     eslint: "npm:^10.5.0"

@@ -2,10 +2,8 @@
 import Wizard from "../util/wizard";
 import {
   BUNDLE_PHASE_REGEXP,
-  EMBR_NATIVE_POD,
   EMBR_RUN_SCRIPT,
   EXPORT_SOURCEMAP_RN_VAR,
-  podfilePatchable,
   xcodePatchable,
   findNameWithCaseSensitiveFromPath,
   MKDIR_SOURCEMAP_DIR,
@@ -15,18 +13,10 @@ import {
 import EmbraceLogger from "../../src/utils/EmbraceLogger";
 
 import patch from "./patches/patch";
-import {
-  apiToken,
-  iosAppID,
-  iosProjectFolderName,
-  IPackageJson,
-  packageJSON,
-} from "./common";
+import {apiToken, iosAppID, iosProjectFolderName, packageJSON} from "./common";
 
 const path = require("path");
 const fs = require("fs");
-
-const semverGte = require("semver/functions/gte");
 
 const LOGGER = new EmbraceLogger(console);
 
@@ -66,45 +56,6 @@ const iosInitializeEmbrace = {
   },
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
-};
-
-const patchPodfile = (json: IPackageJson) => {
-  const rnVersion = (json.dependencies || {})["react-native"];
-
-  if (!rnVersion) {
-    throw Error("react-native dependency was not found");
-  }
-
-  const rnVersionSanitized = rnVersion.replace("^", "");
-
-  // If 6.0.0, autolink should have linked the Pod.
-  if (semverGte("6.0.0", rnVersionSanitized)) {
-    LOGGER.log(
-      "Skipping patching Podfile since react-native is on an autolink supported version",
-    );
-
-    return;
-  }
-
-  return podfilePatchable().then(podfile => {
-    if (podfile.hasLine(EMBR_NATIVE_POD)) {
-      LOGGER.warn("Already has 'EmbraceIO' pod");
-      return;
-    }
-
-    podfile.addBefore("use_react_native", `${EMBR_NATIVE_POD}\n`);
-
-    return podfile.patch();
-  });
-};
-
-const iOSPodfilePatch = {
-  name: "Podfile patch (Only React Native v < 0.6)",
-  run: async (wizard: Wizard): Promise<any> => {
-    return wizard.fieldValue(packageJSON).then(patchPodfile);
-  },
-  docURL:
-    "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#native-modules",
 };
 
 const patchXcodeBundlePhase = {
@@ -241,10 +192,8 @@ import EmbraceIO
 
 export {
   tryToPatchAppDelegate,
-  patchPodfile,
   getIOSProjectName,
   iosInitializeEmbrace,
-  iOSPodfilePatch,
   patchXcodeBundlePhase,
   addUploadBuildPhase,
   addEmbraceInitializerSwift,

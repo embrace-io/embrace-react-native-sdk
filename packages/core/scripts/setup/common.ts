@@ -1,10 +1,5 @@
 import Asker, {Answer} from "../util/asker";
 
-interface IPackageJson {
-  name: string;
-  dependencies: Record<string, string>;
-}
-
 enum Platform {
   Android = "Android",
   IOS = "iOS",
@@ -87,7 +82,6 @@ const packageJSON = {
 };
 
 export {
-  IPackageJson,
   Platform,
   iosAppID,
   androidAppID,

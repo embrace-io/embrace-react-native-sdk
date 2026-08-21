@@ -2,7 +2,6 @@ import Wizard, {Step} from "../util/wizard";
 import {
   BUNDLE_PHASE_REGEXP,
   EMBR_KSCRASH_MODULAR_HEADER_POD,
-  EMBR_NATIVE_POD,
   EMBR_RUN_SCRIPT,
   embracePlistPatchable,
   EXPORT_SOURCEMAP_RN_VAR,
@@ -86,18 +85,6 @@ const UNINSTALL_ANDROID_GRADLE_PLUGIN_APPLY: IUnlinkEmbraceCode = {
   docUrl: "",
 };
 
-const UNINSTALL_IOS_PODFILE: IUnlinkEmbraceCode = {
-  stepName: "Removing Embrace code in Podfile",
-  fileName: "Podfile",
-  textsToDelete: [
-    {
-      ITextToDelete: `${EMBR_NATIVE_POD}\n`,
-    },
-  ],
-  findFileFunction: getPodFile,
-  docUrl: "",
-};
-
 // Only applies to projects patched by a version that still added this pod
 const UNINSTALL_IOS_KSCRASH_PODFILE: IUnlinkEmbraceCode = {
   stepName: "Removing KSCrash pod from Podfile",
@@ -112,10 +99,7 @@ const UNINSTALL_IOS_KSCRASH_PODFILE: IUnlinkEmbraceCode = {
 };
 
 type UNLINK_EMBRACE_CODE =
-  | "gradlePluginDependency"
-  | "gradlePluginApply"
-  | "podFileImport"
-  | "ksCrashPodImport";
+  "gradlePluginDependency" | "gradlePluginApply" | "ksCrashPodImport";
 
 type SupportedPatches = {
   [key in UNLINK_EMBRACE_CODE]: IUnlinkEmbraceCode;
@@ -124,7 +108,6 @@ type SupportedPatches = {
 const UNLINK_EMBRACE_CODE: SupportedPatches = {
   gradlePluginDependency: UNINSTALL_ANDROID_GRADLE_PLUGIN_DEPENDENCY,
   gradlePluginApply: UNINSTALL_ANDROID_GRADLE_PLUGIN_APPLY,
-  podFileImport: UNINSTALL_IOS_PODFILE,
   ksCrashPodImport: UNINSTALL_IOS_KSCRASH_PODFILE,
 };
 

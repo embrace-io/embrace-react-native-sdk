@@ -40,36 +40,6 @@ describe("Uninstall Script iOS", () => {
     .spyOn(Wizard.prototype, "fieldValueList")
     .mockResolvedValueOnce(["t3st4", {name: "io.embrace.testapp"}]);
 
-  test("Remove Embrace From Podfile", async () => {
-    jest.mock("glob", () => ({
-      sync: () => ["./packages/core/scripts/__tests__/__mocks__/ios/Podfile"],
-    }));
-
-    jest.mock("semver/functions/gte", () => () => false);
-    jest.mock(
-      "../../../../../../package.json",
-      () => ({
-        name: "test",
-      }),
-      {virtual: true},
-    );
-    const {removeEmbraceLinkFromFile} = require("../setup/uninstall");
-
-    const resultUnpatch = await removeEmbraceLinkFromFile("podFileImport");
-
-    expect(resultUnpatch).toBe(true);
-
-    const {patchPodfile} = require("../setup/ios");
-    const mockPackageJson = {
-      name: "Test",
-      dependencies: {
-        "react-native": "0.0.0",
-      },
-    };
-
-    await patchPodfile(mockPackageJson);
-  });
-
   test("Remove KSCrash from Podfile", async () => {
     const podfile = "./packages/core/scripts/__tests__/tmp/PodfileKSCrash";
     copyMock(
@@ -81,7 +51,6 @@ describe("Uninstall Script iOS", () => {
       sync: () => ["./packages/core/scripts/__tests__/tmp/PodfileKSCrash"],
     }));
 
-    jest.mock("semver/functions/gte", () => () => false);
     jest.mock(
       "../../../../../../package.json",
       () => ({
