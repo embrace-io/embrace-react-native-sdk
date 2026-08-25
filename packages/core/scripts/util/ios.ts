@@ -18,12 +18,6 @@ const UPLOAD_SYMBOLS_PHASE = "Embrace Symbol Uploads";
 const EMBRACE_INIT_OBJECTIVEC = "[EmbraceInitializer start];";
 const EMBR_RUN_SCRIPT =
   '"${SRCROOT}/../node_modules/@embrace-io/react-native/ios/scripts/run.sh"';
-// No longer added to Podfiles, KSCrash sets DEFINES_MODULE itself as of 2.5.0.
-// Kept so uninstall can still remove it from projects patched by older versions.
-const EMBR_KSCRASH_MODULAR_HEADER_POD = `
-# [Embrace] Make KSCrash modular so Swift can import it 
-pod 'KSCrash', :modular_headers => true
-`;
 const BUNDLE_PHASE_REGEXP =
   /^.*?\/(packager|scripts)\/react-native-xcode\.sh\s*/m;
 const MKDIR_SOURCEMAP_DIR =
@@ -449,7 +443,6 @@ const findNameWithCaseSensitiveFromPath = (path: string, name: string) => {
 
 export {
   type ProjectFileType,
-  EMBR_KSCRASH_MODULAR_HEADER_POD,
   BUNDLE_PHASE_REGEXP,
   MKDIR_SOURCEMAP_DIR,
   EXPORT_SOURCEMAP_RN_VAR,

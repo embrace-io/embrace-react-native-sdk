@@ -34,7 +34,7 @@
         }
       ],
       [
-        "@embrace-io/react-native",
+        "@embrace-io/react-native/lib/app.plugin.js",
         {
           "androidAppId": "REPLACE_ME",
           "apiToken": "REPLACE_ME",

@@ -26,6 +26,14 @@ type EmbraceProps = {
    * for more details on why this is required.
    */
   productModuleName?: string;
+
+  /**
+   * iOSUseSPM sources the Embrace iOS SDK from Swift Package Manager instead of CocoaPods.
+   *
+   * Requires React Native 0.75 or later, and requires your app to be built with dynamic frameworks.
+   * Add the expo-build-properties plugin with `ios.useFrameworks: "dynamic"` alongside this one.
+   */
+  iOSUseSPM?: boolean;
 };
 
 export {EmbraceProps};

@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- install steps match Wizard Step.run (Promise<any>) */
 import Wizard from "../util/wizard";
+import {applyEmbracePatches} from "../util/podfile";
 import {
   BUNDLE_PHASE_REGEXP,
   EMBR_RUN_SCRIPT,
   EXPORT_SOURCEMAP_RN_VAR,
+  podfilePatchable,
   xcodePatchable,
   findNameWithCaseSensitiveFromPath,
   MKDIR_SOURCEMAP_DIR,
@@ -56,6 +58,32 @@ const iosInitializeEmbrace = {
   },
   docURL:
     "https://embrace.io/docs/react-native/integration/add-embrace-sdk/?platform=ios#manually",
+};
+
+const patchPodfile = {
+  name: "Update Podfile",
+  run: async (_wizard: Wizard): Promise<any> => {
+    return podfilePatchable().then(podfile => {
+      const original = podfile.contents;
+      const {contents, error} = applyEmbracePatches(original);
+
+      if (error) {
+        LOGGER.error(error);
+        return;
+      }
+
+      if (contents === original) {
+        LOGGER.warn("Already has the Embrace Podfile patches");
+        return;
+      }
+
+      podfile.contents = contents;
+
+      return podfile.patch();
+    });
+  },
+  docURL:
+    "https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manual-setup---ios",
 };
 
 const patchXcodeBundlePhase = {
@@ -194,6 +222,7 @@ export {
   tryToPatchAppDelegate,
   getIOSProjectName,
   iosInitializeEmbrace,
+  patchPodfile,
   patchXcodeBundlePhase,
   addUploadBuildPhase,
   addEmbraceInitializerSwift,

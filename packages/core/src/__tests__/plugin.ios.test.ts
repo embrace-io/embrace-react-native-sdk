@@ -6,7 +6,9 @@ import {
   withIosEmbraceAddInitializer,
   withIosEmbraceAddUploadPhase,
   withIosEmbraceInvokeInitializer,
+  withIosEmbracePodfile,
 } from "../plugin/withIosEmbrace";
+import {type EmbraceProps} from "../plugin/types";
 
 import {getMockModConfig, readMockFile} from "./helpers/pluginTestUtils";
 
@@ -18,6 +20,22 @@ const xcode = require("xcode");
 
 const mockWithXcodeProject = jest.fn();
 const mockWithAppDelegate = jest.fn();
+const mockWithDangerousMod = jest.fn();
+
+const setupTempPodfile = (contents: string) => {
+  // the Podfile gets overwritten in place so write it to a tmp dir first
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "plugin-test-"));
+  const podfilePath = path.join(tmp, "Podfile");
+  fs.writeFileSync(podfilePath, contents);
+
+  return {tmp, podfilePath};
+};
+
+const embraceProps: EmbraceProps = {
+  androidAppId: "android123",
+  apiToken: "apiToken456",
+  iOSAppId: "ios789",
+};
 
 const setupTempProjectFile = (
   originalFileName: string,
@@ -56,6 +74,13 @@ jest.mock("@expo/config-plugins", () => {
       config: ExpoConfig,
       modFunc: (cfg: ExportedConfigWithProps) => ExportedConfigWithProps,
     ) => mockWithAppDelegate(modFunc),
+    withDangerousMod: (
+      config: ExpoConfig,
+      props: [
+        string,
+        (cfg: ExportedConfigWithProps) => ExportedConfigWithProps,
+      ],
+    ) => mockWithDangerousMod(props),
   };
 });
 
@@ -78,11 +103,7 @@ describe("Expo Config Plugin iOS", () => {
         modResults: pbx,
       });
 
-      withIosEmbraceAddInitializer(mockConfig, {
-        androidAppId: "",
-        apiToken: "",
-        iOSAppId: "ios789",
-      });
+      withIosEmbraceAddInitializer(mockConfig, embraceProps);
 
       expect(mockWithXcodeProject).toHaveBeenCalled();
       const modFunc = mockWithXcodeProject.mock.lastCall[0];
@@ -134,11 +155,7 @@ describe("Expo Config Plugin iOS", () => {
         contents: beforeEmbrace,
       });
 
-      withIosEmbraceInvokeInitializer(mockConfig, {
-        androidAppId: "",
-        apiToken: "",
-        iOSAppId: "",
-      });
+      withIosEmbraceInvokeInitializer(mockConfig, embraceProps);
 
       expect(mockWithAppDelegate).toHaveBeenCalled();
 
@@ -169,9 +186,7 @@ describe("Expo Config Plugin iOS", () => {
       });
 
       withIosEmbraceInvokeInitializer(mockConfig, {
-        androidAppId: "",
-        apiToken: "",
-        iOSAppId: "",
+        ...embraceProps,
         productModuleName: "MyProduct",
       });
 
@@ -201,11 +216,7 @@ describe("Expo Config Plugin iOS", () => {
         contents: beforeEmbrace,
       });
 
-      withIosEmbraceInvokeInitializer(mockConfig, {
-        androidAppId: "",
-        apiToken: "",
-        iOSAppId: "",
-      });
+      withIosEmbraceInvokeInitializer(mockConfig, embraceProps);
 
       expect(mockWithAppDelegate).toHaveBeenCalled();
 
@@ -233,11 +244,7 @@ describe("Expo Config Plugin iOS", () => {
         contents: beforeEmbrace,
       });
 
-      withIosEmbraceInvokeInitializer(mockConfig, {
-        androidAppId: "",
-        apiToken: "",
-        iOSAppId: "",
-      });
+      withIosEmbraceInvokeInitializer(mockConfig, embraceProps);
 
       expect(mockWithAppDelegate).toHaveBeenCalled();
 
@@ -270,11 +277,7 @@ describe("Expo Config Plugin iOS", () => {
         modResults: pbx,
       });
 
-      withIosEmbraceAddBridgingHeader(mockConfig, {
-        androidAppId: "",
-        apiToken: "",
-        iOSAppId: "ios789",
-      });
+      withIosEmbraceAddBridgingHeader(mockConfig, embraceProps);
 
       expect(mockWithXcodeProject).toHaveBeenCalled();
       const modFunc = mockWithXcodeProject.mock.lastCall[0];
@@ -324,11 +327,7 @@ describe("Expo Config Plugin iOS", () => {
         modResults: pbx,
       });
 
-      withIosEmbraceAddBridgingHeader(mockConfig, {
-        androidAppId: "",
-        apiToken: "",
-        iOSAppId: "ios789",
-      });
+      withIosEmbraceAddBridgingHeader(mockConfig, embraceProps);
 
       expect(mockWithXcodeProject).toHaveBeenCalled();
     });
@@ -348,11 +347,7 @@ describe("Expo Config Plugin iOS", () => {
         modResults: pbx,
       });
 
-      withIosEmbraceAddUploadPhase(mockConfig, {
-        androidAppId: "",
-        apiToken: "apiToken456",
-        iOSAppId: "ios789",
-      });
+      withIosEmbraceAddUploadPhase(mockConfig, embraceProps);
 
       expect(mockWithXcodeProject).toHaveBeenCalled();
       const modFunc = mockWithXcodeProject.mock.lastCall[0];
@@ -371,6 +366,89 @@ describe("Expo Config Plugin iOS", () => {
       expect(fs.readFileSync(projectPath).toString()).toEqual(
         expectedAfterPhase,
       );
+    });
+  });
+
+  // The snippets every Podfile gets are covered by the shared transform in
+  // scripts/__tests__/util.podfile.test.ts. iOSUseSPM belongs to the plugin, so it is covered here.
+  describe("withIosEmbracePodfile", () => {
+    const runMod = async (tmp: string) => {
+      expect(mockWithDangerousMod).toHaveBeenCalled();
+      const [platform, modFunc] = mockWithDangerousMod.mock.lastCall[0];
+      expect(platform).toEqual("ios");
+
+      await modFunc(
+        getMockModConfig({platform: "ios", platformProjectRoot: tmp}),
+      );
+    };
+
+    it("sources the SDK from CocoaPods by default", async () => {
+      const {tmp, podfilePath} = setupTempPodfile(
+        readMockFile("PodfileExpoWithoutEmbrace"),
+      );
+      const expected = readMockFile("PodfileExpoWithEmbrace");
+
+      withIosEmbracePodfile(
+        getMockModConfig({platform: "ios", platformProjectRoot: tmp}),
+        embraceProps,
+      );
+      await runMod(tmp);
+
+      expect(fs.readFileSync(podfilePath).toString()).toEqual(expected);
+
+      // prebuild reuses an existing ios/ directory, so this has to be a no-op the second time
+      await runMod(tmp);
+
+      expect(fs.readFileSync(podfilePath).toString()).toEqual(expected);
+    });
+
+    it("sources the SDK from SPM when iOSUseSPM is set", async () => {
+      const {tmp, podfilePath} = setupTempPodfile(
+        readMockFile("PodfileExpoWithoutEmbrace"),
+      );
+      const expected = readMockFile("PodfileExpoWithEmbraceSPM");
+
+      withIosEmbracePodfile(
+        getMockModConfig({platform: "ios", platformProjectRoot: tmp}),
+        {...embraceProps, iOSUseSPM: true},
+      );
+      await runMod(tmp);
+
+      expect(fs.readFileSync(podfilePath).toString()).toEqual(expected);
+
+      await runMod(tmp);
+
+      expect(fs.readFileSync(podfilePath).toString()).toEqual(expected);
+    });
+
+    it("reverts to CocoaPods when iOSUseSPM is turned off", async () => {
+      const {tmp, podfilePath} = setupTempPodfile(
+        readMockFile("PodfileExpoWithEmbraceSPM"),
+      );
+
+      withIosEmbracePodfile(
+        getMockModConfig({platform: "ios", platformProjectRoot: tmp}),
+        embraceProps,
+      );
+      await runMod(tmp);
+
+      expect(fs.readFileSync(podfilePath).toString()).toEqual(
+        readMockFile("PodfileExpoWithEmbrace"),
+      );
+    });
+
+    it("fails loudly when the Podfile has nowhere to patch", async () => {
+      const {tmp} = setupTempPodfile("source 'https://cdn.cocoapods.org/'\n");
+
+      withIosEmbracePodfile(
+        getMockModConfig({platform: "ios", platformProjectRoot: tmp}),
+        embraceProps,
+      );
+
+      const [, modFunc] = mockWithDangerousMod.mock.lastCall[0];
+      await expect(
+        modFunc(getMockModConfig({platform: "ios", platformProjectRoot: tmp})),
+      ).rejects.toThrow("Could not patch the Podfile");
     });
   });
 });

@@ -14,6 +14,11 @@ import {EMBRACE_INIT_SWIFT} from "../setup/patches/patch";
 
 const fs = require("fs");
 
+// setup/uninstall requires package.json at module scope, so loading it needs this
+jest.mock("../../../../../../package.json", () => ({name: "test"}), {
+  virtual: true,
+});
+
 jest.useFakeTimers();
 
 // avoiding real logs in unit tests
@@ -27,42 +32,56 @@ beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
 
+const TMP = "./packages/core/scripts/__tests__/tmp";
+const MOCKS = "./packages/core/scripts/__tests__/__mocks__/ios";
+
 const copyMock = (from: string, to: string) => {
-  const dir = "./packages/core/scripts/__tests__/tmp/";
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
+  if (!fs.existsSync(TMP)) {
+    fs.mkdirSync(TMP);
   }
   fs.copyFileSync(from, to);
 };
+
+const readTmp = (name: string) => fs.readFileSync(`${TMP}/${name}`).toString();
 
 describe("Uninstall Script iOS", () => {
   jest
     .spyOn(Wizard.prototype, "fieldValueList")
     .mockResolvedValueOnce(["t3st4", {name: "io.embrace.testapp"}]);
 
-  test("Remove KSCrash from Podfile", async () => {
-    const podfile = "./packages/core/scripts/__tests__/tmp/PodfileKSCrash";
-    copyMock(
-      "./packages/core/scripts/__tests__/__mocks__/ios/Podfile",
-      podfile,
-    );
+  test("Remove the Embrace patches from Podfile", async () => {
+    copyMock(`${MOCKS}/PodfileWithEmbrace`, `${TMP}/UnpatchPodfilePatches`);
 
     jest.mock("glob", () => ({
-      sync: () => ["./packages/core/scripts/__tests__/tmp/PodfileKSCrash"],
+      sync: () => [
+        "./packages/core/scripts/__tests__/tmp/UnpatchPodfilePatches",
+      ],
     }));
 
-    jest.mock(
-      "../../../../../../package.json",
-      () => ({
-        name: "test",
-      }),
-      {virtual: true},
-    );
     const {removeEmbraceLinkFromFile} = require("../setup/uninstall");
 
-    const shouldUnpatch = await removeEmbraceLinkFromFile("ksCrashPodImport");
-    expect(shouldUnpatch).toBe(true);
-    expect(fs.readFileSync(podfile).toString()).not.toContain("KSCrash");
+    expect(await removeEmbraceLinkFromFile("podfilePatches")).toBe(true);
+
+    // Removal is an exact inverse of the install patches
+    expect(readTmp("UnpatchPodfilePatches")).toEqual(
+      fs.readFileSync(`${MOCKS}/PodfileWithoutEmbrace`).toString(),
+    );
+  });
+
+  test("Remove the Embrace patches from a Podfile that has none", async () => {
+    copyMock(`${MOCKS}/PodfileWithoutEmbrace`, `${TMP}/UnpatchPodfileClean`);
+
+    jest.mock("glob", () => ({
+      sync: () => ["./packages/core/scripts/__tests__/tmp/UnpatchPodfileClean"],
+    }));
+
+    const {removeEmbraceLinkFromFile} = require("../setup/uninstall");
+
+    // Reports that there was nothing to do rather than rewriting the file regardless
+    expect(await removeEmbraceLinkFromFile("podfilePatches")).toBe(false);
+    expect(readTmp("UnpatchPodfileClean")).toEqual(
+      fs.readFileSync(`${MOCKS}/PodfileWithoutEmbrace`).toString(),
+    );
   });
 
   test("Remove Embrace From Xcode", async () => {
@@ -83,15 +102,6 @@ describe("Uninstall Script iOS", () => {
       ],
     }));
 
-    jest.mock(
-      "../../../../../../package.json",
-      () => ({
-        name: "testMock",
-      }),
-      {
-        virtual: true,
-      },
-    );
     const {xcodePatchable} = require("../util/ios");
     const packageJsonMock = {
       name: "testMock",
@@ -123,13 +133,6 @@ describe("Uninstall Script iOS", () => {
         "./packages/core/scripts/__tests__/__mocks__/ios/NoAppDelegate.mm",
       ],
     }));
-    jest.mock(
-      "../../../../../../package.json",
-      () => ({
-        name: "test",
-      }),
-      {virtual: true},
-    );
     const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
 
     const crash = jest.fn();
@@ -147,13 +150,6 @@ describe("Uninstall Script iOS", () => {
         "./packages/core/scripts/__tests__/__mocks__/ios/NoAppDelegate.swift",
       ],
     }));
-    jest.mock(
-      "../../../../../../package.json",
-      () => ({
-        name: "test",
-      }),
-      {virtual: true},
-    );
     const {removeEmbraceImportAndStartFromFile} = require("../setup/uninstall");
 
     const crash = jest.fn();
@@ -179,13 +175,6 @@ describe("Uninstall Script iOS", () => {
         "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate.mm",
       ],
     }));
-    jest.mock(
-      "../../../../../../package.json",
-      () => ({
-        name: "test",
-      }),
-      {virtual: true},
-    );
     const {getAppDelegateByIOSLanguage} = require("../util/ios");
     const appDelegate = await getAppDelegateByIOSLanguage("test", "objectivec");
 
@@ -222,13 +211,6 @@ describe("Uninstall Script iOS", () => {
         "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate.swift",
       ],
     }));
-    jest.mock(
-      "../../../../../../package.json",
-      () => ({
-        name: "test",
-      }),
-      {virtual: true},
-    );
     const {getAppDelegateByIOSLanguage} = require("../util/ios");
     const appDelegate = await getAppDelegateByIOSLanguage("test", "swift");
 
@@ -258,13 +240,6 @@ describe("Uninstall Script iOS", () => {
         "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate5x.mm",
       ],
     }));
-    jest.mock(
-      "../../../../../../package.json",
-      () => ({
-        name: "test",
-      }),
-      {virtual: true},
-    );
     const {getAppDelegateByIOSLanguage} = require("../util/ios");
     const appDelegate = await getAppDelegateByIOSLanguage("test", "objectivec");
 
@@ -299,13 +274,6 @@ describe("Uninstall Script iOS", () => {
         "./packages/core/scripts/__tests__/tmp/UnlinkedAppDelegate5x.swift",
       ],
     }));
-    jest.mock(
-      "../../../../../../package.json",
-      () => ({
-        name: "test",
-      }),
-      {virtual: true},
-    );
     const {getAppDelegateByIOSLanguage} = require("../util/ios");
     const appDelegate = await getAppDelegateByIOSLanguage("test", "swift5x");
 

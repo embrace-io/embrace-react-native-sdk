@@ -5,6 +5,13 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
+# Resolve the Embrace post_install helper with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "@embrace-io/react-native/ios/scripts/embrace_post_install.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
@@ -24,6 +31,9 @@ target 'ProjectName' do
   )
 
   post_install do |installer|
+    # Adds/removes the app target's Embrace SPM dependencies based on the EMBRACE_USE_SPM flag
+    embrace_post_install(installer)
+
     react_native_post_install(
       installer,
       config[:reactNativePath],
