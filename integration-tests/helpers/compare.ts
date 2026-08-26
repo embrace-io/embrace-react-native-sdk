@@ -29,6 +29,17 @@ const VOLATILE_ATTR_KEYS = new Set([
   "emb.stacktrace.ios", // base64 native stack with absolute paths
   "emb.state.network", // Android only: wifi / cellular / unknown
   "emb.state.screen-automatic", // Android only: whichever screen is current
+  // crashes: everything that identifies the exception is embedded in a stack trace, so the whole
+  // attribute is volatile and the spec asserts the exception itself
+  "emb.android.crash.exception_cause", // native cause chain, carries the JS stack
+  "emb.android.crash_number", // per-device crash counter
+  "emb.android.react_native_crash.js_exception", // JS exception JSON, carries the JS stack
+  "emb.ios.react_native_crash.js_exception",
+  "emb.android.threads", // thread dumps
+  "emb.payload", // iOS KSCrash report
+  "exception.id", // per-crash uuid
+  "exception.message", // Android appends the JS stack to the message
+  "exception.stacktrace", // native stack: line numbers
   // network
   "http.request.body.size",
   "http.response.body.size",
