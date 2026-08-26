@@ -5,6 +5,7 @@
   "endpoint": "http://localhost:8877",
   "enable_network_span_forwarding": true,
   "disabled_url_patterns": ["grafana.net"],
+  "trackUnhandledRejections": true,
   "exporters": {
     "logExporter": {
       "endpoint": "http://localhost/logs",
