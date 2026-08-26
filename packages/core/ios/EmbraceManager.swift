@@ -551,7 +551,8 @@ class EmbraceManager: NSObject {
         )
 
         do {
-            // adding crash metadata
+            // Unhandled JS exceptions will also generate a native crash log, so we append the
+            // JS exception UUID to the native crash - the backend uses this to dedupe/discard the native log
             try Embrace.client?.appendCrashInfo(key: EMB_EXC, value: jsExceptionUUID)
             resolve(true)
         } catch let error {
