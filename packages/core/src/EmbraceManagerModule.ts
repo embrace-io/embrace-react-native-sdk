@@ -1,4 +1,6 @@
-import {NativeModules, Platform} from "react-native";
+import {NativeModules, Platform, TurboModuleRegistry} from "react-native";
+
+import type {Spec} from "./NativeEmbraceManager";
 
 const LINKING_ERROR =
   `The package '@embrace-io/react-native' doesn't seem to be linked. Make sure: \n\n` +
@@ -6,13 +8,14 @@ const LINKING_ERROR =
   "- You rebuilt the app after installing the package\n" +
   "- You are not using Expo Go\n";
 
-export const EmbraceManagerModule = NativeModules.EmbraceManager
-  ? NativeModules.EmbraceManager
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      },
-    );
+const nativeModule =
+  TurboModuleRegistry?.get?.<Spec>("EmbraceManager") ??
+  (NativeModules?.EmbraceManager as Spec | undefined);
+
+export const EmbraceManagerModule: Spec =
+  nativeModule ??
+  new Proxy({} as Spec, {
+    get() {
+      throw new Error(LINKING_ERROR);
+    },
+  });

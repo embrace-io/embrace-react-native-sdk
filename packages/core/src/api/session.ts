@@ -139,9 +139,9 @@ const getCurrentSessionId = (): Promise<string> =>
  */
 const getLastRunEndState = (): Promise<SessionStatus> =>
   safePromise(
-    EmbraceManagerModule.getLastRunEndState(),
+    EmbraceManagerModule.getLastRunEndState() as Promise<SessionStatus>,
     "getLastRunEndState",
-    "INVALID" as SessionStatus,
+    "INVALID",
   );
 
 /**
