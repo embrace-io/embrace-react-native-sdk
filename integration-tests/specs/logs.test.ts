@@ -4,6 +4,18 @@ import {getPayloadSource} from "../helpers/payload_source";
 import {currentPlatform} from "../helpers/platform";
 import {EmbraceLogRecord} from "../typings/embrace";
 
+const NATIVE_CRASH_LOG_TYPE = "sys.ios.crash";
+
+// Both platforms report an unhandled JS exception as a log of this type. A function rather than a
+// constant because currentPlatform() needs a live driver session.
+const jsExceptionLogType = () => `sys.${currentPlatform()}.react_native_crash`;
+
+const getLogByType = (
+  logs: EmbraceLogRecord[],
+  embType: string,
+): EmbraceLogRecord | undefined =>
+  logs.find(log => getAttribute(log, "emb.type") === embType);
+
 // The React Native crash log carries the JS exception as a JSON blob, same shape on both platforms.
 interface JSException {
   n: string; // error name
@@ -12,13 +24,12 @@ interface JSException {
   st: string; // JS stack
 }
 
-// The blob holds bundle offsets and absolute paths, so the attribute itself is volatile and the
-// golden compare only checks that it is there — the exception is asserted from here instead.
-const jsException = (logs: EmbraceLogRecord[]): JSException => {
-  const key = `emb.${currentPlatform()}.react_native_crash.js_exception`;
-  const value = logs.map(log => getAttribute(log, key)).find(v => v !== "");
-  return JSON.parse(value || "{}");
-};
+// JS exceptions are serialized into a log attribute and are volatile, so the golden
+// compare only checks that it is there — the exception is asserted from here instead.
+const jsExceptionFromLog = (log: EmbraceLogRecord): JSException =>
+  JSON.parse(
+    getAttribute(log, `emb.${currentPlatform()}.react_native_crash.js_exception`) || "{}",
+  );
 
 // Android prefixes the stack with "<type>: <message>"; iOS starts at the first frame.
 const topFrame = (stack = ""): string =>
@@ -78,12 +89,26 @@ describe("Logs", () => {
     await relaunchAppAfterCrash();
 
     const payload = await source.getPayloads();
+
+    // Check the general shape matches the expected golden
     expect(payload.logs).toMatchGoldenFile("anonymous-crash", "logs");
 
-    const exception = jsException(payload.logs);
+    // Check the serialized JS Exception has the expected values
+    const jsExceptionLog = getLogByType(payload.logs, jsExceptionLogType());
+    const exception = jsExceptionFromLog(jsExceptionLog);
     expect(exception.n).toBe("ReferenceError");
     expect(exception.m).toBe("Anonymous Crash (Unhandled JS Exception)");
     expect(topFrame(exception.st)).toContain("at anonymous");
+
+    if (currentPlatform() === "ios") {
+      // The native KSCrash log's emb.payload should contain the JS log's exception.id under
+      // user["emb-js"], set by appendCrashInfo.
+      const nativeCrashLog = getLogByType(payload.logs, NATIVE_CRASH_LOG_TYPE);
+      const jsExceptionId = getAttribute(jsExceptionLog, "exception.id");
+      const {user} = JSON.parse(getAttribute(nativeCrashLog, "emb.payload") || "{}");
+      expect(jsExceptionId).not.toBe("");
+      expect(user?.["emb-js"]).toBe(jsExceptionId);
+    }
   });
 
   it("records an unhandled JS exception thrown from a named function", async () => {
@@ -91,11 +116,25 @@ describe("Logs", () => {
     await relaunchAppAfterCrash();
 
     const payload = await source.getPayloads();
+
+    // Check the general shape matches the expected golden
     expect(payload.logs).toMatchGoldenFile("crash", "logs");
 
-    const exception = jsException(payload.logs);
+    // Check the serialized JS Exception has the expected values
+    const jsExceptionLog = getLogByType(payload.logs, jsExceptionLogType());
+    const exception = jsExceptionFromLog(jsExceptionLog);
     expect(exception.n).toBe("ReferenceError");
     expect(exception.m).toBe("Crash (Unhandled JS Exception)");
     expect(topFrame(exception.st)).toContain("at myLovellyUnhandledError");
+
+    if (currentPlatform() === "ios") {
+      // The native KSCrash log's emb.payload should contain the JS log's exception.id under
+      // user["emb-js"], set by appendCrashInfo.
+      const nativeCrashLog = getLogByType(payload.logs, NATIVE_CRASH_LOG_TYPE);
+      const jsExceptionId = getAttribute(jsExceptionLog, "exception.id");
+      const {user} = JSON.parse(getAttribute(nativeCrashLog, "emb.payload") || "{}");
+      expect(jsExceptionId).not.toBe("");
+      expect(user?.["emb-js"]).toBe(jsExceptionId);
+    }
   });
 });
