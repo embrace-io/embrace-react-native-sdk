@@ -11,5 +11,10 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "codegenConfig": {
+    "name": "RNEmbraceCoreSpec",
+    "type": "modules",
+    "jsSrcsDir": "../src"
   }
 }

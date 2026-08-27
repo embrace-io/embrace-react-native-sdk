@@ -53,6 +53,7 @@ jobs:
             ios:
             - 'packages/**/*.swift'
             - 'packages/**/*.m'
+            - 'packages/**/*.mm'
             - 'packages/**/*.h'
             - 'common/ios/**'
             - '.github/workflows/ios.unit-test.yml'
@@ -104,6 +105,7 @@ jobs:
             core:
             - 'packages/core/**/*.swift'
             - 'packages/core/**/*.m'
+            - 'packages/core/**/*.mm'
             - 'packages/core/**/*.h'
             - 'packages/core/RNEmbraceCore.podspec'
             - 'packages/core/package.json'
@@ -201,6 +203,7 @@ jobs:
             tracer-provider:
             - 'packages/react-native-tracer-provider/**/*.swift'
             - 'packages/react-native-tracer-provider/**/*.m'
+            - 'packages/react-native-tracer-provider/**/*.mm'
             - 'packages/react-native-tracer-provider/**/*.h'
             - 'packages/react-native-tracer-provider/RNEmbraceTracerProvider.podspec'
             - 'packages/react-native-tracer-provider/package.json'
@@ -300,6 +303,7 @@ jobs:
             otlp:
             - 'packages/react-native-otlp/**/*.swift'
             - 'packages/react-native-otlp/**/*.m'
+            - 'packages/react-native-otlp/**/*.mm'
             - 'packages/react-native-otlp/**/*.h'
             - 'packages/react-native-otlp/RNEmbraceOTLP.podspec'
             - 'packages/react-native-otlp/package.json'
