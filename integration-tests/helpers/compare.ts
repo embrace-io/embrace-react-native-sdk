@@ -58,19 +58,6 @@ const isVolatileKey = (key: string): boolean =>
 
 // ---- shared types ----
 export type EventProjection = {name: string; attributes: EmbraceSpanAttribute[]};
-export type SpanProjection = {
-  name: string;
-  parentName: string | null;
-  status: string;
-  attributes: EmbraceSpanAttribute[];
-  events: EventProjection[];
-};
-export type LogProjection = {
-  body: string;
-  severityText: string;
-  severityNumber: number;
-  attributes: EmbraceSpanAttribute[];
-};
 export type CompareResult = {pass: boolean; message: string};
 
 // ---- attribute comparison ----
@@ -161,29 +148,15 @@ export const idToNameMap = (spans: EmbraceSpanData[]): Map<string, string> => {
   return m;
 };
 
-export const projectSpan = (
-  span: EmbraceSpanData,
-  idToName: Map<string, string>,
-): SpanProjection => ({
-  name: span.name,
-  parentName: parentNameOf(span.parent_span_id, idToName),
-  status: span.status,
-  attributes: span.attributes ?? [],
-  events: (span.events ?? []).map(e => ({name: e.name, attributes: e.attributes ?? []})),
-});
-
+// Compares only what is intrinsic to the span. Parentage depends on the surrounding set, so
+// compareSpans handles it.
 export const compareSpan = (
   actual: EmbraceSpanData,
-  expected: SpanProjection,
-  idToName: Map<string, string>,
+  expected: EmbraceSpanData,
 ): CompareResult => {
   const errors: string[] = [];
   if (actual.name !== expected.name) {
     errors.push(`name expected "${expected.name}", got "${actual.name}"`);
-  }
-  const actualParent = parentNameOf(actual.parent_span_id, idToName);
-  if (actualParent !== expected.parentName) {
-    errors.push(`parent expected "${expected.parentName ?? "root"}", got "${actualParent ?? "root"}"`);
   }
   if (actual.status !== expected.status) {
     errors.push(`status expected "${expected.status}", got "${actual.status}"`);
@@ -227,37 +200,60 @@ export const compareSpans = (
     seen.add(span.name);
   }
 
-  const expectedProjections = expected
-    .map(span => projectSpan(span, expectedIds))
-    .sort((a, b) => a.name.localeCompare(b.name));
-  const expectedNames = new Set(expectedProjections.map(p => p.name));
+  const expectedSpans = [...expected].sort((a, b) => a.name.localeCompare(b.name));
+  const expectedNames = new Set(expectedSpans.map(span => span.name));
 
   for (const name of actualByName.keys()) {
     if (!expectedNames.has(name)) {
       errors.push(`unexpected span "${name}"`);
     }
   }
-  for (const expected of expectedProjections) {
-    const actual = actualByName.get(expected.name);
-    if (!actual) {
-      errors.push(`missing span "${expected.name}"`);
+  for (const expectedSpan of expectedSpans) {
+    const actualSpan = actualByName.get(expectedSpan.name);
+    if (!actualSpan) {
+      errors.push(`missing span "${expectedSpan.name}"`);
       continue;
     }
-    const result = compareSpan(actual, expected, actualIds);
+    const result = compareSpan(actualSpan, expectedSpan);
     if (!result.pass) {
       errors.push(result.message);
+    }
+    // Span ids vary run to run, so compare the parent by name within each side's own set.
+    const actualParent = parentNameOf(actualSpan.parent_span_id, actualIds);
+    const expectedParent = parentNameOf(expectedSpan.parent_span_id, expectedIds);
+    if (actualParent !== expectedParent) {
+      errors.push(
+        `span "${expectedSpan.name}": parent expected "${expectedParent ?? "root"}", got "${actualParent ?? "root"}"`,
+      );
     }
   }
   return {pass: errors.length === 0, message: errors.join("\n")};
 };
 
 // ---- log comparison ----
-export const projectLog = (log: EmbraceLogRecord): LogProjection => ({
-  body: log.body,
-  severityText: log.severity_text,
-  severityNumber: log.severity_number,
-  attributes: log.attributes ?? [],
-});
+export const compareLog = (
+  actual: EmbraceLogRecord,
+  expected: EmbraceLogRecord,
+): CompareResult => {
+  const errors: string[] = [];
+  if (actual.severity_text !== expected.severity_text) {
+    errors.push(`severity_text expected "${expected.severity_text}", got "${actual.severity_text}"`);
+  }
+  if (actual.severity_number !== expected.severity_number) {
+    errors.push(`severity_number expected ${expected.severity_number}, got ${actual.severity_number}`);
+  }
+  if (!isPresent(actual.time_unix_nano)) {
+    errors.push('missing field "time_unix_nano"');
+  }
+  const attrs = compareAttributes(actual.attributes, expected.attributes);
+  if (!attrs.pass) {
+    errors.push(attrs.message);
+  }
+  return {
+    pass: errors.length === 0,
+    message: errors.length ? `log "${expected.body}": ${errors.join("; ")}` : "",
+  };
+};
 
 // Compare log records by body. Bodies are unique within every scenario the specs assert;
 // a batch split across several envelopes compares the same either way.
@@ -276,10 +272,8 @@ export const compareLogs = (
     seen.add(log.body);
   }
 
-  const expectedProjections = expected
-    .map(projectLog)
-    .sort((a, b) => a.body.localeCompare(b.body));
-  const expectedBodies = new Set(expectedProjections.map(p => p.body));
+  const expectedLogs = [...expected].sort((a, b) => a.body.localeCompare(b.body));
+  const expectedBodies = new Set(expectedLogs.map(log => log.body));
 
   for (const body of actualByBody.keys()) {
     if (!expectedBodies.has(body)) {
@@ -287,28 +281,15 @@ export const compareLogs = (
     }
   }
 
-  for (const expected of expectedProjections) {
-    const actual = actualByBody.get(expected.body);
+  for (const expectedLog of expectedLogs) {
+    const actual = actualByBody.get(expectedLog.body);
     if (!actual) {
-      errors.push(`missing log "${expected.body}"`);
+      errors.push(`missing log "${expectedLog.body}"`);
       continue;
     }
-    const logErrors: string[] = [];
-    if (actual.severity_text !== expected.severityText) {
-      logErrors.push(`severity_text expected "${expected.severityText}", got "${actual.severity_text}"`);
-    }
-    if (actual.severity_number !== expected.severityNumber) {
-      logErrors.push(`severity_number expected ${expected.severityNumber}, got ${actual.severity_number}`);
-    }
-    if (!isPresent(actual.time_unix_nano)) {
-      logErrors.push('missing field "time_unix_nano"');
-    }
-    const attrs = compareAttributes(actual.attributes, expected.attributes);
-    if (!attrs.pass) {
-      logErrors.push(attrs.message);
-    }
-    if (logErrors.length) {
-      errors.push(`log "${expected.body}": ${logErrors.join("; ")}`);
+    const result = compareLog(actual, expectedLog);
+    if (!result.pass) {
+      errors.push(result.message);
     }
   }
 

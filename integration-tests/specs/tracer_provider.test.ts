@@ -1,5 +1,4 @@
 import {driver} from "@wdio/globals";
-import {idToNameMap, projectSpan} from "../helpers/compare";
 import {loadGoldenFile} from "../helpers/golden";
 import {getAttribute} from "../helpers/normalize";
 import {endSession, tap} from "../helpers/app";
@@ -57,9 +56,7 @@ describe("Tracer Provider", () => {
     // viewSpans also holds incidental tab-navigation views whose composition depends on run
     // order, so compare only this span against its counterpart in the golden.
     const golden = loadGoldenFile("span-record-view").viewSpans;
-    expect(byViewName(p.viewSpans, "my-view")).toMatchSpan(
-      projectSpan(byViewName(golden, "my-view"), idToNameMap(golden)),
-    );
+    expect(byViewName(p.viewSpans, "my-view")).toMatchSpan(byViewName(golden, "my-view"));
   });
 
   it("records completed spans with attributes, events and a parent", async () => {
