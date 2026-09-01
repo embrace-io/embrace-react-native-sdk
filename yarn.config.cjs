@@ -127,7 +127,7 @@ function enforceEmbraceMetadata({Yarn}) {
     }
 
     workspace.set("embrace", {
-      iosVersion: "6.19.0",
+      iosVersion: "6.22.0",
       androidVersion: "8.4.0",
       otelSwiftVersion: "2.1.1",
     });

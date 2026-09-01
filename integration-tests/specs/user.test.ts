@@ -2,7 +2,6 @@ import {driver} from "@wdio/globals";
 import {endSession, tap} from "../helpers/app";
 import {getAttribute} from "../helpers/normalize";
 import {getPayloadSource} from "../helpers/payload_source";
-import { currentPlatform } from "../helpers/platform";
 
 describe("User", () => {
   const source = getPayloadSource();
@@ -84,15 +83,7 @@ describe("User", () => {
 
     expect(deviceId).not.toBe("");
 
-    // SPM pulls in a more recent version of KSCrash (2.6.0) that changes the lastRunEndState behaviour:
-    // it now returns "CRASH" for unexplained exits (in this case, appium relaunching the app in a previous test)
-    // TODO: revert this when fixed in the iOS SDK
-    const expectedLastRunEndStates =
-      currentPlatform() === "ios" && process.env.EMBRACE_USE_SPM === "1"
-        ? ["CRASH"]
-        : ["CLEAN_EXIT", "INVALID"];
-
-    expect(expectedLastRunEndStates).toContain(lastRunEndState);
+    expect(["CLEAN_EXIT", "INVALID"]).toContain(lastRunEndState);
 
     // The id the SDK reported must be the one that lands on the flushed session span.
     await endSession();

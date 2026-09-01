@@ -35,11 +35,12 @@ func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> E
         let servicesBuilder = CaptureServiceBuilder()
         
         let urlSessionServiceOptions = URLSessionCaptureService.Options(
-            // allowing to enable/disable NSF by code
-            injectTracingHeader: !config.disableNetworkSpanForwarding,
             requestsDataSource: nil,
             // disabling tracking for ignored urls
-            ignoredURLs: config.ignoredURLs ?? []
+            ignoredURLs: config.ignoredURLs ?? [],
+            traceparent: URLSessionCaptureService.Traceparent(
+                onlyAllowDomains: config.disableNetworkSpanForwarding ? [] : nil
+            )
         )
         // manually adding the URLSessionCaptureService
         servicesBuilder.add(.urlSession(options: urlSessionServiceOptions))
