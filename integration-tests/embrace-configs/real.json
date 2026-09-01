@@ -3,6 +3,7 @@
   "ios_app_id": "cvKeD",
   "enable_network_span_forwarding": true,
   "disabled_url_patterns": ["grafana.net"],
+  "trackUnhandledRejections": true,
   "exporters": {
     "logExporter": {
       "endpoint": "https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/logs",

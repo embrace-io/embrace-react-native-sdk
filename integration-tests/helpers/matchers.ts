@@ -9,10 +9,10 @@ import {
 } from "../typings/embrace";
 import {
   EventProjection,
-  SpanProjection,
   compareAttributes,
   compareSpans,
   compareEvents,
+  compareLog,
   compareLogs,
   compareSpan,
   idToNameMap,
@@ -40,8 +40,11 @@ export const registerMatchers = (): void =>
       }
       return wrap(compareSpans(received as EmbraceSpanData[], golden[section]));
     },
-    toMatchSpan(received: EmbraceSpanData, expected: SpanProjection, within: EmbraceSpanData[] = [received]) {
-      return wrap(compareSpan(received, expected, idToNameMap(within)));
+    toMatchSpan(received: EmbraceSpanData, expected: EmbraceSpanData) {
+      return wrap(compareSpan(received, expected));
+    },
+    toMatchLog(received: EmbraceLogRecord, expected: EmbraceLogRecord) {
+      return wrap(compareLog(received, expected));
     },
     toMatchAttributes(received: EmbraceSpanAttribute[], expected: EmbraceSpanAttribute[]) {
       return wrap(compareAttributes(received, expected));

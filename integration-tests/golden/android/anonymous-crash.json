@@ -1,0 +1,554 @@
+{
+  "spans": [
+    {
+      "resource": {
+        "app_version": "1.0",
+        "app_framework": 2,
+        "build_id": "10FA977633124324A636E4F3F1A01D48",
+        "app_ecosystem_id": "io.embrace.rn82",
+        "build_type": "release",
+        "build_flavor": "",
+        "environment": "prod",
+        "bundle_version": "1",
+        "sdk_version": "8.4.0",
+        "sdk_simple_version": 53,
+        "react_native_bundle_id": "2FD30948BD80EE3FBCFE01A660F41001",
+        "hosted_platform_version": "0.82.1",
+        "hosted_sdk_version": "7.0.0",
+        "device_manufacturer": "Google",
+        "device_model": "sdk_gphone64_arm64",
+        "device_architecture": "arm64-v8a",
+        "jailbroken": false,
+        "disk_total_capacity": 6228115456,
+        "os_type": "linux",
+        "os_name": "android",
+        "os_version": "14",
+        "os_code": "34",
+        "screen_resolution": "1080x2209",
+        "num_cores": 4
+      },
+      "metadata": {
+        "personas": [],
+        "timezone_description": "Europe/London",
+        "locale": "en_US"
+      },
+      "version": "0.1.0",
+      "type": "spans",
+      "data": {
+        "spans": [
+          {
+            "trace_id": "27e05a7afe60a0e2d833e36f1da04a65",
+            "span_id": "55e678c2b772a010",
+            "parent_span_id": "0000000000000000",
+            "name": "emb-sdk-init",
+            "start_time_unix_nano": 1785862096269000000,
+            "end_time_unix_nano": 1785862096286000000,
+            "status": "Unset",
+            "events": [],
+            "attributes": [
+              {
+                "key": "emb.private",
+                "value": "true"
+              },
+              {
+                "key": "emb.private.sequence_id",
+                "value": "5"
+              },
+              {
+                "key": "emb.process_identifier",
+                "value": "ffb1df43af16b442"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf"
+              },
+              {
+                "key": "ended-in-foreground",
+                "value": "true"
+              },
+              {
+                "key": "session.id",
+                "value": "53DA0490B8F941659D70C62203080062"
+              },
+              {
+                "key": "thread-name",
+                "value": "mqt_v_native"
+              }
+            ],
+            "links": [
+              {
+                "span_id": "d506f007ee95aeb5",
+                "trace_id": "97ecd0556ae9eee30ce14c17a6d888a5",
+                "attributes": [
+                  {
+                    "key": "emb.link_type",
+                    "value": "END_SESSION"
+                  },
+                  {
+                    "key": "session.id",
+                    "value": "53DA0490B8F941659D70C62203080062"
+                  }
+                ],
+                "is_remote": false
+              }
+            ]
+          },
+          {
+            "trace_id": "823998a5d3dfe20866e37316215b1261",
+            "span_id": "7556bc768ca50b8f",
+            "parent_span_id": "0000000000000000",
+            "name": "emb-GET /v2/config",
+            "start_time_unix_nano": 1785862096380000000,
+            "end_time_unix_nano": 1785862096880000000,
+            "status": "Unset",
+            "events": [],
+            "attributes": [
+              {
+                "key": "emb.private.sequence_id",
+                "value": "8"
+              },
+              {
+                "key": "emb.process_identifier",
+                "value": "ffb1df43af16b442"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf.network_request"
+              },
+              {
+                "key": "http.request.body.size",
+                "value": "0"
+              },
+              {
+                "key": "http.request.method",
+                "value": "GET"
+              },
+              {
+                "key": "http.response.body.size",
+                "value": "2"
+              },
+              {
+                "key": "http.response.status_code",
+                "value": "200"
+              },
+              {
+                "key": "session.id",
+                "value": "53DA0490B8F941659D70C62203080062"
+              },
+              {
+                "key": "url.full",
+                "value": "http://10.0.2.2:8877/v2/config"
+              },
+              {
+                "key": "user_agent.name",
+                "value": "okhttp"
+              },
+              {
+                "key": "user_agent.version",
+                "value": "4.12.0"
+              }
+            ],
+            "links": [
+              {
+                "span_id": "d506f007ee95aeb5",
+                "trace_id": "97ecd0556ae9eee30ce14c17a6d888a5",
+                "attributes": [
+                  {
+                    "key": "emb.link_type",
+                    "value": "END_SESSION"
+                  },
+                  {
+                    "key": "session.id",
+                    "value": "53DA0490B8F941659D70C62203080062"
+                  }
+                ],
+                "is_remote": false
+              }
+            ]
+          },
+          {
+            "trace_id": "1ce39422ca64fe5bcc423cda4d6aefaa",
+            "span_id": "e3d384239c3d0f6b",
+            "parent_span_id": "0000000000000000",
+            "name": "emb-network-status",
+            "start_time_unix_nano": 1785862096286000000,
+            "end_time_unix_nano": 1785862098287000000,
+            "status": "Error",
+            "events": [],
+            "attributes": [
+              {
+                "key": "emb.error_code",
+                "value": "failure"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.network_status"
+              },
+              {
+                "key": "network",
+                "value": "wifi"
+              }
+            ],
+            "links": []
+          },
+          {
+            "trace_id": "9de4ed266f2449084c89296c9499b007",
+            "span_id": "fa8771e7e4445049",
+            "parent_span_id": "0000000000000000",
+            "name": "emb-state-network",
+            "start_time_unix_nano": 1785862096286000000,
+            "end_time_unix_nano": 1785862098287000000,
+            "status": "Error",
+            "events": [
+              {
+                "name": "transition",
+                "time_unix_nano": 1785862096286000000,
+                "attributes": [
+                  {
+                    "key": "emb.state.new_value",
+                    "value": "wifi"
+                  }
+                ]
+              }
+            ],
+            "attributes": [
+              {
+                "key": "emb.error_code",
+                "value": "failure"
+              },
+              {
+                "key": "emb.type",
+                "value": "state"
+              },
+              {
+                "key": "emb.private",
+                "value": "true"
+              },
+              {
+                "key": "emb.state.transition_count",
+                "value": "1"
+              },
+              {
+                "key": "emb.state.initial_value",
+                "value": "unknown"
+              }
+            ],
+            "links": []
+          },
+          {
+            "trace_id": "1424cce348e0ec35ee96ecd92a957573",
+            "span_id": "a589a0124067792f",
+            "parent_span_id": "0000000000000000",
+            "name": "emb-thermal-state",
+            "start_time_unix_nano": 1785862096287000000,
+            "end_time_unix_nano": 1785862098287000000,
+            "status": "Error",
+            "events": [],
+            "attributes": [
+              {
+                "key": "emb.error_code",
+                "value": "failure"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf.thermal_state"
+              },
+              {
+                "key": "status",
+                "value": "0"
+              }
+            ],
+            "links": []
+          },
+          {
+            "trace_id": "97ecd0556ae9eee30ce14c17a6d888a5",
+            "span_id": "d506f007ee95aeb5",
+            "parent_span_id": "0000000000000000",
+            "name": "emb-session",
+            "start_time_unix_nano": 1785862096269000000,
+            "end_time_unix_nano": 1785862098287000000,
+            "status": "Error",
+            "events": [
+              {
+                "name": "emb-breadcrumb",
+                "time_unix_nano": 1785862096290000000,
+                "attributes": [
+                  {
+                    "key": "message",
+                    "value": "The App started in portrait mode"
+                  },
+                  {
+                    "key": "emb.type",
+                    "value": "sys.breadcrumb"
+                  }
+                ]
+              }
+            ],
+            "attributes": [
+              {
+                "key": "emb.error_code",
+                "value": "failure"
+              },
+              {
+                "key": "emb.termination_cause",
+                "value": "crash"
+              },
+              {
+                "key": "emb.cold_start",
+                "value": "true"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "emb.clean_exit",
+                "value": "false"
+              },
+              {
+                "key": "emb.session_start_type",
+                "value": "state"
+              },
+              {
+                "key": "emb.terminated",
+                "value": "true"
+              },
+              {
+                "key": "emb.type",
+                "value": "ux.session"
+              },
+              {
+                "key": "emb.heartbeat_time_unix_nano",
+                "value": "1785862098287000000"
+              },
+              {
+                "key": "session.id",
+                "value": "53DA0490B8F941659D70C62203080062"
+              },
+              {
+                "key": "emb.session_number",
+                "value": "159"
+              }
+            ],
+            "links": [
+              {
+                "span_id": "55e678c2b772a010",
+                "trace_id": "27e05a7afe60a0e2d833e36f1da04a65",
+                "attributes": [
+                  {
+                    "key": "emb.link_type",
+                    "value": "ENDED_IN"
+                  }
+                ],
+                "is_remote": false
+              },
+              {
+                "span_id": "7556bc768ca50b8f",
+                "trace_id": "823998a5d3dfe20866e37316215b1261",
+                "attributes": [
+                  {
+                    "key": "emb.link_type",
+                    "value": "ENDED_IN"
+                  }
+                ],
+                "is_remote": false
+              }
+            ]
+          },
+          {
+            "trace_id": "5cabc9cb4bf5795746977813d3259049",
+            "span_id": "7c7480eaeb338558",
+            "parent_span_id": "0000000000000000",
+            "name": "log",
+            "start_time_unix_nano": 1785862096304000000,
+            "end_time_unix_nano": 1785862098287000000,
+            "status": "Error",
+            "events": [],
+            "attributes": [
+              {
+                "key": "emb.error_code",
+                "value": "failure"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf"
+              },
+              {
+                "key": "test.attr",
+                "value": "654321"
+              },
+              {
+                "key": "emb.type",
+                "value": "ux.view"
+              },
+              {
+                "key": "view.launch",
+                "value": "true"
+              },
+              {
+                "key": "package",
+                "value": "@react-navigation/native"
+              },
+              {
+                "key": "view.name",
+                "value": "log"
+              }
+            ],
+            "links": []
+          },
+          {
+            "trace_id": "9c81904e07826bec95bf757250a9b0e3",
+            "span_id": "bf4d258bc3a3c392",
+            "parent_span_id": "0000000000000000",
+            "name": "emb-state-screen-automatic",
+            "start_time_unix_nano": 1785862096286000000,
+            "end_time_unix_nano": 1785862098287000000,
+            "status": "Error",
+            "events": [],
+            "attributes": [
+              {
+                "key": "emb.error_code",
+                "value": "failure"
+              },
+              {
+                "key": "emb.type",
+                "value": "state"
+              },
+              {
+                "key": "emb.private",
+                "value": "true"
+              },
+              {
+                "key": "emb.state.initial_value",
+                "value": "Initializing"
+              }
+            ],
+            "links": []
+          }
+        ],
+        "span_snapshots": [],
+        "shared_lib_symbol_mapping": {
+          "libappmodules.so": "8a30482b0bd1ed5705d298c2a49ab17e1128ce91",
+          "libc++_shared.so": "8f9b811782f82b7e96ef983939059539bc486507",
+          "libembrace-native.so": "35cedcf27cf57a11b659e2b4ff54dca526caac87",
+          "libfbjni.so": "908a62be76b9bea375d88a9d714790c3d188ab34",
+          "libhermestooling.so": "932db19c2d633f3fbab0a27babfa59fc3178e70a",
+          "libhermesvm.so": "c07ce4d699f2e41fb5cf1820bc557f68085691bd",
+          "libimagepipeline.so": "c1917611b61c4f8d33e62c57dab46eb7e9c2403b",
+          "libjsi.so": "b1c590786f48329e1e588bbe6766f73656113539",
+          "libnative-filters.so": "de02a13b15e8af37611450ee433d59d619584a85",
+          "libnative-imagetranscoder.so": "46588427304036cab21cb7115b8236f4a48c7773",
+          "libreact_codegen_rnscreens.so": "8d0bdb15fb32036cba4f60df751dc4b20e69df7d",
+          "libreact_codegen_safeareacontext.so": "cafc19c09650ba459812b081cc15719d1ecd884a",
+          "libreactnative.so": "f046e3d04f1955971798ecc645a88ed231a39af7",
+          "librnscreens.so": "af752a85cd2847192707d6cf475a69773c9bfb8f"
+        }
+      }
+    }
+  ],
+  "logs": [
+    {
+      "resource": {
+        "app_version": "1.0",
+        "app_framework": 2,
+        "build_id": "10FA977633124324A636E4F3F1A01D48",
+        "app_ecosystem_id": "io.embrace.rn82",
+        "build_type": "release",
+        "build_flavor": "",
+        "environment": "prod",
+        "bundle_version": "1",
+        "sdk_version": "8.4.0",
+        "sdk_simple_version": 53,
+        "react_native_bundle_id": "2FD30948BD80EE3FBCFE01A660F41001",
+        "hosted_platform_version": "0.82.1",
+        "hosted_sdk_version": "7.0.0",
+        "device_manufacturer": "Google",
+        "device_model": "sdk_gphone64_arm64",
+        "device_architecture": "arm64-v8a",
+        "jailbroken": false,
+        "disk_total_capacity": 6228115456,
+        "os_type": "linux",
+        "os_name": "android",
+        "os_version": "14",
+        "os_code": "34",
+        "screen_resolution": "1080x2209",
+        "num_cores": 4
+      },
+      "metadata": {
+        "personas": [],
+        "timezone_description": "Europe/London",
+        "locale": "en_US"
+      },
+      "version": "0.1.0",
+      "type": "logs",
+      "data": {
+        "logs": [
+          {
+            "time_unix_nano": 1785862099683000000,
+            "severity_number": 17,
+            "severity_text": "ERROR",
+            "body": "",
+            "attributes": [
+              {
+                "key": "emb.android.crash.exception_cause",
+                "value": "[{\"n\":\"com.facebook.react.common.JavascriptException\",\"m\":\"ReferenceError: Anonymous Crash (Unhandled JS Exception), stack:\\nanonymous@1:957861\\n_performTransitionSideEffects@1:463963\\n_receiveSignal@1:463567\\nonResponderRelease@1:462404\\nexecuteDispatch@1:129397\\nexecuteDispatchesAndReleaseTopLevel@1:134949\\nforEachAccumulated@1:130910\\nanonymous@1:135407\\nbatchedUpdatesImpl@1:205262\\nbatchedUpdates$1@1:134875\\ndispatchEvent@1:135153\\n\",\"tt\":[\"com.facebook.react.modules.core.ExceptionsManagerModule.reportException(ExceptionsManagerModule.kt:52)\",\"com.facebook.jni.NativeRunnable.run(Native Method)\",\"android.os.Handler.handleCallback(Handler.java:958)\",\"android.os.Handler.dispatchMessage(Handler.java:99)\",\"com.facebook.react.bridge.queue.MessageQueueThreadHandler.dispatchMessage(MessageQueueThreadHandler.kt:21)\",\"android.os.Looper.loopOnce(Looper.java:205)\",\"android.os.Looper.loop(Looper.java:294)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.startNewBackgroundThread$lambda$0(MessageQueueThreadImpl.kt:152)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.$r8$lambda$YYXYCFexeoKtAeDpeNYkxZZlpbA(Unknown Source:0)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)\",\"java.lang.Thread.run(Thread.java:1012)\"]}]"
+              },
+              {
+                "key": "emb.android.crash_number",
+                "value": "1"
+              },
+              {
+                "key": "emb.android.react_native_crash.js_exception",
+                "value": "{\"n\":\"ReferenceError\",\"m\":\"Anonymous Crash (Unhandled JS Exception)\",\"t\":\"ReferenceError\",\"st\":\"ReferenceError: Anonymous Crash (Unhandled JS Exception)\\n    at anonymous (address at index.android.bundle:1:957861)\\n    at _performTransitionSideEffects (address at index.android.bundle:1:463963)\\n    at _receiveSignal (address at index.android.bundle:1:463567)\\n    at onResponderRelease (address at index.android.bundle:1:462404)\\n    at executeDispatch (address at index.android.bundle:1:129397)\\n    at executeDispatchesAndReleaseTopLevel (address at index.android.bundle:1:134949)\\n    at forEach (native)\\n    at forEachAccumulated (address at index.android.bundle:1:130910)\\n    at anonymous (address at index.android.bundle:1:135407)\\n    at batchedUpdatesImpl (address at index.android.bundle:1:205262)\\n    at batchedUpdates$1 (address at index.android.bundle:1:134875)\\n    at dispatchEvent (address at index.android.bundle:1:135153)\"}"
+              },
+              {
+                "key": "emb.android.threads",
+                "value": "[{\"threadId\":1070,\"state\":\"RUNNABLE\",\"n\":\"Jit thread pool worker thread 0\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":1082,\"state\":\"RUNNABLE\",\"n\":\"hwuiTask0\",\"p\":6,\"tt\":[],\"fc\":0},{\"threadId\":1067,\"state\":\"WAITING\",\"n\":\"ReferenceQueueDaemon\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.Object.wait(Object.java:524)\",\"java.lang.Daemons$ReferenceQueueDaemon.runInternal(Daemons.java:239)\",\"java.lang.Daemons$Daemon.run(Daemons.java:145)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":6},{\"threadId\":1081,\"state\":\"RUNNABLE\",\"n\":\"SurfaceSyncGroupTimer\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"android.os.HandlerThread.run(HandlerThread.java:67)\"],\"fc\":5},{\"threadId\":1076,\"state\":\"WAITING\",\"n\":\"HybridData DestructorThread\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:210)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:231)\",\"com.facebook.jni.DestructorThread$1.run(DestructorThread.java:77)\"],\"fc\":5},{\"threadId\":1071,\"state\":\"RUNNABLE\",\"n\":\"binder:23918_1\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":1087,\"state\":\"RUNNABLE\",\"n\":\"queued-work-looper\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"android.os.HandlerThread.run(HandlerThread.java:67)\"],\"fc\":5},{\"threadId\":1088,\"state\":\"TIMED_WAITING\",\"n\":\"emb-periodic-cache\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":1065,\"state\":\"WAITING\",\"n\":\"Signal Catcher\",\"p\":10,\"tt\":[],\"fc\":0},{\"threadId\":1072,\"state\":\"RUNNABLE\",\"n\":\"binder:23918_2\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":1090,\"state\":\"TIMED_WAITING\",\"n\":\"emb-thread-blockage-watchdog\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":1080,\"state\":\"RUNNABLE\",\"n\":\"mqt_v_native\",\"p\":5,\"tt\":[\"dalvik.system.VMStack.getThreadStackTrace(Native Method)\",\"java.lang.Thread.getStackTrace(Thread.java:1841)\",\"java.lang.Thread.getAllStackTraces(Thread.java:1909)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl.getThreadsInfo(JvmCrashDataSourceImpl.kt:125)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl.logUnhandledJvmThrowable$lambda$0(JvmCrashDataSourceImpl.kt:86)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl.$r8$lambda$9hk2iBDg1thXsRBNKlnDDMSXfy0(Unknown Source:0)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)\",\"io.embrace.android.embracesdk.internal.arch.datasource.DataSourceImpl.captureTelemetry(DataSourceImpl.kt:52)\",\"io.embrace.android.embracesdk.internal.arch.datasource.DataSource$DefaultImpls.captureTelemetry$default(DataSource.kt:43)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl.logUnhandledJvmThrowable(JvmCrashDataSourceImpl.kt:56)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.EmbraceUncaughtExceptionHandler.uncaughtException(EmbraceUncaughtExceptionHandler.kt:26)\",\"java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1071)\",\"java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1066)\",\"java.lang.Thread.dispatchUncaughtException(Thread.java:2306)\"],\"fc\":14},{\"threadId\":1091,\"state\":\"TIMED_WAITING\",\"n\":\"OkHttp TaskRunner\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"okhttp3.internal.concurrent.TaskRunner$RealBackend.coordinatorWait(TaskRunner.kt:294)\",\"okhttp3.internal.concurrent.TaskRunner.awaitTaskToRun(TaskRunner.kt:218)\",\"okhttp3.internal.concurrent.TaskRunner$runnable$1.run(TaskRunner.kt:59)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":7},{\"threadId\":1074,\"state\":\"RUNNABLE\",\"n\":\"Profile Saver\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":1073,\"state\":\"RUNNABLE\",\"n\":\"binder:23918_3\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":1092,\"state\":\"TIMED_WAITING\",\"n\":\"Okio Watchdog\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1757)\",\"okio.AsyncTimeout$Companion.awaitTimeout(AsyncTimeout.kt:370)\",\"okio.AsyncTimeout$Watchdog.run(AsyncTimeout.kt:211)\"],\"fc\":5},{\"threadId\":1068,\"state\":\"WAITING\",\"n\":\"FinalizerDaemon\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:210)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:231)\",\"java.lang.Daemons$FinalizerDaemon.runInternal(Daemons.java:309)\",\"java.lang.Daemons$Daemon.run(Daemons.java:145)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":7},{\"threadId\":1083,\"state\":\"RUNNABLE\",\"n\":\"hwuiTask1\",\"p\":6,\"tt\":[],\"fc\":0},{\"threadId\":1086,\"state\":\"TIMED_WAITING\",\"n\":\"emb-non-io-reg\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":1078,\"state\":\"WAITING\",\"n\":\"pool-2-thread-1\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:435)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":11},{\"threadId\":1066,\"state\":\"WAITING\",\"n\":\"HeapTaskDaemon\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":1079,\"state\":\"RUNNABLE\",\"n\":\"mqt_v_js\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.startNewBackgroundThread$lambda$0(MessageQueueThreadImpl.kt:152)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.$r8$lambda$YYXYCFexeoKtAeDpeNYkxZZlpbA(Unknown Source:0)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":8},{\"threadId\":1094,\"state\":\"WAITING\",\"n\":\"emb-delivery-scheduling\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1176)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":12},{\"threadId\":1089,\"state\":\"WAITING\",\"n\":\"emb-data-persistence\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.PriorityBlockingQueue.take(PriorityBlockingQueue.java:538)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":11},{\"threadId\":2,\"state\":\"RUNNABLE\",\"n\":\"main\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"android.app.ActivityThread.main(ActivityThread.java:8177)\",\"java.lang.reflect.Method.invoke(Native Method)\",\"com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)\",\"com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)\"],\"fc\":8},{\"threadId\":1075,\"state\":\"RUNNABLE\",\"n\":\"RenderThread\",\"p\":7,\"tt\":[],\"fc\":0},{\"threadId\":1069,\"state\":\"TIMED_WAITING\",\"n\":\"FinalizerWatchdogDaemon\",\"p\":5,\"tt\":[\"java.lang.Thread.sleep(Native Method)\",\"java.lang.Thread.sleep(Thread.java:450)\",\"java.lang.Thread.sleep(Thread.java:355)\",\"java.lang.Daemons$FinalizerWatchdogDaemon.sleepForNanos(Daemons.java:481)\",\"java.lang.Daemons$FinalizerWatchdogDaemon.waitForProgress(Daemons.java:544)\",\"java.lang.Daemons$FinalizerWatchdogDaemon.runInternal(Daemons.java:412)\",\"java.lang.Daemons$Daemon.run(Daemons.java:145)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":8},{\"threadId\":1085,\"state\":\"TIMED_WAITING\",\"n\":\"emb-io-reg\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9}]"
+              },
+              {
+                "key": "emb.private.send_mode",
+                "value": "DEFER"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "emb.state.network",
+                "value": "wifi"
+              },
+              {
+                "key": "emb.state.screen-automatic",
+                "value": "Initializing"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.android.react_native_crash"
+              },
+              {
+                "key": "exception.message",
+                "value": "ReferenceError: Anonymous Crash (Unhandled JS Exception), stack:\nanonymous@1:957861\n_performTransitionSideEffects@1:463963\n_receiveSignal@1:463567\nonResponderRelease@1:462404\nexecuteDispatch@1:129397\nexecuteDispatchesAndReleaseTopLevel@1:134949\nforEachAccumulated@1:130910\nanonymous@1:135407\nbatchedUpdatesImpl@1:205262\nbatchedUpdates$1@1:134875\ndispatchEvent@1:135153\n"
+              },
+              {
+                "key": "exception.stacktrace",
+                "value": "[\"com.facebook.react.modules.core.ExceptionsManagerModule.reportException(ExceptionsManagerModule.kt:52)\",\"com.facebook.jni.NativeRunnable.run(Native Method)\",\"android.os.Handler.handleCallback(Handler.java:958)\",\"android.os.Handler.dispatchMessage(Handler.java:99)\",\"com.facebook.react.bridge.queue.MessageQueueThreadHandler.dispatchMessage(MessageQueueThreadHandler.kt:21)\",\"android.os.Looper.loopOnce(Looper.java:205)\",\"android.os.Looper.loop(Looper.java:294)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.startNewBackgroundThread$lambda$0(MessageQueueThreadImpl.kt:152)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.$r8$lambda$YYXYCFexeoKtAeDpeNYkxZZlpbA(Unknown Source:0)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)\",\"java.lang.Thread.run(Thread.java:1012)\"]"
+              },
+              {
+                "key": "exception.type",
+                "value": "com.facebook.react.common.JavascriptException"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "C09D8E8577BE4EEBA83EC33BEFBF927C"
+              },
+              {
+                "key": "session.id",
+                "value": "53DA0490B8F941659D70C62203080062"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
