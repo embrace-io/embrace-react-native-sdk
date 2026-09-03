@@ -11,5 +11,10 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "codegenConfig": {
+    "name": "RNEmbraceTracerProviderSpec",
+    "type": "modules",
+    "jsSrcsDir": "../src"
   }
 }
