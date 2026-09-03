@@ -8,8 +8,6 @@ import kotlin.time.toJavaDuration
 
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 
@@ -36,8 +34,10 @@ data class OtlpExporterConfig (
     val logExporter: ExporterConfig? = null
 )
 
-class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-    override fun getName() = "RNEmbraceOTLP"
+class RNEmbraceOTLPModuleImpl(reactContext: ReactApplicationContext) {
+    companion object {
+        const val NAME = "RNEmbraceOTLP"
+    }
 
     private val context: ReactApplicationContext = reactContext
     private val log = Logger.getLogger("[Embrace]")
@@ -164,19 +164,17 @@ class RNEmbraceOTLPModule(reactContext: ReactApplicationContext) : ReactContextB
 
     // _sdkConfig is meant to not be used in Android, but the config is needed in iOS.
     // adding the param as placeholder.
-    @ReactMethod
-    fun startNativeEmbraceSDK(sdkConfig: ReadableMap, otlpExporterConfig: ReadableMap? = null, promise: Promise) {
+    @Suppress("UNUSED_PARAMETER")
+    fun startNativeEmbraceSDK(sdkConfig: ReadableMap, otlpExporterConfig: ReadableMap, promise: Promise) {
         try {
             // 1) Initialize custom export if there is config
-            if (otlpExporterConfig != null) {
-                val spanExportConfig = otlpExporterConfig.getMap("traceExporter")
-                val logExportConfig = otlpExporterConfig.getMap("logExporter")
+            val spanExportConfig = otlpExporterConfig.getMap("traceExporter")
+            val logExportConfig = otlpExporterConfig.getMap("logExporter")
 
-                if (spanExportConfig != null || logExportConfig != null) {
-                    setHttpExporters(parseExportConfig(spanExportConfig, logExportConfig))
-                } else {
-                    log.info("Neither Traces nor Logs configuration were found, skipping custom export.")
-                }
+            if (spanExportConfig != null || logExportConfig != null) {
+                setHttpExporters(parseExportConfig(spanExportConfig, logExportConfig))
+            } else {
+                log.info("Neither Traces nor Logs configuration were found, skipping custom export.")
             }
 
             // 2) Embrace Start

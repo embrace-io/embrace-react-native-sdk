@@ -41,8 +41,8 @@ import OSLog
   }
 }
 
-@objc(RNEmbraceOTLP)
-class RNEmbraceOTLP: NSObject {
+@objc(RNEmbraceOTLPImpl)
+public class RNEmbraceOTLP: NSObject {
   private var log = OSLog(subsystem: "Embrace", category: "RNEmbraceOTLP")
 
   // Http starts
@@ -120,10 +120,10 @@ class RNEmbraceOTLP: NSObject {
     }
 
     @objc(startNativeEmbraceSDK:otlpExportConfigDict:resolver:rejecter:)
-    func startNativeEmbraceSDK(sdkConfigDict: NSDictionary,
-                               otlpExportConfigDict: NSDictionary,
-                               resolve: @escaping RCTPromiseResolveBlock,
-                               rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func startNativeEmbraceSDK(sdkConfigDict: NSDictionary,
+                                      otlpExportConfigDict: NSDictionary,
+                                      resolve: @escaping RCTPromiseResolveBlock,
+                                      rejecter reject: @escaping RCTPromiseRejectBlock) {
         let sdkConfig = SDKConfig(from: sdkConfigDict)
 
         let traceExporter = otlpExportConfigDict.value(forKey: "traceExporter") as? NSDictionary
