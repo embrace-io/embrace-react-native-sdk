@@ -1,4 +1,4 @@
-import {NativeModules} from "react-native";
+import {NativeModules, TurboModuleRegistry} from "react-native";
 import {useEffect, useState} from "react";
 import {Tracer, TracerProvider} from "@opentelemetry/api";
 
@@ -8,6 +8,9 @@ import {
   EmbraceNativeTracerProviderReturn,
 } from "./types";
 import {EmbraceNativeTracerProvider} from "./EmbraceNativeTracerProvider";
+
+const EmbraceManagerModule =
+  TurboModuleRegistry?.get("EmbraceManager") ?? NativeModules.EmbraceManager;
 
 /**
  * useEmbraceNativeTracerProvider makes sure that the Embrace SDK has been installed and started and
@@ -42,7 +45,7 @@ const useEmbraceNativeTracerProvider = (
       return;
     }
 
-    if (!NativeModules.EmbraceManager) {
+    if (!EmbraceManagerModule) {
       setError(
         "You must have the Embrace SDK available to use the TracerProvider, please install `@embrace-io/react-native`.",
       );
@@ -52,7 +55,7 @@ const useEmbraceNativeTracerProvider = (
     }
 
     if (isLoading) {
-      NativeModules.EmbraceManager.isStarted()
+      EmbraceManagerModule.isStarted()
         .then((started: boolean) => {
           if (!started) {
             setError(
