@@ -161,7 +161,7 @@ const logHandledError = (
   if (error instanceof Error) {
     const {stack, message} = error;
     return safePromise(
-      EmbraceManagerModule.logHandledError(message, stack, properties),
+      EmbraceManagerModule.logHandledError(message, stack ?? "", properties),
       "logHandledError",
       false,
     );

@@ -43,6 +43,7 @@ jobs:
             - 'packages/**/*.gradle'
             - 'packages/**/*.kt'
             - 'packages/**/*.java'
+            - 'packages/**/package.json'
 
       - name: Install Root Node Modules
         run: yarn install

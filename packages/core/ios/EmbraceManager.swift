@@ -23,13 +23,13 @@ private let EVENT_ATTRIBUTES_KEY = "attributes"
 // Crash metadata
 private let EMB_EXC = "emb-js"
 
-@objc(EmbraceManager)
-class EmbraceManager: NSObject {
+@objc(EmbraceManagerImpl)
+public class EmbraceManager: NSObject {
     private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
     private var config: SDKConfig = SDKConfig(from: NSDictionary())
 
     @objc(setJavaScriptBundlePath:resolver:rejecter:)
-    func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.global(qos: .background).async {
             do {
                 let bundleID = try computeBundleID(path: path)
@@ -42,7 +42,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc
-    func getDefaultJavaScriptBundlePath(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func getDefaultJavaScriptBundlePath(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         if  let filePath = Bundle.main.path(forResource: "main", ofType: "jsbundle") {
             resolve(filePath)
         } else {
@@ -51,7 +51,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc
-    func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         guard let state = Embrace.client?.state else {
             resolve(false)
             return
@@ -66,7 +66,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(startNativeEmbraceSDK:resolver:rejecter:)
-    func startNativeEmbraceSDK(configDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func startNativeEmbraceSDK(configDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         config = SDKConfig(from: configDict)
 
         DispatchQueue.main.async {
@@ -82,7 +82,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc
-    func getDeviceId(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func getDeviceId(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         if let deviceId = Embrace.client?.currentDeviceId() {
             resolve(deviceId)
         } else {
@@ -91,7 +91,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(setUserIdentifier:resolver:rejecter:)
-    func setUserIdentifier(_ userIdentifier: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func setUserIdentifier(_ userIdentifier: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         guard Embrace.client != nil else {
             reject("SET_USER_IDENTIFIER_ERROR", "Embrace SDK may not be initialized", nil)
             return
@@ -101,7 +101,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc
-    func getCurrentSessionId(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func getCurrentSessionId(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         if let sessionId = Embrace.client?.currentSessionId() {
             resolve(sessionId)
         } else {
@@ -110,7 +110,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(addBreadcrumb:resolver:rejecter:)
-    func addBreadcrumb(_ event: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func addBreadcrumb(_ event: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         // Add function returns empty if it succeeds, so I specify true as return
         if (Embrace.client?.add(event: .breadcrumb(event))) != nil {
             resolve(true)
@@ -132,7 +132,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc
-    func getLastRunEndState(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func getLastRunEndState(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         if let endState = Embrace.client?.lastRunEndState() {
             resolve(lastRunEndStateToString(endState: endState))
         } else {
@@ -141,7 +141,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(setReactNativeSDKVersion:resolver:rejecter:)
-    func setReactNativeSDKVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func setReactNativeSDKVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
             try Embrace.client?.metadata.addResource(key: HOSTED_SDK_VERSION_RESOURCE_KEY, value: version, lifespan: .process)
             resolve(true)
@@ -151,7 +151,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(setUsername:resolver:rejecter:)
-    func setUsername(_ userName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func setUsername(_ userName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         guard Embrace.client != nil else {
             reject("SET_USERNAME_ERROR", "Embrace SDK may not be initialized", nil)
             return
@@ -161,7 +161,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc
-    func clearUserEmail(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func clearUserEmail(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         guard Embrace.client != nil else {
             reject("CLEAR_USER_EMAIL_ERROR", "Embrace SDK may not be initialized", nil)
             return
@@ -171,7 +171,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(setJavaScriptPatchNumber:resolver:rejecter:)
-    func setJavaScriptPatchNumber(_ patch: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func setJavaScriptPatchNumber(_ patch: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
             try Embrace.client?.metadata.addResource(key: JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY, value: patch, lifespan: .process)
             resolve(true)
@@ -181,7 +181,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc
-    func clearUserIdentifier(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func clearUserIdentifier(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         guard Embrace.client != nil else {
             reject("CLEAR_USER_IDENTIFIER_ERROR", "Embrace SDK may not be initialized", nil)
             return
@@ -191,7 +191,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc
-    func clearUsername(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func clearUsername(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         guard Embrace.client != nil else {
             reject("CLEAR_USERNAME_ERROR", "Embrace SDK may not be initialized", nil)
             return
@@ -201,7 +201,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc
-    func endSession(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func endSession(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         guard Embrace.client != nil else {
             reject("END_SESSION_ERROR", "Embrace SDK may not be initialized", nil)
             return
@@ -211,7 +211,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(addUserPersona:resolver:rejecter:)
-    func addUserPersona(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func addUserPersona(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
             try Embrace.client?.metadata.add(persona: persona, lifespan: .session)
             resolve(true)
@@ -221,7 +221,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc
-    func clearAllUserPersonas(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func clearAllUserPersonas(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         guard Embrace.client != nil else {
             reject("CLEAR_ALL_USER_PERSONAS_ERROR", "Embrace SDK may not be initialized", nil)
             return
@@ -231,7 +231,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(clearUserPersona:resolver:rejecter:)
-    func clearUserPersona(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func clearUserPersona(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
             try Embrace.client?.metadata.remove(persona: PersonaTag(persona), lifespan: .session)
             resolve(true)
@@ -241,7 +241,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(setReactNativeVersion:resolver:rejecter:)
-    func setReactNativeVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func setReactNativeVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
             try Embrace.client?.metadata.addResource(key: HOSTED_PLATFORM_VERSION_RESOURCE_KEY, value: version, lifespan: .process)
             resolve(true)
@@ -251,7 +251,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(removeSessionProperty:resolver:rejecter:)
-    func removeSessionProperty(_ key: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func removeSessionProperty(_ key: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
             // Depending on on how `addSessionProperty` was called we may have added this key as either
             // .session or .permanent so remove both here, multiple calls to remove are safe
@@ -265,7 +265,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(setUserEmail:resolver:rejecter:)
-    func setUserEmail(_ userEmail: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    public func setUserEmail(_ userEmail: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         guard Embrace.client != nil else {
             reject("SET_USER_EMAIL_ERROR", "Embrace SDK may not be initialized", nil)
             return
@@ -275,7 +275,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(addSessionProperty:value:permanent:resolver:rejecter:)
-    func addSessionProperty(
+    public func addSessionProperty(
         _ key: String,
         value: String,
         permanent: Bool,
@@ -292,7 +292,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(logMessageWithSeverityAndProperties:severity:properties:stacktrace:includeStacktrace:resolver:rejecter:)
-    func logMessageWithSeverityAndProperties(
+    public func logMessageWithSeverityAndProperties(
         _ message: String,
         severity: String,
         properties: NSDictionary,
@@ -348,7 +348,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(logNetworkRequest:httpMethod:startInMillis:endInMillis:bytesSent:bytesReceived:statusCode:resolver:rejecter:)
-    func logNetworkRequest(
+    public func logNetworkRequest(
         _ url: String,
         httpMethod: String,
         startInMillis: Double,
@@ -402,7 +402,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(logNetworkClientError:httpMethod:startInMillis:endInMillis:errorType:errorMessage:resolver:rejecter:)
-    func logNetworkClientError(
+    public func logNetworkClientError(
         _ url: String,
         httpMethod: String,
         startInMillis: Double,
@@ -481,7 +481,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(logHandledError:stacktrace:properties:resolver:rejecter:)
-    func logHandledError(
+    public func logHandledError(
         _ message: String,
         stacktrace: String,
         properties: NSDictionary,
@@ -516,7 +516,7 @@ class EmbraceManager: NSObject {
     }
 
     @objc(logUnhandledJSException:message:type:stacktrace:resolver:rejecter:)
-    func logUnhandledJSException(
+    public func logUnhandledJSException(
         _ name: String,
         message: String,
         type: String,

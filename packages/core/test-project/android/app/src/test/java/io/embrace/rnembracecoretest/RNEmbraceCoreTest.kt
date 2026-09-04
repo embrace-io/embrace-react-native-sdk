@@ -6,7 +6,7 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.common.SystemClock.currentTimeMillis
 import io.embrace.android.embracesdk.Embrace
 import io.embrace.android.embracesdk.network.http.HttpMethod
-import io.embrace.rnembracecore.EmbraceManagerModule
+import io.embrace.rnembracecore.EmbraceManagerModuleImpl
 import io.opentelemetry.kotlin.export.OperationResultCode
 import io.opentelemetry.kotlin.logging.export.LogRecordExporter
 import io.opentelemetry.kotlin.logging.model.ReadableLogRecord
@@ -39,7 +39,7 @@ import org.robolectric.annotation.Config
 @Config(sdk = [34])
 class RNEmbraceCoreTest {
     companion object {
-        private val embraceModuleSpy = Mockito.spy(EmbraceManagerModule(mock()))
+        private val embraceModuleSpy = Mockito.spy(EmbraceManagerModuleImpl(mock()))
 
         private val spanExporter: SpanExporter = mock {
             onBlocking { export(any()) } doReturn OperationResultCode.Success
@@ -73,9 +73,9 @@ class RNEmbraceCoreTest {
         val httpMethod = "GET"
         val startTime = currentTimeMillis().toDouble()
         val endTime = currentTimeMillis().toDouble() + 400000
-        val bytesSent = 12938
-        val bytesReceived = 199
-        val statusCode = 200
+        val bytesSent = 12938.0
+        val bytesReceived = 199.0
+        val statusCode = 200.0
 
         whenever(embraceModuleSpy.isNetworkSpanForwardingEnabled).thenReturn(true)
         embraceModuleSpy.logNetworkRequest(
@@ -383,5 +383,15 @@ class RNEmbraceCoreTest {
             assertNotNull(logWithNoSeverity.attributes["emb.state.screen-automatic"])
             assertEquals("stacktrace as string", logWithNoSeverity.attributes["emb.stacktrace.rn"])
         }
+    }
+
+    @Test
+    fun getDefaultJavaScriptBundlePathIsUnsupportedOnAndroid() {
+        embraceModuleSpy.getDefaultJavaScriptBundlePath(promise)
+
+        verify(promise, times(1)).reject(
+            "GET_DEFAULT_JS_BUNDLE_PATH_UNSUPPORTED",
+            "Unable to retrieve JS bundle path",
+        )
     }
 }
