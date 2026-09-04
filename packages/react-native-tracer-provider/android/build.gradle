@@ -20,7 +20,7 @@ def reactNativeArchitectures() {
 }
 
 def isNewArchitectureEnabled() {
-  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+  return project.hasProperty("newArchEnabled") && project.getProperty("newArchEnabled") == "true"
 }
 
 apply plugin: "com.android.library"
@@ -50,10 +50,18 @@ def supportsNamespace() {
 android {
   if (supportsNamespace()) {
     namespace "io.embrace.reactnativetracerprovider"
+  }
 
-    sourceSets {
-      main {
+  sourceSets {
+    main {
+      if (supportsNamespace()) {
         manifest.srcFile "src/main/AndroidManifestNew.xml"
+      }
+
+      if (isNewArchitectureEnabled()) {
+        java.srcDirs += ["src/newarch/java"]
+      } else {
+        java.srcDirs += ["src/oldarch/java"]
       }
     }
   }

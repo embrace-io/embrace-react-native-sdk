@@ -1,9 +1,6 @@
 package io.embrace.reactnativetracerprovider
 
 import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
@@ -50,15 +47,18 @@ private const val SPAN_STATUS_MESSAGE_KEY = "message"
 // Should not get hit under normal circumstances, add as a guard against misinstrumentation
 private const val MAX_STORED_SPANS = 10000
 
-class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class ReactNativeTracerProviderModuleImpl(
+    private val writableMapBuilder: WritableMapBuilder = WritableNativeMapBuilder(),
+    private var tracerProvider: TracerProvider? = null
+) {
+    companion object {
+        const val NAME = "ReactNativeTracerProviderModule"
+    }
+
     private val log = Logger.getLogger("[Embrace]")
     private val tracers = ConcurrentHashMap<String, Tracer>()
     private val activeSpans = ConcurrentHashMap<String, Span>()
     private val completedSpans = ConcurrentHashMap<String, Span>()
-    private var tracerProvider: TracerProvider? = null
-    private var writableMapBuilder: WritableMapBuilder
-
-    override fun getName() = "ReactNativeTracerProviderModule"
 
     /**
      * Various deserializer helpers to go to and from the bridge Readable/Writable Array/Maps to
@@ -148,32 +148,6 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         return map
     }
 
-    init {
-        writableMapBuilder = WritableNativeMapBuilder()
-    }
-
-    /**
-     * Exposed for unit testing to allow a writableMapBuilder to be injected
-     */
-    constructor(
-        reactContext: ReactApplicationContext,
-        writableMapBuilder: WritableMapBuilder
-    ) : this(reactContext) {
-        this.writableMapBuilder = writableMapBuilder
-    }
-
-    /**
-     * Exposed for unit testing to allow a different trace provider and writableMapBuilder to be injected
-     */
-    constructor(
-        reactContext: ReactApplicationContext,
-        tracerProvider: TracerProvider,
-        writableMapBuilder: WritableMapBuilder
-    ) : this(reactContext) {
-        this.tracerProvider = tracerProvider
-        this.writableMapBuilder = writableMapBuilder
-    }
-
     private fun getTracerKey(name: String, version: String, schemaUrl: String): String {
         return "$name $version $schemaUrl"
     }
@@ -190,7 +164,6 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
      * Methods to allow the JS side to conform to @opentelemetry-js/api
      */
 
-    @ReactMethod
     fun setupTracer(name: String, version: String, schemaUrl: String) {
         if (tracerProvider == null) {
             if (!Embrace.isStarted) {
@@ -226,7 +199,6 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
     }
 
     @Suppress("LongParameterList")
-    @ReactMethod
     fun startSpan(
         tracerName: String,
         tracerVersion: String,
@@ -302,13 +274,11 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         }
     }
 
-    @ReactMethod
     fun setAttributes(spanBridgeId: String, attributes: ReadableMap) {
         val span = getSpan(spanBridgeId) ?: return
         span.setAllAttributes(attributesFromReadableMap(attributes))
     }
 
-    @ReactMethod
     fun addEvent(spanBridgeId: String, eventName: String, attributes: ReadableMap, time: Double) {
         val span = getSpan(spanBridgeId) ?: return
 
@@ -319,7 +289,6 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         }
     }
 
-    @ReactMethod
     fun addLinks(spanBridgeId: String, links: ReadableArray) {
         val span = getSpan(spanBridgeId) ?: return
         for (i in 0..links.size() - 1) {
@@ -335,7 +304,6 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         }
     }
 
-    @ReactMethod
     fun setStatus(spanBridgeId: String, status: ReadableMap) {
         val span = getSpan(spanBridgeId) ?: return
         val statusCode = status.getString(SPAN_STATUS_CODE_KEY) ?: return
@@ -352,13 +320,11 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         }
     }
 
-    @ReactMethod
     fun updateName(spanBridgeId: String, name: String) {
         val span = getSpan(spanBridgeId) ?: return
         span.updateName(name)
     }
 
-    @ReactMethod
     fun endSpan(spanBridgeId: String, endTime: Double) {
         val span = getSpan(spanBridgeId) ?: return
 
@@ -376,7 +342,6 @@ class ReactNativeTracerProviderModule(reactContext: ReactApplicationContext) : R
         }
     }
 
-    @ReactMethod
     fun clearCompletedSpans() {
         completedSpans.clear()
     }

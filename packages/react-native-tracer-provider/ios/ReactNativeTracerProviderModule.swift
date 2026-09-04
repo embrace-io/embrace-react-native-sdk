@@ -24,8 +24,8 @@ private let SPAN_STATUS_MESSAGE_KEY = "message"
 // Should not get hit under normal circumstances, add as a guard against misinstrumentation
 private let MAX_STORED_SPANS = 10000
 
-@objc(ReactNativeTracerProviderModule)
-class ReactNativeTracerProviderModule: NSObject {
+@objc(ReactNativeTracerProviderModuleImpl)
+public class ReactNativeTracerProviderModule: NSObject {
   private let tracersQueue = DispatchQueue(
     label: "io.embrace.reactnativetracerprovider.tracers",
     attributes: .concurrent
@@ -138,7 +138,7 @@ class ReactNativeTracerProviderModule: NSObject {
    */
 
   @objc(setupTracer:version:schemaUrl:)
-  func setupTracer(name: String, version: String, schemaUrl: String) {
+  public func setupTracer(name: String, version: String, schemaUrl: String) {
     if tracerProvider == nil {
         if let state = Embrace.client?.state as? EmbraceSDKState,
            state == .started {
@@ -169,10 +169,10 @@ class ReactNativeTracerProviderModule: NSObject {
   }
 
   @objc(startSpan:tracerVersion:tracerSchemaUrl:spanBridgeId:name:kind:time:attributes:links:parentId:resolve:reject:)
-  func startSpan(tracerName: String, tracerVersion: String, tracerSchemaUrl: String,
-                 spanBridgeId: String, name: String, kind: String, time: Double,
-                 attributes: NSDictionary, links: NSArray, parentId: String,
-                 resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  public func startSpan(tracerName: String, tracerVersion: String, tracerSchemaUrl: String,
+                        spanBridgeId: String, name: String, kind: String, time: Double,
+                        attributes: NSDictionary, links: NSArray, parentId: String,
+                        resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     let tracerKey = getTracerKey(name: tracerName, version: tracerVersion, schemaUrl: tracerSchemaUrl)
     var tracer: Tracer?
 
@@ -246,7 +246,7 @@ class ReactNativeTracerProviderModule: NSObject {
   }
 
   @objc(setAttributes:attributes:)
-  func setAttributes(spanBridgeId: String, attributes: NSDictionary) {
+  public func setAttributes(spanBridgeId: String, attributes: NSDictionary) {
     if let span = getSpan(spanBridgeId: spanBridgeId) {
       for (key, value) in attributesFrom(dict: attributes) {
         span.setAttribute(key: key, value: value)
@@ -255,7 +255,7 @@ class ReactNativeTracerProviderModule: NSObject {
   }
 
   @objc(addEvent:eventName:attributes:time:)
-  func addEvent(spanBridgeId: String, eventName: String, attributes: NSDictionary, time: Double) {
+  public func addEvent(spanBridgeId: String, eventName: String, attributes: NSDictionary, time: Double) {
     if let span = getSpan(spanBridgeId: spanBridgeId) {
       if time.isZero {
         span.addEvent(name: eventName, attributes: attributesFrom(dict: attributes))
@@ -266,13 +266,13 @@ class ReactNativeTracerProviderModule: NSObject {
   }
 
   @objc(addLinks:links:)
-  func addLinks(spanBridgeId: String, links: NSArray) {
+  public func addLinks(spanBridgeId: String, links: NSArray) {
     // not supported by the OTEL Swift API currently
     os_log("adding links is not currently supported", log: log, type: .error)
   }
 
   @objc(setStatus:status:)
-  func setStatus(spanBridgeId: String, status: NSDictionary) {
+  public func setStatus(spanBridgeId: String, status: NSDictionary) {
     if let span = getSpan(spanBridgeId: spanBridgeId),
        let code = status.value(forKey: SPAN_STATUS_CODE_KEY),
        let code = code as? String {
@@ -294,14 +294,14 @@ class ReactNativeTracerProviderModule: NSObject {
   }
 
   @objc(updateName:name:)
-  func updateName(spanBridgeId: String, name: String) {
+  public func updateName(spanBridgeId: String, name: String) {
     if let span = getSpan(spanBridgeId: spanBridgeId) {
       span.name = name
     }
   }
 
   @objc(endSpan:time:)
-  func endSpan(spanBridgeId: String, time: Double) {
+  public func endSpan(spanBridgeId: String, time: Double) {
     if let span = getSpan(spanBridgeId: spanBridgeId) {
       if time.isZero {
         span.end()
@@ -325,7 +325,7 @@ class ReactNativeTracerProviderModule: NSObject {
   }
 
   @objc(clearCompletedSpans)
-  func clearCompletedSpans() {
+  public func clearCompletedSpans() {
     completedSpansQueue.async(flags: .barrier) {
       self.completedSpans.removeAll()
     }

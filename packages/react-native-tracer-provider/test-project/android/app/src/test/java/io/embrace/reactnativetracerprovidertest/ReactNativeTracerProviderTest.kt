@@ -4,13 +4,12 @@ import android.os.Looper
 import com.facebook.react.bridge.JavaOnlyArray
 import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import io.embrace.android.embracesdk.Embrace
 import io.embrace.android.embracesdk.otel.java.addJavaSpanExporter
 import io.embrace.android.embracesdk.otel.java.getJavaOpenTelemetry
-import io.embrace.reactnativetracerprovider.ReactNativeTracerProviderModule
+import io.embrace.reactnativetracerprovider.ReactNativeTracerProviderModuleImpl
 import io.embrace.reactnativetracerprovider.WritableMapBuilder
 import io.mockk.every
 import io.mockk.mockkObject
@@ -56,7 +55,7 @@ class JavaOnlyMapMapBuilder : WritableMapBuilder {
 @Config(sdk = [34])
 class ReactNativeTracerProviderModuleTest {
     companion object {
-        private lateinit var tracerProviderModule: ReactNativeTracerProviderModule
+        private lateinit var tracerProviderModule: ReactNativeTracerProviderModuleImpl
         private val exporter: SpanExporter = mock {
             on { export(any()) } doReturn CompletableResultCode.ofSuccess()
         }
@@ -77,18 +76,16 @@ class ReactNativeTracerProviderModuleTest {
     @Before
     fun setUp() {
         if (!sdkStarted) {
-            val context: ReactApplicationContext = mock()
-
             // Sometimes useful to test against the OTEL Tracer Provider to compare differences
             // val provider = setupOTELTracerProvider(exporter)
-            // tracerProviderModule = ReactNativeTracerProviderModule(context, provider, JavaOnlyMapMapBuilder())
+            // tracerProviderModule = ReactNativeTracerProviderModuleImpl(JavaOnlyMapMapBuilder(), provider)
 
             Embrace.addJavaSpanExporter(exporter)
             Embrace.start(RuntimeEnvironment.getApplication())
             shadowOf(Looper.getMainLooper()).idle()
             assertTrue(Embrace.isStarted)
 
-            tracerProviderModule = ReactNativeTracerProviderModule(context, JavaOnlyMapMapBuilder())
+            tracerProviderModule = ReactNativeTracerProviderModuleImpl(JavaOnlyMapMapBuilder())
             tracerProviderModule.setupTracer("test", "v1", "")
 
             extraAttributes = listOf("emb.process_identifier", "emb.type", "emb.private.sequence_id", "session.id")
@@ -639,8 +636,7 @@ class ReactNativeTracerProviderModuleTest {
         mockkObject(Embrace)
         try {
             every { Embrace.isStarted } returns false
-            val context: ReactApplicationContext = mock()
-            val module = ReactNativeTracerProviderModule(context)
+            val module = ReactNativeTracerProviderModuleImpl()
 
             // Operations are noops that shouldn't error. With the SDK reported as not
             // started, setupTracer registers no tracer, so startSpan rejects.
