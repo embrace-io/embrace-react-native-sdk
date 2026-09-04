@@ -1,5 +1,3 @@
-import {Platform, NativeModules} from "react-native";
-
 import {SDKConfig} from "../interfaces";
 import {initialize, type OTLPExporterConfig} from "../index";
 
@@ -10,17 +8,12 @@ const IOS_SDK_BASE_CONFIG = {
 };
 
 const mockStartNativeEmbraceSDK = jest.fn().mockResolvedValue(true);
-jest.mock("react-native", () => ({
-  NativeModules: {
-    RNEmbraceOTLP: {
-      startNativeEmbraceSDK: (
-        sdkConfig: SDKConfig["ios"] | NonNullable<object>,
-        otlpConfig: OTLPExporterConfig,
-      ) => mockStartNativeEmbraceSDK(sdkConfig, otlpConfig),
-    },
-  },
-  Platform: {
-    OS: "ios",
+jest.mock("../RNEmbraceOTLPModule", () => ({
+  RNEmbraceOTLPModule: {
+    startNativeEmbraceSDK: (
+      sdkConfig: SDKConfig["ios"] | NonNullable<object>,
+      otlpConfig: OTLPExporterConfig,
+    ) => mockStartNativeEmbraceSDK(sdkConfig, otlpConfig),
   },
 }));
 
@@ -106,10 +99,6 @@ describe("React Native OTLP", () => {
   });
 
   describe("should call `startNativeEmbraceSDK` (Android specific)", () => {
-    beforeAll(() => {
-      Platform.OS = "android";
-    });
-
     it("if it receives the proper configuration (happy path)", async () => {
       const otlpExporterConfig = {
         logExporter: {
@@ -351,10 +340,6 @@ describe("React Native OTLP", () => {
   });
 
   describe("should not call `startNativeEmbraceSDK` (Android specific)", () => {
-    beforeAll(() => {
-      Platform.OS = "android";
-    });
-
     const mockConsoleWarn = jest
       .spyOn(console, "warn")
       .mockImplementation(a => a);
@@ -373,9 +358,7 @@ describe("React Native OTLP", () => {
 
   describe("should throw and reject", () => {
     beforeAll(() => {
-      NativeModules.RNEmbraceOTLP.startNativeEmbraceSDK = jest
-        .fn()
-        .mockImplementation(jest.fn().mockResolvedValue(false));
+      mockStartNativeEmbraceSDK.mockResolvedValue(false);
     });
 
     it("if something goes wrong in the Native layer", async () => {
@@ -383,6 +366,18 @@ describe("React Native OTLP", () => {
       const isStarted = await customInitCallback(IOS_SDK_BASE_CONFIG);
 
       expect(isStarted).toBe(false);
+    });
+
+    it("if the native module is not linked", async () => {
+      mockStartNativeEmbraceSDK.mockImplementation(() => {
+        throw new Error("linking error");
+      });
+
+      const customInitCallback = initialize({});
+
+      await expect(customInitCallback(IOS_SDK_BASE_CONFIG)).rejects.toBe(
+        "[Embrace] Failed to configure Custom Exporter",
+      );
     });
   });
 });

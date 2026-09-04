@@ -7,7 +7,7 @@ import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.WritableMap
-import io.embrace.rnembraceotlp.RNEmbraceOTLPModule
+import io.embrace.rnembraceotlp.RNEmbraceOTLPModuleImpl
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -58,7 +58,7 @@ class RNEmbraceOTLPTest {
         val context: ReactApplicationContext = mock {
             on { applicationContext } doReturn mock<Context>()
         }
-        val embraceOTLPModule = RNEmbraceOTLPModule(context)
+        val embraceOTLPModule = RNEmbraceOTLPModuleImpl(context)
 
         embraceOTLPModule.startNativeEmbraceSDK(JavaOnlyMap(), config, promise)
     }
