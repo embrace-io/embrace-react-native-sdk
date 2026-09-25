@@ -112,10 +112,7 @@ The Embrace SDK should be started in native code before `initialize` is called. 
 scripts in [Native Setup](#native-setup) do this for you; if you set up manually, see
 [Start Embrace SDK in the native side](https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side).
 
-Then call `initialize` once, at the top level of your application, to set up tracking on the JS side. You can call it
-directly or through the `useEmbrace` hook.
-
-### Without hooks
+Then call `initialize` once, at the top level of your application, to set up tracking on the JS side:
 
 ```javascript
 import React, { useEffect } from 'react'
@@ -146,41 +143,6 @@ const App = () => {
 
 export default App
 ```
-
-### With hooks
-
-We expose also a hook that handles the initialization of Embrace in a more React friendly way:
-
-```javascript
-import React from 'react'
-import { useEmbrace } from '@embrace-io/react-native';
-
-const App = () => {
-  const {isPending, isStarted} = useEmbrace({ trackUnhandledRejections: true });
-
-  if (isPending) {
-    return (
-      <View>
-        <Text>Loading Embrace</Text>
-      </View>
-    );
-  } else {
-    if (!isStarted) {
-      console.log('An error occurred during Embrace initialization');
-    }
-  }
-
-  // regular content of the application
-  return (
-    ...
-  );
-}
-
-export default App
-```
-
-In both cases we recommend to use these methods to initialize the React Native Embrace SDK at the top level of your
-application just once to prevent side effects in the JavaScript layer.
 
 ## Uploading source maps
 
