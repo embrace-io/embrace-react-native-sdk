@@ -13,6 +13,9 @@ const INIT_SDK_CONFIG = {
   sdkConfig: {ios: {appId: "abc12"}},
 };
 
+const JS_START_DEPRECATION_WARNING =
+  "[Embrace] Starting the native SDK from JavaScript (including `sdkConfig.ios` and `sdkConfig.exporters`) is deprecated and will be removed in the next major release. Start Embrace in native code instead: https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side";
+
 const mockSetReactNativeVersion = jest
   .fn()
   .mockReturnValue(Promise.resolve(true));
@@ -154,7 +157,7 @@ describe("SDK initialization", () => {
       await waitFor(() => {
         expect(mockPreviousHandler).toHaveBeenCalledWith(err, true);
         expect(mockLogUnhandledJSException).toHaveBeenCalled();
-        expect(mockConsoleWarn).toHaveBeenCalledTimes(1);
+        expect(mockConsoleWarn).toHaveBeenCalledTimes(2);
         expect(mockConsoleWarn).toHaveBeenCalledWith(
           "[Embrace] Failed to log exception",
         );
@@ -280,6 +283,20 @@ describe("SDK initialization", () => {
     });
   });
 
+  describe("Deprecations", () => {
+    test("warns when the native SDK is started from JS", async () => {
+      mockIsStarted.mockReturnValueOnce(false);
+      const isStarted = await initialize(INIT_SDK_CONFIG);
+
+      await waitFor(() => {
+        expect(isStarted).toBe(true);
+        expect(mockConsoleWarn).toHaveBeenCalledWith(
+          JS_START_DEPRECATION_WARNING,
+        );
+      });
+    });
+  });
+
   describe("Android: initialize", () => {
     test("SDK should start (in Js side)", async () => {
       const isStarted = await initialize(INIT_SDK_CONFIG);
@@ -319,6 +336,9 @@ describe("SDK initialization", () => {
         );
         expect(mockStart).not.toHaveBeenCalled();
         expect(mockConsoleInfo).not.toHaveBeenCalled();
+        expect(mockConsoleWarn).not.toHaveBeenCalledWith(
+          JS_START_DEPRECATION_WARNING,
+        );
       });
     });
 
@@ -394,7 +414,7 @@ describe("SDK initialization", () => {
         expect(mockSetReactNativeVersion).not.toHaveBeenCalled();
         expect(mockSetJavaScriptPatchNumber).not.toHaveBeenCalled();
         expect(mockSetReactNativeSDKVersion).not.toHaveBeenCalled();
-        expect(mockConsoleWarn).toHaveBeenCalledTimes(1);
+        expect(mockConsoleWarn).toHaveBeenCalledTimes(2);
         expect(mockConsoleWarn).toHaveBeenCalledWith(
           "[Embrace] 'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
         );
@@ -423,11 +443,11 @@ describe("SDK initialization", () => {
 
       await waitFor(() => {
         expect(isStarted).toBe(false);
-        expect(mockConsoleWarn).toHaveBeenCalledTimes(2);
-        expect(mockConsoleWarn.mock.calls[0][0]).toBe(
+        expect(mockConsoleWarn).toHaveBeenCalledTimes(3);
+        expect(mockConsoleWarn.mock.calls[1][0]).toBe(
           "[Embrace] something went wrong in the native side (fake error message)",
         );
-        expect(mockConsoleWarn.mock.calls[1][0]).toBe(
+        expect(mockConsoleWarn.mock.calls[2][0]).toBe(
           "[Embrace] we could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
         );
       });
@@ -448,7 +468,10 @@ describe("SDK initialization", () => {
       await waitFor(() => {
         expect(isStarted).toBe(true);
         expect(mockSetJavaScriptBundlePath).toHaveBeenCalledWith("found");
-        expect(mockConsoleWarn).not.toHaveBeenCalled();
+        expect(mockConsoleWarn).toHaveBeenCalledTimes(1);
+        expect(mockConsoleWarn).toHaveBeenCalledWith(
+          JS_START_DEPRECATION_WARNING,
+        );
       });
     });
 
@@ -458,7 +481,10 @@ describe("SDK initialization", () => {
       await waitFor(() => {
         expect(isStarted).toBe(true);
         expect(mockSetJavaScriptBundlePath).not.toHaveBeenCalled();
-        expect(mockConsoleWarn).not.toHaveBeenCalled();
+        expect(mockConsoleWarn).toHaveBeenCalledTimes(1);
+        expect(mockConsoleWarn).toHaveBeenCalledWith(
+          JS_START_DEPRECATION_WARNING,
+        );
       });
     });
 

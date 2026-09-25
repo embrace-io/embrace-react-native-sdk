@@ -37,6 +37,10 @@ const initialize = async (
   // if the sdk started in the native side the follow condition doesn't take any effect.
   // neither iOS setup() nor start() will be overridden
   if (!hasNativeSDKStarted) {
+    logger.warn(
+      "Starting the native SDK from JavaScript (including `sdkConfig.ios` and `sdkConfig.exporters`) is deprecated and will be removed in the next major release. Start Embrace in native code instead: https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side",
+    );
+
     if (isIOS && !sdkConfig?.ios?.appId && !sdkConfig?.exporters) {
       logger.warn(
         "'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
