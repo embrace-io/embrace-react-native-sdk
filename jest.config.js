@@ -7,6 +7,7 @@ module.exports = {
   ...tsjPreset,
   clearMocks: true,
   preset: "@react-native/jest-preset",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   modulePathIgnorePatterns: [
     "<rootDir>/dist/",
     "<rootDir>/packages/.*/lib/",

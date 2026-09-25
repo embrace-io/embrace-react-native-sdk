@@ -21,13 +21,6 @@ jest.mock("../../../../../../package.json", () => ({name: "test"}), {
 
 jest.useFakeTimers();
 
-// avoiding real logs in unit tests
-beforeAll(() => {
-  jest.spyOn(console, "log").mockImplementation(() => {});
-  jest.spyOn(console, "error").mockImplementation(() => {});
-  jest.spyOn(console, "warn").mockImplementation(() => {});
-});
-
 beforeEach(() => {
   jest.clearAllMocks().resetModules();
 });
