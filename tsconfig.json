@@ -13,7 +13,8 @@
     "declaration": true,
     "noUnusedLocals": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["jest", "node"]
   },
   "exclude": ["node_modules", "ios", "android", "./dist", "./integration-tests"]
 }
