@@ -6,6 +6,12 @@ much needed additional context (logs and user info) and measure the timing of ke
 
 For additional info please refer to the [React Native Guide](https://embrace.io/docs/react-native).
 
+> [!IMPORTANT]
+> Starting the native SDK from JavaScript (`sdkConfig.ios`, `sdkConfig.exporters`) and `@embrace-io/react-native-otlp`
+> are deprecated and will be removed in the next major release. Start Embrace in native code as described in
+> [Native Setup](#native-setup) and
+> [Start Embrace SDK in the native side](https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side).
+
 # Requirements
 
 Only an Embrace App ID and an Embrace API Token.
@@ -84,7 +90,7 @@ node node_modules/@embrace-io/react-native/lib/scripts/setup/installIos.js
 
 ### Manually
 
-To run the native setup steps manually refer to [this section of our guide](https://embrace.io/docs/react-native/integration/add-embrace-sdk/#manually)
+To apply the native setup manually refer to [this section of our guide](https://embrace.io/docs/react-native/integration/add-embrace-sdk/#native-setup) to add the native SDKs, then follow the steps to [start the Embrace SDK in the native side](https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side).
 
 ## Sourcing the Embrace iOS SDK from SPM
 
@@ -102,27 +108,21 @@ EMBRACE_USE_SPM=1 USE_FRAMEWORKS=dynamic pod install
 
 ## Initialize the Embrace SDK
 
-### Without hooks
+The Embrace SDK should be started in native code before `initialize` is called. The Expo config plugin and the setup
+scripts in [Native Setup](#native-setup) do this for you; if you set up manually, see
+[Start Embrace SDK in the native side](https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side).
 
-Calling the `initialize` method setups up the tracking for the SDK on the JS side. This is needed even if you choose
-to start the SDK earlier on the native side as explained below, however in that case the configuration passed through
-in the `sdkConfig` object is ignored in favor of the native startup configuration.
+Then call `initialize` once, at the top level of your application, to set up tracking on the JS side:
 
 ```javascript
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { initialize } from '@embrace-io/react-native';
 
 const App = () => {
   useEffect(() => {
     const initEmbrace = async () => {
       try {
-        const isStarted = await initialize({
-          sdkConfig: {
-            ios: {
-              appId: "abcdf",
-            },
-          },
-        });
+        const isStarted = await initialize({ trackUnhandledRejections: true });
 
         if (isStarted) {
           // do something
@@ -143,47 +143,6 @@ const App = () => {
 
 export default App
 ```
-
-### With hooks
-
-We expose also a hook that handles the initialization of Embrace in a more React friendly way:
-
-```javascript
-import React, { useEffect, useState } from 'react'
-import { useEmbrace } from '@embrace-io/react-native';
-
-const App = () => {
-  // minimum of configuration required
-  const {isPending, isStarted} = useEmbrace({
-    ios: {
-      appId: "__APP_ID__", // 5 digits string
-    },
-  });
-
-
-  if (isPending) {
-    return (
-      <View>
-        <Text>Loading Embrace</Text>
-      </View>
-    );
-  } else {
-    if (!isStarted) {
-      console.log('An error occurred during Embrace initialization');
-    }
-  }
-
-  // regular content of the application
-  return (
-    ...
-  );
-}
-
-export default App
-```
-
-In both cases we recommend to use these methods to initialize the React Native Embrace SDK at the top level of your
-application just once to prevent side effects in the JavaScript layer.
 
 ## Uploading source maps
 
