@@ -88,7 +88,7 @@ describe("promiseHandler", () => {
       handleSDKError("testMethod", new Error("test error"));
 
       expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("[Embrace RN SDK]"),
+        expect.stringContaining("[Embrace]"),
         expect.any(Error),
       );
       expect(console.error).toHaveBeenCalledWith(

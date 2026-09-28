@@ -68,7 +68,7 @@ describe("instrumentation/dispatch.ts", () => {
     });
 
     expect(console.info).toHaveBeenCalledWith(
-      "TracerProvider. Using custom tracer.",
+      "[Embrace] TracerProvider. Using custom tracer.",
     );
 
     expect(getTracerSpy).toHaveBeenCalledWith(

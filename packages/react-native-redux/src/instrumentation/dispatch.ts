@@ -34,9 +34,11 @@ const middleware = <RootState>(
 
   return () => {
     if (provider) {
-      console.info("TracerProvider. Using custom tracer.");
+      console.info("[Embrace] TracerProvider. Using custom tracer.");
     } else {
-      console.info("No TracerProvider found. Using global tracer instead.");
+      console.info(
+        "[Embrace] No TracerProvider found. Using global tracer instead.",
+      );
     }
 
     const tracer = provider
