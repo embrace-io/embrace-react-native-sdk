@@ -55,10 +55,6 @@ export const handleSDKError = (methodName: string, error: unknown): void => {
       `[Embrace] SDK error in ${methodName}: ${errorMessage}`,
       errorObj,
     );
-
-    if (errorObj.stack) {
-      console.error(`Stack trace:\n${errorObj.stack}`);
-    }
   }
 };
 

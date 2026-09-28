@@ -273,21 +273,6 @@ describe("promiseHandler", () => {
   });
 
   describe("Stack Trace Logging", () => {
-    it("should log stack trace when available", () => {
-      configureSDKErrorLogging({enabled: true, allowLogToConsole: true});
-
-      const errorWithStack = new Error("test error");
-      errorWithStack.stack = "Error: test\n  at line1\n  at line2";
-
-      handleSDKError("testMethod", errorWithStack);
-
-      const calls = jest.mocked(console.error).mock.calls.flat();
-      const hasStackTrace = calls.some(
-        call => typeof call === "string" && call.includes("Stack trace:"),
-      );
-      expect(hasStackTrace).toBe(true);
-    });
-
     it("should handle errors without stack trace", () => {
       configureSDKErrorLogging({enabled: true, allowLogToConsole: true});
 
