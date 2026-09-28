@@ -35,13 +35,6 @@ describe("EmbraceNativeNavigationTracker.tsx", () => {
 
   const mockAddEventListener = jest.spyOn(AppState, "addEventListener");
 
-  const mockConsoleInfo = jest
-    .spyOn(global.console, "info")
-    .mockImplementation(m => m);
-  const mockConsoleWarn = jest
-    .spyOn(global.console, "warn")
-    .mockImplementation(m => m);
-
   const verifySpans = (expected: object[]) => {
     expect(
       exporter.exportedSpans.map(span => ({
@@ -95,11 +88,11 @@ describe("EmbraceNativeNavigationTracker.tsx", () => {
       </EmbraceNativeNavigationTracker>,
     );
 
-    expect(mockConsoleWarn).toHaveBeenCalledWith(
+    expect(console.warn).toHaveBeenCalledWith(
       "[Embrace] Navigation ref is not available. Make sure this is properly configured.",
     );
 
-    expect(mockConsoleInfo).toHaveBeenCalledWith(
+    expect(console.info).toHaveBeenCalledWith(
       "[Embrace] No TracerProvider found. Using global tracer instead.",
     );
 
@@ -117,14 +110,14 @@ describe("EmbraceNativeNavigationTracker.tsx", () => {
 
     expect(mockStartSpan).not.toHaveBeenCalled();
 
-    expect(mockConsoleWarn).toHaveBeenCalledWith(
+    expect(console.warn).toHaveBeenCalledWith(
       "[Embrace] Navigation component name is not available. Make sure this is properly configured.",
     );
 
     const didDisappearCall = mockDidDisappearListener.mock.calls[0][0];
     didDisappearCall({componentName: null});
 
-    expect(mockConsoleWarn).toHaveBeenCalledWith(
+    expect(console.warn).toHaveBeenCalledWith(
       "[Embrace] Navigation component name is not available. Make sure this is properly configured.",
     );
   });
@@ -132,10 +125,10 @@ describe("EmbraceNativeNavigationTracker.tsx", () => {
   it("should render a component that implements <EmbraceNativeNavigationTracker /> passing a provider", function () {
     render(<AppWithProvider exporter={exporter} />);
 
-    expect(mockConsoleInfo).toHaveBeenCalledWith(
+    expect(console.info).toHaveBeenCalledWith(
       "[Embrace] TracerProvider. Using custom tracer.",
     );
-    expect(mockConsoleInfo).toHaveBeenCalledWith(
+    expect(console.info).toHaveBeenCalledWith(
       "[Embrace] Updated TracerProvider. Switching to the new instance.",
     );
 

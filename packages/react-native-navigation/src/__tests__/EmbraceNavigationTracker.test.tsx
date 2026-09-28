@@ -37,13 +37,6 @@ describe("EmbraceNavigationTracker.tsx", () => {
 
   const mockAddEventListener = jest.spyOn(AppState, "addEventListener");
 
-  const mockConsoleInfo = jest
-    .spyOn(global.console, "info")
-    .mockImplementation(m => m);
-  const mockConsoleWarn = jest
-    .spyOn(global.console, "warn")
-    .mockImplementation(m => m);
-
   const verifySpans = (expected: object[]) => {
     expect(
       exporter.exportedSpans.map(span => ({
@@ -93,11 +86,11 @@ describe("EmbraceNavigationTracker.tsx", () => {
       </EmbraceNavigationTracker>,
     );
 
-    expect(mockConsoleWarn).toHaveBeenCalledWith(
+    expect(console.warn).toHaveBeenCalledWith(
       "[Embrace] Navigation ref is not available. Make sure this is properly configured.",
     );
 
-    expect(mockConsoleInfo).toHaveBeenCalledWith(
+    expect(console.info).toHaveBeenCalledWith(
       "[Embrace] No TracerProvider found. Using global tracer instead.",
     );
 
@@ -115,7 +108,7 @@ describe("EmbraceNavigationTracker.tsx", () => {
     mockGetCurrentRoute.mockReturnValue({name: null});
     mockNavigationListenerCall();
 
-    expect(mockConsoleWarn).toHaveBeenCalledWith(
+    expect(console.warn).toHaveBeenCalledWith(
       "[Embrace] Navigation route name is not available. Make sure this is properly configured.",
     );
   });
@@ -126,10 +119,10 @@ describe("EmbraceNavigationTracker.tsx", () => {
     // should not call the global `getTracer` function since it should get the provider from props
     expect(mockGlobalTracer).not.toHaveBeenCalled();
 
-    expect(mockConsoleInfo).toHaveBeenCalledWith(
+    expect(console.info).toHaveBeenCalledWith(
       "[Embrace] TracerProvider. Using custom tracer.",
     );
-    expect(mockConsoleInfo).toHaveBeenCalledWith(
+    expect(console.info).toHaveBeenCalledWith(
       "[Embrace] Updated TracerProvider. Switching to the new instance.",
     );
 

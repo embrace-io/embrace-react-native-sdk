@@ -45,9 +45,6 @@ jest.mock("../EmbraceManagerModule", () => ({
   },
 }));
 
-const mockConsoleLog = jest.spyOn(console, "log").mockImplementation(m => m);
-const mockConsoleWarn = jest.spyOn(console, "warn").mockImplementation(m => m);
-
 describe("useEmbrace", () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -69,13 +66,13 @@ describe("useEmbrace", () => {
     await waitFor(() => {
       expect(result.current.isPending).toBe(false);
       expect(result.current.isStarted).toBe(true);
-      expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect(console.log).toHaveBeenCalledWith(
         "[Embrace] native SDK was started",
       );
       expect(mockSetJavaScriptPatchNumber).toHaveBeenCalledWith("v1");
     });
 
-    mockConsoleLog.mockClear();
+    jest.mocked(console.log).mockClear();
     mockSetJavaScriptPatchNumber.mockClear();
 
     // not updating what `EmbraceManagerModule.startNativeEmbraceSDK` returns
@@ -87,7 +84,7 @@ describe("useEmbrace", () => {
     });
 
     await waitFor(() => {
-      expect(mockConsoleLog).not.toHaveBeenCalled();
+      expect(console.log).not.toHaveBeenCalled();
       expect(mockSetJavaScriptPatchNumber).not.toHaveBeenCalledWith("v1");
     });
   });
@@ -119,7 +116,7 @@ describe("useEmbrace", () => {
       expect(result.current.isPending).toBe(false);
       expect(result.current.isStarted).toBe(false);
 
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] we could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
     });
@@ -193,7 +190,7 @@ describe("useEmbrace", () => {
       expect(result.current.isPending).toBe(false);
       // it should still initialize the SKD using the regular `@embrace-io/react-native` package
       expect(result.current.isStarted).toBe(true);
-      expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect(console.log).toHaveBeenCalledWith(
         "[Embrace] native SDK was started",
       );
     });
@@ -223,7 +220,7 @@ describe("useEmbrace", () => {
     );
 
     await waitFor(() => {
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] we could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
       expect(result.current.isPending).toBe(false);

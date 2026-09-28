@@ -107,8 +107,6 @@ describe("useOrientationListener.ts", () => {
   });
 
   it("on change with the same dimensions", () => {
-    const mockConsoleWarn = jest.fn();
-    jest.spyOn(console, "warn").mockImplementation(mockConsoleWarn);
     jest.mocked(mockGetDimentions).mockReturnValue(DIMENSIONS.portrait);
     jest.mocked(mockAddEventListener).mockImplementation((_, cb) => {
       cb({screen: DIMENSIONS.portrait});
@@ -129,9 +127,6 @@ describe("useOrientationListener.ts", () => {
   });
 
   it("width/height are the same", () => {
-    const mockConsoleWarn = jest.fn();
-    jest.spyOn(console, "warn").mockImplementation(mockConsoleWarn);
-    // getDimensions() should return `undefined`
     jest.mocked(mockGetDimentions).mockReturnValue({width: 10, height: 10});
     jest.mocked(mockAddEventListener).mockImplementation((_, cb) => {
       cb({screen: {width: 10, height: 10}});
@@ -140,7 +135,7 @@ describe("useOrientationListener.ts", () => {
     renderHook(useOrientationListener);
 
     expect(mockBreadcrumb).not.toHaveBeenCalled();
-    expect(mockConsoleWarn).toHaveBeenCalledWith(
+    expect(console.warn).toHaveBeenCalledWith(
       "[Embrace] we could not determine the screen measurements. Orientation log skipped.",
     );
   });
