@@ -1,5 +1,4 @@
 import * as React from "react";
-import {SDKConfig} from "@embrace-io/react-native";
 import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {
   NavigationContainer,
@@ -16,22 +15,17 @@ import {NetworkTestingScreen} from "./screens/NetworkTestingScreen";
 import {ReduxTestingScreen} from "./screens/ReduxTestingScreen";
 import FullScreenMessage from "./components/FullScreenMessage";
 
-type Props = {
-  sdkConfig: SDKConfig;
-  allowCustomExport?: boolean;
-};
-
 const Tab = createBottomTabNavigator();
 
-const EmbraceReactNativeTestHarness = ({sdkConfig, allowCustomExport = false}: Props) => {
-  const {isPending, isStarted} = useEmbraceSDK(sdkConfig, allowCustomExport);
+const EmbraceReactNativeTestHarness = () => {
+  const {isPending, isStarted, error} = useEmbraceSDK();
   const navigationContainer = useNavigationContainerRef();
   const navigationContainerRef = React.useRef(navigationContainer);
   const {tracerProvider, isLoading: isLoadingTracerProvider} =
     useEmbraceNativeTracerProvider({}, isStarted);
 
   if (isPending || !isStarted) {
-    return <EmbraceSDKStatus isPending={isPending} />;
+    return <EmbraceSDKStatus isPending={isPending} error={error} />;
   }
 
   if (isLoadingTracerProvider || tracerProvider === null) {

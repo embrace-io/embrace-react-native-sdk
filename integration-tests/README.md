@@ -31,7 +31,11 @@ NOTE: `--pm yarn` is set to workaround an issue with the @react-native-community
 set in ../package.json is modified so make sure to revert afterwards.
 
 After initializing, move over the created app into the templates folder (`mv ProjectName templates/my-new-template`) and
-remove any unneeded files then add Embrace specific setup (install scripts may help).
+remove any unneeded files then add Embrace specific setup. This includes the native initialization, copied from an
+existing template: `Embrace.start(this)` after `super.onCreate()` in `MainApplication`, `EmbraceInitializer.start()` at
+the start of the `AppDelegate`'s `didFinishLaunchingWithOptions` and `EmbraceInitializer.swift` added to the Xcode
+project. Copy `EmbraceInitializer.swift` unchanged: `set-embrace-config.js` sets the static properties at the top of it
+and fails if any of them is missing.
 
 The ["Current Tags"](https://www.npmjs.com/package/react-native?activeTab=versions) section of the react-native package
 in NPM can help decide which specific patch version to pin the template to for a given minor version, there will generally
@@ -87,6 +91,11 @@ Set the test app up with a particular embrace config:
 ```bash
 ./set-embrace-config.js <test-app> <config.json> --namespace=<namespace>
 ```
+
+The test apps start the Embrace SDK natively, so the config is written into native files: Android's
+`android/app/src/main/embrace-config.json` and iOS's `ios/<app>/EmbraceInitializer.swift`. Rebuild the app after
+changing its config. The test harness will not start the SDK from JavaScript, if the native SDK was not started it shows
+an error screen instead.
 
 Depending on the testing being done `embrace-configs/` has a few different configuration options:
 * using real app_ids without setting `endpoint` -> Sends actual data to Embrace allowing verifications to be done on
