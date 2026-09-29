@@ -5,11 +5,8 @@ import {
 } from "../utils/promiseHandler";
 
 describe("promiseHandler", () => {
-  let consoleErrorSpy: jest.SpyInstance;
-
   beforeEach(() => {
     jest.clearAllMocks();
-    consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
     // Reset to defaults
     configureSDKErrorLogging({
@@ -17,10 +14,6 @@ describe("promiseHandler", () => {
       allowLogToConsole: false,
       customHandler: undefined,
     });
-  });
-
-  afterEach(() => {
-    consoleErrorSpy.mockRestore();
   });
 
   describe("Configuration", () => {
@@ -78,7 +71,7 @@ describe("promiseHandler", () => {
 
       handleSDKError("testMethod", new Error("test error"));
 
-      expect(consoleErrorSpy).not.toHaveBeenCalled();
+      expect(console.error).not.toHaveBeenCalled();
     });
 
     it("should handle when enabled but allowLogToConsole is false", () => {
@@ -86,7 +79,7 @@ describe("promiseHandler", () => {
 
       handleSDKError("testMethod", new Error("test error"));
 
-      expect(consoleErrorSpy).not.toHaveBeenCalled();
+      expect(console.error).not.toHaveBeenCalled();
     });
 
     it("should log to console when both enabled and allowLogToConsole are true", () => {
@@ -94,11 +87,11 @@ describe("promiseHandler", () => {
 
       handleSDKError("testMethod", new Error("test error"));
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining("[Embrace RN SDK]"),
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining("[Embrace]"),
         expect.any(Error),
       );
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
+      expect(console.error).toHaveBeenCalledWith(
         expect.stringContaining("testMethod"),
         expect.any(Error),
       );
@@ -109,7 +102,7 @@ describe("promiseHandler", () => {
 
       handleSDKError("testMethod", new Error("specific error message"));
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
+      expect(console.error).toHaveBeenCalledWith(
         expect.stringContaining("specific error message"),
         expect.any(Error),
       );
@@ -220,7 +213,7 @@ describe("promiseHandler", () => {
         handleSDKError("testMethod", new Error("test"));
       }).not.toThrow();
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
+      expect(console.error).toHaveBeenCalledWith(
         expect.stringContaining("Error in custom"),
         expect.any(Error),
       );
@@ -237,7 +230,7 @@ describe("promiseHandler", () => {
       handleSDKError("testMethod", new Error("test"));
 
       expect(customHandler).toHaveBeenCalled();
-      expect(consoleErrorSpy).toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalled();
     });
 
     it("should pass correct method name to handler", () => {
@@ -275,26 +268,11 @@ describe("promiseHandler", () => {
 
       handleSDKError("testMethod2", new Error("test2"));
       expect(customHandler).toHaveBeenCalledTimes(1); // Should not be called again
-      expect(consoleErrorSpy).toHaveBeenCalled(); // But console should still work
+      expect(console.error).toHaveBeenCalled(); // But console should still work
     });
   });
 
   describe("Stack Trace Logging", () => {
-    it("should log stack trace when available", () => {
-      configureSDKErrorLogging({enabled: true, allowLogToConsole: true});
-
-      const errorWithStack = new Error("test error");
-      errorWithStack.stack = "Error: test\n  at line1\n  at line2";
-
-      handleSDKError("testMethod", errorWithStack);
-
-      const calls = consoleErrorSpy.mock.calls.flat();
-      const hasStackTrace = calls.some(
-        call => typeof call === "string" && call.includes("Stack trace:"),
-      );
-      expect(hasStackTrace).toBe(true);
-    });
-
     it("should handle errors without stack trace", () => {
       configureSDKErrorLogging({enabled: true, allowLogToConsole: true});
 
@@ -305,7 +283,7 @@ describe("promiseHandler", () => {
         handleSDKError("testMethod", errorWithoutStack);
       }).not.toThrow();
 
-      expect(consoleErrorSpy).toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalled();
     });
 
     it("should include stack trace in custom handler even if logging disabled", () => {

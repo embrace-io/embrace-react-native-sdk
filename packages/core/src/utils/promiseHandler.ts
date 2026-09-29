@@ -43,7 +43,7 @@ export const handleSDKError = (methodName: string, error: unknown): void => {
     } catch (handlerError) {
       if (errorLoggingConfig.allowLogToConsole) {
         console.error(
-          `[Embrace RN SDK] Error in custom error handler for ${methodName}:`,
+          `[Embrace] Error in custom error handler for ${methodName}:`,
           handlerError,
         );
       }
@@ -52,13 +52,9 @@ export const handleSDKError = (methodName: string, error: unknown): void => {
 
   if (errorLoggingConfig.allowLogToConsole) {
     console.error(
-      `[Embrace RN SDK] SDK error in ${methodName}: ${errorMessage}`,
+      `[Embrace] SDK error in ${methodName}: ${errorMessage}`,
       errorObj,
     );
-
-    if (errorObj.stack) {
-      console.error(`Stack trace:\n${errorObj.stack}`);
-    }
   }
 };
 

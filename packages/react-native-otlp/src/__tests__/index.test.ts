@@ -129,17 +129,13 @@ describe("React Native OTLP", () => {
 
   // should NOT call
   describe("should not call `startNativeEmbraceSDK`", () => {
-    const mockConsoleWarn = jest
-      .spyOn(console, "warn")
-      .mockImplementation(a => a);
-
     it("if configuration is missing", async () => {
       // @ts-expect-error (testing invalid configuration)
       const customInitCallback = initialize(undefined);
       await customInitCallback(IOS_SDK_BASE_CONFIG);
 
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid configuration for Custom Exporter",
       );
     });
@@ -152,7 +148,7 @@ describe("React Native OTLP", () => {
       );
       await customInitWithStringArgCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid configuration for Custom Exporter",
       );
 
@@ -161,7 +157,7 @@ describe("React Native OTLP", () => {
       const customInitWithNumberArgCallback = initialize(12345678);
       await customInitWithNumberArgCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid configuration for Custom Exporter",
       );
 
@@ -170,7 +166,7 @@ describe("React Native OTLP", () => {
       const customInitWithArrayArgCallback = initialize([]);
       await customInitWithArrayArgCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid configuration for Custom Exporter",
       );
     });
@@ -184,7 +180,7 @@ describe("React Native OTLP", () => {
 
       await customInitTraceInvalidCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid configuration for Trace Custom Exporter",
       );
 
@@ -196,7 +192,7 @@ describe("React Native OTLP", () => {
 
       await customInitLogInvalidCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid configuration for Trace Custom Exporter",
       );
     });
@@ -211,7 +207,7 @@ describe("React Native OTLP", () => {
 
       await customInitEndpointAsNumberCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid endpoint for Custom Exporter",
       );
 
@@ -224,7 +220,7 @@ describe("React Native OTLP", () => {
 
       await customInitEndpointAsArrayCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid endpoint for Custom Exporter",
       );
 
@@ -237,7 +233,7 @@ describe("React Native OTLP", () => {
 
       await customInitEmptyEndpointCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid endpoint for Custom Exporter",
       );
 
@@ -250,7 +246,7 @@ describe("React Native OTLP", () => {
 
       await customInitEndpointAsObjectCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid endpoint for Custom Exporter",
       );
     });
@@ -265,7 +261,7 @@ describe("React Native OTLP", () => {
 
       await customInitEndpointAsNumberCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid endpoint for Custom Exporter",
       );
 
@@ -278,7 +274,7 @@ describe("React Native OTLP", () => {
 
       await customInitEndpointAsArrayCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid endpoint for Custom Exporter",
       );
 
@@ -290,7 +286,7 @@ describe("React Native OTLP", () => {
 
       await customInitEmptyEndpointCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid endpoint for Custom Exporter",
       );
 
@@ -303,7 +299,7 @@ describe("React Native OTLP", () => {
 
       await customInitEndpointAsObjectCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid endpoint for Custom Exporter",
       );
     });
@@ -319,7 +315,7 @@ describe("React Native OTLP", () => {
 
       await customInitHeaderAsNumberCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid header for Custom Exporter",
       );
 
@@ -333,24 +329,20 @@ describe("React Native OTLP", () => {
 
       await customInitHeaderAsObjectCallback(IOS_SDK_BASE_CONFIG);
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid header for Custom Exporter",
       );
     });
   });
 
   describe("should not call `startNativeEmbraceSDK` (Android specific)", () => {
-    const mockConsoleWarn = jest
-      .spyOn(console, "warn")
-      .mockImplementation(a => a);
-
     it("if configuration is missing", async () => {
       // @ts-expect-error (testing invalid configuration)
       const customInitCallback = initialize(undefined);
       await customInitCallback(IOS_SDK_BASE_CONFIG);
 
       expect(mockStartNativeEmbraceSDK).not.toHaveBeenCalled();
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
+      expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] Invalid configuration for Custom Exporter",
       );
     });

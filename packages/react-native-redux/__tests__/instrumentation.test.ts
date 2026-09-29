@@ -12,15 +12,12 @@ import {
 import noopMiddleware from "./helpers/noopMiddleware";
 import {TestSpanExporter} from "./helpers/exporter";
 
-import SpyInstance = jest.SpyInstance;
-
 jest.mock("react-native", () => ({
   AppState: {currentState: "background"},
 }));
 
 describe("instrumentation/dispatch.ts", () => {
   let exporter: TestSpanExporter;
-  let consoleInfoSpy: SpyInstance;
 
   const verifySpans = (expected: object[]) => {
     expect(
@@ -33,9 +30,6 @@ describe("instrumentation/dispatch.ts", () => {
 
   beforeEach(() => {
     exporter = new TestSpanExporter();
-    consoleInfoSpy = jest
-      .spyOn(global.console, "info")
-      .mockImplementation(() => {});
   });
 
   afterEach(async () => {
@@ -48,9 +42,9 @@ describe("instrumentation/dispatch.ts", () => {
 
   it("should not post console messages if debug mode is disabled", () => {
     const store = getStore(exporter);
-    consoleInfoSpy.mockClear();
+    jest.mocked(console.info).mockClear();
     middleware(undefined, {debug: false})(store);
-    expect(consoleInfoSpy).not.toHaveBeenCalled();
+    expect(console.info).not.toHaveBeenCalled();
   });
 
   it("should use the custom provider and custom configurations to apply to the middleware", () => {
@@ -73,8 +67,8 @@ describe("instrumentation/dispatch.ts", () => {
         ),
     });
 
-    expect(consoleInfoSpy).toHaveBeenCalledWith(
-      "TracerProvider. Using custom tracer.",
+    expect(console.info).toHaveBeenCalledWith(
+      "[Embrace] TracerProvider. Using custom tracer.",
     );
 
     expect(getTracerSpy).toHaveBeenCalledWith(
