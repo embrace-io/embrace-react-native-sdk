@@ -8,15 +8,10 @@ import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-pr
 import FullScreenMessage from "../../components/FullScreenMessage";
 import rootReducer from "./reducers";
 import {counterIncrease, counterDecrease} from "./actions";
-import {useEmbrace} from "@embrace-io/react-native";
 import {useEmbraceMiddleware} from "@embrace-io/react-native-redux";
 
 const ReduxTestingScreen = () => {
-  const {isStarted} = useEmbrace({ios: {appId: "abc123"}});
-  const {isError, error, tracerProvider} = useEmbraceNativeTracerProvider(
-    {},
-    isStarted,
-  );
+  const {isError, error, tracerProvider} = useEmbraceNativeTracerProvider({});
   const {middleware} = useEmbraceMiddleware(tracerProvider);
   const [store, setStore] = useState<EnhancedStore>();
 
