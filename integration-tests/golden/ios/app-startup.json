@@ -83,7 +83,7 @@
             ],
             "status": "ok",
             "span_id": "fdbea83006e6bb57",
-            "name": "emb-app-startup-warm"
+            "name": "emb-app-startup-cold"
           },
           {
             "parent_span_id": "fdbea83006e6bb57",
