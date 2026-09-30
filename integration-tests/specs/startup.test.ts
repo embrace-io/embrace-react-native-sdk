@@ -1,11 +1,12 @@
 import {endSession} from "../helpers/app";
 import {getPayloadSource} from "../helpers/payload_source";
 
-describe("Startup instrumentation", () => {
+describe("Startup instrumentation", function () {
+    this.retries(0);
     const source = getPayloadSource();
 
-    it("captures startup spans", async () => {
-        await new Promise(resolve => setTimeout(resolve, 3000));
+    it("records an app startup trace", async () => {
+        await new Promise(resolve => setTimeout(resolve, 5000));
         await endSession();
 
         const payload = await source.getPayloads();
