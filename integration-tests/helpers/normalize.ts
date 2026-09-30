@@ -7,17 +7,13 @@ import {
 } from "../typings/embrace";
 import { currentPlatform } from "./platform";
 
-// Internal view spans the SDK emits automatically (native screen tracking); not user navigation.
-// The tracer-provider's startView() helper produces a span with the same name, so the name alone
-// is not enough: iOS tags its auto-captured views with view.title (the native class), user spans
-// carry only view.name.
-const INTERNAL_VIEW_SPAN_NAMES = new Set(["emb-screen-view", "emb-sdk-start"]);
-
 // Logs the SDK emits about itself (iOS launch-time warnings). User logs are emb.type=sys.log
 // (sys.exception for handled errors on Android), so this must not be a "sys." prefix match.
 const IGNORED_LOG_TYPES = new Set(["sys.internal"]);
 
 const SESSION_SPAN_NAME = "emb-session";
+
+const INTERNAL_SPAN_PREFIX = "emb-";
 
 // Read a value from a {key,value}[] attribute list (spans and logs share this shape).
 export const getAttribute = (
@@ -40,10 +36,6 @@ const isUserPerf = (span: EmbraceSpanData): boolean => {
   return type === "";
 };
 
-// Distinguish the SDK's auto-captured views from a user's startView() span, which shares the name.
-const isInternalView = (span: EmbraceSpanData): boolean =>
-  INTERNAL_VIEW_SPAN_NAMES.has(span.name) && getAttribute(span, "view.title") !== "";
-
 export const normalizePayloads = (
   spanEnvelopes: EmbraceSpanEnvelope[],
   logEnvelopes: EmbraceLogEnvelope[],
@@ -53,9 +45,11 @@ export const normalizePayloads = (
     viewSpans: [],
     perfSpans: [],
     networkSpans: [],
+    reduxSpans: [],
     spanSnapshots: [],
     logs: [],
     sessionMetadata: {},
+    internalSpans: [],
     ignored: [],
   };
 
@@ -66,13 +60,13 @@ export const normalizePayloads = (
         // User identity lives on the envelope, not the span; keep it for the user specs.
         out.sessionMetadata = env.metadata ?? {};
       } else if (getEmbType(span) === "ux.view") {
-        if (isInternalView(span)) {
-          out.ignored.push(span);
-        } else {
-          out.viewSpans.push(span);
-        }
+        out.viewSpans.push(span);
       } else if (getEmbType(span) === "perf.network_request") {
         out.networkSpans.push(span);
+      } else if (span.name.startsWith(INTERNAL_SPAN_PREFIX)) {
+        out.internalSpans.push(span);
+      } else if (getEmbType(span) === "sys.rn_action") {
+        out.reduxSpans.push(span);
       } else if (isUserPerf(span)) {
         out.perfSpans.push(span);
       } else {
