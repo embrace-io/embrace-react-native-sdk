@@ -2,25 +2,42 @@
 set -Eeuo pipefail
 
 usage() {
- echo "Usage: $0 <name> <platform> <namespace>"
+ echo "Usage: $0 <name> <platform> [namespace] [--simulator]"
+ echo "  --simulator  iOS only: build a Release .app for the simulator instead of an unsigned .ipa."
+ echo "               The namespace becomes optional; without one the app points at the local mock server."
 }
 
-name=$1
+simulator=false
+positional=()
+for arg in "$@"; do
+  case $arg in
+    --simulator) simulator=true ;;
+    *) positional+=("$arg") ;;
+  esac
+done
+
+name=${positional[0]:-}
 if [ -z "$name" ]; then
   echo "name is required."
   usage
   exit 1
 fi
 
-platform=$2
+platform=${positional[1]:-}
 if [[ "$platform" != "ios" && "$platform" != "android" ]]; then
   echo "invalid platform."
   usage
   exit 1
 fi
 
-namespace=$3
-if [ -z "$namespace" ]; then
+if [[ "$simulator" = true && "$platform" != "ios" ]]; then
+  echo "--simulator is only supported for ios."
+  usage
+  exit 1
+fi
+
+namespace=${positional[2]:-}
+if [[ -z "$namespace" && "$simulator" = false ]]; then
   echo "namespace is required."
   usage
   exit 1
@@ -71,7 +88,11 @@ echo "Build and install local Embrace packages for $name"
 ./update-embrace-packages.sh $app_path
 
 echo "Updating the Embrace config for $name"
-./set-embrace-config.js $app_path embrace-configs/remote-mock-api.json --namespace=$namespace
+if [ -n "$namespace" ]; then
+  ./set-embrace-config.js $app_path embrace-configs/remote-mock-api.json --namespace=$namespace
+else
+  ./set-embrace-config.js $app_path embrace-configs/local-node-server.json
+fi
 
 if [ "$platform" == "android" ]; then
   echo "Building $name.apk"
@@ -88,17 +109,28 @@ else
   pod install
   popd
 
-  # Browserstack will re-sign the .ipa before running it on their test devices so produce an unsigned one
-  # here to avoid having to deal with managing our certificates
-  # https://medium.com/@suyesh.kandpal28/how-to-create-an-unsigned-ipa-resign-it-with-a-new-certificate-and-upload-it-to-the-app-store-63c8dc119d20
-  echo "Building $name.xcarchive"
-  xcodebuild archive -workspace $app_path/ios/$ios_name.xcworkspace \
-  -scheme $ios_name -configuration Release \
-  -sdk iphoneos -archivePath $name.xcarchive \
-  CODE_SIGNING_REQUIRED=NO \
-  CODE_SIGNING_ALLOWED=NO
+  if [ "$simulator" = true ]; then
+    echo "Building $name.app for the simulator"
+    xcodebuild build -workspace $app_path/ios/$ios_name.xcworkspace \
+    -scheme $ios_name -configuration Release \
+    -destination 'generic/platform=iOS Simulator' \
+    -derivedDataPath $app_path/ios/build
 
-  echo "Building $name.ipa"
-  mv $name.xcarchive/Products/Applications Payload
-  zip -r $name.ipa Payload
+    rm -rf $name.app
+    mv $app_path/ios/build/Build/Products/Release-iphonesimulator/$ios_name.app $name.app
+  else
+    # Browserstack will re-sign the .ipa before running it on their test devices so produce an unsigned one
+    # here to avoid having to deal with managing our certificates
+    # https://medium.com/@suyesh.kandpal28/how-to-create-an-unsigned-ipa-resign-it-with-a-new-certificate-and-upload-it-to-the-app-store-63c8dc119d20
+    echo "Building $name.xcarchive"
+    xcodebuild archive -workspace $app_path/ios/$ios_name.xcworkspace \
+    -scheme $ios_name -configuration Release \
+    -sdk iphoneos -archivePath $name.xcarchive \
+    CODE_SIGNING_REQUIRED=NO \
+    CODE_SIGNING_ALLOWED=NO
+
+    echo "Building $name.ipa"
+    mv $name.xcarchive/Products/Applications Payload
+    zip -r $name.ipa Payload
+  fi
 fi

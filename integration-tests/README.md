@@ -138,6 +138,20 @@ or through xCode:
 - Under the Run section, change the Build Configuration from Debug to Release.
 - Press Cmd + R to build and run the app in release mode.
 
+To build a Release `.app` for the simulator without installing or launching it (no signing team needed), use the same
+script CI uses with `--simulator`:
+
+```bash
+./build-test-app.sh rn82 ios --simulator                    # points at the local mock server
+./build-test-app.sh rn82 ios firstname.lastname --simulator # points at the hosted mock-api namespace
+xcrun simctl uninstall booted io.embrace.rn82
+xcrun simctl install booted rn82.app
+```
+
+The iOS SDK reports the first launch after a fresh install as a cold start, which is what Browserstack sees on every
+run. Installing over an existing copy keeps its data, so later launches are reported as warm; uninstall first to match
+Browserstack.
+
 ## Integration Testing
 
 For automated testing WebdriverIO's [Testrunner](https://webdriver.io/docs/testrunner/) is used to spin up an [Appium](http://appium.io/docs/en/latest/intro/)
