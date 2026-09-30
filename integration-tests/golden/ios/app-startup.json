@@ -1,0 +1,319 @@
+{
+  "spans": [
+    {
+      "metadata": {
+        "personas": []
+      },
+      "data": {
+        "spans": [
+          {
+            "start_time_unix_nano": 1790701325510298000,
+            "span_id": "b4b125938f1cc180",
+            "name": "emb-session",
+            "status": "ok",
+            "end_time_unix_nano": 1790701328360615000,
+            "events": [
+              {
+                "attributes": [
+                  {
+                    "key": "emb.type",
+                    "value": "sys.breadcrumb"
+                  },
+                  {
+                    "key": "message",
+                    "value": "The App started in portrait mode"
+                  }
+                ],
+                "name": "emb-breadcrumb",
+                "time_unix_nano": 1790701325623898000
+              }
+            ],
+            "links": [],
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "ux.session"
+              },
+              {
+                "key": "session.id",
+                "value": "72F15812C977488A81058C1D4E95C9F5"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "emb.cold_start",
+                "value": "true"
+              },
+              {
+                "key": "emb.terminated",
+                "value": "false"
+              },
+              {
+                "key": "emb.clean_exit",
+                "value": "true"
+              },
+              {
+                "key": "emb.heartbeat_time_unix_nano",
+                "value": "1790701325513169920"
+              },
+              {
+                "key": "emb.session_number",
+                "value": "1"
+              }
+            ],
+            "trace_id": "3502937344741410457a04a8e8c2a9a1"
+          },
+          {
+            "trace_id": "819ace0ff4e75387ea1035a0cf536572",
+            "links": [],
+            "events": [],
+            "start_time_unix_nano": 1790701324981581800,
+            "end_time_unix_nano": 1790701325645357000,
+            "attributes": [
+              {
+                "key": "isPrewarmed",
+                "value": "false"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.startup"
+              }
+            ],
+            "status": "ok",
+            "span_id": "fdbea83006e6bb57",
+            "name": "emb-app-startup-warm"
+          },
+          {
+            "parent_span_id": "fdbea83006e6bb57",
+            "trace_id": "819ace0ff4e75387ea1035a0cf536572",
+            "links": [],
+            "events": [],
+            "start_time_unix_nano": 1790701324981581800,
+            "end_time_unix_nano": 1790701325233495000,
+            "attributes": [
+              {
+                "key": "isPrewarmed",
+                "value": "false"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.startup"
+              }
+            ],
+            "status": "ok",
+            "span_id": "82f429bdee63e848",
+            "name": "emb-app-pre-main-init"
+          },
+          {
+            "parent_span_id": "fdbea83006e6bb57",
+            "trace_id": "819ace0ff4e75387ea1035a0cf536572",
+            "links": [],
+            "events": [],
+            "start_time_unix_nano": 1790701325233495000,
+            "end_time_unix_nano": 1790701325645357000,
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "sys.startup"
+              },
+              {
+                "key": "isPrewarmed",
+                "value": "false"
+              }
+            ],
+            "status": "ok",
+            "span_id": "a1c7a85da493a69c",
+            "name": "emb-app-first-frame-rendered"
+          },
+          {
+            "parent_span_id": "bd9950ae59f9a0cc",
+            "trace_id": "a0b64b585d843e3e6c43c8b7b6bd0708",
+            "links": [],
+            "events": [],
+            "start_time_unix_nano": 1790701325508510000,
+            "end_time_unix_nano": 1790701325523922200,
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "perf"
+              }
+            ],
+            "status": "ok",
+            "span_id": "015e52d1dc3efca0",
+            "name": "emb-sdk-start-process"
+          },
+          {
+            "trace_id": "a0b64b585d843e3e6c43c8b7b6bd0708",
+            "links": [],
+            "events": [],
+            "start_time_unix_nano": 1790701324981581800,
+            "end_time_unix_nano": 1790701325523937500,
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "perf"
+              },
+              {
+                "value": "true",
+                "key": "emb.private"
+              }
+            ],
+            "status": "ok",
+            "span_id": "bd9950ae59f9a0cc",
+            "name": "emb-process-launch"
+          },
+          {
+            "parent_span_id": "fdbea83006e6bb57",
+            "trace_id": "819ace0ff4e75387ea1035a0cf536572",
+            "links": [],
+            "events": [],
+            "start_time_unix_nano": 1790701325233495000,
+            "end_time_unix_nano": 1790701325563030000,
+            "attributes": [
+              {
+                "value": "false",
+                "key": "isPrewarmed"
+              },
+              {
+                "value": "sys.startup",
+                "key": "emb.type"
+              },
+              {
+                "value": "72F15812C977488A81058C1D4E95C9F5",
+                "key": "session.id"
+              }
+            ],
+            "status": "ok",
+            "name": "emb-app-startup-app-init",
+            "span_id": "c721912ae035eba7"
+          },
+          {
+            "parent_span_id": "fdbea83006e6bb57",
+            "trace_id": "819ace0ff4e75387ea1035a0cf536572",
+            "links": [],
+            "events": [],
+            "start_time_unix_nano": 1790701325480521000,
+            "end_time_unix_nano": 1790701325507121200,
+            "attributes": [
+              {
+                "value": "false",
+                "key": "isPrewarmed"
+              },
+              {
+                "value": "sys.startup",
+                "key": "emb.type"
+              },
+              {
+                "value": "72F15812C977488A81058C1D4E95C9F5",
+                "key": "session.id"
+              }
+            ],
+            "status": "ok",
+            "name": "emb-sdk-setup",
+            "span_id": "d9b181e7b2a90004"
+          },
+          {
+            "parent_span_id": "fdbea83006e6bb57",
+            "trace_id": "819ace0ff4e75387ea1035a0cf536572",
+            "links": [],
+            "events": [],
+            "start_time_unix_nano": 1790701325507131100,
+            "end_time_unix_nano": 1790701325523940000,
+            "attributes": [
+              {
+                "value": "false",
+                "key": "isPrewarmed"
+              },
+              {
+                "value": "sys.startup",
+                "key": "emb.type"
+              },
+              {
+                "value": "72F15812C977488A81058C1D4E95C9F5",
+                "key": "session.id"
+              }
+            ],
+            "status": "ok",
+            "name": "emb-sdk-start",
+            "span_id": "7791ad0b6e3a9324"
+          },
+          {
+            "trace_id": "44c95e97569bf59d1e8a83ae5bb5ec73",
+            "links": [],
+            "events": [],
+            "start_time_unix_nano": 1790701325633537800,
+            "end_time_unix_nano": 1790701327741974300,
+            "attributes": [
+              {
+                "value": "ux.view",
+                "key": "emb.type"
+              },
+              {
+                "value": "inactive",
+                "key": "view.state.end"
+              },
+              {
+                "value": "true",
+                "key": "view.launch"
+              },
+              {
+                "value": "72F15812C977488A81058C1D4E95C9F5",
+                "key": "session.id"
+              },
+              {
+                "value": "@react-navigation/native",
+                "key": "package"
+              },
+              {
+                "value": "654321",
+                "key": "test.attr"
+              },
+              {
+                "value": "log",
+                "key": "view.name"
+              }
+            ],
+            "status": "ok",
+            "name": "log",
+            "span_id": "1dc28283c4a5eda6"
+          }
+        ],
+        "span_snapshots": []
+      },
+      "type": "spans",
+      "resource": {
+        "sdk_platform": "ios",
+        "jailbroken": false,
+        "os_type": "darwin",
+        "os_name": "ios",
+        "disk_total_capacity": 994610155520,
+        "build": "1",
+        "sdk_version": "6.22.0",
+        "process_start_time": 1790701324981581800,
+        "process_pre_warm": false,
+        "os_version": "26.4.1",
+        "app_bundle_id": "io.embrace.rn87",
+        "process_identifier": "EE3D6121A93143FA9EFFEFEC5D2CC997",
+        "environment": "dev",
+        "hosted_sdk_version": "7.1.0",
+        "app_framework": 2,
+        "build_id": "0992A060585B3F5D85249A06A158EACD",
+        "os_alternate_type": "iOS",
+        "app_version": "1.0",
+        "device_model": "arm64",
+        "react_native_bundle_id": "8edd6938c99423382ba1ea16d4be06be",
+        "device_architecture": "arm64e",
+        "device_manufacturer": "Apple",
+        "environment_detail": "si",
+        "launch_count": null,
+        "screen_resolution": null,
+        "hosted_platform_version": "0.87.0",
+        "os_build": "25G83"
+      },
+      "version": "1.0"
+    }
+  ],
+  "logs": []
+}
