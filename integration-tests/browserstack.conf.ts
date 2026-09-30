@@ -39,8 +39,8 @@ const commonCapabilities = {
 const androidCapabilities = [
   {
     "bstack:options": {
-      deviceName: "Google Pixel 6 Pro",
-      platformVersion: "15.0",
+      deviceName: "Google Pixel 11 Pro",
+      platformVersion: "17.0",
       platformName: "android",
     },
   },
