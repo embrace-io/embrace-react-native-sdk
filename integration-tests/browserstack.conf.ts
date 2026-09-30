@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { registerMatchers } from "./helpers/matchers";
 import { retrieveStoredRequests, clearStoredRequests } from "./helpers/mock_api";
+import specs from "./specs";
 
 const runID = process.env.CI_RUN_ID || "local";
 const gitRef = process.env.CI_GIT_REF || "local";
@@ -102,7 +103,7 @@ export const config: WebdriverIO.Config = {
   maxInstances: 1,
 
   // Nested so the whole suite runs in a single worker and BrowserStack session
-  specs: [["./specs/**/*.ts" ]],
+  specs: [specs],
   exclude: [],
 
   logLevel: "info",
