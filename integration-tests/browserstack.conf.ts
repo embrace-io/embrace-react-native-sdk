@@ -136,8 +136,9 @@ export const config: WebdriverIO.Config = {
     ]
   ],
 
-  before() {
+  async before() {
     registerMatchers();
+    await clearStoredRequests(namespace);
   },
 
   async afterTest(test, _context, {passed}) {
