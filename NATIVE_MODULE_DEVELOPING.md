@@ -106,7 +106,7 @@ c. Targets -> both (regular and test targets)
 - Make sure to click into the new referenced folder, open the File Inspector (top right corner of XCode) and update the location of the folder to be `relative` to the project (instead of `absolute`). It should show a relative path like `../../../ios/RNEmbrace__NAME__`
 - After all make sure to follow steps in (this comment)[https://github.com/CocoaPods/CocoaPods/issues/12583#issuecomment-2357470707]
 - Move everything using XCode (because of references) from `packages/__PACKAGE_NAME__/test-project/ios/RNEmbrace__NAME__/` to `packages/__PACKAGE_NAME__/test-project/ios/` (we don't need to keep the RNEmbrace__NAME__ dir).
-- At this point the structure will be ios/*.xcodeproj/ + ios/REmbraceTracerProviderTests/*
+- At this point the structure will be ios/*.xcodeproj/ + ios/RNEmbrace<PackageName>Tests/*
 - Into the `.xcodeproj` dir run `pod init` to initialize the Podfile with the minimum targets configuration (this will create the ios/Podfile)
 - Add all required dependencies + React Native (this can be copied/pasted from already existent suites)
 - Run `pod install` to install the dependencies + create the `RNEmbrace__NAME__.xcworkspace` (do not create it manually since it is going to require extra setup we don't want to go over).
@@ -144,10 +144,10 @@ Tests can be run from XCode by opening test-project/ios/RNEmbrace<PackageName>Te
 
 - Using Android Studio for creating a new project: File -> New -> New Project -> Empty Activity + kotlin (into `package/<package-name>test-project/android` dir). Make sure there is support for JUnit tests.
 - Rename the `settings.gradle.kts` -> to just `settings.gradle` (just for consistency, other packages has this file already written in groovy).
-- Add React Native configuration (this can be copied/pasted from other existent packages like `@embrace-io/react-native-tracer-provider`)
+- Add React Native configuration (this can be copied/pasted from other existent packages like `@embrace-io/react-native`)
 - Make sure includeBuild("../node_modules/@react-native/gradle-plugin") is added into `pluginManagement`
 - Include the local package we want to test (`include ':react-native-<package-name>'`)
-- Link the local package into test (`project(':react-native-tracer-provider').projectDir = file('../../android')`)
+- Link the local package into test (`project(':react-native-<package-name>').projectDir = file('../../android')`)
 - Update rootProject.name (`rootProject.name = "io.embrace.rnembrace<packagename>test"`)
 - Into the `gradle.properties` -> Add custom properties (particularly `RNEmbrace<PackageName>_packageJsonPath` following other packages as example)
 - Add `android/config` folder with respective content (`detekt` plugin for linting, in the future this is going to be moved at the root of the repo avoiding config duplication)

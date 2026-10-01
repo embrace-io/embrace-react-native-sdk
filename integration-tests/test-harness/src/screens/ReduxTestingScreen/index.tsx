@@ -4,7 +4,7 @@ import {useCallback, useEffect, useState} from "react";
 import {styles} from "../../helpers/styles";
 import TestButton from "../../components/TestButton";
 import {EnhancedStore, configureStore, Tuple} from "@reduxjs/toolkit";
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
 import FullScreenMessage from "../../components/FullScreenMessage";
 import rootReducer from "./reducers";
 import {counterIncrease, counterDecrease} from "./actions";
