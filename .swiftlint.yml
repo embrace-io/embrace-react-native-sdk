@@ -2,8 +2,6 @@ excluded:
   - '**/Pods'
   - '**/node_modules'
   - '**/__tests__'
-  # packages/react-native-otlp copied/pasted files from opentelemetry-swift
-  - '**/InternalOpenTelemetry'
   
 disabled_rules: # rule identifiers turned on by default to exclude from running
   - identifier_name
