@@ -136,6 +136,7 @@ export * from "./hooks/useEmbrace";
 export * from "./hooks/useEmbraceIsStarted";
 export * from "./hooks/useOrientationListener";
 export * from "./interfaces";
+export * from "./tracerProvider";
 
 export {
   configureSDKErrorLogging,

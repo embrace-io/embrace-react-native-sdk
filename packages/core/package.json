@@ -3,6 +3,7 @@
   "version": "7.2.0",
   "description": "A React Native wrapper for the Embrace SDK",
   "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
     "glob": "^13.0.6",
     "inquirer": "^12.0.0",
     "xcode": "^3.0.1"
@@ -24,7 +25,8 @@
     "android/dependencies.gradle",
     "ios",
     "RNEmbraceCore.podspec",
-    "src/NativeEmbraceManager.ts"
+    "src/NativeEmbraceManager.ts",
+    "src/NativeReactNativeTracerProviderModule.ts"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {
