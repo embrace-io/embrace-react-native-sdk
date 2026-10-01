@@ -1,12 +1,7 @@
 import {renderHook, waitFor} from "@testing-library/react-native";
 
-import {oltpGetStart} from "../utils/otlp";
 import {SDKConfig, EmbraceLoggerLevel} from "../interfaces";
 import {useEmbrace} from "../hooks/useEmbrace";
-
-jest.mock("../utils/otlp", () => ({
-  oltpGetStart: jest.fn(),
-}));
 
 type EmbraceHook = {
   sdkConfig: SDKConfig;
@@ -96,14 +91,7 @@ describe("useEmbrace", () => {
       ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
       {
         initialProps: {
-          sdkConfig: {
-            ios: {appId: "test"},
-            exporters: {
-              logExporter: {
-                endpoint: "http://localhost:8081",
-              },
-            },
-          },
+          sdkConfig: {ios: {appId: "test"}},
           patch: "v1",
           logLevel: "info",
         } as EmbraceHook,
@@ -119,112 +107,6 @@ describe("useEmbrace", () => {
       expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] we could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
-    });
-  });
-
-  it("should start the Embrace React Native SDK using OTLP", async () => {
-    const mockRNEmbraceOTLPInit = jest.fn().mockResolvedValue(true);
-    const mockOltpGetStart = jest
-      .mocked(oltpGetStart)
-      .mockImplementation(() => mockRNEmbraceOTLPInit);
-
-    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
-      ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
-      {
-        initialProps: {
-          sdkConfig: {
-            ios: {appId: "test"},
-            exporters: {
-              logExporter: {
-                endpoint: "http://localhost:8081",
-              },
-            },
-          },
-          patch: "v1",
-          logLevel: "info",
-        } as EmbraceHook,
-      },
-    );
-
-    await waitFor(() => {
-      expect(mockOltpGetStart).toHaveBeenCalledTimes(1);
-      expect(mockRNEmbraceOTLPInit).toHaveBeenCalledTimes(1);
-
-      expect(result.current.isPending).toBe(false);
-      expect(result.current.isStarted).toBe(true);
-    });
-  });
-
-  it("should throw if something goes wrong with React Native OTLP Package and there was exporter configuration available", async () => {
-    const mockOltpGetStart = jest
-      .mocked(oltpGetStart)
-      .mockImplementation(() => {
-        try {
-          // making `@embrace-io/react-native-otlp` throw
-          throw new Error();
-        } catch {
-          // continue regardless of error
-        }
-      });
-
-    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
-      ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
-      {
-        initialProps: {
-          sdkConfig: {
-            ios: {appId: "test"},
-            exporters: {
-              logExporter: {
-                endpoint: "http://localhost:8081",
-              },
-            },
-          },
-          patch: "v1",
-          logLevel: "info",
-        } as EmbraceHook,
-      },
-    );
-
-    await waitFor(() => {
-      expect(mockOltpGetStart).toHaveBeenCalledTimes(1);
-      expect(result.current.isPending).toBe(false);
-      // it should still initialize the SKD using the regular `@embrace-io/react-native` package
-      expect(result.current.isStarted).toBe(true);
-      expect(console.log).toHaveBeenCalledWith(
-        "[Embrace] native SDK was started",
-      );
-    });
-  });
-
-  it("should not initialize the React Native Embrace SDK if the initialization from the OTLP side returns false", async () => {
-    jest
-      .mocked(oltpGetStart)
-      .mockImplementation(jest.fn().mockResolvedValue(false));
-
-    const {result} = renderHook<EmbraceHookResult, EmbraceHook>(
-      ({sdkConfig, patch, logLevel}) => useEmbrace(sdkConfig, patch, logLevel),
-      {
-        initialProps: {
-          sdkConfig: {
-            ios: {appId: "test"},
-            exporters: {
-              logExporter: {
-                endpoint: "http://localhost:8081",
-              },
-            },
-          },
-          patch: "v1",
-          logLevel: "info",
-        } as EmbraceHook,
-      },
-    );
-
-    await waitFor(() => {
-      expect(console.warn).toHaveBeenCalledWith(
-        "[Embrace] we could not initialize Embrace's native SDK, please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
-      );
-      expect(result.current.isPending).toBe(false);
-      expect(result.current.isStarted).toBe(false);
     });
   });
 });
