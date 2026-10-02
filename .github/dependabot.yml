@@ -10,6 +10,9 @@ updates:
       github:
         patterns:
           - "actions/*"
+      codeql:
+        patterns:
+          - "github/codeql-action/*"
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -17,10 +20,21 @@ updates:
     cooldown:
       default-days: 7
     open-pull-requests-limit: 50
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "inquirer"
+        update-types: ["version-update:semver-major"]
     groups:
+      react-native:
+        patterns:
+          - 'react-native'
+          - '@react-native/*'
       jest:
         patterns:
           - '*jest*'
+        exclude-patterns:
+          - '@react-native/*'
       eslint:
         patterns:
           - '*eslint*'
