@@ -19,7 +19,7 @@ import {addBreadcrumb} from "@embrace-io/react-native";
 
 const SpanTestingScreen = () => {
   const {isLoading, isError, error, tracerProvider} =
-    useEmbraceNativeTracerProvider();
+    useEmbraceNativeTracerProvider({});
 
   const tracer = useMemo<Tracer | undefined>(() => {
     if (tracerProvider) {

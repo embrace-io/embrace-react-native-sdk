@@ -3,6 +3,7 @@ import {firstAvailableDevice} from "./helpers/ios";
 import {registerMatchers} from "./helpers/matchers";
 import {getPayloadSource} from "./helpers/payload_source";
 import {Command} from "commander";
+import specs from "./specs";
 
 interface CLIOptions {
   package: string;
@@ -78,7 +79,7 @@ export const config: WebdriverIO.Config = {
   // The path of the spec files will be resolved relative from the directory
   // of the config file unless it's absolute.
   //
-  specs: [["./specs/**/*.ts"]],
+  specs: [specs],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'

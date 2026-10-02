@@ -37,17 +37,6 @@
         }
       }
     }
-
-  And `rn82/app/embrace-sdk-config.json`:
-    {
-      "ios": {
-        "appId": "abcdf",
-        "endpointBaseUrl": "http://localhost:8989",
-        "disableAutomaticViewCapture": true,
-        "disableNetworkSpanForwarding": false,
-        "disabledUrlPatterns": ["*.api.com"]
-      }
-    }
    */
 
   const fs = require("fs");
@@ -166,6 +155,43 @@
     }
   }
 
+  const findIOSInitializerPath = () => {
+    const iosPath = `${appPath}/ios`;
+    const initializerPaths = fs.existsSync(iosPath)
+      ? fs
+          .readdirSync(iosPath)
+          .map(dir => `${iosPath}/${dir}/EmbraceInitializer.swift`)
+          .filter(initializerPath => fs.existsSync(initializerPath))
+      : [];
+
+    if (initializerPaths.length !== 1) {
+      throw new Error(
+        `Expected exactly one ios/*/EmbraceInitializer.swift in ${appPath}, found ${initializerPaths.length}. The app template is missing the Embrace native initialization.`,
+      );
+    }
+
+    return initializerPaths[0];
+  };
+
+  const iosInitializerProperties = {
+    appId: JSON.stringify(config.ios_app_id),
+    endpointBaseUrl: config.endpoint ? JSON.stringify(config.endpoint) : "nil",
+    disableViewCapture: String(!!config.disable_view_capture),
+    enableNetworkSpanForwarding: String(!!config.enable_network_span_forwarding),
+    disabledUrlPatterns: JSON.stringify(config.disabled_url_patterns || []),
+  };
+
+  const setIOSInitializerProperties = (initializerPath, contents) =>
+    Object.entries(iosInitializerProperties).reduce((updated, [name, value]) => {
+      const property = new RegExp(`^(\\s*private static let ${name}\\b[^=]*= ).*$`, "m");
+
+      if (!property.test(updated)) {
+        throw new Error(`Could not find the ${name} property in ${initializerPath}`);
+      }
+
+      return updated.replace(property, (_, declaration) => `${declaration}${value}`);
+    }, contents);
+
   if (!options.prebuild) {
     fs.writeFileSync(
       androidConfigPath,
@@ -173,45 +199,18 @@
     );
 
     console.log(`Wrote ${androidConfigPath}`);
+
+    const iosInitializerPath = findIOSInitializerPath();
+    fs.writeFileSync(
+      iosInitializerPath,
+      setIOSInitializerProperties(
+        iosInitializerPath,
+        fs.readFileSync(iosInitializerPath, "utf8"),
+      ),
+    );
+
+    console.log(`Wrote ${iosInitializerPath}`);
   }
-
-  /*
-    interface SDKConfig {
-      ios?: IOSConfig;
-      exporters?: OTLPExporterConfig;
-      logLevel?: EmbraceLoggerLevel;
-      trackUnhandledRejections?: boolean;
-    }
-
-    interface IOSConfig {
-      ios: {
-        appId: string;
-        endpointBaseUrl: string;
-        disableAutomaticViewCapture: boolean;
-        disableNetworkSpanForwarding: boolean;
-        disabledUrlPatterns: string[];
-      };
-    }
-   */
-  const sdkConfigPath = fs.existsSync(`${appPath}/app`)
-    ? `${appPath}/app/embrace-sdk-config.json`
-    : `${appPath}/embrace-sdk-config.json`;
-
-  const sdkConfig = {
-    ios: {
-      appId: config.ios_app_id,
-      endpointBaseUrl: config.endpoint,
-      disableAutomaticViewCapture: config.disable_view_capture,
-      disableNetworkSpanForwarding: !config.enable_network_span_forwarding,
-      disabledUrlPatterns: config.disabled_url_patterns,
-    },
-    // this is meant for both platforms but it shouldn't be added into the `embrace-config.json` file in the android app
-    exporters: config.exporters,
-    trackUnhandledRejections: config.trackUnhandledRejections,
-  };
-
-  fs.writeFileSync(sdkConfigPath, JSON.stringify(sdkConfig, undefined, 2));
-  console.log(`Wrote ${sdkConfigPath}`);
 
   if (options.prebuild) {
     const appJSONPath = `${appPath}/app.json`;

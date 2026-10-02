@@ -1,6 +1,7 @@
 package com.projectname
 
 import android.app.Application
+import io.embrace.android.embracesdk.Embrace
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost
@@ -33,6 +34,7 @@ class MainApplication : Application(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
+    Embrace.start(this)
     loadReactNative(this)
   }
 }

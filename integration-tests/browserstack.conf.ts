@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { registerMatchers } from "./helpers/matchers";
 import { retrieveStoredRequests, clearStoredRequests } from "./helpers/mock_api";
+import specs from "./specs";
 
 const runID = process.env.CI_RUN_ID || "local";
 const gitRef = process.env.CI_GIT_REF || "local";
@@ -38,8 +39,8 @@ const commonCapabilities = {
 const androidCapabilities = [
   {
     "bstack:options": {
-      deviceName: "Google Pixel 6 Pro",
-      platformVersion: "15.0",
+      deviceName: "Google Pixel 11 Pro",
+      platformVersion: "17.0",
       platformName: "android",
     },
   },
@@ -102,7 +103,7 @@ export const config: WebdriverIO.Config = {
   maxInstances: 1,
 
   // Nested so the whole suite runs in a single worker and BrowserStack session
-  specs: [["./specs/**/*.ts" ]],
+  specs: [specs],
   exclude: [],
 
   logLevel: "info",
@@ -135,8 +136,9 @@ export const config: WebdriverIO.Config = {
     ]
   ],
 
-  before() {
+  async before() {
     registerMatchers();
+    await clearStoredRequests(namespace);
   },
 
   async afterTest(test, _context, {passed}) {

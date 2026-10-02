@@ -4,14 +4,23 @@ import {styles} from "./helpers/styles";
 
 type Props = {
   isPending: boolean;
+  error: Error | null;
 };
 
-export const EmbraceSDKStatus = ({isPending}: Props) => (
+const statusMessage = ({isPending, error}: Props) => {
+  if (isPending) {
+    return "Loading Embrace";
+  }
+
+  if (error) {
+    return error.message;
+  }
+
+  return "An error occurred during the Embrace initialization";
+};
+
+export const EmbraceSDKStatus = (props: Props) => (
   <View style={styles.container}>
-    <Text>
-      {isPending
-        ? "Loading Embrace"
-        : "An error occurred during the Embrace initialization"}
-    </Text>
+    <Text>{statusMessage(props)}</Text>
   </View>
 );
