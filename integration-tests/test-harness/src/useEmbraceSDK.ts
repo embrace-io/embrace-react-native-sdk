@@ -1,39 +1,44 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {
-  useEmbrace,
+  initialize,
   useEmbraceIsStarted,
   useOrientationListener,
   SDKConfig,
 } from "@embrace-io/react-native";
 
-export const useEmbraceSDK = (
-  sdkConfig: SDKConfig,
-  allowCustomExport?: boolean,
-) => {
-  if (!allowCustomExport) {
-    sdkConfig.exporters = undefined;
-  }
+const HARNESS_SDK_CONFIG: SDKConfig = {trackUnhandledRejections: true};
 
-  const alreadyStarted = useEmbraceIsStarted();
-  const {isPending, isStarted} = useEmbrace(sdkConfig);
+export const useEmbraceSDK = () => {
+  const isStartedNatively = useEmbraceIsStarted();
+  const [isPending, setIsPending] = useState(true);
+  const [isStarted, setIsStarted] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (alreadyStarted === null) {
+    if (isStartedNatively === null) {
       return;
     }
 
-    if (alreadyStarted) {
-      console.log(
-        "Embrace SDK has already been started, sdkConfig won't have an effect",
+    if (!isStartedNatively) {
+      const err = new Error(
+        "The Embrace native SDK was not started. The test harness requires Embrace to be started natively and will not start it from JavaScript.",
       );
-    } else {
-      console.log(
-        `Embrace SDK will be started using the following config: ${JSON.stringify(sdkConfig, null, 2)}`,
-      );
+      console.error(err);
+      setError(err);
+      setIsPending(false);
+      return;
     }
-  }, [alreadyStarted]);
+
+    initialize({sdkConfig: HARNESS_SDK_CONFIG})
+      .then(setIsStarted)
+      .catch((e: Error) => {
+        console.error(e);
+        setError(e);
+      })
+      .finally(() => setIsPending(false));
+  }, [isStartedNatively]);
 
   useOrientationListener(isStarted);
 
-  return {isPending, isStarted};
+  return {isPending, isStarted, error};
 };

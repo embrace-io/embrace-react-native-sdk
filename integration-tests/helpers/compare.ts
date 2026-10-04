@@ -56,6 +56,13 @@ const isVolatileKey = (key: string): boolean =>
   VOLATILE_ATTR_KEYS.has(key) ||
   VOLATILE_ATTR_NAMESPACES.some(prefix => key.startsWith(prefix));
 
+// Spans whose attributes and events depend on SDK startup timing: presence-checked, contents ignored.
+// emb-state-network: initial value is "unverified" or the resolved network, depending on whether
+// the connectivity check finishes before the span starts.
+const VOLATILE_SPAN_NAMES = new Set([
+  "emb-state-network",
+]);
+
 // ---- shared types ----
 export type EventProjection = {name: string; attributes: EmbraceSpanAttribute[]};
 export type CompareResult = {pass: boolean; message: string};
@@ -166,13 +173,15 @@ export const compareSpan = (
       errors.push(`missing field "${String(key)}"`);
     }
   }
-  const attrs = compareAttributes(actual.attributes, expected.attributes);
-  if (!attrs.pass) {
-    errors.push(attrs.message);
-  }
-  const events = compareEvents(actual.events, expected.events);
-  if (!events.pass) {
-    errors.push(events.message);
+  if (!VOLATILE_SPAN_NAMES.has(expected.name)) {
+    const attrs = compareAttributes(actual.attributes, expected.attributes);
+    if (!attrs.pass) {
+      errors.push(attrs.message);
+    }
+    const events = compareEvents(actual.events, expected.events);
+    if (!events.pass) {
+      errors.push(events.message);
+    }
   }
   return {
     pass: errors.length === 0,

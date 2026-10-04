@@ -99,6 +99,8 @@ interface NormalizedPayloads {
   viewSpans: EmbraceSpanData[];
   perfSpans: EmbraceSpanData[];
   networkSpans: EmbraceSpanData[];
+  reduxSpans: EmbraceSpanData[];
+  internalSpans: EmbraceSpanData[];
   spanSnapshots: EmbraceSpanData[];
   logs: EmbraceLogRecord[];
   sessionMetadata: EmbracePayloadMetadata;
@@ -110,6 +112,8 @@ type PayloadSection =
   | "viewSpans"
   | "perfSpans"
   | "networkSpans"
+  | "reduxSpans"
+  | "internalSpans"
   | "spanSnapshots"
   | "logs";
 

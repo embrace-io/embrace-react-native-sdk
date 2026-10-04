@@ -31,7 +31,11 @@ NOTE: `--pm yarn` is set to workaround an issue with the @react-native-community
 set in ../package.json is modified so make sure to revert afterwards.
 
 After initializing, move over the created app into the templates folder (`mv ProjectName templates/my-new-template`) and
-remove any unneeded files then add Embrace specific setup (install scripts may help).
+remove any unneeded files then add Embrace specific setup. This includes the native initialization, copied from an
+existing template: `Embrace.start(this)` after `super.onCreate()` in `MainApplication`, `EmbraceInitializer.start()` at
+the start of the `AppDelegate`'s `didFinishLaunchingWithOptions` and `EmbraceInitializer.swift` added to the Xcode
+project. Copy `EmbraceInitializer.swift` unchanged: `set-embrace-config.js` sets the static properties at the top of it
+and fails if any of them is missing.
 
 The ["Current Tags"](https://www.npmjs.com/package/react-native?activeTab=versions) section of the react-native package
 in NPM can help decide which specific patch version to pin the template to for a given minor version, there will generally
@@ -88,6 +92,11 @@ Set the test app up with a particular embrace config:
 ./set-embrace-config.js <test-app> <config.json> --namespace=<namespace>
 ```
 
+The test apps start the Embrace SDK natively, so the config is written into native files: Android's
+`android/app/src/main/embrace-config.json` and iOS's `ios/<app>/EmbraceInitializer.swift`. Rebuild the app after
+changing its config. The test harness will not start the SDK from JavaScript, if the native SDK was not started it shows
+an error screen instead.
+
 Depending on the testing being done `embrace-configs/` has a few different configuration options:
 * using real app_ids without setting `endpoint` -> Sends actual data to Embrace allowing verifications to be done on
 the Embrace dashboard
@@ -128,6 +137,20 @@ or through xCode:
 - Select your target and go to Product > Scheme > Edit Scheme.
 - Under the Run section, change the Build Configuration from Debug to Release.
 - Press Cmd + R to build and run the app in release mode.
+
+To build a Release `.app` for the simulator without installing or launching it (no signing team needed), use the same
+script CI uses with `--simulator`:
+
+```bash
+./build-test-app.sh rn82 ios --simulator                    # points at the local mock server
+./build-test-app.sh rn82 ios firstname.lastname --simulator # points at the hosted mock-api namespace
+xcrun simctl uninstall booted io.embrace.rn82
+xcrun simctl install booted rn82.app
+```
+
+The iOS SDK reports the first launch after a fresh install as a cold start, which is what Browserstack sees on every
+run. Installing over an existing copy keeps its data, so later launches are reported as warm; uninstall first to match
+Browserstack.
 
 ## Integration Testing
 

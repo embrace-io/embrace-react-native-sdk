@@ -35,8 +35,8 @@ const NetworkTestingScreen = () => {
     logNetworkClientError(
       "https://request.fake/manual/method/log/network/client/error",
       "POST",
-      now.getTime().valueOf(),
-      now.getTime().valueOf() + 3000,
+      now.getTime() - 3000,
+      now.getTime(),
       "Bad Request",
       "an error message",
     );
@@ -48,8 +48,8 @@ const NetworkTestingScreen = () => {
     recordNetworkRequest(
       "https://request.fake/manual/method/record/network/request",
       "GET",
-      now.getTime().valueOf(),
-      now.getTime().valueOf() + 400000,
+      now.getTime() - 3000,
+      now.getTime(),
       12938,
       199,
       200,
