@@ -11,14 +11,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import io.embrace.reactnativetracerprovider.ReactNativeTracerProviderModule;
-
 public class EmbraceManagerPackage implements ReactPackage {
 		@Override
 		public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
 			return Arrays.<NativeModule>asList(
 				new EmbraceManagerModule(reactContext),
-				new ReactNativeTracerProviderModule(reactContext)
+				new EmbraceTracerProviderModule(reactContext)
 			);
 		}
 

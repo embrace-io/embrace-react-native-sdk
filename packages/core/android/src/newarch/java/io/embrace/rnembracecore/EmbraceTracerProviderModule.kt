@@ -1,15 +1,14 @@
-package io.embrace.reactnativetracerprovider
+package io.embrace.rnembracecore
 
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
-import io.embrace.rnembracecore.NativeReactNativeTracerProviderModuleSpec
 
-class ReactNativeTracerProviderModule(
+class EmbraceTracerProviderModule(
     reactContext: ReactApplicationContext
-) : NativeReactNativeTracerProviderModuleSpec(reactContext) {
-    private val impl = ReactNativeTracerProviderModuleImpl()
+) : NativeEmbraceTracerProviderSpec(reactContext) {
+    private val impl = EmbraceTracerProviderModuleImpl()
 
     override fun setupTracer(name: String, version: String, schemaUrl: String) {
         impl.setupTracer(name, version, schemaUrl)

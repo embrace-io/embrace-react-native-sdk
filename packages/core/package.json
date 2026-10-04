@@ -26,7 +26,7 @@
     "ios",
     "RNEmbraceCore.podspec",
     "src/NativeEmbraceManager.ts",
-    "src/NativeReactNativeTracerProviderModule.ts"
+    "src/NativeEmbraceTracerProvider.ts"
   ],
   "author": "Embrace <support@embrace.io> (https://embrace.io/)",
   "bugs": {

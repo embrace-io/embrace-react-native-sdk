@@ -1,4 +1,4 @@
-import type {Spec} from "../NativeReactNativeTracerProviderModule";
+import type {Spec} from "../NativeEmbraceTracerProvider";
 
 const LINKING_ERROR_HEAD =
   "The package '@embrace-io/react-native' doesn't seem to be linked. Make sure: \n\n";
@@ -18,7 +18,7 @@ const loadModule = ({
   turboModuleRegistry,
   os = "android",
 }: {
-  nativeModules?: {ReactNativeTracerProviderModule?: object};
+  nativeModules?: {EmbraceTracerProvider?: object};
   turboModuleRegistry?: {get?: jest.Mock};
   os?: string;
 }) => {
@@ -43,19 +43,19 @@ describe("TracerProviderModule", () => {
 
     const tracerProvider = loadModule({
       turboModuleRegistry: {get},
-      nativeModules: {ReactNativeTracerProviderModule: {name: "legacy"}},
+      nativeModules: {EmbraceTracerProvider: {name: "legacy"}},
     });
 
     expect(tracerProvider).toBe(turboModule);
-    expect(get).toHaveBeenCalledWith("ReactNativeTracerProviderModule");
+    expect(get).toHaveBeenCalledWith("EmbraceTracerProvider");
   });
 
-  it("should fall back to NativeModules when the registry has no ReactNativeTracerProviderModule", () => {
+  it("should fall back to NativeModules when the registry has no EmbraceTracerProvider", () => {
     const legacyModule = {name: "legacy"};
 
     const tracerProvider = loadModule({
       turboModuleRegistry: {get: jest.fn().mockReturnValue(null)},
-      nativeModules: {ReactNativeTracerProviderModule: legacyModule},
+      nativeModules: {EmbraceTracerProvider: legacyModule},
     });
 
     expect(tracerProvider).toBe(legacyModule);
@@ -66,7 +66,7 @@ describe("TracerProviderModule", () => {
 
     const tracerProvider = loadModule({
       turboModuleRegistry: {},
-      nativeModules: {ReactNativeTracerProviderModule: legacyModule},
+      nativeModules: {EmbraceTracerProvider: legacyModule},
     });
 
     expect(tracerProvider).toBe(legacyModule);
@@ -77,7 +77,7 @@ describe("TracerProviderModule", () => {
 
     const tracerProvider = loadModule({
       turboModuleRegistry: undefined,
-      nativeModules: {ReactNativeTracerProviderModule: legacyModule},
+      nativeModules: {EmbraceTracerProvider: legacyModule},
     });
 
     expect(tracerProvider).toBe(legacyModule);

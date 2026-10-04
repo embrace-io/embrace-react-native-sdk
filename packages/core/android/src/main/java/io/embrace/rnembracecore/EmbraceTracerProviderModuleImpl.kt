@@ -1,4 +1,4 @@
-package io.embrace.reactnativetracerprovider
+package io.embrace.rnembracecore
 
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReadableArray
@@ -47,12 +47,12 @@ private const val SPAN_STATUS_MESSAGE_KEY = "message"
 // Should not get hit under normal circumstances, add as a guard against misinstrumentation
 private const val MAX_STORED_SPANS = 10000
 
-class ReactNativeTracerProviderModuleImpl(
+class EmbraceTracerProviderModuleImpl(
     private val writableMapBuilder: WritableMapBuilder = WritableNativeMapBuilder(),
     private var tracerProvider: TracerProvider? = null
 ) {
     companion object {
-        const val NAME = "ReactNativeTracerProviderModule"
+        const val NAME = "EmbraceTracerProvider"
     }
 
     private val log = Logger.getLogger("[Embrace]")

@@ -64,9 +64,9 @@ private let EMBRACE_INTERNAL_SPAN_NAMES = [
     "POST /dev/null/v2/spans"
 ]
 
-class ReactNativeTracerProviderTests: XCTestCase {
+class EmbraceTracerProviderTests: XCTestCase {
   static var exporter: TestSpanExporter!
-  var module: ReactNativeTracerProviderModule!
+  var module: EmbraceTracerProvider!
   var promise: Promise!
 
   override class func setUp() {
@@ -91,7 +91,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
   override func setUp() async throws {
       promise = Promise()
-      module = ReactNativeTracerProviderModule()
+      module = EmbraceTracerProvider()
 
       // Wait until the Embrace SDK reports it has started (especially important for first test)
       for _ in 0..<30 {
@@ -103,7 +103,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
 
       // Flush any pending exports and reset so each test starts from an empty span exporter
       flushSpans()
-      ReactNativeTracerProviderTests.exporter.reset(explicitTimeout: nil)
+      EmbraceTracerProviderTests.exporter.reset(explicitTimeout: nil)
 
       module.setupTracer(name: "test", version: "v1", schemaUrl: "")
   }
@@ -117,7 +117,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
   func getExportedSpans() async throws -> [SpanData] {
       // Make sure all of this test's spans have been exported before we read them
       flushSpans()
-      let allSpans = ReactNativeTracerProviderTests.exporter.exportedSpans
+      let allSpans = EmbraceTracerProviderTests.exporter.exportedSpans
 
       let filtered = allSpans.filter { span in
           !EMBRACE_INTERNAL_SPAN_NAMES.contains(span.name)
@@ -605,7 +605,7 @@ class ReactNativeTracerProviderTests: XCTestCase {
 class EmbraceSpansSDKNotStartedTests: XCTestCase {
   func testStartSpanEmbraceNotStarted() async throws {
     let promise = Promise()
-    let module = ReactNativeTracerProviderModule()
+    let module = EmbraceTracerProvider()
 
     // Without the Embrace SDK having started interactions should be no-ops
     module.setupTracer(name: "test", version: "v1", schemaUrl: "")

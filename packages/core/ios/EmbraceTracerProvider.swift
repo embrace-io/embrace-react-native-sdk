@@ -5,13 +5,6 @@ import EmbraceIO
 import OpenTelemetryApi
 import os
 
-/*
- NOTE: There's currently a bit of duplication between this and code in packages/core, particularly https://github.com/embrace-io/embrace-react-native-sdk/blob/7c54b59362adfc93f7f997db89db179950a50e8b/packages/core/ios/RNEmbraceCore/SpanRepository.swift
- 
- The idea will be to have this package power all span features in 6.0 and remove that code from
- the core package so living with the duplication for now
- */
-
 private typealias OpenTelemetryAttributes = [String: OpenTelemetryApi.AttributeValue]
 
 private let LINK_ATTRIBUTES_KEY = "attributes"
@@ -24,25 +17,25 @@ private let SPAN_STATUS_MESSAGE_KEY = "message"
 // Should not get hit under normal circumstances, add as a guard against misinstrumentation
 private let MAX_STORED_SPANS = 10000
 
-@objc(ReactNativeTracerProviderModuleImpl)
-public class ReactNativeTracerProviderModule: NSObject {
+@objc(EmbraceTracerProviderImpl)
+public class EmbraceTracerProvider: NSObject {
   private let tracersQueue = DispatchQueue(
-    label: "io.embrace.reactnativetracerprovider.tracers",
+    label: "io.embrace.rnembracecore.tracerprovider.tracers",
     attributes: .concurrent
   )
   private let activeSpansQueue = DispatchQueue(
-    label: "io.embrace.reactnativetracerprovider.activeSpans",
+    label: "io.embrace.rnembracecore.tracerprovider.activeSpans",
     attributes: .concurrent
   )
   private let completedSpansQueue = DispatchQueue(
-    label: "io.embrace.reactnativetracerprovider.completedSpans",
+    label: "io.embrace.rnembracecore.tracerprovider.completedSpans",
     attributes: .concurrent
   )
   private var tracers = [String: Tracer]()
   private var activeSpans = [String: Span]()
   private var completedSpans = [String: Span]()
   private var tracerProvider: TracerProvider!
-  private var log = OSLog(subsystem: "Embrace", category: "ReactNativeTracerProviderModule")
+  private var log = OSLog(subsystem: "Embrace", category: "EmbraceTracerProvider")
 
   /**
    * Various deserializer helpers to go to and from NSDictionary / NSArray to

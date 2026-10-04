@@ -1,13 +1,7 @@
-import {NativeModules, Platform, TurboModuleRegistry} from "react-native";
 import {Attributes, Link, SpanContext} from "@opentelemetry/api";
 
-import type {Spec} from "../NativeReactNativeTracerProviderModule";
-
-const LINKING_ERROR =
-  `The package '@embrace-io/react-native' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ios: "- You have run 'pod install'\n", default: ""}) +
-  "- You rebuilt the app after installing the package\n" +
-  "- You are not using Expo Go\n";
+import {getNativeModule} from "../utils/nativeModule";
+import type {Spec} from "../NativeEmbraceTracerProvider";
 
 interface NativeTracerProviderModule extends Spec {
   startSpan(
@@ -36,16 +30,8 @@ interface NativeTracerProviderModule extends Spec {
   ): void;
 }
 
-const nativeModule =
-  TurboModuleRegistry?.get?.<Spec>("ReactNativeTracerProviderModule") ??
-  (NativeModules?.ReactNativeTracerProviderModule as Spec | undefined);
-
-const TracerProviderModule: NativeTracerProviderModule =
-  (nativeModule as NativeTracerProviderModule | undefined) ??
-  new Proxy({} as NativeTracerProviderModule, {
-    get() {
-      throw new Error(LINKING_ERROR);
-    },
-  });
+const TracerProviderModule = getNativeModule<Spec>(
+  "EmbraceTracerProvider",
+) as NativeTracerProviderModule;
 
 export {TracerProviderModule};

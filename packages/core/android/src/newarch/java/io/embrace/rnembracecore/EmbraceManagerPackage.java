@@ -11,9 +11,6 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import io.embrace.reactnativetracerprovider.ReactNativeTracerProviderModule;
-import io.embrace.reactnativetracerprovider.ReactNativeTracerProviderModuleImpl;
-
 public class EmbraceManagerPackage extends BaseReactPackage {
     @Nullable
     @Override
@@ -22,8 +19,8 @@ public class EmbraceManagerPackage extends BaseReactPackage {
             return new EmbraceManagerModule(reactContext);
         }
 
-        if (ReactNativeTracerProviderModuleImpl.NAME.equals(name)) {
-            return new ReactNativeTracerProviderModule(reactContext);
+        if (EmbraceTracerProviderModuleImpl.NAME.equals(name)) {
+            return new EmbraceTracerProviderModule(reactContext);
         }
 
         return null;
@@ -43,9 +40,9 @@ public class EmbraceManagerPackage extends BaseReactPackage {
                     true // isTurboModule
             ));
 
-            moduleInfos.put(ReactNativeTracerProviderModuleImpl.NAME, new ReactModuleInfo(
-                    ReactNativeTracerProviderModuleImpl.NAME,
-                    ReactNativeTracerProviderModuleImpl.NAME,
+            moduleInfos.put(EmbraceTracerProviderModuleImpl.NAME, new ReactModuleInfo(
+                    EmbraceTracerProviderModuleImpl.NAME,
+                    EmbraceTracerProviderModuleImpl.NAME,
                     false,
                     false,
                     false,

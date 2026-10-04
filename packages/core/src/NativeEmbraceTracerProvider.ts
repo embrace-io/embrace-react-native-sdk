@@ -30,6 +30,4 @@ export interface Spec extends TurboModule {
   clearCompletedSpans(): void;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>(
-  "ReactNativeTracerProviderModule",
-);
+export default TurboModuleRegistry.getEnforcing<Spec>("EmbraceTracerProvider");

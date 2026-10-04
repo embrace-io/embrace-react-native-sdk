@@ -10,19 +10,19 @@
 #import "RNEmbraceCore-Swift.h"
 #endif
 
-@interface ReactNativeTracerProviderModule : NSObject <RCTBridgeModule>
+@interface EmbraceTracerProvider : NSObject <RCTBridgeModule>
 @end
 
 #ifdef RCT_NEW_ARCH_ENABLED
-@interface ReactNativeTracerProviderModule () <NativeReactNativeTracerProviderModuleSpec>
+@interface EmbraceTracerProvider () <NativeEmbraceTracerProviderSpec>
 @end
 #endif
 
-@implementation ReactNativeTracerProviderModule {
-  ReactNativeTracerProviderModuleImpl *_impl;
+@implementation EmbraceTracerProvider {
+  EmbraceTracerProviderImpl *_impl;
 }
 
-RCT_EXPORT_MODULE(ReactNativeTracerProviderModule)
+RCT_EXPORT_MODULE(EmbraceTracerProvider)
 
 + (BOOL)requiresMainQueueSetup
 {
@@ -34,15 +34,15 @@ RCT_EXPORT_MODULE(ReactNativeTracerProviderModule)
   static dispatch_queue_t queue;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    queue = dispatch_queue_create("io.embrace.reactnativetracerprovider", DISPATCH_QUEUE_SERIAL);
+    queue = dispatch_queue_create("io.embrace.rnembracecore.tracerprovider", DISPATCH_QUEUE_SERIAL);
   });
   return queue;
 }
 
-- (ReactNativeTracerProviderModuleImpl *)impl
+- (EmbraceTracerProviderImpl *)impl
 {
   if (!_impl) {
-    _impl = [ReactNativeTracerProviderModuleImpl new];
+    _impl = [EmbraceTracerProviderImpl new];
   }
   return _impl;
 }
@@ -128,7 +128,7 @@ RCT_EXPORT_METHOD(clearCompletedSpans)
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-  return std::make_shared<facebook::react::NativeReactNativeTracerProviderModuleSpecJSI>(params);
+  return std::make_shared<facebook::react::NativeEmbraceTracerProviderSpecJSI>(params);
 }
 #endif
 
