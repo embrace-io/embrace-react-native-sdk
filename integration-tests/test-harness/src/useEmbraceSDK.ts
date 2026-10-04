@@ -8,35 +8,35 @@ import {
 
 const HARNESS_SDK_CONFIG: SDKConfig = {trackUnhandledRejections: true};
 
-const initializeStartedNatively = async (startedNatively: boolean) => {
-  if (!startedNatively) {
-    throw new Error(
-      "The Embrace native SDK was not started. The test harness requires Embrace to be started natively and will not start it from JavaScript.",
-    );
-  }
-
-  return initialize({sdkConfig: HARNESS_SDK_CONFIG});
-};
-
 export const useEmbraceSDK = () => {
-  const startedNatively = useEmbraceIsStarted();
+  const isStartedNatively = useEmbraceIsStarted();
   const [isPending, setIsPending] = useState(true);
   const [isStarted, setIsStarted] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (startedNatively === null) {
+    if (isStartedNatively === null) {
       return;
     }
 
-    initializeStartedNatively(startedNatively)
+    if (!isStartedNatively) {
+      const err = new Error(
+        "The Embrace native SDK was not started. The test harness requires Embrace to be started natively and will not start it from JavaScript.",
+      );
+      console.error(err);
+      setError(err);
+      setIsPending(false);
+      return;
+    }
+
+    initialize({sdkConfig: HARNESS_SDK_CONFIG})
       .then(setIsStarted)
       .catch((e: Error) => {
         console.error(e);
         setError(e);
       })
       .finally(() => setIsPending(false));
-  }, [startedNatively]);
+  }, [isStartedNatively]);
 
   useOrientationListener(isStarted);
 
