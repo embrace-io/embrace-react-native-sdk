@@ -15,22 +15,22 @@ concurrency:
 
 jobs:
   js-unit:
-    uses: ./.github/workflows/node.js.yml
+    uses: $/.github/workflows/node.js.yml
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   android-unit:
-    uses: ./.github/workflows/android.unit-test.yml
+    uses: $/.github/workflows/android.unit-test.yml
     with:
       run_all: true
 
   ios-unit:
-    uses: ./.github/workflows/ios.unit-test.yml
+    uses: $/.github/workflows/ios.unit-test.yml
     with:
       run_all: true
 
   integration:
-    uses: ./.github/workflows/integration-test.yml
+    uses: $/.github/workflows/integration-test.yml
     secrets:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
