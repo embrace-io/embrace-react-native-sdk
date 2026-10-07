@@ -84,14 +84,13 @@ import EmbraceIO
     // https://embrace.io/docs/ios/open-source/integration/embrace-options/
     static func start() -> Void {
         do {
-            try Embrace
-                .setup(
-                    options: Embrace.Options(
-                        appId: "${appId}",
-                        platform: .reactNative
-                    )
+            try EmbraceIO.setup(
+                options: .withAppId(
+                    "${appId}",
+                    platform: .reactNative
                 )
-                .start()
+            )
+            try EmbraceIO.shared.start()
         } catch let e {
             print("Error starting Embrace \\(e.localizedDescription)")
         }

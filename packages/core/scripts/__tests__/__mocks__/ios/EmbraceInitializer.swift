@@ -8,7 +8,7 @@ import EmbraceIO
         do {
             try EmbraceIO.setup(
                 options: .withAppId(
-                    "ios789",
+                    "abcde",
                     platform: .reactNative
                 )
             )
