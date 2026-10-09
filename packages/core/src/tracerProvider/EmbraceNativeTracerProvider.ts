@@ -28,6 +28,7 @@ const logger = new EmbraceLogger(console);
 class EmbraceNativeTracerProvider implements TracerProvider {
   private readonly contextManager: ContextManager;
   private readonly spanContextSyncBehaviour: SpanContextSyncBehaviour;
+  private readonly tracers = new Map<string, EmbraceNativeTracer>();
 
   constructor(
     config: EmbraceNativeTracerProviderConfig = {
@@ -58,19 +59,28 @@ class EmbraceNativeTracerProvider implements TracerProvider {
   ): Tracer {
     const schemaUrl = options?.schemaUrl || "";
     const tracerVersion = version || "";
+    const key = JSON.stringify([name, tracerVersion, schemaUrl]);
+
+    const cached = this.tracers.get(key);
+    if (cached) {
+      return cached;
+    }
 
     if (schemaUrl && Platform.OS === "ios") {
       logger.warn("`schemaUrl` is ignored when running on iOS");
     }
 
     TracerProviderModule.setupTracer(name, tracerVersion, schemaUrl);
-    return new EmbraceNativeTracer(
+    const tracer = new EmbraceNativeTracer(
       this.contextManager,
       this.spanContextSyncBehaviour,
       name,
       tracerVersion,
       schemaUrl,
     );
+    this.tracers.set(key, tracer);
+
+    return tracer;
   }
 }
 

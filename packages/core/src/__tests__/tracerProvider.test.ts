@@ -1025,6 +1025,25 @@ describe("Embrace Native Tracer Provider", () => {
     expect(mockEndSpan).toHaveBeenCalledWith(expect.any(String), 0);
   });
 
+  it("should reuse the tracer for the same name, version and schemaUrl", () => {
+    const provider = new EmbraceNativeTracerProvider();
+    const tracer = provider.getTracer("tracer", "v1", {schemaUrl: "s1"});
+
+    expect(provider.getTracer("tracer", "v1", {schemaUrl: "s1"})).toBe(tracer);
+    expect(mockSetupTracer).toHaveBeenCalledTimes(1);
+  });
+
+  it("should set up a separate tracer when the version or schemaUrl differs", () => {
+    const provider = new EmbraceNativeTracerProvider();
+    const tracer = provider.getTracer("tracer", "v1");
+
+    expect(provider.getTracer("tracer", "v2")).not.toBe(tracer);
+    expect(provider.getTracer("tracer", "v1", {schemaUrl: "s1"})).not.toBe(
+      tracer,
+    );
+    expect(mockSetupTracer).toHaveBeenCalledTimes(3);
+  });
+
   it("should treat a non-Embrace parent span as no parent", async () => {
     const tracer = await getTestTracer({});
     const parentContext = trace.setSpan(
