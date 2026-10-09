@@ -1,17 +1,9 @@
 import {AppState, Platform} from "react-native";
-import {
-  context,
-  ContextManager,
-  Tracer,
-  TracerProvider,
-} from "@opentelemetry/api";
+import {ContextManager, Tracer, TracerProvider} from "@opentelemetry/api";
 
 import EmbraceLogger from "../utils/EmbraceLogger";
 
-import {
-  EmbraceNativeTracerProviderConfig,
-  SpanContextSyncBehaviour,
-} from "./types";
+import {SpanContextSyncBehaviour} from "./types";
 import {TracerProviderModule} from "./TracerProviderModule";
 import {StackContextManager} from "./StackContextManager";
 import {EmbraceNativeTracer} from "./EmbraceNativeTracer";
@@ -26,24 +18,15 @@ const logger = new EmbraceLogger(console);
  * The JS side of this implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
  */
 class EmbraceNativeTracerProvider implements TracerProvider {
-  private readonly contextManager: ContextManager;
+  public readonly contextManager: ContextManager =
+    new StackContextManager().enable();
   private readonly spanContextSyncBehaviour: SpanContextSyncBehaviour;
   private readonly tracers = new Map<string, EmbraceNativeTracer>();
 
   constructor(
-    config: EmbraceNativeTracerProviderConfig = {
-      setGlobalContextManager: true,
-    },
+    spanContextSyncBehaviour: SpanContextSyncBehaviour = "return_empty",
   ) {
-    this.contextManager = new StackContextManager();
-    this.contextManager.enable();
-
-    if (config.setGlobalContextManager) {
-      context.setGlobalContextManager(this.contextManager);
-    }
-
-    this.spanContextSyncBehaviour =
-      config.spanContextSyncBehaviour || "return_empty";
+    this.spanContextSyncBehaviour = spanContextSyncBehaviour;
 
     AppState.addEventListener("change", () => {
       // Embrace ends the current session when the app switches between foreground and background, at that point

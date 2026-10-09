@@ -23,8 +23,8 @@ const logger = new EmbraceLogger(console);
  * Communication with the native modules is asynchronous while the @opentelemetry/api interfaces are synchronous so spans
  * are returned immediately as simple objects that contain an ID for further communication with the native side.
  *
- * Since the notion of active context differs on the native side this tracer has its own context manager to handle the
- * active context on the JS side which can optionally be configured as the global context manager.
+ * Since the notion of active context differs on the native side all tracers share one context manager to handle the
+ * active context on the JS side which can optionally be registered as the global context manager.
  *
  * The JS side of this implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
  */

@@ -8,7 +8,7 @@ import {
   EmbraceNativeTracerProviderConfig,
   EmbraceNativeTracerProviderReturn,
 } from "./types";
-import {EmbraceNativeTracerProvider} from "./EmbraceNativeTracerProvider";
+import {registerTracerProvider} from "./register";
 
 const logger = new EmbraceLogger(console);
 
@@ -66,7 +66,7 @@ const useEmbraceNativeTracerProvider = (
             );
             setIsError(true);
           } else if (!tracerProvider) {
-            const provider = new EmbraceNativeTracerProvider(config);
+            const provider = registerTracerProvider(config);
             setTracerProvider(provider);
             setTracer(provider.getTracer("embrace-default-tracer"));
           }
