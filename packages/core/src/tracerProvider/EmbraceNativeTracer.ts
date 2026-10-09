@@ -8,15 +8,14 @@ import {
   Tracer,
 } from "@opentelemetry/api";
 
-import {
-  logWarning,
-  normalizeAttributes,
-  normalizeLinks,
-  normalizeTime,
-} from "./util";
+import EmbraceLogger from "../utils/EmbraceLogger";
+
+import {normalizeAttributes, normalizeLinks, normalizeTime} from "./util";
 import {SpanContextSyncBehaviour} from "./types";
 import {TracerProviderModule} from "./TracerProviderModule";
 import {EmbraceNativeSpan} from "./EmbraceNativeSpan";
+
+const logger = new EmbraceLogger(console);
 
 /**
  * EmbraceNativeTracer implements a Tracer over the native Embrace Android and iOS SDKs.
@@ -24,8 +23,8 @@ import {EmbraceNativeSpan} from "./EmbraceNativeSpan";
  * Communication with the native modules is asynchronous while the @opentelemetry/api interfaces are synchronous so spans
  * are returned immediately as simple objects that contain an ID for further communication with the native side.
  *
- * Since the notion of active context differs on the native side this tracer has its own context manager to handle the
- * active context on the JS side which can optionally be configured as the global context manager.
+ * Since the notion of active context differs on the native side all tracers share one context manager to handle the
+ * active context on the JS side which can optionally be registered as the global context manager.
  *
  * The JS side of this implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
  */
@@ -55,10 +54,11 @@ class EmbraceNativeTracer implements Tracer {
     context?: Context,
   ): Span {
     const {kind, attributes, links, startTime, root} = options;
-    const parentSpan = trace.getSpan(
-      context || this.contextManager.active(),
-    ) as EmbraceNativeSpan;
-    const parentNativeID = (!root && parentSpan && parentSpan.nativeID()) || "";
+    const parentSpan = trace.getSpan(context || this.contextManager.active());
+    const parentNativeID =
+      !root && parentSpan instanceof EmbraceNativeSpan
+        ? parentSpan.nativeID()
+        : "";
 
     const nativeSpan = new EmbraceNativeSpan(
       this.name,
@@ -68,7 +68,7 @@ class EmbraceNativeTracer implements Tracer {
     );
 
     if (links && links.length) {
-      logWarning(
+      logger.warn(
         "Adding span links is not currently supported by the Embrace SDK",
       );
     }

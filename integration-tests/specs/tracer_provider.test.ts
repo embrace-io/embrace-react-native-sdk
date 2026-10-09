@@ -47,6 +47,19 @@ describe("Tracer Provider", () => {
     expect(p.perfSpans).toMatchGoldenFile("tracer-nested-spans", "perfSpans");
   });
 
+  it("records spans through the global OpenTelemetry API", async () => {
+    await tap("GENERATE GLOBAL API SPANS");
+    await endSession();
+
+    const p = await source.getPayloads();
+    expect(p.perfSpans).toMatchGoldenFile("tracer-global-api", "perfSpans");
+
+    const span = (name: string) => p.perfSpans.find(s => s.name === name)!;
+    expect(span("global-parent")).toHaveAttributes({"set-via-active-span": "true"});
+    expect(span("other-tracer-child")).toHaveParentSpan(span("global-parent"));
+    expect(span("non-embrace-parent-child")).toBeRootSpan();
+  });
+
   it("records a view span via startView", async () => {
     await tap("Record View");
     await endSession();
