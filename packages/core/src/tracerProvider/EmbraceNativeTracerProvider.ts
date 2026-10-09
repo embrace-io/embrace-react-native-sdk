@@ -6,7 +6,8 @@ import {
   TracerProvider,
 } from "@opentelemetry/api";
 
-import {logWarning} from "./util";
+import EmbraceLogger from "../utils/EmbraceLogger";
+
 import {
   EmbraceNativeTracerProviderConfig,
   SpanContextSyncBehaviour,
@@ -14,6 +15,8 @@ import {
 import {TracerProviderModule} from "./TracerProviderModule";
 import {StackContextManager} from "./StackContextManager";
 import {EmbraceNativeTracer} from "./EmbraceNativeTracer";
+
+const logger = new EmbraceLogger(console);
 
 /**
  * EmbraceNativeTracerProvider implements a TracerProvider over the native Embrace Android and iOS SDKs.
@@ -57,7 +60,7 @@ class EmbraceNativeTracerProvider implements TracerProvider {
     const tracerVersion = version || "";
 
     if (schemaUrl && Platform.OS === "ios") {
-      logWarning("`schemaUrl` is ignored when running on iOS");
+      logger.warn("`schemaUrl` is ignored when running on iOS");
     }
 
     TracerProviderModule.setupTracer(name, tracerVersion, schemaUrl);

@@ -8,15 +8,14 @@ import {
   Tracer,
 } from "@opentelemetry/api";
 
-import {
-  logWarning,
-  normalizeAttributes,
-  normalizeLinks,
-  normalizeTime,
-} from "./util";
+import EmbraceLogger from "../utils/EmbraceLogger";
+
+import {normalizeAttributes, normalizeLinks, normalizeTime} from "./util";
 import {SpanContextSyncBehaviour} from "./types";
 import {TracerProviderModule} from "./TracerProviderModule";
 import {EmbraceNativeSpan} from "./EmbraceNativeSpan";
+
+const logger = new EmbraceLogger(console);
 
 /**
  * EmbraceNativeTracer implements a Tracer over the native Embrace Android and iOS SDKs.
@@ -68,7 +67,7 @@ class EmbraceNativeTracer implements Tracer {
     );
 
     if (links && links.length) {
-      logWarning(
+      logger.warn(
         "Adding span links is not currently supported by the Embrace SDK",
       );
     }

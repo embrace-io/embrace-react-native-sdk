@@ -10,15 +10,18 @@ import {
   TimeInput,
 } from "@opentelemetry/api";
 
+import EmbraceLogger from "../utils/EmbraceLogger";
+
 import {
   isAttributes,
-  logWarning,
   normalizeAttributes,
   normalizeLinks,
   normalizeTime,
 } from "./util";
 import {SpanContextSyncBehaviour} from "./types";
 import {TracerProviderModule} from "./TracerProviderModule";
+
+const logger = new EmbraceLogger(console);
 
 /**
  * EmbraceNativeSpan implements a Span over the native Embrace Android and iOS SDKs.
@@ -70,7 +73,7 @@ class EmbraceNativeSpan implements Span {
         this.savedSpanContext = spanContext;
       })
       .catch(reason => {
-        logWarning(`Failed to create span: ${reason}`);
+        logger.warn(`Failed to create span: ${reason}`);
       });
   }
 
@@ -98,7 +101,7 @@ class EmbraceNativeSpan implements Span {
 
     switch (this.spanContextSyncBehaviour) {
       case "return_empty":
-        logWarning(msg + " Returning a blank SpanContext");
+        logger.warn(msg + " Returning a blank SpanContext");
         return {
           traceId: "",
           spanId: "",
@@ -175,7 +178,7 @@ class EmbraceNativeSpan implements Span {
       return this;
     }
 
-    logWarning(
+    logger.warn(
       "Adding span links is not currently supported by the Embrace SDK",
     );
     TracerProviderModule.addLinks(this.nativeID(), normalizeLinks(links));
