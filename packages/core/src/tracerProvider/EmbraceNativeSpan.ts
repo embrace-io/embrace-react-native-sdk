@@ -1,8 +1,8 @@
-import {Link} from "@opentelemetry/api/build/src/trace/link";
 import {
   Attributes,
   AttributeValue,
   Exception,
+  Link,
   Span,
   SpanContext,
   SpanStatus,
