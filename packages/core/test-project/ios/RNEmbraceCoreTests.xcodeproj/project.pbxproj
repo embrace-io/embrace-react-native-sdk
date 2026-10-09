@@ -11,8 +11,11 @@
 		25BB4D9E437210EDD6420521 /* Pods_RNEmbraceCorePlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41C9D5E1581CF997B7F14BF /* Pods_RNEmbraceCorePlaceholder.framework */; };
 		30DFDA6A2C486677009F2ECC /* RNEmbraceCorePlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30DFDA622C486677009F2ECC /* RNEmbraceCorePlaceholder.framework */; };
 		30DFDA6F2C486677009F2ECC /* RNEmbraceCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFDA6E2C486677009F2ECC /* RNEmbraceCoreTests.swift */; };
+		655F75B60EB88C8CA5EBDCFF /* RNEmbraceCorePlaceholder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30DFDA622C486677009F2ECC /* RNEmbraceCorePlaceholder.framework */; };
 		6DE4471B2E5604BA0036CFBB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DE4471A2E5604BA0036CFBB /* AudioToolbox.framework */; };
 		6DE4471D2E5604C90036CFBB /* AVFAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DE4471C2E5604C90036CFBB /* AVFAudio.framework */; };
+		9854BC75436BD121E8243DC3 /* Pods_RNEmbraceCorePlaceholder_RNEmbraceTracerProviderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E0EBB853E913CA182CBEADD /* Pods_RNEmbraceCorePlaceholder_RNEmbraceTracerProviderTests.framework */; };
+		F4AF4AFB8147BBBB55E6C0AD /* RNEmbraceTracerProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BD15FF61C3B8003ED4F616 /* RNEmbraceTracerProviderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,10 +26,20 @@
 			remoteGlobalIDString = 30DFDA612C486677009F2ECC;
 			remoteInfo = RNEmbraceCore;
 		};
+		72900AFD741E919DA9B25876 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 30DFDA062C485A70009F2ECC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 30DFDA612C486677009F2ECC;
+			remoteInfo = RNEmbraceCorePlaceholder;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		05C0DA0B2D2601ABAE09F09D /* Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests.debug.xcconfig"; sourceTree = "<group>"; };
 		169F89163720696D3B756375 /* Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.debug.xcconfig"; path = "Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.debug.xcconfig"; sourceTree = "<group>"; };
+		233120FB25CE250E5613B3D5 /* Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests.release.xcconfig"; sourceTree = "<group>"; };
+		2E0EBB853E913CA182CBEADD /* Pods_RNEmbraceCorePlaceholder_RNEmbraceTracerProviderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceCorePlaceholder_RNEmbraceTracerProviderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		30DFDA622C486677009F2ECC /* RNEmbraceCorePlaceholder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RNEmbraceCorePlaceholder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		30DFDA692C486677009F2ECC /* RNEmbraceCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNEmbraceCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		30DFDA6E2C486677009F2ECC /* RNEmbraceCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNEmbraceCoreTests.swift; sourceTree = "<group>"; };
@@ -34,12 +47,23 @@
 		6DE4471A2E5604BA0036CFBB /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
 		6DE4471C2E5604C90036CFBB /* AVFAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFAudio.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk/System/Library/Frameworks/AVFAudio.framework; sourceTree = DEVELOPER_DIR; };
 		70771DAB84A0B92776D63ED7 /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		845BEEA852867D744B33E935 /* RNEmbraceTracerProviderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNEmbraceTracerProviderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D444774AB9A34C8CF34510A /* Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.release.xcconfig"; sourceTree = "<group>"; };
+		A2BD15FF61C3B8003ED4F616 /* RNEmbraceTracerProviderTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RNEmbraceTracerProviderTests.swift; sourceTree = "<group>"; };
 		C21EEE78D206AE6693E5AFEC /* Pods-RNEmbraceCorePlaceholder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNEmbraceCorePlaceholder.release.xcconfig"; path = "Target Support Files/Pods-RNEmbraceCorePlaceholder/Pods-RNEmbraceCorePlaceholder.release.xcconfig"; sourceTree = "<group>"; };
 		D41C9D5E1581CF997B7F14BF /* Pods_RNEmbraceCorePlaceholder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RNEmbraceCorePlaceholder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0992C66512559E05C4A50BC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				655F75B60EB88C8CA5EBDCFF /* RNEmbraceCorePlaceholder.framework in Frameworks */,
+				9854BC75436BD121E8243DC3 /* Pods_RNEmbraceCorePlaceholder_RNEmbraceTracerProviderTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		30DFDA5F2C486677009F2ECC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -69,6 +93,8 @@
 				C21EEE78D206AE6693E5AFEC /* Pods-RNEmbraceCorePlaceholder.release.xcconfig */,
 				169F89163720696D3B756375 /* Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.debug.xcconfig */,
 				8D444774AB9A34C8CF34510A /* Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests.release.xcconfig */,
+				233120FB25CE250E5613B3D5 /* Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests.release.xcconfig */,
+				05C0DA0B2D2601ABAE09F09D /* Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests.debug.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -77,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				30DFDA6D2C486677009F2ECC /* RNEmbraceCoreTests */,
+				76EBC0802181C3194F0681CA /* RNEmbraceTracerProviderTests */,
 				30DFDA102C485A70009F2ECC /* Products */,
 				0C8E90FDF3018EA1FCF9459E /* Pods */,
 				3BD9D3FB7C46D73CA78BB6DB /* Frameworks */,
@@ -88,6 +115,7 @@
 			children = (
 				30DFDA622C486677009F2ECC /* RNEmbraceCorePlaceholder.framework */,
 				30DFDA692C486677009F2ECC /* RNEmbraceCoreTests.xctest */,
+				845BEEA852867D744B33E935 /* RNEmbraceTracerProviderTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -107,8 +135,17 @@
 				6DE4471A2E5604BA0036CFBB /* AudioToolbox.framework */,
 				D41C9D5E1581CF997B7F14BF /* Pods_RNEmbraceCorePlaceholder.framework */,
 				70771DAB84A0B92776D63ED7 /* Pods_RNEmbraceCorePlaceholder_RNEmbraceCoreTests.framework */,
+				2E0EBB853E913CA182CBEADD /* Pods_RNEmbraceCorePlaceholder_RNEmbraceTracerProviderTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		76EBC0802181C3194F0681CA /* RNEmbraceTracerProviderTests */ = {
+			isa = PBXGroup;
+			children = (
+				A2BD15FF61C3B8003ED4F616 /* RNEmbraceTracerProviderTests.swift */,
+			);
+			path = RNEmbraceTracerProviderTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,6 +161,27 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		21819EA2FE9FEEC45325EE90 /* RNEmbraceTracerProviderTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 91856E58662EBA1AA9FAC79D /* Build configuration list for PBXNativeTarget "RNEmbraceTracerProviderTests" */;
+			buildPhases = (
+				85E084A060A61D45E0EDF987 /* [CP] Check Pods Manifest.lock */,
+				8EC6E5C5069CF64E3DE6F14A /* Sources */,
+				0992C66512559E05C4A50BC4 /* Frameworks */,
+				A10DCE655CF5129C47B7701F /* Resources */,
+				63D6B0249B4834383AB183F9 /* [CP] Embed Pods Frameworks */,
+				21DE6DAD4DF7F245764C16E1 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				409F408CA641205831CDBC04 /* PBXTargetDependency */,
+			);
+			name = RNEmbraceTracerProviderTests;
+			productName = RNEmbraceTracerProviderTests;
+			productReference = 845BEEA852867D744B33E935 /* RNEmbraceTracerProviderTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		30DFDA612C486677009F2ECC /* RNEmbraceCorePlaceholder */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 30DFDA712C486677009F2ECC /* Build configuration list for PBXNativeTarget "RNEmbraceCorePlaceholder" */;
@@ -175,6 +233,9 @@
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
+					21819EA2FE9FEEC45325EE90 = {
+						CreatedOnToolsVersion = 15.4;
+					};
 					30DFDA612C486677009F2ECC = {
 						CreatedOnToolsVersion = 15.4;
 						LastSwiftMigration = 1540;
@@ -199,6 +260,7 @@
 			targets = (
 				30DFDA612C486677009F2ECC /* RNEmbraceCorePlaceholder */,
 				30DFDA682C486677009F2ECC /* RNEmbraceCoreTests */,
+				21819EA2FE9FEEC45325EE90 /* RNEmbraceTracerProviderTests */,
 			);
 		};
 /* End PBXProject section */
@@ -212,6 +274,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		30DFDA672C486677009F2ECC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10DCE655CF5129C47B7701F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -236,6 +305,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceCorePlaceholder/Pods-RNEmbraceCorePlaceholder-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		21DE6DAD4DF7F245764C16E1 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2793946DFFAF2BFFEB82E2F4 /* [CP] Embed Pods Frameworks */ = {
@@ -270,6 +356,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceCoreTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		63D6B0249B4834383AB183F9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		85E084A060A61D45E0EDF987 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8D9D3FA8DBDB66790D30BA10 /* [CP] Check Pods Manifest.lock */ = {
@@ -334,6 +459,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8EC6E5C5069CF64E3DE6F14A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4AF4AFB8147BBBB55E6C0AD /* RNEmbraceTracerProviderTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -341,6 +474,12 @@
 			isa = PBXTargetDependency;
 			target = 30DFDA612C486677009F2ECC /* RNEmbraceCorePlaceholder */;
 			targetProxy = 30DFDA6B2C486677009F2ECC /* PBXContainerItemProxy */;
+		};
+		409F408CA641205831CDBC04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RNEmbraceCorePlaceholder;
+			target = 30DFDA612C486677009F2ECC /* RNEmbraceCorePlaceholder */;
+			targetProxy = 72900AFD741E919DA9B25876 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -679,6 +818,50 @@
 			};
 			name = Release;
 		};
+		C070196DCEB7690E0DEA0B4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 233120FB25CE250E5613B3D5 /* Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbraceTracerProviderTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C4ACFA4697B70FD9CB4FA523 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05C0DA0B2D2601ABAE09F09D /* Pods-RNEmbraceCorePlaceholder-RNEmbraceTracerProviderTests.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.embrace.RNEmbraceTracerProviderTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -705,6 +888,15 @@
 			buildConfigurations = (
 				30DFDA752C486677009F2ECC /* Debug */,
 				30DFDA762C486677009F2ECC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		91856E58662EBA1AA9FAC79D /* Build configuration list for PBXNativeTarget "RNEmbraceTracerProviderTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C070196DCEB7690E0DEA0B4E /* Release */,
+				C4ACFA4697B70FD9CB4FA523 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
