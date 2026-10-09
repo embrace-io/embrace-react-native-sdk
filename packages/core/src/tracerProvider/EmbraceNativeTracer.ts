@@ -54,10 +54,11 @@ class EmbraceNativeTracer implements Tracer {
     context?: Context,
   ): Span {
     const {kind, attributes, links, startTime, root} = options;
-    const parentSpan = trace.getSpan(
-      context || this.contextManager.active(),
-    ) as EmbraceNativeSpan;
-    const parentNativeID = (!root && parentSpan && parentSpan.nativeID()) || "";
+    const parentSpan = trace.getSpan(context || this.contextManager.active());
+    const parentNativeID =
+      !root && parentSpan instanceof EmbraceNativeSpan
+        ? parentSpan.nativeID()
+        : "";
 
     const nativeSpan = new EmbraceNativeSpan(
       this.name,

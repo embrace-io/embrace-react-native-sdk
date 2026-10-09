@@ -8,6 +8,7 @@ import {
   Link,
   trace,
   Span,
+  ROOT_CONTEXT,
 } from "@opentelemetry/api";
 
 import {
@@ -1022,6 +1023,36 @@ describe("Embrace Native Tracer Provider", () => {
     expect(mockAddEvent).not.toHaveBeenCalled();
     expect(mockSetStatus).not.toHaveBeenCalled();
     expect(mockEndSpan).toHaveBeenCalledWith(expect.any(String), 0);
+  });
+
+  it("should treat a non-Embrace parent span as no parent", async () => {
+    const tracer = await getTestTracer({});
+    const parentContext = trace.setSpan(
+      ROOT_CONTEXT,
+      trace.wrapSpanContext({
+        traceId: "a".repeat(32),
+        spanId: "b".repeat(16),
+        traceFlags: 1,
+      }),
+    );
+    let child = getEmptySpan();
+
+    expect(() => {
+      child = tracer.startSpan("my-child-span", {}, parentContext);
+    }).not.toThrow();
+
+    expect(mockStartSpan).toHaveBeenLastCalledWith(
+      "test",
+      "v1",
+      "",
+      (child as EmbraceNativeSpan).nativeID(),
+      "my-child-span",
+      "",
+      0,
+      {},
+      [],
+      "",
+    );
   });
 
   it("should not collide on native span IDs when multiple tracer providers and tracers are instantiated", async () => {
