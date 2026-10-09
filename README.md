@@ -21,7 +21,6 @@ Individual packages are published from this monorepo, reasoning can be found in 
 | [`@embrace-io/react-native-redux`](./packages/react-native-redux)   | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-redux.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-redux)   |
 | [`@embrace-io/react-native-navigation`](./packages/react-native-navigation)           | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-navigation.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-navigation)           |
 | [`@embrace-io/react-native-tracer-provider`](./packages/react-native-tracer-provider) | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-tracer-provider.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-tracer-provider) |
-| [`@embrace-io/react-native-otlp`](./packages/react-native-otlp)                       | [![npm](https://img.shields.io/npm/v/@embrace-io/react-native-otlp.svg?maxAge=3600)](https://www.npmjs.com/package/@embrace-io/react-native-otlp)                       |
 
 ## Support
 

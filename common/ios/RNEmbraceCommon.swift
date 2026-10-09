@@ -28,7 +28,7 @@ class SDKConfig: NSObject {
     }
 }
 
-func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> Embrace.Options {
+func initEmbraceOptions(config: SDKConfig) -> Embrace.Options {
     var embraceOptions: Embrace.Options {
         var crashReporter = config.disableCrashReporter ? nil : KSCrashReporter()
 
@@ -57,15 +57,6 @@ func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> E
         if config.endpointBaseUrl != nil {
             endpoints = Embrace.Endpoints(baseURL: config.endpointBaseUrl!, configBaseURL: config.endpointBaseUrl!)
         }
-                
-        if (config.appId == nil && exporters != nil) {
-            return .init(
-                export: exporters!,
-                captureServices: servicesBuilder.build(),
-                crashReporter: crashReporter,
-                logLevel: .default
-            )
-        }
 
         return .init(
             appId: config.appId ?? "",
@@ -73,8 +64,7 @@ func initEmbraceOptions(config: SDKConfig, exporters: OpenTelemetryExport?) -> E
             platform: .reactNative,
             endpoints: endpoints,
             captureServices: servicesBuilder.build(),
-            crashReporter: crashReporter,
-            export: exporters
+            crashReporter: crashReporter
         )
     }
         
