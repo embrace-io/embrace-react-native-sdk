@@ -11,7 +11,7 @@ interface EmbraceNativeTracerProviderReturn {
 interface EmbraceNativeTracerProviderConfig {
   /** Determines the behaviour when a span's context is not currently available when grabbed synchronously */
   spanContextSyncBehaviour?: SpanContextSyncBehaviour;
-  /** If true, the tracer provider will be registered globally with OpenTelemetry */
+  /** If true or omitted, the tracer provider will be registered globally with OpenTelemetry */
   registerGlobally?: boolean;
 }
 
