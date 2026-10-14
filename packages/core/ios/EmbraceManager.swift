@@ -70,9 +70,9 @@ public class EmbraceManager: NSObject {
         bundleIDQueue.async {
             do {
                 let bundleID = try computeBundleID(path: path)
-                try Embrace.client?.metadata.addResource(key: REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, value: bundleID.id, lifespan: .process)
+                self.addResource(REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, bundleID.id)
             } catch let error {
-                os_log("Error setting the default JS bundle ID: %{public}@", log: self.log, type: .error, error.localizedDescription)
+                os_log("Error computing the default JS bundle ID: %{public}@", log: self.log, type: .error, error.localizedDescription)
             }
         }
     }
