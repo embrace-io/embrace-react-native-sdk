@@ -1,6 +1,5 @@
 import {waitFor} from "@testing-library/react-native";
 
-import * as otlpHelper from "../utils/otlp";
 import {trackUnhandledRejection} from "../utils/error";
 import {AndroidConfig, initialize, IOSConfig} from "../index";
 import {handleError, handleGlobalError} from "../api/error";
@@ -14,7 +13,7 @@ const INIT_SDK_CONFIG = {
 };
 
 const JS_START_DEPRECATION_WARNING =
-  "[Embrace] Starting the native SDK from JavaScript (including `sdkConfig.ios` and `sdkConfig.exporters`) is deprecated and will be removed in the next major release. Start Embrace in native code instead: https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side";
+  "[Embrace] Starting the native SDK from JavaScript (including `sdkConfig.ios`) is deprecated and will be removed in the next major release. Start Embrace in native code instead: https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side";
 
 const mockSetReactNativeVersion = jest
   .fn()
@@ -331,40 +330,6 @@ describe("SDK initialization", () => {
         );
       });
     });
-
-    // not mocking OTLP helpers and letting it throw errors for testing purposes (require.context)
-    it("exporter config is passed but OTLP throw error", async () => {
-      const isStarted = await initialize({
-        patch: "v1",
-        sdkConfig: {
-          exporters: {
-            traceExporter: {
-              endpoint: "http://localhost/trace",
-            },
-          },
-        },
-      });
-
-      await waitFor(() => {
-        // since it's android and there is no `ios.appId` it should not log this message
-        expect(console.log).not.toHaveBeenCalledWith(
-          "[Embrace] 'sdkConfig.ios.appId' not found, only custom exporters will be used",
-        );
-        // embrace manual error + metro exception
-        expect(console.error).toHaveBeenCalledTimes(2);
-        expect(console.error).toHaveBeenCalledWith(
-          "[Embrace] an error ocurred when checking if `@embrace-io/react-native-otlp` was installed",
-        );
-        expect(isStarted).toBe(true);
-        expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-          "OTLP exporters were configured but `@embrace-io/react-native-otlp` could not be loaded. OTLP exporters won't be used.",
-          "warning",
-          {},
-          expect.any(String),
-          true,
-        );
-      });
-    });
   });
 
   describe("iOS: initialize", () => {
@@ -372,30 +337,7 @@ describe("SDK initialization", () => {
       mockReactNative.Platform.OS = "ios";
     });
 
-    it("should not call regular `startNativeEmbraceSDK` if `exporters` are available", async () => {
-      const mockOltpGetStart = jest.fn().mockResolvedValue(true);
-
-      jest
-        .spyOn(otlpHelper, "oltpGetStart")
-        .mockImplementation(() => mockOltpGetStart);
-
-      const isStarted = await initialize({
-        sdkConfig: {
-          ios: {appId: "abc12"},
-          exporters: {
-            logExporter: {endpoint: "http://localhost:8081/mock/log"},
-          },
-        },
-      });
-
-      await waitFor(() => {
-        expect(mockOltpGetStart).toHaveBeenCalledTimes(1);
-        expect(mockStart).not.toHaveBeenCalled();
-        expect(isStarted).toBe(true);
-      });
-    });
-
-    test("SDK should not start because `appId` is missing and there is not configured custom exporters", async () => {
+    test("SDK should not start because `appId` is missing", async () => {
       const isStarted = await initialize({patch: "v1", sdkConfig: {ios: {}}});
 
       await waitFor(() => {
@@ -406,7 +348,7 @@ describe("SDK initialization", () => {
         expect(mockSetReactNativeSDKVersion).not.toHaveBeenCalled();
         expect(console.warn).toHaveBeenCalledTimes(2);
         expect(console.warn).toHaveBeenCalledWith(
-          "[Embrace] 'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+          "[Embrace] 'sdkConfig.ios.appId' is required to initialize Embrace's native SDK. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
         );
       });
     });
