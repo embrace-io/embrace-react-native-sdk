@@ -71,7 +71,7 @@ public class EmbraceManager: NSObject {
 
         DispatchQueue.main.async {
             do {
-                try Embrace.setup(options: initEmbraceOptions(config: self.config, exporters: nil))
+                try Embrace.setup(options: initEmbraceOptions(config: self.config))
                     .start()
 
                 resolve(true)
