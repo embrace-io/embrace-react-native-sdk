@@ -16,6 +16,7 @@ import {
   compareLogs,
   compareSpan,
   idToNameMap,
+  isRootParentId,
   parentNameOf,
 } from "./compare";
 import {loadGoldenFile} from "./golden";
@@ -121,6 +122,12 @@ export const registerMatchers = (): void =>
       return wrap({
         pass: actualName === parent,
         message: `span "${received.name}" expected parent "${parent}", got "${actualName ?? "root"}"`,
+      });
+    },
+    toBeRootSpan(received: EmbraceSpanData) {
+      return wrap({
+        pass: isRootParentId(received.parent_span_id),
+        message: `span "${received.name}" expected to be a root span, got parent id "${received.parent_span_id}"`,
       });
     },
     toHaveSpanNames(received: EmbraceSpanData[], names: string[]) {

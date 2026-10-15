@@ -5,6 +5,7 @@ import {styles} from "../helpers/styles";
 import TestButton from "../components/TestButton";
 import {
   generateBasicSpan,
+  generateGlobalApiSpans,
   generateNestedSpans,
   generateTestSpans,
 } from "../helpers/generateSpans";
@@ -107,6 +108,10 @@ const SpanTestingScreen = () => {
         <TestButton
           onPress={() => generateNestedSpans(tracer!)}
           title={"GENERATE NESTED SPANS"}
+        />
+        <TestButton
+          onPress={() => generateGlobalApiSpans(tracer!)}
+          title={"GENERATE GLOBAL API SPANS"}
         />
         <TestButton onPress={recordViewHandler} title="Record View" />
         <TestButton
