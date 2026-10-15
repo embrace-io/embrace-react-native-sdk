@@ -22,6 +22,11 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
         return EmbraceManagerModuleImpl.NAME;
     }
 
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public boolean initializeReactNativeSDK(ReadableMap config) {
+        return impl.initializeReactNativeSDK(config);
+    }
+
     @ReactMethod
     public void isStarted(Promise promise) {
         impl.isStarted(promise);
