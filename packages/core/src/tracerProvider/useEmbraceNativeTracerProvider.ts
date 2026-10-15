@@ -2,12 +2,15 @@ import {NativeModules, TurboModuleRegistry} from "react-native";
 import {useEffect, useState} from "react";
 import {Tracer, TracerProvider} from "@opentelemetry/api";
 
-import {logWarning} from "./util";
+import EmbraceLogger from "../utils/EmbraceLogger";
+
 import {
   EmbraceNativeTracerProviderConfig,
   EmbraceNativeTracerProviderReturn,
 } from "./types";
-import {EmbraceNativeTracerProvider} from "./EmbraceNativeTracerProvider";
+import {registerTracerProvider} from "./register";
+
+const logger = new EmbraceLogger(console);
 
 const EmbraceManagerModule =
   TurboModuleRegistry?.get("EmbraceManager") ?? NativeModules.EmbraceManager;
@@ -36,7 +39,7 @@ const useEmbraceNativeTracerProvider = (
 
   useEffect(() => {
     if (error) {
-      logWarning(error);
+      logger.warn(error);
     }
   }, [error]);
 
@@ -63,7 +66,7 @@ const useEmbraceNativeTracerProvider = (
             );
             setIsError(true);
           } else if (!tracerProvider) {
-            const provider = new EmbraceNativeTracerProvider(config);
+            const provider = registerTracerProvider(config);
             setTracerProvider(provider);
             setTracer(provider.getTracer("embrace-default-tracer"));
           }
