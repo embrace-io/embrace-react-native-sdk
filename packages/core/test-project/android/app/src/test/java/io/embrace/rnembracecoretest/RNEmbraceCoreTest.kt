@@ -5,6 +5,7 @@ import com.facebook.react.bridge.JavaOnlyMap
 import com.facebook.react.bridge.Promise
 import com.facebook.react.common.SystemClock.currentTimeMillis
 import io.embrace.android.embracesdk.Embrace
+import io.embrace.android.embracesdk.internal.ReactNativeInternalInterface
 import io.embrace.android.embracesdk.network.http.HttpMethod
 import io.embrace.rnembracecore.EmbraceManagerModuleImpl
 import io.opentelemetry.kotlin.export.OperationResultCode
@@ -21,10 +22,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.timeout
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -63,6 +67,78 @@ class RNEmbraceCoreTest {
             sdkStarted = true
         }
         clearInvocations(spanExporter, logExporter, promise)
+    }
+
+    private fun moduleWithInternalInterface(rn: ReactNativeInternalInterface): EmbraceManagerModuleImpl {
+        val module = Mockito.spy(EmbraceManagerModuleImpl(mock()))
+        doReturn(rn).whenever(module).reactNativeInternalInterface
+        return module
+    }
+
+    @Test
+    fun initializeReactNativeSDKWithTheStartedSdk() {
+        val started = EmbraceManagerModuleImpl(mock()).initializeReactNativeSDK(
+            JavaOnlyMap().apply {
+                putString("reactNativeVersion", "0.85.0")
+                putString("sdkVersion", "8.0.0")
+                putNull("javaScriptPatchNumber")
+                putBoolean("resolveDefaultBundlePath", true)
+            },
+        )
+
+        assertTrue(started)
+    }
+
+    @Test
+    fun initializeReactNativeSDKAppliesEachField() {
+        val rn: ReactNativeInternalInterface = mock()
+
+        val started = moduleWithInternalInterface(rn).initializeReactNativeSDK(
+            JavaOnlyMap().apply {
+                putString("reactNativeVersion", "0.85.0")
+                putString("sdkVersion", "8.0.0")
+                putString("javaScriptPatchNumber", "patch-1")
+                putBoolean("resolveDefaultBundlePath", true)
+            },
+        )
+
+        assertTrue(started)
+        verify(rn).setReactNativeVersionNumber("0.85.0")
+        verify(rn).setReactNativeSdkVersion("8.0.0")
+        verify(rn).setJavaScriptPatchNumber("patch-1")
+    }
+
+    @Test
+    fun initializeReactNativeSDKSkipsMissingFields() {
+        val rn: ReactNativeInternalInterface = mock()
+
+        val started = moduleWithInternalInterface(rn).initializeReactNativeSDK(
+            JavaOnlyMap().apply {
+                putString("sdkVersion", "8.0.0")
+            },
+        )
+
+        assertTrue(started)
+        verify(rn).setReactNativeSdkVersion("8.0.0")
+        verify(rn, never()).setReactNativeVersionNumber(anyOrNull())
+        verify(rn, never()).setJavaScriptPatchNumber(anyOrNull())
+    }
+
+    @Test
+    fun initializeReactNativeSDKReturnsTrueWhenASetterThrows() {
+        val rn: ReactNativeInternalInterface = mock {
+            on { setReactNativeVersionNumber(anyOrNull()) } doThrow RuntimeException("setter failed")
+        }
+
+        val started = moduleWithInternalInterface(rn).initializeReactNativeSDK(
+            JavaOnlyMap().apply {
+                putString("reactNativeVersion", "0.85.0")
+                putString("sdkVersion", "8.0.0")
+                putString("javaScriptPatchNumber", "patch-1")
+            },
+        )
+
+        assertTrue(started)
     }
 
     @Test

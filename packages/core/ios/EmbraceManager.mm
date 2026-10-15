@@ -39,6 +39,11 @@ RCT_EXPORT_MODULE(EmbraceManager)
   return _impl;
 }
 
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, initializeReactNativeSDK:(NSDictionary *)config)
+{
+  return @([self.impl initializeReactNativeSDK:config]);
+}
+
 RCT_EXPORT_METHOD(isStarted:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
 {
