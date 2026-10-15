@@ -2,8 +2,7 @@
 
 > [!IMPORTANT]
 >
-> This module requires both the [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native) and
-> the [React Native Embrace Tracer Provider](https://www.npmjs.com/package/@embrace-io/react-native-tracer-provider).
+> This module requires the [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native).
 
 This package uses Embrace's React Native SDK and OpenTelemetry Tracer Provider to collect telemetry around dispatching
 actions with Redux. It provides a custom middleware that can be configured with your Redux store.
@@ -29,8 +28,7 @@ yarn add @embrace-io/react-native-redux
 ```typescript
 import {useEffect, useState} from "react";
 import {EnhancedStore, configureStore, Tuple} from "@reduxjs/toolkit";
-import {useEmbrace} from "@embrace-io/react-native";
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {useEmbrace, useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
 import {useEmbraceMiddleware} from "@embrace-io/react-native-redux";
 
 const MyApp = () => {
@@ -59,8 +57,7 @@ const MyApp = () => {
 
 ```typescript
 import {configureStore, Tuple} from "@reduxjs/toolkit";
-import {initialize} from "@embrace-io/react-native";
-import {EmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {EmbraceNativeTracerProvider, initialize} from "@embrace-io/react-native";
 import {createEmbraceMiddleware} from "@embrace-io/react-native-redux";
 
 const setupStore = async () => {

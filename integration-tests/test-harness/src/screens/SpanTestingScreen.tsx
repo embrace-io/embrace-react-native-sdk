@@ -13,7 +13,7 @@ import {
   useEmbraceNativeTracerProvider,
   startView,
   recordCompletedSpan,
-} from "@embrace-io/react-native-tracer-provider";
+} from "@embrace-io/react-native";
 import FullScreenMessage from "../components/FullScreenMessage";
 import {addBreadcrumb} from "@embrace-io/react-native";
 

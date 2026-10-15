@@ -19,6 +19,10 @@ public class EmbraceManagerPackage extends BaseReactPackage {
             return new EmbraceManagerModule(reactContext);
         }
 
+        if (EmbraceTracerProviderModuleImpl.NAME.equals(name)) {
+            return new EmbraceTracerProviderModule(reactContext);
+        }
+
         return null;
     }
 
@@ -34,6 +38,15 @@ public class EmbraceManagerPackage extends BaseReactPackage {
                     false, // needsEagerInit
                     false, // isCXXModule
                     true // isTurboModule
+            ));
+
+            moduleInfos.put(EmbraceTracerProviderModuleImpl.NAME, new ReactModuleInfo(
+                    EmbraceTracerProviderModuleImpl.NAME,
+                    EmbraceTracerProviderModuleImpl.NAME,
+                    false,
+                    false,
+                    false,
+                    true
             ));
 
             return moduleInfos;

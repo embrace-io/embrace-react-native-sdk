@@ -2,8 +2,7 @@
 
 > [!IMPORTANT]
 >
-> This module requires both the [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native) and
-> the [React Native Embrace Tracer Provider](https://www.npmjs.com/package/@embrace-io/react-native-tracer-provider).
+> This module requires the [React Native Embrace SDK](https://www.npmjs.com/package/@embrace-io/react-native).
 
 This package uses Embrace's React Native SDK and OpenTelemetry Tracer Provider to collect telemetry around Navigation based on [expo-router](https://github.com/expo/expo/tree/main/packages/expo-router), [@react-navigation/native](https://github.com/react-navigation/react-navigation) and [react-native-navigation](https://wix.github.io/react-native-navigation/).
 
@@ -27,10 +26,9 @@ Using `expo-router`:
 
 ```javascript
 import React from 'react';
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {Stack, useNavigationContainerRef} from 'expo-router';
-import {useEmbrace} from "@embrace-io/react-native";
+import {useEmbrace, useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
 
 const App = () => {
   const {isStarted} = useEmbrace({
@@ -84,14 +82,13 @@ If you are using purely [@react-navigation/native](https://github.com/react-navi
 
 ```javascript
 import React from 'react';
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {
   NavigationContainer,
   useNavigationContainerRef,
 } from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {useEmbrace} from "@embrace-io/react-native";
+import {useEmbrace, useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
 import CartPage from "screens/CartPage";
 import CheckoutPage from "screens/CheckoutPage";
 
@@ -172,10 +169,9 @@ You have to make sure you wrap your entry view with the `<EmbraceNativeNavigatio
 ```javascript
 // index.ts
 import React, {useRef} from "react";
-import {EmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
 import {TracerProvider} from "@opentelemetry/api";
 import {EmbraceNativeNavigationTracker} from "@embrace-io/react-native-navigation";
-import {initialize} from "@embrace-io/react-native";
+import {EmbraceNativeTracerProvider, initialize} from "@embrace-io/react-native";
 import {Navigation} from "react-native-navigation";
 import {HomeScreen} from "screens/HomeScreen";
 
