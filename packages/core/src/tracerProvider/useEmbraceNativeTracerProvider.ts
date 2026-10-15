@@ -1,90 +1,37 @@
-import {NativeModules, TurboModuleRegistry} from "react-native";
-import {useEffect, useState} from "react";
-import {Tracer, TracerProvider} from "@opentelemetry/api";
-
-import EmbraceLogger from "../utils/EmbraceLogger";
-
 import {
   EmbraceNativeTracerProviderConfig,
   EmbraceNativeTracerProviderReturn,
 } from "./types";
-import {registerTracerProvider} from "./register";
+import {getEmbraceTracerProvider} from "./register";
+import {getEmbraceTracer} from "./convenience";
 
-const logger = new EmbraceLogger(console);
-
-const EmbraceManagerModule =
-  TurboModuleRegistry?.get("EmbraceManager") ?? NativeModules.EmbraceManager;
+const NO_TRACER_PROVIDER =
+  "No Embrace tracer provider is registered. Call `initialize` from `@embrace-io/react-native` in the first import of your app's entry file, check that it returns `true`, and do not pass `tracerProvider: false`.";
 
 /**
- * useEmbraceNativeTracerProvider makes sure that the Embrace SDK has been installed and started and
- * then sets up a EmbraceNativeTracerProvider
- *
- * The EmbraceNativeTracerProvider implements a TracerProvider over the native Embrace Android and iOS SDKs.
- * Thin wrapped objects representing Tracers and Spans are maintained at the JS level and use Native Modules to
- * call down to the SDKs to perform the actual operations on them.
- *
- * The JS side of its implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
+ * @deprecated Use `getEmbraceTracer()` or `getEmbraceTracerProvider()`. Pass any config to `initialize({tracerProvider})`; the arguments here are ignored.
  */
 const useEmbraceNativeTracerProvider = (
-  config?: EmbraceNativeTracerProviderConfig,
-  enabled = true,
+  _config?: EmbraceNativeTracerProviderConfig,
+  _enabled?: boolean,
 ): EmbraceNativeTracerProviderReturn => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isError, setIsError] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [tracerProvider, setTracerProvider] = useState<TracerProvider | null>(
-    null,
-  );
-  const [tracer, setTracer] = useState<Tracer | null>(null);
-
-  useEffect(() => {
-    if (error) {
-      logger.warn(error);
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (!enabled) {
-      return;
-    }
-
-    if (!EmbraceManagerModule) {
-      setError(
-        "You must have the Embrace SDK available to use the TracerProvider, please install `@embrace-io/react-native`.",
-      );
-      setIsError(true);
-      setIsLoading(false);
-      return;
-    }
-
-    if (isLoading) {
-      EmbraceManagerModule.isStarted()
-        .then((started: boolean) => {
-          if (!started) {
-            setError(
-              "The Embrace SDK must be started to use the TracerProvider, please invoke `initialize` from `@embrace-io/react-native`.",
-            );
-            setIsError(true);
-          } else if (!tracerProvider) {
-            const provider = registerTracerProvider(config);
-            setTracerProvider(provider);
-            setTracer(provider.getTracer("embrace-default-tracer"));
-          }
-        })
-        .catch(() => {
-          setError("Failed to setup EmbraceNativeTracerProvider");
-          setIsError(true);
-        })
-        .finally(() => setIsLoading(false));
-    }
-  }, [isLoading, config, enabled, tracerProvider]);
+  const provider = getEmbraceTracerProvider();
+  if (!provider) {
+    return {
+      isLoading: false,
+      isError: true,
+      error: NO_TRACER_PROVIDER,
+      tracerProvider: null,
+      tracer: null,
+    };
+  }
 
   return {
-    isLoading,
-    isError,
-    error,
-    tracerProvider,
-    tracer,
+    isLoading: false,
+    isError: false,
+    error: "",
+    tracerProvider: provider,
+    tracer: getEmbraceTracer() ?? null,
   };
 };
 

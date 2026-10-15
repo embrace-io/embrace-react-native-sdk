@@ -1,4 +1,3 @@
-import {renderHook, waitFor} from "@testing-library/react-native";
 import {
   Attributes,
   context,
@@ -11,12 +10,10 @@ import {
   ROOT_CONTEXT,
 } from "@opentelemetry/api";
 
-import {registerTracerProvider} from "../tracerProvider/register";
 import {EmbraceNativeTracerProvider} from "../tracerProvider/EmbraceNativeTracerProvider";
 import {
   SpanContextSyncBehaviour,
   EmbraceNativeSpan,
-  useEmbraceNativeTracerProvider,
   startView,
   endAsFailed,
   asParent,
@@ -33,15 +30,9 @@ const mockUpdateName = jest.fn();
 const mockEndSpan = jest.fn();
 const mockClearCompletedSpans = jest.fn();
 
-const mockIsStarted = jest.fn();
 const mockAppStateListener = jest.fn();
 
 jest.mock("react-native", () => ({
-  NativeModules: {
-    EmbraceManager: {
-      isStarted: () => mockIsStarted(),
-    },
-  },
   AppState: {
     addEventListener: (type: string, listener: () => void) =>
       mockAppStateListener(type, listener),
@@ -100,7 +91,6 @@ describe("Embrace Native Tracer Provider", () => {
   beforeEach(async () => {
     jest.resetAllMocks();
 
-    mockIsStarted.mockReturnValue(Promise.resolve(true));
     mockStartSpan.mockReturnValue(
       Promise.resolve({
         traceId: "",
@@ -139,81 +129,6 @@ describe("Embrace Native Tracer Provider", () => {
   it("should allow getting a tracer", () => {
     getTestTracer({name: "some-tracer", version: "v17"});
     expect(mockSetupTracer).toHaveBeenCalledWith("some-tracer", "v17", "");
-  });
-
-  it("should provide a tracer by default", async () => {
-    const {result} = renderHook(() => useEmbraceNativeTracerProvider());
-
-    await waitFor(() => expect(result.current.tracer).toBeTruthy());
-
-    const span = result.current.tracer!.startSpan("my-span");
-
-    expect(mockStartSpan).toHaveBeenCalledWith(
-      "embrace-default-tracer",
-      "",
-      "",
-      (span as EmbraceNativeSpan).nativeID(),
-      "my-span",
-      "",
-      0,
-      {},
-      [],
-      "",
-    );
-  });
-
-  it("should share one registered tracer provider across hook calls", async () => {
-    const {result: first} = renderHook(() => useEmbraceNativeTracerProvider());
-    const {result: second} = renderHook(() =>
-      useEmbraceNativeTracerProvider({spanContextSyncBehaviour: "throw"}),
-    );
-
-    await waitFor(() => expect(first.current.tracerProvider).toBeTruthy());
-    await waitFor(() => expect(second.current.tracerProvider).toBeTruthy());
-
-    expect(second.current.tracerProvider).toBe(first.current.tracerProvider);
-    expect(first.current.tracerProvider).toBe(registerTracerProvider());
-  });
-
-  it("should error if getting a tracer provider before the Embrace SDK has started", async () => {
-    mockIsStarted.mockReturnValue(Promise.resolve(false));
-
-    const {result} = renderHook(() => useEmbraceNativeTracerProvider());
-
-    await waitFor(() => {
-      expect(result.current).toEqual({
-        isLoading: false,
-        isError: true,
-        error:
-          "The Embrace SDK must be started to use the TracerProvider, please invoke `initialize` from `@embrace-io/react-native`.",
-        tracerProvider: null,
-        tracer: null,
-      });
-    });
-  });
-
-  it("should error if there was a problem setting up the tracer provider", async () => {
-    mockIsStarted.mockReturnValue(Promise.reject("rejected"));
-
-    const {result} = renderHook(() => useEmbraceNativeTracerProvider());
-
-    await waitFor(() => {
-      expect(result.current).toEqual({
-        isLoading: false,
-        isError: true,
-        error: "Failed to setup EmbraceNativeTracerProvider",
-        tracerProvider: null,
-        tracer: null,
-      });
-    });
-  });
-
-  it("should allow preventing the creation of a tracer provider until a condition is met", async () => {
-    const {result} = renderHook(() =>
-      useEmbraceNativeTracerProvider({}, false),
-    );
-    await new Promise(r => setTimeout(r, 1));
-    await waitFor(() => expect(result.current.tracerProvider).toBeFalsy());
   });
 
   it("should allow starting a span", () => {

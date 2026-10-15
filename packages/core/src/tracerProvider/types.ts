@@ -1,5 +1,6 @@
 import {Tracer, TracerProvider} from "@opentelemetry/api";
 
+/** @deprecated Returned only by the deprecated `useEmbraceNativeTracerProvider`. */
 interface EmbraceNativeTracerProviderReturn {
   isLoading: boolean;
   isError: boolean;
