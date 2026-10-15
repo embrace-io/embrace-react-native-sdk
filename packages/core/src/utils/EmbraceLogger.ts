@@ -1,4 +1,4 @@
-import {EmbraceLoggerLevel} from "../interfaces";
+type EmbraceLoggerLevel = "info" | "error" | "warn";
 
 interface Logger {
   log: (message: string) => void;
@@ -41,4 +41,5 @@ class EmbraceLogger implements Logger, Formatter {
   }
 }
 
+export {type EmbraceLoggerLevel};
 export default EmbraceLogger;

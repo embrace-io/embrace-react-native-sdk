@@ -245,19 +245,18 @@ class EmbraceManagerTests: XCTestCase {
         XCTAssertEqual(resources["javascript_patch_number"], "patch-1")
     }
 
-    func testInitializeReactNativeSDKSkipsANullPatch() async throws {
+    func testInitializeReactNativeSDKSkipsAMissingPatch() async throws {
         XCTAssertTrue(module.initializeReactNativeSDK(NSDictionary(dictionary: [
-            "javaScriptPatchNumber": "patch-before-null"
+            "javaScriptPatchNumber": "patch-before-missing"
         ])))
         XCTAssertTrue(module.initializeReactNativeSDK(NSDictionary(dictionary: [
-            "sdkVersion": "8.0.0-null-patch",
-            "javaScriptPatchNumber": NSNull()
+            "sdkVersion": "8.0.0-missing-patch"
         ])))
 
         await waitForMetadataWrites()
         let resources = try await exportedResources()
-        XCTAssertEqual(resources["hosted_sdk_version"], "8.0.0-null-patch")
-        XCTAssertEqual(resources["javascript_patch_number"], "patch-before-null")
+        XCTAssertEqual(resources["hosted_sdk_version"], "8.0.0-missing-patch")
+        XCTAssertEqual(resources["javascript_patch_number"], "patch-before-missing")
     }
 
     func testInitializeReactNativeSDKWhenNotStarted() async throws {

@@ -1,6 +1,8 @@
+import {logWarning} from "../api/log";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 import {safePromise} from "./promiseHandler";
+import EmbraceLogger from "./EmbraceLogger";
 
 const UNHANDLED_PROMISE_REJECTION_PREFIX = "Unhandled promise rejection";
 
@@ -32,20 +34,29 @@ const REJECTION_TRACKING_CONFIG = {
   onHandled: () => {},
 };
 
-const enableUnhandledRejectionTracking = () => {
-  // @ts-expect-error to allow for checking if HermesInternal exists on `global` since it isn't part of its type
-  const hermesInternal = global?.HermesInternal;
+const enableUnhandledRejectionTracking = (logger: EmbraceLogger) => {
+  try {
+    // @ts-expect-error to allow for checking if HermesInternal exists on `global` since it isn't part of its type
+    const hermesInternal = global?.HermesInternal;
 
-  // Do the same checking as react-native to make sure we add tracking to the right Promise implementation
-  // https://github.com/facebook/react-native/blob/v0.77.0/packages/react-native/Libraries/Core/polyfillPromise.js#L25
-  if (hermesInternal?.hasPromise?.()) {
-    hermesInternal?.enablePromiseRejectionTracker?.(REJECTION_TRACKING_CONFIG);
-  } else {
-    // [Unhandled Rejections](https://github.com/then/promise/blob/master/Readme.md#unhandled-rejections)
-    // [promise/setimmediate/rejection-tracking](https://github.com/then/promise/blob/master/src/rejection-tracking.js)
-    require("promise/setimmediate/rejection-tracking").enable(
-      REJECTION_TRACKING_CONFIG,
-    );
+    // Do the same checking as react-native to make sure we add tracking to the right Promise implementation
+    // https://github.com/facebook/react-native/blob/v0.77.0/packages/react-native/Libraries/Core/polyfillPromise.js#L25
+    if (hermesInternal?.hasPromise?.()) {
+      hermesInternal?.enablePromiseRejectionTracker?.(
+        REJECTION_TRACKING_CONFIG,
+      );
+    } else {
+      // [Unhandled Rejections](https://github.com/then/promise/blob/master/Readme.md#unhandled-rejections)
+      // [promise/setimmediate/rejection-tracking](https://github.com/then/promise/blob/master/src/rejection-tracking.js)
+      require("promise/setimmediate/rejection-tracking").enable(
+        REJECTION_TRACKING_CONFIG,
+      );
+    }
+  } catch (e) {
+    const errorMessage =
+      "we were unable to setup tracking of unhandled promise rejections.";
+    logger.warn(errorMessage);
+    logWarning(`${errorMessage} | ${e}`);
   }
 };
 
