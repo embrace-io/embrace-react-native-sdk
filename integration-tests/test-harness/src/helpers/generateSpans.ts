@@ -16,6 +16,7 @@ import {
   SpanKind,
   SpanStatusCode,
   trace,
+  TraceFlags,
   Tracer,
 } from "@opentelemetry/api";
 import {
@@ -24,6 +25,8 @@ import {
   endAsFailed,
 } from "@embrace-io/react-native";
 import {Platform} from "react-native";
+
+const globalTracer = trace.getTracer("span-test-global", "1.0");
 
 export function generateBasicSpan(tracer: Tracer) {
   const span1 = tracer.startSpan("test-1");
@@ -122,4 +125,21 @@ export function generateNestedSpans(tracer: Tracer) {
 
   // Use helper for setting parent
   tracer.startSpan("test-with-asParent", {}, asParent(span1)).end();
+}
+
+export function generateGlobalApiSpans(tracer: Tracer) {
+  globalTracer.startActiveSpan("global-parent", parent => {
+    trace.getActiveSpan()?.setAttribute("set-via-active-span", true);
+    tracer.startSpan("other-tracer-child").end();
+    parent.end();
+  });
+
+  const nonEmbraceParent = trace.wrapSpanContext({
+    traceId: "a".repeat(32),
+    spanId: "b".repeat(16),
+    traceFlags: TraceFlags.SAMPLED,
+  });
+  context.with(trace.setSpan(context.active(), nonEmbraceParent), () =>
+    tracer.startSpan("non-embrace-parent-child").end(),
+  );
 }
