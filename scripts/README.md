@@ -20,7 +20,7 @@ Runs iOS tests **with code coverage enabled**.
 Runs iOS tests **without code coverage**.
 
 **Used by:**
-- **All packages on CI** (`@embrace-io/react-native`, `@embrace-io/react-native-tracer-provider`)
+- **All packages on CI** (`@embrace-io/react-native`)
 
 **Usage:**
 ```bash
@@ -65,7 +65,7 @@ To collect coverage data on your local machine:
 
 2. Or run directly:
    ```bash
-   cd packages/core  # or tracer-provider
+   cd packages/core
    yarn run ios:shared
    ../../scripts/run-ios-tests.sh test-project/ios/YourWorkspace.xcworkspace YourScheme
    ```

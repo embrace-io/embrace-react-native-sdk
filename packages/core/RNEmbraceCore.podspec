@@ -28,16 +28,19 @@ Pod::Spec.new do |s|
       raise "EMBRACE_USE_SPM is set, but SPM support is not available. Please ensure you are using React Native 0.75 or later."
     end
 
+    # Don't add OpenTelemetryApi, EmbraceSemantics or EmbraceCrash even though core imports them.
+    # They're already inside EmbraceIO and OpenTelemetrySdk, and declaring them separately makes
+    # Xcode link a second copy into RNEmbraceCore.
     spm_dependency(s,
       url: 'https://github.com/embrace-io/embrace-apple-sdk.git',
       requirement: {kind: 'exactVersion', version: embrace_ios_sdk_version},
-      products: ['EmbraceIO', 'EmbraceCrash', 'EmbraceSemantics']
+      products: ['EmbraceIO']
     )
 
     spm_dependency(s,
       url: 'https://github.com/open-telemetry/opentelemetry-swift-core.git',
       requirement: {kind: 'upToNextMajorVersion', minimumVersion: otel_swift_version},
-      products: ['OpenTelemetryApi']
+      products: ['OpenTelemetrySdk']
     )
 
     # Xcode 16+ Explicitly Built Modules can't resolve SPM package-framework modules via CocoaPods.

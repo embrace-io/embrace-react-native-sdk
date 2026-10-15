@@ -24,6 +24,7 @@ jest.mock("react-native", () => ({
 const mockSetJavaScriptPatchNumber = jest
   .fn()
   .mockReturnValue(Promise.resolve(true));
+jest.mock("../tracerProvider", () => ({}));
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
     startNativeEmbraceSDK: () => mockStartNativeEmbraceSDK(),

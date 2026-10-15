@@ -31,6 +31,14 @@
         "identifier" : "30DFDA682C486677009F2ECC",
         "name" : "RNEmbraceCoreTests"
       }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:RNEmbraceCoreTests.xcodeproj",
+        "identifier" : "21819EA2FE9FEEC45325EE90",
+        "name" : "RNEmbraceTracerProviderTests"
+      }
     }
   ],
   "version" : 1
