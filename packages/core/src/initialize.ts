@@ -5,6 +5,8 @@ import * as embracePackage from "../package.json";
 import {enableOrientationTracking} from "./utils/orientation";
 import {enableUnhandledRejectionTracking} from "./utils/error";
 import EmbraceLogger, {EmbraceLoggerLevel} from "./utils/EmbraceLogger";
+import {EmbraceNativeTracerProviderConfig} from "./tracerProvider/types";
+import {registerTracerProvider} from "./tracerProvider/register";
 import {handleError, handleGlobalError} from "./api/error";
 import {EmbraceManagerModule} from "./EmbraceManagerModule";
 
@@ -13,6 +15,7 @@ interface EmbraceConfig {
   logLevel?: EmbraceLoggerLevel;
   trackUnhandledRejections?: boolean;
   trackScreenOrientation?: boolean;
+  tracerProvider?: boolean | EmbraceNativeTracerProviderConfig;
 }
 
 interface NativeInitConfig {
@@ -35,6 +38,7 @@ const initialize = ({
   logLevel = "info",
   trackUnhandledRejections = false,
   trackScreenOrientation = false,
+  tracerProvider = true,
 }: EmbraceConfig = {}): boolean => {
   const logger = new EmbraceLogger(console, logLevel);
 
@@ -86,6 +90,10 @@ const initialize = ({
 
   if (trackScreenOrientation) {
     enableOrientationTracking();
+  }
+
+  if (tracerProvider) {
+    registerTracerProvider(tracerProvider === true ? {} : tracerProvider);
   }
 
   return true;

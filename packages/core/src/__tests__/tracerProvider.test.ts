@@ -12,6 +12,7 @@ import {
 } from "@opentelemetry/api";
 
 import {registerTracerProvider} from "../tracerProvider/register";
+import {EmbraceNativeTracerProvider} from "../tracerProvider/EmbraceNativeTracerProvider";
 import {
   SpanContextSyncBehaviour,
   EmbraceNativeSpan,
@@ -20,7 +21,6 @@ import {
   endAsFailed,
   asParent,
   recordCompletedSpan,
-  EmbraceNativeTracerProvider,
 } from "../tracerProvider";
 
 const mockSetupTracer = jest.fn();
