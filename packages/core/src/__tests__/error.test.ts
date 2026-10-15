@@ -6,8 +6,7 @@ import {
   trackUnhandledRejection,
 } from "../utils/error";
 import EmbraceLogger from "../utils/EmbraceLogger";
-import {LogProperties, LogSeverity} from "../interfaces";
-import {logHandledError} from "../api/log";
+import {logHandledError, LogProperties, LogSeverity} from "../api/log";
 import {handleError, handleGlobalError} from "../api/error";
 import {ComponentError, logIfComponentError} from "../api/component";
 

@@ -10,8 +10,9 @@
  */
 
 import {safePromise} from "../utils/promiseHandler";
-import {SessionStatus} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
+
+type SessionStatus = "INVALID" | "CRASH" | "CLEAN_EXIT";
 
 /**
  * Adds a key-value property to the current session.
@@ -171,4 +172,5 @@ export {
   getCurrentSessionId,
   getLastRunEndState,
   getDeviceId,
+  type SessionStatus,
 };
