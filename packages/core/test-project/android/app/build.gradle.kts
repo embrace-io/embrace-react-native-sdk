@@ -126,6 +126,9 @@ dependencies {
     implementation(project(":core"))
     implementation("com.facebook.react:react-android")
     testImplementation("io.opentelemetry.kotlin:core")
+    testImplementation(platform("io.opentelemetry:opentelemetry-bom:1.62.0"))
+    testImplementation("io.opentelemetry:opentelemetry-sdk")
+    testImplementation("io.opentelemetry:opentelemetry-exporter-logging")
 
     testImplementation(libs.junit)
 
@@ -150,6 +153,7 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnit()
+    forkEvery = 1
 
     filter {
         includeTestsMatching("*Test")

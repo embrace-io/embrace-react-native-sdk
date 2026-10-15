@@ -8,7 +8,7 @@ import {ReduxTestingScreen} from "../screens/ReduxTestingScreen";
 import {NetworkTestingScreen} from "../screens/NetworkTestingScreen";
 import {UserTestingScreen} from "../screens/UserTestingScreen";
 
-import {EmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {EmbraceNativeTracerProvider} from "@embrace-io/react-native";
 import {TracerProvider} from "@opentelemetry/api";
 
 const wixAppInit = async (sdkConfig: SDKConfig) => {

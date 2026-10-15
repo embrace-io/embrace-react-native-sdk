@@ -14,7 +14,6 @@ fi
 SOURCE_DIRS=(
     "$(pwd)/packages"
     "$(pwd)/packages/core/test-project"
-    "$(pwd)/packages/react-native-tracer-provider/native-src"
 )
 
 # find command

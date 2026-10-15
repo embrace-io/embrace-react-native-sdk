@@ -39,6 +39,7 @@ const mockSetJavaScriptBundlePath = jest
 const mockGetDefaultJavaScriptBundlePath = jest
   .fn()
   .mockResolvedValue("some/path");
+jest.mock("../tracerProvider", () => ({}));
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
     setReactNativeVersion: (version: string) =>
