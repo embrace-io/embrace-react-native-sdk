@@ -22,7 +22,7 @@ import {
   EmbraceNativeSpan,
   asParent,
   endAsFailed,
-} from "@embrace-io/react-native-tracer-provider";
+} from "@embrace-io/react-native";
 import {Platform} from "react-native";
 
 export function generateBasicSpan(tracer: Tracer) {
