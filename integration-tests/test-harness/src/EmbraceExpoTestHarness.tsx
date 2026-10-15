@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native-tracer-provider";
+import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {
   Stack,
