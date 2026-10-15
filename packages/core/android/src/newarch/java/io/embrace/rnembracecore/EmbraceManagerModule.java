@@ -13,6 +13,11 @@ public class EmbraceManagerModule extends NativeEmbraceManagerSpec {
     }
 
     @Override
+    public boolean initializeReactNativeSDK(ReadableMap config) {
+        return impl.initializeReactNativeSDK(config);
+    }
+
+    @Override
     public void isStarted(Promise promise) {
         impl.isStarted(promise);
     }

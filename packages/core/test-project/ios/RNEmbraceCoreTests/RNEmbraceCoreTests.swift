@@ -211,6 +211,99 @@ class EmbraceManagerTests: XCTestCase {
         }
     }
 
+    private func waitForMetadataWrites() async {
+        guard let metadata = Embrace.client?.metadata else {
+            return
+        }
+        await withCheckedContinuation { continuation in
+            metadata.getCurrentPersonas { (_: [String]) in
+                continuation.resume()
+            }
+        }
+    }
+
+    private func exportedResources() async throws -> [String: String] {
+        Embrace.client?.buildSpan(name: "resource-probe").startSpan().end()
+        let probe = try await getExportedSpans().last { $0.name == "resource-probe" }
+        return probe?.resource.attributes.mapValues { $0.description } ?? [:]
+    }
+
+    func testInitializeReactNativeSDK() async throws {
+        let started = module.initializeReactNativeSDK(NSDictionary(dictionary: [
+            "reactNativeVersion": "0.85.0",
+            "sdkVersion": "8.0.0",
+            "javaScriptPatchNumber": "patch-1",
+            "resolveDefaultBundlePath": false
+        ]))
+
+        XCTAssertTrue(started)
+
+        await waitForMetadataWrites()
+        let resources = try await exportedResources()
+        XCTAssertEqual(resources["hosted_platform_version"], "0.85.0")
+        XCTAssertEqual(resources["hosted_sdk_version"], "8.0.0")
+        XCTAssertEqual(resources["javascript_patch_number"], "patch-1")
+    }
+
+    func testInitializeReactNativeSDKSkipsANullPatch() async throws {
+        XCTAssertTrue(module.initializeReactNativeSDK(NSDictionary(dictionary: [
+            "javaScriptPatchNumber": "patch-before-null"
+        ])))
+        XCTAssertTrue(module.initializeReactNativeSDK(NSDictionary(dictionary: [
+            "sdkVersion": "8.0.0-null-patch",
+            "javaScriptPatchNumber": NSNull()
+        ])))
+
+        await waitForMetadataWrites()
+        let resources = try await exportedResources()
+        XCTAssertEqual(resources["hosted_sdk_version"], "8.0.0-null-patch")
+        XCTAssertEqual(resources["javascript_patch_number"], "patch-before-null")
+    }
+
+    func testInitializeReactNativeSDKWhenNotStarted() async throws {
+        module.isSDKStarted = { false }
+
+        let started = module.initializeReactNativeSDK(NSDictionary(dictionary: [
+            "reactNativeVersion": "not-started-rn-version",
+            "sdkVersion": "not-started-sdk-version",
+            "javaScriptPatchNumber": "not-started-patch",
+            "resolveDefaultBundlePath": true
+        ]))
+
+        XCTAssertFalse(started)
+
+        await waitForMetadataWrites()
+        let resources = try await exportedResources()
+        XCTAssertNotEqual(resources["hosted_platform_version"], "not-started-rn-version")
+        XCTAssertNotEqual(resources["hosted_sdk_version"], "not-started-sdk-version")
+        XCTAssertNotEqual(resources["javascript_patch_number"], "not-started-patch")
+    }
+
+    func testInitializeReactNativeSDKResolvesTheDefaultBundle() async throws {
+        let bundleURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try "console.log('my js bundle');".write(to: bundleURL, atomically: true, encoding: .utf8)
+        let bundleIDQueue = DispatchQueue(label: "io.embrace.rnembracecore.tests.bundleid")
+        module.defaultBundlePath = { bundleURL.path }
+        module.bundleIDQueue = bundleIDQueue
+
+        XCTAssertTrue(module.initializeReactNativeSDK(NSDictionary(dictionary: [
+            "resolveDefaultBundlePath": true
+        ])))
+
+        bundleIDQueue.sync {}
+        await waitForMetadataWrites()
+        let resources = try await exportedResources()
+        XCTAssertEqual(resources["react_native_bundle_id"], "29da484ad2a259e9de64a991cfec7f10")
+    }
+
+    func testInitializeReactNativeSDKWithoutADefaultBundle() {
+        module.defaultBundlePath = { nil }
+
+        XCTAssertTrue(module.initializeReactNativeSDK(NSDictionary(dictionary: [
+            "resolveDefaultBundlePath": true
+        ])))
+    }
+
     /* TODO, currently we have no way to stop the started SDK instance so can't have another test start a new instance
     func testStartNativeEmbraceSDK() async throws {
         module.startNativeEmbraceSDK(configDict: NSDictionary(dictionary: ["appId": "myApp"]),
