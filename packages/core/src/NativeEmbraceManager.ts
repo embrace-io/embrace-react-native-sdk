@@ -3,6 +3,7 @@ import type {TurboModule} from "react-native";
 import {TurboModuleRegistry} from "react-native";
 
 export interface Spec extends TurboModule {
+  initializeReactNativeSDK(config: Object): boolean;
   isStarted(): Promise<boolean>;
   startNativeEmbraceSDK(config: Object): Promise<boolean>;
   setJavaScriptBundlePath(path: string): Promise<boolean>;

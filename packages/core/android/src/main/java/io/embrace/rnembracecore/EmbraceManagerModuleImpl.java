@@ -12,16 +12,51 @@ import java.util.Map;
 import io.embrace.android.embracesdk.Embrace;
 import io.embrace.android.embracesdk.Severity;
 import io.embrace.android.embracesdk.internal.EmbraceInternalApi;
+import io.embrace.android.embracesdk.internal.ReactNativeInternalInterface;
 import io.embrace.android.embracesdk.network.EmbraceNetworkRequest;
 import io.embrace.android.embracesdk.network.http.HttpMethod;
 
 public class EmbraceManagerModuleImpl {
     public static final String NAME = "EmbraceManager";
 
+    private static final String REACT_NATIVE_VERSION_KEY = "reactNativeVersion";
+    private static final String SDK_VERSION_KEY = "sdkVersion";
+    private static final String JAVASCRIPT_PATCH_NUMBER_KEY = "javaScriptPatchNumber";
+
     private final ReactApplicationContext context;
 
     public EmbraceManagerModuleImpl(ReactApplicationContext reactContext) {
         this.context = reactContext;
+    }
+
+    public boolean initializeReactNativeSDK(ReadableMap config) {
+        if (!Embrace.INSTANCE.isStarted()) {
+            return false;
+        }
+
+        try {
+            ReactNativeInternalInterface rn = getReactNativeInternalInterface();
+
+            if (config.hasKey(REACT_NATIVE_VERSION_KEY)) {
+                rn.setReactNativeVersionNumber(config.getString(REACT_NATIVE_VERSION_KEY));
+            }
+
+            if (config.hasKey(SDK_VERSION_KEY)) {
+                rn.setReactNativeSdkVersion(config.getString(SDK_VERSION_KEY));
+            }
+
+            if (config.hasKey(JAVASCRIPT_PATCH_NUMBER_KEY)) {
+                rn.setJavaScriptPatchNumber(config.getString(JAVASCRIPT_PATCH_NUMBER_KEY));
+            }
+
+        } catch(Exception e) {
+            Log.e("Embrace", "Error setting React Native metadata", e);
+        }
+        return true;
+    }
+
+    public ReactNativeInternalInterface getReactNativeInternalInterface() {
+        return EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface();
     }
 
     public void isStarted(Promise promise) {
@@ -185,7 +220,7 @@ public class EmbraceManagerModuleImpl {
 
     public void logUnhandledJSException(String name, String message, String type, String stacktrace, Promise promise) {
         try {
-            EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().logUnhandledJsException(name, message, type, stacktrace);
+            getReactNativeInternalInterface().logUnhandledJsException(name, message, type, stacktrace);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error logging unhandled JS exception", e);
@@ -194,7 +229,7 @@ public class EmbraceManagerModuleImpl {
 
     public void setJavaScriptPatchNumber(String number, Promise promise) {
         try {
-            EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().setJavaScriptPatchNumber(number);
+            getReactNativeInternalInterface().setJavaScriptPatchNumber(number);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("SET_JS_PATCH_ERROR", "Error setting JavaScript patch number", e);
@@ -221,7 +256,7 @@ public class EmbraceManagerModuleImpl {
 
     public void setJavaScriptBundlePath(String path, Promise promise) {
         try {
-            EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().setJavaScriptBundleUrl(this.context.getApplicationContext(), path);
+            getReactNativeInternalInterface().setJavaScriptBundleUrl(this.context.getApplicationContext(), path);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", e);
@@ -356,7 +391,7 @@ public class EmbraceManagerModuleImpl {
     }
 
     public boolean isNetworkSpanForwardingEnabled() {
-        return EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().isNetworkSpanForwardingEnabled();
+        return getReactNativeInternalInterface().isNetworkSpanForwardingEnabled();
     }
 
     public String generateW3cTraceparent() {

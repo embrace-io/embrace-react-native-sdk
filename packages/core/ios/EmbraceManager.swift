@@ -27,6 +27,55 @@ private let EMB_EXC = "emb-js"
 public class EmbraceManager: NSObject {
     private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
     private var config: SDKConfig = SDKConfig(from: NSDictionary())
+    var isSDKStarted: () -> Bool = { Embrace.client?.state == .started }
+    var defaultBundlePath: () -> String? = { Bundle.main.path(forResource: "main", ofType: "jsbundle") }
+    var bundleIDQueue: DispatchQueue = .global(qos: .utility)
+
+    @objc(initializeReactNativeSDK:)
+    public func initializeReactNativeSDK(_ config: NSDictionary) -> Bool {
+        guard isSDKStarted() else {
+            return false
+        }
+
+        addResource(HOSTED_PLATFORM_VERSION_RESOURCE_KEY, config["reactNativeVersion"])
+        addResource(HOSTED_SDK_VERSION_RESOURCE_KEY, config["sdkVersion"])
+        addResource(JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY, config["javaScriptPatchNumber"])
+
+        if config["resolveDefaultBundlePath"] as? Bool == true {
+            resolveAndSetDefaultBundleID()
+        }
+
+        return true
+    }
+
+    private func addResource(_ key: String, _ value: Any?) {
+        guard let value = value as? String else {
+            return
+        }
+
+        do {
+            try Embrace.client?.metadata.addResource(key: key, value: value, lifespan: .process)
+        } catch let error {
+            os_log("Error adding resource %{public}@: %{public}@", log: log, type: .error, key, error.localizedDescription)
+        }
+    }
+
+    private func resolveAndSetDefaultBundleID() {
+        guard let path = defaultBundlePath() else {
+            os_log("Unable to find the default JS bundle, call setJavaScriptBundlePath to enable crash symbolication",
+                   log: log, type: .error)
+            return
+        }
+
+        bundleIDQueue.async {
+            do {
+                let bundleID = try computeBundleID(path: path)
+                self.addResource(REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, bundleID.id)
+            } catch let error {
+                os_log("Error computing the default JS bundle ID: %{public}@", log: self.log, type: .error, error.localizedDescription)
+            }
+        }
+    }
 
     @objc(setJavaScriptBundlePath:resolver:rejecter:)
     public func setJavaScriptBundlePath(_ path: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
