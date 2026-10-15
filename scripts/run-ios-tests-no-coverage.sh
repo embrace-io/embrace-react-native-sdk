@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run iOS tests WITHOUT code coverage (used for memory-intensive packages like OTLP)
+# Run iOS tests WITHOUT code coverage (used for memory-intensive packages)
 WORKSPACE=$1
 SCHEME=$2
 
