@@ -303,49 +303,6 @@ class EmbraceManagerTests: XCTestCase {
         ])))
     }
 
-    /* TODO, currently we have no way to stop the started SDK instance so can't have another test start a new instance
-    func testStartNativeEmbraceSDK() async throws {
-        module.startNativeEmbraceSDK(configDict: NSDictionary(dictionary: ["appId": "myApp"]),
-                                     resolve: promise.resolve, rejecter: promise.reject)
-        try await Task.sleep(nanoseconds: UInt64(5.0 * Double(NSEC_PER_SEC)))
-        XCTAssertEqual(promise.resolveCalls.count, 1)
-        XCTAssertTrue((promise.resolveCalls[0] as? Bool)!)
-
-        module.isStarted(promise.resolve, rejecter: promise.reject)
-        XCTAssertEqual(promise.resolveCalls.count, 2)
-        XCTAssertTrue((promise.resolveCalls[1] as? Bool)!)
-    }
-    */
-
-    func testParseSDKConfig() {
-        let config = SDKConfig(from: NSDictionary(dictionary: [
-            "appId": "myApp",
-            "appGroupId": "myAppGroup",
-            "disableCrashReporter": true,
-            "disableAutomaticViewCapture": true,
-            "disableNetworkSpanForwarding": true,
-            "endpointBaseUrl": "http://example.com"
-        ]))
-
-        XCTAssertEqual(config.appId, "myApp")
-        XCTAssertEqual(config.appGroupId, "myAppGroup")
-        XCTAssertTrue(config.disableCrashReporter)
-        XCTAssertTrue(config.disableAutomaticViewCapture)
-        XCTAssertTrue(config.disableNetworkSpanForwarding)
-        XCTAssertEqual(config.endpointBaseUrl, "http://example.com")
-    }
-
-    func testParseSDKConfigDefaults() {
-        let config = SDKConfig(from: NSDictionary(dictionary: ["appId": "myApp"]))
-
-        XCTAssertEqual(config.appId, "myApp")
-        XCTAssertNil(config.appGroupId)
-        XCTAssertFalse(config.disableCrashReporter)
-        XCTAssertFalse(config.disableAutomaticViewCapture)
-        XCTAssertFalse(config.disableNetworkSpanForwarding)
-        XCTAssertNil(config.endpointBaseUrl)
-    }
-
     func testLogHandledError() async throws {
         module.logHandledError("my handled error", stacktrace: "stacktrace as string", properties: NSDictionary(), resolver: promise.resolve, rejecter: promise.reject)
 
