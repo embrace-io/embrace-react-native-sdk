@@ -2,7 +2,6 @@
 
 import {Platform} from "react-native";
 
-import {oltpGetStart} from "./utils/otlp";
 import {enableUnhandledRejectionTracking} from "./utils/error";
 import {setEmbracePackageVersion, setReactNativeVersion} from "./utils/bundle";
 import EmbraceLogger from "./utils/EmbraceLogger";
@@ -38,45 +37,24 @@ const initialize = async (
   // neither iOS setup() nor start() will be overridden
   if (!hasNativeSDKStarted) {
     logger.warn(
-      "Starting the native SDK from JavaScript (including `sdkConfig.ios` and `sdkConfig.exporters`) is deprecated and will be removed in the next major release. Start Embrace in native code instead: https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side",
+      "Starting the native SDK from JavaScript (including `sdkConfig.ios`) is deprecated and will be removed in the next major release. Start Embrace in native code instead: https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side",
     );
 
-    if (isIOS && !sdkConfig?.ios?.appId && !sdkConfig?.exporters) {
+    if (isIOS && !sdkConfig?.ios?.appId) {
       logger.warn(
-        "'sdkConfig.ios.appId' is required to initialize Embrace's native SDK if there is no configuration for custom exporters. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
+        "'sdkConfig.ios.appId' is required to initialize Embrace's native SDK. Please check the Embrace integration docs at https://embrace.io/docs/react-native/integration/",
       );
 
       return Promise.resolve(false);
     }
 
-    const {exporters: otlpExporters} = sdkConfig || {};
     const startSdkConfig = (isIOS && sdkConfig?.ios) || {};
 
     let isStarted;
-    let otlpStart = null;
-
-    // separating blocks for throwing their own warning messages individually.
-    // if core/otlp blocks are combined into one try/catch and the otlp package throws an error
-    // the core package won't be able to start the SDK as fallback
-    // `oltpGetStart` has their own try/catch block
-    if (otlpExporters) {
-      if (isIOS && !startSdkConfig.appId) {
-        logger.log(
-          "'sdkConfig.ios.appId' not found, only custom exporters will be used",
-        );
-      }
-
-      // if package is installed/available and exporters are provided get the `start` method
-      otlpStart = oltpGetStart(logger, otlpExporters);
-    }
 
     try {
-      // if the otlp package throws or it is not available, the core package will work as usual printing the proper messages
-      isStarted = otlpStart
-        ? // if OTLP exporter package is available, use it
-          await otlpStart(startSdkConfig)
-        : // otherwise, uses the core package
-          await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
+      isStarted =
+        await EmbraceManagerModule.startNativeEmbraceSDK(startSdkConfig);
     } catch (e) {
       isStarted = false;
       logger.warn(`${e}`);
@@ -90,12 +68,6 @@ const initialize = async (
       return Promise.resolve(false);
     } else {
       logger.log("native SDK was started");
-    }
-
-    if (otlpExporters && !otlpStart) {
-      const errorMessage =
-        "OTLP exporters were configured but `@embrace-io/react-native-otlp` could not be loaded. OTLP exporters won't be used.";
-      logWarning(errorMessage);
     }
   }
 
