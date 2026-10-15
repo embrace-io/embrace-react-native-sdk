@@ -138,12 +138,15 @@ const VOLATILE_FIELDS: {key: keyof EmbraceSpanData; valid: (v: unknown) => boole
   {key: "start_time_unix_nano", valid: isPresent},
 ];
 
+export const isRootParentId = (parentId: string | undefined): boolean =>
+  !parentId || parentId === "0000000000000000";
+
 // Resolve a parent_span_id to the parent's name within a set; root/absent/unknown → null.
 export const parentNameOf = (
   parentId: string | undefined,
   idToName: Map<string, string>,
 ): string | null =>
-  !parentId || parentId === "0000000000000000" ? null : idToName.get(parentId) ?? null;
+  isRootParentId(parentId) ? null : idToName.get(parentId!) ?? null;
 
 export const idToNameMap = (spans: EmbraceSpanData[]): Map<string, string> => {
   const m = new Map<string, string>();
