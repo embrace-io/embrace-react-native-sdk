@@ -53,14 +53,4 @@ const isAttributes = (
   );
 };
 
-const logWarning = (msg: string) => {
-  console.warn(`[Embrace] ${msg}`);
-};
-
-export {
-  normalizeTime,
-  normalizeAttributes,
-  normalizeLinks,
-  isAttributes,
-  logWarning,
-};
+export {normalizeTime, normalizeAttributes, normalizeLinks, isAttributes};
