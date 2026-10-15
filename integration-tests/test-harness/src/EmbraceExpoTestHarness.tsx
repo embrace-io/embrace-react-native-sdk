@@ -1,22 +1,27 @@
+import "./embrace";
 import * as React from "react";
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
+import {
+  isInitialized,
+  useEmbraceNativeTracerProvider,
+  useOrientationListener,
+} from "@embrace-io/react-native";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {
   Stack,
   useNavigationContainerRef as useExpoNavigationContainerRef,
 } from "expo-router";
-import {useEmbraceSDK} from "./useEmbraceSDK";
-import {EmbraceSDKStatus} from "./EmbraceSDKStatus";
+import {EmbraceNotInitialized} from "./EmbraceNotInitialized";
 import FullScreenMessage from "./components/FullScreenMessage";
 
 export const EmbraceExpoTestHarness = () => {
-  const {isPending, isStarted, error} = useEmbraceSDK();
+  const initialized = isInitialized();
   const expoNavigationRef = useExpoNavigationContainerRef();
   const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({}, isStarted);
+    useEmbraceNativeTracerProvider({}, initialized);
+  useOrientationListener(initialized);
 
-  if (isPending || !isStarted) {
-    return <EmbraceSDKStatus isPending={isPending} error={error} />;
+  if (!initialized) {
+    return <EmbraceNotInitialized />;
   }
 
   if (isLoadingTracerProvider || tracerProvider === null) {

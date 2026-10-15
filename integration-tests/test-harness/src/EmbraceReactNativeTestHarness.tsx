@@ -1,13 +1,17 @@
+import "./embrace";
 import * as React from "react";
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
+import {
+  isInitialized,
+  useEmbraceNativeTracerProvider,
+  useOrientationListener,
+} from "@embrace-io/react-native";
 import {
   NavigationContainer,
   useNavigationContainerRef,
 } from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
-import {useEmbraceSDK} from "./useEmbraceSDK";
-import {EmbraceSDKStatus} from "./EmbraceSDKStatus";
+import {EmbraceNotInitialized} from "./EmbraceNotInitialized";
 import {LogTestingScreen} from "./screens/LogTestingScreen";
 import {UserTestingScreen} from "./screens/UserTestingScreen";
 import {SpanTestingScreen} from "./screens/SpanTestingScreen";
@@ -18,14 +22,15 @@ import FullScreenMessage from "./components/FullScreenMessage";
 const Tab = createBottomTabNavigator();
 
 const EmbraceReactNativeTestHarness = () => {
-  const {isPending, isStarted, error} = useEmbraceSDK();
+  const initialized = isInitialized();
   const navigationContainer = useNavigationContainerRef();
   const navigationContainerRef = React.useRef(navigationContainer);
   const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({}, isStarted);
+    useEmbraceNativeTracerProvider({}, initialized);
+  useOrientationListener(initialized);
 
-  if (isPending || !isStarted) {
-    return <EmbraceSDKStatus isPending={isPending} error={error} />;
+  if (!initialized) {
+    return <EmbraceNotInitialized />;
   }
 
   if (isLoadingTracerProvider || tracerProvider === null) {
