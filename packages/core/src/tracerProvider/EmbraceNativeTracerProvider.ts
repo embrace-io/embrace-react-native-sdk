@@ -1,19 +1,14 @@
 import {AppState, Platform} from "react-native";
-import {
-  context,
-  ContextManager,
-  Tracer,
-  TracerProvider,
-} from "@opentelemetry/api";
+import {ContextManager, Tracer, TracerProvider} from "@opentelemetry/api";
 
-import {logWarning} from "./util";
-import {
-  EmbraceNativeTracerProviderConfig,
-  SpanContextSyncBehaviour,
-} from "./types";
+import EmbraceLogger from "../utils/EmbraceLogger";
+
+import {SpanContextSyncBehaviour} from "./types";
 import {TracerProviderModule} from "./TracerProviderModule";
 import {StackContextManager} from "./StackContextManager";
 import {EmbraceNativeTracer} from "./EmbraceNativeTracer";
+
+const logger = new EmbraceLogger(console);
 
 /**
  * EmbraceNativeTracerProvider implements a TracerProvider over the native Embrace Android and iOS SDKs.
@@ -23,23 +18,15 @@ import {EmbraceNativeTracer} from "./EmbraceNativeTracer";
  * The JS side of this implementation is modelled after [opentelemetry-sdk-trace-base](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-base)
  */
 class EmbraceNativeTracerProvider implements TracerProvider {
-  private readonly contextManager: ContextManager;
+  public readonly contextManager: ContextManager =
+    new StackContextManager().enable();
   private readonly spanContextSyncBehaviour: SpanContextSyncBehaviour;
+  private readonly tracers = new Map<string, EmbraceNativeTracer>();
 
   constructor(
-    config: EmbraceNativeTracerProviderConfig = {
-      setGlobalContextManager: true,
-    },
+    spanContextSyncBehaviour: SpanContextSyncBehaviour = "return_empty",
   ) {
-    this.contextManager = new StackContextManager();
-    this.contextManager.enable();
-
-    if (config.setGlobalContextManager) {
-      context.setGlobalContextManager(this.contextManager);
-    }
-
-    this.spanContextSyncBehaviour =
-      config.spanContextSyncBehaviour || "return_empty";
+    this.spanContextSyncBehaviour = spanContextSyncBehaviour;
 
     AppState.addEventListener("change", () => {
       // Embrace ends the current session when the app switches between foreground and background, at that point
@@ -55,19 +42,28 @@ class EmbraceNativeTracerProvider implements TracerProvider {
   ): Tracer {
     const schemaUrl = options?.schemaUrl || "";
     const tracerVersion = version || "";
+    const key = JSON.stringify([name, tracerVersion, schemaUrl]);
+
+    const cached = this.tracers.get(key);
+    if (cached) {
+      return cached;
+    }
 
     if (schemaUrl && Platform.OS === "ios") {
-      logWarning("`schemaUrl` is ignored when running on iOS");
+      logger.warn("`schemaUrl` is ignored when running on iOS");
     }
 
     TracerProviderModule.setupTracer(name, tracerVersion, schemaUrl);
-    return new EmbraceNativeTracer(
+    const tracer = new EmbraceNativeTracer(
       this.contextManager,
       this.spanContextSyncBehaviour,
       name,
       tracerVersion,
       schemaUrl,
     );
+    this.tracers.set(key, tracer);
+
+    return tracer;
   }
 }
 

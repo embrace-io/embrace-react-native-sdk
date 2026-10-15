@@ -19,6 +19,7 @@ declare global {
       toHaveEvents(subset: EventProjection[]): R;
       toHaveMetadata(subset: Partial<EmbracePayloadMetadata>): R;
       toHaveParentSpan(parent: EmbraceSpanData | string, within?: EmbraceSpanData[]): R;
+      toBeRootSpan(): R;
       toHaveSpanNames(names: string[]): R;
     }
   }
