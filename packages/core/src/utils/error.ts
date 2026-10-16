@@ -1,4 +1,3 @@
-import {logWarning} from "../api/log";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
 
 import {safePromise} from "./promiseHandler";
@@ -53,10 +52,9 @@ const enableUnhandledRejectionTracking = (logger: EmbraceLogger) => {
       );
     }
   } catch (e) {
-    const errorMessage =
-      "we were unable to setup tracking of unhandled promise rejections.";
-    logger.warn(errorMessage);
-    logWarning(`${errorMessage} | ${e}`);
+    logger.warn(
+      `we were unable to setup tracking of unhandled promise rejections: ${e}`,
+    );
   }
 };
 

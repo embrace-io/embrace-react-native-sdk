@@ -237,7 +237,7 @@ describe("`enableUnhandledRejectionTracking()`", () => {
     expect(mockEnableRejectionTracking).not.toHaveBeenCalled();
   });
 
-  it("warns and logs when the setup fails", () => {
+  it("warns when the setup fails", () => {
     mockEnableRejectionTracking.mockImplementationOnce(() => {
       throw new Error("tracking setup failed");
     });
@@ -245,14 +245,7 @@ describe("`enableUnhandledRejectionTracking()`", () => {
     enableUnhandledRejectionTracking(logger);
 
     expect(console.warn).toHaveBeenCalledWith(
-      "[Embrace] we were unable to setup tracking of unhandled promise rejections.",
-    );
-    expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
-      "we were unable to setup tracking of unhandled promise rejections. | Error: tracking setup failed",
-      "warning",
-      {},
-      expect.anything(),
-      true,
+      "[Embrace] we were unable to setup tracking of unhandled promise rejections: Error: tracking setup failed",
     );
   });
 });
