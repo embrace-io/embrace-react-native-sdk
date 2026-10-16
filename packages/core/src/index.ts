@@ -11,7 +11,7 @@ export * from "./api/user";
 export * from "./hooks/useOrientationListener";
 export * from "./tracerProvider";
 
-export {initialize, isInitialized, type EmbraceConfig} from "./initialize";
+export {initialize, type EmbraceConfig} from "./initialize";
 export {type EmbraceLoggerLevel} from "./utils/EmbraceLogger";
 
 export {

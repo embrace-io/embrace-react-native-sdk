@@ -1,5 +1,5 @@
 import {initialize} from "@embrace-io/react-native";
 
-initialize({
+export const embraceInitialized = initialize({
   trackUnhandledRejections: true,
 });

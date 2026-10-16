@@ -84,6 +84,4 @@ const initialize = ({
   return true;
 };
 
-const isInitialized = (): boolean => initialized;
-
-export {initialize, isInitialized, type EmbraceConfig};
+export {initialize, type EmbraceConfig};

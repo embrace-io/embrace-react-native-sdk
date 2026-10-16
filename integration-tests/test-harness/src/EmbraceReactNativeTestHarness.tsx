@@ -1,7 +1,6 @@
-import "./embrace";
+import {embraceInitialized} from "./embrace";
 import * as React from "react";
 import {
-  isInitialized,
   useEmbraceNativeTracerProvider,
   useOrientationListener,
 } from "@embrace-io/react-native";
@@ -22,14 +21,13 @@ import FullScreenMessage from "./components/FullScreenMessage";
 const Tab = createBottomTabNavigator();
 
 const EmbraceReactNativeTestHarness = () => {
-  const initialized = isInitialized();
   const navigationContainer = useNavigationContainerRef();
   const navigationContainerRef = React.useRef(navigationContainer);
   const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({}, initialized);
-  useOrientationListener(initialized);
+    useEmbraceNativeTracerProvider({}, embraceInitialized);
+  useOrientationListener(embraceInitialized);
 
-  if (!initialized) {
+  if (!embraceInitialized) {
     return <EmbraceNotInitialized />;
   }
 

@@ -44,11 +44,6 @@ describe("SDK initialization", () => {
     ErrorUtils.setGlobalHandler(originalGlobalHandler);
   });
 
-  test("is not initialized before `initialize` is called", () => {
-    expect(core.isInitialized()).toBe(false);
-    expect(mockInitializeReactNativeSDK).not.toHaveBeenCalled();
-  });
-
   describe("on success", () => {
     test("sends the JS metadata to native in a single call", () => {
       expect(core.initialize({patch: "v1"})).toBe(true);
@@ -60,7 +55,6 @@ describe("SDK initialization", () => {
         javaScriptPatchNumber: "v1",
         resolveDefaultBundlePath: true,
       });
-      expect(core.isInitialized()).toBe(true);
     });
 
     test("omits the patch and skips the default bundle path in dev", () => {
@@ -105,7 +99,6 @@ describe("SDK initialization", () => {
       expect(console.warn).toHaveBeenCalledWith(
         "[Embrace] ErrorUtils is not defined, not capturing unhandled exceptions.",
       );
-      expect(core.isInitialized()).toBe(true);
     });
   });
 
@@ -121,7 +114,6 @@ describe("SDK initialization", () => {
     );
     expect(setGlobalHandler).not.toHaveBeenCalled();
     expect(mockEnableRejectionTracking).not.toHaveBeenCalled();
-    expect(core.isInitialized()).toBe(false);
   });
 
   describe("when the native SDK is not started", () => {
@@ -145,7 +137,6 @@ describe("SDK initialization", () => {
       );
       expect(setGlobalHandler).not.toHaveBeenCalled();
       expect(mockEnableRejectionTracking).not.toHaveBeenCalled();
-      expect(core.isInitialized()).toBe(false);
     });
 
     test("tries again on the next call", () => {
