@@ -15,7 +15,8 @@ interface EmbraceConfig {
   logLevel?: EmbraceLoggerLevel;
   trackUnhandledRejections?: boolean;
   trackScreenOrientation?: boolean;
-  tracerProvider?: boolean | EmbraceNativeTracerProviderConfig;
+  setupTracerProvider?: boolean;
+  tracerProviderConfig?: EmbraceNativeTracerProviderConfig;
 }
 
 interface NativeInitConfig {
@@ -38,7 +39,8 @@ const initialize = ({
   logLevel = "info",
   trackUnhandledRejections = false,
   trackScreenOrientation = false,
-  tracerProvider = true,
+  setupTracerProvider = true,
+  tracerProviderConfig,
 }: EmbraceConfig = {}): boolean => {
   const logger = new EmbraceLogger(console, logLevel);
 
@@ -92,8 +94,8 @@ const initialize = ({
     enableOrientationTracking();
   }
 
-  if (tracerProvider) {
-    registerTracerProvider(tracerProvider === true ? {} : tracerProvider);
+  if (setupTracerProvider) {
+    registerTracerProvider(tracerProviderConfig);
   }
 
   return true;

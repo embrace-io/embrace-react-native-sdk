@@ -227,21 +227,26 @@ describe("SDK initialization", () => {
       expect(core.initialize()).toBe(true);
 
       expect(mockRegisterTracerProvider).toHaveBeenCalledTimes(1);
-      expect(mockRegisterTracerProvider).toHaveBeenCalledWith({});
+      expect(mockRegisterTracerProvider).toHaveBeenCalledWith(undefined);
     });
 
     test("is registered with the given config", () => {
-      expect(core.initialize({tracerProvider: {registerGlobally: false}})).toBe(
-        true,
-      );
+      expect(
+        core.initialize({tracerProviderConfig: {registerGlobally: false}}),
+      ).toBe(true);
 
       expect(mockRegisterTracerProvider).toHaveBeenCalledWith({
         registerGlobally: false,
       });
     });
 
-    test("is not registered when the option is false", () => {
-      expect(core.initialize({tracerProvider: false})).toBe(true);
+    test("is not registered when setupTracerProvider is false", () => {
+      expect(
+        core.initialize({
+          setupTracerProvider: false,
+          tracerProviderConfig: {registerGlobally: false},
+        }),
+      ).toBe(true);
 
       expect(mockRegisterTracerProvider).not.toHaveBeenCalled();
     });
