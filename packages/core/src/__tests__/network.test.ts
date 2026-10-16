@@ -1,5 +1,8 @@
-import {MethodType} from "../interfaces";
-import {logNetworkClientError, recordNetworkRequest} from "../api/network";
+import {
+  logNetworkClientError,
+  recordNetworkRequest,
+  MethodType,
+} from "../api/network";
 
 const mockLogNetworkClientError = jest
   .fn()
