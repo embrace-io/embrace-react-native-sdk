@@ -1,6 +1,5 @@
 import {embraceInitialized} from "./embrace";
 import * as React from "react";
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -13,29 +12,21 @@ import {UserTestingScreen} from "./screens/UserTestingScreen";
 import {SpanTestingScreen} from "./screens/SpanTestingScreen";
 import {NetworkTestingScreen} from "./screens/NetworkTestingScreen";
 import {ReduxTestingScreen} from "./screens/ReduxTestingScreen";
-import FullScreenMessage from "./components/FullScreenMessage";
 
 const Tab = createBottomTabNavigator();
 
 const EmbraceReactNativeTestHarness = () => {
   const navigationContainer = useNavigationContainerRef();
   const navigationContainerRef = React.useRef(navigationContainer);
-  const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({}, embraceInitialized);
 
   if (!embraceInitialized) {
     return <EmbraceNotInitialized />;
-  }
-
-  if (isLoadingTracerProvider || tracerProvider === null) {
-    return <FullScreenMessage msg="Loading Tracer Provider" />;
   }
 
   return (
     <NavigationContainer ref={navigationContainer}>
       <EmbraceNavigationTracker
         ref={navigationContainerRef}
-        tracerProvider={tracerProvider}
         screenAttributes={{
           "test.attr": 654321,
           package: "@react-navigation/native",

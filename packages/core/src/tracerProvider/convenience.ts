@@ -10,6 +10,13 @@ import {
   SpanStatus,
 } from "@opentelemetry/api";
 
+import {getEmbraceTracerProvider} from "./register";
+
+const getEmbraceTracer = (
+  name = "embrace-default-tracer",
+  version?: string,
+): Tracer | undefined => getEmbraceTracerProvider()?.getTracer(name, version);
+
 /**
  * startView uses the given tracer to create a span that follows Embrace's semantics for representing a view
  */
@@ -81,5 +88,11 @@ const recordCompletedSpan = (
   span.end(options.endTime);
 };
 
-export {startView, endAsFailed, asParent, recordCompletedSpan};
+export {
+  getEmbraceTracer,
+  startView,
+  endAsFailed,
+  asParent,
+  recordCompletedSpan,
+};
 export type {CompletedSpanOptions};
