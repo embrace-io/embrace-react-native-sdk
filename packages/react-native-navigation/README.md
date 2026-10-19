@@ -6,6 +6,8 @@
 
 This package uses Embrace's React Native SDK and OpenTelemetry Tracer Provider to collect telemetry around Navigation based on [expo-router](https://github.com/expo/expo/tree/main/packages/expo-router), [@react-navigation/native](https://github.com/react-navigation/react-navigation) and [react-native-navigation](https://wix.github.io/react-native-navigation/).
 
+For more information, see [Track navigation](https://embrace.io/docs/react-native/features/navigation/).
+
 ## Install the component
 
 npm:
@@ -22,54 +24,30 @@ yarn add @embrace-io/react-native-navigation
 
 ## Setup in your code
 
+The tracker records its spans with the global OpenTelemetry tracer provider. By default, `initialize` from
+`@embrace-io/react-native` registers the Embrace tracer provider as the global one, so call `initialize` before your app
+renders and the tracker needs no further setup. `screenAttributes` are added to every span the tracker creates.
+
 Using `expo-router`:
 
 ```javascript
 import React from 'react';
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {Stack, useNavigationContainerRef} from 'expo-router';
-import {useEmbrace, useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
 
 const App = () => {
-  const {isStarted} = useEmbrace({
-    ios: {
-      appId: "__APP_ID__"
-    }
-  });
-
-  // The provider is something you need to configure and pass down as prop into the `<EmbraceNavigationTracker />` component 
-  // If your choice is not to pass any custom tracer provider, the component will use the global one.
-  // In both cases you have to make sure a tracer provider is registered BEFORE you attempt to record the first span (otherwise some initial telemetry can be missed).
-  const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({}, isStarted);
-
-  // If you do not use `expo-router` the same hook is also available in `@react-navigation/native` since `expo-router` is built on top of it.
-  // Make sure this ref is passed also to the navigation container at the root of your app (if not, the ref would be empty and you will get a console.warn message instead).
   const expoNavigationRef = useNavigationContainerRef();
-
-  if (isLoadingTracerProvider || tracerProvider === null) {
-    return (
-      <View>
-        <View>
-          <Text>Loading Tracer Provider...</Text>
-        </View>
-      </View>
-    );
-  }
 
   return (
     <EmbraceNavigationTracker
       ref={expoNavigationRef}
-      tracerProvider={tracerProvider}
-      // These static attributes will be passed into each created span
       screenAttributes={{
-          "static.attribute": 123456,
-          "custom.key": "abcd...",
+        "static.attribute": 123456,
+        "custom.key": "abcd...",
       }}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{headerShown: false}} />
         <Stack.Screen name="+not-found" />
-        ... rest of stack
       </Stack>
     </EmbraceNavigationTracker>
   );
@@ -78,80 +56,38 @@ const App = () => {
 export default App;
 ```
 
-If you are using purely [@react-navigation/native](https://github.com/react-navigation/react-navigation):
+Using [@react-navigation/native](https://github.com/react-navigation/react-navigation), put the tracker inside your
+`NavigationContainer`. Pass the value from `useNavigationContainerRef` to `NavigationContainer`, and wrap it in `useRef`
+for the tracker:
 
 ```javascript
-import React from 'react';
+import React, {useRef} from 'react';
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {
   NavigationContainer,
   useNavigationContainerRef,
 } from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {useEmbrace, useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
 import CartPage from "screens/CartPage";
 import CheckoutPage from "screens/CheckoutPage";
 
 const Tab = createBottomTabNavigator();
 
 const App = () => {
-  const {isStarted} = useEmbrace({
-    ios: {
-      appId: "__APP_ID__"
-    }
-  });
-
-  // The provider is something you need to configure and pass down as prop into the `EmbraceNavigationTracker` component 
-  // If your choice is not to pass any custom tracer provider, the <EmbraceNavigationTracker /> component will use the global one.
-  // In both cases you have to make sure a tracer provider is registered BEFORE you attempt to record the first span.
-  const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({}, isStarted);
-
-  // Tip! as of now if you inspect the source code of `useNavigationContainerRef` from `@react-navigation/native` you will see that it returns `navigation.current` instead of the entire shape of a reference
-  const navigationRefVal = useNavigationContainerRef();
-  // We need here the entire shape, so we re-create it and pass it down into the `ref` prop for the `EmbraceNavigationTracker` component.
-  const navigationRef = useRef(navigationRefVal);
-
-  if (isLoadingTracerProvider || tracerProvider === null) {
-    return (
-      <View>
-        <View>
-          <Text>Loading Tracer Provider...</Text>
-        </View>
-      </View>
-    );
-  }
+  const navigationContainer = useNavigationContainerRef();
+  const navigationRef = useRef(navigationContainer);
 
   return (
-    // `NavigationContainer` is waiting for what `useNavigationContainerRef` is returning (both exported from `@react-navigation/native`)
-    <NavigationContainer ref={navigationRefVal}>
+    <NavigationContainer ref={navigationContainer}>
       <EmbraceNavigationTracker
         ref={navigationRef}
-        tracerProvider={tracerProvider}
         screenAttributes={{
           "static.attribute": 123456,
           "custom.key": "abcd...",
         }}>
-        <Tab.Navigator
-          screenOptions={{
-            tabBarLabelPosition: "beside-icon",
-            tabBarIconStyle: {display: "none"},
-          }}>
-          <Tab.Screen
-            name="cart"
-            options={{
-              tabBarAccessibilityLabel: "Cart",
-            }}
-            component={CartPage}
-          />
-          <Tab.Screen
-            name="checkout"
-            options={{
-              tabBarAccessibilityLabel: "Checkout",
-            }}
-            component={CheckoutPage}
-          />
-          ... rest of tabs
+        <Tab.Navigator>
+          <Tab.Screen name="cart" component={CartPage} />
+          <Tab.Screen name="checkout" component={CheckoutPage} />
         </Tab.Navigator>
       </EmbraceNavigationTracker>
     </NavigationContainer>
@@ -161,103 +97,55 @@ const App = () => {
 export default App;
 ```
 
-NOTE: If you are using [@react-navigation/native](https://github.com/react-navigation/react-navigation) you need to wrap your entire application with the `NavigationTracker` component as described in their official documentation.
-
-If you are using [react-native-navigation](https://wix.github.io/react-native-navigation/) you are also able to track navigation changes.
-You have to make sure you wrap your entry view with the `<EmbraceNativeNavigationTracker />` component and initialize Embrace as soon as possible to avoid missing telemetry data.
+Using [react-native-navigation](https://wix.github.io/react-native-navigation/), wrap your app's entry screen with
+`EmbraceNativeNavigationTracker`, and pass it the events registry from `Navigation.events()` wrapped in `useRef`:
 
 ```javascript
-// index.ts
 import React, {useRef} from "react";
-import {TracerProvider} from "@opentelemetry/api";
 import {EmbraceNativeNavigationTracker} from "@embrace-io/react-native-navigation";
-import {EmbraceNativeTracerProvider, initialize} from "@embrace-io/react-native";
 import {Navigation} from "react-native-navigation";
 import {HomeScreen} from "screens/HomeScreen";
 
-const initApp = async () => {
-  // this example is showing how we can initialize Embrace not using hooks
-  await initialize({
-    sdkConfig: {
-      ios: {appId: "__APP_ID__"},
-    },
-  });
+Navigation.registerComponent(
+  "HomeScreen",
+  () => props => {
+    const navRef = useRef(Navigation.events());
 
-  let embraceTracerProvider: TracerProvider;
-  try {
-    embraceTracerProvider = new EmbraceNativeTracerProvider();
-  } catch (e) {
-    console.log(
-      "Error creating `EmbraceNativeTracerProvider`. Will use global tracer provider instead",
-      e,
+    return (
+      <EmbraceNativeNavigationTracker
+        ref={navRef}
+        screenAttributes={{
+          "static.attribute": 123456,
+          "custom.key": "abcd...",
+        }}>
+        <HomeScreen {...props} />
+      </EmbraceNativeNavigationTracker>
     );
-  }
+  },
+  () => HomeScreen,
+);
+```
 
-  Navigation.registerComponent(
-    "HomeScreen",
-    () =>
-      (props) => {
-        // make sure to wrap the events registry instance in a React ref
-        const navRef = useRef(Navigation.events());
+## When Embrace is not the global tracer provider
 
-        return (
-          <EmbraceNativeNavigationTracker
-            ref={navRef}
-            tracerProvider={embraceTracerProvider}
-            screenAttributes={{
-              "test.attr": 98765,
-              dev: true,
-            }}>
-            <HomeScreen {...props} />
-          </EmbraceNativeNavigationTracker>
-        );
-      },
-    () => HomeScreen,
-  );
+If you pass `tracerProviderConfig: {registerGlobally: false}` to `initialize`, or another OpenTelemetry tracer provider
+was registered as the global one first, the tracker's spans do not reach Embrace. Pass the Embrace tracer provider to
+the tracker instead:
 
-  // ... rest of registration and configuration
-};
+```javascript
+import {getEmbraceTracerProvider} from "@embrace-io/react-native";
 
-// root of the app
-initApp();
+<EmbraceNavigationTracker
+  ref={navigationRef}
+  tracerProvider={getEmbraceTracerProvider()}>
+  ...
+</EmbraceNavigationTracker>
 ```
 
 ## Disable Auto Tracking for Native Screens
 
-Embrace also collects automatically the Native screens, if you do not want to see Native components in the Session you can disable it:
-
-### JavaScript
-
-```javascript
-const App = () => {
-  const {isPending, isStarted} = useEmbrace({
-    ios: {
-      appId: "__APP_ID__",
-      disableAutomaticViewCapture: true, // disabling the feature just for iOS
-    },
-  });
-
-
-  if (isPending) {
-    return (
-      <View>
-        <Text>Loading Embrace</Text>
-      </View>
-    );
-  } else {
-    if (!isStarted) {
-      console.log('An error occurred during Embrace initialization');
-    }
-  }
-
-  // regular content of the application
-  return (
-    ...  
-  );
-}
-
-export default App
-```
+Embrace also collects native screens automatically. If you do not want to see native components in the session, you
+can disable it in the native SDK configuration.
 
 ### Android
 
@@ -280,7 +168,7 @@ With these changes your file should at least look like the following:
 ### iOS:
 
 If you used the automated installation script or followed the manual steps for setting up the iOS SDK then you can
-modify the setup in `EmbraceInitializer.swift` to remove the view capture service, see [Configurating the iOS SDK](/ios/open-source/integration/embrace-options/)
+modify the setup in `EmbraceInitializer.swift` to remove the view capture service, see [Configurating the iOS SDK](https://embrace.io/docs/ios/open-source/integration/embrace-options/)
 for more details:
 
 ```swift
