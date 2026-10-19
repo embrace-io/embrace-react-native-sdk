@@ -55,7 +55,6 @@ jobs:
             - 'packages/**/*.m'
             - 'packages/**/*.mm'
             - 'packages/**/*.h'
-            - 'common/ios/**'
             - '.github/workflows/ios.unit-test.yml'
             - 'scripts/run-swiftlint.sh'
 
@@ -110,7 +109,6 @@ jobs:
             - 'packages/core/RNEmbraceCore.podspec'
             - 'packages/core/package.json'
             - 'packages/core/test-project/ios/**'
-            - 'common/ios/**'
             - '.github/workflows/ios.unit-test.yml'
             - 'scripts/run-ios-tests-no-coverage.sh'
 
