@@ -18,11 +18,6 @@ public class EmbraceManagerModule extends NativeEmbraceManagerSpec {
     }
 
     @Override
-    public void isStarted(Promise promise) {
-        impl.isStarted(promise);
-    }
-
-    @Override
     public void setJavaScriptBundlePath(String path, Promise promise) {
         impl.setJavaScriptBundlePath(path, promise);
     }

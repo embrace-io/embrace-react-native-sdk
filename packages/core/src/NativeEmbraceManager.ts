@@ -4,7 +4,6 @@ import {TurboModuleRegistry} from "react-native";
 
 export interface Spec extends TurboModule {
   initializeReactNativeSDK(config: Object): boolean;
-  isStarted(): Promise<boolean>;
   setJavaScriptBundlePath(path: string): Promise<boolean>;
   setJavaScriptPatchNumber(patch: string): Promise<boolean>;
 
