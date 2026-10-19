@@ -17,37 +17,17 @@ const useTracerRef = (
   const console = useConsole(!!debug);
 
   useEffect(() => {
-    if (tracerRef.current === null) {
-      if (!provider) {
-        console.info(
-          "[Embrace] No TracerProvider found. Using global tracer instead.",
-        );
-      } else {
-        console.info("[Embrace] TracerProvider. Using custom tracer.");
-      }
-
-      tracerRef.current = provider
-        ? provider.getTracer(PACKAGE_NAME, PACKAGE_VERSION, tracerOptions)
-        : // using global tracer provider
-          trace.getTracer(PACKAGE_NAME, PACKAGE_VERSION);
+    if (provider) {
+      console.info("[Embrace] TracerProvider. Using custom tracer.");
+    } else {
+      console.info("[Embrace] Using the global tracer provider.");
     }
 
-    // this is useful in cases where the provider is passed but it's still `null` or `undefined` (given a re-render or something specific of the lifecycle of the app that implements the library)
-    if (
-      tracerRef.current !== null &&
-      provider !== undefined &&
-      provider !== null
-    ) {
-      tracerRef.current = provider.getTracer(
-        PACKAGE_NAME,
-        PACKAGE_VERSION,
-        tracerOptions,
-      );
-
-      console.info(
-        "[Embrace] Updated TracerProvider. Switching to the new instance.",
-      );
-    }
+    tracerRef.current = (provider ?? trace.getTracerProvider()).getTracer(
+      PACKAGE_NAME,
+      PACKAGE_VERSION,
+      tracerOptions,
+    );
   }, [console, provider, tracerOptions]);
 
   return tracerRef;
