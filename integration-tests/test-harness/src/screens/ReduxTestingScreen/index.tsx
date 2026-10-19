@@ -3,15 +3,13 @@ import {View, Text} from "react-native";
 import {styles} from "../../helpers/styles";
 import TestButton from "../../components/TestButton";
 import {configureStore, Tuple} from "@reduxjs/toolkit";
-import {trace} from "@opentelemetry/api";
 import rootReducer from "./reducers";
 import {counterIncrease, counterDecrease} from "./actions";
 import {createEmbraceMiddleware} from "@embrace-io/react-native-redux";
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: () =>
-    new Tuple(createEmbraceMiddleware(trace.getTracerProvider())),
+  middleware: () => new Tuple(createEmbraceMiddleware()),
 });
 
 const increase = () => store.dispatch(counterIncrease());
