@@ -7,6 +7,8 @@
 This package uses Embrace's React Native SDK and OpenTelemetry Tracer Provider to collect telemetry around dispatching
 actions with Redux. It provides a custom middleware that can be configured with your Redux store.
 
+For more information, see [Track Redux actions](https://embrace.io/docs/react-native/features/redux-actions/).
+
 ## Install the component
 
 npm:
@@ -23,49 +25,34 @@ yarn add @embrace-io/react-native-redux
 
 ## Add the middleware
 
-### With hooks
+By default, the middleware records its spans with the global OpenTelemetry tracer provider. Since `initialize` from
+`@embrace-io/react-native` registers the Embrace tracer provider as the global one by default, the middleware needs no further setup:
 
 ```typescript
-import {useEffect, useState} from "react";
-import {EnhancedStore, configureStore, Tuple} from "@reduxjs/toolkit";
-import {useEmbrace, useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
-import {useEmbraceMiddleware} from "@embrace-io/react-native-redux";
-
-const MyApp = () => {
-  const {isStarted} = useEmbrace({ios: {appId: "MYAPP"}});
-  const {tracerProvider} = useEmbraceNativeTracerProvider({}, isStarted);
-  const {middleware} = useEmbraceMiddleware(tracerProvider);
-  const [store, setStore] = useState<EnhancedStore>();
-
-  useEffect(() => {
-    if (middleware && !store) {
-      setStore(
-        configureStore({
-          reducer: rootReducer,
-          middleware: () => new Tuple(middleware),
-        }),
-      );
-    }
-  }, [middleware, store]);
-
-  ...
-
-};
-```
-
-### Without hooks
-
-```typescript
-import {configureStore, Tuple} from "@reduxjs/toolkit";
-import {EmbraceNativeTracerProvider, initialize} from "@embrace-io/react-native";
+import {configureStore} from "@reduxjs/toolkit";
 import {createEmbraceMiddleware} from "@embrace-io/react-native-redux";
 
-const setupStore = async () => {
-  await initialize({sdkConfig: {ios: {appId: "abc123"}}});
-  const tracerProvider = new EmbraceNativeTracerProvider();
-  return configureStore({
-    reducer: rootReducer,
-    middleware: () => new Tuple(createEmbraceMiddleware(tracerProvider)),
-  });
-};
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(createEmbraceMiddleware()),
+});
+```
+
+## When Embrace is not the global tracer provider
+
+If you pass `tracerProviderConfig: {registerGlobally: false}` to `initialize` but still want the middleware's spans to reach Embrace, pass the Embrace tracer provider to the middleware directly. Note that `getEmbraceTracerProvider()` returns `undefined` until `initialize` has run, so be sure to create the store after calling `initialize`:
+
+```typescript
+import {configureStore} from "@reduxjs/toolkit";
+import {getEmbraceTracerProvider} from "@embrace-io/react-native";
+import {createEmbraceMiddleware} from "@embrace-io/react-native-redux";
+
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(
+      createEmbraceMiddleware(getEmbraceTracerProvider()), // must be called after initialize
+    ),
+});
 ```
