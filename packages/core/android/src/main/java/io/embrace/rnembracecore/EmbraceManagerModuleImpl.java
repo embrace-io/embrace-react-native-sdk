@@ -48,7 +48,6 @@ public class EmbraceManagerModuleImpl {
             if (config.hasKey(JAVASCRIPT_PATCH_NUMBER_KEY)) {
                 rn.setJavaScriptPatchNumber(config.getString(JAVASCRIPT_PATCH_NUMBER_KEY));
             }
-
         } catch(Exception e) {
             Log.e("Embrace", "Error setting React Native metadata", e);
         }
@@ -65,16 +64,6 @@ public class EmbraceManagerModuleImpl {
             promise.resolve(success);
         } catch(Exception e) {
             promise.reject("IS_STARTED_ERROR", "Error checking if Embrace SDK is started", e);
-        }
-    }
-
-    public void startNativeEmbraceSDK(ReadableMap config, Promise promise) {
-        // config for now is only used to setup the iOS SDK, the Android SDK reads its config from a file
-        try {
-            Embrace.INSTANCE.start(this.context.getApplicationContext());
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.reject("START_SDK_ERROR", "Error starting Embrace SDK", e);
         }
     }
 
@@ -236,24 +225,6 @@ public class EmbraceManagerModuleImpl {
         }
     }
 
-    public void setReactNativeSDKVersion(String number, Promise promise) {
-        try {
-            EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().setReactNativeSdkVersion(number);
-            promise.resolve(true);
-        } catch (Exception e) {
-            promise.reject("SET_RN_SDK_VERSION_ERROR", "Error setting React Native SDK version", e);
-        }
-    }
-
-    public void setReactNativeVersion(String version, Promise promise) {
-        try {
-            EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface().setReactNativeVersionNumber(version);
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.reject("SET_RN_VERSION_ERROR", "Error setting React Native version", e);
-        }
-    }
-
     public void setJavaScriptBundlePath(String path, Promise promise) {
         try {
             getReactNativeInternalInterface().setJavaScriptBundleUrl(this.context.getApplicationContext(), path);
@@ -261,10 +232,6 @@ public class EmbraceManagerModuleImpl {
         } catch(Exception e) {
             promise.reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", e);
         }
-    }
-
-    public void getDefaultJavaScriptBundlePath(Promise promise) {
-        promise.reject("GET_DEFAULT_JS_BUNDLE_PATH_UNSUPPORTED", "Unable to retrieve JS bundle path");
     }
 
     public void addSessionProperty(String key, String value, boolean permanent, Promise promise) {

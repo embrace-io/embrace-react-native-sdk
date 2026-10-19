@@ -99,7 +99,9 @@ describe("EmbraceManagerModule", () => {
     expect(() => manager.initializeReactNativeSDK({})).toThrow(
       ANDROID_LINKING_ERROR,
     );
-    expect(() => manager.isStarted()).toThrow(ANDROID_LINKING_ERROR);
+    expect(() => manager.setJavaScriptPatchNumber("patch")).toThrow(
+      ANDROID_LINKING_ERROR,
+    );
     expect(() => manager.getDeviceId()).toThrow(ANDROID_LINKING_ERROR);
   });
 
@@ -109,6 +111,8 @@ describe("EmbraceManagerModule", () => {
     expect(() => manager.initializeReactNativeSDK({})).toThrow(
       IOS_LINKING_ERROR,
     );
-    expect(() => manager.isStarted()).toThrow(IOS_LINKING_ERROR);
+    expect(() => manager.setJavaScriptPatchNumber("patch")).toThrow(
+      IOS_LINKING_ERROR,
+    );
   });
 });
