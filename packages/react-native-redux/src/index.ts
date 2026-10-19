@@ -34,7 +34,7 @@ const attributeTransform = (attrs: Attributes) => {
 };
 
 const createEmbraceMiddleware = <RootState>(
-  tracerProvider: TracerProvider,
+  tracerProvider?: TracerProvider,
   // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 ): Middleware<{}, RootState> =>
