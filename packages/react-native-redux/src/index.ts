@@ -1,15 +1,8 @@
-import {useEffect, useState} from "react";
 import {gzipSync, strToU8} from "fflate";
 import {Middleware} from "@reduxjs/toolkit";
 import {Attributes, TracerProvider} from "@opentelemetry/api";
 
 import {dispatchMiddleware} from "./instrumentation";
-
-interface UseActionTrackerReturn<RootState> {
-  // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  middleware?: Middleware<{}, RootState>;
-}
 
 type EmbraceAttributes = {
   name?: string;
@@ -41,7 +34,7 @@ const attributeTransform = (attrs: Attributes) => {
 };
 
 const createEmbraceMiddleware = <RootState>(
-  tracerProvider: TracerProvider,
+  tracerProvider?: TracerProvider,
   // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 ): Middleware<{}, RootState> =>
@@ -49,24 +42,4 @@ const createEmbraceMiddleware = <RootState>(
     attributeTransform,
   });
 
-const useEmbraceMiddleware = <RootState>(
-  tracerProvider?: TracerProvider | null,
-): UseActionTrackerReturn<RootState> => {
-  // disabling rule following recommendation on: https://redux.js.org/usage/usage-with-typescript#type-checking-middleware
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  const [middleware, setMiddleware] = useState<Middleware<{}, RootState>>();
-
-  useEffect(() => {
-    if (tracerProvider && !middleware) {
-      // since `middleware` is a function the wrapping anonymous function is needed here to avoid using the overloaded
-      // signature of `setMiddleware` that accepts a function as the first argument
-      setMiddleware(() => createEmbraceMiddleware<RootState>(tracerProvider));
-    }
-  }, [tracerProvider, middleware]);
-
-  return {
-    middleware,
-  };
-};
-
-export {useEmbraceMiddleware, createEmbraceMiddleware};
+export {createEmbraceMiddleware};
