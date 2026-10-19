@@ -7,6 +7,7 @@ const mockInitializeReactNativeSDK = jest.fn();
 const mockLogUnhandledJSException = jest.fn().mockResolvedValue(true);
 const mockEnableRejectionTracking = jest.fn();
 const mockEnableOrientationTracking = jest.fn();
+const mockRegisterTracerProvider = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
@@ -21,6 +22,10 @@ jest.mock("promise/setimmediate/rejection-tracking", () => ({
 
 jest.mock("../utils/orientation", () => ({
   enableOrientationTracking: mockEnableOrientationTracking,
+}));
+
+jest.mock("../tracerProvider/register", () => ({
+  registerTracerProvider: mockRegisterTracerProvider,
 }));
 
 const mockIsDev = (isDev: boolean) =>
@@ -125,6 +130,7 @@ describe("SDK initialization", () => {
     expect(setGlobalHandler).not.toHaveBeenCalled();
     expect(mockEnableRejectionTracking).not.toHaveBeenCalled();
     expect(mockEnableOrientationTracking).not.toHaveBeenCalled();
+    expect(mockRegisterTracerProvider).not.toHaveBeenCalled();
   });
 
   describe("when the native SDK is not started", () => {
@@ -154,6 +160,7 @@ describe("SDK initialization", () => {
       expect(setGlobalHandler).not.toHaveBeenCalled();
       expect(mockEnableRejectionTracking).not.toHaveBeenCalled();
       expect(mockEnableOrientationTracking).not.toHaveBeenCalled();
+      expect(mockRegisterTracerProvider).not.toHaveBeenCalled();
     });
 
     test("tries again on the next call", () => {
@@ -212,6 +219,36 @@ describe("SDK initialization", () => {
       expect(core.initialize()).toBe(true);
 
       expect(mockEnableOrientationTracking).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("tracer provider", () => {
+    test("is registered with the default config by default", () => {
+      expect(core.initialize()).toBe(true);
+
+      expect(mockRegisterTracerProvider).toHaveBeenCalledTimes(1);
+      expect(mockRegisterTracerProvider).toHaveBeenCalledWith(undefined);
+    });
+
+    test("is registered with the given config", () => {
+      expect(
+        core.initialize({tracerProviderConfig: {registerGlobally: false}}),
+      ).toBe(true);
+
+      expect(mockRegisterTracerProvider).toHaveBeenCalledWith({
+        registerGlobally: false,
+      });
+    });
+
+    test("is not registered when setupTracerProvider is false", () => {
+      expect(
+        core.initialize({
+          setupTracerProvider: false,
+          tracerProviderConfig: {registerGlobally: false},
+        }),
+      ).toBe(true);
+
+      expect(mockRegisterTracerProvider).not.toHaveBeenCalled();
     });
   });
 });

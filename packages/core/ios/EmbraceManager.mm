@@ -44,12 +44,6 @@ RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, initializeReactNativeSDK:(NSDict
   return @([self.impl initializeReactNativeSDK:config]);
 }
 
-RCT_EXPORT_METHOD(isStarted:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-  [self.impl isStarted:resolve rejecter:reject];
-}
-
 RCT_EXPORT_METHOD(setJavaScriptBundlePath:(NSString *)path
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)

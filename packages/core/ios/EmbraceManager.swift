@@ -90,21 +90,6 @@ public class EmbraceManager: NSObject {
     }
 
     @objc
-    public func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard let state = Embrace.client?.state else {
-            resolve(false)
-            return
-        }
-
-        switch state {
-            case .started:
-                resolve(true)
-            case .initialized, .notInitialized, .stopped:
-                resolve(false)
-        }
-    }
-
-    @objc
     public func getDeviceId(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         if let deviceId = Embrace.client?.currentDeviceId() {
             resolve(deviceId)
