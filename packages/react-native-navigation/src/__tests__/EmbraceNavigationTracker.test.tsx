@@ -46,18 +46,20 @@ describe("EmbraceNavigationTracker.tsx", () => {
     ).toEqual(expected);
   };
 
-  const mockGlobalTracer = jest.spyOn(api.trace, "getTracer");
   const mockEndSpan = jest.fn();
   const mockStartSpan = jest.fn().mockReturnValue({
     end: mockEndSpan,
     setAttributes: jest.fn(),
     setAttribute: jest.fn(),
   });
-
-  jest.spyOn(api.trace, "getTracer").mockReturnValue({
+  const mockGlobalGetTracer = jest.fn().mockReturnValue({
     startSpan: mockStartSpan,
     startActiveSpan: jest.fn(),
   });
+
+  jest
+    .spyOn(api.trace, "getTracerProvider")
+    .mockReturnValue({getTracer: mockGlobalGetTracer});
 
   const mockAddListener = jest.fn();
   const mockGetCurrentRoute = jest.fn();
@@ -91,12 +93,29 @@ describe("EmbraceNavigationTracker.tsx", () => {
     );
 
     expect(console.info).toHaveBeenCalledWith(
-      "[Embrace] No TracerProvider found. Using global tracer instead.",
+      "[Embrace] Using the global tracer provider.",
     );
 
-    expect(mockGlobalTracer).toHaveBeenCalledWith(
+    expect(mockGlobalGetTracer).toHaveBeenCalledWith(
       "@embrace-io/react-native-navigation",
       "",
+      undefined,
+    );
+  });
+
+  it("should pass the tracer options to the global tracer provider", function () {
+    render(
+      <EmbraceNavigationTracker
+        ref={{current: null}}
+        tracerOptions={{schemaUrl: "https://example.com/schema"}}>
+        the app goes here
+      </EmbraceNavigationTracker>,
+    );
+
+    expect(mockGlobalGetTracer).toHaveBeenCalledWith(
+      "@embrace-io/react-native-navigation",
+      "",
+      {schemaUrl: "https://example.com/schema"},
     );
   });
 
@@ -117,13 +136,11 @@ describe("EmbraceNavigationTracker.tsx", () => {
     render(<AppWithProvider exporter={exporter} />);
 
     // should not call the global `getTracer` function since it should get the provider from props
-    expect(mockGlobalTracer).not.toHaveBeenCalled();
+    expect(mockGlobalGetTracer).not.toHaveBeenCalled();
 
+    expect(console.info).toHaveBeenCalledTimes(1);
     expect(console.info).toHaveBeenCalledWith(
       "[Embrace] TracerProvider. Using custom tracer.",
-    );
-    expect(console.info).toHaveBeenCalledWith(
-      "[Embrace] Updated TracerProvider. Switching to the new instance.",
     );
 
     expect(mockAddListener).toHaveBeenCalled();
@@ -164,6 +181,49 @@ describe("EmbraceNavigationTracker.tsx", () => {
           "view.launch": false,
           "view.state.end": "active",
           "view.name": "detailsView",
+        },
+      },
+    ]);
+  });
+
+  it("should switch to a tracer provider passed after the first render", function () {
+    const ref = {
+      current: {
+        getCurrentRoute: mockGetCurrentRoute,
+        addListener: mockAddListener,
+      },
+    };
+    const {rerender} = render(
+      <EmbraceNavigationTracker ref={ref}>
+        the app goes here
+      </EmbraceNavigationTracker>,
+    );
+
+    rerender(
+      <EmbraceNavigationTracker
+        ref={ref}
+        tracerProvider={createInstanceProvider(exporter)}>
+        the app goes here
+      </EmbraceNavigationTracker>,
+    );
+
+    const mockNavigationListenerCall = mockAddListener.mock.calls[0][1];
+
+    mockGetCurrentRoute.mockReturnValue({name: "homeView"});
+    mockNavigationListenerCall();
+
+    mockGetCurrentRoute.mockReturnValue({name: "detailsView"});
+    mockNavigationListenerCall();
+
+    expect(mockStartSpan).not.toHaveBeenCalled();
+    verifySpans([
+      {
+        name: "homeView",
+        attributes: {
+          "emb.type": "ux.view",
+          "view.launch": true,
+          "view.state.end": "active",
+          "view.name": "homeView",
         },
       },
     ]);
