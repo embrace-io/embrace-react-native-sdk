@@ -2,6 +2,7 @@ import * as reactNativePackage from "react-native/package.json";
 
 import * as embracePackage from "../package.json";
 
+import {enableOrientationTracking} from "./utils/orientation";
 import {enableUnhandledRejectionTracking} from "./utils/error";
 import EmbraceLogger, {EmbraceLoggerLevel} from "./utils/EmbraceLogger";
 import {handleError, handleGlobalError} from "./api/error";
@@ -11,6 +12,7 @@ interface EmbraceConfig {
   patch?: string;
   logLevel?: EmbraceLoggerLevel;
   trackUnhandledRejections?: boolean;
+  trackScreenOrientation?: boolean;
 }
 
 interface NativeInitConfig {
@@ -32,6 +34,7 @@ const initialize = ({
   patch,
   logLevel = "info",
   trackUnhandledRejections = false,
+  trackScreenOrientation = false,
 }: EmbraceConfig = {}): boolean => {
   const logger = new EmbraceLogger(console, logLevel);
 
@@ -79,6 +82,10 @@ const initialize = ({
 
   if (trackUnhandledRejections) {
     enableUnhandledRejectionTracking(logger);
+  }
+
+  if (trackScreenOrientation) {
+    enableOrientationTracking();
   }
 
   return true;

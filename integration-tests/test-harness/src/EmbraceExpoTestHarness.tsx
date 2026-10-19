@@ -1,9 +1,6 @@
 import {embraceInitialized} from "./embrace";
 import * as React from "react";
-import {
-  useEmbraceNativeTracerProvider,
-  useOrientationListener,
-} from "@embrace-io/react-native";
+import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {
   Stack,
@@ -16,7 +13,6 @@ export const EmbraceExpoTestHarness = () => {
   const expoNavigationRef = useExpoNavigationContainerRef();
   const {tracerProvider, isLoading: isLoadingTracerProvider} =
     useEmbraceNativeTracerProvider({}, embraceInitialized);
-  useOrientationListener(embraceInitialized);
 
   if (!embraceInitialized) {
     return <EmbraceNotInitialized />;
