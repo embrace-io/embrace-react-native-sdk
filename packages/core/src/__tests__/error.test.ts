@@ -1,12 +1,23 @@
-import {trackUnhandledRejection} from "../utils/error";
-import {LogProperties, LogSeverity} from "../interfaces";
-import {logHandledError} from "../api/log";
+import {Platform} from "react-native";
+import {waitFor} from "@testing-library/react-native";
+
+import {
+  enableUnhandledRejectionTracking,
+  trackUnhandledRejection,
+} from "../utils/error";
+import EmbraceLogger from "../utils/EmbraceLogger";
+import {logHandledError, LogProperties, LogSeverity} from "../api/log";
+import {handleError, handleGlobalError} from "../api/error";
 import {ComponentError, logIfComponentError} from "../api/component";
 
 const mockLogHandledError = jest.fn().mockReturnValue(Promise.resolve(true));
 const mockLogMessageWithSeverityAndProperties = jest
   .fn()
   .mockReturnValue(Promise.resolve(true));
+const mockLogUnhandledJSException = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(true));
+const mockEnableRejectionTracking = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
@@ -29,7 +40,17 @@ jest.mock("../EmbraceManagerModule", () => ({
         stacktrace,
         includeStacktrace,
       ),
+    logUnhandledJSException: (
+      name: string,
+      message: string,
+      type: string,
+      stackTrace: string,
+    ) => mockLogUnhandledJSException(name, message, type, stackTrace),
   },
+}));
+
+jest.mock("promise/setimmediate/rejection-tracking", () => ({
+  enable: (config: unknown) => mockEnableRejectionTracking(config),
 }));
 
 jest.mock("../utils/log", () => ({
@@ -74,6 +95,53 @@ describe("Component Error", () => {
         {},
         "in SomeScreen/n in SomeOtherScreen",
         true,
+      );
+    });
+  });
+});
+
+describe("`handleGlobalError()`", () => {
+  it("logs a component error before forwarding it", async () => {
+    const mockPreviousHandler = jest.fn().mockReturnValue(jest.fn());
+
+    const generatedGlobalErrorFunc = handleGlobalError(
+      mockPreviousHandler,
+      handleError,
+    );
+
+    const componentError = new Error("Test") as ComponentError;
+    componentError.componentStack = "in SomeScreen\n in SomeOtherScreen";
+
+    generatedGlobalErrorFunc(componentError, false);
+
+    await waitFor(() => {
+      expect(mockLogMessageWithSeverityAndProperties).toHaveBeenCalledWith(
+        "Test",
+        "error",
+        {},
+        "in SomeScreen\n in SomeOtherScreen",
+        true,
+      );
+      expect(mockPreviousHandler).toHaveBeenCalledWith(componentError, false);
+    });
+  });
+
+  it("forwards the error even when logging it is rejected", async () => {
+    const mockPreviousHandler = jest.fn();
+    mockLogUnhandledJSException.mockRejectedValueOnce("Some rejected value");
+
+    const generatedGlobalErrorFunc = handleGlobalError(
+      mockPreviousHandler,
+      handleError,
+    );
+
+    const error = new Error("Test");
+    generatedGlobalErrorFunc(error, true);
+
+    await waitFor(() => {
+      expect(mockPreviousHandler).toHaveBeenCalledWith(error, true);
+      expect(console.warn).toHaveBeenCalledWith(
+        "[Embrace] Failed to log exception",
       );
     });
   });
@@ -139,6 +207,85 @@ describe("`trackUnhandledRejection()`", () => {
       {},
       "",
       false,
+    );
+  });
+});
+
+describe("`enableUnhandledRejectionTracking()`", () => {
+  const logger = new EmbraceLogger(console);
+
+  afterEach(() => {
+    // @ts-expect-error HermesInternal isn't part of `global`'s type
+    global.HermesInternal = undefined;
+  });
+
+  it("uses Hermes when it provides promises", () => {
+    const hermesInternal = {
+      hasPromise: () => true,
+      enablePromiseRejectionTracker: jest.fn(),
+    };
+    // @ts-expect-error HermesInternal isn't part of `global`'s type
+    global.HermesInternal = hermesInternal;
+
+    enableUnhandledRejectionTracking(logger);
+
+    expect(hermesInternal.enablePromiseRejectionTracker).toHaveBeenCalledWith({
+      allRejections: true,
+      onUnhandled: trackUnhandledRejection,
+      onHandled: expect.any(Function),
+    });
+    expect(mockEnableRejectionTracking).not.toHaveBeenCalled();
+  });
+
+  it("warns when the setup fails", () => {
+    mockEnableRejectionTracking.mockImplementationOnce(() => {
+      throw new Error("tracking setup failed");
+    });
+
+    enableUnhandledRejectionTracking(logger);
+
+    expect(console.warn).toHaveBeenCalledWith(
+      "[Embrace] we were unable to setup tracking of unhandled promise rejections: Error: tracking setup failed",
+    );
+  });
+});
+
+describe("`handleError()`", () => {
+  const error = new Error("Test");
+  error.stack = "Error: Test\n    at foo (app.js:1:1)\n    at bar (app.js:2:2)";
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it("sends the stack trace as plain text on Android", async () => {
+    jest.replaceProperty(Platform, "OS", "android");
+
+    await handleError(error, jest.fn());
+
+    expect(mockLogUnhandledJSException).toHaveBeenCalledWith(
+      "Error",
+      "Test",
+      "Error",
+      "Error: Test\n    at foo (app.js:1:1)\n    at bar (app.js:2:2)",
+    );
+  });
+
+  it("sends the stack trace as JSON without its first line on iOS", async () => {
+    jest.replaceProperty(Platform, "OS", "ios");
+
+    await handleError(error, jest.fn());
+
+    expect(mockLogUnhandledJSException).toHaveBeenCalledWith(
+      "Error",
+      "Test",
+      "Error",
+      JSON.stringify({
+        n: "Error",
+        m: "Test",
+        t: "Error",
+        st: "    at foo (app.js:1:1)\n    at bar (app.js:2:2)",
+      }),
     );
   });
 });

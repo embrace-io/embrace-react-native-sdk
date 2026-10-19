@@ -50,13 +50,6 @@ RCT_EXPORT_METHOD(isStarted:(RCTPromiseResolveBlock)resolve
   [self.impl isStarted:resolve rejecter:reject];
 }
 
-RCT_EXPORT_METHOD(startNativeEmbraceSDK:(NSDictionary *)config
-                  resolve:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-  [self.impl startNativeEmbraceSDK:config resolver:resolve rejecter:reject];
-}
-
 RCT_EXPORT_METHOD(setJavaScriptBundlePath:(NSString *)path
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
@@ -64,31 +57,11 @@ RCT_EXPORT_METHOD(setJavaScriptBundlePath:(NSString *)path
   [self.impl setJavaScriptBundlePath:path resolver:resolve rejecter:reject];
 }
 
-RCT_EXPORT_METHOD(getDefaultJavaScriptBundlePath:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-  [self.impl getDefaultJavaScriptBundlePath:resolve rejecter:reject];
-}
-
 RCT_EXPORT_METHOD(setJavaScriptPatchNumber:(NSString *)patch
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
 {
   [self.impl setJavaScriptPatchNumber:patch resolver:resolve rejecter:reject];
-}
-
-RCT_EXPORT_METHOD(setReactNativeSDKVersion:(NSString *)version
-                  resolve:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-  [self.impl setReactNativeSDKVersion:version resolver:resolve rejecter:reject];
-}
-
-RCT_EXPORT_METHOD(setReactNativeVersion:(NSString *)version
-                  resolve:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-  [self.impl setReactNativeVersion:version resolver:resolve rejecter:reject];
 }
 
 RCT_EXPORT_METHOD(getDeviceId:(RCTPromiseResolveBlock)resolve

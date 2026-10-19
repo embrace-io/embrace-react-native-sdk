@@ -10,8 +10,33 @@
  */
 
 import {safePromise} from "../utils/promiseHandler";
-import {MethodType} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
+
+type MethodType =
+  | "get"
+  | "GET"
+  | "delete"
+  | "DELETE"
+  | "head"
+  | "HEAD"
+  | "options"
+  | "OPTIONS"
+  | "post"
+  | "POST"
+  | "put"
+  | "PUT"
+  | "patch"
+  | "PATCH"
+  | "purge"
+  | "PURGE"
+  | "link"
+  | "LINK"
+  | "unlink"
+  | "UNLINK"
+  | "connect"
+  | "CONNECT"
+  | "trace"
+  | "TRACE";
 
 /**
  * Manually records a completed network request.
@@ -125,4 +150,4 @@ const logNetworkClientError = (
     false,
   );
 
-export {recordNetworkRequest, logNetworkClientError};
+export {recordNetworkRequest, logNetworkClientError, type MethodType};

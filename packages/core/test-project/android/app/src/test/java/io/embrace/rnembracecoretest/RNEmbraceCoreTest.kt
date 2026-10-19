@@ -460,14 +460,4 @@ class RNEmbraceCoreTest {
             assertEquals("stacktrace as string", logWithNoSeverity.attributes["emb.stacktrace.rn"])
         }
     }
-
-    @Test
-    fun getDefaultJavaScriptBundlePathIsUnsupportedOnAndroid() {
-        embraceModuleSpy.getDefaultJavaScriptBundlePath(promise)
-
-        verify(promise, times(1)).reject(
-            "GET_DEFAULT_JS_BUNDLE_PATH_UNSUPPORTED",
-            "Unable to retrieve JS bundle path",
-        )
-    }
 }
