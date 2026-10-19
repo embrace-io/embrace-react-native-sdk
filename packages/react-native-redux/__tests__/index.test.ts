@@ -1,7 +1,7 @@
-import {renderHook, waitFor} from "@testing-library/react-native";
 import {configureStore, Tuple} from "@reduxjs/toolkit";
+import {trace} from "@opentelemetry/api";
 
-import {useEmbraceMiddleware} from "../src";
+import {createEmbraceMiddleware} from "../src";
 
 import {counterActions, rootReducer} from "./helpers/store";
 import {
@@ -28,20 +28,18 @@ describe("React Native Action Tracker", () => {
 
   afterEach(async () => {
     jest.clearAllMocks();
+    trace.disable();
     await shutdownInstanceProvider();
     if (exporter) {
       await exporter.shutdown();
     }
   });
 
-  it("should apply the middleware with Embrace specific attributes", async () => {
+  it("should apply the middleware with Embrace specific attributes", () => {
     const provider = createInstanceProvider(exporter);
-    const {result} = renderHook(() => useEmbraceMiddleware(provider));
-    await waitFor(() => expect(result.current.middleware).toBeTruthy());
-
     const store = configureStore({
       reducer: rootReducer,
-      middleware: () => new Tuple(result.current.middleware!),
+      middleware: () => new Tuple(createEmbraceMiddleware(provider)),
     });
 
     store.dispatch(counterActions.decrease(1));
@@ -59,8 +57,25 @@ describe("React Native Action Tracker", () => {
     ]);
   });
 
-  it("should handle a provider not being ready yet", () => {
-    const {result} = renderHook(() => useEmbraceMiddleware(undefined));
-    expect(result.current.middleware).toBeFalsy();
+  it("should use a global tracer provider registered after the store is created", () => {
+    const store = configureStore({
+      reducer: rootReducer,
+      middleware: () => new Tuple(createEmbraceMiddleware()),
+    });
+    createInstanceProvider(exporter);
+
+    store.dispatch(counterActions.decrease(1));
+
+    verifySpans([
+      {
+        name: "action",
+        attributes: {
+          "emb.type": "sys.rn_action",
+          name: "COUNTER_DECREASE:normal",
+          outcome: "success",
+          payload_size: "31",
+        },
+      },
+    ]);
   });
 });
