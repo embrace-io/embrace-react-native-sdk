@@ -5,12 +5,8 @@ import {TurboModuleRegistry} from "react-native";
 export interface Spec extends TurboModule {
   initializeReactNativeSDK(config: Object): boolean;
   isStarted(): Promise<boolean>;
-  startNativeEmbraceSDK(config: Object): Promise<boolean>;
   setJavaScriptBundlePath(path: string): Promise<boolean>;
-  getDefaultJavaScriptBundlePath(): Promise<string>;
   setJavaScriptPatchNumber(patch: string): Promise<boolean>;
-  setReactNativeSDKVersion(version: string): Promise<boolean>;
-  setReactNativeVersion(version: string): Promise<boolean>;
 
   getDeviceId(): Promise<string>;
   getCurrentSessionId(): Promise<string>;

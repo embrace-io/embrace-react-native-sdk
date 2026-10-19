@@ -10,8 +10,13 @@
 
 import {safePromise} from "../utils/promiseHandler";
 import {generateStackTrace} from "../utils/log";
-import {LogSeverity, LogProperties} from "../interfaces";
 import {EmbraceManagerModule} from "../EmbraceManagerModule";
+
+type LogSeverity = "warning" | "info" | "error";
+
+interface LogProperties {
+  [key: string]: string;
+}
 
 /**
  * Logs a message with the specified severity, optional properties, and optional stack trace.
@@ -170,4 +175,12 @@ const logHandledError = (
   return Promise.resolve(false);
 };
 
-export {logInfo, logWarning, logError, logHandledError, logMessage};
+export {
+  logInfo,
+  logWarning,
+  logError,
+  logHandledError,
+  logMessage,
+  type LogSeverity,
+  type LogProperties,
+};
