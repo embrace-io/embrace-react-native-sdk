@@ -37,4 +37,6 @@ const registerTracerProvider = (
   return provider;
 };
 
-export {registerTracerProvider};
+const getEmbraceTracerProvider = (): TracerProvider | undefined => provider;
+
+export {registerTracerProvider, getEmbraceTracerProvider};

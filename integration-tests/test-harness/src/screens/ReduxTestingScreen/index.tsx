@@ -1,64 +1,31 @@
 import * as React from "react";
 import {View, Text} from "react-native";
-import {useCallback, useEffect, useState} from "react";
 import {styles} from "../../helpers/styles";
 import TestButton from "../../components/TestButton";
-import {EnhancedStore, configureStore, Tuple} from "@reduxjs/toolkit";
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
-import FullScreenMessage from "../../components/FullScreenMessage";
+import {configureStore, Tuple} from "@reduxjs/toolkit";
+import {trace} from "@opentelemetry/api";
 import rootReducer from "./reducers";
 import {counterIncrease, counterDecrease} from "./actions";
-import {useEmbraceMiddleware} from "@embrace-io/react-native-redux";
+import {createEmbraceMiddleware} from "@embrace-io/react-native-redux";
 
-const ReduxTestingScreen = () => {
-  const {isError, error, tracerProvider} = useEmbraceNativeTracerProvider({});
-  const {middleware} = useEmbraceMiddleware(tracerProvider);
-  const [store, setStore] = useState<EnhancedStore>();
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: () =>
+    new Tuple(createEmbraceMiddleware(trace.getTracerProvider())),
+});
 
-  useEffect(() => {
-    if (middleware && !store) {
-      setStore(
-        configureStore({
-          reducer: rootReducer,
-          middleware: () => new Tuple(middleware),
-        }),
-      );
-    }
-  }, [middleware, store]);
+const increase = () => store.dispatch(counterIncrease());
 
-  const increaseActionHandler = useCallback(async () => {
-    if (store) {
-      store.dispatch(counterIncrease());
-    } else {
-      console.log("store isn't ready yet");
-    }
-  }, [store]);
+const decrease = () => store.dispatch(counterDecrease());
 
-  const decreaseActionHandler = useCallback(async () => {
-    if (store) {
-      store.dispatch(counterDecrease());
-    } else {
-      console.log("store isn't ready yet");
-    }
-  }, [store]);
-
-  if (!store) {
-    return <FullScreenMessage msg="Setting up store" />;
-  }
-
-  if (isError) {
-    return <FullScreenMessage msg={error} />;
-  }
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.section}>
-        <Text style={styles.title}>Actions</Text>
-        <TestButton onPress={increaseActionHandler} title="Increase" />
-        <TestButton onPress={decreaseActionHandler} title="Decrease" />
-      </View>
+const ReduxTestingScreen = () => (
+  <View style={styles.container}>
+    <View style={styles.section}>
+      <Text style={styles.title}>Actions</Text>
+      <TestButton onPress={increase} title="Increase" />
+      <TestButton onPress={decrease} title="Decrease" />
     </View>
-  );
-};
+  </View>
+);
 
 export {ReduxTestingScreen};

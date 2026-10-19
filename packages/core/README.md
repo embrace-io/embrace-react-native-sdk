@@ -6,12 +6,6 @@ much needed additional context (logs and user info) and measure the timing of ke
 
 For additional info please refer to the [React Native Guide](https://embrace.io/docs/react-native).
 
-> [!IMPORTANT]
-> Starting the native SDK from JavaScript (`sdkConfig.ios`, `sdkConfig.exporters`) and `@embrace-io/react-native-otlp`
-> are deprecated and will be removed in the next major release. Start Embrace in native code as described in
-> [Native Setup](#native-setup) and
-> [Start Embrace SDK in the native side](https://embrace.io/docs/react-native/integration/session-reporting/#start-embrace-sdk-in-the-native-side).
-
 # Requirements
 
 Only an Embrace App ID and an Embrace API Token.
@@ -115,26 +109,11 @@ scripts in [Native Setup](#native-setup) do this for you; if you set up manually
 Then call `initialize` once, at the top level of your application, to set up tracking on the JS side:
 
 ```javascript
-import React, { useEffect } from 'react'
 import { initialize } from '@embrace-io/react-native';
 
+initialize({ trackUnhandledRejections: true });
+
 const App = () => {
-  useEffect(() => {
-    const initEmbrace = async () => {
-      try {
-        const isStarted = await initialize({ trackUnhandledRejections: true });
-
-        if (isStarted) {
-          // do something
-        }
-      } catch {
-        console.log("Error initializing Embrace SDK");
-      }
-    };
-
-    initEmbrace();
-  }, []); // you should only initialize the Embrace SDK once.
-
   // regular content of the application
   return (
     ...
@@ -143,6 +122,13 @@ const App = () => {
 
 export default App
 ```
+
+Refer to [EmbraceConfig](./src/initialize.ts) for the full set of options available to configure `initialize`.
+
+By default `initialize` also sets up the Embrace tracer provider and registers it, together with its context manager, as the
+OpenTelemetry globals. To keep the provider without registering the globals, pass `tracerProviderConfig: {registerGlobally: false}`, or to skip the provider entirely, pass `setupTracerProvider: false`. 
+
+Use `getEmbraceTracer()` to get a tracer, or `getEmbraceTracerProvider()` to get the provider. For more information, see [Traces](https://embrace.io/docs/react-native/features/traces/).
 
 ## Uploading source maps
 
@@ -153,8 +139,8 @@ Refer to our guide on [uploading symbol files](https://embrace.io/docs/react-nat
 
 Additional features for our SDK are kept in other packages to allow you to include just the dependencies for the ones
 you are using and to keep your overall bundle size smaller. Once this core package is installed you can check out the
-documentation in our [Feature Reference](/react-native/features/) to learn more about these additional packages. The
-various screens in our [Test Harness](https://github.com/embrace-io/embrace-react-native-sdk/tree/main/integration-tests/test-harness)
+documentation in our [Feature Reference](https://embrace.io/docs/react-native/features/) to learn more about these
+additional packages. The various screens in our [Test Harness](https://github.com/embrace-io/embrace-react-native-sdk/tree/main/integration-tests/test-harness)
 also provide examples of how these packages can be used with the core SDK.
 
 ## Troubleshooting
