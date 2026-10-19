@@ -6,6 +6,7 @@ import {version as SDK_VERSION} from "../../package.json";
 const mockInitializeReactNativeSDK = jest.fn();
 const mockLogUnhandledJSException = jest.fn().mockResolvedValue(true);
 const mockEnableRejectionTracking = jest.fn();
+const mockEnableOrientationTracking = jest.fn();
 
 jest.mock("../EmbraceManagerModule", () => ({
   EmbraceManagerModule: {
@@ -16,6 +17,10 @@ jest.mock("../EmbraceManagerModule", () => ({
 
 jest.mock("promise/setimmediate/rejection-tracking", () => ({
   enable: mockEnableRejectionTracking,
+}));
+
+jest.mock("../utils/orientation", () => ({
+  enableOrientationTracking: mockEnableOrientationTracking,
 }));
 
 const mockIsDev = (isDev: boolean) =>
@@ -107,13 +112,19 @@ describe("SDK initialization", () => {
       throw new Error("native call failed");
     });
 
-    expect(core.initialize({trackUnhandledRejections: true})).toBe(false);
+    expect(
+      core.initialize({
+        trackUnhandledRejections: true,
+        trackScreenOrientation: true,
+      }),
+    ).toBe(false);
 
     expect(console.error).toHaveBeenCalledWith(
       "[Embrace] Failed to initialize the SDK: Error: native call failed",
     );
     expect(setGlobalHandler).not.toHaveBeenCalled();
     expect(mockEnableRejectionTracking).not.toHaveBeenCalled();
+    expect(mockEnableOrientationTracking).not.toHaveBeenCalled();
   });
 
   describe("when the native SDK is not started", () => {
@@ -130,13 +141,19 @@ describe("SDK initialization", () => {
     });
 
     test("logs an error, returns false and installs nothing in release", () => {
-      expect(core.initialize({trackUnhandledRejections: true})).toBe(false);
+      expect(
+        core.initialize({
+          trackUnhandledRejections: true,
+          trackScreenOrientation: true,
+        }),
+      ).toBe(false);
 
       expect(console.error).toHaveBeenCalledWith(
         expect.stringContaining("The Embrace native SDK has not been started"),
       );
       expect(setGlobalHandler).not.toHaveBeenCalled();
       expect(mockEnableRejectionTracking).not.toHaveBeenCalled();
+      expect(mockEnableOrientationTracking).not.toHaveBeenCalled();
     });
 
     test("tries again on the next call", () => {
@@ -181,6 +198,20 @@ describe("SDK initialization", () => {
       expect(core.initialize()).toBe(true);
 
       expect(mockEnableRejectionTracking).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("screen orientation tracking", () => {
+    test("is enabled when the option is set", () => {
+      expect(core.initialize({trackScreenOrientation: true})).toBe(true);
+
+      expect(mockEnableOrientationTracking).toHaveBeenCalledTimes(1);
+    });
+
+    test("is not enabled by default", () => {
+      expect(core.initialize()).toBe(true);
+
+      expect(mockEnableOrientationTracking).not.toHaveBeenCalled();
     });
   });
 });
