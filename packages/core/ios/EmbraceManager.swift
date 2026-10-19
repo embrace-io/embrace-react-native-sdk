@@ -26,7 +26,6 @@ private let EMB_EXC = "emb-js"
 @objc(EmbraceManagerImpl)
 public class EmbraceManager: NSObject {
     private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
-    private var config: SDKConfig = SDKConfig(from: NSDictionary())
     var isSDKStarted: () -> Bool = { Embrace.client?.state == .started }
     var defaultBundlePath: () -> String? = { Bundle.main.path(forResource: "main", ofType: "jsbundle") }
     var bundleIDQueue: DispatchQueue = .global(qos: .utility)
@@ -91,15 +90,6 @@ public class EmbraceManager: NSObject {
     }
 
     @objc
-    public func getDefaultJavaScriptBundlePath(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        if  let filePath = Bundle.main.path(forResource: "main", ofType: "jsbundle") {
-            resolve(filePath)
-        } else {
-            reject("error", "Unable to retrieve JS bundle path", nil)
-        }
-    }
-
-    @objc
     public func isStarted(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         guard let state = Embrace.client?.state else {
             resolve(false)
@@ -111,22 +101,6 @@ public class EmbraceManager: NSObject {
                 resolve(true)
             case .initialized, .notInitialized, .stopped:
                 resolve(false)
-        }
-    }
-
-    @objc(startNativeEmbraceSDK:resolver:rejecter:)
-    public func startNativeEmbraceSDK(configDict: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        config = SDKConfig(from: configDict)
-
-        DispatchQueue.main.async {
-            do {
-                try Embrace.setup(options: initEmbraceOptions(config: self.config))
-                    .start()
-
-                resolve(true)
-            } catch let error {
-                reject("START_EMBRACE_SDK", "Error starting Embrace SDK", error)
-            }
         }
     }
 
@@ -186,16 +160,6 @@ public class EmbraceManager: NSObject {
             resolve(lastRunEndStateToString(endState: endState))
         } else {
             reject("GET_LAST_RUN_END_STATE", "Error getting Last Run End State", nil)
-        }
-    }
-
-    @objc(setReactNativeSDKVersion:resolver:rejecter:)
-    public func setReactNativeSDKVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            try Embrace.client?.metadata.addResource(key: HOSTED_SDK_VERSION_RESOURCE_KEY, value: version, lifespan: .process)
-            resolve(true)
-        } catch let error {
-            reject("SET_RN_SDK_VERSION", "Error setting ReactNative SDK version", error)
         }
     }
 
@@ -286,16 +250,6 @@ public class EmbraceManager: NSObject {
             resolve(true)
         } catch let error {
             reject("CLEAR_USER_PERSONA", "Error removing User Persona", error)
-        }
-    }
-
-    @objc(setReactNativeVersion:resolver:rejecter:)
-    public func setReactNativeVersion(_ version: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            try Embrace.client?.metadata.addResource(key: HOSTED_PLATFORM_VERSION_RESOURCE_KEY, value: version, lifespan: .process)
-            resolve(true)
-        } catch let error {
-            reject("SET_RECT_NATIVE_VERSION", "Error setting React Native Number", error)
         }
     }
 
@@ -437,17 +391,14 @@ public class EmbraceManager: NSObject {
             .setStartTime(time: dateFrom(ms: startInMillis))
             .startSpan()
 
-        if span != nil {
-            // injecting the w3c traceparent only if NSF is enabled
-            if !self.config.disableNetworkSpanForwarding {
-                injectW3cTraceparent(span: span!)
-            }
-
-            span!.end(errorCode: nil, time: dateFrom(ms: endInMillis))
-            resolve(true)
-        } else {
+        guard let span = span else {
             reject("LOG_NETWORK_REQUEST_ERROR", "Failed to create network span", nil)
+            return
         }
+
+        injectW3cTraceparent(span: span)
+        span.end(errorCode: nil, time: dateFrom(ms: endInMillis))
+        resolve(true)
     }
 
     @objc(logNetworkClientError:httpMethod:startInMillis:endInMillis:errorType:errorMessage:resolver:rejecter:)
@@ -484,18 +435,15 @@ public class EmbraceManager: NSObject {
             .setStartTime(time: dateFrom(ms: startInMillis))
             .startSpan()
 
-        if span != nil {
-            // injecting the w3c traceparent only if NSF is enabled
-            if !config.disableNetworkSpanForwarding {
-                injectW3cTraceparent(span: span!)
-            }
-
-            // `errorCode` should be used to calc `emb.error_code` attr in native sdk
-            span!.end(errorCode: SpanErrorCode.failure, time: dateFrom(ms: endInMillis))
-            resolve(true)
-        } else {
+        guard let span = span else {
             reject("LOG_NETWORK_CLIENT_ERROR_ERROR", "Failed to create network client error span", nil)
+            return
         }
+
+        injectW3cTraceparent(span: span)
+        // `errorCode` should be used to calc `emb.error_code` attr in native sdk
+        span.end(errorCode: SpanErrorCode.failure, time: dateFrom(ms: endInMillis))
+        resolve(true)
     }
 
     private func dateFrom(ms: Double) -> Date {

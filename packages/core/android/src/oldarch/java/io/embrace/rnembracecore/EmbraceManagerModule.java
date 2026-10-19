@@ -33,33 +33,13 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startNativeEmbraceSDK(ReadableMap config, Promise promise) {
-        impl.startNativeEmbraceSDK(config, promise);
-    }
-
-    @ReactMethod
     public void setJavaScriptBundlePath(String path, Promise promise) {
         impl.setJavaScriptBundlePath(path, promise);
     }
 
     @ReactMethod
-    public void getDefaultJavaScriptBundlePath(Promise promise) {
-        impl.getDefaultJavaScriptBundlePath(promise);
-    }
-
-    @ReactMethod
     public void setJavaScriptPatchNumber(String patch, Promise promise) {
         impl.setJavaScriptPatchNumber(patch, promise);
-    }
-
-    @ReactMethod
-    public void setReactNativeSDKVersion(String version, Promise promise) {
-        impl.setReactNativeSDKVersion(version, promise);
-    }
-
-    @ReactMethod
-    public void setReactNativeVersion(String version, Promise promise) {
-        impl.setReactNativeVersion(version, promise);
     }
 
     @ReactMethod
