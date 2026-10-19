@@ -8,7 +8,6 @@ import {
   TracerProvider,
 } from "@opentelemetry/api";
 
-import type {registerTracerProvider as RegisterTracerProvider} from "../tracerProvider/register";
 import {StackContextManager} from "../tracerProvider/StackContextManager";
 import type {EmbraceNativeTracerProviderConfig} from "../tracerProvider";
 
@@ -35,9 +34,13 @@ jest.mock("../tracerProvider/TracerProviderModule", () => ({
 
 const loadRegister = () => {
   jest.resetModules();
+  const register: typeof import("../tracerProvider/register") = require("../tracerProvider/register");
+  const convenience: typeof import("../tracerProvider/convenience") = require("../tracerProvider/convenience");
+
   return {
-    registerTracerProvider: require("../tracerProvider/register")
-      .registerTracerProvider as typeof RegisterTracerProvider,
+    registerTracerProvider: register.registerTracerProvider,
+    getEmbraceTracerProvider: register.getEmbraceTracerProvider,
+    getEmbraceTracer: convenience.getEmbraceTracer,
     api: require("@opentelemetry/api") as typeof import("@opentelemetry/api"),
   };
 };
@@ -207,5 +210,56 @@ describe("registerTracerProvider", () => {
       ),
     ).not.toThrow();
     expect(getStartSpanMock().mock.lastCall?.[9]).toBe("");
+  });
+});
+
+describe("getEmbraceTracerProvider and getEmbraceTracer", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+    trace.disable();
+    context.disable();
+  });
+
+  it("should return undefined before a provider is registered", () => {
+    const {getEmbraceTracerProvider, getEmbraceTracer} = loadRegister();
+
+    expect(getEmbraceTracerProvider()).toBeUndefined();
+    expect(getEmbraceTracer("checkout", "1.0")).toBeUndefined();
+    expect(mockAppStateListener).not.toHaveBeenCalled();
+  });
+
+  it("should return the registered provider and its cached tracer", () => {
+    const {registerTracerProvider, getEmbraceTracerProvider, getEmbraceTracer} =
+      loadRegister();
+
+    const provider = registerTracerProvider({registerGlobally: false});
+
+    expect(getEmbraceTracerProvider()).toBe(provider);
+    expect(getEmbraceTracer("checkout", "1.0")).toBe(
+      provider.getTracer("checkout", "1.0"),
+    );
+  });
+
+  it("should default to the embrace-default-tracer name", () => {
+    const {registerTracerProvider, getEmbraceTracer} = loadRegister();
+
+    const provider = registerTracerProvider({registerGlobally: false});
+
+    expect(getEmbraceTracer()).toBe(
+      provider.getTracer("embrace-default-tracer"),
+    );
+  });
+
+  it("should start Embrace spans when another provider holds the global", () => {
+    jest.spyOn(console, "warn").mockImplementation(() => {});
+    const foreignTracer = {startSpan: jest.fn(), startActiveSpan: jest.fn()};
+    trace.setGlobalTracerProvider({getTracer: () => foreignTracer});
+    const {registerTracerProvider, getEmbraceTracer} = loadRegister();
+
+    registerTracerProvider();
+    getEmbraceTracer("checkout", "1.0")!.startSpan("my-span");
+
+    expect(getStartSpanMock()).toHaveBeenCalledTimes(1);
+    expect(foreignTracer.startSpan).not.toHaveBeenCalled();
   });
 });

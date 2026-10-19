@@ -1,31 +1,22 @@
 import {embraceInitialized} from "./embrace";
 import * as React from "react";
-import {useEmbraceNativeTracerProvider} from "@embrace-io/react-native";
 import {EmbraceNavigationTracker} from "@embrace-io/react-native-navigation";
 import {
   Stack,
   useNavigationContainerRef as useExpoNavigationContainerRef,
 } from "expo-router";
 import {EmbraceNotInitialized} from "./EmbraceNotInitialized";
-import FullScreenMessage from "./components/FullScreenMessage";
 
 export const EmbraceExpoTestHarness = () => {
   const expoNavigationRef = useExpoNavigationContainerRef();
-  const {tracerProvider, isLoading: isLoadingTracerProvider} =
-    useEmbraceNativeTracerProvider({}, embraceInitialized);
 
   if (!embraceInitialized) {
     return <EmbraceNotInitialized />;
   }
 
-  if (isLoadingTracerProvider || tracerProvider === null) {
-    return <FullScreenMessage msg="Loading Tracer Provider" />;
-  }
-
   return (
     <EmbraceNavigationTracker
       ref={expoNavigationRef}
-      tracerProvider={tracerProvider}
       screenAttributes={{
         "test.attr": 123456,
         package: "expo-router",

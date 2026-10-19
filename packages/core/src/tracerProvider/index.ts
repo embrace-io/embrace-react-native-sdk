@@ -1,6 +1,5 @@
 export * from "./EmbraceNativeSpan";
-export * from "./EmbraceNativeTracer";
-export * from "./EmbraceNativeTracerProvider";
-export * from "./useEmbraceNativeTracerProvider";
+export type {EmbraceNativeTracer} from "./EmbraceNativeTracer";
 export * from "./types";
 export * from "./convenience";
+export {getEmbraceTracerProvider} from "./register";

@@ -28,11 +28,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void isStarted(Promise promise) {
-        impl.isStarted(promise);
-    }
-
-    @ReactMethod
     public void setJavaScriptBundlePath(String path, Promise promise) {
         impl.setJavaScriptBundlePath(path, promise);
     }

@@ -58,15 +58,6 @@ public class EmbraceManagerModuleImpl {
         return EmbraceInternalApi.INSTANCE.getReactNativeInternalInterface();
     }
 
-    public void isStarted(Promise promise) {
-        try {
-            Boolean success = Embrace.INSTANCE.isStarted();
-            promise.resolve(success);
-        } catch(Exception e) {
-            promise.reject("IS_STARTED_ERROR", "Error checking if Embrace SDK is started", e);
-        }
-    }
-
     public void setUserIdentifier(String userIdentifier, Promise promise) {
         try {
             Embrace.INSTANCE.setUserIdentifier(userIdentifier);
