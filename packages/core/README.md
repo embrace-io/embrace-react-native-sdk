@@ -126,7 +126,7 @@ export default App
 Refer to [EmbraceConfig](./src/initialize.ts) for the full set of options available to configure `initialize`.
 
 By default `initialize` also sets up the Embrace tracer provider and registers it, together with its context manager, as the
-OpenTelemetry globals. To keep the provider without registering the globals, pass `tracerProviderConfig: {registerGlobally: false}`, or to disable skip the provider entirely, pass `setupTracerProvider: false`. 
+OpenTelemetry globals. To keep the provider without registering the globals, pass `tracerProviderConfig: {registerGlobally: false}`, or to skip the provider entirely, pass `setupTracerProvider: false`. 
 
 Use `getEmbraceTracer()` to get a tracer, or `getEmbraceTracerProvider()` to get the provider. For more information, see [Traces](https://embrace.io/docs/react-native/features/traces/).
 
