@@ -126,7 +126,7 @@ dependencies {
     implementation(project(":core"))
     implementation("com.facebook.react:react-android")
     testImplementation("io.opentelemetry.kotlin:core")
-    testImplementation(platform("io.opentelemetry:opentelemetry-bom:1.62.0"))
+    testImplementation(platform("io.opentelemetry:opentelemetry-bom:1.66.0"))
     testImplementation("io.opentelemetry:opentelemetry-sdk")
     testImplementation("io.opentelemetry:opentelemetry-exporter-logging")
 
@@ -137,6 +137,7 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.11")
 
     testImplementation("org.robolectric:robolectric:4.15.1")
+    testImplementation("androidx.lifecycle:lifecycle-process:2.7.0")
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
