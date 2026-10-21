@@ -4,17 +4,17 @@
       "resource": {
         "app_version": "1.0",
         "app_framework": 2,
-        "build_id": "4FE4870C5C9047ADB89E956A39A3B7E1",
+        "build_id": "9D2C43640EA146AFB8855E0F971E53B4",
         "app_ecosystem_id": "io.embrace.rn87",
         "build_type": "release",
         "build_flavor": "",
         "environment": "prod",
         "bundle_version": "1",
-        "sdk_version": "8.4.0",
+        "sdk_version": "9.3.1",
         "sdk_simple_version": 53,
-        "react_native_bundle_id": "4F3C86A1E521E8C6F4995D2F86B0CE83",
+        "react_native_bundle_id": "17DD813421D1E143DAA7B44CE2E62563",
         "hosted_platform_version": "0.87.0",
-        "hosted_sdk_version": "7.1.0",
+        "hosted_sdk_version": "7.2.0",
         "device_manufacturer": "Google",
         "device_model": "sdk_gphone64_arm64",
         "device_architecture": "arm64-v8a",
@@ -25,471 +25,13 @@
         "os_version": "14",
         "os_code": "34",
         "screen_resolution": "1080x2209",
-        "num_cores": 4
+        "num_cores": 4,
+        "device_soc_model": "ranchu"
       },
       "metadata": {
-        "personas": [],
-        "timezone_description": "Europe/London",
-        "locale": "en_US"
-      },
-      "version": "0.1.0",
-      "type": "spans",
-      "data": {
-        "spans": [
-          {
-            "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
-            "span_id": "4d700f947ae2172d",
-            "parent_span_id": "26b4fecbfe00591a",
-            "name": "emb-MainActivity-start",
-            "start_time_unix_nano": 1790701279363000000,
-            "end_time_unix_nano": 1790701279364000000,
-            "status": "Unset",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.private.sequence_id",
-                "value": "132"
-              },
-              {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
-              },
-              {
-                "key": "emb.type",
-                "value": "perf"
-              },
-              {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
-              }
-            ],
-            "links": [
-              {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "END_SESSION"
-                  },
-                  {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
-                  }
-                ],
-                "is_remote": false
-              }
-            ]
-          },
-          {
-            "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
-            "span_id": "156deecbf10877d8",
-            "parent_span_id": "26b4fecbfe00591a",
-            "name": "emb-MainActivity-resume",
-            "start_time_unix_nano": 1790701279364000000,
-            "end_time_unix_nano": 1790701279365000000,
-            "status": "Unset",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.private.sequence_id",
-                "value": "133"
-              },
-              {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
-              },
-              {
-                "key": "emb.type",
-                "value": "perf"
-              },
-              {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
-              }
-            ],
-            "links": [
-              {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "END_SESSION"
-                  },
-                  {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
-                  }
-                ],
-                "is_remote": false
-              }
-            ]
-          },
-          {
-            "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
-            "span_id": "26b4fecbfe00591a",
-            "parent_span_id": "0000000000000000",
-            "name": "emb-MainActivity-hot-time-to-initial-display",
-            "start_time_unix_nano": 1790701279363000000,
-            "end_time_unix_nano": 1790701279365000000,
-            "status": "Unset",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.private.sequence_id",
-                "value": "131"
-              },
-              {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
-              },
-              {
-                "key": "emb.type",
-                "value": "perf.ui_load"
-              },
-              {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
-              }
-            ],
-            "links": [
-              {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "END_SESSION"
-                  },
-                  {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
-                  }
-                ],
-                "is_remote": false
-              }
-            ]
-          },
-          {
-            "trace_id": "17b54827385e140641a000f99682e1c9",
-            "span_id": "3be9f73ca7ef7cf3",
-            "parent_span_id": "0000000000000000",
-            "name": "emb-thermal-state",
-            "start_time_unix_nano": 1790701149394000000,
-            "end_time_unix_nano": 1790701285369000000,
-            "status": "Error",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.error_code",
-                "value": "failure"
-              },
-              {
-                "key": "emb.type",
-                "value": "perf.thermal_state"
-              },
-              {
-                "key": "status",
-                "value": "0"
-              }
-            ],
-            "links": []
-          },
-          {
-            "trace_id": "bedb7b0676fc9ab053d4c582c6d50fcd",
-            "span_id": "a674b304dd6f1343",
-            "parent_span_id": "0000000000000000",
-            "name": "emb-state-network",
-            "start_time_unix_nano": 1790701279363000000,
-            "end_time_unix_nano": 1790701285369000000,
-            "status": "Error",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.error_code",
-                "value": "failure"
-              },
-              {
-                "key": "emb.type",
-                "value": "state"
-              },
-              {
-                "key": "emb.private",
-                "value": "true"
-              },
-              {
-                "key": "emb.state.initial_value",
-                "value": "wifi"
-              }
-            ],
-            "links": []
-          },
-          {
-            "trace_id": "ad04e3b5332f0ebce8cca99846dda2cd",
-            "span_id": "c8b0431012746f8f",
-            "parent_span_id": "0000000000000000",
-            "name": "emb-network-status",
-            "start_time_unix_nano": 1790701149465000000,
-            "end_time_unix_nano": 1790701285369000000,
-            "status": "Error",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.error_code",
-                "value": "failure"
-              },
-              {
-                "key": "emb.type",
-                "value": "sys.network_status"
-              },
-              {
-                "key": "network",
-                "value": "wifi"
-              }
-            ],
-            "links": []
-          },
-          {
-            "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
-            "span_id": "72b48e327173471e",
-            "parent_span_id": "0000000000000000",
-            "name": "emb-session",
-            "start_time_unix_nano": 1790701279363000000,
-            "end_time_unix_nano": 1790701285369000000,
-            "status": "Error",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.error_code",
-                "value": "failure"
-              },
-              {
-                "key": "emb.termination_cause",
-                "value": "crash"
-              },
-              {
-                "key": "emb.cold_start",
-                "value": "false"
-              },
-              {
-                "key": "emb.state",
-                "value": "foreground"
-              },
-              {
-                "key": "emb.clean_exit",
-                "value": "false"
-              },
-              {
-                "key": "emb.session_start_type",
-                "value": "state"
-              },
-              {
-                "key": "emb.terminated",
-                "value": "true"
-              },
-              {
-                "key": "emb.type",
-                "value": "ux.session"
-              },
-              {
-                "key": "emb.heartbeat_time_unix_nano",
-                "value": "1790701285369000000"
-              },
-              {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
-              },
-              {
-                "key": "emb.session_number",
-                "value": "345"
-              }
-            ],
-            "links": [
-              {
-                "span_id": "e6ead852d175a37e",
-                "trace_id": "41d696e50bd1c2960f3baa80f03342ab",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "PREV_SESSION"
-                  },
-                  {
-                    "key": "session.id",
-                    "value": "F7EF35F5151D4F21AD346F9C9570F85B"
-                  }
-                ],
-                "is_remote": false
-              },
-              {
-                "span_id": "4d700f947ae2172d",
-                "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "ENDED_IN"
-                  }
-                ],
-                "is_remote": false
-              },
-              {
-                "span_id": "156deecbf10877d8",
-                "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "ENDED_IN"
-                  }
-                ],
-                "is_remote": false
-              },
-              {
-                "span_id": "26b4fecbfe00591a",
-                "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "ENDED_IN"
-                  }
-                ],
-                "is_remote": false
-              }
-            ]
-          },
-          {
-            "trace_id": "a30894fd9a2827a0eff49e980508dfba",
-            "span_id": "ce9e83f9b84a4aad",
-            "parent_span_id": "0000000000000000",
-            "name": "log",
-            "start_time_unix_nano": 1790701279365000000,
-            "end_time_unix_nano": 1790701285369000000,
-            "status": "Error",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.error_code",
-                "value": "failure"
-              },
-              {
-                "key": "emb.type",
-                "value": "perf"
-              },
-              {
-                "key": "test.attr",
-                "value": "654321"
-              },
-              {
-                "key": "emb.type",
-                "value": "ux.view"
-              },
-              {
-                "key": "view.launch",
-                "value": "false"
-              },
-              {
-                "key": "package",
-                "value": "@react-navigation/native"
-              },
-              {
-                "key": "view.name",
-                "value": "log"
-              }
-            ],
-            "links": []
-          },
-          {
-            "trace_id": "1c514cae69b50aacf567174fde68f708",
-            "span_id": "79b661399afd48d2",
-            "parent_span_id": "0000000000000000",
-            "name": "emb-state-screen-automatic",
-            "start_time_unix_nano": 1790701279363000000,
-            "end_time_unix_nano": 1790701285369000000,
-            "status": "Error",
-            "events": [
-              {
-                "name": "transition",
-                "time_unix_nano": 1790701279363000000,
-                "attributes": [
-                  {
-                    "key": "emb.state.new_value",
-                    "value": "MainActivity"
-                  }
-                ]
-              }
-            ],
-            "attributes": [
-              {
-                "key": "emb.error_code",
-                "value": "failure"
-              },
-              {
-                "key": "emb.type",
-                "value": "state"
-              },
-              {
-                "key": "emb.private",
-                "value": "true"
-              },
-              {
-                "key": "emb.state.transition_count",
-                "value": "1"
-              },
-              {
-                "key": "emb.state.initial_value",
-                "value": "Backgrounded"
-              }
-            ],
-            "links": []
-          }
+        "personas": [
+          "first_day"
         ],
-        "span_snapshots": [],
-        "shared_lib_symbol_mapping": {
-          "libappmodules.so": "ab4c0e0db4fac8392c4847c5b3dc543479188634",
-          "libc++_shared.so": "8f9b811782f82b7e96ef983939059539bc486507",
-          "libembrace-native.so": "35cedcf27cf57a11b659e2b4ff54dca526caac87",
-          "libfbjni.so": "908a62be76b9bea375d88a9d714790c3d188ab34",
-          "libhermestooling.so": "69dc64792648cd8539c5a3946aefef34199a1f99",
-          "libhermesvm.so": "29e16b5b2961c04689f82bdb9fd52818e92ec6f2",
-          "libimagepipeline.so": "c1917611b61c4f8d33e62c57dab46eb7e9c2403b",
-          "libjsi.so": "48dd9b2df37bf37e1dca714515014574379c74a4",
-          "libnative-filters.so": "f5dabe8b01e9da9ad08ebb99f0e2f9e3f601d234",
-          "libnative-imagetranscoder.so": "46588427304036cab21cb7115b8236f4a48c7773",
-          "libreact_codegen_rnscreens.so": "293a7afed2e6dbf172610befa88f7597764695ca",
-          "libreact_codegen_safeareacontext.so": "6241b4e9d7f54cacb817afb9da3f02394acebeb0",
-          "libreactnative.so": "6267efeacb3f99ce0851e1b20d162fb1ff4bb938",
-          "librnscreens.so": "46c88a1f347567e7c8eb28f836e6147964d08f65"
-        }
-      }
-    },
-    {
-      "resource": {
-        "app_version": "1.0",
-        "app_framework": 2,
-        "build_id": "4FE4870C5C9047ADB89E956A39A3B7E1",
-        "app_ecosystem_id": "io.embrace.rn87",
-        "build_type": "release",
-        "build_flavor": "",
-        "environment": "prod",
-        "bundle_version": "1",
-        "sdk_version": "8.4.0",
-        "sdk_simple_version": 53,
-        "react_native_bundle_id": "4F3C86A1E521E8C6F4995D2F86B0CE83",
-        "hosted_platform_version": "0.87.0",
-        "hosted_sdk_version": "7.1.0",
-        "device_manufacturer": "Google",
-        "device_model": "sdk_gphone64_arm64",
-        "device_architecture": "arm64-v8a",
-        "jailbroken": false,
-        "disk_total_capacity": 6228115456,
-        "os_type": "linux",
-        "os_name": "android",
-        "os_version": "14",
-        "os_code": "34",
-        "screen_resolution": "1080x2209",
-        "num_cores": 4
-      },
-      "metadata": {
-        "personas": [],
         "timezone_description": "Europe/London",
         "locale": "en_US"
       },
@@ -498,44 +40,48 @@
       "data": {
         "spans": [
           {
-            "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
-            "span_id": "4d700f947ae2172d",
-            "parent_span_id": "26b4fecbfe00591a",
+            "trace_id": "ca485b096051f2870634f6b2c0a426db",
+            "span_id": "fad2f45c66e98bef",
+            "parent_span_id": "b5520e2d45f8f773",
             "name": "emb-MainActivity-start",
-            "start_time_unix_nano": 1790701279363000000,
-            "end_time_unix_nano": 1790701279364000000,
+            "start_time_unix_nano": 1792422545706000000,
+            "end_time_unix_nano": 1792422545708000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private.sequence_id",
-                "value": "132"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "2902D1A4A6E1C6E7404F8170C3A02895"
               },
               {
                 "key": "emb.type",
                 "value": "perf"
               },
               {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               }
             ],
             "links": [
               {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
+                "span_id": "789bdcaab0c9d57e",
+                "trace_id": "fec9ba8cc07d3aff33161154d6e936b5",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -543,44 +89,48 @@
             ]
           },
           {
-            "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
-            "span_id": "156deecbf10877d8",
-            "parent_span_id": "26b4fecbfe00591a",
+            "trace_id": "ca485b096051f2870634f6b2c0a426db",
+            "span_id": "4fe043b3650efa85",
+            "parent_span_id": "b5520e2d45f8f773",
             "name": "emb-MainActivity-resume",
-            "start_time_unix_nano": 1790701279364000000,
-            "end_time_unix_nano": 1790701279365000000,
+            "start_time_unix_nano": 1792422545708000000,
+            "end_time_unix_nano": 1792422545709000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private.sequence_id",
-                "value": "133"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "2902D1A4A6E1C6E7404F8170C3A02895"
               },
               {
                 "key": "emb.type",
                 "value": "perf"
               },
               {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               }
             ],
             "links": [
               {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
+                "span_id": "789bdcaab0c9d57e",
+                "trace_id": "fec9ba8cc07d3aff33161154d6e936b5",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -588,44 +138,48 @@
             ]
           },
           {
-            "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
-            "span_id": "26b4fecbfe00591a",
+            "trace_id": "ca485b096051f2870634f6b2c0a426db",
+            "span_id": "b5520e2d45f8f773",
             "parent_span_id": "0000000000000000",
             "name": "emb-MainActivity-hot-time-to-initial-display",
-            "start_time_unix_nano": 1790701279363000000,
-            "end_time_unix_nano": 1790701279365000000,
+            "start_time_unix_nano": 1792422545706000000,
+            "end_time_unix_nano": 1792422545709000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private.sequence_id",
-                "value": "131"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "2902D1A4A6E1C6E7404F8170C3A02895"
               },
               {
                 "key": "emb.type",
                 "value": "perf.ui_load"
               },
               {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               }
             ],
             "links": [
               {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
+                "span_id": "789bdcaab0c9d57e",
+                "trace_id": "fec9ba8cc07d3aff33161154d6e936b5",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -633,17 +187,17 @@
             ]
           },
           {
-            "trace_id": "1c514cae69b50aacf567174fde68f708",
-            "span_id": "79b661399afd48d2",
+            "trace_id": "cbc294ce96374b6a85d7c19d1e909c07",
+            "span_id": "cebec7bfe33b9bf5",
             "parent_span_id": "0000000000000000",
             "name": "emb-state-screen-automatic",
-            "start_time_unix_nano": 1790701279363000000,
-            "end_time_unix_nano": 1790701287058000000,
+            "start_time_unix_nano": 1792422545707000000,
+            "end_time_unix_nano": 1792422547443000000,
             "status": "Unset",
             "events": [
               {
                 "name": "transition",
-                "time_unix_nano": 1790701279363000000,
+                "time_unix_nano": 1792422545706000000,
                 "attributes": [
                   {
                     "key": "emb.state.new_value",
@@ -654,16 +208,12 @@
             ],
             "attributes": [
               {
-                "key": "emb.private",
-                "value": "true"
-              },
-              {
-                "key": "emb.private.sequence_id",
-                "value": "129"
-              },
-              {
                 "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "value": "16c8127f4ef9b09d"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "2902D1A4A6E1C6E7404F8170C3A02895"
               },
               {
                 "key": "emb.state.initial_value",
@@ -678,22 +228,26 @@
                 "value": "state"
               },
               {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               }
             ],
             "links": [
               {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
+                "span_id": "789bdcaab0c9d57e",
+                "trace_id": "fec9ba8cc07d3aff33161154d6e936b5",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -701,26 +255,22 @@
             ]
           },
           {
-            "trace_id": "bedb7b0676fc9ab053d4c582c6d50fcd",
-            "span_id": "a674b304dd6f1343",
+            "trace_id": "8a8764db8b23e4549e6875cfd0852456",
+            "span_id": "220007720bc997e7",
             "parent_span_id": "0000000000000000",
             "name": "emb-state-network",
-            "start_time_unix_nano": 1790701279363000000,
-            "end_time_unix_nano": 1790701287059000000,
+            "start_time_unix_nano": 1792422545707000000,
+            "end_time_unix_nano": 1792422547443000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private",
-                "value": "true"
-              },
-              {
-                "key": "emb.private.sequence_id",
-                "value": "130"
-              },
-              {
                 "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "value": "16c8127f4ef9b09d"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "2902D1A4A6E1C6E7404F8170C3A02895"
               },
               {
                 "key": "emb.state.initial_value",
@@ -731,22 +281,26 @@
                 "value": "state"
               },
               {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               }
             ],
             "links": [
               {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
+                "span_id": "789bdcaab0c9d57e",
+                "trace_id": "fec9ba8cc07d3aff33161154d6e936b5",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -754,65 +308,12 @@
             ]
           },
           {
-            "trace_id": "17b54827385e140641a000f99682e1c9",
-            "span_id": "3be9f73ca7ef7cf3",
-            "parent_span_id": "0000000000000000",
-            "name": "emb-thermal-state",
-            "start_time_unix_nano": 1790701149394000000,
-            "end_time_unix_nano": 1790701287059000000,
-            "status": "Error",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.error_code",
-                "value": "failure"
-              },
-              {
-                "key": "emb.private.sequence_id",
-                "value": "4"
-              },
-              {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
-              },
-              {
-                "key": "emb.type",
-                "value": "perf.thermal_state"
-              },
-              {
-                "key": "session.id",
-                "value": "1AB45271E90C441CA4A09E366A8596C4"
-              },
-              {
-                "key": "status",
-                "value": "0"
-              }
-            ],
-            "links": [
-              {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
-                "attributes": [
-                  {
-                    "key": "emb.link_type",
-                    "value": "END_SESSION"
-                  },
-                  {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
-                  }
-                ],
-                "is_remote": false
-              }
-            ]
-          },
-          {
-            "trace_id": "ad04e3b5332f0ebce8cca99846dda2cd",
-            "span_id": "c8b0431012746f8f",
+            "trace_id": "209130723f2fb2cb2e8724e38f1d65f5",
+            "span_id": "6c7922bfc35283c0",
             "parent_span_id": "0000000000000000",
             "name": "emb-network-status",
-            "start_time_unix_nano": 1790701149465000000,
-            "end_time_unix_nano": 1790701287059000000,
+            "start_time_unix_nano": 1792422427538000000,
+            "end_time_unix_nano": 1792422547444000000,
             "status": "Error",
             "events": [],
             "attributes": [
@@ -821,38 +322,42 @@
                 "value": "failure"
               },
               {
-                "key": "emb.private.sequence_id",
-                "value": "8"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "1B3457AD7F2F2BA1EE68940096583449"
               },
               {
                 "key": "emb.type",
                 "value": "sys.network_status"
               },
               {
-                "key": "network",
-                "value": "wifi"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               },
               {
-                "key": "session.id",
-                "value": "1AB45271E90C441CA4A09E366A8596C4"
+                "key": "network",
+                "value": "wifi"
               }
             ],
             "links": [
               {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
+                "span_id": "789bdcaab0c9d57e",
+                "trace_id": "fec9ba8cc07d3aff33161154d6e936b5",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -860,12 +365,12 @@
             ]
           },
           {
-            "trace_id": "a30894fd9a2827a0eff49e980508dfba",
-            "span_id": "ce9e83f9b84a4aad",
+            "trace_id": "8155dd886428eed00ae61134c3664a66",
+            "span_id": "440fba00c4f1ebf3",
             "parent_span_id": "0000000000000000",
             "name": "log",
-            "start_time_unix_nano": 1790701279365000000,
-            "end_time_unix_nano": 1790701287059000000,
+            "start_time_unix_nano": 1792422545709000000,
+            "end_time_unix_nano": 1792422547444000000,
             "status": "Error",
             "events": [],
             "attributes": [
@@ -874,28 +379,28 @@
                 "value": "failure"
               },
               {
-                "key": "emb.private.sequence_id",
-                "value": "134"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "2902D1A4A6E1C6E7404F8170C3A02895"
               },
               {
                 "key": "emb.type",
                 "value": "ux.view"
               },
               {
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+              },
+              {
                 "key": "package",
                 "value": "@react-navigation/native"
               },
               {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
-              },
-              {
                 "key": "test.attr",
-                "value": "654321"
+                "value": "654321.0"
               },
               {
                 "key": "view.launch",
@@ -908,16 +413,20 @@
             ],
             "links": [
               {
-                "span_id": "72b48e327173471e",
-                "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
+                "span_id": "789bdcaab0c9d57e",
+                "trace_id": "fec9ba8cc07d3aff33161154d6e936b5",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "65383936E7A74D378C4ACE792FCE4F78"
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -925,12 +434,69 @@
             ]
           },
           {
-            "trace_id": "8ca0f0ba24029c346394057c3a28f15a",
-            "span_id": "72b48e327173471e",
+            "trace_id": "451af5761665cd1a63ef7f43e7956bf4",
+            "span_id": "ec9cf2fdd2efb00a",
+            "parent_span_id": "0000000000000000",
+            "name": "emb-thermal-state",
+            "start_time_unix_nano": 1792422427468000000,
+            "end_time_unix_nano": 1792422547444000000,
+            "status": "Error",
+            "events": [],
+            "attributes": [
+              {
+                "key": "emb.error_code",
+                "value": "failure"
+              },
+              {
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": ""
+              },
+              {
+                "key": "emb.type",
+                "value": "perf.thermal_state"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+              },
+              {
+                "key": "status",
+                "value": "0"
+              }
+            ],
+            "links": [
+              {
+                "span_id": "789bdcaab0c9d57e",
+                "trace_id": "fec9ba8cc07d3aff33161154d6e936b5",
+                "attributes": [
+                  {
+                    "key": "emb.link_type",
+                    "value": "END_SESSION_PART"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                  }
+                ],
+                "is_remote": false
+              }
+            ]
+          },
+          {
+            "trace_id": "fec9ba8cc07d3aff33161154d6e936b5",
+            "span_id": "789bdcaab0c9d57e",
             "parent_span_id": "0000000000000000",
             "name": "emb-session",
-            "start_time_unix_nano": 1790701279363000000,
-            "end_time_unix_nano": 1790701287059000000,
+            "start_time_unix_nano": 1792422545706000000,
+            "end_time_unix_nano": 1792422547444000000,
             "status": "Error",
             "events": [],
             "attributes": [
@@ -940,7 +506,7 @@
               },
               {
                 "key": "emb.clock_network_drift",
-                "value": "5407536"
+                "value": "65915481"
               },
               {
                 "key": "emb.cold_start",
@@ -948,11 +514,11 @@
               },
               {
                 "key": "emb.crash_id",
-                "value": "E2770D3FF51346AA8395825F4AC1B26C"
+                "value": "DB307CC237AC9588D699B74CA6FCB24D"
               },
               {
                 "key": "emb.disk_free_bytes",
-                "value": "4162596864"
+                "value": "4509036544"
               },
               {
                 "key": "emb.error_code",
@@ -964,7 +530,7 @@
               },
               {
                 "key": "emb.heartbeat_time_unix_nano",
-                "value": "1790701285369000000"
+                "value": "1792422545708000000"
               },
               {
                 "key": "emb.is_emulator",
@@ -983,20 +549,20 @@
                 "value": "4.12.0"
               },
               {
-                "key": "emb.private.sequence_id",
-                "value": "128"
-              },
-              {
                 "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "value": "16c8127f4ef9b09d"
               },
               {
                 "key": "emb.session_end_type",
                 "value": "state"
               },
               {
-                "key": "emb.session_number",
-                "value": "345"
+                "key": "emb.session_part_id",
+                "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+              },
+              {
+                "key": "emb.session_part_number",
+                "value": "26"
               },
               {
                 "key": "emb.session_start_type",
@@ -1019,132 +585,236 @@
                 "value": "ux.session"
               },
               {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+              },
+              {
+                "key": "emb.user_session_inactivity_timeout_seconds",
+                "value": "1800"
+              },
+              {
+                "key": "emb.user_session_max_duration_seconds",
+                "value": "43200"
+              },
+              {
+                "key": "emb.user_session_number",
+                "value": "1"
+              },
+              {
+                "key": "emb.user_session_part_index",
+                "value": "26"
+              },
+              {
+                "key": "emb.user_session_start_ts",
+                "value": "1792422360154"
               }
             ],
             "links": [
               {
-                "span_id": "e6ead852d175a37e",
-                "trace_id": "41d696e50bd1c2960f3baa80f03342ab",
+                "span_id": "2b43db243a412c7f",
+                "trace_id": "a1c2b1e967355c533f25ff1ff5f06c86",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "PREV_SESSION"
+                    "value": "PREV_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "F7EF35F5151D4F21AD346F9C9570F85B"
+                    "key": "emb.session_part_id",
+                    "value": "EFA3CA2384FBCE17A56FE5512888A994"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "4d700f947ae2172d",
-                "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
+                "span_id": "fad2f45c66e98bef",
+                "trace_id": "ca485b096051f2870634f6b2c0a426db",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "156deecbf10877d8",
-                "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
+                "span_id": "4fe043b3650efa85",
+                "trace_id": "ca485b096051f2870634f6b2c0a426db",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "26b4fecbfe00591a",
-                "trace_id": "5b0d5e048038ecf599fa16b03fce822f",
+                "span_id": "b5520e2d45f8f773",
+                "trace_id": "ca485b096051f2870634f6b2c0a426db",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "79b661399afd48d2",
-                "trace_id": "1c514cae69b50aacf567174fde68f708",
+                "span_id": "cebec7bfe33b9bf5",
+                "trace_id": "cbc294ce96374b6a85d7c19d1e909c07",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "79b661399afd48d2",
-                "trace_id": "1c514cae69b50aacf567174fde68f708",
+                "span_id": "cebec7bfe33b9bf5",
+                "trace_id": "cbc294ce96374b6a85d7c19d1e909c07",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "STATE"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "a674b304dd6f1343",
-                "trace_id": "bedb7b0676fc9ab053d4c582c6d50fcd",
+                "span_id": "220007720bc997e7",
+                "trace_id": "8a8764db8b23e4549e6875cfd0852456",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "a674b304dd6f1343",
-                "trace_id": "bedb7b0676fc9ab053d4c582c6d50fcd",
+                "span_id": "220007720bc997e7",
+                "trace_id": "8a8764db8b23e4549e6875cfd0852456",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "STATE"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "3be9f73ca7ef7cf3",
-                "trace_id": "17b54827385e140641a000f99682e1c9",
+                "span_id": "6c7922bfc35283c0",
+                "trace_id": "209130723f2fb2cb2e8724e38f1d65f5",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "c8b0431012746f8f",
-                "trace_id": "ad04e3b5332f0ebce8cca99846dda2cd",
+                "span_id": "440fba00c4f1ebf3",
+                "trace_id": "8155dd886428eed00ae61134c3664a66",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "ce9e83f9b84a4aad",
-                "trace_id": "a30894fd9a2827a0eff49e980508dfba",
+                "span_id": "ec9cf2fdd2efb00a",
+                "trace_id": "451af5761665cd1a63ef7f43e7956bf4",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "2902D1A4A6E1C6E7404F8170C3A02895"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -1154,9 +824,9 @@
         ],
         "span_snapshots": [],
         "shared_lib_symbol_mapping": {
-          "libappmodules.so": "ab4c0e0db4fac8392c4847c5b3dc543479188634",
+          "libappmodules.so": "217736c7dd77f2d399b43be2ed33ba1560cf7ea0",
           "libc++_shared.so": "8f9b811782f82b7e96ef983939059539bc486507",
-          "libembrace-native.so": "35cedcf27cf57a11b659e2b4ff54dca526caac87",
+          "libembrace-native.so": "d4f39d80b24539077c14e5c1cd255a3a53da5b7e",
           "libfbjni.so": "908a62be76b9bea375d88a9d714790c3d188ab34",
           "libhermestooling.so": "69dc64792648cd8539c5a3946aefef34199a1f99",
           "libhermesvm.so": "29e16b5b2961c04689f82bdb9fd52818e92ec6f2",
@@ -1164,10 +834,10 @@
           "libjsi.so": "48dd9b2df37bf37e1dca714515014574379c74a4",
           "libnative-filters.so": "f5dabe8b01e9da9ad08ebb99f0e2f9e3f601d234",
           "libnative-imagetranscoder.so": "46588427304036cab21cb7115b8236f4a48c7773",
-          "libreact_codegen_rnscreens.so": "293a7afed2e6dbf172610befa88f7597764695ca",
-          "libreact_codegen_safeareacontext.so": "6241b4e9d7f54cacb817afb9da3f02394acebeb0",
+          "libreact_codegen_rnscreens.so": "48fe42ab3fce048eaa22c2a5f49af80cf8647c90",
+          "libreact_codegen_safeareacontext.so": "1c6a5283d78eb9aa534691b52dda6842715a6b68",
           "libreactnative.so": "6267efeacb3f99ce0851e1b20d162fb1ff4bb938",
-          "librnscreens.so": "46c88a1f347567e7c8eb28f836e6147964d08f65"
+          "librnscreens.so": "180fc7c163a49b283dbeee16a565016c600c36c7"
         }
       }
     }
@@ -1177,17 +847,17 @@
       "resource": {
         "app_version": "1.0",
         "app_framework": 2,
-        "build_id": "4FE4870C5C9047ADB89E956A39A3B7E1",
+        "build_id": "9D2C43640EA146AFB8855E0F971E53B4",
         "app_ecosystem_id": "io.embrace.rn87",
         "build_type": "release",
         "build_flavor": "",
         "environment": "prod",
         "bundle_version": "1",
-        "sdk_version": "8.4.0",
+        "sdk_version": "9.3.1",
         "sdk_simple_version": 53,
-        "react_native_bundle_id": "4F3C86A1E521E8C6F4995D2F86B0CE83",
+        "react_native_bundle_id": "17DD813421D1E143DAA7B44CE2E62563",
         "hosted_platform_version": "0.87.0",
-        "hosted_sdk_version": "7.1.0",
+        "hosted_sdk_version": "7.2.0",
         "device_manufacturer": "Google",
         "device_model": "sdk_gphone64_arm64",
         "device_architecture": "arm64-v8a",
@@ -1198,10 +868,13 @@
         "os_version": "14",
         "os_code": "34",
         "screen_resolution": "1080x2209",
-        "num_cores": 4
+        "num_cores": 4,
+        "device_soc_model": "ranchu"
       },
       "metadata": {
-        "personas": [],
+        "personas": [
+          "first_day"
+        ],
         "timezone_description": "Europe/London",
         "locale": "en_US"
       },
@@ -1210,30 +883,34 @@
       "data": {
         "logs": [
           {
-            "time_unix_nano": 1790701287057000000,
+            "time_unix_nano": 1792422547441000000,
             "severity_number": 17,
             "severity_text": "ERROR",
             "body": "",
             "attributes": [
               {
                 "key": "emb.android.crash.exception_cause",
-                "value": "[{\"n\":\"com.facebook.react.common.JavascriptException\",\"m\":\"ReferenceError: Anonymous Crash (Unhandled JS Exception), stack:\\nanonymous@1:957408\\n_performTransitionSideEffects@1:769442\\n_receiveSignal@1:768867\\nonResponderRelease@1:1047156\\nexecuteDispatch@1:295367\\nexecuteDispatchesAndReleaseTopLevel@1:299640\\nanonymous@1:688102\\nbatchedUpdatesImpl@1:387680\\nbatchedUpdates$1@1:299560\\ndispatchEvent@1:300056\\n\",\"tt\":[\"com.facebook.react.modules.core.ExceptionsManagerModule.reportException(ExceptionsManagerModule.kt:52)\",\"com.facebook.jni.NativeRunnable.run(Native Method)\",\"android.os.Handler.handleCallback(Handler.java:958)\",\"android.os.Handler.dispatchMessage(Handler.java:99)\",\"com.facebook.react.bridge.queue.MessageQueueThreadHandler.dispatchMessage(MessageQueueThreadHandler.kt:21)\",\"android.os.Looper.loopOnce(Looper.java:205)\",\"android.os.Looper.loop(Looper.java:294)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.startNewBackgroundThread$lambda$0(MessageQueueThreadImpl.kt:152)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)\",\"java.lang.Thread.run(Thread.java:1012)\"]}]"
+                "value": "[{\"n\":\"com.facebook.react.common.JavascriptException\",\"m\":\"ReferenceError: Anonymous Crash (Unhandled JS Exception), stack:\\nanonymous@1:926695\\n_performTransitionSideEffects@1:798676\\n_receiveSignal@1:798101\\nonResponderRelease@1:1015888\\nexecuteDispatch@1:364418\\nexecuteDispatchesAndReleaseTopLevel@1:368691\\nanonymous@1:731208\\nbatchedUpdatesImpl@1:456731\\nbatchedUpdates$1@1:368611\\ndispatchEvent@1:369107\\n\",\"tt\":[\"com.facebook.react.modules.core.ExceptionsManagerModule.reportException(ExceptionsManagerModule.kt:52)\",\"com.facebook.jni.NativeRunnable.run(Native Method)\",\"android.os.Handler.handleCallback(Handler.java:958)\",\"android.os.Handler.dispatchMessage(Handler.java:99)\",\"com.facebook.react.bridge.queue.MessageQueueThreadHandler.dispatchMessage(MessageQueueThreadHandler.kt:21)\",\"android.os.Looper.loopOnce(Looper.java:205)\",\"android.os.Looper.loop(Looper.java:294)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.startNewBackgroundThread$lambda$0(MessageQueueThreadImpl.kt:152)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)\",\"java.lang.Thread.run(Thread.java:1012)\"]}]"
               },
               {
                 "key": "emb.android.crash_number",
-                "value": "10"
+                "value": "1"
               },
               {
                 "key": "emb.android.react_native_crash.js_exception",
-                "value": "{\"n\":\"ReferenceError\",\"m\":\"Anonymous Crash (Unhandled JS Exception)\",\"t\":\"ReferenceError\",\"st\":\"ReferenceError: Anonymous Crash (Unhandled JS Exception)\\n    at anonymous (address at index.android.bundle:1:957408)\\n    at _performTransitionSideEffects (address at index.android.bundle:1:769442)\\n    at _receiveSignal (address at index.android.bundle:1:768867)\\n    at onResponderRelease (address at index.android.bundle:1:1047156)\\n    at executeDispatch (address at index.android.bundle:1:295367)\\n    at executeDispatchesAndReleaseTopLevel (address at index.android.bundle:1:299640)\\n    at forEach (native)\\n    at anonymous (address at index.android.bundle:1:688102)\\n    at batchedUpdatesImpl (address at index.android.bundle:1:387680)\\n    at batchedUpdates$1 (address at index.android.bundle:1:299560)\\n    at dispatchEvent (address at index.android.bundle:1:300056)\"}"
+                "value": "{\"n\":\"ReferenceError\",\"m\":\"Anonymous Crash (Unhandled JS Exception)\",\"t\":\"ReferenceError\",\"st\":\"ReferenceError: Anonymous Crash (Unhandled JS Exception)\\n    at anonymous (address at index.android.bundle:1:926695)\\n    at _performTransitionSideEffects (address at index.android.bundle:1:798676)\\n    at _receiveSignal (address at index.android.bundle:1:798101)\\n    at onResponderRelease (address at index.android.bundle:1:1015888)\\n    at executeDispatch (address at index.android.bundle:1:364418)\\n    at executeDispatchesAndReleaseTopLevel (address at index.android.bundle:1:368691)\\n    at forEach (native)\\n    at anonymous (address at index.android.bundle:1:731208)\\n    at batchedUpdatesImpl (address at index.android.bundle:1:456731)\\n    at batchedUpdates$1 (address at index.android.bundle:1:368611)\\n    at dispatchEvent (address at index.android.bundle:1:369107)\"}"
               },
               {
                 "key": "emb.android.threads",
-                "value": "[{\"threadId\":2139,\"state\":\"WAITING\",\"n\":\"emb-log-message\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1176)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":12},{\"threadId\":2097,\"state\":\"WAITING\",\"n\":\"ReferenceQueueDaemon\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.Object.wait(Object.java:524)\",\"java.lang.Daemons$ReferenceQueueDaemon.runInternal(Daemons.java:239)\",\"java.lang.Daemons$Daemon.run(Daemons.java:145)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":6},{\"threadId\":2099,\"state\":\"WAITING\",\"n\":\"FinalizerWatchdogDaemon\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.Object.wait(Object.java:524)\",\"java.lang.Daemons$FinalizerWatchdogDaemon.sleepUntilNeeded(Daemons.java:428)\",\"java.lang.Daemons$FinalizerWatchdogDaemon.runInternal(Daemons.java:408)\",\"java.lang.Daemons$Daemon.run(Daemons.java:145)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":7},{\"threadId\":2126,\"state\":\"WAITING\",\"n\":\"emb-http-request\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1176)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":12},{\"threadId\":2096,\"state\":\"WAITING\",\"n\":\"HeapTaskDaemon\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2098,\"state\":\"WAITING\",\"n\":\"FinalizerDaemon\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:210)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:231)\",\"java.lang.Daemons$FinalizerDaemon.runInternal(Daemons.java:309)\",\"java.lang.Daemons$Daemon.run(Daemons.java:145)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":7},{\"threadId\":2114,\"state\":\"WAITING\",\"n\":\"pool-5-thread-1\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:435)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":11},{\"threadId\":2120,\"state\":\"RUNNABLE\",\"n\":\"hwuiTask0\",\"p\":6,\"tt\":[],\"fc\":0},{\"threadId\":2125,\"state\":\"WAITING\",\"n\":\"emb-delivery-scheduling\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1176)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":12},{\"threadId\":2137,\"state\":\"TIMED_WAITING\",\"n\":\"OkHttp TaskRunner\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"okhttp3.internal.concurrent.TaskRunner$RealBackend.coordinatorWait(TaskRunner.kt:294)\",\"okhttp3.internal.concurrent.TaskRunner.awaitTaskToRun(TaskRunner.kt:218)\",\"okhttp3.internal.concurrent.TaskRunner$runnable$1.run(TaskRunner.kt:59)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":7},{\"threadId\":2116,\"state\":\"RUNNABLE\",\"n\":\"mqt_v_native\",\"p\":5,\"tt\":[\"dalvik.system.VMStack.getThreadStackTrace(Native Method)\",\"java.lang.Thread.getStackTrace(Thread.java:1841)\",\"java.lang.Thread.getAllStackTraces(Thread.java:1909)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl.getThreadsInfo(JvmCrashDataSourceImpl.kt:125)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl.logUnhandledJvmThrowable$lambda$0(JvmCrashDataSourceImpl.kt:86)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)\",\"io.embrace.android.embracesdk.internal.arch.datasource.DataSourceImpl.captureTelemetry(DataSourceImpl.kt:52)\",\"io.embrace.android.embracesdk.internal.arch.datasource.DataSource$DefaultImpls.captureTelemetry$default(DataSource.kt:43)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl.logUnhandledJvmThrowable(JvmCrashDataSourceImpl.kt:56)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.EmbraceUncaughtExceptionHandler.uncaughtException(EmbraceUncaughtExceptionHandler.kt:26)\",\"java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1071)\",\"java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1066)\",\"java.lang.Thread.dispatchUncaughtException(Thread.java:2306)\"],\"fc\":13},{\"threadId\":2121,\"state\":\"RUNNABLE\",\"n\":\"hwuiTask1\",\"p\":6,\"tt\":[],\"fc\":0},{\"threadId\":2105,\"state\":\"RUNNABLE\",\"n\":\"Profile Saver\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2115,\"state\":\"RUNNABLE\",\"n\":\"mqt_v_js\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.startNewBackgroundThread$lambda$0(MessageQueueThreadImpl.kt:152)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":7},{\"threadId\":2133,\"state\":\"RUNNABLE\",\"n\":\"binder:1227_5\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2107,\"state\":\"TIMED_WAITING\",\"n\":\"emb-io-reg\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":2108,\"state\":\"TIMED_WAITING\",\"n\":\"emb-thread-blockage-watchdog\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":2110,\"state\":\"RUNNABLE\",\"n\":\"queued-work-looper\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"android.os.HandlerThread.run(HandlerThread.java:67)\"],\"fc\":5},{\"threadId\":2104,\"state\":\"RUNNABLE\",\"n\":\"binder:1227_4\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2103,\"state\":\"RUNNABLE\",\"n\":\"binder:1227_3\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2119,\"state\":\"RUNNABLE\",\"n\":\"SurfaceSyncGroupTimer\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"android.os.HandlerThread.run(HandlerThread.java:67)\"],\"fc\":5},{\"threadId\":2123,\"state\":\"TIMED_WAITING\",\"n\":\"Okio Watchdog\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1757)\",\"okio.AsyncTimeout$Companion.awaitTimeout(AsyncTimeout.kt:370)\",\"okio.AsyncTimeout$Watchdog.run(AsyncTimeout.kt:211)\"],\"fc\":5},{\"threadId\":2111,\"state\":\"RUNNABLE\",\"n\":\"RenderThread\",\"p\":7,\"tt\":[],\"fc\":0},{\"threadId\":2112,\"state\":\"WAITING\",\"n\":\"HybridData DestructorThread\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:210)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:231)\",\"com.facebook.jni.DestructorThread$1.run(DestructorThread.java:77)\"],\"fc\":5},{\"threadId\":2117,\"state\":\"TIMED_WAITING\",\"n\":\"emb-periodic-cache\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":2095,\"state\":\"WAITING\",\"n\":\"Signal Catcher\",\"p\":10,\"tt\":[],\"fc\":0},{\"threadId\":2,\"state\":\"RUNNABLE\",\"n\":\"main\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"android.app.ActivityThread.main(ActivityThread.java:8177)\",\"java.lang.reflect.Method.invoke(Native Method)\",\"com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)\",\"com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)\"],\"fc\":8},{\"threadId\":2100,\"state\":\"RUNNABLE\",\"n\":\"Jit thread pool worker thread 0\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2102,\"state\":\"RUNNABLE\",\"n\":\"binder:1227_2\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2138,\"state\":\"TIMED_WAITING\",\"n\":\"OkHttp TaskRunner\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:401)\",\"java.util.concurrent.SynchronousQueue.poll(SynchronousQueue.java:903)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1070)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":8},{\"threadId\":2109,\"state\":\"TIMED_WAITING\",\"n\":\"emb-non-io-reg\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":2122,\"state\":\"RUNNABLE\",\"n\":\"OkHttp example.com\",\"p\":5,\"tt\":[\"java.net.SocketInputStream.socketRead0(Native Method)\",\"java.net.SocketInputStream.socketRead(SocketInputStream.java:118)\",\"java.net.SocketInputStream.read(SocketInputStream.java:173)\",\"java.net.SocketInputStream.read(SocketInputStream.java:143)\",\"com.android.org.conscrypt.ConscryptEngineSocket$SSLInputStream.readFromSocket(ConscryptEngineSocket.java:983)\",\"com.android.org.conscrypt.ConscryptEngineSocket$SSLInputStream.processDataFromSocket(ConscryptEngineSocket.java:947)\",\"com.android.org.conscrypt.ConscryptEngineSocket$SSLInputStream.readUntilDataAvailable(ConscryptEngineSocket.java:862)\",\"com.android.org.conscrypt.ConscryptEngineSocket$SSLInputStream.read(ConscryptEngineSocket.java:835)\",\"okio.InputStreamSource.read(JvmOkio.kt:93)\",\"okio.AsyncTimeout$source$1.read(AsyncTimeout.kt:153)\",\"okio.RealBufferedSource.request(RealBufferedSource.kt:209)\",\"okio.RealBufferedSource.require(RealBufferedSource.kt:202)\",\"okhttp3.internal.http2.Http2Reader.nextFrame(Http2Reader.kt:89)\",\"okhttp3.internal.http2.Http2Connection$ReaderRunnable.invoke(Http2Connection.kt:618)\",\"okhttp3.internal.http2.Http2Connection$ReaderRunnable.invoke(Http2Connection.kt:609)\",\"okhttp3.internal.concurrent.TaskQueue$execute$1.runOnce(TaskQueue.kt:98)\",\"okhttp3.internal.concurrent.TaskRunner.runTask(TaskRunner.kt:116)\",\"okhttp3.internal.concurrent.TaskRunner.access$runTask(TaskRunner.kt:42)\",\"okhttp3.internal.concurrent.TaskRunner$runnable$1.run(TaskRunner.kt:65)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":22},{\"threadId\":2118,\"state\":\"WAITING\",\"n\":\"emb-data-persistence\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.PriorityBlockingQueue.take(PriorityBlockingQueue.java:538)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":11},{\"threadId\":2101,\"state\":\"RUNNABLE\",\"n\":\"binder:1227_1\",\"p\":5,\"tt\":[],\"fc\":0}]"
+                "value": "[{\"threadId\":2847,\"state\":\"WAITING\",\"n\":\"pool-8-thread-1\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:435)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":11},{\"threadId\":2850,\"state\":\"TIMED_WAITING\",\"n\":\"emb-periodic-cache\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":2,\"state\":\"RUNNABLE\",\"n\":\"main\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"android.app.ActivityThread.main(ActivityThread.java:8177)\",\"java.lang.reflect.Method.invoke(Native Method)\",\"com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)\",\"com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)\"],\"fc\":8},{\"threadId\":2842,\"state\":\"WAITING\",\"n\":\"emb-data-persistence\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.PriorityBlockingQueue.take(PriorityBlockingQueue.java:538)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":11},{\"threadId\":2826,\"state\":\"WAITING\",\"n\":\"HeapTaskDaemon\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2829,\"state\":\"WAITING\",\"n\":\"FinalizerDaemon\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:210)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:231)\",\"java.lang.Daemons$FinalizerDaemon.runInternal(Daemons.java:309)\",\"java.lang.Daemons$Daemon.run(Daemons.java:145)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":7},{\"threadId\":2839,\"state\":\"TIMED_WAITING\",\"n\":\"emb-non-io-reg\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":2840,\"state\":\"TIMED_WAITING\",\"n\":\"emb-thread-blockage-watchdog\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":2833,\"state\":\"RUNNABLE\",\"n\":\"binder:20955_3\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2836,\"state\":\"WAITING\",\"n\":\"emb-io-reg\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1176)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":12},{\"threadId\":2853,\"state\":\"RUNNABLE\",\"n\":\"hwuiTask1\",\"p\":6,\"tt\":[],\"fc\":0},{\"threadId\":2852,\"state\":\"RUNNABLE\",\"n\":\"hwuiTask0\",\"p\":6,\"tt\":[],\"fc\":0},{\"threadId\":2868,\"state\":\"WAITING\",\"n\":\"emb-log-message\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1176)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":12},{\"threadId\":2854,\"state\":\"RUNNABLE\",\"n\":\"OkHttp example.com\",\"p\":5,\"tt\":[\"java.net.SocketInputStream.socketRead0(Native Method)\",\"java.net.SocketInputStream.socketRead(SocketInputStream.java:118)\",\"java.net.SocketInputStream.read(SocketInputStream.java:173)\",\"java.net.SocketInputStream.read(SocketInputStream.java:143)\",\"com.android.org.conscrypt.ConscryptEngineSocket$SSLInputStream.readFromSocket(ConscryptEngineSocket.java:983)\",\"com.android.org.conscrypt.ConscryptEngineSocket$SSLInputStream.processDataFromSocket(ConscryptEngineSocket.java:947)\",\"com.android.org.conscrypt.ConscryptEngineSocket$SSLInputStream.readUntilDataAvailable(ConscryptEngineSocket.java:862)\",\"com.android.org.conscrypt.ConscryptEngineSocket$SSLInputStream.read(ConscryptEngineSocket.java:835)\",\"okio.InputStreamSource.read(JvmOkio.kt:93)\",\"okio.AsyncTimeout$source$1.read(AsyncTimeout.kt:128)\",\"okio.RealBufferedSource.request(RealBufferedSource.kt:209)\",\"okio.RealBufferedSource.require(RealBufferedSource.kt:202)\",\"okhttp3.internal.http2.Http2Reader.nextFrame(Http2Reader.kt:89)\",\"okhttp3.internal.http2.Http2Connection$ReaderRunnable.invoke(Http2Connection.kt:618)\",\"okhttp3.internal.http2.Http2Connection$ReaderRunnable.invoke(Http2Connection.kt:609)\",\"okhttp3.internal.concurrent.TaskQueue$execute$1.runOnce(TaskQueue.kt:98)\",\"okhttp3.internal.concurrent.TaskRunner.runTask(TaskRunner.kt:116)\",\"okhttp3.internal.concurrent.TaskRunner.access$runTask(TaskRunner.kt:42)\",\"okhttp3.internal.concurrent.TaskRunner$runnable$1.run(TaskRunner.kt:65)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":22},{\"threadId\":2825,\"state\":\"WAITING\",\"n\":\"Signal Catcher\",\"p\":10,\"tt\":[],\"fc\":0},{\"threadId\":2832,\"state\":\"RUNNABLE\",\"n\":\"binder:20955_2\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2843,\"state\":\"WAITING\",\"n\":\"emb-delivery-scheduling\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)\",\"java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3466)\",\"java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3437)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1176)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":12},{\"threadId\":2831,\"state\":\"RUNNABLE\",\"n\":\"binder:20955_1\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2848,\"state\":\"RUNNABLE\",\"n\":\"mqt_v_js\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.startNewBackgroundThread$lambda$0(MessageQueueThreadImpl.kt:152)\",\"com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":7},{\"threadId\":2830,\"state\":\"WAITING\",\"n\":\"FinalizerWatchdogDaemon\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.Object.wait(Object.java:524)\",\"java.lang.Daemons$FinalizerWatchdogDaemon.sleepUntilNeeded(Daemons.java:428)\",\"java.lang.Daemons$FinalizerWatchdogDaemon.runInternal(Daemons.java:408)\",\"java.lang.Daemons$Daemon.run(Daemons.java:145)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":7},{\"threadId\":2865,\"state\":\"TIMED_WAITING\",\"n\":\"OkHttp TaskRunner\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:401)\",\"java.util.concurrent.SynchronousQueue.poll(SynchronousQueue.java:903)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1070)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":8},{\"threadId\":2855,\"state\":\"TIMED_WAITING\",\"n\":\"Okio Watchdog\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1757)\",\"okio.AsyncTimeout$Companion.awaitTimeout$okio(AsyncTimeout.kt:320)\",\"okio.AsyncTimeout$Watchdog.run(AsyncTimeout.kt:186)\"],\"fc\":5},{\"threadId\":2864,\"state\":\"TIMED_WAITING\",\"n\":\"OkHttp TaskRunner\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"okhttp3.internal.concurrent.TaskRunner$RealBackend.coordinatorWait(TaskRunner.kt:294)\",\"okhttp3.internal.concurrent.TaskRunner.awaitTaskToRun(TaskRunner.kt:218)\",\"okhttp3.internal.concurrent.TaskRunner$runnable$1.run(TaskRunner.kt:59)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":7},{\"threadId\":2845,\"state\":\"WAITING\",\"n\":\"HybridData DestructorThread\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:210)\",\"java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:231)\",\"com.facebook.jni.DestructorThread$1.run(DestructorThread.java:77)\"],\"fc\":5},{\"threadId\":2851,\"state\":\"RUNNABLE\",\"n\":\"SurfaceSyncGroupTimer\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"android.os.HandlerThread.run(HandlerThread.java:67)\"],\"fc\":5},{\"threadId\":2841,\"state\":\"RUNNABLE\",\"n\":\"queued-work-looper\",\"p\":5,\"tt\":[\"android.os.MessageQueue.nativePollOnce(Native Method)\",\"android.os.MessageQueue.next(MessageQueue.java:335)\",\"android.os.Looper.loopOnce(Looper.java:162)\",\"android.os.Looper.loop(Looper.java:294)\",\"android.os.HandlerThread.run(HandlerThread.java:67)\"],\"fc\":5},{\"threadId\":2867,\"state\":\"RUNNABLE\",\"n\":\"binder:20955_5\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2844,\"state\":\"RUNNABLE\",\"n\":\"RenderThread\",\"p\":7,\"tt\":[],\"fc\":0},{\"threadId\":2827,\"state\":\"WAITING\",\"n\":\"ReferenceQueueDaemon\",\"p\":5,\"tt\":[\"java.lang.Object.wait(Native Method)\",\"java.lang.Object.wait(Object.java:386)\",\"java.lang.Object.wait(Object.java:524)\",\"java.lang.Daemons$ReferenceQueueDaemon.runInternal(Daemons.java:239)\",\"java.lang.Daemons$Daemon.run(Daemons.java:145)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":6},{\"threadId\":2837,\"state\":\"TIMED_WAITING\",\"n\":\"emb-http-request\",\"p\":5,\"tt\":[\"jdk.internal.misc.Unsafe.park(Native Method)\",\"java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)\",\"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1188)\",\"java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:905)\",\"java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1071)\",\"java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1131)\",\"java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)\",\"java.lang.Thread.run(Thread.java:1012)\"],\"fc\":9},{\"threadId\":2835,\"state\":\"RUNNABLE\",\"n\":\"Profile Saver\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2834,\"state\":\"RUNNABLE\",\"n\":\"binder:20955_4\",\"p\":5,\"tt\":[],\"fc\":0},{\"threadId\":2849,\"state\":\"RUNNABLE\",\"n\":\"mqt_v_native\",\"p\":5,\"tt\":[\"dalvik.system.VMStack.getThreadStackTrace(Native Method)\",\"java.lang.Thread.getStackTrace(Thread.java:1841)\",\"java.lang.Thread.getAllStackTraces(Thread.java:1909)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl.getThreadsInfo(JvmCrashDataSourceImpl.kt:127)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl.logUnhandledJvmThrowable$lambda$0(JvmCrashDataSourceImpl.kt:88)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)\",\"io.embrace.android.embracesdk.internal.arch.datasource.DataSourceImpl.captureTelemetry(DataSourceImpl.kt:52)\",\"io.embrace.android.embracesdk.internal.arch.datasource.DataSource$DefaultImpls.captureTelemetry$default(DataSource.kt:43)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.JvmCrashDataSourceImpl.logUnhandledJvmThrowable(JvmCrashDataSourceImpl.kt:58)\",\"io.embrace.android.embracesdk.internal.instrumentation.crash.jvm.EmbraceUncaughtExceptionHandler.uncaughtException(EmbraceUncaughtExceptionHandler.kt:26)\",\"java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1071)\",\"java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1066)\",\"java.lang.Thread.dispatchUncaughtException(Thread.java:2306)\"],\"fc\":13},{\"threadId\":2828,\"state\":\"RUNNABLE\",\"n\":\"Jit thread pool worker thread 0\",\"p\":5,\"tt\":[],\"fc\":0}]"
               },
               {
                 "key": "emb.private.send_mode",
                 "value": "DEFER"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "2902D1A4A6E1C6E7404F8170C3A02895"
               },
               {
                 "key": "emb.state",
@@ -1252,8 +929,12 @@
                 "value": "sys.android.react_native_crash"
               },
               {
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+              },
+              {
                 "key": "exception.message",
-                "value": "ReferenceError: Anonymous Crash (Unhandled JS Exception), stack:\nanonymous@1:957408\n_performTransitionSideEffects@1:769442\n_receiveSignal@1:768867\nonResponderRelease@1:1047156\nexecuteDispatch@1:295367\nexecuteDispatchesAndReleaseTopLevel@1:299640\nanonymous@1:688102\nbatchedUpdatesImpl@1:387680\nbatchedUpdates$1@1:299560\ndispatchEvent@1:300056\n"
+                "value": "ReferenceError: Anonymous Crash (Unhandled JS Exception), stack:\nanonymous@1:926695\n_performTransitionSideEffects@1:798676\n_receiveSignal@1:798101\nonResponderRelease@1:1015888\nexecuteDispatch@1:364418\nexecuteDispatchesAndReleaseTopLevel@1:368691\nanonymous@1:731208\nbatchedUpdatesImpl@1:456731\nbatchedUpdates$1@1:368611\ndispatchEvent@1:369107\n"
               },
               {
                 "key": "exception.stacktrace",
@@ -1265,11 +946,7 @@
               },
               {
                 "key": "log.record.uid",
-                "value": "E2770D3FF51346AA8395825F4AC1B26C"
-              },
-              {
-                "key": "session.id",
-                "value": "65383936E7A74D378C4ACE792FCE4F78"
+                "value": "DB307CC237AC9588D699B74CA6FCB24D"
               }
             ]
           }
