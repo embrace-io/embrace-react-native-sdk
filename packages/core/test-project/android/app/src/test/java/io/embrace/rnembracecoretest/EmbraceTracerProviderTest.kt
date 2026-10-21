@@ -7,7 +7,7 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import io.embrace.android.embracesdk.Embrace
-import io.embrace.android.embracesdk.otel.java.addJavaSpanExporter
+import io.embrace.android.embracesdk.otel.java.addJavaSpanProcessor
 import io.embrace.android.embracesdk.otel.java.getJavaOpenTelemetry
 import io.embrace.rnembracecore.EmbraceTracerProviderModuleImpl
 import io.embrace.rnembracecore.WritableMapBuilder
@@ -20,23 +20,21 @@ import io.opentelemetry.api.trace.SpanKind
 import io.opentelemetry.api.trace.StatusCode
 import io.opentelemetry.api.trace.TraceId
 import io.opentelemetry.api.trace.TracerProvider
-import io.opentelemetry.sdk.common.CompletableResultCode
+import io.opentelemetry.context.Context
+import io.opentelemetry.sdk.trace.ReadWriteSpan
+import io.opentelemetry.sdk.trace.ReadableSpan
 import io.opentelemetry.sdk.trace.SdkTracerProvider
+import io.opentelemetry.sdk.trace.SpanProcessor
 import io.opentelemetry.sdk.trace.data.SpanData
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
-import io.opentelemetry.sdk.trace.export.SpanExporter
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -44,6 +42,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import java.util.concurrent.CopyOnWriteArrayList
 
 class JavaOnlyMapMapBuilder : WritableMapBuilder {
     override fun build(): WritableMap {
@@ -51,24 +50,35 @@ class JavaOnlyMapMapBuilder : WritableMapBuilder {
     }
 }
 
+private class TestJavaSpanProcessor : SpanProcessor {
+    val spans = CopyOnWriteArrayList<SpanData>()
+
+    override fun onStart(parentContext: Context, span: ReadWriteSpan) {}
+    override fun isStartRequired() = false
+    override fun onEnd(span: ReadableSpan) {
+        if (span.getAttribute(AttributeKey.stringKey("emb.private")) == null) {
+            spans.add(span.toSpanData())
+        }
+    }
+    override fun isEndRequired() = true
+}
+
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 class EmbraceTracerProviderModuleTest {
     companion object {
         private lateinit var tracerProviderModule: EmbraceTracerProviderModuleImpl
-        private val exporter: SpanExporter = mock {
-            on { export(any()) } doReturn CompletableResultCode.ofSuccess()
-        }
+        private val spanProcessor = TestJavaSpanProcessor()
         private val promise: Promise = mock()
         private var extraAttributes: List<String> = listOf()
         private var sdkStarted = false
 
         @JvmStatic
-        fun setupOTELTracerProvider(exporter: SpanExporter): TracerProvider {
+        fun setupOTELTracerProvider(processor: SpanProcessor): TracerProvider {
             extraAttributes = listOf()
 
             return SdkTracerProvider.builder()
-                .addSpanProcessor(SimpleSpanProcessor.create(exporter))
+                .addSpanProcessor(processor)
                 .build()
         }
     }
@@ -77,10 +87,10 @@ class EmbraceTracerProviderModuleTest {
     fun setUp() {
         if (!sdkStarted) {
             // Sometimes useful to test against the OTEL Tracer Provider to compare differences
-            // val provider = setupOTELTracerProvider(exporter)
+            // val provider = setupOTELTracerProvider(spanProcessor)
             // tracerProviderModule = EmbraceTracerProviderModuleImpl(JavaOnlyMapMapBuilder(), provider)
 
-            Embrace.addJavaSpanExporter(exporter)
+            Embrace.addJavaSpanProcessor(spanProcessor)
             Embrace.start(RuntimeEnvironment.getApplication())
             shadowOf(Looper.getMainLooper()).idle()
             assertTrue(Embrace.isStarted)
@@ -88,10 +98,11 @@ class EmbraceTracerProviderModuleTest {
             tracerProviderModule = EmbraceTracerProviderModuleImpl(JavaOnlyMapMapBuilder())
             tracerProviderModule.setupTracer("test", "v1", "")
 
-            extraAttributes = listOf("emb.process_identifier", "emb.type", "emb.private.sequence_id", "session.id")
+            extraAttributes = listOf("emb.process_identifier", "emb.type", "emb.user_session_id", "emb.session_part_id")
             sdkStarted = true
         }
-        clearInvocations(exporter, promise)
+        spanProcessor.spans.clear()
+        clearInvocations(promise)
     }
 
     @Test
@@ -102,17 +113,11 @@ class EmbraceTracerProviderModuleTest {
         val span = spanBuilder.startSpan()
         span.end()
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
-            assertEquals(1, allValues.size)
+        assertEquals(1, spanProcessor.spans.size)
 
-            val spans = allValues[0].asSequence().withIndex()
-            val span1 = spans.elementAt(0).value
-
-            assertEquals(1, spans.count())
-            assertEquals("my-span", span1.name)
-            assertTrue(span1.hasEnded())
-        }
+        val span1 = spanProcessor.spans[0]
+        assertEquals("my-span", span1.name)
+        assertTrue(span1.hasEnded())
     }
 
     @Test
@@ -124,17 +129,11 @@ class EmbraceTracerProviderModuleTest {
         )
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
-            assertEquals(1, allValues.size)
+        assertEquals(1, spanProcessor.spans.size)
 
-            val spans = allValues[0].asSequence().withIndex()
-            val span1 = spans.elementAt(0).value
-
-            assertEquals(1, spans.count())
-            assertEquals("my-span", span1.name)
-            assertTrue(span1.hasEnded())
-        }
+        val span1 = spanProcessor.spans[0]
+        assertEquals("my-span", span1.name)
+        assertTrue(span1.hasEnded())
 
         argumentCaptor<WritableMap>().apply {
             verify(promise, times(1)).resolve(capture())
@@ -180,61 +179,43 @@ class EmbraceTracerProviderModuleTest {
             )
         )
 
-        // Skipping links for now as they are both not currently supported AND causing issues with 0.4.0 OtelJavaSpanBuilderAdapter.kt:
-        // https://github.com/embrace-io/opentelemetry-kotlin/blob/82ea41fdfc2dfcac893f202f7e76c7a6bc4f7fae/opentelemetry-kotlin-compat/src/jvmMain/kotlin/io/embrace/opentelemetry/kotlin/tracing/OtelJavaSpanBuilderAdapter.kt#L101
         tracerProviderModule.startSpan(
             "test", "v1", "", "span_0",
-            "my-span", "CLIENT", 1718386928001.0, attributes, JavaOnlyArray(),
+            "my-span", "CLIENT", 1718386928001.0, attributes, links,
             "", promise
         )
 
         tracerProviderModule.endSpan("span_0", 1728386928001.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
-            assertEquals(1, allValues.size)
+        assertEquals(1, spanProcessor.spans.size)
 
-            val spans = allValues[0].asSequence().withIndex()
-            val span1 = spans.elementAt(0).value
+        val span1 = spanProcessor.spans[0]
+        assertEquals("my-span", span1.name)
+        assertEquals(SpanKind.CLIENT, span1.kind)
+        assertEquals(1718386928001000000, span1.startEpochNanos)
 
-            assertEquals(1, spans.count())
-            assertEquals("my-span", span1.name)
-            assertEquals(SpanKind.CLIENT, span1.kind)
-            assertEquals(1718386928001000000, span1.startEpochNanos)
-
-            assertEquals(6 + extraAttributes.size, span1.attributes.size())
-            assertEquals("some-string", span1.attributes.get(AttributeKey.stringKey("my-attr1")))
-            /*
-            // TODO currently only string attributes are supported by the Embrace Tracer Provider
-            assertEquals(true, span1.attributes.get(AttributeKey.booleanKey("my-attr2")))
-            assertEquals(344.0, span1.attributes.get(AttributeKey.doubleKey("my-attr3")))
-            assertEquals(listOf("str1", "str2"), span1.attributes.get(AttributeKey.stringArrayKey("my-attr4")))
-            assertEquals(listOf(true, false), span1.attributes.get(AttributeKey.booleanArrayKey("my-attr5")))
-            assertEquals(listOf(22.0, 44.0), span1.attributes.get(AttributeKey.doubleArrayKey("my-attr6")))
-             */
-            assertEquals("true", span1.attributes.get(AttributeKey.stringKey("my-attr2")))
-            assertEquals("344", span1.attributes.get(AttributeKey.stringKey("my-attr3")))
-            assertEquals("[str1, str2]", span1.attributes.get(AttributeKey.stringKey("my-attr4")))
-            assertEquals("[true, false]", span1.attributes.get(AttributeKey.stringKey("my-attr5")))
-            assertEquals("[22, 44]", span1.attributes.get(AttributeKey.stringKey("my-attr6")))
-            for (attr in extraAttributes) {
-                assertNotNull(span1.attributes.get(AttributeKey.stringKey(attr)))
-            }
-
-            /*
-            // TODO links are not currently supported by the Embrace Tracer Provider
-            assertEquals(2, span1.links.size)
-            assertEquals("1111000011110000", span1.links[0].spanContext.spanId)
-            assertEquals("22220000222200002222000022220000", span1.links[0].spanContext.traceId)
-            assertEquals(1, span1.links[0].attributes.size())
-            assertEquals("my-link-attr", span1.links[0].attributes.get(AttributeKey.stringKey("link-attr-1")))
-            assertEquals("6666000066660000", span1.links[1].spanContext.spanId)
-            assertEquals("77770000777700007777000077770000", span1.links[1].spanContext.traceId)
-            assertEquals(0, span1.links[1].attributes.size())
-             */
-
-            assertEquals(1728386928001000000, span1.endEpochNanos)
+        assertEquals(6 + extraAttributes.size, span1.attributes.size())
+        assertEquals("some-string", span1.attributes.get(AttributeKey.stringKey("my-attr1")))
+        assertEquals("true", span1.attributes.get(AttributeKey.stringKey("my-attr2")))
+        assertEquals("344.0", span1.attributes.get(AttributeKey.stringKey("my-attr3")))
+        assertEquals("[str1, str2]", span1.attributes.get(AttributeKey.stringKey("my-attr4")))
+        assertEquals("[true, false]", span1.attributes.get(AttributeKey.stringKey("my-attr5")))
+        assertEquals("[22.0, 44.0]", span1.attributes.get(AttributeKey.stringKey("my-attr6")))
+        for (attr in extraAttributes) {
+            assertNotNull(span1.attributes.get(AttributeKey.stringKey(attr)))
         }
+
+        assertEquals(3, span1.links.size)
+        assertEquals("END_SESSION_PART", span1.links[0].attributes.get(AttributeKey.stringKey("emb.link_type")))
+        assertEquals("1111000011110000", span1.links[1].spanContext.spanId)
+        assertEquals("22220000222200002222000022220000", span1.links[1].spanContext.traceId)
+        assertEquals(1, span1.links[1].attributes.size())
+        assertEquals("my-link-attr", span1.links[1].attributes.get(AttributeKey.stringKey("link-attr-1")))
+        assertEquals("6666000066660000", span1.links[2].spanContext.spanId)
+        assertEquals("77770000777700007777000077770000", span1.links[2].spanContext.traceId)
+        assertEquals(0, span1.links[2].attributes.size())
+
+        assertEquals(1728386928001000000, span1.endEpochNanos)
     }
 
     @Test
@@ -262,17 +243,14 @@ class EmbraceTracerProviderModuleTest {
             childSpanContext = allValues[1]
         }
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(2)).export(capture())
-            assertEquals(2, allValues.size)
+        assertEquals(2, spanProcessor.spans.size)
 
-            val parentSpan = allValues[0].asSequence().withIndex().elementAt(0).value
-            val childSpan = allValues[1].asSequence().withIndex().elementAt(0).value
+        val parentSpan = spanProcessor.spans[0]
+        val childSpan = spanProcessor.spans[1]
 
-            assertEquals(SpanId.getInvalid(), parentSpan.parentSpanId)
-            assertEquals(parentSpanContext?.getString("spanId"), childSpan.parentSpanId)
-            assertEquals(parentSpanContext?.getString("traceId"), childSpanContext?.getString("traceId"))
-        }
+        assertEquals(SpanId.getInvalid(), parentSpan.parentSpanId)
+        assertEquals(parentSpanContext?.getString("spanId"), childSpan.parentSpanId)
+        assertEquals(parentSpanContext?.getString("traceId"), childSpanContext?.getString("traceId"))
     }
 
     @Test
@@ -301,17 +279,14 @@ class EmbraceTracerProviderModuleTest {
             childSpanContext = allValues[1]
         }
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(2)).export(capture())
-            assertEquals(2, allValues.size)
+        assertEquals(2, spanProcessor.spans.size)
 
-            val parentSpan = allValues[0].asSequence().withIndex().elementAt(0).value
-            val childSpan = allValues[1].asSequence().withIndex().elementAt(0).value
+        val parentSpan = spanProcessor.spans[0]
+        val childSpan = spanProcessor.spans[1]
 
-            assertEquals(SpanId.getInvalid(), parentSpan.parentSpanId)
-            assertEquals(parentSpanContext?.getString("spanId"), childSpan.parentSpanId)
-            assertEquals(parentSpanContext?.getString("traceId"), childSpanContext?.getString("traceId"))
-        }
+        assertEquals(SpanId.getInvalid(), parentSpan.parentSpanId)
+        assertEquals(parentSpanContext?.getString("spanId"), childSpan.parentSpanId)
+        assertEquals(parentSpanContext?.getString("traceId"), childSpanContext?.getString("traceId"))
     }
 
     @Test
@@ -341,17 +316,14 @@ class EmbraceTracerProviderModuleTest {
             childSpanContext = allValues[1]
         }
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(2)).export(capture())
-            assertEquals(2, allValues.size)
+        assertEquals(2, spanProcessor.spans.size)
 
-            val parentSpan = allValues[0].asSequence().withIndex().elementAt(0).value
-            val childSpan = allValues[1].asSequence().withIndex().elementAt(0).value
+        val parentSpan = spanProcessor.spans[0]
+        val childSpan = spanProcessor.spans[1]
 
-            assertEquals(SpanId.getInvalid(), parentSpan.parentSpanId)
-            assertEquals(SpanId.getInvalid(), childSpan.parentSpanId)
-            assertNotEquals(parentSpanContext?.getString("traceId"), childSpanContext?.getString("traceId"))
-        }
+        assertEquals(SpanId.getInvalid(), parentSpan.parentSpanId)
+        assertEquals(SpanId.getInvalid(), childSpan.parentSpanId)
+        assertNotEquals(parentSpanContext?.getString("traceId"), childSpanContext?.getString("traceId"))
     }
 
     @Test
@@ -374,31 +346,19 @@ class EmbraceTracerProviderModuleTest {
         )
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
-            assertEquals(1, allValues.size)
+        assertEquals(1, spanProcessor.spans.size)
 
-            val spans = allValues[0].asSequence().withIndex()
-            val span1 = spans.elementAt(0).value
+        val span1 = spanProcessor.spans[0]
 
-            assertEquals(6 + extraAttributes.size, span1.attributes.size())
-            assertEquals("some-string", span1.attributes.get(AttributeKey.stringKey("my-attr1")))
-            /*
-            // TODO currently only string attributes are supported by the Embrace Tracer Provider
-            assertEquals(true, span1.attributes.get(AttributeKey.booleanKey("my-attr2")))
-            assertEquals(344.0, span1.attributes.get(AttributeKey.doubleKey("my-attr3")))
-            assertEquals(listOf("str1", "str2"), span1.attributes.get(AttributeKey.stringArrayKey("my-attr4")))
-            assertEquals(listOf(true, false), span1.attributes.get(AttributeKey.booleanArrayKey("my-attr5")))
-            assertEquals(listOf(22.0, 44.0), span1.attributes.get(AttributeKey.doubleArrayKey("my-attr6")))
-             */
-            assertEquals("true", span1.attributes.get(AttributeKey.stringKey("my-attr2")))
-            assertEquals("344.0", span1.attributes.get(AttributeKey.stringKey("my-attr3")))
-            assertEquals("[str1, str2]", span1.attributes.get(AttributeKey.stringKey("my-attr4")))
-            assertEquals("[true, false]", span1.attributes.get(AttributeKey.stringKey("my-attr5")))
-            assertEquals("[22.0, 44.0]", span1.attributes.get(AttributeKey.stringKey("my-attr6")))
-            for (attr in extraAttributes) {
-                assertNotNull(span1.attributes.get(AttributeKey.stringKey(attr)))
-            }
+        assertEquals(6 + extraAttributes.size, span1.attributes.size())
+        assertEquals("some-string", span1.attributes.get(AttributeKey.stringKey("my-attr1")))
+        assertEquals("true", span1.attributes.get(AttributeKey.stringKey("my-attr2")))
+        assertEquals("344.0", span1.attributes.get(AttributeKey.stringKey("my-attr3")))
+        assertEquals("[str1, str2]", span1.attributes.get(AttributeKey.stringKey("my-attr4")))
+        assertEquals("[true, false]", span1.attributes.get(AttributeKey.stringKey("my-attr5")))
+        assertEquals("[22.0, 44.0]", span1.attributes.get(AttributeKey.stringKey("my-attr6")))
+        for (attr in extraAttributes) {
+            assertNotNull(span1.attributes.get(AttributeKey.stringKey(attr)))
         }
     }
 
@@ -423,27 +383,22 @@ class EmbraceTracerProviderModuleTest {
         )
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
-            assertEquals(1, allValues.size)
+        assertEquals(1, spanProcessor.spans.size)
 
-            val spans = allValues[0].asSequence().withIndex()
-            val span1 = spans.elementAt(0).value
+        val span1 = spanProcessor.spans[0]
 
-            assertEquals(2, span1.events.size)
+        assertEquals(2, span1.events.size)
 
-            assertEquals("my-1st-event", span1.events[0].name)
-            assertEquals(1, span1.events[0].attributes.size())
-            assertEquals("some-string", span1.events[0].attributes.get(AttributeKey.stringKey("my-attr1")))
+        assertEquals("my-1st-event", span1.events[0].name)
+        assertEquals(1, span1.events[0].attributes.size())
+        assertEquals("some-string", span1.events[0].attributes.get(AttributeKey.stringKey("my-attr1")))
 
-            assertEquals("my-2nd-event", span1.events[1].name)
-            assertEquals(1, span1.events[1].attributes.size())
-            assertEquals("other-string", span1.events[1].attributes.get(AttributeKey.stringKey("my-attr2")))
-            assertEquals(1518386928052000000, span1.events[1].epochNanos)
-        }
+        assertEquals("my-2nd-event", span1.events[1].name)
+        assertEquals(1, span1.events[1].attributes.size())
+        assertEquals("other-string", span1.events[1].attributes.get(AttributeKey.stringKey("my-attr2")))
+        assertEquals(1518386928052000000, span1.events[1].epochNanos)
     }
 
-    @Ignore("links are not currently supported by the Embrace Tracer Provider")
     @Test
     fun addLinks() {
         tracerProviderModule.startSpan(
@@ -481,22 +436,19 @@ class EmbraceTracerProviderModuleTest {
         )
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
-            assertEquals(1, allValues.size)
+        assertEquals(1, spanProcessor.spans.size)
 
-            val spans = allValues[0].asSequence().withIndex()
-            val span1 = spans.elementAt(0).value
+        val span1 = spanProcessor.spans[0]
 
-            assertEquals(2, span1.links.size)
-            assertEquals("1111000011110000", span1.links[0].spanContext.spanId)
-            assertEquals("22220000222200002222000022220000", span1.links[0].spanContext.traceId)
-            assertEquals(1, span1.links[0].attributes.size())
-            assertEquals("my-link-attr", span1.links[0].attributes.get(AttributeKey.stringKey("link-attr-1")))
-            assertEquals("6666000066660000", span1.links[1].spanContext.spanId)
-            assertEquals("77770000777700007777000077770000", span1.links[1].spanContext.traceId)
-            assertEquals(0, span1.links[1].attributes.size())
-        }
+        assertEquals(3, span1.links.size)
+        assertEquals("END_SESSION_PART", span1.links[0].attributes.get(AttributeKey.stringKey("emb.link_type")))
+        assertEquals("1111000011110000", span1.links[1].spanContext.spanId)
+        assertEquals("22220000222200002222000022220000", span1.links[1].spanContext.traceId)
+        assertEquals(1, span1.links[1].attributes.size())
+        assertEquals("my-link-attr", span1.links[1].attributes.get(AttributeKey.stringKey("link-attr-1")))
+        assertEquals("6666000066660000", span1.links[2].spanContext.spanId)
+        assertEquals("77770000777700007777000077770000", span1.links[2].spanContext.traceId)
+        assertEquals(0, span1.links[2].attributes.size())
     }
 
     @Test
@@ -517,18 +469,15 @@ class EmbraceTracerProviderModuleTest {
         tracerProviderModule.setStatus("span_1", JavaOnlyMap.of("code", "OK"))
         tracerProviderModule.endSpan("span_1", 0.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(2)).export(capture())
-            assertEquals(2, allValues.size)
+        assertEquals(2, spanProcessor.spans.size)
 
-            val span1 = allValues[0].asSequence().withIndex().elementAt(0).value
-            assertEquals(StatusCode.ERROR, span1.status.statusCode)
-            assertEquals("some message", span1.status.description)
+        val span1 = spanProcessor.spans[0]
+        assertEquals(StatusCode.ERROR, span1.status.statusCode)
+        assertEquals("some message", span1.status.description)
 
-            val span2 = allValues[1].asSequence().withIndex().elementAt(0).value
-            assertEquals(StatusCode.OK, span2.status.statusCode)
-            assertEquals("", span2.status.description)
-        }
+        val span2 = spanProcessor.spans[1]
+        assertEquals(StatusCode.OK, span2.status.statusCode)
+        assertEquals("", span2.status.description)
     }
 
     @Test
@@ -541,13 +490,10 @@ class EmbraceTracerProviderModuleTest {
         tracerProviderModule.updateName("span_0", "my-updated-span-name")
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
-            assertEquals(1, allValues.size)
+        assertEquals(1, spanProcessor.spans.size)
 
-            val span1 = allValues[0].asSequence().withIndex().elementAt(0).value
-            assertEquals("my-updated-span-name", span1.name)
-        }
+        val span1 = spanProcessor.spans[0]
+        assertEquals("my-updated-span-name", span1.name)
     }
 
     @Test
@@ -559,16 +505,12 @@ class EmbraceTracerProviderModuleTest {
         )
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
-            assertEquals(1, allValues.size)
+        assertEquals(1, spanProcessor.spans.size)
 
-            val spans = allValues[0].asSequence().withIndex()
-            val span1 = spans.elementAt(0).value
+        val span1 = spanProcessor.spans[0]
 
-            assertEquals("my-span", span1.name)
-            assertEquals(SpanKind.INTERNAL, span1.kind)
-        }
+        assertEquals("my-span", span1.name)
+        assertEquals(SpanKind.INTERNAL, span1.kind)
     }
 
     @Test
@@ -581,16 +523,12 @@ class EmbraceTracerProviderModuleTest {
         tracerProviderModule.setStatus("span_0", JavaOnlyMap.of("code", "foo"))
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
-            assertEquals(1, allValues.size)
+        assertEquals(1, spanProcessor.spans.size)
 
-            val spans = allValues[0].asSequence().withIndex()
-            val span1 = spans.elementAt(0).value
+        val span1 = spanProcessor.spans[0]
 
-            assertEquals("my-span", span1.name)
-            assertEquals(StatusCode.UNSET, span1.status.statusCode)
-        }
+        assertEquals("my-span", span1.name)
+        assertEquals(StatusCode.UNSET, span1.status.statusCode)
     }
 
     @Test
@@ -604,10 +542,7 @@ class EmbraceTracerProviderModuleTest {
         )
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(0)).export(capture())
-            assertEquals(0, allValues.size)
-        }
+        assertEquals(0, spanProcessor.spans.size)
 
         // Create a tracer with that schemaUrl, should work now
         tracerProviderModule.setupTracer("test", "v1", "schema")
@@ -618,17 +553,11 @@ class EmbraceTracerProviderModuleTest {
         )
         tracerProviderModule.endSpan("span_0", 0.0)
 
-        argumentCaptor<Collection<SpanData>>().apply {
-            verify(exporter, times(1)).export(capture())
-            assertEquals(1, allValues.size)
+        assertEquals(1, spanProcessor.spans.size)
 
-            val spans = allValues[0].asSequence().withIndex()
-            val span1 = spans.elementAt(0).value
-
-            assertEquals(1, spans.count())
-            assertEquals("my-span", span1.name)
-            assertTrue(span1.hasEnded())
-        }
+        val span1 = spanProcessor.spans[0]
+        assertEquals("my-span", span1.name)
+        assertTrue(span1.hasEnded())
     }
 
     @Test

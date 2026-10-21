@@ -2,6 +2,7 @@ import {driver} from "@wdio/globals";
 import {endSession, tap} from "../helpers/app";
 import {getAttribute} from "../helpers/normalize";
 import {getPayloadSource} from "../helpers/payload_source";
+import {currentPlatform} from "../helpers/platform";
 
 describe("User", () => {
   const source = getPayloadSource();
@@ -88,6 +89,7 @@ describe("User", () => {
     // The id the SDK reported must be the one that lands on the flushed session span.
     await endSession();
     const payload = await source.getPayloads();
-    expect(payload.sessionSpans[0]).toHaveAttributes({"session.id": sessionId});
+    const sessionIdKey = currentPlatform() === "android" ? "emb.user_session_id" : "session.id";
+    expect(payload.sessionSpans[0]).toHaveAttributes({[sessionIdKey]: sessionId});
   });
 });
