@@ -13,6 +13,13 @@ const isPresent = (v: unknown): boolean =>
 // Attribute keys whose value varies run-to-run: presence-checked, value ignored
 const VOLATILE_ATTR_KEYS = new Set([
   "session.id",
+  "emb.user_session_id",
+  "emb.session_part_id",
+  "emb.session_part_number",
+  "emb.user_session_number",
+  "emb.user_session_part_index",
+  "emb.user_session_start_ts",
+  "emb.app.version_startup_counter",
   "emb.cold_start",
   "emb.session_number",
   "emb.startup_duration",
@@ -61,6 +68,8 @@ const isVolatileKey = (key: string): boolean =>
 // the connectivity check finishes before the span starts.
 const VOLATILE_SPAN_NAMES = new Set([
   "emb-state-network",
+  "emb-sdk-init",
+  "emb-embrace-init",
 ]);
 
 // ---- shared types ----
@@ -77,7 +86,7 @@ export const compareAttributes = (
   const expectedMap = new Map(expected.map(a => [a.key, a.value]));
 
   for (const [key, value] of expectedMap) {
-    if (isVolatileKey(key)) {
+    if (isVolatileKey(key) && value !== "") {
       if (!isPresent(actualMap.get(key))) {
         errors.push(`missing volatile attribute "${key}"`);
       }

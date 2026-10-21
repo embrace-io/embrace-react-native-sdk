@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.embrace.android.embracesdk.Embrace;
+import io.embrace.android.embracesdk.PropertyScope;
 import io.embrace.android.embracesdk.Severity;
 import io.embrace.android.embracesdk.internal.EmbraceInternalApi;
 import io.embrace.android.embracesdk.internal.ReactNativeInternalInterface;
@@ -227,7 +228,8 @@ public class EmbraceManagerModuleImpl {
 
     public void addSessionProperty(String key, String value, boolean permanent, Promise promise) {
         try {
-            Boolean success = Embrace.INSTANCE.addSessionProperty(key, value, permanent);
+            PropertyScope scope = permanent ? PropertyScope.PERMANENT : PropertyScope.USER_SESSION;
+            Boolean success = Embrace.INSTANCE.addUserSessionProperty(key, value, scope);
             promise.resolve(success);
         } catch(Exception e) {
             promise.reject("ADD_SESSION_PROPERTY_ERROR", "Error adding session property", e);
@@ -236,7 +238,7 @@ public class EmbraceManagerModuleImpl {
 
     public void removeSessionProperty(String key, Promise promise) {
         try {
-            Embrace.INSTANCE.removeSessionProperty(key);
+            Embrace.INSTANCE.removeUserSessionProperty(key);
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("REMOVE_SESSION_PROPERTY_ERROR", "Error removing session property", e);
@@ -245,7 +247,7 @@ public class EmbraceManagerModuleImpl {
 
     public void endSession(Promise promise) {
         try {
-            Embrace.INSTANCE.endSession(false);
+            Embrace.INSTANCE.endUserSession();
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("END_SESSION_ERROR", "Error ending session", e);
@@ -271,7 +273,7 @@ public class EmbraceManagerModuleImpl {
 
     public void getCurrentSessionId(Promise promise) {
         try {
-            promise.resolve(Embrace.INSTANCE.getCurrentSessionId());
+            promise.resolve(Embrace.INSTANCE.getCurrentUserSessionId());
         } catch(Exception e) {
             promise.reject("GET_CURRENT_SESSION_ID_ERROR", "Error getting current session ID", e);
         }
