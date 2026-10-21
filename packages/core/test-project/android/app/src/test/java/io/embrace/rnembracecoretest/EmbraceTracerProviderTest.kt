@@ -31,7 +31,6 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.argumentCaptor
@@ -180,11 +179,9 @@ class EmbraceTracerProviderModuleTest {
             )
         )
 
-        // Skipping links for now as they are both not currently supported AND causing issues with 0.4.0 OtelJavaSpanBuilderAdapter.kt:
-        // https://github.com/embrace-io/opentelemetry-kotlin/blob/82ea41fdfc2dfcac893f202f7e76c7a6bc4f7fae/opentelemetry-kotlin-compat/src/jvmMain/kotlin/io/embrace/opentelemetry/kotlin/tracing/OtelJavaSpanBuilderAdapter.kt#L101
         tracerProviderModule.startSpan(
             "test", "v1", "", "span_0",
-            "my-span", "CLIENT", 1718386928001.0, attributes, JavaOnlyArray(),
+            "my-span", "CLIENT", 1718386928001.0, attributes, links,
             "", promise
         )
 
@@ -199,14 +196,6 @@ class EmbraceTracerProviderModuleTest {
 
         assertEquals(6 + extraAttributes.size, span1.attributes.size())
         assertEquals("some-string", span1.attributes.get(AttributeKey.stringKey("my-attr1")))
-        /*
-        // TODO currently only string attributes are supported by the Embrace Tracer Provider
-        assertEquals(true, span1.attributes.get(AttributeKey.booleanKey("my-attr2")))
-        assertEquals(344.0, span1.attributes.get(AttributeKey.doubleKey("my-attr3")))
-        assertEquals(listOf("str1", "str2"), span1.attributes.get(AttributeKey.stringArrayKey("my-attr4")))
-        assertEquals(listOf(true, false), span1.attributes.get(AttributeKey.booleanArrayKey("my-attr5")))
-        assertEquals(listOf(22.0, 44.0), span1.attributes.get(AttributeKey.doubleArrayKey("my-attr6")))
-         */
         assertEquals("true", span1.attributes.get(AttributeKey.stringKey("my-attr2")))
         assertEquals("344.0", span1.attributes.get(AttributeKey.stringKey("my-attr3")))
         assertEquals("[str1, str2]", span1.attributes.get(AttributeKey.stringKey("my-attr4")))
@@ -216,17 +205,15 @@ class EmbraceTracerProviderModuleTest {
             assertNotNull(span1.attributes.get(AttributeKey.stringKey(attr)))
         }
 
-        /*
-        // TODO links are not currently supported by the Embrace Tracer Provider
-        assertEquals(2, span1.links.size)
-        assertEquals("1111000011110000", span1.links[0].spanContext.spanId)
-        assertEquals("22220000222200002222000022220000", span1.links[0].spanContext.traceId)
-        assertEquals(1, span1.links[0].attributes.size())
-        assertEquals("my-link-attr", span1.links[0].attributes.get(AttributeKey.stringKey("link-attr-1")))
-        assertEquals("6666000066660000", span1.links[1].spanContext.spanId)
-        assertEquals("77770000777700007777000077770000", span1.links[1].spanContext.traceId)
-        assertEquals(0, span1.links[1].attributes.size())
-         */
+        assertEquals(3, span1.links.size)
+        assertEquals("END_SESSION_PART", span1.links[0].attributes.get(AttributeKey.stringKey("emb.link_type")))
+        assertEquals("1111000011110000", span1.links[1].spanContext.spanId)
+        assertEquals("22220000222200002222000022220000", span1.links[1].spanContext.traceId)
+        assertEquals(1, span1.links[1].attributes.size())
+        assertEquals("my-link-attr", span1.links[1].attributes.get(AttributeKey.stringKey("link-attr-1")))
+        assertEquals("6666000066660000", span1.links[2].spanContext.spanId)
+        assertEquals("77770000777700007777000077770000", span1.links[2].spanContext.traceId)
+        assertEquals(0, span1.links[2].attributes.size())
 
         assertEquals(1728386928001000000, span1.endEpochNanos)
     }
@@ -365,14 +352,6 @@ class EmbraceTracerProviderModuleTest {
 
         assertEquals(6 + extraAttributes.size, span1.attributes.size())
         assertEquals("some-string", span1.attributes.get(AttributeKey.stringKey("my-attr1")))
-        /*
-        // TODO currently only string attributes are supported by the Embrace Tracer Provider
-        assertEquals(true, span1.attributes.get(AttributeKey.booleanKey("my-attr2")))
-        assertEquals(344.0, span1.attributes.get(AttributeKey.doubleKey("my-attr3")))
-        assertEquals(listOf("str1", "str2"), span1.attributes.get(AttributeKey.stringArrayKey("my-attr4")))
-        assertEquals(listOf(true, false), span1.attributes.get(AttributeKey.booleanArrayKey("my-attr5")))
-        assertEquals(listOf(22.0, 44.0), span1.attributes.get(AttributeKey.doubleArrayKey("my-attr6")))
-         */
         assertEquals("true", span1.attributes.get(AttributeKey.stringKey("my-attr2")))
         assertEquals("344.0", span1.attributes.get(AttributeKey.stringKey("my-attr3")))
         assertEquals("[str1, str2]", span1.attributes.get(AttributeKey.stringKey("my-attr4")))
@@ -420,7 +399,6 @@ class EmbraceTracerProviderModuleTest {
         assertEquals(1518386928052000000, span1.events[1].epochNanos)
     }
 
-    @Ignore("links are not currently supported by the Embrace Tracer Provider")
     @Test
     fun addLinks() {
         tracerProviderModule.startSpan(
@@ -462,14 +440,15 @@ class EmbraceTracerProviderModuleTest {
 
         val span1 = spanProcessor.spans[0]
 
-        assertEquals(2, span1.links.size)
-        assertEquals("1111000011110000", span1.links[0].spanContext.spanId)
-        assertEquals("22220000222200002222000022220000", span1.links[0].spanContext.traceId)
-        assertEquals(1, span1.links[0].attributes.size())
-        assertEquals("my-link-attr", span1.links[0].attributes.get(AttributeKey.stringKey("link-attr-1")))
-        assertEquals("6666000066660000", span1.links[1].spanContext.spanId)
-        assertEquals("77770000777700007777000077770000", span1.links[1].spanContext.traceId)
-        assertEquals(0, span1.links[1].attributes.size())
+        assertEquals(3, span1.links.size)
+        assertEquals("END_SESSION_PART", span1.links[0].attributes.get(AttributeKey.stringKey("emb.link_type")))
+        assertEquals("1111000011110000", span1.links[1].spanContext.spanId)
+        assertEquals("22220000222200002222000022220000", span1.links[1].spanContext.traceId)
+        assertEquals(1, span1.links[1].attributes.size())
+        assertEquals("my-link-attr", span1.links[1].attributes.get(AttributeKey.stringKey("link-attr-1")))
+        assertEquals("6666000066660000", span1.links[2].spanContext.spanId)
+        assertEquals("77770000777700007777000077770000", span1.links[2].spanContext.traceId)
+        assertEquals(0, span1.links[2].attributes.size())
     }
 
     @Test
