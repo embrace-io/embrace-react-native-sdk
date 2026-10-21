@@ -4,17 +4,17 @@
       "resource": {
         "app_version": "1.0",
         "app_framework": 2,
-        "build_id": "4FE4870C5C9047ADB89E956A39A3B7E1",
+        "build_id": "9D2C43640EA146AFB8855E0F971E53B4",
         "app_ecosystem_id": "io.embrace.rn87",
         "build_type": "release",
         "build_flavor": "",
         "environment": "prod",
         "bundle_version": "1",
-        "sdk_version": "8.4.0",
+        "sdk_version": "9.3.1",
         "sdk_simple_version": 53,
-        "react_native_bundle_id": "4F3C86A1E521E8C6F4995D2F86B0CE83",
+        "react_native_bundle_id": "17DD813421D1E143DAA7B44CE2E62563",
         "hosted_platform_version": "0.87.0",
-        "hosted_sdk_version": "7.1.0",
+        "hosted_sdk_version": "7.2.0",
         "device_manufacturer": "Google",
         "device_model": "sdk_gphone64_arm64",
         "device_architecture": "arm64-v8a",
@@ -25,10 +25,13 @@
         "os_version": "14",
         "os_code": "34",
         "screen_resolution": "1080x2209",
-        "num_cores": 4
+        "num_cores": 4,
+        "device_soc_model": "ranchu"
       },
       "metadata": {
-        "personas": [],
+        "personas": [
+          "first_day"
+        ],
         "timezone_description": "Europe/London",
         "locale": "en_US"
       },
@@ -37,44 +40,48 @@
       "data": {
         "spans": [
           {
-            "trace_id": "eebb485a00c2fd9dfeb4b1d526b6c645",
-            "span_id": "268245c436c17055",
-            "parent_span_id": "1fa8558b950c9907",
+            "trace_id": "69e626682b92d8ca14570d4420929828",
+            "span_id": "a082606a77fd1987",
+            "parent_span_id": "be63cf9f2d011f38",
             "name": "emb-MainActivity-start",
-            "start_time_unix_nano": 1790701161218000000,
-            "end_time_unix_nano": 1790701161221000000,
+            "start_time_unix_nano": 1792422434083000000,
+            "end_time_unix_nano": 1792422434087000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private.sequence_id",
-                "value": "21"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "7412E80E6A053A02510692D964A3234B"
               },
               {
                 "key": "emb.type",
                 "value": "perf"
               },
               {
-                "key": "session.id",
-                "value": "E78E4678D7954230B4322CF24053F69B"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               }
             ],
             "links": [
               {
-                "span_id": "e94b4081cde69579",
-                "trace_id": "b646b31097f38ee0d2c167fca4a47834",
+                "span_id": "9b574a8efce72731",
+                "trace_id": "1590b3eebe272afc0d839698c4831c20",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "E78E4678D7954230B4322CF24053F69B"
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -82,44 +89,48 @@
             ]
           },
           {
-            "trace_id": "eebb485a00c2fd9dfeb4b1d526b6c645",
-            "span_id": "c6cb2127f8e19819",
-            "parent_span_id": "1fa8558b950c9907",
+            "trace_id": "69e626682b92d8ca14570d4420929828",
+            "span_id": "ea65331d7f21a68b",
+            "parent_span_id": "be63cf9f2d011f38",
             "name": "emb-MainActivity-resume",
-            "start_time_unix_nano": 1790701161221000000,
-            "end_time_unix_nano": 1790701161221000000,
+            "start_time_unix_nano": 1792422434088000000,
+            "end_time_unix_nano": 1792422434089000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private.sequence_id",
-                "value": "22"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "7412E80E6A053A02510692D964A3234B"
               },
               {
                 "key": "emb.type",
                 "value": "perf"
               },
               {
-                "key": "session.id",
-                "value": "E78E4678D7954230B4322CF24053F69B"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               }
             ],
             "links": [
               {
-                "span_id": "e94b4081cde69579",
-                "trace_id": "b646b31097f38ee0d2c167fca4a47834",
+                "span_id": "9b574a8efce72731",
+                "trace_id": "1590b3eebe272afc0d839698c4831c20",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "E78E4678D7954230B4322CF24053F69B"
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -127,44 +138,48 @@
             ]
           },
           {
-            "trace_id": "eebb485a00c2fd9dfeb4b1d526b6c645",
-            "span_id": "1fa8558b950c9907",
+            "trace_id": "69e626682b92d8ca14570d4420929828",
+            "span_id": "be63cf9f2d011f38",
             "parent_span_id": "0000000000000000",
             "name": "emb-MainActivity-hot-time-to-initial-display",
-            "start_time_unix_nano": 1790701161218000000,
-            "end_time_unix_nano": 1790701161221000000,
+            "start_time_unix_nano": 1792422434083000000,
+            "end_time_unix_nano": 1792422434089000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private.sequence_id",
-                "value": "20"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "7412E80E6A053A02510692D964A3234B"
               },
               {
                 "key": "emb.type",
                 "value": "perf.ui_load"
               },
               {
-                "key": "session.id",
-                "value": "E78E4678D7954230B4322CF24053F69B"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               }
             ],
             "links": [
               {
-                "span_id": "e94b4081cde69579",
-                "trace_id": "b646b31097f38ee0d2c167fca4a47834",
+                "span_id": "9b574a8efce72731",
+                "trace_id": "1590b3eebe272afc0d839698c4831c20",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "E78E4678D7954230B4322CF24053F69B"
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -172,38 +187,38 @@
             ]
           },
           {
-            "trace_id": "4e146d27b2d4f67ca9aa48da4482839d",
-            "span_id": "e4566dd89de6cd5d",
+            "trace_id": "2aeaaf6d87dcf75e8f2d69bbfadd9e9f",
+            "span_id": "9082519e75eb3fb2",
             "parent_span_id": "0000000000000000",
             "name": "log",
-            "start_time_unix_nano": 1790701161221000000,
-            "end_time_unix_nano": 1790701162838000000,
+            "start_time_unix_nano": 1792422434093000000,
+            "end_time_unix_nano": 1792422435670000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private.sequence_id",
-                "value": "23"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "7412E80E6A053A02510692D964A3234B"
               },
               {
                 "key": "emb.type",
                 "value": "ux.view"
               },
               {
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+              },
+              {
                 "key": "package",
                 "value": "@react-navigation/native"
               },
               {
-                "key": "session.id",
-                "value": "E78E4678D7954230B4322CF24053F69B"
-              },
-              {
                 "key": "test.attr",
-                "value": "654321"
+                "value": "654321.0"
               },
               {
                 "key": "view.launch",
@@ -220,16 +235,20 @@
             ],
             "links": [
               {
-                "span_id": "e94b4081cde69579",
-                "trace_id": "b646b31097f38ee0d2c167fca4a47834",
+                "span_id": "9b574a8efce72731",
+                "trace_id": "1590b3eebe272afc0d839698c4831c20",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "E78E4678D7954230B4322CF24053F69B"
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -237,38 +256,38 @@
             ]
           },
           {
-            "trace_id": "7d3664789ca545da1da6130932751814",
-            "span_id": "4b408f019dd7f00d",
+            "trace_id": "bf2b17ff2c4340069e048be9d91ceb34",
+            "span_id": "fcecfefde59d8426",
             "parent_span_id": "0000000000000000",
             "name": "span",
-            "start_time_unix_nano": 1790701162838000000,
-            "end_time_unix_nano": 1790701163519000000,
+            "start_time_unix_nano": 1792422435670000000,
+            "end_time_unix_nano": 1792422436366000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private.sequence_id",
-                "value": "24"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "7412E80E6A053A02510692D964A3234B"
               },
               {
                 "key": "emb.type",
                 "value": "ux.view"
               },
               {
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+              },
+              {
                 "key": "package",
                 "value": "@react-navigation/native"
               },
               {
-                "key": "session.id",
-                "value": "E78E4678D7954230B4322CF24053F69B"
-              },
-              {
                 "key": "test.attr",
-                "value": "654321"
+                "value": "654321.0"
               },
               {
                 "key": "view.launch",
@@ -285,16 +304,20 @@
             ],
             "links": [
               {
-                "span_id": "e94b4081cde69579",
-                "trace_id": "b646b31097f38ee0d2c167fca4a47834",
+                "span_id": "9b574a8efce72731",
+                "trace_id": "1590b3eebe272afc0d839698c4831c20",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "E78E4678D7954230B4322CF24053F69B"
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -302,38 +325,38 @@
             ]
           },
           {
-            "trace_id": "a6bba180dd9840c3e53b34fa2f92b0d8",
-            "span_id": "a13cf38a2a57c25f",
+            "trace_id": "7d0525b5f902882b8b895a66c1d2829e",
+            "span_id": "33a37818d8b6bfe4",
             "parent_span_id": "0000000000000000",
             "name": "log",
-            "start_time_unix_nano": 1790701163519000000,
-            "end_time_unix_nano": 1790701164131000000,
+            "start_time_unix_nano": 1792422436366000000,
+            "end_time_unix_nano": 1792422436940000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private.sequence_id",
-                "value": "25"
+                "key": "emb.process_identifier",
+                "value": "16c8127f4ef9b09d"
               },
               {
-                "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "key": "emb.session_part_id",
+                "value": "7412E80E6A053A02510692D964A3234B"
               },
               {
                 "key": "emb.type",
                 "value": "ux.view"
               },
               {
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+              },
+              {
                 "key": "package",
                 "value": "@react-navigation/native"
               },
               {
-                "key": "session.id",
-                "value": "E78E4678D7954230B4322CF24053F69B"
-              },
-              {
                 "key": "test.attr",
-                "value": "654321"
+                "value": "654321.0"
               },
               {
                 "key": "view.launch",
@@ -350,16 +373,20 @@
             ],
             "links": [
               {
-                "span_id": "e94b4081cde69579",
-                "trace_id": "b646b31097f38ee0d2c167fca4a47834",
+                "span_id": "9b574a8efce72731",
+                "trace_id": "1590b3eebe272afc0d839698c4831c20",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "E78E4678D7954230B4322CF24053F69B"
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -367,17 +394,17 @@
             ]
           },
           {
-            "trace_id": "fa42f040c0d656cf3b5fec9a632fbf3b",
-            "span_id": "0cddf3ba551d314b",
+            "trace_id": "0f131a149cb3eaee78d534291dbd0891",
+            "span_id": "9410fe5e626d68a5",
             "parent_span_id": "0000000000000000",
             "name": "emb-state-screen-automatic",
-            "start_time_unix_nano": 1790701161218000000,
-            "end_time_unix_nano": 1790701164830000000,
+            "start_time_unix_nano": 1792422434085000000,
+            "end_time_unix_nano": 1792422437641000000,
             "status": "Unset",
             "events": [
               {
                 "name": "transition",
-                "time_unix_nano": 1790701161217000000,
+                "time_unix_nano": 1792422434082000000,
                 "attributes": [
                   {
                     "key": "emb.state.new_value",
@@ -387,7 +414,7 @@
               },
               {
                 "name": "transition",
-                "time_unix_nano": 1790701164830000000,
+                "time_unix_nano": 1792422437640000000,
                 "attributes": [
                   {
                     "key": "emb.state.new_value",
@@ -398,16 +425,12 @@
             ],
             "attributes": [
               {
-                "key": "emb.private",
-                "value": "true"
-              },
-              {
-                "key": "emb.private.sequence_id",
-                "value": "18"
-              },
-              {
                 "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "value": "16c8127f4ef9b09d"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "7412E80E6A053A02510692D964A3234B"
               },
               {
                 "key": "emb.state.initial_value",
@@ -422,22 +445,26 @@
                 "value": "state"
               },
               {
-                "key": "session.id",
-                "value": "E78E4678D7954230B4322CF24053F69B"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               }
             ],
             "links": [
               {
-                "span_id": "e94b4081cde69579",
-                "trace_id": "b646b31097f38ee0d2c167fca4a47834",
+                "span_id": "9b574a8efce72731",
+                "trace_id": "1590b3eebe272afc0d839698c4831c20",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "E78E4678D7954230B4322CF24053F69B"
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -445,26 +472,22 @@
             ]
           },
           {
-            "trace_id": "61335fe3e7ae0943aedd2652763b04c5",
-            "span_id": "6abb1c2d84a39cb8",
+            "trace_id": "1b01c0d5c1b9bf434edbadb0a8303ae6",
+            "span_id": "876a27b6d5c9ba9f",
             "parent_span_id": "0000000000000000",
             "name": "emb-state-network",
-            "start_time_unix_nano": 1790701161219000000,
-            "end_time_unix_nano": 1790701164831000000,
+            "start_time_unix_nano": 1792422434085000000,
+            "end_time_unix_nano": 1792422437641000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
-                "key": "emb.private",
-                "value": "true"
-              },
-              {
-                "key": "emb.private.sequence_id",
-                "value": "19"
-              },
-              {
                 "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "value": "16c8127f4ef9b09d"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "7412E80E6A053A02510692D964A3234B"
               },
               {
                 "key": "emb.state.initial_value",
@@ -475,22 +498,26 @@
                 "value": "state"
               },
               {
-                "key": "session.id",
-                "value": "E78E4678D7954230B4322CF24053F69B"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
               }
             ],
             "links": [
               {
-                "span_id": "e94b4081cde69579",
-                "trace_id": "b646b31097f38ee0d2c167fca4a47834",
+                "span_id": "9b574a8efce72731",
+                "trace_id": "1590b3eebe272afc0d839698c4831c20",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "END_SESSION"
+                    "value": "END_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "E78E4678D7954230B4322CF24053F69B"
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -498,12 +525,12 @@
             ]
           },
           {
-            "trace_id": "b646b31097f38ee0d2c167fca4a47834",
-            "span_id": "e94b4081cde69579",
+            "trace_id": "1590b3eebe272afc0d839698c4831c20",
+            "span_id": "9b574a8efce72731",
             "parent_span_id": "0000000000000000",
             "name": "emb-session",
-            "start_time_unix_nano": 1790701161218000000,
-            "end_time_unix_nano": 1790701164831000000,
+            "start_time_unix_nano": 1792422434084000000,
+            "end_time_unix_nano": 1792422437641000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -513,7 +540,7 @@
               },
               {
                 "key": "emb.clock_network_drift",
-                "value": "5407536"
+                "value": "65915481"
               },
               {
                 "key": "emb.cold_start",
@@ -521,7 +548,7 @@
               },
               {
                 "key": "emb.disk_free_bytes",
-                "value": "4162596864"
+                "value": "4509036544"
               },
               {
                 "key": "emb.error_log_count",
@@ -529,7 +556,7 @@
               },
               {
                 "key": "emb.heartbeat_time_unix_nano",
-                "value": "1790701163222000000"
+                "value": "1792422436088000000"
               },
               {
                 "key": "emb.is_emulator",
@@ -548,20 +575,20 @@
                 "value": "4.12.0"
               },
               {
-                "key": "emb.private.sequence_id",
-                "value": "17"
-              },
-              {
                 "key": "emb.process_identifier",
-                "value": "b89188d85f66e7cc"
+                "value": "16c8127f4ef9b09d"
               },
               {
                 "key": "emb.session_end_type",
                 "value": "state"
               },
               {
-                "key": "emb.session_number",
-                "value": "331"
+                "key": "emb.session_part_id",
+                "value": "7412E80E6A053A02510692D964A3234B"
+              },
+              {
+                "key": "emb.session_part_number",
+                "value": "12"
               },
               {
                 "key": "emb.session_start_type",
@@ -580,132 +607,236 @@
                 "value": "ux.session"
               },
               {
-                "key": "session.id",
-                "value": "E78E4678D7954230B4322CF24053F69B"
+                "key": "emb.user_session_id",
+                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+              },
+              {
+                "key": "emb.user_session_inactivity_timeout_seconds",
+                "value": "1800"
+              },
+              {
+                "key": "emb.user_session_max_duration_seconds",
+                "value": "43200"
+              },
+              {
+                "key": "emb.user_session_number",
+                "value": "1"
+              },
+              {
+                "key": "emb.user_session_part_index",
+                "value": "12"
+              },
+              {
+                "key": "emb.user_session_start_ts",
+                "value": "1792422360154"
               }
             ],
             "links": [
               {
-                "span_id": "880345e0bae61c52",
-                "trace_id": "4a72c7489a9355c4c80242e4a36e7962",
+                "span_id": "56d49c1dd6f92f4e",
+                "trace_id": "56b900d30862d4f2596e44b18a1aed34",
                 "attributes": [
                   {
                     "key": "emb.link_type",
-                    "value": "PREV_SESSION"
+                    "value": "PREV_SESSION_PART"
                   },
                   {
-                    "key": "session.id",
-                    "value": "1AB45271E90C441CA4A09E366A8596C4"
+                    "key": "emb.session_part_id",
+                    "value": "1B3457AD7F2F2BA1EE68940096583449"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "268245c436c17055",
-                "trace_id": "eebb485a00c2fd9dfeb4b1d526b6c645",
+                "span_id": "a082606a77fd1987",
+                "trace_id": "69e626682b92d8ca14570d4420929828",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "c6cb2127f8e19819",
-                "trace_id": "eebb485a00c2fd9dfeb4b1d526b6c645",
+                "span_id": "ea65331d7f21a68b",
+                "trace_id": "69e626682b92d8ca14570d4420929828",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "1fa8558b950c9907",
-                "trace_id": "eebb485a00c2fd9dfeb4b1d526b6c645",
+                "span_id": "be63cf9f2d011f38",
+                "trace_id": "69e626682b92d8ca14570d4420929828",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "e4566dd89de6cd5d",
-                "trace_id": "4e146d27b2d4f67ca9aa48da4482839d",
+                "span_id": "9082519e75eb3fb2",
+                "trace_id": "2aeaaf6d87dcf75e8f2d69bbfadd9e9f",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "4b408f019dd7f00d",
-                "trace_id": "7d3664789ca545da1da6130932751814",
+                "span_id": "fcecfefde59d8426",
+                "trace_id": "bf2b17ff2c4340069e048be9d91ceb34",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "a13cf38a2a57c25f",
-                "trace_id": "a6bba180dd9840c3e53b34fa2f92b0d8",
+                "span_id": "33a37818d8b6bfe4",
+                "trace_id": "7d0525b5f902882b8b895a66c1d2829e",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "0cddf3ba551d314b",
-                "trace_id": "fa42f040c0d656cf3b5fec9a632fbf3b",
+                "span_id": "9410fe5e626d68a5",
+                "trace_id": "0f131a149cb3eaee78d534291dbd0891",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "0cddf3ba551d314b",
-                "trace_id": "fa42f040c0d656cf3b5fec9a632fbf3b",
+                "span_id": "9410fe5e626d68a5",
+                "trace_id": "0f131a149cb3eaee78d534291dbd0891",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "STATE"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "6abb1c2d84a39cb8",
-                "trace_id": "61335fe3e7ae0943aedd2652763b04c5",
+                "span_id": "876a27b6d5c9ba9f",
+                "trace_id": "1b01c0d5c1b9bf434edbadb0a8303ae6",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "ENDED_IN"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "6abb1c2d84a39cb8",
-                "trace_id": "61335fe3e7ae0943aedd2652763b04c5",
+                "span_id": "876a27b6d5c9ba9f",
+                "trace_id": "1b01c0d5c1b9bf434edbadb0a8303ae6",
                 "attributes": [
                   {
                     "key": "emb.link_type",
                     "value": "STATE"
+                  },
+                  {
+                    "key": "emb.session_part_id",
+                    "value": "7412E80E6A053A02510692D964A3234B"
+                  },
+                  {
+                    "key": "emb.user_session_id",
+                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
                   }
                 ],
                 "is_remote": false
@@ -715,31 +846,11 @@
         ],
         "span_snapshots": [
           {
-            "trace_id": "17b54827385e140641a000f99682e1c9",
-            "span_id": "3be9f73ca7ef7cf3",
-            "parent_span_id": "0000000000000000",
-            "name": "emb-thermal-state",
-            "start_time_unix_nano": 1790701149394000000,
-            "status": "Unset",
-            "events": [],
-            "attributes": [
-              {
-                "key": "emb.type",
-                "value": "perf.thermal_state"
-              },
-              {
-                "key": "status",
-                "value": "0"
-              }
-            ],
-            "links": []
-          },
-          {
-            "trace_id": "ad04e3b5332f0ebce8cca99846dda2cd",
-            "span_id": "c8b0431012746f8f",
+            "trace_id": "209130723f2fb2cb2e8724e38f1d65f5",
+            "span_id": "6c7922bfc35283c0",
             "parent_span_id": "0000000000000000",
             "name": "emb-network-status",
-            "start_time_unix_nano": 1790701149465000000,
+            "start_time_unix_nano": 1792422427538000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -753,12 +864,32 @@
               }
             ],
             "links": []
+          },
+          {
+            "trace_id": "451af5761665cd1a63ef7f43e7956bf4",
+            "span_id": "ec9cf2fdd2efb00a",
+            "parent_span_id": "0000000000000000",
+            "name": "emb-thermal-state",
+            "start_time_unix_nano": 1792422427468000000,
+            "status": "Unset",
+            "events": [],
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "perf.thermal_state"
+              },
+              {
+                "key": "status",
+                "value": "0"
+              }
+            ],
+            "links": []
           }
         ],
         "shared_lib_symbol_mapping": {
-          "libappmodules.so": "ab4c0e0db4fac8392c4847c5b3dc543479188634",
+          "libappmodules.so": "217736c7dd77f2d399b43be2ed33ba1560cf7ea0",
           "libc++_shared.so": "8f9b811782f82b7e96ef983939059539bc486507",
-          "libembrace-native.so": "35cedcf27cf57a11b659e2b4ff54dca526caac87",
+          "libembrace-native.so": "d4f39d80b24539077c14e5c1cd255a3a53da5b7e",
           "libfbjni.so": "908a62be76b9bea375d88a9d714790c3d188ab34",
           "libhermestooling.so": "69dc64792648cd8539c5a3946aefef34199a1f99",
           "libhermesvm.so": "29e16b5b2961c04689f82bdb9fd52818e92ec6f2",
@@ -766,10 +897,10 @@
           "libjsi.so": "48dd9b2df37bf37e1dca714515014574379c74a4",
           "libnative-filters.so": "f5dabe8b01e9da9ad08ebb99f0e2f9e3f601d234",
           "libnative-imagetranscoder.so": "46588427304036cab21cb7115b8236f4a48c7773",
-          "libreact_codegen_rnscreens.so": "293a7afed2e6dbf172610befa88f7597764695ca",
-          "libreact_codegen_safeareacontext.so": "6241b4e9d7f54cacb817afb9da3f02394acebeb0",
+          "libreact_codegen_rnscreens.so": "48fe42ab3fce048eaa22c2a5f49af80cf8647c90",
+          "libreact_codegen_safeareacontext.so": "1c6a5283d78eb9aa534691b52dda6842715a6b68",
           "libreactnative.so": "6267efeacb3f99ce0851e1b20d162fb1ff4bb938",
-          "librnscreens.so": "46c88a1f347567e7c8eb28f836e6147964d08f65"
+          "librnscreens.so": "180fc7c163a49b283dbeee16a565016c600c36c7"
         }
       }
     }
