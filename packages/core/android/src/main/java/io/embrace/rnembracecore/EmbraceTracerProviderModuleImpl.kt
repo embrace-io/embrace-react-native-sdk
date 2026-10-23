@@ -10,6 +10,7 @@ import io.embrace.android.embracesdk.Embrace
 import io.embrace.android.embracesdk.otel.java.getJavaOpenTelemetry
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
+import io.opentelemetry.api.common.AttributesBuilder
 import io.opentelemetry.api.trace.Span
 import io.opentelemetry.api.trace.SpanContext
 import io.opentelemetry.api.trace.SpanKind
@@ -65,31 +66,20 @@ class EmbraceTracerProviderModuleImpl(
      * actual OTEL API objects
      */
 
-    private fun stringListFromReadableArray(array: ReadableArray): List<String> {
-        val list: MutableList<String> = mutableListOf()
-        for (i in 0..array.size() - 1) {
-            val str = array.getString(i)
-            if (str != null) {
-                list.add(str)
-            }
+    private fun putArrayAttribute(builder: AttributesBuilder, key: String, array: ReadableArray) {
+        if (array.size() == 0) {
+            builder.put(AttributeKey.stringArrayKey(key), emptyList())
+            return
         }
-        return list.toList()
-    }
 
-    private fun doubleListFromReadableArray(array: ReadableArray): List<Double> {
-        val list: MutableList<Double> = mutableListOf()
-        for (i in 0..array.size() - 1) {
-            list.add(array.getDouble(i))
+        val indices = 0 until array.size()
+        val elementType = indices.map { array.getType(it) }.distinct().singleOrNull()
+        when (elementType) {
+            ReadableType.Boolean -> builder.put(AttributeKey.booleanArrayKey(key), indices.map { array.getBoolean(it) })
+            ReadableType.Number -> builder.put(AttributeKey.doubleArrayKey(key), indices.map { array.getDouble(it) })
+            ReadableType.String -> builder.put(AttributeKey.stringArrayKey(key), indices.mapNotNull { array.getString(it) })
+            else -> log.warning("invalid attribute value for key: $key")
         }
-        return list.toList()
-    }
-
-    private fun booleanListFromReadableArray(array: ReadableArray): List<Boolean> {
-        val list: MutableList<Boolean> = mutableListOf()
-        for (i in 0..array.size() - 1) {
-            list.add(array.getBoolean(i))
-        }
-        return list.toList()
     }
 
     private fun attributesFromReadableMap(map: ReadableMap): Attributes {
@@ -104,18 +94,7 @@ class EmbraceTracerProviderModuleImpl(
                 ReadableType.Boolean -> builder.put(key, map.getBoolean(key))
                 ReadableType.Number -> builder.put(key, map.getDouble(key))
                 ReadableType.String -> builder.put(key, map.getString(key) ?: "")
-                ReadableType.Array -> {
-                    val array = map.getArray(key)
-                    val arrayType = array?.getType(0)
-                    when (arrayType) {
-                        ReadableType.Boolean -> builder.put(AttributeKey.booleanArrayKey(key), booleanListFromReadableArray(array))
-                        ReadableType.Number -> builder.put(AttributeKey.doubleArrayKey(key), doubleListFromReadableArray(array))
-                        ReadableType.String -> builder.put(AttributeKey.stringArrayKey(key), stringListFromReadableArray(array))
-                        else -> {
-                            log.warning("invalid attribute key: $key")
-                        }
-                    }
-                }
+                ReadableType.Array -> map.getArray(key)?.let { array -> putArrayAttribute(builder, key, array) }
                 else -> {
                     log.warning("invalid attribute value for key: $key")
                 }
