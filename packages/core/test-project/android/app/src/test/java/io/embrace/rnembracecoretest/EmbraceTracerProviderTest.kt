@@ -29,6 +29,7 @@ import io.opentelemetry.sdk.trace.data.SpanData
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -360,6 +361,87 @@ class EmbraceTracerProviderModuleTest {
         for (attr in extraAttributes) {
             assertNotNull(span1.attributes.get(AttributeKey.stringKey(attr)))
         }
+    }
+
+    @Test
+    fun setAttributesEmptyArray() {
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
+            "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+            "", promise
+        )
+        tracerProviderModule.setAttributes(
+            "span_0",
+            JavaOnlyMap.of(
+                "my-attr1",
+                "some-string",
+                "my-attr2",
+                JavaOnlyArray(),
+            )
+        )
+        tracerProviderModule.endSpan("span_0", 0.0)
+
+        assertEquals(1, spanProcessor.spans.size)
+
+        val span1 = spanProcessor.spans[0]
+
+        assertEquals(2 + extraAttributes.size, span1.attributes.size())
+        assertEquals("some-string", span1.attributes.get(AttributeKey.stringKey("my-attr1")))
+        assertEquals("[]", span1.attributes.get(AttributeKey.stringKey("my-attr2")))
+    }
+
+    @Test
+    fun setAttributesArrayWithNulls() {
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
+            "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+            "", promise
+        )
+        tracerProviderModule.setAttributes(
+            "span_0",
+            JavaOnlyMap.of(
+                "my-attr1",
+                "some-string",
+                "my-attr2",
+                JavaOnlyArray.of(true, null),
+            )
+        )
+        tracerProviderModule.endSpan("span_0", 0.0)
+
+        assertEquals(1, spanProcessor.spans.size)
+
+        val span1 = spanProcessor.spans[0]
+
+        assertEquals(1 + extraAttributes.size, span1.attributes.size())
+        assertEquals("some-string", span1.attributes.get(AttributeKey.stringKey("my-attr1")))
+        assertNull(span1.attributes.get(AttributeKey.stringKey("my-attr2")))
+    }
+
+    @Test
+    fun setAttributesMixedTypeArray() {
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
+            "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+            "", promise
+        )
+        tracerProviderModule.setAttributes(
+            "span_0",
+            JavaOnlyMap.of(
+                "my-attr1",
+                "some-string",
+                "my-attr2",
+                JavaOnlyArray.of(1, "str1"),
+            )
+        )
+        tracerProviderModule.endSpan("span_0", 0.0)
+
+        assertEquals(1, spanProcessor.spans.size)
+
+        val span1 = spanProcessor.spans[0]
+
+        assertEquals(1 + extraAttributes.size, span1.attributes.size())
+        assertEquals("some-string", span1.attributes.get(AttributeKey.stringKey("my-attr1")))
+        assertNull(span1.attributes.get(AttributeKey.stringKey("my-attr2")))
     }
 
     @Test
