@@ -2265,43 +2265,57 @@ __metadata:
   linkType: hard
 
 "@dotenvx/dotenvx@npm:^2.1.5":
-  version: 2.35.0
-  resolution: "@dotenvx/dotenvx@npm:2.35.0"
+  version: 2.38.2
+  resolution: "@dotenvx/dotenvx@npm:2.38.2"
   dependencies:
-    "@dotenvx/primitives": "npm:^3.3.0"
-    "@dotenvx/providers": "npm:^0.3.5"
-    "@dotenvx/tooling": "npm:^1.0.5"
+    "@dotenvx/primitives": "npm:^3.3.1"
+    "@dotenvx/providers": "npm:^0.3.11"
+    "@dotenvx/tooling": "npm:^1.0.6"
     undici: "npm:^6.28.1"
     write-file-atomic: "npm:^5.0.1"
     yocto-spinner: "npm:^1.2.1"
   bin:
     dotenvx: src/cli/dotenvx.js
     dx: src/cli/dotenvx.js
-  checksum: 10c0/033f61a40a926c02543b016f96d817ae40c6ac32b9bd544e8752f96c08a5a28645ef2b451dca7dd2f096793ecd4abed24a0a2f1c16e9f8945314392f21776ed6
+  checksum: 10c0/a251f8fc94b69c7ed90e195575fa9e5716c476c61b4c82a8df6f16ed8285d0accc77f00032a14b707153b61eb05829d98d8a3a242c76229cab66b16587e00dd6
   languageName: node
   linkType: hard
 
-"@dotenvx/primitives@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@dotenvx/primitives@npm:3.3.0"
-  checksum: 10c0/2316dd2372a754e0381eb4f616abeb9afad3c35e880a5a7463f5b96c348a75a34d72c59488a9310c7511e4ec99b6d384befe60c9fcd016842736c9641ee2de29
+"@dotenvx/primitives@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "@dotenvx/primitives@npm:3.3.1"
+  checksum: 10c0/d9909f466f54ae0662a61f91d210ad55b3dd6acb7be44d2e0e459edd0d2a41ea2a311a2d4cde4b0932866c738b14fdaa73780bc5679a11832483a69d1d1b6ca9
   languageName: node
   linkType: hard
 
-"@dotenvx/providers@npm:^0.3.5":
-  version: 0.3.5
-  resolution: "@dotenvx/providers@npm:0.3.5"
+"@dotenvx/primitives@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@dotenvx/primitives@npm:4.0.0"
+  checksum: 10c0/65acf5bad42e4bf8c1957e30a953ca98d434c23268cc05d8aecab1a4aa64c0ec18d701387d5753a36392e510ab8c82c68be678efcdae33fe61152fb57016c51c
+  languageName: node
+  linkType: hard
+
+"@dotenvx/providers@npm:^0.3.11":
+  version: 0.3.12
+  resolution: "@dotenvx/providers@npm:0.3.12"
   dependencies:
-    "@dotenvx/primitives": "npm:^3.3.0"
+    "@dotenvx/primitives": "npm:^4.0.0"
     "@dotenvx/tooling": "npm:^1.0.4"
-  checksum: 10c0/35ffb7a3dc0756c87ac7788e9733443cbf768f19d360f00e3704981066f2092ecea8388e3c877b4e7f15e8d4d070dd6403b770da6802d06ebcccbbf34318f436
+  checksum: 10c0/9ea9420b7bbada2321bb4300f5e9a8483768994d9fb0c4f7aa745f070bb7612440014870d3acdeaf739fe405654764226c30d85a9388a2085c9a6225a9b32a0c
   languageName: node
   linkType: hard
 
-"@dotenvx/tooling@npm:^1.0.4, @dotenvx/tooling@npm:^1.0.5":
+"@dotenvx/tooling@npm:^1.0.4":
   version: 1.0.5
   resolution: "@dotenvx/tooling@npm:1.0.5"
   checksum: 10c0/ac6b4693354fa9768216087239ed2ad895c5f8cc15d07076fe7d20238ad7b276d78ed9d8b2916a6fbbbede3b12eb15e2734fb1d5413e4cbe8719c2702cf3bd58
+  languageName: node
+  linkType: hard
+
+"@dotenvx/tooling@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "@dotenvx/tooling@npm:1.0.6"
+  checksum: 10c0/f090e5e32690621fc140a4f65a48ee57f73f51880db3720993c97c84501850e1d865098839e0c01d4a9366ce34a37b71e18c43412edc25be2b371f06c590268d
   languageName: node
   linkType: hard
 
