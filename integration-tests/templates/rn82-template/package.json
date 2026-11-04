@@ -9,12 +9,12 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "@react-navigation/bottom-tabs": "6.6.1",
-    "@react-navigation/native": "6.1.18",
+    "@react-navigation/bottom-tabs": "7.21.0",
+    "@react-navigation/native": "7.5.1",
     "react": "19.1.1",
     "react-native": "0.82.1",
-    "react-native-safe-area-context": "5.5.2",
-    "react-native-screens": "4.25.0"
+    "react-native-safe-area-context": "5.11.1",
+    "react-native-screens": "4.25.2"
   },
   "devDependencies": {
     "@babel/core": "7.29.0",
