@@ -19,6 +19,9 @@ DerivedData
 project.xcworkspace
 **/Pods
 **/ios/build
+packages/core/.swiftpm/
+packages/core/.build/
+packages/core/Package.resolved
 
 # Gradle
 /build/

@@ -25,6 +25,8 @@
     "android/dependencies.gradle",
     "ios",
     "RNEmbraceCore.podspec",
+    "Package.swift",
+    "react-native.config.js",
     "src/NativeEmbraceManager.ts",
     "src/NativeEmbraceTracerProvider.ts"
   ],
@@ -60,7 +62,7 @@
   ],
   "scripts": {
     "android:test": "cd test-project && yarn install && cd android && ./gradlew :app:detekt && ./gradlew :app:testDebugUnitTest && cd ../../",
-    "build": "node update_android_version.ts && tsc && cp app.plugin.js lib/",
+    "build": "node update_android_version.ts && node update_ios_version.ts && tsc && cp app.plugin.js lib/",
     "ios:install": "cd test-project && yarn install && cd ios && rm -rf ~/Library/Caches/CocoaPods && rm -f Podfile.lock && USE_FRAMEWORKS=dynamic pod install --repo-update && rm .xcode.env.local",
     "ios:test": "../../scripts/run-ios-tests-no-coverage.sh test-project/ios/RNEmbraceCoreTests.xcworkspace RNEmbraceCoreTests"
   },
@@ -80,5 +82,8 @@
     "android": {
       "javaPackageName": "io.embrace.rnembracecore"
     }
+  },
+  "swiftpmConfig": {
+    "name": "RNEmbraceCore"
   }
 }
