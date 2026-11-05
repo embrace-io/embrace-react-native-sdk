@@ -52,7 +52,7 @@ class Wizard {
     return list.reduce(
       async (chain: Promise<any[]>, field: Field): Promise<any[]> => {
         return chain.then(results =>
-          field.fetch().then(res => [...results, res]),
+          this.fieldValue(field).then(res => [...results, res]),
         );
       },
       Promise.resolve([]),
