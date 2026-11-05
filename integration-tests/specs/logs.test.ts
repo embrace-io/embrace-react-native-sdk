@@ -80,6 +80,17 @@ describe("Logs", () => {
     expect(payload.logs).toMatchGoldenFile("promise-rejection", "logs");
   });
 
+  it("records a render error caught by EmbraceErrorBoundary", async () => {
+    await tap("Trigger a Render error");
+    await endSession();
+
+    const payload = await source.getPayloads();
+    expect(payload.logs).toMatchGoldenFile("render-error", "logs");
+
+    const renderErrorLog = payload.logs.find(log => log.body === "Upssssssss");
+    expect(getAttribute(renderErrorLog, "emb.stacktrace.rn")).toContain("SubErrorComponent2");
+  });
+
   // The two crash tests come last: the SDK only delivers a crash report at the next startup, so
   // they have to relaunch the app, and that relaunch is a cold start for whatever runs after them.
   // The settle after the tap lets the dying process finish writing its report and exit, so the
