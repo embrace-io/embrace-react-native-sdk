@@ -160,6 +160,7 @@ export * from "./api/log";
 export * from "./api/session";
 export * from "./api/network";
 export * from "./api/user";
+export * from "./components/EmbraceErrorBoundary";
 export * from "./hooks/useEmbrace";
 export * from "./hooks/useEmbraceIsStarted";
 export * from "./hooks/useOrientationListener";

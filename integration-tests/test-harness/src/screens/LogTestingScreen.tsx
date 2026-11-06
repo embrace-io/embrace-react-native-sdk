@@ -4,6 +4,7 @@ import {useCallback} from "react";
 import {styles} from "../helpers/styles";
 import TestButton from "../components/TestButton";
 import {
+  EmbraceErrorBoundary,
   logHandledError,
   logError,
   logInfo,
@@ -74,9 +75,9 @@ const LogTestingScreen = () => {
     Promise.reject(new Error("fail"));
   }, []);
 
-  const [isError, setIsError] = React.useState(false);
+  const [renderErrorCount, setRenderErrorCount] = React.useState(0);
   const triggerRenderError = useCallback(() => {
-    setIsError(true);
+    setRenderErrorCount(count => count + 1);
   }, []);
 
   return (
@@ -107,7 +108,13 @@ const LogTestingScreen = () => {
           title="Trigger an Unhandled Promise rejection"
         />
         <TestButton onPress={triggerRenderError} title="Trigger a Render error" />
-        {isError && <ErrorComponent />}
+        {renderErrorCount > 0 && (
+          <EmbraceErrorBoundary
+            key={renderErrorCount}
+            fallback={() => <Text>Render error caught</Text>}>
+            <ErrorComponent />
+          </EmbraceErrorBoundary>
+        )}
       </View>
     </View>
   );
