@@ -2,30 +2,78 @@
   "spans": [
     {
       "data": {
+        "span_snapshots": [],
         "spans": [
           {
-            "trace_id": "b6f27b2329b24c7eb0af4927924ea8c2",
+            "name": "emb-session",
+            "attributes": [
+              {
+                "value": "ux.session",
+                "key": "emb.type"
+              },
+              {
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "session.id"
+              },
+              {
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "emb.user_session_id"
+              },
+              {
+                "value": "0716B564D3924A97B70B8C4ECF55CB5A",
+                "key": "emb.session_part_id"
+              },
+              {
+                "value": "foreground",
+                "key": "emb.state"
+              },
+              {
+                "value": "false",
+                "key": "emb.cold_start"
+              },
+              {
+                "value": "false",
+                "key": "emb.terminated"
+              },
+              {
+                "value": "true",
+                "key": "emb.clean_exit"
+              },
+              {
+                "value": "1795025853883280128",
+                "key": "emb.heartbeat_time_unix_nano"
+              },
+              {
+                "value": "7",
+                "key": "emb.session_part_number"
+              },
+              {
+                "value": "7",
+                "key": "emb.user_session_part_index"
+              },
+              {
+                "value": "1795025747268536064",
+                "key": "emb.user_session_start_ts"
+              },
+              {
+                "value": "43200",
+                "key": "emb.user_session_max_duration_seconds"
+              },
+              {
+                "value": "1800",
+                "key": "emb.user_session_inactivity_timeout_seconds"
+              }
+            ],
+            "links": [],
+            "span_id": "4b0a8cd34fb9cfcf",
+            "trace_id": "36d7d355f8b834f54dec36d4c8819e12",
+            "status": "ok",
+            "start_time_unix_nano": 1795025853883229000,
+            "end_time_unix_nano": 1795025856488243200,
             "events": [
               {
                 "name": "emb-ui-tap",
-                "attributes": [
-                  {
-                    "key": "tap.coords",
-                    "value": "120,819"
-                  },
-                  {
-                    "key": "emb.type",
-                    "value": "ux.tap"
-                  },
-                  {
-                    "key": "view.name",
-                    "value": "RCTParagraphComponentView"
-                  }
-                ],
-                "time_unix_nano": 1790701353724133000
-              },
-              {
-                "name": "emb-ui-tap",
+                "time_unix_nano": 1795025853989303000,
                 "attributes": [
                   {
                     "value": "RCTParagraphComponentView",
@@ -36,147 +84,146 @@
                     "key": "emb.type"
                   },
                   {
-                    "value": "201,313",
+                    "value": "120,815",
                     "key": "tap.coords"
                   }
-                ],
-                "time_unix_nano": 1790701355175705900
+                ]
+              },
+              {
+                "name": "emb-ui-tap",
+                "time_unix_nano": 1795025855569354000,
+                "attributes": [
+                  {
+                    "value": "ux.tap",
+                    "key": "emb.type"
+                  },
+                  {
+                    "value": "201,288",
+                    "key": "tap.coords"
+                  },
+                  {
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
+                  }
+                ]
               }
-            ],
-            "start_time_unix_nano": 1790701348135716900,
-            "status": "ok",
-            "span_id": "c9e1995ebd4b5d5d",
-            "name": "emb-session",
-            "attributes": [
-              {
-                "key": "emb.type",
-                "value": "ux.session"
-              },
-              {
-                "key": "session.id",
-                "value": "B2F4488DBACE4F499F43ABDD6DB8AD00"
-              },
-              {
-                "key": "emb.state",
-                "value": "foreground"
-              },
-              {
-                "key": "emb.cold_start",
-                "value": "false"
-              },
-              {
-                "key": "emb.terminated",
-                "value": "false"
-              },
-              {
-                "key": "emb.clean_exit",
-                "value": "true"
-              },
-              {
-                "key": "emb.heartbeat_time_unix_nano",
-                "value": "1790701353139704832"
-              },
-              {
-                "key": "emb.session_number",
-                "value": "4"
-              }
-            ],
-            "end_time_unix_nano": 1790701356159319800,
-            "links": []
+            ]
           },
           {
-            "trace_id": "36ae8db914db37134aadcfbed493b91e",
-            "events": [],
-            "start_time_unix_nano": 1790701348139198000,
-            "span_id": "2032272cbb117cf0",
-            "status": "ok",
             "name": "span",
             "attributes": [
               {
-                "value": "654321",
-                "key": "test.attr"
+                "key": "emb.session_part_id",
+                "value": "0716B564D3924A97B70B8C4ECF55CB5A"
               },
               {
-                "value": "ux.view",
-                "key": "emb.type"
+                "key": "test.attr",
+                "value": "654321"
               },
               {
-                "value": "B2F4488DBACE4F499F43ABDD6DB8AD00",
-                "key": "session.id"
+                "key": "emb.user_session_id",
+                "value": "D2109E734F204553B907B6C2F58F8F51"
               },
               {
-                "value": "span",
-                "key": "view.name"
+                "key": "view.name",
+                "value": "span"
               },
               {
-                "value": "@react-navigation/native",
-                "key": "package"
+                "key": "package",
+                "value": "@react-navigation/native"
               },
               {
-                "value": "false",
-                "key": "view.launch"
+                "key": "view.state.end",
+                "value": "inactive"
               },
               {
-                "value": "inactive",
-                "key": "view.state.end"
+                "key": "view.launch",
+                "value": "false"
+              },
+              {
+                "key": "emb.type",
+                "value": "ux.view"
+              },
+              {
+                "key": "session.id",
+                "value": "D2109E734F204553B907B6C2F58F8F51"
               }
             ],
-            "end_time_unix_nano": 1790701355531579400,
-            "links": []
+            "links": [],
+            "span_id": "a2c0c127020d309e",
+            "trace_id": "8d0cbab331133b20b09aaabda0f338c8",
+            "status": "unset",
+            "start_time_unix_nano": 1795025853883502800,
+            "end_time_unix_nano": 1795025855869731000,
+            "events": []
           },
           {
-            "trace_id": "d692dbbab174a1b52f68f29f0344e4da",
-            "events": [],
-            "start_time_unix_nano": 1790701355256144100,
-            "span_id": "d50c06a36cdfb8ed",
-            "status": "ok",
             "name": "test-1",
             "attributes": [
               {
-                "value": "B2F4488DBACE4F499F43ABDD6DB8AD00",
-                "key": "session.id"
+                "key": "emb.session_part_id",
+                "value": "0716B564D3924A97B70B8C4ECF55CB5A"
+              },
+              {
+                "key": "session.id",
+                "value": "D2109E734F204553B907B6C2F58F8F51"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "D2109E734F204553B907B6C2F58F8F51"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf"
               }
             ],
-            "end_time_unix_nano": 1790701355256254500,
-            "links": []
+            "links": [],
+            "span_id": "922aa9f852518cf4",
+            "trace_id": "d5fc69fb9a79bbe067155b7c81d1184f",
+            "status": "unset",
+            "start_time_unix_nano": 1795025855653048000,
+            "end_time_unix_nano": 1795025855653143000,
+            "events": []
           }
-        ],
-        "span_snapshots": []
+        ]
       },
-      "resource": {
-        "sdk_version": "6.22.0",
-        "os_build": "25G83",
-        "os_type": "darwin",
-        "process_start_time": 1790701324981581800,
-        "sdk_platform": "ios",
-        "build": "1",
-        "disk_total_capacity": 994610155520,
-        "os_name": "ios",
-        "process_pre_warm": false,
-        "os_version": "26.4.1",
-        "app_bundle_id": "io.embrace.rn87",
-        "process_identifier": "EE3D6121A93143FA9EFFEFEC5D2CC997",
-        "environment": "dev",
-        "hosted_sdk_version": "7.1.0",
-        "app_framework": 2,
-        "build_id": "0992A060585B3F5D85249A06A158EACD",
-        "os_alternate_type": "iOS",
-        "app_version": "1.0",
-        "device_model": "arm64",
-        "react_native_bundle_id": "8edd6938c99423382ba1ea16d4be06be",
-        "device_architecture": "arm64e",
-        "device_manufacturer": "Apple",
-        "environment_detail": "si",
-        "launch_count": null,
-        "screen_resolution": null,
-        "hosted_platform_version": "0.87.0",
-        "jailbroken": false
-      },
-      "type": "spans",
-      "version": "1.0",
       "metadata": {
         "personas": []
-      }
+      },
+      "version": "1.0",
+      "resource": {
+        "jailbroken": false,
+        "os_alternate_type": "iOS",
+        "app_framework": 2,
+        "hosted_sdk_version": "7.2.0",
+        "build_id": "899B345D68413D3994000DCB852FDFB7",
+        "hosted_platform_version": "0.87.0",
+        "build": "1",
+        "os_version": "26.5",
+        "sdk_version": "7.1.0",
+        "react_native_bundle_id": "85c0bb2cbb6c1be3bd596f6fdb91cbe8",
+        "process_pre_warm": false,
+        "device_manufacturer": "Apple",
+        "device_model": "arm64",
+        "service.version": "1.0",
+        "environment": "dev",
+        "process_identifier": "2E943DD51B334F5382B0C1092F3AE912",
+        "os_build": "26A434",
+        "disk_total_capacity": 994610155520,
+        "environment_detail": "si",
+        "device_architecture": "arm64e",
+        "app_version": "1.0",
+        "process_start_time": 1795025746765672000,
+        "screen_resolution": null,
+        "os_type": "darwin",
+        "sdk_platform": "ios",
+        "app_bundle_id": "io.embrace.rn87",
+        "os_name": "ios",
+        "launch_count": null,
+        "service.name": "io.embrace.rn87:rn87",
+        "telemetry.sdk.language": "swift"
+      },
+      "type": "spans"
     }
   ],
   "logs": []

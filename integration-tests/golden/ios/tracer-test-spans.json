@@ -1,125 +1,133 @@
 {
   "spans": [
     {
+      "version": "1.0",
+      "type": "spans",
       "data": {
-        "span_snapshots": [
-          {
-            "trace_id": "54da7cfcccc1febfb2bc8467d7352c41",
-            "events": [],
-            "start_time_unix_nano": 1790701363506484500,
-            "span_id": "17ce940f6999147d",
-            "attributes": [
-              {
-                "key": "session.id",
-                "value": "FB40CD4E5961498383B085307CAD0437"
-              }
-            ],
-            "name": "test-5",
-            "status": "unset",
-            "links": []
-          }
-        ],
         "spans": [
           {
-            "trace_id": "9021772ab18deb171e19612a0d273a49",
+            "name": "emb-session",
+            "trace_id": "5d33479732dabc16b7b24e1c14c0e12b",
             "events": [
               {
                 "name": "emb-ui-tap",
+                "time_unix_nano": 1795025872743191000,
                 "attributes": [
                   {
-                    "value": "120,819",
-                    "key": "tap.coords"
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
                   },
                   {
                     "value": "ux.tap",
                     "key": "emb.type"
                   },
                   {
-                    "value": "RCTParagraphComponentView",
-                    "key": "view.name"
+                    "value": "201,334",
+                    "key": "tap.coords"
                   }
-                ],
-                "time_unix_nano": 1790701361864318700
+                ]
               },
               {
                 "name": "emb-ui-tap",
+                "time_unix_nano": 1795025871152776000,
                 "attributes": [
-                  {
-                    "value": "201,359",
-                    "key": "tap.coords"
-                  },
                   {
                     "value": "ux.tap",
                     "key": "emb.type"
                   },
                   {
+                    "value": "120,815",
+                    "key": "tap.coords"
+                  },
+                  {
                     "value": "RCTParagraphComponentView",
                     "key": "view.name"
                   }
-                ],
-                "time_unix_nano": 1790701363439221800
+                ]
               }
             ],
-            "start_time_unix_nano": 1790701361515075000,
-            "status": "ok",
-            "span_id": "e97e8b480f1e526a",
-            "name": "emb-session",
+            "start_time_unix_nano": 1795025871039114000,
+            "links": [],
             "attributes": [
               {
-                "key": "emb.type",
-                "value": "ux.session"
+                "value": "ux.session",
+                "key": "emb.type"
               },
               {
-                "key": "session.id",
-                "value": "FB40CD4E5961498383B085307CAD0437"
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "session.id"
               },
               {
-                "key": "emb.state",
-                "value": "foreground"
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "emb.user_session_id"
               },
               {
-                "key": "emb.cold_start",
-                "value": "false"
+                "value": "2E8FE310E29D4E0A92370A2D464F6AEB",
+                "key": "emb.session_part_id"
               },
               {
-                "key": "emb.terminated",
-                "value": "false"
+                "value": "foreground",
+                "key": "emb.state"
               },
               {
-                "key": "emb.clean_exit",
-                "value": "true"
+                "value": "false",
+                "key": "emb.cold_start"
               },
               {
-                "key": "emb.heartbeat_time_unix_nano",
-                "value": "1790701361517467136"
+                "value": "false",
+                "key": "emb.terminated"
               },
               {
-                "key": "emb.session_number",
-                "value": "5"
+                "value": "true",
+                "key": "emb.clean_exit"
+              },
+              {
+                "value": "1795025871039180032",
+                "key": "emb.heartbeat_time_unix_nano"
+              },
+              {
+                "value": "9",
+                "key": "emb.session_part_number"
+              },
+              {
+                "value": "9",
+                "key": "emb.user_session_part_index"
+              },
+              {
+                "value": "1795025747268536064",
+                "key": "emb.user_session_start_ts"
+              },
+              {
+                "value": "43200",
+                "key": "emb.user_session_max_duration_seconds"
+              },
+              {
+                "value": "1800",
+                "key": "emb.user_session_inactivity_timeout_seconds"
               }
             ],
-            "end_time_unix_nano": 1790701364411239200,
-            "links": []
+            "span_id": "dd07537c5c4fd08d",
+            "status": "ok",
+            "end_time_unix_nano": 1795025873673472800
           },
           {
-            "trace_id": "4842f359e1109a9c13c88e9b4ff0f782",
-            "events": [],
-            "start_time_unix_nano": 1790701361517782000,
-            "span_id": "7fe068b305912d51",
-            "status": "ok",
             "name": "span",
+            "trace_id": "dea43b3896b16d02e33c1f2c136ebcaf",
+            "events": [],
+            "start_time_unix_nano": 1795025871039479000,
+            "links": [],
             "attributes": [
+              {
+                "key": "emb.session_part_id",
+                "value": "2E8FE310E29D4E0A92370A2D464F6AEB"
+              },
               {
                 "key": "test.attr",
                 "value": "654321"
               },
               {
-                "key": "emb.type",
-                "value": "ux.view"
-              },
-              {
-                "key": "session.id",
-                "value": "FB40CD4E5961498383B085307CAD0437"
+                "key": "emb.user_session_id",
+                "value": "D2109E734F204553B907B6C2F58F8F51"
               },
               {
                 "key": "view.name",
@@ -130,174 +138,307 @@
                 "value": "@react-navigation/native"
               },
               {
+                "key": "view.state.end",
+                "value": "inactive"
+              },
+              {
                 "key": "view.launch",
                 "value": "false"
               },
               {
-                "key": "view.state.end",
-                "value": "inactive"
+                "key": "emb.type",
+                "value": "ux.view"
+              },
+              {
+                "key": "session.id",
+                "value": "D2109E734F204553B907B6C2F58F8F51"
               }
             ],
-            "end_time_unix_nano": 1790701363790935300,
-            "links": []
+            "span_id": "1a08fb2c1010dcd5",
+            "status": "unset",
+            "end_time_unix_nano": 1795025873047624200
           },
           {
-            "trace_id": "4cd4fc06d30874b6f41f0d2b293d8e9d",
+            "name": "test-1",
+            "trace_id": "f026f8d134bf4bcacabced1090bf6722",
             "events": [],
-            "start_time_unix_nano": 1790701363506244900,
-            "span_id": "ba8ae63e89bfe12b",
-            "status": "ok",
-            "name": "test-1-updated",
+            "start_time_unix_nano": 1795025872819676000,
+            "links": [],
             "attributes": [
-              {
-                "key": "string-attr",
-                "value": "my-attr"
-              },
-              {
-                "key": "bool-attr",
-                "value": "true"
-              },
               {
                 "key": "number-attr",
                 "value": "22"
               },
               {
                 "key": "session.id",
-                "value": "FB40CD4E5961498383B085307CAD0437"
+                "value": "D2109E734F204553B907B6C2F58F8F51"
+              },
+              {
+                "key": "string-attr",
+                "value": "my-attr"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "D2109E734F204553B907B6C2F58F8F51"
+              },
+              {
+                "key": "bool-attr",
+                "value": "true"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "2E8FE310E29D4E0A92370A2D464F6AEB"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf"
               }
             ],
-            "end_time_unix_nano": 1790701363506577000,
-            "links": []
+            "span_id": "9aea62863c5ad9d9",
+            "status": "ok",
+            "end_time_unix_nano": 1795025872819962000
           },
           {
-            "trace_id": "40083594af27badb2d48d5f9eff17a4e",
+            "name": "test-2",
+            "trace_id": "5457f57f84fbcedb0a3b4dd06df82077",
             "events": [
               {
-                "name": "test-2-event-1",
-                "attributes": [],
-                "time_unix_nano": 1790701363506605800
-              },
-              {
-                "name": "test-2-event-2",
-                "attributes": [],
-                "time_unix_nano": 1700001002000000000
-              },
-              {
-                "name": "test-2-event-3",
                 "attributes": [
+                  {
+                    "key": "emb.type",
+                    "value": "perf"
+                  }
+                ],
+                "time_unix_nano": 1700001002000000000,
+                "name": "test-2-event-2"
+              },
+              {
+                "attributes": [
+                  {
+                    "key": "emb.type",
+                    "value": "perf"
+                  }
+                ],
+                "time_unix_nano": 1795025872819984000,
+                "name": "test-2-event-1"
+              },
+              {
+                "attributes": [
+                  {
+                    "value": "perf",
+                    "key": "emb.type"
+                  },
                   {
                     "value": "my-event-attr",
                     "key": "test-2-event-attr"
                   }
                 ],
-                "time_unix_nano": 1700009002000000000
+                "time_unix_nano": 1700009002000000000,
+                "name": "test-2-event-3"
               }
             ],
-            "start_time_unix_nano": 1790701363506326300,
-            "span_id": "f86ba861c77e03e1",
-            "status": "ok",
-            "name": "test-2",
+            "start_time_unix_nano": 1795025872819745000,
+            "links": [],
             "attributes": [
               {
+                "key": "emb.user_session_id",
+                "value": "D2109E734F204553B907B6C2F58F8F51"
+              },
+              {
                 "key": "session.id",
-                "value": "FB40CD4E5961498383B085307CAD0437"
+                "value": "D2109E734F204553B907B6C2F58F8F51"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "2E8FE310E29D4E0A92370A2D464F6AEB"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf"
               }
             ],
-            "end_time_unix_nano": 1790701363506622000,
-            "links": []
+            "span_id": "c2995edbd15b4f00",
+            "status": "unset",
+            "end_time_unix_nano": 1795025872820036900
           },
           {
-            "trace_id": "cb47e24feea789fee8fd1c48d3d40158",
+            "name": "test-3",
+            "trace_id": "07a30350770205265e2e7b395af8603f",
             "events": [
               {
-                "name": "exception",
                 "attributes": [
                   {
-                    "key": "exception.message",
-                    "value": "span exception"
+                    "value": "span exception",
+                    "key": "exception.message"
+                  },
+                  {
+                    "value": "perf",
+                    "key": "emb.type"
                   }
                 ],
-                "time_unix_nano": 1790701363506657800
+                "time_unix_nano": 1795025872820087800,
+                "name": "exception"
               }
             ],
-            "start_time_unix_nano": 1790701363506361300,
-            "span_id": "f713ae935c0c8c0a",
-            "status": "ok",
-            "name": "test-3",
+            "start_time_unix_nano": 1795025872819772000,
+            "links": [
+              {
+                "attributes": [],
+                "span_id": "9aea62863c5ad9d9",
+                "trace_id": "f026f8d134bf4bcacabced1090bf6722"
+              },
+              {
+                "attributes": [
+                  {
+                    "value": "my-link-attr",
+                    "key": "test-3-link-attr"
+                  }
+                ],
+                "span_id": "c2995edbd15b4f00",
+                "trace_id": "5457f57f84fbcedb0a3b4dd06df82077"
+              }
+            ],
             "attributes": [
               {
-                "key": "session.id",
-                "value": "FB40CD4E5961498383B085307CAD0437"
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "emb.user_session_id"
+              },
+              {
+                "value": "perf",
+                "key": "emb.type"
+              },
+              {
+                "value": "2E8FE310E29D4E0A92370A2D464F6AEB",
+                "key": "emb.session_part_id"
+              },
+              {
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "session.id"
               }
             ],
-            "end_time_unix_nano": 1790701363506660900,
-            "links": []
+            "span_id": "322b3e037a7ba648",
+            "status": "unset",
+            "end_time_unix_nano": 1795025872820107000
           },
           {
-            "trace_id": "59ad3e9ca781008de644063a04ee3845",
-            "events": [],
-            "start_time_unix_nano": 1790701363506385200,
-            "span_id": "a963dd43a5c0aeba",
-            "status": "ok",
             "name": "test-4",
+            "trace_id": "7124b77af44171c05ef18b9853a8d01a",
+            "events": [],
+            "start_time_unix_nano": 1795025872819795200,
+            "links": [],
             "attributes": [
               {
-                "key": "session.id",
-                "value": "FB40CD4E5961498383B085307CAD0437"
+                "value": "perf",
+                "key": "emb.type"
+              },
+              {
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "session.id"
+              },
+              {
+                "value": "2E8FE310E29D4E0A92370A2D464F6AEB",
+                "key": "emb.session_part_id"
+              },
+              {
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "emb.user_session_id"
               }
             ],
+            "status": "unset",
             "end_time_unix_nano": 1709424000000000000,
-            "links": []
+            "span_id": "1aa87dcbf25d30fd"
           },
           {
-            "trace_id": "1bf93f9c964b23780084c33167f5b0ef",
-            "events": [],
-            "start_time_unix_nano": 1790701363506675700,
-            "span_id": "dda8e02ef7b1c13e",
-            "status": "error",
             "name": "test-with-endAsFailed",
+            "trace_id": "2a7b0ec75c4d06df4d27fb5443e05497",
+            "events": [],
+            "start_time_unix_nano": 1795025872820113000,
+            "links": [],
             "attributes": [
               {
-                "key": "session.id",
-                "value": "FB40CD4E5961498383B085307CAD0437"
+                "value": "2E8FE310E29D4E0A92370A2D464F6AEB",
+                "key": "emb.session_part_id"
+              },
+              {
+                "value": "perf",
+                "key": "emb.type"
+              },
+              {
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "session.id"
+              },
+              {
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "emb.user_session_id"
               }
             ],
-            "end_time_unix_nano": 1790701363506749200,
-            "links": []
+            "status": "error",
+            "end_time_unix_nano": 1795025872820160800,
+            "span_id": "4ac0a6265b8fc13b"
+          }
+        ],
+        "span_snapshots": [
+          {
+            "name": "test-5",
+            "trace_id": "100a38bfbd0a631046f187e9ce6f4fd5",
+            "events": [],
+            "start_time_unix_nano": 1795025872819854000,
+            "links": [],
+            "attributes": [
+              {
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "session.id"
+              },
+              {
+                "value": "2E8FE310E29D4E0A92370A2D464F6AEB",
+                "key": "emb.session_part_id"
+              },
+              {
+                "value": "D2109E734F204553B907B6C2F58F8F51",
+                "key": "emb.user_session_id"
+              },
+              {
+                "value": "perf",
+                "key": "emb.type"
+              }
+            ],
+            "status": "unset",
+            "span_id": "a7478e8bfb39e747"
           }
         ]
       },
-      "version": "1.0",
       "resource": {
-        "sdk_platform": "ios",
-        "jailbroken": false,
-        "sdk_version": "6.22.0",
-        "os_name": "ios",
-        "disk_total_capacity": 994610155520,
-        "build": "1",
-        "os_type": "darwin",
-        "process_start_time": 1790701324981581800,
-        "process_pre_warm": false,
-        "os_version": "26.4.1",
-        "app_bundle_id": "io.embrace.rn87",
-        "process_identifier": "EE3D6121A93143FA9EFFEFEC5D2CC997",
-        "environment": "dev",
-        "hosted_sdk_version": "7.1.0",
-        "app_framework": 2,
-        "build_id": "0992A060585B3F5D85249A06A158EACD",
-        "os_alternate_type": "iOS",
-        "app_version": "1.0",
-        "device_model": "arm64",
-        "react_native_bundle_id": "8edd6938c99423382ba1ea16d4be06be",
-        "device_architecture": "arm64e",
-        "device_manufacturer": "Apple",
-        "environment_detail": "si",
         "launch_count": null,
-        "screen_resolution": null,
+        "app_version": "1.0",
+        "os_version": "26.5",
+        "os_alternate_type": "iOS",
+        "environment_detail": "si",
+        "os_build": "26A434",
+        "service.name": "io.embrace.rn87:rn87",
+        "telemetry.sdk.language": "swift",
+        "build_id": "899B345D68413D3994000DCB852FDFB7",
+        "hosted_sdk_version": "7.2.0",
+        "jailbroken": false,
+        "os_type": "darwin",
+        "sdk_platform": "ios",
+        "sdk_version": "7.1.0",
+        "device_manufacturer": "Apple",
+        "app_bundle_id": "io.embrace.rn87",
+        "device_architecture": "arm64e",
         "hosted_platform_version": "0.87.0",
-        "os_build": "25G83"
+        "environment": "dev",
+        "react_native_bundle_id": "85c0bb2cbb6c1be3bd596f6fdb91cbe8",
+        "disk_total_capacity": 994610155520,
+        "service.version": "1.0",
+        "app_framework": 2,
+        "os_name": "ios",
+        "screen_resolution": null,
+        "build": "1",
+        "device_model": "arm64",
+        "process_identifier": "2E943DD51B334F5382B0C1092F3AE912",
+        "process_pre_warm": false,
+        "process_start_time": 1795025746765672000
       },
-      "type": "spans",
       "metadata": {
         "personas": []
       }
