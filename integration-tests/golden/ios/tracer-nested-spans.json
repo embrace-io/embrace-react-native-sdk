@@ -1,34 +1,106 @@
 {
   "spans": [
     {
-      "metadata": {
-        "personas": []
+      "resource": {
+        "build": "1",
+        "sdk_platform": "ios",
+        "os_type": "darwin",
+        "app_framework": 2,
+        "service.name": "io.embrace.rn87:rn87",
+        "app_version": "1.0",
+        "process_pre_warm": false,
+        "telemetry.sdk.language": "swift",
+        "react_native_bundle_id": "ba29a843e2412175cf2a982285ee7f6d",
+        "os_build": "25G342",
+        "os_version": "27.2",
+        "build_id": "EF51B36402053436BE828449442643C7",
+        "service.version": "1.0",
+        "environment": "dev",
+        "os_name": "ios",
+        "disk_total_capacity": 1995165736960,
+        "device_architecture": "arm64e",
+        "screen_resolution": null,
+        "os_alternate_type": "iOS",
+        "hosted_platform_version": "0.87.0",
+        "launch_count": null,
+        "device_model": "arm64",
+        "hosted_sdk_version": "7.3.0",
+        "jailbroken": false,
+        "app_bundle_id": "io.embrace.rn87",
+        "sdk_version": "7.2.0",
+        "process_identifier": "EE8177034B8742199B8A71E3FECE0A95",
+        "environment_detail": "si",
+        "device_manufacturer": "Apple",
+        "process_start_time": 1795703402932600000
       },
-      "version": "1.0",
-      "type": "spans",
       "data": {
         "spans": [
           {
             "status": "ok",
-            "end_time_unix_nano": 1790701372628706800,
-            "links": [],
-            "name": "emb-session",
+            "start_time_unix_nano": 1795703446766403000,
+            "trace_id": "7cfa4b118bd8a80c0027883151f21414",
+            "events": [
+              {
+                "time_unix_nano": 1795703448286727000,
+                "attributes": [
+                  {
+                    "key": "tap.coords",
+                    "value": "201,380"
+                  },
+                  {
+                    "key": "emb.type",
+                    "value": "ux.tap"
+                  },
+                  {
+                    "key": "view.name",
+                    "value": "RCTParagraphComponentView"
+                  }
+                ],
+                "name": "emb-ui-tap"
+              },
+              {
+                "time_unix_nano": 1795703446879437000,
+                "attributes": [
+                  {
+                    "key": "emb.type",
+                    "value": "ux.tap"
+                  },
+                  {
+                    "key": "view.name",
+                    "value": "RCTParagraphComponentView"
+                  },
+                  {
+                    "key": "tap.coords",
+                    "value": "120,815"
+                  }
+                ],
+                "name": "emb-ui-tap"
+              }
+            ],
             "attributes": [
               {
-                "value": "ux.session",
-                "key": "emb.type"
+                "key": "emb.type",
+                "value": "ux.session"
               },
               {
-                "value": "2606610E6E9D4B3796211ECDB3CB0E89",
-                "key": "session.id"
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
-                "value": "foreground",
-                "key": "emb.state"
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
-                "value": "false",
-                "key": "emb.cold_start"
+                "key": "emb.session_part_id",
+                "value": "6AF36D8542FD4569B97D8B5B9DACEEE3"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
+              },
+              {
+                "key": "emb.cold_start",
+                "value": "false"
               },
               {
                 "value": "false",
@@ -39,69 +111,56 @@
                 "key": "emb.clean_exit"
               },
               {
-                "value": "1790701369764744960",
+                "value": "1795703446766455296",
                 "key": "emb.heartbeat_time_unix_nano"
               },
               {
                 "value": "6",
-                "key": "emb.session_number"
-              }
-            ],
-            "start_time_unix_nano": 1790701369761910000,
-            "span_id": "c0b1cc678be2a69b",
-            "trace_id": "d74db6e062aa61e67148ada08cafa857",
-            "events": [
-              {
-                "time_unix_nano": 1790701370112784000,
-                "name": "emb-ui-tap",
-                "attributes": [
-                  {
-                    "key": "emb.type",
-                    "value": "ux.tap"
-                  },
-                  {
-                    "value": "RCTParagraphComponentView",
-                    "key": "view.name"
-                  },
-                  {
-                    "value": "120,819",
-                    "key": "tap.coords"
-                  }
-                ]
+                "key": "emb.session_part_number"
               },
               {
-                "time_unix_nano": 1790701371643358000,
-                "name": "emb-ui-tap",
-                "attributes": [
-                  {
-                    "value": "201,405",
-                    "key": "tap.coords"
-                  },
-                  {
-                    "value": "RCTParagraphComponentView",
-                    "key": "view.name"
-                  },
-                  {
-                    "value": "ux.tap",
-                    "key": "emb.type"
-                  }
-                ]
+                "value": "6",
+                "key": "emb.user_session_part_index"
+              },
+              {
+                "value": "1795703404423071744",
+                "key": "emb.user_session_start_ts"
+              },
+              {
+                "value": "43200",
+                "key": "emb.user_session_max_duration_seconds"
+              },
+              {
+                "value": "1800",
+                "key": "emb.user_session_inactivity_timeout_seconds"
               }
-            ]
+            ],
+            "span_id": "984b860141ace173",
+            "end_time_unix_nano": 1795703449208926000,
+            "name": "emb-session",
+            "links": []
           },
           {
-            "status": "ok",
-            "end_time_unix_nano": 1790701371999388700,
-            "links": [],
-            "name": "span",
             "attributes": [
+              {
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "view.launch",
+                "value": "false"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "6AF36D8542FD4569B97D8B5B9DACEEE3"
+              },
               {
                 "key": "view.state.end",
                 "value": "inactive"
               },
               {
-                "key": "session.id",
-                "value": "2606610E6E9D4B3796211ECDB3CB0E89"
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
                 "key": "test.attr",
@@ -112,195 +171,267 @@
                 "value": "span"
               },
               {
-                "key": "view.launch",
-                "value": "false"
+                "key": "package",
+                "value": "@react-navigation/native"
               },
               {
                 "key": "emb.type",
                 "value": "ux.view"
-              },
-              {
-                "key": "package",
-                "value": "@react-navigation/native"
               }
             ],
-            "start_time_unix_nano": 1790701369765144800,
-            "span_id": "ae32a3d1358b8ba9",
-            "trace_id": "d5d3a9bc56ae901112dec2c88d816b8e",
-            "events": []
+            "events": [],
+            "status": "unset",
+            "start_time_unix_nano": 1795703446766676000,
+            "name": "span",
+            "links": [],
+            "end_time_unix_nano": 1795703448581130000,
+            "trace_id": "fbda27fb6ea91544ef6f6961ae314832",
+            "span_id": "a26738315994c16b"
           },
           {
-            "status": "ok",
-            "end_time_unix_nano": 1790701371723385300,
-            "links": [],
-            "name": "test-1",
             "attributes": [
               {
                 "key": "session.id",
-                "value": "2606610E6E9D4B3796211ECDB3CB0E89"
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "6AF36D8542FD4569B97D8B5B9DACEEE3"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               }
             ],
-            "start_time_unix_nano": 1790701371722986500,
-            "span_id": "fa8a9631428c5796",
-            "trace_id": "a5b797b246bdf06b675ee40386f12216",
-            "events": []
+            "events": [],
+            "status": "unset",
+            "start_time_unix_nano": 1795703448353779000,
+            "name": "test-1",
+            "links": [],
+            "end_time_unix_nano": 1795703448354086000,
+            "trace_id": "2da862ddde25a13286c68731a5c510ed",
+            "span_id": "e8785fd6ddc6ec1b"
           },
           {
-            "status": "ok",
-            "end_time_unix_nano": 1790701371723420000,
-            "links": [],
-            "name": "test-2",
-            "parent_span_id": "fa8a9631428c5796",
-            "start_time_unix_nano": 1790701371723114800,
-            "span_id": "061da8773d9dfd79",
             "attributes": [
+              {
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "emb.user_session_id"
+              },
               {
                 "value": "my-attr",
                 "key": "test-2-attr"
               },
               {
-                "value": "2606610E6E9D4B3796211ECDB3CB0E89",
-                "key": "session.id"
-              }
-            ],
-            "trace_id": "a5b797b246bdf06b675ee40386f12216",
-            "events": []
-          },
-          {
-            "status": "ok",
-            "end_time_unix_nano": 1790701371723453200,
-            "links": [],
-            "name": "test-3",
-            "attributes": [
-              {
-                "value": "2606610E6E9D4B3796211ECDB3CB0E89",
-                "key": "session.id"
+                "value": "perf",
+                "key": "emb.type"
               },
               {
-                "value": "my-attr",
-                "key": "test-3-attr"
+                "value": "6AF36D8542FD4569B97D8B5B9DACEEE3",
+                "key": "emb.session_part_id"
+              },
+              {
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "session.id"
               }
             ],
-            "start_time_unix_nano": 1790701371723164400,
-            "span_id": "1833cab9a408997f",
-            "trace_id": "d76a4af610ecd279757442e22a857ae7",
-            "events": []
+            "events": [],
+            "parent_span_id": "e8785fd6ddc6ec1b",
+            "status": "unset",
+            "name": "test-2",
+            "start_time_unix_nano": 1795703448353879800,
+            "links": [],
+            "end_time_unix_nano": 1795703448354111000,
+            "trace_id": "2da862ddde25a13286c68731a5c510ed",
+            "span_id": "2eaa63e9c44adba1"
           },
           {
-            "status": "ok",
-            "end_time_unix_nano": 1790701371723359000,
+            "attributes": [
+              {
+                "key": "emb.type",
+                "value": "perf"
+              },
+              {
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "6AF36D8542FD4569B97D8B5B9DACEEE3"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "test-3-attr",
+                "value": "my-attr"
+              }
+            ],
+            "events": [],
+            "status": "unset",
+            "start_time_unix_nano": 1795703448353924000,
+            "name": "test-3",
             "links": [],
+            "end_time_unix_nano": 1795703448354135000,
+            "trace_id": "c9a4821e9b3008e7487c7b15c58ac0b9",
+            "span_id": "d4586de1b658eeec"
+          },
+          {
+            "attributes": [
+              {
+                "value": "6AF36D8542FD4569B97D8B5B9DACEEE3",
+                "key": "emb.session_part_id"
+              },
+              {
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "emb.user_session_id"
+              },
+              {
+                "value": "perf",
+                "key": "emb.type"
+              },
+              {
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "session.id"
+              }
+            ],
+            "events": [],
+            "status": "unset",
+            "start_time_unix_nano": 1795703448353942800,
             "name": "test-4",
-            "attributes": [
-              {
-                "value": "2606610E6E9D4B3796211ECDB3CB0E89",
-                "key": "session.id"
-              }
-            ],
-            "start_time_unix_nano": 1790701371723190500,
-            "span_id": "fdb6aa2408d572c9",
-            "trace_id": "e4f106b7aefdeecdac24048fc2415059",
-            "events": []
+            "links": [],
+            "end_time_unix_nano": 1795703448354064000,
+            "span_id": "1df70bc43e62d665",
+            "trace_id": "a794f2ab2f04fbc97b294be3316f24d4"
           },
           {
-            "status": "ok",
-            "end_time_unix_nano": 1790701371723331800,
-            "links": [],
+            "attributes": [
+              {
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "6AF36D8542FD4569B97D8B5B9DACEEE3"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              }
+            ],
+            "events": [],
+            "parent_span_id": "1df70bc43e62d665",
+            "status": "unset",
             "name": "test-5",
-            "parent_span_id": "fdb6aa2408d572c9",
-            "start_time_unix_nano": 1790701371723270000,
-            "span_id": "0eb80fb997aae7fb",
-            "attributes": [
-              {
-                "value": "2606610E6E9D4B3796211ECDB3CB0E89",
-                "key": "session.id"
-              }
-            ],
-            "trace_id": "e4f106b7aefdeecdac24048fc2415059",
-            "events": []
+            "start_time_unix_nano": 1795703448353978000,
+            "links": [],
+            "end_time_unix_nano": 1795703448354036000,
+            "span_id": "df91049aa231b803",
+            "trace_id": "a794f2ab2f04fbc97b294be3316f24d4"
           },
           {
-            "status": "ok",
-            "end_time_unix_nano": 1790701371723530800,
-            "links": [],
+            "attributes": [
+              {
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "6AF36D8542FD4569B97D8B5B9DACEEE3"
+              }
+            ],
+            "events": [],
+            "parent_span_id": "e8785fd6ddc6ec1b",
+            "status": "unset",
             "name": "test-6",
-            "parent_span_id": "fa8a9631428c5796",
-            "start_time_unix_nano": 1790701371723477000,
-            "span_id": "762652b52f3ac652",
-            "attributes": [
-              {
-                "value": "2606610E6E9D4B3796211ECDB3CB0E89",
-                "key": "session.id"
-              }
-            ],
-            "trace_id": "a5b797b246bdf06b675ee40386f12216",
-            "events": []
+            "start_time_unix_nano": 1795703448354162000,
+            "links": [],
+            "end_time_unix_nano": 1795703448354206200,
+            "span_id": "9e8724d122c8a0a8",
+            "trace_id": "2da862ddde25a13286c68731a5c510ed"
           },
           {
-            "status": "ok",
-            "end_time_unix_nano": 1790701371723629000,
-            "links": [],
-            "name": "test-with-asParent",
-            "parent_span_id": "fa8a9631428c5796",
-            "start_time_unix_nano": 1790701371723563800,
-            "span_id": "5d409244cddfcbad",
             "attributes": [
               {
-                "value": "2606610E6E9D4B3796211ECDB3CB0E89",
-                "key": "session.id"
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "6AF36D8542FD4569B97D8B5B9DACEEE3"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               }
             ],
-            "trace_id": "a5b797b246bdf06b675ee40386f12216",
-            "events": []
+            "events": [],
+            "parent_span_id": "e8785fd6ddc6ec1b",
+            "status": "unset",
+            "name": "test-with-asParent",
+            "start_time_unix_nano": 1795703448354229000,
+            "links": [],
+            "end_time_unix_nano": 1795703448354279200,
+            "span_id": "805b1a4c0f6c4c76",
+            "trace_id": "2da862ddde25a13286c68731a5c510ed"
           }
         ],
         "span_snapshots": [
           {
-            "status": "unset",
+            "trace_id": "36ea9723ec663b02a07545d036c81d44",
+            "span_id": "bce87f2170db60c9",
+            "events": [],
             "links": [],
-            "name": "test-5",
+            "start_time_unix_nano": 1795703440570241000,
             "attributes": [
               {
-                "key": "session.id",
-                "value": "FB40CD4E5961498383B085307CAD0437"
+                "value": "2BEA4DF0A6A04BA3AE30CE2AFC421361",
+                "key": "emb.session_part_id"
+              },
+              {
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "session.id"
+              },
+              {
+                "value": "perf",
+                "key": "emb.type"
+              },
+              {
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "emb.user_session_id"
               }
             ],
-            "start_time_unix_nano": 1790701363506484500,
-            "span_id": "17ce940f6999147d",
-            "trace_id": "54da7cfcccc1febfb2bc8467d7352c41",
-            "events": []
+            "name": "test-5",
+            "status": "unset"
           }
         ]
       },
-      "resource": {
-        "jailbroken": false,
-        "sdk_version": "6.22.0",
-        "process_start_time": 1790701324981581800,
-        "os_type": "darwin",
-        "build": "1",
-        "disk_total_capacity": 994610155520,
-        "os_name": "ios",
-        "sdk_platform": "ios",
-        "process_pre_warm": false,
-        "os_version": "26.4.1",
-        "app_bundle_id": "io.embrace.rn87",
-        "process_identifier": "EE3D6121A93143FA9EFFEFEC5D2CC997",
-        "environment": "dev",
-        "hosted_sdk_version": "7.1.0",
-        "app_framework": 2,
-        "build_id": "0992A060585B3F5D85249A06A158EACD",
-        "os_alternate_type": "iOS",
-        "app_version": "1.0",
-        "device_model": "arm64",
-        "react_native_bundle_id": "8edd6938c99423382ba1ea16d4be06be",
-        "device_architecture": "arm64e",
-        "device_manufacturer": "Apple",
-        "environment_detail": "si",
-        "launch_count": null,
-        "screen_resolution": null,
-        "hosted_platform_version": "0.87.0",
-        "os_build": "25G83"
-      }
+      "metadata": {
+        "personas": []
+      },
+      "type": "spans",
+      "version": "1.0"
     }
   ],
   "logs": []

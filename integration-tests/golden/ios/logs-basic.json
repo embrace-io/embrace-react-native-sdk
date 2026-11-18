@@ -1,96 +1,26 @@
 {
   "spans": [
     {
-      "type": "spans",
-      "resource": {
-        "process_identifier": "C081F24DA0E74B31B29C54B1AB65579F",
-        "disk_total_capacity": 994610155520,
-        "device_architecture": "arm64e",
-        "screen_resolution": null,
-        "device_model": "arm64",
-        "react_native_bundle_id": "8edd6938c99423382ba1ea16d4be06be",
-        "device_manufacturer": "Apple",
-        "environment": "dev",
-        "process_pre_warm": false,
-        "environment_detail": "si",
-        "hosted_sdk_version": "7.1.0",
-        "os_build": "25G83",
-        "process_start_time": 1790701396226521000,
-        "sdk_platform": "ios",
-        "app_bundle_id": "io.embrace.rn87",
-        "jailbroken": false,
-        "os_alternate_type": "iOS",
-        "build_id": "0992A060585B3F5D85249A06A158EACD",
-        "os_type": "darwin",
-        "hosted_platform_version": "0.87.0",
-        "os_name": "ios",
-        "sdk_version": "6.22.0",
-        "launch_count": null,
-        "app_framework": 2,
-        "app_version": "1.0",
-        "build": "1",
-        "os_version": "26.4.1"
-      },
-      "version": "1.0",
-      "metadata": {
-        "personas": []
-      },
       "data": {
+        "span_snapshots": [],
         "spans": [
           {
-            "start_time_unix_nano": 1790701516012621800,
-            "end_time_unix_nano": 1790701518296124000,
-            "name": "emb-session",
-            "span_id": "69cf0ecb829288db",
-            "trace_id": "6c25d43d2a1b7119e4a3d830662dedeb",
-            "status": "ok",
-            "events": [
-              {
-                "time_unix_nano": 1790701516370175000,
-                "attributes": [
-                  {
-                    "value": "ux.tap",
-                    "key": "emb.type"
-                  },
-                  {
-                    "value": "40,819",
-                    "key": "tap.coords"
-                  },
-                  {
-                    "value": "RCTViewComponentView",
-                    "key": "view.name"
-                  }
-                ],
-                "name": "emb-ui-tap"
-              },
-              {
-                "time_unix_nano": 1790701517324108000,
-                "attributes": [
-                  {
-                    "value": "ux.tap",
-                    "key": "emb.type"
-                  },
-                  {
-                    "value": "RCTParagraphComponentView",
-                    "key": "view.name"
-                  },
-                  {
-                    "value": "201,266",
-                    "key": "tap.coords"
-                  }
-                ],
-                "name": "emb-ui-tap"
-              }
-            ],
-            "links": [],
             "attributes": [
               {
                 "value": "ux.session",
                 "key": "emb.type"
               },
               {
-                "value": "65F48B305B124F7BADB441FF35C50611",
+                "value": "E8199F1FA97045A290454665B12E32D6",
                 "key": "session.id"
+              },
+              {
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "emb.user_session_id"
+              },
+              {
+                "value": "592F8C369B0E45CA815D0BBC9EF92962",
+                "key": "emb.session_part_id"
               },
               {
                 "value": "foreground",
@@ -109,115 +39,233 @@
                 "key": "emb.clean_exit"
               },
               {
-                "value": "1790701516015198976",
+                "value": "1795703639040605952",
                 "key": "emb.heartbeat_time_unix_nano"
               },
               {
-                "value": "21",
-                "key": "emb.session_number"
+                "value": "28",
+                "key": "emb.session_part_number"
+              },
+              {
+                "value": "28",
+                "key": "emb.user_session_part_index"
+              },
+              {
+                "value": "1795703404423071744",
+                "key": "emb.user_session_start_ts"
+              },
+              {
+                "value": "43200",
+                "key": "emb.user_session_max_duration_seconds"
+              },
+              {
+                "value": "1800",
+                "key": "emb.user_session_inactivity_timeout_seconds"
               }
-            ]
+            ],
+            "trace_id": "aa13c54520e64e808f4dbcfeff0c903b",
+            "start_time_unix_nano": 1795703639040521200,
+            "end_time_unix_nano": 1795703640972442000,
+            "name": "emb-session",
+            "events": [
+              {
+                "time_unix_nano": 1795703640061557000,
+                "name": "emb-ui-tap",
+                "attributes": [
+                  {
+                    "value": "201,264",
+                    "key": "tap.coords"
+                  },
+                  {
+                    "value": "ux.tap",
+                    "key": "emb.type"
+                  },
+                  {
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
+                  }
+                ]
+              },
+              {
+                "time_unix_nano": 1795703639148520000,
+                "name": "emb-ui-tap",
+                "attributes": [
+                  {
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
+                  },
+                  {
+                    "value": "40,815",
+                    "key": "tap.coords"
+                  },
+                  {
+                    "value": "ux.tap",
+                    "key": "emb.type"
+                  }
+                ]
+              }
+            ],
+            "links": [],
+            "span_id": "045d77d8fa9ffcf0",
+            "status": "ok"
           },
           {
-            "start_time_unix_nano": 1790701516015737000,
-            "end_time_unix_nano": 1790701516443774700,
-            "name": "redux",
-            "span_id": "dca573421bd86e60",
-            "trace_id": "92a8da016289497e6f97885dd093c680",
-            "status": "ok",
-            "events": [],
-            "links": [],
             "attributes": [
               {
-                "key": "view.launch",
-                "value": "false"
+                "value": "redux",
+                "key": "view.name"
               },
               {
-                "key": "emb.type",
-                "value": "ux.view"
+                "value": "false",
+                "key": "view.launch"
               },
               {
-                "key": "session.id",
-                "value": "65F48B305B124F7BADB441FF35C50611"
+                "value": "active",
+                "key": "view.state.end"
               },
               {
-                "key": "package",
-                "value": "@react-navigation/native"
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "session.id"
               },
               {
-                "key": "view.name",
-                "value": "redux"
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "emb.user_session_id"
               },
               {
-                "key": "test.attr",
-                "value": "654321"
+                "value": "@react-navigation/native",
+                "key": "package"
               },
               {
-                "key": "view.state.end",
-                "value": "active"
+                "value": "654321",
+                "key": "test.attr"
+              },
+              {
+                "value": "592F8C369B0E45CA815D0BBC9EF92962",
+                "key": "emb.session_part_id"
+              },
+              {
+                "value": "ux.view",
+                "key": "emb.type"
               }
-            ]
-          },
-          {
-            "start_time_unix_nano": 1790701516443831600,
-            "end_time_unix_nano": 1790701517677528000,
-            "name": "log",
-            "span_id": "8ad25688db04bcef",
-            "trace_id": "c27ba4930a594f7e7348abf648a68e27",
-            "status": "ok",
+            ],
+            "trace_id": "71237e3e45e85d1fc4a23ab5f255e09d",
+            "start_time_unix_nano": 1795703639040980000,
+            "end_time_unix_nano": 1795703639225481000,
+            "name": "redux",
             "events": [],
             "links": [],
+            "span_id": "04e985ac61b15597",
+            "status": "unset"
+          },
+          {
             "attributes": [
               {
                 "key": "view.state.end",
                 "value": "inactive"
               },
               {
-                "key": "package",
-                "value": "@react-navigation/native"
-              },
-              {
-                "key": "emb.type",
-                "value": "ux.view"
-              },
-              {
-                "key": "view.name",
-                "value": "log"
-              },
-              {
-                "key": "session.id",
-                "value": "65F48B305B124F7BADB441FF35C50611"
-              },
-              {
                 "key": "test.attr",
                 "value": "654321"
               },
               {
+                "key": "package",
+                "value": "@react-navigation/native"
+              },
+              {
+                "value": "ux.view",
+                "key": "emb.type"
+              },
+              {
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "592F8C369B0E45CA815D0BBC9EF92962"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
                 "key": "view.launch",
                 "value": "false"
+              },
+              {
+                "key": "view.name",
+                "value": "log"
               }
-            ]
+            ],
+            "trace_id": "e1bdce9bd16fa22d754909d2f344c3ec",
+            "start_time_unix_nano": 1795703639225522000,
+            "end_time_unix_nano": 1795703640361990000,
+            "name": "log",
+            "events": [],
+            "links": [],
+            "span_id": "4509d9dcbbab1919",
+            "status": "unset"
           }
-        ],
-        "span_snapshots": []
-      }
+        ]
+      },
+      "resource": {
+        "service.name": "io.embrace.rn87:rn87",
+        "device_manufacturer": "Apple",
+        "os_type": "darwin",
+        "sdk_platform": "ios",
+        "device_model": "arm64",
+        "react_native_bundle_id": "ba29a843e2412175cf2a982285ee7f6d",
+        "app_bundle_id": "io.embrace.rn87",
+        "process_pre_warm": false,
+        "sdk_version": "7.2.0",
+        "hosted_platform_version": "0.87.0",
+        "disk_total_capacity": 1995165736960,
+        "os_version": "27.2",
+        "process_start_time": 1795703479379137000,
+        "app_framework": 2,
+        "build_id": "EF51B36402053436BE828449442643C7",
+        "os_name": "ios",
+        "build": "1",
+        "process_identifier": "AE5129E96885401086A5D63019863A94",
+        "service.version": "1.0",
+        "hosted_sdk_version": "7.3.0",
+        "device_architecture": "arm64e",
+        "telemetry.sdk.language": "swift",
+        "os_build": "25G342",
+        "screen_resolution": null,
+        "launch_count": null,
+        "jailbroken": false,
+        "os_alternate_type": "iOS",
+        "app_version": "1.0",
+        "environment": "dev",
+        "environment_detail": "si"
+      },
+      "metadata": {
+        "personas": []
+      },
+      "type": "spans",
+      "version": "1.0"
     }
   ],
   "logs": [
     {
-      "type": "logs",
+      "metadata": {
+        "personas": []
+      },
       "data": {
         "logs": [
           {
-            "body": "This is a Warning log",
             "attributes": [
               {
                 "key": "emb.state",
                 "value": "foreground"
               },
               {
-                "key": "session.id",
-                "value": "65F48B305B124F7BADB441FF35C50611"
+                "key": "emb.session_part_id",
+                "value": "592F8C369B0E45CA815D0BBC9EF92962"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
                 "key": "emb.type",
@@ -225,47 +273,60 @@
               },
               {
                 "key": "emb.stacktrace.rn",
-                "value": "Error\n    at generateStackTrace (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:58342:24)\n    at logWarning (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:58237:98)\n    at anonymous (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:63331:49)\n    at _performTransitionSideEffects (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:27288:22)\n    at _receiveSignal (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:27244:45)\n    at onResponderRelease (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:27106:32)\n    at executeDispatch (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:7825:15)\n    at executeDispatchesAndReleaseTopLevel (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8332:227)\n    at forEach (native)\n    at anonymous (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8015:37)\n    at batchedUpdatesImpl (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:13767:16)\n    at batchedUpdates$1 (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8322:32)\n    at dispatchEvent (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8344:21)"
+                "value": "Error\n    at generateStackTrace (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:62981:24)\n    at logWarning (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:62876:98)\n    at anonymous (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:67501:49)\n    at _performTransitionSideEffects (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:27359:22)\n    at _receiveSignal (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:27315:45)\n    at onResponderRelease (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:27177:32)\n    at executeDispatch (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:7843:15)\n    at executeDispatchesAndReleaseTopLevel (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8350:227)\n    at forEach (native)\n    at anonymous (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8033:37)\n    at batchedUpdatesImpl (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:13785:16)\n    at batchedUpdates$1 (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8340:32)\n    at dispatchEvent (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8362:21)"
+              },
+              {
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
                 "key": "log.record.uid",
-                "value": "4C723205244D461DBFCB7A11B08725B3"
+                "value": "73BF50161C5F470A82DE21AF4874F849"
               }
             ],
+            "time_unix_nano": "1795703640142917120",
             "severity_text": "WARN",
-            "severity_number": 13,
-            "time_unix_nano": "1790701517395421952"
+            "body": "This is a Warning log",
+            "severity_number": 13
           },
           {
-            "severity_text": "INFO",
-            "time_unix_nano": "1790701517395458048",
-            "severity_number": 9,
-            "body": "This is a Info log",
             "attributes": [
               {
-                "value": "foreground",
-                "key": "emb.state"
+                "key": "emb.type",
+                "value": "sys.log"
               },
               {
-                "value": "65F48B305B124F7BADB441FF35C50611",
-                "key": "session.id"
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
-                "value": "sys.log",
-                "key": "emb.type"
+                "key": "emb.state",
+                "value": "foreground"
               },
               {
-                "value": "D3019AF0814D4073B196FBCA8C8C0264",
-                "key": "log.record.uid"
+                "key": "emb.session_part_id",
+                "value": "592F8C369B0E45CA815D0BBC9EF92962"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "log.record.uid",
+                "value": "8F3A7C76844F4E07A5FF3A66D522D56E"
               }
-            ]
+            ],
+            "time_unix_nano": "1795703640142971904",
+            "severity_text": "INFO",
+            "body": "This is a Info log",
+            "severity_number": 9
           },
           {
-            "severity_text": "ERROR",
-            "time_unix_nano": "1790701517395464960",
-            "severity_number": 17,
-            "body": "This is a Error log",
             "attributes": [
+              {
+                "key": "emb.stacktrace.rn",
+                "value": "Error\n    at generateStackTrace (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:62981:24)\n    at logError (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:62876:98)\n    at anonymous (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:67503:47)\n    at _performTransitionSideEffects (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:27359:22)\n    at _receiveSignal (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:27315:45)\n    at onResponderRelease (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:27177:32)\n    at executeDispatch (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:7843:15)\n    at executeDispatchesAndReleaseTopLevel (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8350:227)\n    at forEach (native)\n    at anonymous (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8033:37)\n    at batchedUpdatesImpl (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:13785:16)\n    at batchedUpdates$1 (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8340:32)\n    at dispatchEvent (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8362:21)"
+              },
               {
                 "key": "emb.state",
                 "value": "foreground"
@@ -275,90 +336,107 @@
                 "value": "sys.log"
               },
               {
-                "key": "emb.stacktrace.rn",
-                "value": "Error\n    at generateStackTrace (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:58342:24)\n    at logError (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:58237:98)\n    at anonymous (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:63333:47)\n    at _performTransitionSideEffects (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:27288:22)\n    at _receiveSignal (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:27244:45)\n    at onResponderRelease (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:27106:32)\n    at executeDispatch (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:7825:15)\n    at executeDispatchesAndReleaseTopLevel (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8332:227)\n    at forEach (native)\n    at anonymous (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8015:37)\n    at batchedUpdatesImpl (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:13767:16)\n    at batchedUpdates$1 (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8322:32)\n    at dispatchEvent (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8344:21)"
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
-                "key": "session.id",
-                "value": "65F48B305B124F7BADB441FF35C50611"
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "592F8C369B0E45CA815D0BBC9EF92962"
               },
               {
                 "key": "log.record.uid",
-                "value": "F6A5CBAF7F6141AC8104BE618435903D"
+                "value": "41BECFF916604582AF1563DECD0AD278"
               }
-            ]
+            ],
+            "time_unix_nano": "1795703640142981120",
+            "severity_text": "ERROR",
+            "body": "This is a Error log",
+            "severity_number": 17
           },
           {
-            "severity_text": "WARN",
-            "time_unix_nano": "1790701517395493888",
-            "severity_number": 13,
-            "body": "This is a Message (log)",
             "attributes": [
               {
-                "key": "emb.state",
-                "value": "foreground"
+                "key": "emb.stacktrace.rn",
+                "value": "Error\n    at generateStackTrace (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:62981:24)\n    at logMessage (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:62876:98)\n    at anonymous (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:67504:49)\n    at _performTransitionSideEffects (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:27359:22)\n    at _receiveSignal (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:27315:45)\n    at onResponderRelease (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:27177:32)\n    at executeDispatch (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:7843:15)\n    at executeDispatchesAndReleaseTopLevel (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8350:227)\n    at forEach (native)\n    at anonymous (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8033:37)\n    at batchedUpdatesImpl (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:13785:16)\n    at batchedUpdates$1 (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8340:32)\n    at dispatchEvent (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:8362:21)"
               },
               {
-                "key": "property.test",
-                "value": "abcd"
+                "key": "emb.session_part_id",
+                "value": "592F8C369B0E45CA815D0BBC9EF92962"
               },
               {
                 "key": "another.property",
                 "value": "efghy-jklmn-opqrs-tuvwx-yz"
               },
               {
-                "key": "session.id",
-                "value": "65F48B305B124F7BADB441FF35C50611"
-              },
-              {
                 "key": "emb.type",
                 "value": "sys.log"
               },
               {
-                "key": "emb.stacktrace.rn",
-                "value": "Error\n    at generateStackTrace (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:58342:24)\n    at logMessage (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:58237:98)\n    at anonymous (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:63334:49)\n    at _performTransitionSideEffects (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:27288:22)\n    at _receiveSignal (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:27244:45)\n    at onResponderRelease (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:27106:32)\n    at executeDispatch (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:7825:15)\n    at executeDispatchesAndReleaseTopLevel (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8332:227)\n    at forEach (native)\n    at anonymous (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8015:37)\n    at batchedUpdatesImpl (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:13767:16)\n    at batchedUpdates$1 (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8322:32)\n    at dispatchEvent (/Users/joebloggs/Library/Developer/Xcode/DerivedData/rn87-gsnrchcpluaedtbtxydpznefhcii/Build/Products/Release-iphonesimulator/main.jsbundle:8344:21)"
+                "key": "property.test",
+                "value": "abcd"
+              },
+              {
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.state",
+                "value": "foreground"
               },
               {
                 "key": "log.record.uid",
-                "value": "24117FAE45FB4CDDADF86F357A15BF2F"
+                "value": "C55F1FA72E1E46D098A5DF18DA682F05"
               }
-            ]
+            ],
+            "time_unix_nano": "1795703640143014912",
+            "severity_text": "WARN",
+            "body": "This is a Message (log)",
+            "severity_number": 13
           }
         ]
       },
-      "version": "1.0",
       "resource": {
-        "os_alternate_type": "iOS",
-        "environment": "dev",
-        "launch_count": null,
-        "app_framework": 2,
-        "os_version": "26.4.1",
+        "service.name": "io.embrace.rn87:rn87",
+        "device_manufacturer": "Apple",
         "os_type": "darwin",
-        "hosted_platform_version": "0.87.0",
+        "device_model": "arm64",
+        "sdk_platform": "ios",
+        "react_native_bundle_id": "ba29a843e2412175cf2a982285ee7f6d",
         "app_bundle_id": "io.embrace.rn87",
-        "build_id": "0992A060585B3F5D85249A06A158EACD",
+        "process_pre_warm": false,
+        "sdk_version": "7.2.0",
+        "hosted_platform_version": "0.87.0",
+        "disk_total_capacity": 1995165736960,
+        "os_version": "27.2",
+        "process_start_time": 1795703479379137000,
+        "app_framework": 2,
+        "build_id": "EF51B36402053436BE828449442643C7",
+        "os_name": "ios",
+        "build": "1",
+        "process_identifier": "AE5129E96885401086A5D63019863A94",
+        "service.version": "1.0",
+        "hosted_sdk_version": "7.3.0",
+        "device_architecture": "arm64e",
+        "telemetry.sdk.language": "swift",
+        "os_build": "25G342",
+        "launch_count": null,
         "jailbroken": false,
         "screen_resolution": null,
+        "os_alternate_type": "iOS",
         "app_version": "1.0",
-        "build": "1",
         "environment_detail": "si",
-        "process_start_time": 1790701396226521000,
-        "device_model": "arm64",
-        "device_architecture": "arm64e",
-        "os_build": "25G83",
-        "react_native_bundle_id": "8edd6938c99423382ba1ea16d4be06be",
-        "disk_total_capacity": 994610155520,
-        "process_pre_warm": false,
-        "os_name": "ios",
-        "sdk_platform": "ios",
-        "device_manufacturer": "Apple",
-        "hosted_sdk_version": "7.1.0",
-        "sdk_version": "6.22.0",
-        "process_identifier": "C081F24DA0E74B31B29C54B1AB65579F"
+        "environment": "dev"
       },
-      "metadata": {
-        "personas": []
-      }
+      "type": "logs",
+      "version": "1.0"
     }
   ]
 }

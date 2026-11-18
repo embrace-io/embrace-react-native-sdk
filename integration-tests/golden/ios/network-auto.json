@@ -1,85 +1,130 @@
 {
   "spans": [
     {
+      "resource": {
+        "process_pre_warm": false,
+        "react_native_bundle_id": "ba29a843e2412175cf2a982285ee7f6d",
+        "os_type": "darwin",
+        "build": "1",
+        "app_bundle_id": "io.embrace.rn87",
+        "screen_resolution": null,
+        "service.version": "1.0",
+        "launch_count": null,
+        "process_start_time": 1795703479379137000,
+        "jailbroken": false,
+        "service.name": "io.embrace.rn87:rn87",
+        "environment": "dev",
+        "environment_detail": "si",
+        "os_name": "ios",
+        "os_version": "27.2",
+        "os_alternate_type": "iOS",
+        "device_model": "arm64",
+        "device_manufacturer": "Apple",
+        "app_framework": 2,
+        "hosted_sdk_version": "7.3.0",
+        "telemetry.sdk.language": "swift",
+        "build_id": "EF51B36402053436BE828449442643C7",
+        "device_architecture": "arm64e",
+        "hosted_platform_version": "0.87.0",
+        "app_version": "1.0",
+        "sdk_version": "7.2.0",
+        "disk_total_capacity": 1995165736960,
+        "process_identifier": "AE5129E96885401086A5D63019863A94",
+        "os_build": "25G342",
+        "sdk_platform": "ios"
+      },
+      "version": "1.0",
       "type": "spans",
+      "metadata": {
+        "personas": []
+      },
       "data": {
+        "span_snapshots": [],
         "spans": [
           {
-            "start_time_unix_nano": 1790701420502881000,
-            "end_time_unix_nano": 1790701427260359200,
-            "name": "emb-session",
-            "span_id": "571da73fadef96de",
-            "trace_id": "0fecd28d4b4b9f577ac20b0dd742cf23",
             "status": "ok",
+            "links": [],
+            "end_time_unix_nano": 1795703505113185000,
+            "start_time_unix_nano": 1795703498753416000,
+            "span_id": "2e7a7c13255ab068",
+            "name": "emb-session",
             "events": [
               {
                 "name": "emb-ui-tap",
+                "time_unix_nano": 1795703502176639000,
+                "attributes": [
+                  {
+                    "value": "ux.tap",
+                    "key": "emb.type"
+                  },
+                  {
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
+                  },
+                  {
+                    "value": "201,403",
+                    "key": "tap.coords"
+                  }
+                ]
+              },
+              {
+                "name": "emb-ui-tap",
+                "time_unix_nano": 1795703498863384000,
+                "attributes": [
+                  {
+                    "key": "view.name",
+                    "value": "RCTParagraphComponentView"
+                  },
+                  {
+                    "key": "tap.coords",
+                    "value": "281,815"
+                  },
+                  {
+                    "key": "emb.type",
+                    "value": "ux.tap"
+                  }
+                ]
+              },
+              {
+                "name": "emb-ui-tap",
+                "time_unix_nano": 1795703499770975200,
                 "attributes": [
                   {
                     "key": "emb.type",
                     "value": "ux.tap"
                   },
                   {
-                    "key": "tap.coords",
-                    "value": "281,819"
-                  },
-                  {
                     "key": "view.name",
                     "value": "RCTParagraphComponentView"
+                  },
+                  {
+                    "key": "tap.coords",
+                    "value": "201,357"
                   }
-                ],
-                "time_unix_nano": 1790701420895988000
-              },
-              {
-                "name": "emb-ui-tap",
-                "attributes": [
-                  {
-                    "value": "201,359",
-                    "key": "tap.coords"
-                  },
-                  {
-                    "value": "RCTParagraphComponentView",
-                    "key": "view.name"
-                  },
-                  {
-                    "value": "ux.tap",
-                    "key": "emb.type"
-                  }
-                ],
-                "time_unix_nano": 1790701421842867000
-              },
-              {
-                "name": "emb-ui-tap",
-                "attributes": [
-                  {
-                    "value": "ux.tap",
-                    "key": "emb.type"
-                  },
-                  {
-                    "value": "201,405",
-                    "key": "tap.coords"
-                  },
-                  {
-                    "value": "RCTParagraphComponentView",
-                    "key": "view.name"
-                  }
-                ],
-                "time_unix_nano": 1790701424306454000
+                ]
               }
             ],
-            "links": [],
+            "trace_id": "9376a2bdc4cebd2213613a97334c28e9",
             "attributes": [
               {
-                "key": "emb.type",
-                "value": "ux.session"
+                "value": "ux.session",
+                "key": "emb.type"
               },
               {
-                "key": "session.id",
-                "value": "431E680861094594909E86D4EA264E80"
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "session.id"
               },
               {
-                "key": "emb.state",
-                "value": "foreground"
+                "value": "E8199F1FA97045A290454665B12E32D6",
+                "key": "emb.user_session_id"
+              },
+              {
+                "value": "6B11A9E7CCF14084905F598013AE96DC",
+                "key": "emb.session_part_id"
+              },
+              {
+                "value": "foreground",
+                "key": "emb.state"
               },
               {
                 "value": "false",
@@ -94,202 +139,216 @@
                 "key": "emb.clean_exit"
               },
               {
-                "value": "1790701425506112000",
+                "value": "1795703503755236096",
                 "key": "emb.heartbeat_time_unix_nano"
               },
               {
-                "value": "12",
-                "key": "emb.session_number"
+                "value": "13",
+                "key": "emb.session_part_number"
+              },
+              {
+                "value": "13",
+                "key": "emb.user_session_part_index"
+              },
+              {
+                "value": "1795703404423071744",
+                "key": "emb.user_session_start_ts"
+              },
+              {
+                "value": "43200",
+                "key": "emb.user_session_max_duration_seconds"
+              },
+              {
+                "value": "1800",
+                "key": "emb.user_session_inactivity_timeout_seconds"
               }
             ]
           },
           {
-            "start_time_unix_nano": 1790701420506232800,
-            "end_time_unix_nano": 1790701420976799500,
+            "status": "unset",
+            "links": [],
+            "end_time_unix_nano": 1795703498943002000,
+            "start_time_unix_nano": 1795703498753666000,
+            "span_id": "ae14461d988d46b0",
             "name": "log",
-            "span_id": "c82d18e5cd2a116e",
-            "trace_id": "6370406e879f09096a4ac14d0f38271a",
-            "status": "ok",
             "events": [],
-            "links": [],
+            "trace_id": "15a8b327fc8bc4581364f83aa876eaf2",
             "attributes": [
               {
-                "value": "@react-navigation/native",
-                "key": "package"
+                "key": "view.name",
+                "value": "log"
               },
               {
-                "value": "log",
-                "key": "view.name"
+                "key": "package",
+                "value": "@react-navigation/native"
               },
               {
-                "value": "431E680861094594909E86D4EA264E80",
-                "key": "session.id"
+                "key": "view.launch",
+                "value": "false"
               },
               {
-                "value": "ux.view",
-                "key": "emb.type"
+                "key": "emb.type",
+                "value": "ux.view"
               },
               {
-                "value": "false",
-                "key": "view.launch"
+                "key": "view.state.end",
+                "value": "active"
               },
               {
-                "value": "654321",
-                "key": "test.attr"
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
-                "value": "active",
-                "key": "view.state.end"
+                "key": "test.attr",
+                "value": "654321"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "6B11A9E7CCF14084905F598013AE96DC"
               }
             ]
           },
           {
-            "start_time_unix_nano": 1790701420976849700,
-            "end_time_unix_nano": 1790701426642056000,
+            "status": "unset",
+            "links": [],
+            "end_time_unix_nano": 1795703504493343700,
+            "start_time_unix_nano": 1795703498943036200,
+            "span_id": "3f601e5c8fbd1191",
             "name": "network",
-            "span_id": "70c6044286ce8abf",
-            "trace_id": "07824d98c3253a6f5dbb2a8ca5789480",
-            "status": "ok",
             "events": [],
-            "links": [],
+            "trace_id": "a50586f1982256bc262aae0f190a868b",
             "attributes": [
               {
-                "value": "inactive",
-                "key": "view.state.end"
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
-                "value": "@react-navigation/native",
-                "key": "package"
+                "key": "emb.session_part_id",
+                "value": "6B11A9E7CCF14084905F598013AE96DC"
               },
               {
-                "value": "ux.view",
-                "key": "emb.type"
+                "key": "test.attr",
+                "value": "654321"
               },
               {
-                "value": "network",
-                "key": "view.name"
+                "key": "package",
+                "value": "@react-navigation/native"
               },
               {
-                "value": "431E680861094594909E86D4EA264E80",
-                "key": "session.id"
+                "key": "view.name",
+                "value": "network"
               },
               {
-                "value": "654321",
-                "key": "test.attr"
+                "key": "view.launch",
+                "value": "false"
               },
               {
-                "value": "false",
-                "key": "view.launch"
+                "key": "emb.type",
+                "value": "ux.view"
+              },
+              {
+                "key": "view.state.end",
+                "value": "inactive"
+              },
+              {
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               }
             ]
           },
           {
-            "start_time_unix_nano": 1790701421928583000,
-            "end_time_unix_nano": 1790701421993580500,
+            "status": "unset",
+            "links": [],
+            "end_time_unix_nano": 1795703501056662000,
+            "start_time_unix_nano": 1795703499855367000,
+            "span_id": "49dbf51600c7a38c",
             "name": "GET ",
-            "span_id": "12edcb98d09f37b0",
-            "trace_id": "3c4683fc719963da51b24fa1194dfa72",
-            "status": "ok",
             "events": [],
-            "links": [],
+            "trace_id": "9bfd93366ccf69007e82272b229d1598",
             "attributes": [
               {
-                "value": "GET",
-                "key": "http.request.method"
+                "key": "http.response.status_code",
+                "value": "200"
               },
               {
-                "value": "https://example.com",
-                "key": "url.full"
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
-                "value": "427",
-                "key": "http.response.body.size"
+                "key": "http.response.body.size",
+                "value": "352"
               },
               {
-                "value": "200",
-                "key": "http.response.status_code"
+                "key": "emb.type",
+                "value": "perf.network_request"
               },
               {
-                "value": "431E680861094594909E86D4EA264E80",
-                "key": "session.id"
+                "key": "http.request.method",
+                "value": "GET"
               },
               {
-                "value": "perf.network_request",
-                "key": "emb.type"
+                "key": "emb.session_part_id",
+                "value": "6B11A9E7CCF14084905F598013AE96DC"
+              },
+              {
+                "key": "url.full",
+                "value": "https://example.com"
+              },
+              {
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               }
             ]
           },
           {
-            "start_time_unix_nano": 1790701424373685800,
-            "end_time_unix_nano": 1790701424389147000,
-            "name": "GET /sdk/auto/interception",
-            "span_id": "7d6f1115308a94b8",
-            "trace_id": "fef118978f87d61c59ed43a59017b54f",
-            "status": "ok",
-            "events": [],
+            "status": "unset",
             "links": [],
+            "end_time_unix_nano": 1795703502294268200,
+            "start_time_unix_nano": 1795703502254675000,
+            "span_id": "94b5d3c252359a71",
+            "name": "GET /sdk/auto/interception",
+            "events": [],
+            "trace_id": "79b46259b39058787e7bce7191fc52c9",
             "attributes": [
               {
-                "value": "GET",
-                "key": "http.request.method"
+                "key": "emb.user_session_id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
-                "value": "431E680861094594909E86D4EA264E80",
-                "key": "session.id"
+                "key": "session.id",
+                "value": "E8199F1FA97045A290454665B12E32D6"
               },
               {
-                "value": "427",
-                "key": "http.response.body.size"
+                "key": "http.response.body.size",
+                "value": "352"
               },
               {
-                "value": "perf.network_request",
-                "key": "emb.type"
+                "key": "http.response.status_code",
+                "value": "404"
               },
               {
-                "value": "404",
-                "key": "http.response.status_code"
+                "key": "url.full",
+                "value": "https://example.com/sdk/auto/interception"
               },
               {
-                "value": "https://example.com/sdk/auto/interception",
-                "key": "url.full"
+                "key": "http.request.method",
+                "value": "GET"
+              },
+              {
+                "key": "emb.type",
+                "value": "perf.network_request"
+              },
+              {
+                "key": "emb.session_part_id",
+                "value": "6B11A9E7CCF14084905F598013AE96DC"
               }
             ]
           }
-        ],
-        "span_snapshots": []
-      },
-      "version": "1.0",
-      "resource": {
-        "os_alternate_type": "iOS",
-        "environment": "dev",
-        "launch_count": null,
-        "app_framework": 2,
-        "os_version": "26.4.1",
-        "os_type": "darwin",
-        "hosted_platform_version": "0.87.0",
-        "app_bundle_id": "io.embrace.rn87",
-        "build_id": "0992A060585B3F5D85249A06A158EACD",
-        "app_version": "1.0",
-        "jailbroken": false,
-        "screen_resolution": null,
-        "build": "1",
-        "environment_detail": "si",
-        "process_start_time": 1790701396226521000,
-        "device_model": "arm64",
-        "device_architecture": "arm64e",
-        "os_build": "25G83",
-        "react_native_bundle_id": "8edd6938c99423382ba1ea16d4be06be",
-        "disk_total_capacity": 994610155520,
-        "process_pre_warm": false,
-        "os_name": "ios",
-        "sdk_platform": "ios",
-        "device_manufacturer": "Apple",
-        "hosted_sdk_version": "7.1.0",
-        "sdk_version": "6.22.0",
-        "process_identifier": "C081F24DA0E74B31B29C54B1AB65579F"
-      },
-      "metadata": {
-        "personas": []
+        ]
       }
     }
   ],
