@@ -5,10 +5,8 @@ import EmbraceIO
 // CocoaPods merges every embrace-apple-sdk subspec into a single EmbraceIO module,
 // whereas SPM keeps them as separate modules that have to be imported on their own.
 #if EMBRACE_USE_SPM
-import EmbraceCommonInternal
-import EmbraceSemantics
+import EmbraceCaptureService
 #endif
-import OpenTelemetryApi
 
 private let JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY = "javascript_patch_number"
 private let HOSTED_PLATFORM_VERSION_RESOURCE_KEY = "hosted_platform_version"
@@ -26,7 +24,8 @@ private let EMB_EXC = "emb-js"
 @objc(EmbraceManagerImpl)
 public class EmbraceManager: NSObject {
     private var log = OSLog(subsystem: "Embrace", category: "ReactNativeEmbraceManager")
-    var isSDKStarted: () -> Bool = { Embrace.client?.state == .started }
+    var isSDKStarted: () -> Bool = { EmbraceIO.shared.state == .started }
+    var addResources: ([String: String]) -> Void = { EmbraceIO.shared.addResources($0) }
     var defaultBundlePath: () -> String? = { Bundle.main.path(forResource: "main", ofType: "jsbundle") }
     var bundleIDQueue: DispatchQueue = .global(qos: .utility)
 
@@ -52,11 +51,15 @@ public class EmbraceManager: NSObject {
             return
         }
 
-        do {
-            try Embrace.client?.metadata.addResource(key: key, value: value, lifespan: .process)
-        } catch let error {
-            os_log("Error adding resource %{public}@: %{public}@", log: log, type: .error, key, error.localizedDescription)
+        addResources([key: value])
+    }
+
+    private var captureService: ReactNativeCaptureService {
+        let service = ReactNativeCaptureService.shared
+        if service.isUninstalled {
+            EmbraceIO.shared.add(captureService: service)
         }
+        return service
     }
 
     private func resolveAndSetDefaultBundleID() {
@@ -81,7 +84,7 @@ public class EmbraceManager: NSObject {
         DispatchQueue.global(qos: .background).async {
             do {
                 let bundleID = try computeBundleID(path: path)
-                try Embrace.client?.metadata.addResource(key: REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, value: bundleID.id, lifespan: .process)
+                self.addResources([REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY: bundleID.id])
                 resolve(true)
             } catch let error {
                 reject("SET_JS_BUNDLE_PATH_ERROR", "Error setting JavaScript bundle path", error)
@@ -91,7 +94,7 @@ public class EmbraceManager: NSObject {
 
     @objc
     public func getDeviceId(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        if let deviceId = Embrace.client?.currentDeviceId() {
+        if let deviceId = EmbraceIO.shared.deviceId {
             resolve(deviceId)
         } else {
             reject("GET_DEVICE_ID", "Error getting deviceId", nil)
@@ -100,17 +103,17 @@ public class EmbraceManager: NSObject {
 
     @objc(setUserIdentifier:resolver:rejecter:)
     public func setUserIdentifier(_ userIdentifier: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
+        guard isSDKStarted() else {
             reject("SET_USER_IDENTIFIER_ERROR", "Embrace SDK may not be initialized", nil)
             return
         }
-        Embrace.client?.metadata.userIdentifier = userIdentifier
+        EmbraceIO.shared.userIdentifier = userIdentifier
         resolve(true)
     }
 
     @objc
     public func getCurrentSessionId(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        if let sessionId = Embrace.client?.currentSessionId() {
+        if let sessionId = EmbraceIO.shared.currentUserSessionId {
             resolve(sessionId)
         } else {
             reject("GET_SESSION_ID", "Error getting sessionId", nil)
@@ -119,16 +122,16 @@ public class EmbraceManager: NSObject {
 
     @objc(addBreadcrumb:resolver:rejecter:)
     public func addBreadcrumb(_ event: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        // Add function returns empty if it succeeds, so I specify true as return
-        if (Embrace.client?.add(event: .breadcrumb(event))) != nil {
-            resolve(true)
-        } else {
+        guard isSDKStarted() else {
             reject("ADD_BREADCRUMB", "Error adding breadcrumb", nil)
+            return
         }
+        EmbraceIO.shared.addBreadcrumb(event)
+        resolve(true)
     }
 
     // Should match strings defined in: packages/core/src/interfaces/Types.ts
-    private func lastRunEndStateToString(endState: LastRunEndState) -> String {
+    private func lastRunEndStateToString(endState: EmbraceLastRunEndState) -> String {
         switch endState {
         case .crash:
             return "CRASH"
@@ -141,125 +144,92 @@ public class EmbraceManager: NSObject {
 
     @objc
     public func getLastRunEndState(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        if let endState = Embrace.client?.lastRunEndState() {
-            resolve(lastRunEndStateToString(endState: endState))
-        } else {
+        guard isSDKStarted() else {
             reject("GET_LAST_RUN_END_STATE", "Error getting Last Run End State", nil)
+            return
         }
+        resolve(lastRunEndStateToString(endState: EmbraceIO.shared.lastRunEndState()))
     }
 
     @objc(setUsername:resolver:rejecter:)
     public func setUsername(_ userName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
-            reject("SET_USERNAME_ERROR", "Embrace SDK may not be initialized", nil)
-            return
-        }
-        Embrace.client?.metadata.userName = userName
-        resolve(true)
+        logUnsupportedUserField("setUsername")
+        resolve(false)
     }
 
     @objc
     public func clearUserEmail(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
-            reject("CLEAR_USER_EMAIL_ERROR", "Embrace SDK may not be initialized", nil)
-            return
-        }
-        Embrace.client?.metadata.userEmail = nil
-        resolve(true)
+        logUnsupportedUserField("clearUserEmail")
+        resolve(false)
     }
 
     @objc(setJavaScriptPatchNumber:resolver:rejecter:)
     public func setJavaScriptPatchNumber(_ patch: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            try Embrace.client?.metadata.addResource(key: JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY, value: patch, lifespan: .process)
-            resolve(true)
-        } catch let error {
-            reject("SET_JAVASCRIPT_PATCH_NUMBER", "Error setting JavasScript Patch Number", error)
-        }
+        addResources([JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY: patch])
+        resolve(true)
     }
 
     @objc
     public func clearUserIdentifier(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
+        guard isSDKStarted() else {
             reject("CLEAR_USER_IDENTIFIER_ERROR", "Embrace SDK may not be initialized", nil)
             return
         }
-        Embrace.client?.metadata.userIdentifier = nil
+        EmbraceIO.shared.userIdentifier = nil
         resolve(true)
     }
 
     @objc
     public func clearUsername(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
-            reject("CLEAR_USERNAME_ERROR", "Embrace SDK may not be initialized", nil)
-            return
-        }
-        Embrace.client?.metadata.userName = nil
-        resolve(true)
+        logUnsupportedUserField("clearUsername")
+        resolve(false)
     }
 
     @objc
     public func endSession(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
+        guard isSDKStarted() else {
             reject("END_SESSION_ERROR", "Embrace SDK may not be initialized", nil)
             return
         }
-        Embrace.client?.endCurrentSession()
+        EmbraceIO.shared.endUserSession()
         resolve(true)
     }
 
     @objc(addUserPersona:resolver:rejecter:)
     public func addUserPersona(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            try Embrace.client?.metadata.add(persona: persona, lifespan: .session)
-            resolve(true)
-        } catch let error {
-            reject("ADD_USER_PERSONA", "Error adding User Persona", error)
-        }
+        EmbraceIO.shared.addPersona(persona, lifespan: .userSession)
+        resolve(true)
     }
 
     @objc
     public func clearAllUserPersonas(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
+        guard isSDKStarted() else {
             reject("CLEAR_ALL_USER_PERSONAS_ERROR", "Embrace SDK may not be initialized", nil)
             return
         }
-        Embrace.client?.metadata.removeAllPersonas()
+        EmbraceIO.shared.removeAllPersonas(lifespans: [.permanent, .process, .userSession])
         resolve(true)
     }
 
     @objc(clearUserPersona:resolver:rejecter:)
     public func clearUserPersona(_ persona: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            try Embrace.client?.metadata.remove(persona: PersonaTag(persona), lifespan: .session)
-            resolve(true)
-        } catch let error {
-            reject("CLEAR_USER_PERSONA", "Error removing User Persona", error)
-        }
+        EmbraceIO.shared.removePersona(persona, lifespan: .userSession)
+        resolve(true)
     }
 
     @objc(removeSessionProperty:resolver:rejecter:)
     public func removeSessionProperty(_ key: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        do {
-            // Depending on on how `addSessionProperty` was called we may have added this key as either
-            // .session or .permanent so remove both here, multiple calls to remove are safe
-            try Embrace.client?.metadata.removeProperty(key: key, lifespan: .permanent)
-            try Embrace.client?.metadata.removeProperty(key: key, lifespan: .session)
-
-            resolve(true)
-        } catch let error {
-            reject("REMOVE_SESSION_PROPERTY", "Error removing Session Property", error)
-        }
+        // Depending on on how `addSessionProperty` was called we may have added this key as either
+        // .userSession or .permanent so remove both here, multiple calls to remove are safe
+        EmbraceIO.shared.setProperty(key: key, value: nil, lifespan: .permanent)
+        EmbraceIO.shared.setProperty(key: key, value: nil, lifespan: .userSession)
+        resolve(true)
     }
 
     @objc(setUserEmail:resolver:rejecter:)
     public func setUserEmail(_ userEmail: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
-            reject("SET_USER_EMAIL_ERROR", "Embrace SDK may not be initialized", nil)
-            return
-        }
-        Embrace.client?.metadata.userEmail = userEmail
-        resolve(true)
+        logUnsupportedUserField("setUserEmail")
+        resolve(false)
     }
 
     @objc(addSessionProperty:value:permanent:resolver:rejecter:)
@@ -270,13 +240,8 @@ public class EmbraceManager: NSObject {
         resolver resolve: @escaping RCTPromiseResolveBlock,
         rejecter reject: @escaping RCTPromiseRejectBlock
     ) {
-        do {
-            let lifespan: MetadataLifespan = permanent ? .permanent : .session
-            try Embrace.client?.metadata.addProperty(key: key, value: value, lifespan: lifespan)
-            resolve(true)
-        } catch let error {
-            reject("ADD_SESSION_PROPERTY", "Error adding Session Property", error)
-        }
+        EmbraceIO.shared.setProperty(key: key, value: value, lifespan: permanent ? .permanent : .userSession)
+        resolve(true)
     }
 
     @objc(logMessageWithSeverityAndProperties:severity:properties:stacktrace:includeStacktrace:resolver:rejecter:)
@@ -289,7 +254,7 @@ public class EmbraceManager: NSObject {
         resolver resolve: @escaping RCTPromiseResolveBlock,
         rejecter reject: @escaping RCTPromiseRejectBlock
     ) {
-        guard Embrace.client != nil else {
+        guard isSDKStarted() else {
             reject("LOG_MESSAGE_ERROR", "Embrace SDK may not be initialized", nil)
             return
         }
@@ -302,10 +267,10 @@ public class EmbraceManager: NSObject {
 
         let isInfoLog = severityValue == .info
 
-        var stackTraceBehavior: StackTraceBehavior = StackTraceBehavior.notIncluded
+        var stackTraceBehavior: EmbraceStackTraceBehavior = .notIncluded
         if includeStacktrace == true {
             if stacktrace.isEmpty {
-                stackTraceBehavior = StackTraceBehavior.default // will include the iOS Stacktrace if no JS is passed
+                stackTraceBehavior = .default // will include the iOS Stacktrace if no JS is passed
             } else {
                 // we don't want to send info stacktraces to sdk for 'info' logs, this is already prevented in the js layer as well
                 if !isInfoLog {
@@ -314,7 +279,7 @@ public class EmbraceManager: NSObject {
             }
         }
 
-        Embrace.client?.log(
+        captureService.log(
             message,
             severity: severityValue,
             attributes: attributes,
@@ -324,7 +289,7 @@ public class EmbraceManager: NSObject {
 
     }
 
-    private func severityFromString(from inputString: String) -> LogSeverity {
+    private func severityFromString(from inputString: String) -> EmbraceLogSeverity {
         switch inputString {
         case "info":
             return .info
@@ -347,12 +312,12 @@ public class EmbraceManager: NSObject {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
-        if Embrace.client == nil {
+        guard isSDKStarted() else {
             reject("RECORD_LOG_NETWORK_REQUEST_ERROR", "Error recording a network request, Embrace SDK may not be initialized", nil)
             return
         }
 
-        var attributes = [
+        var attributes: EmbraceAttributes = [
             "http.request.method": httpMethod.uppercased(),
             "url.full": url
         ]
@@ -369,20 +334,18 @@ public class EmbraceManager: NSObject {
             attributes["http.response.body.size"] = String(Int(bytesReceived))
         }
 
-        let span = Embrace.client?
-            .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
-                       type: SpanType.networkRequest,
-                       attributes: attributes)
-            .setStartTime(time: dateFrom(ms: startInMillis))
-            .startSpan()
-
-        guard let span = span else {
+        guard let span = EmbraceIO.shared.createSpan(
+            name: createNetworkSpanName(url: url, httpMethod: httpMethod),
+            type: .networkRequest,
+            startTime: dateFrom(ms: startInMillis),
+            attributes: attributes
+        ) else {
             reject("LOG_NETWORK_REQUEST_ERROR", "Failed to create network span", nil)
             return
         }
 
         injectW3cTraceparent(span: span)
-        span.end(errorCode: nil, time: dateFrom(ms: endInMillis))
+        span.end(errorCode: nil, endTime: dateFrom(ms: endInMillis))
         resolve(true)
     }
 
@@ -397,56 +360,33 @@ public class EmbraceManager: NSObject {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
-        if Embrace.client == nil {
+        guard isSDKStarted() else {
             reject("RECORD_LOG_NETWORK_CLIENT_ERROR_ERROR", "Error recording a network client error, Embrace SDK may not be initialized", nil)
             return
         }
 
-        let attributes = attributeStringsFrom(dict: [
-            "http.request.method": httpMethod.uppercased(),
-            "url.full": url,
-            "error.message": errorMessage,
-            "error.type": errorType,
-
-            // NOTE: this should be handled by iOS native sdk using `errorCode` value
-            // To remove from here when it's done.
-            "emb.error_code": "failure"
-        ])
-
-        let span = Embrace.client?
-            .buildSpan(name: createNetworkSpanName(url: url, httpMethod: httpMethod),
-                       type: SpanType.networkRequest,
-                       attributes: attributes)
-            .setStartTime(time: dateFrom(ms: startInMillis))
-            .startSpan()
-
-        guard let span = span else {
+        guard let span = EmbraceIO.shared.createSpan(
+            name: createNetworkSpanName(url: url, httpMethod: httpMethod),
+            type: .networkRequest,
+            startTime: dateFrom(ms: startInMillis),
+            attributes: [
+                "http.request.method": httpMethod.uppercased(),
+                "url.full": url,
+                "error.message": errorMessage,
+                "error.type": errorType
+            ]
+        ) else {
             reject("LOG_NETWORK_CLIENT_ERROR_ERROR", "Failed to create network client error span", nil)
             return
         }
 
         injectW3cTraceparent(span: span)
-        // `errorCode` should be used to calc `emb.error_code` attr in native sdk
-        span.end(errorCode: SpanErrorCode.failure, time: dateFrom(ms: endInMillis))
+        span.end(errorCode: .failure, endTime: dateFrom(ms: endInMillis))
         resolve(true)
     }
 
     private func dateFrom(ms: Double) -> Date {
         return Date(timeIntervalSince1970: TimeInterval(ms / 1000.0))
-    }
-
-    private func attributeStringsFrom(dict: NSDictionary) -> [String: String] {
-        var attributes = [String: String]()
-
-        for (key, value) in dict {
-            if let key = key as? String, let value = value as? String {
-                attributes.updateValue(value, forKey: key)
-            } else {
-                os_log("unexpected non-string attribute for span", log: log, type: .error)
-            }
-        }
-
-        return attributes
     }
 
     private func createNetworkSpanName(url: String, httpMethod: String) -> String {
@@ -470,7 +410,7 @@ public class EmbraceManager: NSObject {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
-        if Embrace.client == nil {
+        guard isSDKStarted() else {
             reject("LOG_HANDLED_ERROR_ERROR", "Error recording a log handled error, Embrace SDK may not be initialized", nil)
             return
         }
@@ -485,13 +425,13 @@ public class EmbraceManager: NSObject {
         // not added by native sdk
         attributes.updateValue("handled", forKey: "emb.exception_handling")
 
-        Embrace.client?.log(
+        captureService.log(
             message,
-            severity: LogSeverity.error,
-            type: LogType.message,
+            severity: .error,
+            type: .message,
             attributes: attributes,
             // will always include a js stacktrace as per implementation
-            stackTraceBehavior: StackTraceBehavior.notIncluded
+            stackTraceBehavior: .notIncluded
         )
 
         resolve(true)
@@ -506,7 +446,7 @@ public class EmbraceManager: NSObject {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
     ) {
-        if Embrace.client == nil {
+        guard isSDKStarted() else {
             reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error recording a unhandled js exception, Embrace SDK may not be initialized", nil)
             return
         }
@@ -514,8 +454,7 @@ public class EmbraceManager: NSObject {
         // injecting custom ID for js exception
         let jsExceptionUUID = UUID().uuidString
 
-        let attributes: [String: String] = [
-            "emb.type": "sys.ios.react_native_crash",
+        let attributes: EmbraceAttributes = [
             "emb.ios.react_native_crash.js_exception": stacktrace,
 
             "exception.message": message,
@@ -523,26 +462,26 @@ public class EmbraceManager: NSObject {
             "exception.id": jsExceptionUUID
         ]
 
-        Embrace.client?.log(
+        captureService.log(
             name,
-            severity: LogSeverity.error,
-            type: LogType.message,
+            severity: .error,
+            type: EmbraceType(system: "ios.react_native_crash"),
             attributes: attributes,
             // will always include a js stacktrace as per implementation
-            stackTraceBehavior: StackTraceBehavior.notIncluded
+            stackTraceBehavior: .notIncluded
         )
 
-        do {
-            // Unhandled JS exceptions will also generate a native crash log, so we append the
-            // JS exception UUID to the native crash - the backend uses this to dedupe/discard the native log
-            try Embrace.client?.appendCrashInfo(key: EMB_EXC, value: jsExceptionUUID)
-            resolve(true)
-        } catch let error {
-            reject("LOG_UNHANDLED_JS_EXCEPTION_ERROR", "Error adding metadata to Crash", error)
-        }
+        // Unhandled JS exceptions will also generate a native crash log, so we append the
+        // JS exception UUID to the native crash - the backend uses this to dedupe/discard the native log
+        EmbraceIO.shared.appendCrashInfo(key: EMB_EXC, value: jsExceptionUUID)
+        resolve(true)
     }
 
-    func injectW3cTraceparent(span: any Span) {
-        span.setAttribute(key: "emb.w3c_traceparent", value: W3C.traceparent(from: span.context))
+    func injectW3cTraceparent(span: EmbraceSpan) {
+        span.setAttribute(key: "emb.w3c_traceparent", value: "00-\(span.context.traceId)-\(span.context.spanId)-01")
+    }
+
+    private func logUnsupportedUserField(_ method: String) {
+        os_log("%{public}@ is not supported by the Embrace iOS SDK and does nothing", log: log, type: .error, method)
     }
 }

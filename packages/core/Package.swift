@@ -16,7 +16,7 @@ let package = Package(
     dependencies: [
         .package(name: "ReactNative", path: "../../../../xcframeworks"),
         .package(name: "React-GeneratedCode", path: "../../../ios"),
-        .package(url: "https://github.com/embrace-io/embrace-apple-sdk.git", exact: "6.22.1"),
+        .package(url: "https://github.com/embrace-io/embrace-apple-sdk.git", exact: "7.1.0"),
         .package(url: "https://github.com/open-telemetry/opentelemetry-swift-core.git", from: "2.1.1")
     ],
     targets: [
