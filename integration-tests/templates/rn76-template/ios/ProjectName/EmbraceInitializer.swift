@@ -24,15 +24,14 @@ import EmbraceIO
         }
 
         do {
-            try EmbraceIO.setup(
+            try EmbraceIO.start(
                 options: .withAppId(
                     appId,
                     platform: .reactNative,
-                    endpoints: endpointBaseUrl.map { Embrace.Endpoints(baseURL: $0, configBaseURL: $0) },
+                    endpoints: endpointBaseUrl.map { EmbraceEndpoints(baseURL: $0, configBaseURL: $0) },
                     captureServices: captureServices.build()
                 )
             )
-            try EmbraceIO.shared.start()
         } catch let e {
             print("Error starting Embrace \(e.localizedDescription)")
         }
