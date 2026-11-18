@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.source = { :git => ".git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
-  s.ios.deployment_target = '13.0'
+  s.ios.deployment_target = '15.0'
   s.swift_version = '5.0'
 
   if embrace_use_spm
@@ -28,9 +28,9 @@ Pod::Spec.new do |s|
       raise "EMBRACE_USE_SPM is set, but SPM support is not available. Please ensure you are using React Native 0.75 or later."
     end
 
-    # Don't add OpenTelemetryApi, EmbraceSemantics or EmbraceCrash even though core imports them.
-    # They're already inside EmbraceIO and OpenTelemetrySdk, and declaring them separately makes
-    # Xcode link a second copy into RNEmbraceCore.
+    # Don't add OpenTelemetryApi even though core imports it. It's already inside OpenTelemetrySdk,
+    # and declaring it separately makes Xcode link a second copy into RNEmbraceCore.
+    # EmbraceCaptureService isn't a product, it's only reachable through EmbraceIO.
     spm_dependency(s,
       url: 'https://github.com/embrace-io/embrace-apple-sdk.git',
       requirement: {kind: 'exactVersion', version: embrace_ios_sdk_version},

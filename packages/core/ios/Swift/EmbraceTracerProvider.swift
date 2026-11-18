@@ -133,13 +133,15 @@ public class EmbraceTracerProvider: NSObject {
   @objc(setupTracer:version:schemaUrl:)
   public func setupTracer(name: String, version: String, schemaUrl: String) {
     if tracerProvider == nil {
-        if let state = Embrace.client?.state as? EmbraceSDKState,
-           state == .started {
-            tracerProvider = OpenTelemetry.instance.tracerProvider
-        } else {
+        guard EmbraceIO.shared.state == .started else {
             os_log("cannot access tracer provider, Embrace SDK has not been started", log: log, type: .error)
             return
         }
+        guard let provider = EmbraceIO.shared.tracerProvider else {
+            os_log("cannot access tracer provider, Embrace SDK was started without OTel options", log: log, type: .error)
+            return
+        }
+        tracerProvider = provider
     }
 
     let id = getTracerKey(name: name, version: version, schemaUrl: schemaUrl)
