@@ -25,6 +25,9 @@ target 'RNEmbraceCorePlaceholder' do
 
   # using real RNEmbraceCore.podspec to install EmbraceIO
   pod 'RNEmbraceCore', :path => '../../../core'
+  unless ENV['EMBRACE_USE_SPM'] == '1'
+    pod 'EmbraceIO', :git => 'https://github.com/embrace-io/embrace-apple-sdk.git', :branch => 'feat/EMBR-15261-upgrading-capture-services-signals'
+  end
 
   target 'RNEmbraceCoreTests' do
     # Pods inherited by the suite, different than real app

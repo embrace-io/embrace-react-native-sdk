@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
     # Xcode link a second copy into RNEmbraceCore.
     spm_dependency(s,
       url: 'https://github.com/embrace-io/embrace-apple-sdk.git',
-      requirement: {kind: 'exactVersion', version: embrace_ios_sdk_version},
+      requirement: {kind: 'branch', branch: 'feat/EMBR-15261-upgrading-capture-services-signals'},
       products: ['EmbraceIO']
     )
 

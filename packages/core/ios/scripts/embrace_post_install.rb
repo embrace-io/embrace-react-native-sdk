@@ -50,8 +50,10 @@ def embrace_spm_version
   version
 end
 
+EMBRACE_SPM_BRANCH = "feat/EMBR-15261-upgrading-capture-services-signals".freeze
+
 def embrace_spm_requirement
-  {kind: "exactVersion", version: embrace_spm_version}
+  {kind: "branch", branch: EMBRACE_SPM_BRANCH}
 end
 
 def embrace_spm_package?(package)
@@ -62,7 +64,7 @@ end
 # A requirement read back from a project file has string keys; ours has symbols
 def embrace_spm_pinned_version(package)
   requirement = package.requirement || {}
-  requirement["version"] || requirement[:version]
+  requirement["branch"] || requirement[:branch]
 end
 
 def embrace_spm_app_targets(aggregate_target)
@@ -85,9 +87,9 @@ def embrace_spm_add(project, target)
 
   # Follow the pin when the RN SDK is upgraded to a new iOS SDK version
   pinned = embrace_spm_pinned_version(package)
-  if pinned != embrace_spm_version
+  if pinned != EMBRACE_SPM_BRANCH
     package.requirement = embrace_spm_requirement
-    embrace_spm_log("updated #{EMBRACE_SPM_PRODUCT} to #{embrace_spm_version} (was #{pinned || "unpinned"})")
+    embrace_spm_log("updated #{EMBRACE_SPM_PRODUCT} to #{EMBRACE_SPM_BRANCH} (was #{pinned || "unpinned"})")
     changed = true
   end
 

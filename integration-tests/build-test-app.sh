@@ -104,6 +104,12 @@ if [ "$platform" == "android" ]; then
 else
   ios_name="${name/-/}"
 
+  if [ "${EMBRACE_USE_SPM:-}" != "1" ]; then
+    echo "Pointing the EmbraceIO pod at the apple-sdk PR #875 branch"
+    EMBRACE_POD="  pod 'EmbraceIO', :git => 'https://github.com/embrace-io/embrace-apple-sdk.git', :branch => 'feat/EMBR-15261-upgrading-capture-services-signals'" \
+      perl -pi -e '$_ .= "$ENV{EMBRACE_POD}\n" if /use_native_modules!/' $app_path/ios/Podfile
+  fi
+
   echo "Installing pods for $name"
   pushd $app_path/ios
   pod install
