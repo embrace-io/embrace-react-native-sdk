@@ -67,6 +67,7 @@ private let EMBRACE_INTERNAL_SPAN_NAMES = [
 class EmbraceTracerProviderTests: XCTestCase {
   static var exporter: TestSpanExporter!
   var module: EmbraceTracerProvider!
+  var createSpanModule: EmbraceTracerProvider!
   var promise: Promise!
 
   override class func setUp() {
@@ -88,6 +89,7 @@ class EmbraceTracerProviderTests: XCTestCase {
   override func setUp() async throws {
       promise = Promise()
       module = EmbraceTracerProvider()
+      createSpanModule = EmbraceTracerProvider(allowsOTelBridge: false)
 
       // Wait until the Embrace SDK reports it has started (especially important for first test)
       for _ in 0..<30 {
@@ -102,6 +104,7 @@ class EmbraceTracerProviderTests: XCTestCase {
       EmbraceTracerProviderTests.exporter.reset(explicitTimeout: nil)
 
       module.setupTracer(name: "test", version: "v1", schemaUrl: "")
+      createSpanModule.setupTracer(name: "test", version: "v1", schemaUrl: "")
   }
 
   // Drains the SDK queue and the OTel bridge, which exports spans asynchronously — so this
@@ -558,6 +561,277 @@ class EmbraceTracerProviderTests: XCTestCase {
     }
 
     XCTAssertEqual(exportedSpans[0].attributes["emb.type"]?.description, "ux.view")
+  }
+
+  func testCreateSpanPathStartSpanSimple() async throws {
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0,
+                               attributes: NSDictionary(), links: NSArray(), parentId: "",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.endSpan(spanBridgeId: "span_0", time: 0.0)
+
+    let exportedSpans = try await getExportedSpans()
+
+    guard exportedSpans.count == 1 else {
+        XCTFail("Expected 1 exported span, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
+        return
+    }
+
+    XCTAssertEqual(exportedSpans[0].name, "my-span")
+    XCTAssertTrue(exportedSpans[0].hasEnded)
+    XCTAssertEqual(exportedSpans[0].attributes["emb.type"]?.description, "perf")
+
+    guard promise.resolveCalls.count == 1 else {
+        XCTFail("Expected 1 promise resolve call, got \(promise.resolveCalls.count)")
+        return
+    }
+
+    let promiseSpanId = (promise.resolveCalls[0] as? NSDictionary)?.object(forKey: "spanId") as? String
+    let promiseTraceId = (promise.resolveCalls[0] as? NSDictionary)?.object(forKey: "traceId") as? String
+    XCTAssertEqual(promiseSpanId, exportedSpans[0].spanId.hexString)
+    XCTAssertEqual(promiseTraceId, exportedSpans[0].traceId.hexString)
+  }
+
+  func testCreateSpanPathStartSpanWithOptions() async throws {
+    let attributes: [String: Any] = [
+      "my-attr1": "some-string",
+      "my-attr2": true,
+      "my-attr3": 344,
+      "my-attr4": ["str1", "str2"],
+      "my-attr5": [22, 44],
+      "my-attr6": [true, false],
+      "my-attr7": [1.5, 2.0]
+    ]
+    let links = [
+      [
+        "context": [
+          "spanId": "1111000011110000",
+          "traceId": "22220000222200002222000022220000"
+        ],
+        "attributes": [
+          "link-attr-1": "my-link-attr"
+        ]
+      ],
+      [
+        "context": [
+          "spanId": "",
+          "traceId": ""
+        ]
+      ]
+    ]
+
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_0", name: "my-span", kind: "CLIENT",
+                               time: 1718386928001.0, attributes: NSDictionary(dictionary: attributes),
+                               links: NSArray(array: links), parentId: "",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.endSpan(spanBridgeId: "span_0", time: 1728386928001.0)
+
+    let exportedSpans = try await getExportedSpans()
+
+    guard exportedSpans.count == 1 else {
+        XCTFail("Expected 1 exported span, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
+        return
+    }
+
+    XCTAssertEqual(exportedSpans[0].name, "my-span")
+    XCTAssertEqual(exportedSpans[0].startTime, Date(timeIntervalSince1970: 1718386928.001))
+    XCTAssertEqual(exportedSpans[0].endTime, Date(timeIntervalSince1970: 1728386928.001))
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr1"], .string("some-string"))
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr2"], .bool(true))
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr3"], .int(344))
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr4"], .string("[str1, str2]"))
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr5"], .string("[22, 44]"))
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr6"], .string("[true, false]"))
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr7"], .string("[1.5, 2.0]"))
+
+    guard exportedSpans[0].links.count == 1 else {
+        XCTFail("Expected 1 link on span, got \(exportedSpans[0].links.count)")
+        return
+    }
+
+    XCTAssertEqual(exportedSpans[0].links[0].context.spanId.hexString, "1111000011110000")
+    XCTAssertEqual(exportedSpans[0].links[0].context.traceId.hexString, "22220000222200002222000022220000")
+    XCTAssertEqual(exportedSpans[0].links[0].attributes["link-attr-1"]?.description, "my-link-attr")
+  }
+
+  func testCreateSpanPathStartSpanWithParent() async throws {
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_0", name: "parent-span", kind: "", time: 0.0,
+                               attributes: NSDictionary(), links: NSArray(), parentId: "",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_1", name: "child-span", kind: "", time: 0.0,
+                               attributes: NSDictionary(), links: NSArray(), parentId: "span_0",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.endSpan(spanBridgeId: "span_1", time: 0.0)
+    createSpanModule.endSpan(spanBridgeId: "span_0", time: 0.0)
+
+    let exportedSpans = try await getExportedSpans()
+
+    guard exportedSpans.count == 2 else {
+        XCTFail("Expected 2 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
+        return
+    }
+
+    XCTAssertEqual(exportedSpans[0].name, "child-span")
+    XCTAssertEqual(exportedSpans[1].name, "parent-span")
+    XCTAssertNil(exportedSpans[1].parentSpanId)
+    XCTAssertEqual(exportedSpans[0].parentSpanId, exportedSpans[1].spanId)
+    XCTAssertEqual(exportedSpans[0].traceId, exportedSpans[1].traceId)
+  }
+
+  func testCreateSpanPathTypeFromEmbTypeAttribute() async throws {
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_0", name: "emb-screen-view", kind: "", time: 0.0,
+                               attributes: NSDictionary(dictionary: ["emb.type": "ux.view"]), links: NSArray(),
+                               parentId: "", resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.endSpan(spanBridgeId: "span_0", time: 0.0)
+
+    let exportedSpans = try await getExportedSpans()
+
+    guard exportedSpans.count == 1 else {
+        XCTFail("Expected 1 exported span, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
+        return
+    }
+
+    XCTAssertEqual(exportedSpans[0].attributes["emb.type"]?.description, "ux.view")
+  }
+
+  func testCreateSpanPathSetAttributes() async throws {
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0,
+                               attributes: NSDictionary(), links: NSArray(), parentId: "",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.setAttributes(spanBridgeId: "span_0", attributes: NSDictionary(dictionary: [
+      "my-attr1": "some-string",
+      "my-attr2": 344,
+      "my-attr3": ["str1", "str2"]
+    ]))
+    createSpanModule.endSpan(spanBridgeId: "span_0", time: 0.0)
+
+    let exportedSpans = try await getExportedSpans()
+
+    guard exportedSpans.count == 1 else {
+        XCTFail("Expected 1 exported span, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
+        return
+    }
+
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr1"], .string("some-string"))
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr2"], .int(344))
+    XCTAssertEqual(exportedSpans[0].attributes["my-attr3"], .string("[str1, str2]"))
+  }
+
+  func testCreateSpanPathAddEvent() async throws {
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0,
+                               attributes: NSDictionary(), links: NSArray(), parentId: "",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.addEvent(spanBridgeId: "span_0", eventName: "my-event", attributes: NSDictionary(dictionary: [
+      "my-attr1": "some-string"
+    ]), time: 1518386928052.0)
+    createSpanModule.endSpan(spanBridgeId: "span_0", time: 0.0)
+
+    let exportedSpans = try await getExportedSpans()
+
+    guard exportedSpans.count == 1 else {
+        XCTFail("Expected 1 exported span, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
+        return
+    }
+
+    guard exportedSpans[0].events.count == 1 else {
+        XCTFail("Expected 1 event on span, got \(exportedSpans[0].events.count)")
+        return
+    }
+
+    XCTAssertEqual(exportedSpans[0].events[0].name, "my-event")
+    XCTAssertEqual(exportedSpans[0].events[0].timestamp, Date(timeIntervalSince1970: 1518386928.052))
+    XCTAssertEqual(exportedSpans[0].events[0].attributes, ["my-attr1": .string("some-string")])
+  }
+
+  func testCreateSpanPathAddLinksWithABlankContext() async throws {
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0,
+                               attributes: NSDictionary(), links: NSArray(), parentId: "",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.addLinks(spanBridgeId: "span_0", links: NSArray(array: [
+      [
+        "context": [
+          "spanId": "6666000066660000",
+          "traceId": "77770000777700007777000077770000"
+        ]
+      ],
+      [
+        "context": [
+          "spanId": "",
+          "traceId": ""
+        ]
+      ]
+    ]))
+    createSpanModule.endSpan(spanBridgeId: "span_0", time: 0.0)
+
+    let exportedSpans = try await getExportedSpans()
+
+    guard exportedSpans.count == 1 else {
+        XCTFail("Expected 1 exported span, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
+        return
+    }
+
+    XCTAssertEqual(exportedSpans[0].name, "my-span")
+    XCTAssertTrue(exportedSpans[0].hasEnded)
+  }
+
+  func testCreateSpanPathStatusSurvivesEndSpan() async throws {
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_0", name: "error-span", kind: "", time: 0.0,
+                               attributes: NSDictionary(), links: NSArray(), parentId: "",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.setStatus(spanBridgeId: "span_0",
+                               status: NSDictionary(dictionary: ["code": "ERROR", "message": "some message"]))
+    createSpanModule.endSpan(spanBridgeId: "span_0", time: 0.0)
+
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_1", name: "unset-span", kind: "", time: 0.0,
+                               attributes: NSDictionary(), links: NSArray(), parentId: "",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.setStatus(spanBridgeId: "span_1", status: NSDictionary(dictionary: ["code": "UNSET"]))
+    createSpanModule.endSpan(spanBridgeId: "span_1", time: 0.0)
+
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_2", name: "ok-span", kind: "", time: 0.0,
+                               attributes: NSDictionary(), links: NSArray(), parentId: "",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.setStatus(spanBridgeId: "span_2", status: NSDictionary(dictionary: ["code": "OK"]))
+    createSpanModule.endSpan(spanBridgeId: "span_2", time: 0.0)
+
+    let exportedSpans = try await getExportedSpans()
+
+    guard exportedSpans.count == 3 else {
+        XCTFail("Expected 3 exported spans, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
+        return
+    }
+
+    XCTAssertEqual(exportedSpans[0].status, .error(description: ""))
+    XCTAssertEqual(exportedSpans[1].status, .unset)
+    XCTAssertEqual(exportedSpans[2].status, .ok)
+  }
+
+  func testCreateSpanPathUpdateNameDoesNothing() async throws {
+    createSpanModule.startSpan(tracerName: "test", tracerVersion: "v1", tracerSchemaUrl: "",
+                               spanBridgeId: "span_0", name: "my-span", kind: "", time: 0.0,
+                               attributes: NSDictionary(), links: NSArray(), parentId: "",
+                               resolve: promise.resolve, reject: promise.reject)
+    createSpanModule.updateName(spanBridgeId: "span_0", name: "my-updated-span-name")
+    createSpanModule.endSpan(spanBridgeId: "span_0", time: 0.0)
+
+    let exportedSpans = try await getExportedSpans()
+
+    guard exportedSpans.count == 1 else {
+        XCTFail("Expected 1 exported span, got \(exportedSpans.count). Names: \(exportedSpans.map { $0.name })")
+        return
+    }
+
+    XCTAssertEqual(exportedSpans[0].name, "my-span")
   }
 }
 
