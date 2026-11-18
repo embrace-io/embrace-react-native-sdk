@@ -5,7 +5,6 @@ import {
   EmbraceSpanEnvelope,
   NormalizedPayloads,
 } from "../typings/embrace";
-import { currentPlatform } from "./platform";
 
 // Logs the SDK emits about itself (iOS launch-time warnings). User logs are emb.type=sys.log
 // (sys.exception for handled errors on Android), so this must not be a "sys." prefix match.
@@ -25,16 +24,8 @@ export const getAttribute = (
 const getEmbType = (span: EmbraceSpanData): string => getAttribute(span, "emb.type");
 
 // A user-created tracer span/snapshot, distinguished from SDK auto-instrumentation.
-const isUserPerf = (span: EmbraceSpanData): boolean => {
-  const type = getEmbType(span);
-  if (currentPlatform() === "android") {
-    // Android tags user spans with emb.type=perf; the internal emb-sdk-init span
-    // shares that type but is marked emb.private=true.
-    return type === "perf" && getAttribute(span, "emb.private") !== "true";
-  }
-  // iOS user spans carry no emb.type; iOS internal perf spans do, so they are excluded.
-  return type === "";
-};
+const isUserPerf = (span: EmbraceSpanData): boolean =>
+  getEmbType(span) === "perf" && getAttribute(span, "emb.private") !== "true";
 
 export const normalizePayloads = (
   spanEnvelopes: EmbraceSpanEnvelope[],
