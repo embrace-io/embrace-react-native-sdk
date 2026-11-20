@@ -403,6 +403,34 @@ class ReactNativeTracerProviderModuleTest {
     }
 
     @Test
+    fun setAttributesEmptyArray() {
+        tracerProviderModule.startSpan(
+            "test", "v1", "", "span_0",
+            "my-span", "", 0.0, JavaOnlyMap(), JavaOnlyArray(),
+            "", promise
+        )
+        tracerProviderModule.setAttributes(
+            "span_0",
+            JavaOnlyMap.of(
+                "empty-array",
+                JavaOnlyArray(),
+                "other-attribute",
+                "some-string",
+            )
+        )
+        tracerProviderModule.endSpan("span_0", 0.0)
+
+        argumentCaptor<Collection<SpanData>>().apply {
+            verify(exporter, times(1)).export(capture())
+            val span = firstValue.single()
+
+            assertEquals(2 + extraAttributes.size, span.attributes.size())
+            assertEquals("[]", span.attributes.get(AttributeKey.stringKey("empty-array")))
+            assertEquals("some-string", span.attributes.get(AttributeKey.stringKey("other-attribute")))
+        }
+    }
+
+    @Test
     fun addEvent() {
         tracerProviderModule.startSpan(
             "test", "v1", "", "span_0",

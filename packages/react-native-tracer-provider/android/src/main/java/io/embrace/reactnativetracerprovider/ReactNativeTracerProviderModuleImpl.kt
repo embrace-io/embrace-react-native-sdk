@@ -105,8 +105,8 @@ class ReactNativeTracerProviderModuleImpl(
                 ReadableType.Number -> builder.put(key, map.getDouble(key))
                 ReadableType.String -> builder.put(key, map.getString(key) ?: "")
                 ReadableType.Array -> {
-                    val array = map.getArray(key)
-                    val arrayType = array?.getType(0)
+                    val array = map.getArray(key) ?: continue
+                    val arrayType = if (array.size() == 0) ReadableType.String else array.getType(0)
                     when (arrayType) {
                         ReadableType.Boolean -> builder.put(AttributeKey.booleanArrayKey(key), booleanListFromReadableArray(array))
                         ReadableType.Number -> builder.put(AttributeKey.doubleArrayKey(key), doubleListFromReadableArray(array))
