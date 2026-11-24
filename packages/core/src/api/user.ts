@@ -143,6 +143,8 @@ const clearUserIdentifier = (): Promise<boolean> =>
  *
  * await setUsername('jane_doe');
  * ```
+ *
+ * @deprecated `setUsername` is deprecated and will be removed in the next major release. Use `setUserIdentifier` instead: https://embrace.io/docs/react-native/features/identify-users
  */
 const setUsername = (username: string): Promise<boolean> =>
   safePromise(EmbraceManagerModule.setUsername(username), "setUsername", false);
@@ -158,6 +160,8 @@ const setUsername = (username: string): Promise<boolean> =>
  *
  * await clearUsername();
  * ```
+ *
+ * @deprecated `clearUsername` is deprecated and will be removed in the next major release. Use `clearUserIdentifier` instead: https://embrace.io/docs/react-native/features/identify-users
  */
 const clearUsername = (): Promise<boolean> =>
   safePromise(EmbraceManagerModule.clearUsername(), "clearUsername", false);
@@ -181,6 +185,8 @@ const clearUsername = (): Promise<boolean> =>
  *
  * await setUserEmail('jane@example.com');
  * ```
+ *
+ * @deprecated `setUserEmail` is deprecated and will be removed in the next major release. Use `setUserIdentifier` instead: https://embrace.io/docs/react-native/features/identify-users
  */
 const setUserEmail = (userEmail: string): Promise<boolean> =>
   safePromise(
@@ -200,6 +206,8 @@ const setUserEmail = (userEmail: string): Promise<boolean> =>
  *
  * await clearUserEmail();
  * ```
+ *
+ * @deprecated `clearUserEmail` is deprecated and will be removed in the next major release. Use `clearUserIdentifier` instead: https://embrace.io/docs/react-native/features/identify-users
  */
 const clearUserEmail = (): Promise<boolean> =>
   safePromise(EmbraceManagerModule.clearUserEmail(), "clearUserEmail", false);
