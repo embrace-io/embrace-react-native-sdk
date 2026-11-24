@@ -5371,45 +5371,44 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/core@npm:^7.24.0":
-  version: 7.24.0
-  resolution: "@react-navigation/core@npm:7.24.0"
+"@react-navigation/core@npm:^7.25.0":
+  version: 7.25.0
+  resolution: "@react-navigation/core@npm:7.25.0"
   dependencies:
-    "@react-navigation/routers": "npm:^7.6.5"
+    "@react-navigation/routers": "npm:^7.6.6"
     escape-string-regexp: "npm:^4.0.0"
     fast-deep-equal: "npm:^3.1.3"
-    react-is: "npm:^19.1.0"
+    react-is: "npm:^19.3.1"
     use-latest-callback: "npm:^0.2.4"
-    use-sync-external-store: "npm:^1.5.0"
   peerDependencies:
     react: ">= 18.2.0"
-  checksum: 10c0/bcabe2d8618066f0ddcac58afbcbc4f1e599ba95fdf4f457c66e35a5cf7f97a5530b2a1de8da1cc88f62a6769fbde040586d235f79ee1729ba66272d01579fe8
+  checksum: 10c0/a24fb36ad3b28286e3ad1527772ab251ea5a074b05112b85806cfc41ed256ef5177f15b3c0c6443d612798c227bbf5a5a64658b9615cc651df75c20cc100ae41
   languageName: node
   linkType: hard
 
 "@react-navigation/native@npm:^7.0.15":
-  version: 7.5.1
-  resolution: "@react-navigation/native@npm:7.5.1"
+  version: 7.5.2
+  resolution: "@react-navigation/native@npm:7.5.2"
   dependencies:
-    "@react-navigation/core": "npm:^7.24.0"
+    "@react-navigation/core": "npm:^7.25.0"
     escape-string-regexp: "npm:^4.0.0"
     fast-deep-equal: "npm:^3.1.3"
-    nanoid: "npm:^3.3.11"
-    standard-navigation: "npm:^0.0.8"
+    nanoid: "npm:^3.3.20"
+    standard-navigation: "npm:^0.0.9"
     use-latest-callback: "npm:^0.2.4"
   peerDependencies:
     react: ">= 18.2.0"
     react-native: "*"
-  checksum: 10c0/2137fd54f0015cbff8a49b10f50e730a9c9faadae10bebd98fa9914f02e620d7d40ae4a943700f6a30749bf8eff384b300f1703f53c41bcb5cda653ec34c9bb8
+  checksum: 10c0/03bc303926904093069d773de9a5fd378d2178f66787eb3f7b240dd30a18d2a7da22f3badfb7b1dda385601fa8fe91166ccd22d13e54803a6b640206c9418c82
   languageName: node
   linkType: hard
 
-"@react-navigation/routers@npm:^7.6.5":
-  version: 7.6.5
-  resolution: "@react-navigation/routers@npm:7.6.5"
+"@react-navigation/routers@npm:^7.6.6":
+  version: 7.6.6
+  resolution: "@react-navigation/routers@npm:7.6.6"
   dependencies:
-    nanoid: "npm:^3.3.11"
-  checksum: 10c0/79c94b36849c43a725a15bc72b843e7ecc15fd6e9a5be81619f3d353bf30e9608ea2e901e7c8a39258e87f0876e2f549c284e430c419c569e4983aa771575634
+    nanoid: "npm:^3.3.20"
+  checksum: 10c0/f77b91e485419aa1e0bd3bf7d418ab63b60c6bb4754fd3065ad3a37d9acfcaf484a87caa1bd99bb38b85d8c3f8d2cc905b5e34c8b263e37c4276c383a2dfc075
   languageName: node
   linkType: hard
 
@@ -12529,15 +12528,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.11":
-  version: 3.3.18
-  resolution: "nanoid@npm:3.3.18"
-  bin:
-    nanoid: bin/nanoid.cjs
-  checksum: 10c0/b994b4e396730f8be2520923284e2040d61eaee55cc6d4935ef6d38d34bafdc46133eda4d3faea5073bda545aa6079d82b886caeac5c731cf9ac18bcc1301425
-  languageName: node
-  linkType: hard
-
 "nanoid@npm:^3.3.20":
   version: 3.3.20
   resolution: "nanoid@npm:3.3.20"
@@ -13830,7 +13820,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is-19@npm:react-is@^19.2.5, react-is@npm:^19.1.0":
+"react-is-19@npm:react-is@^19.2.5":
   version: 19.2.6
   resolution: "react-is@npm:19.2.6"
   checksum: 10c0/263177f370fc156b279d22570dd6e922a0ad641a4a426a4cb70284b8003b00ef532d59f2beca1d22a1ca0b37f85f9077d7733ca5d344ebecd2942e9bc2a2a3c0
@@ -14765,12 +14755,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"standard-navigation@npm:^0.0.8":
-  version: 0.0.8
-  resolution: "standard-navigation@npm:0.0.8"
+"standard-navigation@npm:^0.0.9":
+  version: 0.0.9
+  resolution: "standard-navigation@npm:0.0.9"
   peerDependencies:
     react: "*"
-  checksum: 10c0/46cdde7d565a612d85a8f479b18467fcd1a0d599c047d70fa50b2355967cc29903c20e1f9f7ed77eea56f55fbaf144ff2d2820389dd6e0ee0e15b162116e69fe
+  checksum: 10c0/b01cecedc2e7583d1d4d8ba0ee8398cb2c4e3d96dd194b9b7b41b2f775aea8a91f83dc87a1c0b54f206ad53da1db77304ad21d02298420d5ee1938971e75e400
   languageName: node
   linkType: hard
 
@@ -15672,15 +15662,6 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: 10c0/6523747b2d76f12a91cf80a3cd9803449571e9defa8db69e9a03b8199b211127d88c038063714fe31d3c2e63ca51a491bd05f4e34203795a1c692a5a44416610
-  languageName: node
-  linkType: hard
-
-"use-sync-external-store@npm:^1.5.0":
-  version: 1.6.0
-  resolution: "use-sync-external-store@npm:1.6.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/35e1179f872a53227bdf8a827f7911da4c37c0f4091c29b76b1e32473d1670ebe7bcd880b808b7549ba9a5605c233350f800ffab963ee4a4ee346ee983b6019b
   languageName: node
   linkType: hard
 
