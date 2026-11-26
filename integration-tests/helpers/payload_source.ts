@@ -10,6 +10,26 @@ import {
   retrieveStoredRequests,
 } from "./mock_api";
 import {normalizePayloads} from "./normalize";
+
+export interface RawPayloads {
+  spans: EmbraceSpanEnvelope[];
+  logs: EmbraceLogEnvelope[];
+}
+
+const EMPTY: RawPayloads = {spans: [], logs: []};
+
+// The raw envelopes behind the most recent getPayloads() call, kept so golden capture can write
+// exactly what the test asserted against. Reset on clear() so a test that never reads payloads
+// can't pick up the previous test's.
+let lastRaw = EMPTY;
+
+export const lastRawPayloads = (): RawPayloads => lastRaw;
+
+const normalizeAndKeep = (raw: RawPayloads): NormalizedPayloads => {
+  lastRaw = raw;
+  return normalizePayloads(raw.spans, raw.logs);
+};
+
 export interface PayloadSource {
   getPayloads(): Promise<NormalizedPayloads>;
   clear(): Promise<void>;
@@ -30,10 +50,11 @@ export class LocalMockServerSource implements PayloadSource {
   async getPayloads(): Promise<NormalizedPayloads> {
     const spans = await this.envelopes<EmbraceSpanEnvelope>("/v2/spans");
     const logs = await this.envelopes<EmbraceLogEnvelope>("/v2/logs");
-    return normalizePayloads(spans, logs);
+    return normalizeAndKeep({spans, logs});
   }
 
   async clear(): Promise<void> {
+    lastRaw = EMPTY;
     await this.client.clear({}, "LOG");
   }
 }
@@ -53,13 +74,14 @@ export class RemoteMockApiSource implements PayloadSource {
   async getPayloads(): Promise<NormalizedPayloads> {
     const stored = await this.settledResponse();
     // The service buckets by endpoint, so Spans holds /v2/spans envelopes and Logs /v2/logs.
-    return normalizePayloads(
-      stored.Spans.map(entry => entry.Body as EmbraceSpanEnvelope),
-      stored.Logs.map(entry => entry.Body as EmbraceLogEnvelope),
-    );
+    return normalizeAndKeep({
+      spans: stored.Spans.map(entry => entry.Body as EmbraceSpanEnvelope),
+      logs: stored.Logs.map(entry => entry.Body as EmbraceLogEnvelope),
+    });
   }
 
   async clear(): Promise<void> {
+    lastRaw = EMPTY;
     await clearStoredRequests(this.namespace);
   }
 

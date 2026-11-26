@@ -1,10 +1,12 @@
 import {endSession, tap} from "../helpers/app";
+import {goldenFile} from "../helpers/golden";
 import {getPayloadSource} from "../helpers/payload_source";
 
 describe("Sessions", () => {
   const payloadSource = getPayloadSource();
 
   it("records a foreground session when the app is backgrounded", async () => {
+    goldenFile("session-foreground");
     await endSession();
 
     const payload = await payloadSource.getPayloads();
@@ -13,6 +15,7 @@ describe("Sessions", () => {
   });
 
   it("records a breadcrumb as a session span event", async () => {
+    goldenFile("session-breadcrumb");
     await tap("SPAN TESTING", 500);
     await tap("Add Breadcrumb", 500);
     await endSession();

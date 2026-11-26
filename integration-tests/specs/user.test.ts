@@ -1,5 +1,6 @@
 import {driver} from "@wdio/globals";
 import {endSession, tap} from "../helpers/app";
+import {goldenFile} from "../helpers/golden";
 import {getAttribute} from "../helpers/normalize";
 import {getPayloadSource} from "../helpers/payload_source";
 
@@ -19,6 +20,7 @@ describe("User", () => {
   });
 
   it("attaches user identity to the session payload", async () => {
+    goldenFile("user-properties-set");
     await tap("Set User Properties", 500);
     await endSession();
 
@@ -33,6 +35,7 @@ describe("User", () => {
   });
 
   it("clears user identity", async () => {
+    goldenFile("user-properties-cleared");
     await tap("Set User Properties", 500);
     await tap("Clear User Properties", 500);
     await endSession();
@@ -46,6 +49,7 @@ describe("User", () => {
   });
 
   it("clears all user personas", async () => {
+    goldenFile("user-personas-cleared");
     await tap("Clear All User Personas", 500);
     await endSession();
 
@@ -56,6 +60,7 @@ describe("User", () => {
   });
 
   it("keeps permanent session properties across sessions and drops temporary ones", async () => {
+    goldenFile("user-session-properties");
     await tap("Set Session Properties", 500);
     await endSession();
     await endSession(); // second session, same app instance

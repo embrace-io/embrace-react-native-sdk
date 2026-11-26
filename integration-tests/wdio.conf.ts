@@ -2,6 +2,7 @@ import {startServer, stopServer} from "./helpers/embrace_server";
 import {firstAvailableDevice} from "./helpers/ios";
 import {registerMatchers} from "./helpers/matchers";
 import {getPayloadSource} from "./helpers/payload_source";
+import {resetGoldenFile, writeGoldenFile} from "./helpers/golden";
 import {Command} from "commander";
 import specs from "./specs";
 
@@ -267,7 +268,15 @@ export const config: WebdriverIO.Config = {
    * Function to be executed before a test (in Mocha/Jasmine) starts.
    */
   async beforeTest() {
+    resetGoldenFile();
     await getPayloadSource().clear();
+  },
+  // Golden capture (GOLDEN_CAPTURE=<scenario,...|all>): write the test's payload to its declared
+  // golden once it has passed. A no-op when GOLDEN_CAPTURE is unset.
+  afterTest(_test, _context, {passed}) {
+    if (passed) {
+      writeGoldenFile();
+    }
   },
   /**
    * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
