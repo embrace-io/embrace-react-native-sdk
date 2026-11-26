@@ -1,6 +1,5 @@
 import {driver} from "@wdio/globals";
 import {endSession, tap} from "../helpers/app";
-import {getAttribute} from "../helpers/normalize";
 import {getPayloadSource} from "../helpers/payload_source";
 import {currentPlatform} from "../helpers/platform";
 
@@ -56,10 +55,10 @@ describe("User", () => {
     expect(personas).not.toContain("all-personas2");
   });
 
-  it("keeps permanent session properties across sessions and drops temporary ones", async () => {
+  it("keeps session properties for the whole user session across backgrounding", async () => {
     await tap("Set Session Properties", 500);
     await endSession();
-    await endSession(); // second session, same app instance
+    await endSession();
 
     const payload = await source.getPayloads();
     const [first, second] = [...payload.sessionSpans].sort(
@@ -70,9 +69,9 @@ describe("User", () => {
       "emb.properties.my-permanent-property": "foo-bar-permanent",
     });
     expect(second).toHaveAttributes({
+      "emb.properties.my-property": "foo-bar",
       "emb.properties.my-permanent-property": "foo-bar-permanent",
     });
-    expect(getAttribute(second, "emb.properties.my-property")).toBe("");
   });
 
   it("returns device, session and last-run metadata", async () => {
