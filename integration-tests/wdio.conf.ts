@@ -33,7 +33,7 @@ if (options.platform === "android" || options.platform === "both") {
     // capabilities for local Appium web tests on an Android Emulator
     platformName: "Android",
     "appium:deviceName": "Android GoogleAPI Emulator",
-    "appium:platformVersion": "14.0",
+    "appium:platformVersion": "17.0",
     "appium:automationName": "UiAutomator2",
     "appium:appPackage": options.package,
     "appium:appActivity": ".MainActivity",
