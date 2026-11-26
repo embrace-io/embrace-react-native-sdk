@@ -1,44 +1,52 @@
 {
   "spans": [
     {
-      "metadata": {
-        "personas": []
-      },
-      "resource": {
-        "os_type": "darwin",
-        "react_native_bundle_id": "fa8872dc312b3a22931fd2765e08f068",
-        "screen_resolution": null,
-        "sdk_platform": "ios",
-        "os_build": "26A434",
-        "app_bundle_id": "io.embrace.rn82",
-        "environment": "dev",
-        "build_id": "0D2BD38CE1113E5499FCAE7A9377DF0D",
-        "jailbroken": false,
-        "disk_total_capacity": 994610155520,
-        "hosted_platform_version": "0.82.1",
-        "process_start_time": 1793892246797320000,
-        "device_manufacturer": "Apple",
-        "sdk_version": "6.22.1",
-        "app_framework": 2,
-        "app_version": "1.0",
-        "device_model": "arm64",
-        "process_identifier": "AF43271B9E564F1697341A977E64BD72",
-        "os_name": "ios",
-        "os_version": "27.0",
-        "build": "1",
-        "os_alternate_type": "iOS",
-        "process_pre_warm": false,
-        "device_architecture": "arm64e",
-        "launch_count": null,
-        "hosted_sdk_version": "7.2.0",
-        "environment_detail": "si"
-      },
-      "version": "1.0",
-      "type": "spans",
       "data": {
-        "span_snapshots": [],
         "spans": [
           {
+            "start_time_unix_nano": 1795697244986945300,
+            "status": "ok",
+            "links": [],
+            "events": [
+              {
+                "name": "emb-ui-tap",
+                "time_unix_nano": 1795697245108134100,
+                "attributes": [
+                  {
+                    "key": "emb.type",
+                    "value": "ux.tap"
+                  },
+                  {
+                    "value": "40,815",
+                    "key": "tap.coords"
+                  },
+                  {
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
+                  }
+                ]
+              },
+              {
+                "attributes": [
+                  {
+                    "value": "RCTParagraphComponentView",
+                    "key": "view.name"
+                  },
+                  {
+                    "value": "ux.tap",
+                    "key": "emb.type"
+                  },
+                  {
+                    "value": "201,636",
+                    "key": "tap.coords"
+                  }
+                ],
+                "name": "emb-ui-tap",
+                "time_unix_nano": 1795697246019974000
+              }
+            ],
+            "end_time_unix_nano": 1795697246961207800,
+            "name": "emb-session",
             "attributes": [
               {
                 "key": "emb.type",
@@ -46,7 +54,7 @@
               },
               {
                 "key": "session.id",
-                "value": "FDFB709FA0D143AABF27F92E89FABA7A"
+                "value": "083A3912A8684A358E66353E7E930139"
               },
               {
                 "key": "emb.state",
@@ -66,153 +74,163 @@
               },
               {
                 "key": "emb.heartbeat_time_unix_nano",
-                "value": "1793892256951108864"
+                "value": "1795697244987094016"
               },
               {
                 "key": "emb.session_number",
-                "value": "2"
+                "value": "5"
               }
             ],
-            "status": "ok",
-            "end_time_unix_nano": 1793892258053943000,
-            "name": "emb-session",
-            "trace_id": "28414cb1639603c373c335951074cf66",
-            "events": [
-              {
-                "time_unix_nano": 1793892257127830000,
-                "attributes": [
-                  {
-                    "key": "tap.coords",
-                    "value": "201,636"
-                  },
-                  {
-                    "key": "view.name",
-                    "value": "RCTParagraphComponentView"
-                  },
-                  {
-                    "key": "emb.type",
-                    "value": "ux.tap"
-                  }
-                ],
-                "name": "emb-ui-tap"
-              }
-            ],
-            "links": [],
-            "start_time_unix_nano": 1793892256948608800,
-            "span_id": "2655e22ae08b8691"
+            "trace_id": "e3ee1fad024f0a33b48730d9d600a919",
+            "span_id": "ecda00f518fe6ff8"
           },
           {
+            "start_time_unix_nano": 1795697244987410200,
+            "status": "ok",
+            "links": [],
+            "events": [],
+            "end_time_unix_nano": 1795697246315463200,
+            "name": "log",
             "attributes": [
-              {
-                "value": "false",
-                "key": "view.launch"
-              },
-              {
-                "value": "log",
-                "key": "view.name"
-              },
               {
                 "value": "inactive",
                 "key": "view.state.end"
               },
               {
-                "value": "FDFB709FA0D143AABF27F92E89FABA7A",
-                "key": "session.id"
+                "value": "ux.view",
+                "key": "emb.type"
               },
               {
                 "value": "654321",
                 "key": "test.attr"
               },
               {
+                "value": "false",
+                "key": "view.launch"
+              },
+              {
                 "value": "@react-navigation/native",
                 "key": "package"
               },
               {
-                "value": "ux.view",
-                "key": "emb.type"
+                "value": "083A3912A8684A358E66353E7E930139",
+                "key": "session.id"
+              },
+              {
+                "value": "log",
+                "key": "view.name"
               }
             ],
-            "status": "ok",
-            "end_time_unix_nano": 1793892257418992000,
-            "name": "log",
-            "trace_id": "e217ac3c0fd5e816014ee1204377a5f2",
-            "events": [],
-            "links": [],
-            "start_time_unix_nano": 1793892256951510000,
-            "span_id": "d7c51682d1df8765"
+            "trace_id": "63d4d4d78331c0cab55f392a5f9c6252",
+            "span_id": "cd8993003d87ac26"
           }
-        ]
-      }
-    }
-  ],
-  "logs": [
-    {
+        ],
+        "span_snapshots": []
+      },
+      "type": "spans",
       "resource": {
-        "sdk_version": "6.22.1",
-        "launch_count": null,
-        "os_alternate_type": "iOS",
-        "build_id": "0D2BD38CE1113E5499FCAE7A9377DF0D",
-        "os_version": "27.0",
-        "hosted_platform_version": "0.82.1",
-        "device_model": "arm64",
+        "device_manufacturer": "Apple",
         "screen_resolution": null,
-        "os_build": "26A434",
-        "environment_detail": "si",
+        "disk_total_capacity": 1995165736960,
+        "hosted_platform_version": "0.87.0",
+        "process_identifier": "871F87BF79F3477DACB6FD0F8626DFC3",
+        "react_native_bundle_id": "8f7b3c55c8baf47ddb49da304e150c6e",
         "sdk_platform": "ios",
-        "jailbroken": false,
-        "process_identifier": "AF43271B9E564F1697341A977E64BD72",
+        "device_model": "arm64",
+        "sdk_version": "6.23.0",
+        "launch_count": null,
+        "os_version": "27.2",
         "environment": "dev",
-        "build": "1",
-        "disk_total_capacity": 994610155520,
-        "app_version": "1.0",
-        "process_start_time": 1793892246797320000,
+        "os_build": "25G342",
         "device_architecture": "arm64e",
         "app_framework": 2,
-        "os_name": "ios",
-        "react_native_bundle_id": "fa8872dc312b3a22931fd2765e08f068",
-        "app_bundle_id": "io.embrace.rn82",
-        "hosted_sdk_version": "7.2.0",
+        "environment_detail": "si",
+        "os_alternate_type": "iOS",
+        "build": "1",
         "process_pre_warm": false,
-        "device_manufacturer": "Apple",
-        "os_type": "darwin"
+        "os_type": "darwin",
+        "process_start_time": 1795697210208316200,
+        "app_version": "1.0",
+        "os_name": "ios",
+        "hosted_sdk_version": "7.3.0",
+        "build_id": "FFF36D1625A336BF8924CB35ED24B25D",
+        "jailbroken": false,
+        "app_bundle_id": "io.embrace.rn87"
       },
       "metadata": {
         "personas": []
       },
-      "version": "1.0",
+      "version": "1.0"
+    }
+  ],
+  "logs": [
+    {
+      "metadata": {
+        "personas": []
+      },
       "type": "logs",
+      "resource": {
+        "environment_detail": "si",
+        "device_architecture": "arm64e",
+        "os_build": "25G342",
+        "app_bundle_id": "io.embrace.rn87",
+        "screen_resolution": null,
+        "os_alternate_type": "iOS",
+        "build_id": "FFF36D1625A336BF8924CB35ED24B25D",
+        "device_model": "arm64",
+        "disk_total_capacity": 1995165736960,
+        "launch_count": null,
+        "os_name": "ios",
+        "sdk_platform": "ios",
+        "build": "1",
+        "os_type": "darwin",
+        "sdk_version": "6.23.0",
+        "environment": "dev",
+        "app_version": "1.0",
+        "react_native_bundle_id": "8f7b3c55c8baf47ddb49da304e150c6e",
+        "jailbroken": false,
+        "hosted_platform_version": "0.87.0",
+        "process_identifier": "871F87BF79F3477DACB6FD0F8626DFC3",
+        "process_start_time": 1795697210208316200,
+        "app_framework": 2,
+        "os_version": "27.2",
+        "device_manufacturer": "Apple",
+        "process_pre_warm": false,
+        "hosted_sdk_version": "7.3.0"
+      },
       "data": {
         "logs": [
           {
             "body": "Upssssssss",
             "severity_number": 17,
+            "time_unix_nano": "1795697246094139136",
+            "severity_text": "ERROR",
             "attributes": [
-              {
-                "key": "emb.type",
-                "value": "sys.log"
-              },
-              {
-                "key": "emb.stacktrace.rn",
-                "value": "\n    at SubErrorComponent2 (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:73805:24)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:4850:75)\n    at SubErrorComponent1 (<anonymous>)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:4850:75)\n    at ErrorComponent (<anonymous>)\n    at EmbraceErrorBoundary (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:69947:22)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:4850:75)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:4850:75)\n    at LogTestingScreen (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:73814:51)\n    at StaticContainer (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:58497:17)\n    at EnsureSingleNavigator (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:53923:24)\n    at SceneView (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:58364:22)\n    at NavigationProvider (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:54336:21)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:4850:75)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:4850:75)\n    at Animated(View) (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:37562:30)\n    at Background (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:60119:21)\n    at Screen (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:64341:71)\n    at RNSScreen (<anonymous>)\n    at Animated(Anonymous) (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:37562:30)\n    at Suspender (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:66458:22)\n    at Suspense (<anonymous>)\n    at Freeze (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:66468:23)\n    at DelayedFreeze (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:66423:22)\n    at InnerScreen (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:66199:41)\n    at anonymous (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:66391:50)\n    at MaybeScreen (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:65283:24)\n    at TabScene (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:65059:22)\n    at RNSScreenNavigationContainer (<anonymous>)\n    at ScreenContainer (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:67019:31)\n    at MaybeScreenContainer (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:65272:23)\n    at RNCSafeAreaProvider (<anonymous>)\n    at SafeAreaProvider (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:62667:24)\n    at FrameSizeProvider (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:63048:28)\n    at SafeAreaProviderCompat (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:64290:24)\n    at BottomTabView (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:64874:30)\n    at PreventRemoveProvider (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:54407:24)\n    at NavigationStateListenerProvider (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:54181:21)\n    at BottomTabNavigator (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:68324:18)\n    at anonymous (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:73719:24)\n    at anonymous (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:73366:27)\n    at ThemeProvider (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:53961:21)\n    at EnsureSingleNavigator (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:53923:24)\n    at BaseNavigationContainer (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:51448:28)\n    at NavigationContainerInner (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:58843:30)\n    at EmbraceReactNativeTestHarness (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:50123:65)\n    at App (<anonymous>)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:4850:75)\n    at AppContainer (/tmp/rn-apps/rn82/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:24531:24)"
-              },
-              {
-                "key": "session.id",
-                "value": "FDFB709FA0D143AABF27F92E89FABA7A"
-              },
               {
                 "key": "emb.state",
                 "value": "foreground"
               },
               {
+                "key": "session.id",
+                "value": "083A3912A8684A358E66353E7E930139"
+              },
+              {
+                "key": "emb.stacktrace.rn",
+                "value": "\n    at SubErrorComponent2 (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:67482:24)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:5312:47)\n    at SubErrorComponent1 (<anonymous>)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:5312:47)\n    at ErrorComponent (<anonymous>)\n    at EmbraceErrorBoundary (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:63426:22)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:5312:47)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:5312:47)\n    at LogTestingScreen (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:67491:51)\n    at StaticContainer (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:52629:17)\n    at EnsureSingleNavigator (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:48235:3)\n    at SceneView (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:52495:3)\n    at NavigationProvider (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:48642:3)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:5312:47)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:5312:47)\n    at Animated(View) (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:31965:29)\n    at Background (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:54195:3)\n    at Screen (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:58366:67)\n    at RNSScreen (<anonymous>)\n    at Animated(Anonymous) (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:31965:29)\n    at Suspender (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:60557:3)\n    at Suspense (<anonymous>)\n    at Freeze (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:60568:3)\n    at DelayedFreeze (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:60521:3)\n    at InnerScreen (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:60297:41)\n    at anonymous (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:60489:50)\n    at MaybeScreen (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:59314:3)\n    at TabScene (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:59089:42)\n    at RNSScreenNavigationContainer (<anonymous>)\n    at ScreenContainer (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:61067:31)\n    at MaybeScreenContainer (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:59299:30)\n    at RNCSafeAreaProvider (<anonymous>)\n    at SafeAreaProvider (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:56722:3)\n    at FrameSizeProvider (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:57095:3)\n    at SafeAreaProviderCompat (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:58309:3)\n    at BottomTabView (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:58911:30)\n    at PreventRemoveProvider (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:48711:3)\n    at NavigationStateListenerProvider (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:48492:3)\n    at BottomTabNavigator (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:62350:3)\n    at anonymous (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:67398:51)\n    at anonymous (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:67058:27)\n    at ThemeProvider (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:48272:3)\n    at EnsureSingleNavigator (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:48235:3)\n    at BaseNavigationContainer (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:45878:97)\n    at NavigationContainerInner (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:52961:3)\n    at EmbraceReactNativeTestHarness (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:44576:88)\n    at App (<anonymous>)\n    at RCTView (<anonymous>)\n    at View_withRef (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:5312:47)\n    at AppContainer (/tmp/rn-apps/rn87/ios/build/Build/Products/Release-iphonesimulator/main.jsbundle:24168:22)"
+              },
+              {
+                "key": "emb.type",
+                "value": "sys.log"
+              },
+              {
                 "key": "log.record.uid",
-                "value": "0B69A397B72D4D02B63FA9FC73A95958"
+                "value": "F2D8B373BCBB40B5AB218428F5CCF15C"
               }
-            ],
-            "severity_text": "ERROR",
-            "time_unix_nano": "1793892257204688128"
+            ]
           }
         ]
-      }
+      },
+      "version": "1.0"
     }
   ]
 }
