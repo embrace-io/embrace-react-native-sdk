@@ -1,5 +1,6 @@
 import {driver} from "@wdio/globals";
 import {endSession, tap, isExpo} from "../helpers/app";
+import {goldenFile} from "../helpers/golden";
 import {getPayloadSource} from "../helpers/payload_source";
 import {EmbraceSpanData} from "../typings/embrace";
 
@@ -36,6 +37,7 @@ describe("Navigation", () => {
   });
 
   it("records navigation between screens", async () => {
+    goldenFile("navigation-between-screens");
     await tap("SPAN TESTING", 500);
     await tap("LOG TESTING", 500);
     await endSession();

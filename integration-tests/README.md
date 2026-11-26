@@ -224,6 +224,43 @@ navigation so if a new testing screen is added those apps and templates will hav
 
 The verification of the payload sent as a result of that interaction should then be added under `specs/`.
 
+### Golden files
+
+`golden/<platform>/<scenario>.json` holds the raw `{spans, logs}` payloads captured from the SDK, which specs compare
+against with `toMatchGoldenFile(scenario, section)` or `loadGoldenFile(scenario)`. Values that vary run to run (ids,
+timestamps, stack traces) are only checked for presence, see `helpers/compare.ts`.
+
+Each test is associated with at most one golden. Comparing against a golden associates it implicitly. A test that asserts
+with targeted matchers instead can still keep its full payload as a reference by calling `goldenFile(scenario)` as its
+first line.
+
+Goldens are captured by running the spec that uses them, so write or change the spec first. Set `GOLDEN_CAPTURE` to a
+comma-separated list of scenarios, or `all`, and run the suite as usual against the local mock server:
+
+```bash
+GOLDEN_CAPTURE=logs-basic,logs-no-stacktrace npm run test-local -- --package=io.embrace.rn87 --platform=android
+```
+
+After each test that passes, its payload is written to its golden. While a scenario is being captured, comparisons
+against it check the live payload against itself, so the old file can't fail the run. The test's other assertions still
+apply, and a test that fails writes nothing. Scenarios not listed are compared as usual.
+
+Things to get right before capturing:
+
+* Capture against the local mock server, not the hosted mock-api. A fresh install there brings cold-start data (for
+  example `emb.startup_duration`, or a span for the SDK's own config request) that a local run doesn't have.
+* Every spec except startup runs in a warm session, one started by the previous test backgrounding the app. If you
+  capture a spec on its own, launch the app, then background it and bring it back once before the run. Otherwise the
+  golden records a cold start. `wdio.conf.ts` doesn't accept `--spec`. To run one spec, create a temporary config that
+  imports it and overrides `specs`: `export const config = {...base, specs: ["./specs/logs.test.ts"]};`.
+* `app-startup` is the one cold capture: install the app fresh, launch it, and run the suite (startup runs first).
+* User identity and permanent session properties persist across sessions. An aborted run can leave them behind, and
+  they then leak into later captures.
+
+Review the diff before committing. Expect changes to ids and timestamps; anything else should be explainable. Then run
+the spec again without `GOLDEN_CAPTURE` and confirm it passes, because a capture run compares the payload with itself and
+proves nothing on its own. Capture each platform separately.
+
 ## Troubleshooting
 
 ### Appium updates
