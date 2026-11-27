@@ -92,7 +92,7 @@ class Promise {
 private let EMBRACE_INTERNAL_SPAN_NAMES = ["emb-session", "emb-sdk-start", "emb-setup", "emb-process-launch",
                                            "POST /dev/null/v2/logs", "POST /dev/null/v2/spans"]
 
-private let DEFAULT_WAIT_TIME = Double(ProcessInfo.processInfo.environment["IOS_TEST_WAIT_TIME"] ?? "") ?? 5.0
+private let DRAIN_TIMEOUT: TimeInterval = 120.0
 
 class EmbraceManagerTests: XCTestCase {
     static var logExporter: TestLogExporter!
@@ -146,61 +146,32 @@ class EmbraceManagerTests: XCTestCase {
         flushSpans()
         EmbraceManagerTests.spanExporter.reset(explicitTimeout: nil)
 
-        // Logs have no synchronous drain, so poll until no new logs arrive for 3 seconds
-        // (max 30 seconds total), then snapshot a baseline; getExportedLogs returns only
-        // logs since this index.
-        var previousLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
-        var stableCount = 0
-        for _ in 0..<30 {
-            try await Task.sleep(nanoseconds: UInt64(1.0 * Double(NSEC_PER_SEC)))
-            let currentLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
-            if currentLogCount == previousLogCount {
-                stableCount += 1
-                if stableCount >= 3 {
-                    break  // No new logs for 3 seconds, we're stable
-                }
-            } else {
-                stableCount = 0
-                previousLogCount = currentLogCount
-            }
-        }
-
+        try await flushLogs()
         startingLogCount = EmbraceManagerTests.logExporter.exportedLogs.count
     }
 
     // The tracer provider's forceFlush drains its span processor, which exports spans
     // asynchronously — so this blocks until every span created so far has been exported
     private func flushSpans() {
-        (OpenTelemetry.instance.tracerProvider as? TracerProviderSdk)?.forceFlush(timeout: 5.0)
+        (OpenTelemetry.instance.tracerProvider as? TracerProviderSdk)?.forceFlush(timeout: DRAIN_TIMEOUT)
     }
 
-    func getExportedLogs(expectedCount: Int? = nil, timeout: TimeInterval = 60.0) async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
-        let startTime = Date()
-        var filtered: [OpenTelemetrySdk.ReadableLogRecord] = []
+    private func flushLogs() async throws {
+        let marker = UUID().uuidString
+        Embrace.client?.log(marker, severity: .debug)
 
-        // Poll for logs until we get the expected count or timeout
-        while Date().timeIntervalSince(startTime) < timeout {
-            let newLogs = EmbraceManagerTests.logExporter.getLogsSince(index: startingLogCount)
-            filtered = newLogs.filter { log in
-                log.severity != .debug &&
-                log.attributes["emb.type"]?.description != "sys.internal"
-            }
-
-            if let expected = expectedCount, filtered.count >= expected {
-                break
-            }
-
-            // If no expected count, wait the default time and return
-            if expectedCount == nil {
-                try await Task.sleep(nanoseconds: UInt64(DEFAULT_WAIT_TIME * Double(NSEC_PER_SEC)))
-                break
-            }
-
-            // Short sleep between polls
-            try await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+        let deadline = Date().addingTimeInterval(DRAIN_TIMEOUT)
+        while Date() < deadline && !EmbraceManagerTests.logExporter.exportedLogs.contains(where: { $0.body?.description == marker }) {
+            try await Task.sleep(nanoseconds: 100_000_000)
         }
+    }
 
-        return filtered
+    func getExportedLogs() async throws -> [OpenTelemetrySdk.ReadableLogRecord] {
+        try await flushLogs()
+        return EmbraceManagerTests.logExporter.getLogsSince(index: startingLogCount).filter { log in
+            log.severity != .debug &&
+            log.attributes["emb.type"]?.description != "sys.internal"
+        }
     }
 
     func getExportedSpans() async throws -> [SpanData] {
@@ -257,7 +228,7 @@ class EmbraceManagerTests: XCTestCase {
     func testLogHandledError() async throws {
         module.logHandledError("my handled error", stacktrace: "stacktrace as string", properties: NSDictionary(), resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs(expectedCount: 1)
+        let exportedLogs = try await getExportedLogs()
 
         guard exportedLogs.count == 1 else {
             XCTFail("Expected 1 exported log, got \(exportedLogs.count)")
@@ -282,7 +253,7 @@ class EmbraceManagerTests: XCTestCase {
     func testLogUnhandledJSException() async throws {
         module.logUnhandledJSException("my unhandled exception", message: "unhandled message", type: "Error", stacktrace: "stacktrace as string", resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs(expectedCount: 1)
+        let exportedLogs = try await getExportedLogs()
 
         guard exportedLogs.count == 1 else {
             XCTFail("Expected 1 exported log, got \(exportedLogs.count)")
@@ -325,7 +296,7 @@ class EmbraceManagerTests: XCTestCase {
                                                    includeStacktrace: false,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs(expectedCount: 2)
+        let exportedLogs = try await getExportedLogs()
 
         guard exportedLogs.count == 2 else {
             XCTFail("Expected 2 exported logs, got \(exportedLogs.count)")
@@ -375,7 +346,7 @@ class EmbraceManagerTests: XCTestCase {
                                                    includeStacktrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs(expectedCount: 3)
+        let exportedLogs = try await getExportedLogs()
 
         guard exportedLogs.count == 3 else {
             XCTFail("Expected 3 exported logs, got \(exportedLogs.count)")
@@ -430,7 +401,7 @@ class EmbraceManagerTests: XCTestCase {
                                                    includeStacktrace: true,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs(expectedCount: 3)
+        let exportedLogs = try await getExportedLogs()
 
         guard exportedLogs.count == 3 else {
             XCTFail("Expected 3 exported logs, got \(exportedLogs.count)")
@@ -494,7 +465,7 @@ class EmbraceManagerTests: XCTestCase {
                                                    includeStacktrace: false,
                                                    resolver: promise.resolve, rejecter: promise.reject)
 
-        let exportedLogs = try await getExportedLogs(expectedCount: 6)
+        let exportedLogs = try await getExportedLogs()
 
         guard exportedLogs.count == 6 else {
             XCTFail("Expected 6 exported logs, got \(exportedLogs.count)")
