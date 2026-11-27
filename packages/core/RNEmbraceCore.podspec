@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.source = { :git => ".git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
-  s.ios.deployment_target = '13.0'
+  s.ios.deployment_target = '15.0'
   s.swift_version = '5.0'
 
   if embrace_use_spm
