@@ -30,23 +30,17 @@ public class EmbraceManager: NSObject {
             return false
         }
 
-        addResource(HOSTED_PLATFORM_VERSION_RESOURCE_KEY, config["reactNativeVersion"])
-        addResource(HOSTED_SDK_VERSION_RESOURCE_KEY, config["sdkVersion"])
-        addResource(JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY, config["javaScriptPatchNumber"])
+        addResources([
+            HOSTED_PLATFORM_VERSION_RESOURCE_KEY: config["reactNativeVersion"],
+            HOSTED_SDK_VERSION_RESOURCE_KEY: config["sdkVersion"],
+            JAVASCRIPT_PATCH_NUMBER_RESOURCE_KEY: config["javaScriptPatchNumber"]
+        ].compactMapValues { $0 as? String })
 
         if config["resolveDefaultBundlePath"] as? Bool == true {
             resolveAndSetDefaultBundleID()
         }
 
         return true
-    }
-
-    private func addResource(_ key: String, _ value: Any?) {
-        guard let value = value as? String else {
-            return
-        }
-
-        addResources([key: value])
     }
 
     private var captureService: ReactNativeCaptureService {
@@ -67,7 +61,7 @@ public class EmbraceManager: NSObject {
         bundleIDQueue.async {
             do {
                 let bundleID = try computeBundleID(path: path)
-                self.addResource(REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY, bundleID.id)
+                self.addResources([REACT_NATIVE_BUNDLE_ID_RESOURCE_KEY: bundleID.id])
             } catch let error {
                 os_log("Error computing the default JS bundle ID: %{public}@", log: self.log, type: .error, error.localizedDescription)
             }
