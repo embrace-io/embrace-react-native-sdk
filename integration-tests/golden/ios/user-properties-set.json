@@ -169,8 +169,6 @@
       },
       "metadata": {
         "user_id": "user-identifier",
-        "username": "user-name",
-        "email": "user@test.com",
         "personas": [
           "persona1"
         ]

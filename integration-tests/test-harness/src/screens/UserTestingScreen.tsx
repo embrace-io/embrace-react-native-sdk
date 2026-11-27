@@ -6,10 +6,6 @@ import TestButton from "../components/TestButton";
 import {
   setUserIdentifier,
   clearUserIdentifier,
-  setUsername,
-  clearUsername,
-  setUserEmail,
-  clearUserEmail,
   addUserPersona,
   clearUserPersona,
   clearAllUserPersonas,
@@ -29,8 +25,6 @@ const UserTestingScreen = () => {
   const setUserProperties = useCallback(async () => {
     try {
       await setUserIdentifier("user-identifier");
-      await setUsername("user-name");
-      await setUserEmail("user@test.com");
       await addUserPersona("persona1");
     } catch (e) {
       console.log("failed to set user properties");
@@ -40,8 +34,6 @@ const UserTestingScreen = () => {
   const clearUserProperties = useCallback(async () => {
     try {
       await clearUserIdentifier();
-      await clearUsername();
-      await clearUserEmail();
       await clearUserPersona("persona1");
     } catch (e) {
       console.log("failed to clear user properties");

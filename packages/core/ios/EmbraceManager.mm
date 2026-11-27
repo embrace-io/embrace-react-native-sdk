@@ -111,32 +111,6 @@ RCT_EXPORT_METHOD(clearUserIdentifier:(RCTPromiseResolveBlock)resolve
   [self.impl clearUserIdentifier:resolve rejecter:reject];
 }
 
-RCT_EXPORT_METHOD(setUsername:(NSString *)userName
-                  resolve:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-  [self.impl setUsername:userName resolver:resolve rejecter:reject];
-}
-
-RCT_EXPORT_METHOD(clearUsername:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-  [self.impl clearUsername:resolve rejecter:reject];
-}
-
-RCT_EXPORT_METHOD(setUserEmail:(NSString *)userEmail
-                  resolve:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-  [self.impl setUserEmail:userEmail resolver:resolve rejecter:reject];
-}
-
-RCT_EXPORT_METHOD(clearUserEmail:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-  [self.impl clearUserEmail:resolve rejecter:reject];
-}
-
 RCT_EXPORT_METHOD(addUserPersona:(NSString *)persona
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)

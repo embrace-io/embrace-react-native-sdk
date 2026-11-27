@@ -20,10 +20,6 @@ export interface Spec extends TurboModule {
 
   setUserIdentifier(userIdentifier: string): Promise<boolean>;
   clearUserIdentifier(): Promise<boolean>;
-  setUsername(userName: string): Promise<boolean>;
-  clearUsername(): Promise<boolean>;
-  setUserEmail(userEmail: string): Promise<boolean>;
-  clearUserEmail(): Promise<boolean>;
   addUserPersona(persona: string): Promise<boolean>;
   clearUserPersona(persona: string): Promise<boolean>;
   clearAllUserPersonas(): Promise<boolean>;

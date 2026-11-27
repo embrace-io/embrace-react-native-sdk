@@ -68,48 +68,12 @@ public class EmbraceManagerModuleImpl {
         }
     }
 
-    public void setUsername(String username, Promise promise) {
-        try {
-            Embrace.INSTANCE.setUsername(username);
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.reject("SET_USERNAME_ERROR", "Error setting username", e);
-        }
-    }
-
-    public void setUserEmail(String userEmail, Promise promise) {
-        try {
-            Embrace.INSTANCE.setUserEmail(userEmail);
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.reject("SET_USER_EMAIL_ERROR", "Error setting user email", e);
-        }
-    }
-
-    public void clearUserEmail(Promise promise) {
-        try {
-            Embrace.INSTANCE.clearUserEmail();
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.reject("CLEAR_USER_EMAIL_ERROR", "Error clearing user email", e);
-        }
-    }
-
     public void clearUserIdentifier(Promise promise) {
         try {
             Embrace.INSTANCE.clearUserIdentifier();
             promise.resolve(true);
         } catch(Exception e) {
             promise.reject("CLEAR_USER_IDENTIFIER_ERROR", "Error clearing user identifier", e);
-        }
-    }
-
-    public void clearUsername(Promise promise) {
-        try {
-            Embrace.INSTANCE.clearUsername();
-            promise.resolve(true);
-        } catch(Exception e) {
-            promise.reject("CLEAR_USERNAME_ERROR", "Error clearing username", e);
         }
     }
 

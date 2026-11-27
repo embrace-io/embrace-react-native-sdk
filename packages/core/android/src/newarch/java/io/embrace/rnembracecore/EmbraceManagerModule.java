@@ -68,26 +68,6 @@ public class EmbraceManagerModule extends NativeEmbraceManagerSpec {
     }
 
     @Override
-    public void setUsername(String userName, Promise promise) {
-        impl.setUsername(userName, promise);
-    }
-
-    @Override
-    public void clearUsername(Promise promise) {
-        impl.clearUsername(promise);
-    }
-
-    @Override
-    public void setUserEmail(String userEmail, Promise promise) {
-        impl.setUserEmail(userEmail, promise);
-    }
-
-    @Override
-    public void clearUserEmail(Promise promise) {
-        impl.clearUserEmail(promise);
-    }
-
-    @Override
     public void addUserPersona(String persona, Promise promise) {
         impl.addUserPersona(persona, promise);
     }

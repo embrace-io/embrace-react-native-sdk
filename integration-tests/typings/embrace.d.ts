@@ -49,8 +49,6 @@ interface EmbracePayloadResource {
 // iOS sends neither, so specs assert subsets rather than the whole object.
 interface EmbracePayloadMetadata {
   user_id?: string;
-  email?: string;
-  username?: string;
   personas?: string[];
   timezone_description?: string;
   locale?: string;

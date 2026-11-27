@@ -26,8 +26,6 @@ describe("User", () => {
     // personas is a contains check: Android also carries the SDK-injected "first_day".
     expect(payload.sessionMetadata).toHaveMetadata({
       user_id: "user-identifier",
-      username: "user-name",
-      email: "user@test.com",
       personas: ["persona1"],
     });
   });
@@ -40,8 +38,6 @@ describe("User", () => {
     const payload = await source.getPayloads();
     // Cleared fields are omitted from the metadata rather than sent empty.
     expect(payload.sessionMetadata.user_id).toBeUndefined();
-    expect(payload.sessionMetadata.username).toBeUndefined();
-    expect(payload.sessionMetadata.email).toBeUndefined();
     expect(payload.sessionMetadata.personas ?? []).not.toContain("persona1");
   });
 
