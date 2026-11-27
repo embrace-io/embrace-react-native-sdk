@@ -124,102 +124,10 @@ const clearUserIdentifier = (): Promise<boolean> =>
     false,
   );
 
-/**
- * Sets a username for the current user.
- *
- * The username is displayed in the Embrace dashboard and can help identify users
- * when debugging issues.
- *
- * Note: Be mindful of PII and privacy regulations when setting usernames.
- * We strongly recommend using anonymized or pseudonymous usernames where possible in combination with
- * setUserIdentifier for unique user identification.
- *
- * @param username - The username to associate with the current user
- * @returns A promise that resolves to `true` if the username was successfully set, `false` otherwise
- *
- * @example
- * ```typescript
- * import { setUsername } from '@embrace-io/react-native';
- *
- * await setUsername('jane_doe');
- * ```
- *
- * @deprecated `setUsername` is deprecated and will be removed in the next major release. Use `setUserIdentifier` instead: https://embrace.io/docs/react-native/features/identify-users
- */
-const setUsername = (username: string): Promise<boolean> =>
-  safePromise(EmbraceManagerModule.setUsername(username), "setUsername", false);
-
-/**
- * Clears the current user's username.
- *
- * @returns A promise that resolves to `true` if the username was successfully cleared, `false` otherwise
- *
- * @example
- * ```typescript
- * import { clearUsername } from '@embrace-io/react-native';
- *
- * await clearUsername();
- * ```
- *
- * @deprecated `clearUsername` is deprecated and will be removed in the next major release. Use `clearUserIdentifier` instead: https://embrace.io/docs/react-native/features/identify-users
- */
-const clearUsername = (): Promise<boolean> =>
-  safePromise(EmbraceManagerModule.clearUsername(), "clearUsername", false);
-
-/**
- * Sets an email address for the current user.
- *
- * The email is displayed in the Embrace dashboard and can help identify users
- * when debugging issues or providing customer support.
- *
- * Note: Be mindful of PII and privacy regulations when setting user email addresses.
- * We strongly recommend using hashed or anonymized emails where possible in combination with
- * setUserIdentifier for unique user identification.
- *
- * @param userEmail - The email address to associate with the current user
- * @returns A promise that resolves to `true` if the email was successfully set, `false` otherwise
- *
- * @example
- * ```typescript
- * import { setUserEmail } from '@embrace-io/react-native';
- *
- * await setUserEmail('jane@example.com');
- * ```
- *
- * @deprecated `setUserEmail` is deprecated and will be removed in the next major release. Use `setUserIdentifier` instead: https://embrace.io/docs/react-native/features/identify-users
- */
-const setUserEmail = (userEmail: string): Promise<boolean> =>
-  safePromise(
-    EmbraceManagerModule.setUserEmail(userEmail),
-    "setUserEmail",
-    false,
-  );
-
-/**
- * Clears the current user's email address.
- *
- * @returns A promise that resolves to `true` if the email was successfully cleared, `false` otherwise
- *
- * @example
- * ```typescript
- * import { clearUserEmail } from '@embrace-io/react-native';
- *
- * await clearUserEmail();
- * ```
- *
- * @deprecated `clearUserEmail` is deprecated and will be removed in the next major release. Use `clearUserIdentifier` instead: https://embrace.io/docs/react-native/features/identify-users
- */
-const clearUserEmail = (): Promise<boolean> =>
-  safePromise(EmbraceManagerModule.clearUserEmail(), "clearUserEmail", false);
-
 export {
   addUserPersona,
   clearUserPersona,
   clearAllUserPersonas,
   setUserIdentifier,
   clearUserIdentifier,
-  setUsername,
-  clearUsername,
-  setUserEmail,
-  clearUserEmail,
 };

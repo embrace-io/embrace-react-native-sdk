@@ -78,26 +78,6 @@ public class EmbraceManagerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setUsername(String userName, Promise promise) {
-        impl.setUsername(userName, promise);
-    }
-
-    @ReactMethod
-    public void clearUsername(Promise promise) {
-        impl.clearUsername(promise);
-    }
-
-    @ReactMethod
-    public void setUserEmail(String userEmail, Promise promise) {
-        impl.setUserEmail(userEmail, promise);
-    }
-
-    @ReactMethod
-    public void clearUserEmail(Promise promise) {
-        impl.clearUserEmail(promise);
-    }
-
-    @ReactMethod
     public void addUserPersona(String persona, Promise promise) {
         impl.addUserPersona(persona, promise);
     }

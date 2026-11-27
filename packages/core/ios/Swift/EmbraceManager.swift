@@ -148,26 +148,6 @@ public class EmbraceManager: NSObject {
         }
     }
 
-    @objc(setUsername:resolver:rejecter:)
-    public func setUsername(_ userName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
-            reject("SET_USERNAME_ERROR", "Embrace SDK may not be initialized", nil)
-            return
-        }
-        Embrace.client?.metadata.userName = userName
-        resolve(true)
-    }
-
-    @objc
-    public func clearUserEmail(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
-            reject("CLEAR_USER_EMAIL_ERROR", "Embrace SDK may not be initialized", nil)
-            return
-        }
-        Embrace.client?.metadata.userEmail = nil
-        resolve(true)
-    }
-
     @objc(setJavaScriptPatchNumber:resolver:rejecter:)
     public func setJavaScriptPatchNumber(_ patch: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         do {
@@ -185,16 +165,6 @@ public class EmbraceManager: NSObject {
             return
         }
         Embrace.client?.metadata.userIdentifier = nil
-        resolve(true)
-    }
-
-    @objc
-    public func clearUsername(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
-            reject("CLEAR_USERNAME_ERROR", "Embrace SDK may not be initialized", nil)
-            return
-        }
-        Embrace.client?.metadata.userName = nil
         resolve(true)
     }
 
@@ -250,16 +220,6 @@ public class EmbraceManager: NSObject {
         } catch let error {
             reject("REMOVE_SESSION_PROPERTY", "Error removing Session Property", error)
         }
-    }
-
-    @objc(setUserEmail:resolver:rejecter:)
-    public func setUserEmail(_ userEmail: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        guard Embrace.client != nil else {
-            reject("SET_USER_EMAIL_ERROR", "Embrace SDK may not be initialized", nil)
-            return
-        }
-        Embrace.client?.metadata.userEmail = userEmail
-        resolve(true)
     }
 
     @objc(addSessionProperty:value:permanent:resolver:rejecter:)

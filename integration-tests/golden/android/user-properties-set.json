@@ -31,8 +31,6 @@
       },
       "metadata": {
         "user_id": "user-identifier",
-        "email": "user@test.com",
-        "username": "user-name",
         "personas": [
           "first_day",
           "persona1"
@@ -551,15 +549,7 @@
                 "value": "1"
               },
               {
-                "key": "emb.usage.set_user_email",
-                "value": "1"
-              },
-              {
                 "key": "emb.usage.set_user_identifier",
-                "value": "1"
-              },
-              {
-                "key": "emb.usage.set_username",
                 "value": "1"
               },
               {

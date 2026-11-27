@@ -502,10 +502,6 @@
                 "value": "1"
               },
               {
-                "key": "emb.usage.clear_user_email",
-                "value": "2"
-              },
-              {
                 "key": "emb.usage.clear_user_identifier",
                 "value": "2"
               },
@@ -514,23 +510,11 @@
                 "value": "2"
               },
               {
-                "key": "emb.usage.clear_username",
-                "value": "2"
-              },
-              {
                 "key": "emb.usage.remove_session_property",
                 "value": "2"
               },
               {
-                "key": "emb.usage.set_user_email",
-                "value": "1"
-              },
-              {
                 "key": "emb.usage.set_user_identifier",
-                "value": "1"
-              },
-              {
-                "key": "emb.usage.set_username",
                 "value": "1"
               },
               {

@@ -13,10 +13,6 @@ jest.mock("../EmbraceManagerModule", () => ({
     clearAllUserPersonas: jest.fn().mockRejectedValue(NATIVE_ERROR),
     setUserIdentifier: jest.fn().mockRejectedValue(NATIVE_ERROR),
     clearUserIdentifier: jest.fn().mockRejectedValue(NATIVE_ERROR),
-    setUsername: jest.fn().mockRejectedValue(NATIVE_ERROR),
-    clearUsername: jest.fn().mockRejectedValue(NATIVE_ERROR),
-    setUserEmail: jest.fn().mockRejectedValue(NATIVE_ERROR),
-    clearUserEmail: jest.fn().mockRejectedValue(NATIVE_ERROR),
     logMessageWithSeverityAndProperties: jest
       .fn()
       .mockRejectedValue(NATIVE_ERROR),
@@ -45,10 +41,6 @@ import {
   clearAllUserPersonas,
   setUserIdentifier,
   clearUserIdentifier,
-  setUsername,
-  clearUsername,
-  setUserEmail,
-  clearUserEmail,
 } from "../api/user";
 import {
   addSessionProperty,
@@ -101,26 +93,6 @@ describe("Promise rejection safety", () => {
 
     it("clearUserIdentifier does not throw on rejection", async () => {
       const result = await clearUserIdentifier();
-      expect(result).toBe(false);
-    });
-
-    it("setUsername does not throw on rejection", async () => {
-      const result = await setUsername("name");
-      expect(result).toBe(false);
-    });
-
-    it("clearUsername does not throw on rejection", async () => {
-      const result = await clearUsername();
-      expect(result).toBe(false);
-    });
-
-    it("setUserEmail does not throw on rejection", async () => {
-      const result = await setUserEmail("email@test.com");
-      expect(result).toBe(false);
-    });
-
-    it("clearUserEmail does not throw on rejection", async () => {
-      const result = await clearUserEmail();
       expect(result).toBe(false);
     });
   });
