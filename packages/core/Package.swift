@@ -16,7 +16,7 @@ let package = Package(
     dependencies: [
         .package(name: "ReactNative", path: "../../../../xcframeworks"),
         .package(name: "React-GeneratedCode", path: "../../../ios"),
-        .package(url: "https://github.com/embrace-io/embrace-apple-sdk.git", exact: "6.23.0"),
+        .package(url: "https://github.com/embrace-io/embrace-apple-sdk.git", exact: "7.2.0"),
         .package(url: "https://github.com/open-telemetry/opentelemetry-swift-core.git", from: "2.1.1")
     ],
     targets: [
@@ -27,7 +27,7 @@ let package = Package(
                 .product(name: "OpenTelemetryApi", package: "opentelemetry-swift-core")
             ],
             path: "ios/Swift",
-            swiftSettings: [.define("EMBRACE_USE_SPM"), .swiftLanguageMode(.v5)]
+            swiftSettings: [.swiftLanguageMode(.v5)]
         ),
         .target(
             name: "RNEmbraceCoreBridge",
