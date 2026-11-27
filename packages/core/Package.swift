@@ -27,7 +27,7 @@ let package = Package(
                 .product(name: "OpenTelemetryApi", package: "opentelemetry-swift-core")
             ],
             path: "ios/Swift",
-            swiftSettings: [.define("EMBRACE_USE_SPM"), .swiftLanguageMode(.v5)]
+            swiftSettings: [.swiftLanguageMode(.v5)]
         ),
         .target(
             name: "RNEmbraceCoreBridge",
