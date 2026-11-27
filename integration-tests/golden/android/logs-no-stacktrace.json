@@ -4,29 +4,30 @@
       "resource": {
         "app_version": "1.0",
         "app_framework": 2,
-        "build_id": "9D2C43640EA146AFB8855E0F971E53B4",
+        "build_id": "9BE317C6629E43A3A36EBF899E762EA4",
         "app_ecosystem_id": "io.embrace.rn87",
         "build_type": "release",
         "build_flavor": "",
         "environment": "prod",
         "bundle_version": "1",
-        "sdk_version": "9.3.1",
+        "sdk_version": "9.5.0",
         "sdk_simple_version": 53,
-        "react_native_bundle_id": "17DD813421D1E143DAA7B44CE2E62563",
+        "react_native_bundle_id": "FD3FD584E9C77A33AC81227EAE9F9470",
         "hosted_platform_version": "0.87.0",
-        "hosted_sdk_version": "7.2.0",
+        "hosted_sdk_version": "7.3.0",
         "device_manufacturer": "Google",
         "device_model": "sdk_gphone64_arm64",
         "device_architecture": "arm64-v8a",
         "jailbroken": false,
-        "disk_total_capacity": 6228115456,
+        "disk_total_capacity": 10411143168,
         "os_type": "linux",
         "os_name": "android",
-        "os_version": "14",
-        "os_code": "34",
-        "screen_resolution": "1080x2209",
+        "os_version": "17",
+        "os_code": "37",
+        "screen_resolution": "1280x2856",
         "num_cores": 4,
-        "device_soc_model": "ranchu"
+        "device_soc_model": "ranchu",
+        "otel_sdk_mode": "compat"
       },
       "metadata": {
         "personas": [
@@ -40,22 +41,22 @@
       "data": {
         "spans": [
           {
-            "trace_id": "c6bda4d796fedd907f345d0f4a8c46c7",
-            "span_id": "d29ec88e8501bc8e",
-            "parent_span_id": "6d5fc98120133026",
+            "trace_id": "c8a141d49e6689c6f0ccee4fd4a6b41b",
+            "span_id": "ab424e1791d4759b",
+            "parent_span_id": "3c60a5acf995eeed",
             "name": "emb-MainActivity-start",
-            "start_time_unix_nano": 1792422523648000000,
-            "end_time_unix_nano": 1792422523650000000,
+            "start_time_unix_nano": 1795716080743000000,
+            "end_time_unix_nano": 1795716080746000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
                 "key": "emb.process_identifier",
-                "value": "16c8127f4ef9b09d"
+                "value": "8d00270c9bb0c701"
               },
               {
                 "key": "emb.session_part_id",
-                "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                "value": "C86A31FC746F4A4891B723CF999B2D7A"
               },
               {
                 "key": "emb.type",
@@ -63,13 +64,13 @@
               },
               {
                 "key": "emb.user_session_id",
-                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                "value": "84D66C9134F0DB407E8F930FB1120FDC"
               }
             ],
             "links": [
               {
-                "span_id": "27e534c939f2b637",
-                "trace_id": "a176529be6f8a1ff288dc904c6f73d39",
+                "span_id": "faf64413e817f4bc",
+                "trace_id": "0416624189710ad55487ed82038566dd",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -77,11 +78,11 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
@@ -89,22 +90,22 @@
             ]
           },
           {
-            "trace_id": "c6bda4d796fedd907f345d0f4a8c46c7",
-            "span_id": "d2f1250784fc71b2",
-            "parent_span_id": "6d5fc98120133026",
+            "trace_id": "c8a141d49e6689c6f0ccee4fd4a6b41b",
+            "span_id": "ef492a2836c742cd",
+            "parent_span_id": "3c60a5acf995eeed",
             "name": "emb-MainActivity-resume",
-            "start_time_unix_nano": 1792422523650000000,
-            "end_time_unix_nano": 1792422523650000000,
+            "start_time_unix_nano": 1795716080746000000,
+            "end_time_unix_nano": 1795716080747000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
                 "key": "emb.process_identifier",
-                "value": "16c8127f4ef9b09d"
+                "value": "8d00270c9bb0c701"
               },
               {
                 "key": "emb.session_part_id",
-                "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                "value": "C86A31FC746F4A4891B723CF999B2D7A"
               },
               {
                 "key": "emb.type",
@@ -112,13 +113,13 @@
               },
               {
                 "key": "emb.user_session_id",
-                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                "value": "84D66C9134F0DB407E8F930FB1120FDC"
               }
             ],
             "links": [
               {
-                "span_id": "27e534c939f2b637",
-                "trace_id": "a176529be6f8a1ff288dc904c6f73d39",
+                "span_id": "faf64413e817f4bc",
+                "trace_id": "0416624189710ad55487ed82038566dd",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -126,11 +127,11 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
@@ -138,22 +139,22 @@
             ]
           },
           {
-            "trace_id": "c6bda4d796fedd907f345d0f4a8c46c7",
-            "span_id": "6d5fc98120133026",
+            "trace_id": "c8a141d49e6689c6f0ccee4fd4a6b41b",
+            "span_id": "3c60a5acf995eeed",
             "parent_span_id": "0000000000000000",
             "name": "emb-MainActivity-hot-time-to-initial-display",
-            "start_time_unix_nano": 1792422523648000000,
-            "end_time_unix_nano": 1792422523650000000,
+            "start_time_unix_nano": 1795716080743000000,
+            "end_time_unix_nano": 1795716080747000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
                 "key": "emb.process_identifier",
-                "value": "16c8127f4ef9b09d"
+                "value": "8d00270c9bb0c701"
               },
               {
                 "key": "emb.session_part_id",
-                "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                "value": "C86A31FC746F4A4891B723CF999B2D7A"
               },
               {
                 "key": "emb.type",
@@ -161,13 +162,13 @@
               },
               {
                 "key": "emb.user_session_id",
-                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                "value": "84D66C9134F0DB407E8F930FB1120FDC"
               }
             ],
             "links": [
               {
-                "span_id": "27e534c939f2b637",
-                "trace_id": "a176529be6f8a1ff288dc904c6f73d39",
+                "span_id": "faf64413e817f4bc",
+                "trace_id": "0416624189710ad55487ed82038566dd",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -175,11 +176,11 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
@@ -187,22 +188,22 @@
             ]
           },
           {
-            "trace_id": "c36970a0a1bd40d9bc4e4ed40d5d2614",
-            "span_id": "abd75467d64e2a27",
+            "trace_id": "3bcd0fb48790db14cdb4f3c7e648c558",
+            "span_id": "f561709bb8fa140e",
             "parent_span_id": "0000000000000000",
             "name": "log",
-            "start_time_unix_nano": 1792422523650000000,
-            "end_time_unix_nano": 1792422525270000000,
+            "start_time_unix_nano": 1795716080748000000,
+            "end_time_unix_nano": 1795716082789000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
                 "key": "emb.process_identifier",
-                "value": "16c8127f4ef9b09d"
+                "value": "8d00270c9bb0c701"
               },
               {
                 "key": "emb.session_part_id",
-                "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                "value": "C86A31FC746F4A4891B723CF999B2D7A"
               },
               {
                 "key": "emb.type",
@@ -210,7 +211,7 @@
               },
               {
                 "key": "emb.user_session_id",
-                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                "value": "84D66C9134F0DB407E8F930FB1120FDC"
               },
               {
                 "key": "package",
@@ -235,8 +236,8 @@
             ],
             "links": [
               {
-                "span_id": "27e534c939f2b637",
-                "trace_id": "a176529be6f8a1ff288dc904c6f73d39",
+                "span_id": "faf64413e817f4bc",
+                "trace_id": "0416624189710ad55487ed82038566dd",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -244,11 +245,11 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
@@ -256,17 +257,17 @@
             ]
           },
           {
-            "trace_id": "2a86a8833a2eb0a96f9b582b501e0659",
-            "span_id": "15539ef269fde07c",
+            "trace_id": "02b8950932d31bc0c5ec23da2aa562a7",
+            "span_id": "369570584e6c3047",
             "parent_span_id": "0000000000000000",
             "name": "emb-state-screen-automatic",
-            "start_time_unix_nano": 1792422523649000000,
-            "end_time_unix_nano": 1792422526033000000,
+            "start_time_unix_nano": 1795716080744000000,
+            "end_time_unix_nano": 1795716083914000000,
             "status": "Unset",
             "events": [
               {
                 "name": "transition",
-                "time_unix_nano": 1792422523648000000,
+                "time_unix_nano": 1795716080743000000,
                 "attributes": [
                   {
                     "key": "emb.state.new_value",
@@ -276,11 +277,15 @@
               },
               {
                 "name": "transition",
-                "time_unix_nano": 1792422526033000000,
+                "time_unix_nano": 1795716083914000000,
                 "attributes": [
                   {
                     "key": "emb.state.new_value",
                     "value": "Backgrounded"
+                  },
+                  {
+                    "key": "emb.state.value_type",
+                    "value": "system"
                   }
                 ]
               }
@@ -288,11 +293,11 @@
             "attributes": [
               {
                 "key": "emb.process_identifier",
-                "value": "16c8127f4ef9b09d"
+                "value": "8d00270c9bb0c701"
               },
               {
                 "key": "emb.session_part_id",
-                "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                "value": "C86A31FC746F4A4891B723CF999B2D7A"
               },
               {
                 "key": "emb.state.initial_value",
@@ -303,18 +308,22 @@
                 "value": "2"
               },
               {
+                "key": "emb.state.value_type",
+                "value": "system"
+              },
+              {
                 "key": "emb.type",
                 "value": "state"
               },
               {
                 "key": "emb.user_session_id",
-                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                "value": "84D66C9134F0DB407E8F930FB1120FDC"
               }
             ],
             "links": [
               {
-                "span_id": "27e534c939f2b637",
-                "trace_id": "a176529be6f8a1ff288dc904c6f73d39",
+                "span_id": "faf64413e817f4bc",
+                "trace_id": "0416624189710ad55487ed82038566dd",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -322,11 +331,11 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
@@ -334,22 +343,22 @@
             ]
           },
           {
-            "trace_id": "8d9aff45b39a38f75f55827fab2531b9",
-            "span_id": "de16c61b259a2214",
+            "trace_id": "9ae5e202613749a439711bdec1e7f20f",
+            "span_id": "e1878e1f978e42ac",
             "parent_span_id": "0000000000000000",
             "name": "emb-state-network",
-            "start_time_unix_nano": 1792422523649000000,
-            "end_time_unix_nano": 1792422526034000000,
+            "start_time_unix_nano": 1795716080744000000,
+            "end_time_unix_nano": 1795716083914000000,
             "status": "Unset",
             "events": [],
             "attributes": [
               {
                 "key": "emb.process_identifier",
-                "value": "16c8127f4ef9b09d"
+                "value": "8d00270c9bb0c701"
               },
               {
                 "key": "emb.session_part_id",
-                "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                "value": "C86A31FC746F4A4891B723CF999B2D7A"
               },
               {
                 "key": "emb.state.initial_value",
@@ -361,13 +370,13 @@
               },
               {
                 "key": "emb.user_session_id",
-                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                "value": "84D66C9134F0DB407E8F930FB1120FDC"
               }
             ],
             "links": [
               {
-                "span_id": "27e534c939f2b637",
-                "trace_id": "a176529be6f8a1ff288dc904c6f73d39",
+                "span_id": "faf64413e817f4bc",
+                "trace_id": "0416624189710ad55487ed82038566dd",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -375,11 +384,11 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
@@ -387,12 +396,12 @@
             ]
           },
           {
-            "trace_id": "a176529be6f8a1ff288dc904c6f73d39",
-            "span_id": "27e534c939f2b637",
+            "trace_id": "0416624189710ad55487ed82038566dd",
+            "span_id": "faf64413e817f4bc",
             "parent_span_id": "0000000000000000",
             "name": "emb-session",
-            "start_time_unix_nano": 1792422523648000000,
-            "end_time_unix_nano": 1792422526034000000,
+            "start_time_unix_nano": 1795716080744000000,
+            "end_time_unix_nano": 1795716083914000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -402,7 +411,7 @@
               },
               {
                 "key": "emb.clock_network_drift",
-                "value": "65915481"
+                "value": "323"
               },
               {
                 "key": "emb.cold_start",
@@ -410,15 +419,11 @@
               },
               {
                 "key": "emb.disk_free_bytes",
-                "value": "4509036544"
+                "value": "9466351616"
               },
               {
                 "key": "emb.error_log_count",
                 "value": "1"
-              },
-              {
-                "key": "emb.heartbeat_time_unix_nano",
-                "value": "1792422525650000000"
               },
               {
                 "key": "emb.is_emulator",
@@ -434,11 +439,11 @@
               },
               {
                 "key": "emb.okhttp3_on_classpath",
-                "value": "4.12.0"
+                "value": "4.12.1"
               },
               {
                 "key": "emb.process_identifier",
-                "value": "16c8127f4ef9b09d"
+                "value": "8d00270c9bb0c701"
               },
               {
                 "key": "emb.session_end_type",
@@ -446,7 +451,7 @@
               },
               {
                 "key": "emb.session_part_id",
-                "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                "value": "C86A31FC746F4A4891B723CF999B2D7A"
               },
               {
                 "key": "emb.session_part_number",
@@ -474,7 +479,7 @@
               },
               {
                 "key": "emb.user_session_id",
-                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                "value": "84D66C9134F0DB407E8F930FB1120FDC"
               },
               {
                 "key": "emb.user_session_inactivity_timeout_seconds",
@@ -494,13 +499,13 @@
               },
               {
                 "key": "emb.user_session_start_ts",
-                "value": "1792422360154"
+                "value": "1795715899712"
               }
             ],
             "links": [
               {
-                "span_id": "0985dca1daa6eb83",
-                "trace_id": "676d63ed8edcefe250fb9d34ae7eafed",
+                "span_id": "9dad383314a8df2c",
+                "trace_id": "09ef0378bdb962293d1cc258498deac3",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -508,18 +513,18 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "DE76405AD481B031D296B7B53D557C8B"
+                    "value": "00A801FE88E9A73544D04AFC8173894A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "d29ec88e8501bc8e",
-                "trace_id": "c6bda4d796fedd907f345d0f4a8c46c7",
+                "span_id": "ab424e1791d4759b",
+                "trace_id": "c8a141d49e6689c6f0ccee4fd4a6b41b",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -527,18 +532,18 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "d2f1250784fc71b2",
-                "trace_id": "c6bda4d796fedd907f345d0f4a8c46c7",
+                "span_id": "ef492a2836c742cd",
+                "trace_id": "c8a141d49e6689c6f0ccee4fd4a6b41b",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -546,18 +551,18 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "6d5fc98120133026",
-                "trace_id": "c6bda4d796fedd907f345d0f4a8c46c7",
+                "span_id": "3c60a5acf995eeed",
+                "trace_id": "c8a141d49e6689c6f0ccee4fd4a6b41b",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -565,18 +570,18 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "abd75467d64e2a27",
-                "trace_id": "c36970a0a1bd40d9bc4e4ed40d5d2614",
+                "span_id": "f561709bb8fa140e",
+                "trace_id": "3bcd0fb48790db14cdb4f3c7e648c558",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -584,18 +589,18 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "15539ef269fde07c",
-                "trace_id": "2a86a8833a2eb0a96f9b582b501e0659",
+                "span_id": "369570584e6c3047",
+                "trace_id": "02b8950932d31bc0c5ec23da2aa562a7",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -603,18 +608,18 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "15539ef269fde07c",
-                "trace_id": "2a86a8833a2eb0a96f9b582b501e0659",
+                "span_id": "369570584e6c3047",
+                "trace_id": "02b8950932d31bc0c5ec23da2aa562a7",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -622,18 +627,18 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "de16c61b259a2214",
-                "trace_id": "8d9aff45b39a38f75f55827fab2531b9",
+                "span_id": "e1878e1f978e42ac",
+                "trace_id": "9ae5e202613749a439711bdec1e7f20f",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -641,18 +646,18 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
               },
               {
-                "span_id": "de16c61b259a2214",
-                "trace_id": "8d9aff45b39a38f75f55827fab2531b9",
+                "span_id": "e1878e1f978e42ac",
+                "trace_id": "9ae5e202613749a439711bdec1e7f20f",
                 "attributes": [
                   {
                     "key": "emb.link_type",
@@ -660,11 +665,11 @@
                   },
                   {
                     "key": "emb.session_part_id",
-                    "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                    "value": "C86A31FC746F4A4891B723CF999B2D7A"
                   },
                   {
                     "key": "emb.user_session_id",
-                    "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                    "value": "84D66C9134F0DB407E8F930FB1120FDC"
                   }
                 ],
                 "is_remote": false
@@ -674,11 +679,11 @@
         ],
         "span_snapshots": [
           {
-            "trace_id": "209130723f2fb2cb2e8724e38f1d65f5",
-            "span_id": "6c7922bfc35283c0",
+            "trace_id": "6402a5128da710226ae5c089172994cd",
+            "span_id": "a5742c40daaece17",
             "parent_span_id": "0000000000000000",
             "name": "emb-network-status",
-            "start_time_unix_nano": 1792422427538000000,
+            "start_time_unix_nano": 1795715975639000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -694,11 +699,11 @@
             "links": []
           },
           {
-            "trace_id": "451af5761665cd1a63ef7f43e7956bf4",
-            "span_id": "ec9cf2fdd2efb00a",
+            "trace_id": "d72cad31c93554ffcacabda98b8222a2",
+            "span_id": "40ec30857c7f286a",
             "parent_span_id": "0000000000000000",
             "name": "emb-thermal-state",
-            "start_time_unix_nano": 1792422427468000000,
+            "start_time_unix_nano": 1795715974137000000,
             "status": "Unset",
             "events": [],
             "attributes": [
@@ -715,9 +720,9 @@
           }
         ],
         "shared_lib_symbol_mapping": {
-          "libappmodules.so": "217736c7dd77f2d399b43be2ed33ba1560cf7ea0",
+          "libappmodules.so": "f042f933f662acbd2fac23831eae0950343a0bce",
           "libc++_shared.so": "8f9b811782f82b7e96ef983939059539bc486507",
-          "libembrace-native.so": "d4f39d80b24539077c14e5c1cd255a3a53da5b7e",
+          "libembrace-native.so": "7d7532612c413a0e584aee3f653bbc5141bc56df",
           "libfbjni.so": "908a62be76b9bea375d88a9d714790c3d188ab34",
           "libhermestooling.so": "69dc64792648cd8539c5a3946aefef34199a1f99",
           "libhermesvm.so": "29e16b5b2961c04689f82bdb9fd52818e92ec6f2",
@@ -725,10 +730,10 @@
           "libjsi.so": "48dd9b2df37bf37e1dca714515014574379c74a4",
           "libnative-filters.so": "f5dabe8b01e9da9ad08ebb99f0e2f9e3f601d234",
           "libnative-imagetranscoder.so": "46588427304036cab21cb7115b8236f4a48c7773",
-          "libreact_codegen_rnscreens.so": "48fe42ab3fce048eaa22c2a5f49af80cf8647c90",
-          "libreact_codegen_safeareacontext.so": "1c6a5283d78eb9aa534691b52dda6842715a6b68",
+          "libreact_codegen_rnscreens.so": "54c2ba3bd0929a92ad9ed3e96d0409fb69f60d9b",
+          "libreact_codegen_safeareacontext.so": "0b8ac9e51bbcbf5cb8d5b989091c6e568e80b54d",
           "libreactnative.so": "6267efeacb3f99ce0851e1b20d162fb1ff4bb938",
-          "librnscreens.so": "180fc7c163a49b283dbeee16a565016c600c36c7"
+          "librnscreens.so": "d7402598e70aa6232df45e1c0d01d8137e585c48"
         }
       }
     }
@@ -738,29 +743,30 @@
       "resource": {
         "app_version": "1.0",
         "app_framework": 2,
-        "build_id": "9D2C43640EA146AFB8855E0F971E53B4",
+        "build_id": "9BE317C6629E43A3A36EBF899E762EA4",
         "app_ecosystem_id": "io.embrace.rn87",
         "build_type": "release",
         "build_flavor": "",
         "environment": "prod",
         "bundle_version": "1",
-        "sdk_version": "9.3.1",
+        "sdk_version": "9.5.0",
         "sdk_simple_version": 53,
-        "react_native_bundle_id": "17DD813421D1E143DAA7B44CE2E62563",
+        "react_native_bundle_id": "FD3FD584E9C77A33AC81227EAE9F9470",
         "hosted_platform_version": "0.87.0",
-        "hosted_sdk_version": "7.2.0",
+        "hosted_sdk_version": "7.3.0",
         "device_manufacturer": "Google",
         "device_model": "sdk_gphone64_arm64",
         "device_architecture": "arm64-v8a",
         "jailbroken": false,
-        "disk_total_capacity": 6228115456,
+        "disk_total_capacity": 10411143168,
         "os_type": "linux",
         "os_name": "android",
-        "os_version": "14",
-        "os_code": "34",
-        "screen_resolution": "1080x2209",
+        "os_version": "17",
+        "os_code": "37",
+        "screen_resolution": "1280x2856",
         "num_cores": 4,
-        "device_soc_model": "ranchu"
+        "device_soc_model": "ranchu",
+        "otel_sdk_mode": "compat"
       },
       "metadata": {
         "personas": [
@@ -774,14 +780,14 @@
       "data": {
         "logs": [
           {
-            "time_unix_nano": 1792422525212000000,
+            "time_unix_nano": 1795716082719000000,
             "severity_number": 13,
             "severity_text": "WARNING",
             "body": "This is a Warning log without stacktrace",
             "attributes": [
               {
                 "key": "emb.session_part_id",
-                "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                "value": "C86A31FC746F4A4891B723CF999B2D7A"
               },
               {
                 "key": "emb.state",
@@ -801,23 +807,23 @@
               },
               {
                 "key": "emb.user_session_id",
-                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                "value": "84D66C9134F0DB407E8F930FB1120FDC"
               },
               {
                 "key": "log.record.uid",
-                "value": "1066400B5F5E3DC42D5AA5CAC188347C"
+                "value": "6A062019090D6EF87546AC4FCD2B1A0B"
               }
             ]
           },
           {
-            "time_unix_nano": 1792422525213000000,
+            "time_unix_nano": 1795716082719000000,
             "severity_number": 17,
             "severity_text": "ERROR",
             "body": "This is a Error log without stacktrace",
             "attributes": [
               {
                 "key": "emb.session_part_id",
-                "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                "value": "C86A31FC746F4A4891B723CF999B2D7A"
               },
               {
                 "key": "emb.state",
@@ -837,16 +843,16 @@
               },
               {
                 "key": "emb.user_session_id",
-                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                "value": "84D66C9134F0DB407E8F930FB1120FDC"
               },
               {
                 "key": "log.record.uid",
-                "value": "C295EB8286EC436CE3025BE8C47E28B5"
+                "value": "4A2E0C806E39CB1B24E87353472571A0"
               }
             ]
           },
           {
-            "time_unix_nano": 1792422525213000000,
+            "time_unix_nano": 1795716082719000000,
             "severity_number": 13,
             "severity_text": "WARNING",
             "body": "This is a Message (log without stacktrace)",
@@ -857,7 +863,7 @@
               },
               {
                 "key": "emb.session_part_id",
-                "value": "5B2951B2CA9D1A55EFA299374E9A8836"
+                "value": "C86A31FC746F4A4891B723CF999B2D7A"
               },
               {
                 "key": "emb.state",
@@ -877,11 +883,11 @@
               },
               {
                 "key": "emb.user_session_id",
-                "value": "1DEBD661EEE282B3ABF95475D5FEC12D"
+                "value": "84D66C9134F0DB407E8F930FB1120FDC"
               },
               {
                 "key": "log.record.uid",
-                "value": "DA725137816443DDF7264FE5916B6D7F"
+                "value": "11E7DD58F9F43A0B61C9781D511A20D4"
               },
               {
                 "key": "property.test",

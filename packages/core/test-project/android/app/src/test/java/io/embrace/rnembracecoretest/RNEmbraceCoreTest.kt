@@ -359,11 +359,12 @@ class RNEmbraceCoreTest {
         assertEquals("value.for-custom-property2", warningLog.attributes["custom.property2"])
         assertEquals("stacktrace as string", warningLog.attributes["emb.stacktrace.rn"])
         assertEquals("sys.log", warningLog.attributes["emb.type"])
-        assertEquals(10, warningLog.attributes.size)
+        assertEquals(11, warningLog.attributes.size)
         assertNotNull(warningLog.attributes["log.record.uid"])
         assertNotNull(warningLog.attributes["emb.state"])
         assertNotNull(warningLog.attributes["emb.state.network"])
         assertNotNull(warningLog.attributes["emb.state.screen-automatic"])
+        assertNotNull(warningLog.attributes["emb.state.screen-automatic.value_type"])
         assertNotNull(warningLog.attributes["emb.user_session_id"])
         assertNotNull(warningLog.attributes["emb.session_part_id"])
 
@@ -373,11 +374,12 @@ class RNEmbraceCoreTest {
         assertEquals("value.for-custom-property1", warningLogNoStacktrace.attributes["custom.property1"])
         assertEquals("value.for-custom-property2", warningLogNoStacktrace.attributes["custom.property2"])
         assertEquals("sys.log", warningLogNoStacktrace.attributes["emb.type"])
-        assertEquals(9, warningLogNoStacktrace.attributes.size)
+        assertEquals(10, warningLogNoStacktrace.attributes.size)
         assertNotNull(warningLogNoStacktrace.attributes["log.record.uid"])
         assertNotNull(warningLogNoStacktrace.attributes["emb.state"])
         assertNotNull(warningLogNoStacktrace.attributes["emb.state.network"])
         assertNotNull(warningLogNoStacktrace.attributes["emb.state.screen-automatic"])
+        assertNotNull(warningLogNoStacktrace.attributes["emb.state.screen-automatic.value_type"])
         assertNotNull(warningLogNoStacktrace.attributes["emb.user_session_id"])
         assertNotNull(warningLogNoStacktrace.attributes["emb.session_part_id"])
         // no stacktrace if passing empty string
@@ -390,11 +392,12 @@ class RNEmbraceCoreTest {
         assertEquals("value.for-custom-property2", errorLog.attributes["custom.property2"])
         assertEquals("stacktrace as string", errorLog.attributes["emb.stacktrace.rn"])
         assertEquals("sys.log", errorLog.attributes["emb.type"])
-        assertEquals(10, errorLog.attributes.size)
+        assertEquals(11, errorLog.attributes.size)
         assertNotNull(errorLog.attributes["log.record.uid"])
         assertNotNull(errorLog.attributes["emb.state"])
         assertNotNull(errorLog.attributes["emb.state.network"])
         assertNotNull(errorLog.attributes["emb.state.screen-automatic"])
+        assertNotNull(errorLog.attributes["emb.state.screen-automatic.value_type"])
         assertNotNull(errorLog.attributes["emb.user_session_id"])
         assertNotNull(errorLog.attributes["emb.session_part_id"])
 
@@ -404,11 +407,12 @@ class RNEmbraceCoreTest {
         assertEquals("value.for-custom-property1", errorLogNoStacktrace.attributes["custom.property1"])
         assertEquals("value.for-custom-property2", errorLogNoStacktrace.attributes["custom.property2"])
         assertEquals("sys.log", errorLogNoStacktrace.attributes["emb.type"])
-        assertEquals(9, errorLogNoStacktrace.attributes.size)
+        assertEquals(10, errorLogNoStacktrace.attributes.size)
         assertNotNull(errorLogNoStacktrace.attributes["log.record.uid"])
         assertNotNull(errorLogNoStacktrace.attributes["emb.state"])
         assertNotNull(errorLogNoStacktrace.attributes["emb.state.network"])
         assertNotNull(errorLogNoStacktrace.attributes["emb.state.screen-automatic"])
+        assertNotNull(errorLogNoStacktrace.attributes["emb.state.screen-automatic.value_type"])
         assertNotNull(errorLogNoStacktrace.attributes["emb.user_session_id"])
         assertNotNull(errorLogNoStacktrace.attributes["emb.session_part_id"])
         // no stacktrace if passing empty string
@@ -420,11 +424,12 @@ class RNEmbraceCoreTest {
         assertEquals("value.for-custom-property1", infoLog.attributes["custom.property1"])
         assertEquals("value.for-custom-property2", infoLog.attributes["custom.property2"])
         assertEquals("sys.log", infoLog.attributes["emb.type"])
-        assertEquals(9, infoLog.attributes.size)
+        assertEquals(10, infoLog.attributes.size)
         assertNotNull(infoLog.attributes["log.record.uid"])
         assertNotNull(infoLog.attributes["emb.state"])
         assertNotNull(infoLog.attributes["emb.state.network"])
         assertNotNull(infoLog.attributes["emb.state.screen-automatic"])
+        assertNotNull(infoLog.attributes["emb.state.screen-automatic.value_type"])
         assertNotNull(infoLog.attributes["emb.user_session_id"])
         assertNotNull(infoLog.attributes["emb.session_part_id"])
         // no stacktrace if passing a stacktrace as product's decision
@@ -434,11 +439,12 @@ class RNEmbraceCoreTest {
         assertEquals("INFO", infoLogNoProperties.severityText)
         assertEquals("a nice info message without properties", infoLogNoProperties.body.toString())
         assertEquals("sys.log", infoLogNoProperties.attributes["emb.type"])
-        assertEquals(7, infoLogNoProperties.attributes.size)
+        assertEquals(8, infoLogNoProperties.attributes.size)
         assertNotNull(infoLogNoProperties.attributes["log.record.uid"])
         assertNotNull(infoLogNoProperties.attributes["emb.state"])
         assertNotNull(infoLogNoProperties.attributes["emb.state.network"])
         assertNotNull(infoLogNoProperties.attributes["emb.state.screen-automatic"])
+        assertNotNull(infoLogNoProperties.attributes["emb.state.screen-automatic.value_type"])
         assertNotNull(infoLogNoProperties.attributes["emb.user_session_id"])
         assertNotNull(infoLogNoProperties.attributes["emb.session_part_id"])
         assertNull(infoLogNoProperties.attributes["emb.stacktrace.rn"])
@@ -447,18 +453,19 @@ class RNEmbraceCoreTest {
         assertEquals("ERROR", logWithNoSeverity.severityText)
         assertEquals("a message without severity", logWithNoSeverity.body.toString())
         assertEquals("sys.log", logWithNoSeverity.attributes["emb.type"])
-        assertEquals(8, logWithNoSeverity.attributes.size)
+        assertEquals(9, logWithNoSeverity.attributes.size)
         assertNotNull(logWithNoSeverity.attributes["log.record.uid"])
         assertNotNull(logWithNoSeverity.attributes["emb.state"])
         assertNotNull(logWithNoSeverity.attributes["emb.state.network"])
         assertNotNull(logWithNoSeverity.attributes["emb.state.screen-automatic"])
+        assertNotNull(logWithNoSeverity.attributes["emb.state.screen-automatic.value_type"])
         assertNotNull(logWithNoSeverity.attributes["emb.user_session_id"])
         assertNotNull(logWithNoSeverity.attributes["emb.session_part_id"])
         assertEquals("stacktrace as string", logWithNoSeverity.attributes["emb.stacktrace.rn"])
     }
 
     @Test
-    fun endSessionStartsANewSessionThatKeepsOnlyPermanentProperties() {
+    fun endSessionStartsANewUserSessionThatKeepsOnlyPermanentProperties() {
         embraceModuleSpy.addSessionProperty("permanent-key", "permanent-value", true, promise)
         embraceModuleSpy.addSessionProperty("temporary-key", "temporary-value", false, promise)
         embraceModuleSpy.addSessionProperty("removed-key", "removed-value", false, promise)
@@ -510,6 +517,7 @@ private class TestSpanProcessor : SpanProcessor {
     }
     override fun isStartRequired() = false
     override fun isEndRequired() = true
+    override fun isOnEndingRequired() = false
     override suspend fun forceFlush() = OperationResultCode.Success
     override suspend fun shutdown() = OperationResultCode.Success
 }
