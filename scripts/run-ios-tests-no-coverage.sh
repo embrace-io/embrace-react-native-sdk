@@ -16,5 +16,12 @@ DERIVED_DATA="$HOME/Library/Developer/Xcode/DerivedData/$(basename "$WORKSPACE" 
 rm -rf "$DERIVED_DATA/Logs/Test"
 
 # iPhone 17 Pro with iOS 26.5 - available on both local and CI environments
-xcodebuild test -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk iphonesimulator -derivedDataPath "$DERIVED_DATA" -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5' -disable-concurrent-testing -jobs 1 | xcbeautify
+for _ in $(seq 1 12); do
+  UDID=$(xcrun simctl list devices available --json | jq -r '.devices["com.apple.CoreSimulator.SimRuntime.iOS-26-5"][]? | select(.name == "iPhone 17 Pro") | .udid' | head -1)
+  [ -n "$UDID" ] && break
+  sleep 5
+done
+[ -n "$UDID" ] || { echo "No iPhone 17 Pro simulator on iOS 26.5 is available"; exit 1; }
+
+xcodebuild test -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk iphonesimulator -derivedDataPath "$DERIVED_DATA" -destination "platform=iOS Simulator,id=$UDID" -disable-concurrent-testing -jobs 1 | xcbeautify
 exit  "${PIPESTATUS[0]}"
